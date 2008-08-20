@@ -6,7 +6,6 @@ package eu.semaine.jms;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.MessageFormatException;
 import javax.jms.TextMessage;
 
 import eu.semaine.jms.IOBase.Event;
@@ -41,17 +40,54 @@ public class SEMAINEMessage
 	 */
 	public static final String PERIOD = "period";
 	
-	private Message message;
+	protected Message message;
 
 	/**
 	 * Create a SEMAINE specific abstraction from the given message.
 	 * @param message a message containing SEMAINE-specific properties.
-	 * @throws NullPointerException if message is null. 
+	 * @throws NullPointerException if message is null.
+	 * @throws MessageFormatException if the message does not have the proper format 
 	 */
 	public SEMAINEMessage(Message message)
+	throws MessageFormatException
 	{
-		if (message == null) throw new NullPointerException("Message is null");
+		if (message == null)
+			throw new NullPointerException("Message is null");
 		this.message = message;
+		verifyProperties();
+	}
+	
+	/**
+	 * Check that the message conforms to our expectations.
+	 * This method is private because overriding it makes no sense:
+	 * as it is called from the constructor, the version in the subclass
+	 * would not be visible from our constructor.
+	 * @throws MessageFormatException if a problem with the properties is found.
+	 */
+	private void verifyProperties()
+	throws MessageFormatException
+	{
+		try { 
+			getUsertime(); 
+		} catch (Exception e) {
+			throw new MessageFormatException("Problem with message property '"+USERTIME+"'", e); 
+		}
+		try { 
+			getDatatype(); 
+		} catch (Exception e) {
+			throw new MessageFormatException("Problem with message property '"+DATATYPE+"'", e); 
+		}
+		try { 
+			getSource(); 
+		} catch (Exception e) {
+			throw new MessageFormatException("Problem with message property '"+SOURCE+"'", e); 
+		}
+		try {
+			if (!isPeriodic() && !isEventBased())
+				throw new MessageFormatException("Message contains neither periodic nor event-based header properties.");
+		} catch (Exception e) {
+			throw new MessageFormatException("Problem determining whether properties '"+PERIOD+"' or '"+EVENT+"' exist.");
+		}
 	}
 	
 	/**
@@ -116,7 +152,7 @@ public class SEMAINEMessage
 	 * @throws MessageFormatException if the message contains an <code>event</code> property, but the value is not known. 
 	 * @throws IllegalStateException if the message is not event-based.
 	 */
-	public Event getEventType() throws JMSException, IllegalArgumentException, IllegalStateException
+	public Event getEventType() throws JMSException, IllegalArgumentException, IllegalStateException, MessageFormatException
 	{
 		if (!message.propertyExists(EVENT)) 
 			throw new IllegalStateException("Message is not event-based, cannot provide event type");

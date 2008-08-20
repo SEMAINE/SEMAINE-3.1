@@ -5,6 +5,7 @@
 package eu.semaine.jms;
 
 import javax.jms.JMSException;
+import javax.jms.Message;
 
 /**
  * An abstraction of the Receiver for feature vectors.
@@ -13,7 +14,8 @@ import javax.jms.JMSException;
  */
 public class FeatureReceiver extends Receiver
 {
-
+	protected String[] featureNames;
+	
 	/**
 	 * Create a receiver that will listen for all messages in the given Topic.
 	 * @param topic the name of the JMS Topic to listen to.
@@ -34,6 +36,13 @@ public class FeatureReceiver extends Receiver
 	throws JMSException
 	{
 		super(topicName, messageSelector);
+	}
+	
+	
+	protected SEMAINEMessage createSEMAINEMessage(Message message)
+	throws MessageFormatException
+	{
+		return new SEMAINEFeatureMessage(message);
 	}
 
 }

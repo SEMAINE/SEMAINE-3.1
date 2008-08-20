@@ -63,6 +63,24 @@ public class Receiver extends IOBase implements MessageListener
 		return consumer.getMessageSelector();
 	}
 	
+	///////////////// The abstraction step: create SEMAINE message ///////
+	
+	/**
+	 * Create a SEMAINE message from the given JMS message.
+	 * Subclasses may want to override this in order to 
+	 * provide subclasses of SEMAINEMessage for their data.
+	 * @param message the JMS method to convert into a SEMAINE message.
+	 * @throws MessageFormatException if the message format is problematic
+	 * @throws NullPointerException if message is null.
+	 */
+	protected SEMAINEMessage createSEMAINEMessage(Message message)
+	throws MessageFormatException
+	{
+		if (message == null)
+			throw new NullPointerException("cannot create semaine message from null");
+		return new SEMAINEMessage(message);
+	}
+	
 	
 	////////////////// Synchronous message consumption ////////////////
 	
@@ -128,8 +146,14 @@ public class Receiver extends IOBase implements MessageListener
 	public void onMessage(Message message)
 	{
 		assert listener != null : "asynchronous mode, but no SEMAINE message listener registered!";
-		SEMAINEMessage m = (message != null ? new SEMAINEMessage(message) : null);
-		listener.onMessage(m);
+		if (message != null) {
+			try {
+				SEMAINEMessage m = new SEMAINEMessage(message);
+				listener.onMessage(m);
+			} catch (MessageFormatException mfe) {
+				// TODO: can we log the problem somewhere?
+			}
+		}
 	}
 	
 	

@@ -8,6 +8,7 @@ package eu.semaine.jms;
 import javax.jms.ConnectionMetaData;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 
@@ -216,7 +217,8 @@ public class Sender extends IOBase
 	public void sendTextMessage(String text, long usertime)
 	throws JMSException
 	{
-		TextMessage message = prepareTextMessage(text, usertime);
+		TextMessage message = session.createTextMessage(text);
+		fillMessageProperties(message, usertime);
 		if (isPeriodic())
 			message.setIntProperty(SEMAINEMessage.PERIOD, getPeriod());
 		else // event-based
@@ -249,24 +251,24 @@ public class Sender extends IOBase
 	{
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
-
-		TextMessage message = prepareTextMessage(text, usertime);
+		TextMessage message = session.createTextMessage(text);
+		fillMessageProperties(message, usertime);
 		message.setStringProperty(SEMAINEMessage.EVENT, eventType.toString());
 		producer.send(message);
 	}
 	
 	/**
-	 * Prepare and fill a text message as far as possible, with body and most header fields.
-	 * @param text the message text.
+	 * Fill in the usual message properties as far as possible.
+	 * Subclasses are encouraged to override this method, but should
+	 * normally call this method as well (as <code>super.fillMessageProperties(message, usertime)</code>).
+	 * @param a message object in preparation for sending.
 	 * @param usertime the "user" time that this message refers to,
 	 * in milliseconds since 1970.
 	 * @return a Message object, ready to be sent, but to which some properties can be added. 
 	 */
-	protected TextMessage prepareTextMessage(String text, long usertime)
+	protected Message fillMessageProperties(Message message, long usertime)
 	throws JMSException
 	{
-		TextMessage message = session.createTextMessage();
-		message.setText(text);
 		message.setStringProperty(SEMAINEMessage.DATATYPE, getDatatype());
 		message.setStringProperty(SEMAINEMessage.SOURCE, getSource());
 		message.setLongProperty(SEMAINEMessage.USERTIME, usertime);
