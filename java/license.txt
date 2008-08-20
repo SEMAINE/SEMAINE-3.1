@@ -1,0 +1,11 @@
+SEMAINE source code License
+===========================
+
+Any source code in this repository not otherwise licensed shall be
+licensed under the terms of the GNU Lesser General Public License
+(LGPL), version 2.1.
+
+You can read the full text of the LGPL at 
+http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+
+ 
