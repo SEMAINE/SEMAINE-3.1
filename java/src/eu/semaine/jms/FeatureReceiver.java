@@ -7,6 +7,8 @@ package eu.semaine.jms;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
+import eu.semaine.exceptions.MessageFormatException;
+
 /**
  * An abstraction of the Receiver for feature vectors.
  * @author marc

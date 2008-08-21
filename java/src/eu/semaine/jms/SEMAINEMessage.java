@@ -8,12 +8,21 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
+import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.IOBase.Event;
 
 /**
  * A representation of a message as used in SEMAINE code.
  * It is a higher-level access method for JMS messages,
  * providing interpretations of information accessible in the message headers.
+ * 
+ * This base class provides access to the Message body only as plain text
+ * (for text messages). Subclasses should:
+ * <ul>
+ * <li>add any specific message format verification code in their constructor;</li>
+ * <li>provide their own API for accessing the message content.</li>
+ * </ul>
+ * 
  * @author marc
  *
  */

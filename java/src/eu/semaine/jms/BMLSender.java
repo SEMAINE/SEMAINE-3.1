@@ -11,7 +11,7 @@ import javax.jms.JMSException;
  * @author marc
  *
  */
-public class StateSender extends XMLSender
+public class BMLSender extends XMLSender
 {
 	/**
 	 * Create a new Sender to the given topic on the default JMS server.
@@ -27,7 +27,7 @@ public class StateSender extends XMLSender
 	 * @param source the name of the component sending the data.
 	 * @throws NullPointerException if any of the parameters topicName, datatype, or source are null. 
 	 */
-	public StateSender(String topicName, String datatype, String source)
+	public BMLSender(String topicName, String datatype, String source)
 	throws JMSException
 	{
 		super(topicName, datatype, source);
@@ -45,7 +45,7 @@ public class StateSender extends XMLSender
 	 * @throws JMSException
 	 * @throws NullPointerException if any of the parameters jmsUrl, topicName, datatype, or source are null. 
 	 */
-	public StateSender(String jmsUrl, String jmsUser, String jmsPassword, String topicName, String datatype, String source)
+	public BMLSender(String jmsUrl, String jmsUser, String jmsPassword, String topicName, String datatype, String source)
 	throws JMSException
 	{
 		super(jmsUrl, jmsUser, jmsPassword, topicName, datatype, source);

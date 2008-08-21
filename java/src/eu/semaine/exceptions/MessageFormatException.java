@@ -1,4 +1,4 @@
-package eu.semaine.jms;
+package eu.semaine.exceptions;
 
 import javax.jms.JMSException;
 

@@ -5,6 +5,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
+import eu.semaine.exceptions.MessageFormatException;
+
 public class SEMAINEFeatureMessage extends SEMAINEMessage
 {
 	protected float[] features = null;
