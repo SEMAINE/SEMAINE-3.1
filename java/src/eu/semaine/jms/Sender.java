@@ -93,7 +93,6 @@ public class Sender extends IOBase
 		this.producer = session.createProducer(topic);
 		// Do not allow for messages to be lost:
 		this.producer.setDeliveryMode(DeliveryMode.PERSISTENT);
-		connection.start();
 	}
 	
 	/**
@@ -212,11 +211,13 @@ public class Sender extends IOBase
 	 * @param text the message text.
 	 * @param usertime the "user" time that this message refers to,
 	 * in milliseconds since 1970.
-	 * @throws IllegalStateException if the sender is in event-based mode.
+	 * @throws IllegalStateException if the connection is not started or the sender is in event-based mode.
 	 */
 	public void sendTextMessage(String text, long usertime)
 	throws JMSException
 	{
+		if (!isConnectionStarted)
+			throw new IllegalStateException("Connection is not started!");
 		TextMessage message = session.createTextMessage(text);
 		fillMessageProperties(message, usertime);
 		if (isPeriodic())
@@ -244,11 +245,13 @@ public class Sender extends IOBase
 	 * @param usertime the "user" time that this message refers to,
 	 * in milliseconds since 1970.
 	 * @param event the type of event represented by this message.
-	 * @throws IllegalStateException if the sender is in periodic mode.
+	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
 	 */
 	public void sendTextMessage(String text, long usertime, Event eventType)
 	throws JMSException
 	{
+		if (!isConnectionStarted)
+			throw new IllegalStateException("Connection is not started!");
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
 		TextMessage message = session.createTextMessage(text);
@@ -280,6 +283,7 @@ public class Sender extends IOBase
 	public static void main(String[] args) throws Exception
 	{
 		Sender s = new Sender("testtopic", "test data", "command line");
+		s.startConnection();
 		ConnectionMetaData meta = s.getConnection().getMetaData();
 		String provider = meta.getJMSProviderName();
 		String providerVersion = meta.getProviderVersion();

@@ -24,7 +24,9 @@ public class Receiver extends IOBase implements MessageListener
 {
 	protected MessageConsumer consumer;
 	
-	protected SEMAINEMessageListener listener;
+	protected SEMAINEMessageAvailableListener listener;
+	
+	protected SEMAINEMessage message = null;
 		
 	/**
 	 * Create a receiver that will listen for all messages in the given Topic.
@@ -34,7 +36,6 @@ public class Receiver extends IOBase implements MessageListener
 	{
 		super(topicName);
 		consumer = session.createConsumer(topic);
-		connection.start();
 	}
 	
 	/**
@@ -49,7 +50,6 @@ public class Receiver extends IOBase implements MessageListener
 	{
 		super(topicName);
 		consumer = session.createConsumer(topic, messageSelector);
-		connection.start();
 	}
 	
 	/**
@@ -93,9 +93,11 @@ public class Receiver extends IOBase implements MessageListener
 	public SEMAINEMessage receive()
 	throws JMSException
 	{
+		if (!isConnectionStarted)
+			throw new IllegalStateException("Connection is not started!");
 		Message m = consumer.receive();
 		if (m == null) return null;
-		return new SEMAINEMessage(m);
+		return createSEMAINEMessage(m);
 	}
 	
 	/**
@@ -108,9 +110,11 @@ public class Receiver extends IOBase implements MessageListener
 	public SEMAINEMessage receive(long timeout)
 	throws JMSException
 	{
+		if (!isConnectionStarted)
+			throw new IllegalStateException("Connection is not started!");
 		Message m = consumer.receive(timeout);
 		if (m == null) return null;
-		return new SEMAINEMessage(m);
+		return createSEMAINEMessage(m);
 	}
 
 	/**
@@ -121,14 +125,16 @@ public class Receiver extends IOBase implements MessageListener
 	public SEMAINEMessage receiveNoWait()
 	throws JMSException
 	{
+		if (!isConnectionStarted)
+			throw new IllegalStateException("Connection is not started!");
 		Message m = consumer.receiveNoWait();
 		if (m == null) return null;
-		return new SEMAINEMessage(m);
+		return createSEMAINEMessage(m);
 	}
 
 	////////////////// Asynchronous message consumption ////////////////
 
-	public void setMessageListener(SEMAINEMessageListener aListener)
+	public void setMessageListener(SEMAINEMessageAvailableListener aListener)
 	throws JMSException
 	{
 		this.listener = aListener;
@@ -138,24 +144,46 @@ public class Receiver extends IOBase implements MessageListener
 			consumer.setMessageListener(this);
 	}
 	
-	public SEMAINEMessageListener getMessageListener()
+	public SEMAINEMessageAvailableListener getMessageListener()
 	{
 		return listener;
 	}
 	
-	public void onMessage(Message message)
+	public void onMessage(Message m)
 	{
 		assert listener != null : "asynchronous mode, but no SEMAINE message listener registered!";
-		if (message != null) {
+		if (m != null) {
 			try {
-				SEMAINEMessage m = new SEMAINEMessage(message);
-				listener.onMessage(m);
+				message = createSEMAINEMessage(m);
+				// Notify component that new message has arrived
+				listener.messageAvailableFrom(this);
+				// Block until message has been picked up
+				synchronized (this) {
+					while (notPickedUp()) {
+						try {
+							this.wait();
+						} catch (InterruptedException ie) {}
+					}
+				}
 			} catch (MessageFormatException mfe) {
 				// TODO: can we log the problem somewhere?
 			}
 		}
 	}
 	
+	
+	public synchronized SEMAINEMessage getMessage()
+	{
+		SEMAINEMessage m = this.message;
+		this.message = null;
+		this.notify();
+		return m;
+	}
+	
+	public synchronized boolean notPickedUp()
+	{
+		return message != null;
+	}
 	
 	/////////////////////// Simplistic test code ////////////////////////
 	public static void main(String[] args) throws Exception

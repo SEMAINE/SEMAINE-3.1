@@ -29,6 +29,7 @@ public class IOBase
 	protected Connection connection;
 	protected Session session;
 	protected Topic topic;
+	protected boolean isConnectionStarted = false;
 	
 	/**
 	 * Create a new JMS IOBase connection with the given topic on the default JMS server.
@@ -115,5 +116,13 @@ public class IOBase
 	public Topic getTopic()
 	{
 		return topic;
+	}
+	
+	public void startConnection()
+	throws JMSException
+	{
+		connection.start();
+		isConnectionStarted = true;
+		
 	}
 }
