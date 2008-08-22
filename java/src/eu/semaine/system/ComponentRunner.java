@@ -12,6 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+
 import eu.semaine.components.Component;
 import eu.semaine.exceptions.SystemConfigurationException;
 
@@ -21,6 +29,7 @@ import eu.semaine.exceptions.SystemConfigurationException;
  */
 public class ComponentRunner 
 {
+	private Log log;
 	private List<Component> components;
 	
 	@SuppressWarnings("unchecked")
@@ -29,6 +38,7 @@ public class ComponentRunner
 		ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 		InstantiationException, InvocationTargetException
 	{
+		log = LogFactory.getLog(ComponentRunner.class);
 		components = new ArrayList<Component>();
 		Properties p = new Properties();
 		p.load(new FileInputStream(configFile));
@@ -55,7 +65,7 @@ public class ComponentRunner
 			} else { // no arguments
 				className = d;
 			}
-			System.err.println("Now initiating class '"+className+"'");
+			log.info("Now initiating class '"+className+"'");
 			Class<? extends Component> theClass = Class.forName(className).asSubclass(Component.class);
 			Component component = null;
 			// Now invoke Constructor with args.length String arguments
@@ -80,14 +90,14 @@ public class ComponentRunner
 		// When shutting down, 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				System.err.println("Shutting down components...");
+				log.info("Shutting down components...");
 				for (Component c : components) {
 					c.requestExit();
 				}
 				for (Component c : components) {
 					try {
 						c.join();
-						System.err.println("   ... "+c.getClass().getSimpleName()+" shut down.");
+						log.info("   ... "+c.getClass().getSimpleName()+" shut down.");
 					} catch (InterruptedException ie) {
 						ie.printStackTrace(System.err);
 					}
@@ -116,7 +126,10 @@ public class ComponentRunner
 			System.err.println();
 			System.err.println("where configfile defines which components to start");
 		}
-
+		PatternLayout layout = new PatternLayout("%d [%t] %-5p %-10c %m\n");
+		BasicConfigurator.configure(new ConsoleAppender(layout));
+		Logger.getRootLogger().setLevel(Level.DEBUG);
+		Logger.getLogger("org.apache").setLevel(Level.INFO);
 		ComponentRunner runner = new ComponentRunner(args[0]);
 		runner.go();
 	}

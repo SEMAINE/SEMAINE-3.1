@@ -3,6 +3,7 @@ package eu.semaine.components.dummy;
 import javax.jms.JMSException;
 
 import eu.semaine.components.Component;
+import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.Receiver;
 import eu.semaine.jms.SEMAINEMessage;
 import eu.semaine.jms.Sender;
@@ -11,6 +12,7 @@ public class GenericTestComponent extends Component
 {
 	private int boredTime = 3000; // ms
 	private long lastMessageTime = 0;
+	private JMSLogger log;
 	
 	public GenericTestComponent(String name, String receiveTopic, String sendTopic)
 	throws JMSException
@@ -18,6 +20,7 @@ public class GenericTestComponent extends Component
 		super(name);
 		receivers.add(new Receiver(receiveTopic));
 		senders.add(new Sender(sendTopic, sendTopic, this.getClass().getSimpleName()));
+		log = new JMSLogger(name);
 	}
 
 	@Override
@@ -39,9 +42,8 @@ public class GenericTestComponent extends Component
 	{
 		try {
 			String text = message.getText();
-			System.out.println("Received message from '"+message.getSource()+"' of type '"+message.getDatatype()+"':");
-			System.out.println(text);
-			System.out.println();
+			log.info("Received message from '"+message.getSource()+"' of type '"+message.getDatatype()+"':");
+			log.debug(text);
 			Thread.sleep(1000);
 			long time = System.currentTimeMillis();
 			senders.get(0).sendTextMessage("Hello there", time);

@@ -36,11 +36,6 @@ public class Sender extends IOBase
 	 * Data can be either periodic or event-based, but not both at the same time.
 	 */
 	protected int period = 0;
-	/**
-	 * The time to live for messages sent, in milliseconds.
-	 * 0 means unlimited, i.e. messages will not expire.
-	 */
-	protected long timeToLive = 0;
 	
 	/**
 	 * Create a new Sender to the given topic on the default JMS server.
@@ -267,15 +262,13 @@ public class Sender extends IOBase
 	 * @param a message object in preparation for sending.
 	 * @param usertime the "user" time that this message refers to,
 	 * in milliseconds since 1970.
-	 * @return a Message object, ready to be sent, but to which some properties can be added. 
 	 */
-	protected Message fillMessageProperties(Message message, long usertime)
+	protected void fillMessageProperties(Message message, long usertime)
 	throws JMSException
 	{
 		message.setStringProperty(SEMAINEMessage.DATATYPE, getDatatype());
 		message.setStringProperty(SEMAINEMessage.SOURCE, getSource());
 		message.setLongProperty(SEMAINEMessage.USERTIME, usertime);
-		return message;
 	}
 	
 	
