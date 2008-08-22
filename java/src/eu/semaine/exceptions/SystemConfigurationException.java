@@ -8,6 +8,7 @@ import javax.jms.JMSException;
  * @author marc
  *
  */
+@SuppressWarnings("serial")
 public class SystemConfigurationException extends JMSException 
 {
 	public SystemConfigurationException(String text)

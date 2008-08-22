@@ -1,0 +1,14 @@
+<?eclipse.ant.import ?>
+<project basedir="." default="jars" name="myname">
+    <target name="jars" depends="build">
+        <jar destfile="lib/semaine.jar" basedir="bin" includes="eu/**/*.class">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Main-Class"
+                    value="eu.semaine.system.ComponentRunner"/>
+                <attribute name="Class-Path" value="activemq-all-5.1.0.jar"/>
+            </manifest>
+         </jar>
+    </target>
+    
+</project>

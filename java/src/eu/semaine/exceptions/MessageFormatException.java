@@ -7,6 +7,7 @@ import javax.jms.JMSException;
  * @author marc
  *
  */
+@SuppressWarnings("serial")
 public class MessageFormatException extends JMSException 
 {
 	public MessageFormatException(String text)
