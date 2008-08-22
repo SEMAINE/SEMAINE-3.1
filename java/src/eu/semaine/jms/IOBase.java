@@ -43,7 +43,7 @@ public class IOBase
 	 * @throws JMSException
 	 * @throws NullPointerException if any of the parameters jmsUrl or topicName are null. 
 	 */
-	protected IOBase(String topicName) throws JMSException
+	public IOBase(String topicName) throws JMSException
 	{
 		jmsUrl = System.getProperty("jms.url", "tcp://localhost:61616");
 		jmsUser = System.getProperty("jms.user", null);
@@ -61,7 +61,7 @@ public class IOBase
 	 * @throws JMSException
 	 * @throws NullPointerException if any of the parameters jmsUrl or topicName are null. 
 	 */
-	protected IOBase(String jmsUrl, String jmsUser, String jmsPassword, String topicName)
+	public IOBase(String jmsUrl, String jmsUser, String jmsPassword, String topicName)
 	throws JMSException
 	{
 		this.jmsUrl = jmsUrl;

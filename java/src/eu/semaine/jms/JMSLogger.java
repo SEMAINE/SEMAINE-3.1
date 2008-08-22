@@ -4,10 +4,16 @@
  */
 package eu.semaine.jms;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author marc
@@ -15,11 +21,15 @@ import javax.jms.TextMessage;
  */
 public class JMSLogger extends Sender
 {
-	MessageProducer info;
-	MessageProducer error;
-	MessageProducer warn;
-	MessageProducer debug;
+	private enum Level {error, warn, info, debug};
+	
+	private MessageProducer error;
+	private MessageProducer warn;
+	private MessageProducer info;
+	private MessageProducer debug;
 
+	private Log fallbackLogger;
+	
 	/**
 	 * @param topicName
 	 * @param datatype
@@ -52,6 +62,7 @@ public class JMSLogger extends Sender
 	private void setupLoggers(String basename)
 	throws JMSException
 	{
+		fallbackLogger = LogFactory.getLog(basename);
 		info = producer; // set up in parent code
 		error = session.createProducer(session.createTopic(basename+".error"));
 		warn = session.createProducer(session.createTopic(basename+".warn"));
@@ -59,34 +70,65 @@ public class JMSLogger extends Sender
 		startConnection();
 	}
 	
-	public void error(String text)
-	throws JMSException
+	public void error(Object... objects)
 	{
-		TextMessage message = session.createTextMessage(text);
-		error.send(message);
+		log(error, Level.error, objects);
 	}
 
-	public void warn(String text)
-	throws JMSException
+	public void warn(Object... objects)
 	{
-		TextMessage message = session.createTextMessage(text);
-		warn.send(message);
+		log(warn, Level.warn, objects);
 	}
 
-	public void info(String text)
-	throws JMSException
+	public void info(Object... objects)
 	{
-		TextMessage message = session.createTextMessage(text);
-		info.send(message);
+		log(info, Level.info, objects);
 	}
 
-	public void debug(String text)
-	throws JMSException
+	public void debug(Object... objects)
 	{
-		TextMessage message = session.createTextMessage(text);
-		debug.send(message);
+		log(debug, Level.debug, objects);
 	}
 
+	private void log(MessageProducer target, Level level, Object... objects)
+	{
+		StringBuilder builder = new StringBuilder();
+		for (Object o : objects) {
+			if (builder.length() > 0) {
+				builder.append(" ");
+			}
+			if (o instanceof Throwable) {
+				Throwable t = (Throwable) o;
+				StringWriter sw = new StringWriter();
+				t.printStackTrace(new PrintWriter(sw));
+				builder.append(sw.toString());
+			} else {
+				builder.append(o.toString());
+			}
+		}
+		String logMessageText = builder.toString();
+		try {
+			TextMessage message = session.createTextMessage(logMessageText);
+			target.send(message);
+		} catch (JMSException e) {
+			fallbackLogger.error("problem with JMS logger", e);
+			if (level == Level.error) {
+				fallbackLogger.error(logMessageText);
+			} else if (level == Level.warn) {
+				fallbackLogger.warn(logMessageText);
+			} else if (level == Level.info) {
+				fallbackLogger.warn(logMessageText);
+			} else if (level == Level.debug) {
+				fallbackLogger.warn(logMessageText);
+			} else {
+				fallbackLogger.error("problem with fallback logger -- unknown log level: "+level);
+				fallbackLogger.info(logMessageText);
+			}
+		}
+		
+	}
+	
+	
 	public boolean isDebugEnabled()
 	{
 		// in the future, we may be able to use advisory information to know
