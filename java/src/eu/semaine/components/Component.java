@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.jms.JMSException;
 
+import eu.semaine.datatypes.SEMAINEMessage;
 import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.Receiver;
-import eu.semaine.jms.SEMAINEMessage;
 import eu.semaine.jms.SEMAINEMessageAvailableListener;
 import eu.semaine.jms.Sender;
 
@@ -38,12 +38,6 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	 */
 	public static enum State {starting, ready, stopped, failure};
 	
-	/**
-	 * Time to spend waiting for a message before checking if we can do something proactively.
-	 * Time is in milliseconds.
-	 */
-	public static final long MAXWAITINGTIME = 100;
-	
 	protected List<Receiver> receivers;
 	protected List<Sender> senders;
 	protected BlockingQueue<Receiver> inputWaiting;
@@ -51,6 +45,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	private boolean exitRequested = false;
 	protected State state = State.stopped;
 	protected MetaMessenger meta;
+	protected int waitingTime = 100;
 	
 	protected Component(String componentName)
 	throws JMSException
@@ -131,7 +126,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			Receiver r = null;
 			try {
 				// block until input becomes available
-				r = inputWaiting.poll(MAXWAITINGTIME, TimeUnit.MILLISECONDS);
+				r = inputWaiting.poll(waitingTime, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException ie) {
 				// if we have no input, we'll keep on waiting
 				continue;

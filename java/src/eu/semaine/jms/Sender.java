@@ -12,6 +12,8 @@ import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 
+import eu.semaine.datatypes.SEMAINEMessage;
+
 
 /**
  * This class handles the common part to all message senders in

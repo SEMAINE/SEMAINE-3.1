@@ -2,13 +2,14 @@
  * Copyright (C) 2008 DFKI GmbH. All rights reserved.
  * Use is subject to license terms -- see license.txt.
  */
-package eu.semaine.jms;
+package eu.semaine.datatypes;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
 import eu.semaine.exceptions.MessageFormatException;
+import eu.semaine.jms.IOBase;
 import eu.semaine.jms.IOBase.Event;
 
 /**

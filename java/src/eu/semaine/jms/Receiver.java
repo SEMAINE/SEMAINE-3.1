@@ -14,6 +14,7 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 
+import eu.semaine.datatypes.SEMAINEMessage;
 import eu.semaine.exceptions.MessageFormatException;
 
 /**

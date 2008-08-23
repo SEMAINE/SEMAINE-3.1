@@ -1,4 +1,4 @@
-package eu.semaine.jms;
+package eu.semaine.datatypes;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
