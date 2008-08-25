@@ -12,10 +12,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import eu.semaine.exceptions.MessageFormatException;
 
 
 /**
@@ -158,5 +159,65 @@ public class XMLTool
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Same as {@link #getChildElementByTagNameNS(Node, String, String)}, but
+	 * throw a MessageFormatException if there is no such child element.
+	 * @param node
+	 * @param childName
+	 * @param childNamespace
+	 * @return a non-null child element
+	 * @throws MessageFormatException if there is no such child, 
+	 * i.e. when getChildElementByTagNameNS() would return null.
+	 */
+	public static Element needChildElementByTagNameNS(Node node, String childName, String childNamespace)
+	throws MessageFormatException
+	{
+		Element e = getChildElementByTagNameNS(node, childName, childNamespace);
+		if (e == null) {
+			String nodeNamespace = node.getNamespaceURI();
+			boolean sameNamespace = childNamespace != null && childNamespace.equals(nodeNamespace)
+								|| childNamespace == null && nodeNamespace == null;
+			throw new MessageFormatException("Node '"+node.getNodeName()+"' in namespace '"+
+					nodeNamespace+" needs to have a child '"+childName+"' in "+
+					(sameNamespace ? "the same namespace" : "namespace '"+childNamespace+"'"));
+		}
+		return e;
+	}
+	
+	/**
+	 * For the given element, return the value of the given attribute if it exists,
+	 * or complain with a MessageFormatException if it doesn't exist.
+	 * @param e the element whose attribute to return
+	 * @param attributeName the name of the attribute to look up.
+	 * @return the String value of the attribute if it exists
+	 * @throws MessageFormatException if the attribute doesn't exist.
+	 */
+	public static String needAttribute(Element e, String attributeName)
+	throws MessageFormatException
+	{
+		if (!e.hasAttribute(attributeName)) {
+			throw new MessageFormatException("Element '"+e.getTagName()+"' in namespace '"+
+					e.getNamespaceURI()+"' needs an attribute '"+attributeName+"'");
+		}
+		return e.getAttribute(attributeName);
+	}
+
+	/**
+	 * For the given element, return the value of the given attribute if it exists,
+	 * or null if it doesn't exist. Note that this is different from calling
+	 * e.getAttribute(), which will return the empty string both if the attribute
+	 * doesn't exist and if it exists and has the empty value. 
+	 * @param e
+	 * @param attributeName
+	 * @return the String value of the attribute if it exists, or null
+	 */
+	public static String getAttributeIfAvailable(Element e, String attributeName)
+	{
+		if (!e.hasAttribute(attributeName)) {
+			return null;
+		}
+		return e.getAttribute(attributeName);
 	}
 }

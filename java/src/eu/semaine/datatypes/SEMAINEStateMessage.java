@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
 
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.JMSLogger;
+import eu.semaine.util.XMLTool;
 
 /**
  * @author marc
@@ -81,11 +82,7 @@ public abstract class SEMAINEStateMessage extends SEMAINEXMLMessage
 			if (tagname.equals(EmotionML.CATEGORY)) {
 				String set = el.getAttribute(EmotionML.SET);
 				if (info.containsKey(set)) {
-					String name = el.getAttribute(EmotionML.NAME);
-					if (name.equals("")) {
-						throw new MessageFormatException("For set '"+set+
-								"', expected attribute '"+EmotionML.NAME+"'");
-					}
+					String name = XMLTool.needAttribute(el, EmotionML.NAME);
 					info.put(set, name);
 					return true;
 				}

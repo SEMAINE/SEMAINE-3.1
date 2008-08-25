@@ -4,8 +4,6 @@
  */
 package eu.semaine.components.dummy;
 
-import java.util.Random;
-
 import javax.jms.JMSException;
 
 import org.w3c.dom.Document;
@@ -21,8 +19,6 @@ import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.EmmaSender;
 import eu.semaine.jms.FeatureReceiver;
 import eu.semaine.jms.UserStateReceiver;
-import eu.semaine.jms.StateSender;
-import eu.semaine.jms.Sender;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.util.XMLTool;
 

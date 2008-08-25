@@ -10,7 +10,6 @@ import javax.jms.JMSException;
 
 import eu.semaine.components.Component;
 import eu.semaine.jms.FeatureSender;
-import eu.semaine.jms.Sender;
 
 /**
  * @author marc

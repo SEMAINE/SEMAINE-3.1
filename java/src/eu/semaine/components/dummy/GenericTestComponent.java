@@ -4,7 +4,6 @@ import javax.jms.JMSException;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.Receiver;
 import eu.semaine.jms.Sender;
 

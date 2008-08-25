@@ -15,7 +15,7 @@ import eu.semaine.util.XMLTool;
  * @author marc
  *
  */
-public class SEMAINEAgentStateMessage extends SEMAINEStateMessage
+public class SEMAINEUserStateMessage extends SEMAINEStateMessage
 {
 	public static final String APIVersion = "0.1";
 
@@ -25,10 +25,10 @@ public class SEMAINEAgentStateMessage extends SEMAINEStateMessage
 	 * @param apiVersion
 	 * @throws MessageFormatException
 	 */
-	public SEMAINEAgentStateMessage(Message message)
+	public SEMAINEUserStateMessage(Message message)
 	throws MessageFormatException
 	{
-		super(message, "AgentState", APIVersion);
+		super(message, "UserState", APIVersion);
 	}
 
 	
@@ -41,9 +41,11 @@ public class SEMAINEAgentStateMessage extends SEMAINEStateMessage
 	{
 		info.put("emotion-quadrant", null);
 		info.put("interest", null);
-		info.put("stance to user", null);
-		info.put("stance to topic", null);
-		info.put("emotionally-concordant-with-user", null);
+		info.put("engagement", null);
+		info.put("turn-event", null);
+		info.put("turn-event time", null);
+		info.put("behaviour", null);
+		info.put("behaviour intensity", null);
 	}
 
 	protected boolean analyseElement(Element el)
@@ -55,31 +57,33 @@ public class SEMAINEAgentStateMessage extends SEMAINEStateMessage
 		String namespace = el.getNamespaceURI();
 		String tagname = el.getTagName();
 		if (namespace.equals(EmotionML.namespace)) {
-			if (tagname.equals(EmotionML.EMOTION)) {
-				String type = el.getAttribute(EmotionML.TYPE);
-				if (type.equals("stance")) {
-					Element object = XMLTool.needChildElementByTagNameNS(el, EmotionML.OBJECT, EmotionML.namespace);
-					String objectName = object.getAttribute(EmotionML.NAME);
-					String infoKey = "stance to "+objectName;
-					if (!info.containsKey(infoKey)) {
-						throw new MessageFormatException("unknown object '"+objectName+"'");
-					}
-					Element category = XMLTool.needChildElementByTagNameNS(el, EmotionML.CATEGORY, EmotionML.namespace);
-					String set = XMLTool.needAttribute(category, EmotionML.SET);
-					if (!set.equals("like-dislike")) {
-						throw new MessageFormatException("a stance needs a category with set 'like-dislike'");
-					}
-					String value = XMLTool.needAttribute(category, EmotionML.NAME);
+			if (tagname.equals(EmotionML.DIMENSIONS)) {
+				String set = XMLTool.needAttribute(el, EmotionML.SET);
+				if (set.equals("engagement")) {
+					Element engagement = XMLTool.needChildElementByTagNameNS(el, "engagement", EmotionML.namespace);
+					String value = XMLTool.needAttribute(engagement, EmotionML.VALUE);
 					// And finally...
-					info.put(infoKey, value);
+					info.put("engagement", value);
 					return true;
 				}
 			}
 		} else if (namespace.equals(SemaineML.namespace)) {
-			if (tagname.equals(SemaineML.EMOTIONALLY_CONCORDANT_WITH_USER)) {
+			if (tagname.equals(SemaineML.EVENT)) {
+				String name = XMLTool.needAttribute(el, SemaineML.NAME);
 				String value = XMLTool.needAttribute(el, SemaineML.VALUE);
-				info.put("emotionally-concordant-with-user", value);
+				info.put(name, value);
+				String time = XMLTool.getAttributeIfAvailable(el, SemaineML.TIME);
+				if (time != null) {
+					info.put(name + " time", time);
+				}
 				return true;
+			} else if (tagname.equals(SemaineML.BEHAVIOUR)) {
+				String name = XMLTool.needAttribute(el, SemaineML.NAME);
+				info.put("behaviour", name);
+				String intensity = XMLTool.getAttributeIfAvailable(el, "intensity");
+				if (intensity != null) {
+					info.put("behaviour intensity", intensity);
+				}
 			}
 		}
 		return false;

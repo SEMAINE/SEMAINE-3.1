@@ -9,7 +9,6 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.IOBase;
 import eu.semaine.jms.IOBase.Event;
 
 /**

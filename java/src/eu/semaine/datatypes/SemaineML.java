@@ -18,6 +18,7 @@ public class SemaineML
     public static final String AGENTSTATE = "agent-state";
     public static final String DIALOGSTATE = "dialog-state";
     public static final String FEATURE = "feature";
+    public static final String EVENT = "event";
     public static final String BEHAVIOUR = "behaviour";
     public static final String TEXT = "text";
     public static final String EMOTIONALLY_CONCORDANT_WITH_USER = "emotionally-concordant-with-user";
@@ -32,7 +33,6 @@ public class SemaineML
     public static final String NAME = "name";
     public static final String ATT_TOPIC = "topic";
     public static final String VALUE = "value";
-    public static final String EVENT = "event";
     public static final String TIME = "time";
     public static final String INTENSITY = "intensity";
     

@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 
