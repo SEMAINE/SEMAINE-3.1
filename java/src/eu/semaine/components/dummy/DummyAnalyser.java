@@ -20,7 +20,7 @@ import eu.semaine.datatypes.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.EmmaSender;
 import eu.semaine.jms.FeatureReceiver;
-import eu.semaine.jms.StateReceiver;
+import eu.semaine.jms.UserStateReceiver;
 import eu.semaine.jms.StateSender;
 import eu.semaine.jms.Sender;
 import eu.semaine.jms.IOBase.Event;
@@ -36,7 +36,7 @@ import eu.semaine.util.XMLTool;
 public class DummyAnalyser extends Component 
 {
 	private EmmaSender userStateSender;
-	private StateReceiver dialogStateReceiver;
+	private UserStateReceiver dialogStateReceiver;
 	private FeatureReceiver featureReceiver;
 	
 	private boolean userIsSpeaking = false;
@@ -50,7 +50,7 @@ public class DummyAnalyser extends Component
 		super("DummyAnalyser");
 		featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
 		receivers.add(featureReceiver); // to set up properly
-		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog");
+		dialogStateReceiver = new UserStateReceiver("semaine.data.state.dialog");
 		receivers.add(dialogStateReceiver);
 		userStateSender = new EmmaSender("semaine.data.state.user", getName());
 		senders.add(userStateSender); // so it can be started etc

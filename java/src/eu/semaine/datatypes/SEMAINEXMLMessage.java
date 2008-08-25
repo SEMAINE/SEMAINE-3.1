@@ -34,14 +34,12 @@ public class SEMAINEXMLMessage extends SEMAINEMessage
 		} catch (JMSException j) {
 			throw new MessageFormatException("Cannot read property '"+IS_XML+"'", j);
 		}
+		parseDocument();
 	}
 	
 	public Document getDocument()
 	throws MessageFormatException
 	{
-		if (doc == null) {
-			parseDocument();
-		}
 		return doc;
 	}
 	

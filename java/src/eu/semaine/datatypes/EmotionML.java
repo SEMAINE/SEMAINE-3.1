@@ -21,11 +21,13 @@ public class EmotionML
 	public static final String AROUSAL = "arousal";
 	public static final String VALENCE = "valence";
 	public static final String POTENCY = "potency";
+	public static final String OBJECT = "object";
 	
 	// Attributes
 	public static final String SET = "set";
 	public static final String NAME = "name";
 	public static final String VALUE = "value";
 	public static final String CONFIDENCE = "confidence";
+	public static final String TYPE = "type";
 
 }
