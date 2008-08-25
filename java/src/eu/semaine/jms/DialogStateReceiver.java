@@ -9,9 +9,12 @@ import java.util.SortedSet;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
+import eu.semaine.datatypes.DialogStateInfo;
 import eu.semaine.datatypes.SEMAINEDialogStateMessage;
 import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.datatypes.SEMAINEDialogStateMessage.DialogAct;
+import eu.semaine.datatypes.SEMAINEStateMessage;
+import eu.semaine.datatypes.StateInfo;
+import eu.semaine.datatypes.DialogStateInfo.DialogAct;
 import eu.semaine.exceptions.MessageFormatException;
 
 public class DialogStateReceiver extends XMLReceiver
@@ -47,6 +50,8 @@ public class DialogStateReceiver extends XMLReceiver
 
 	public SortedSet<DialogAct> getDialogHistory()
 	{
-		return ((SEMAINEDialogStateMessage)message).getDialogHistory();
+		StateInfo s = ((SEMAINEStateMessage)message).getState();
+		return ((DialogStateInfo)s).getDialogHistory();
 	}
+	
 }

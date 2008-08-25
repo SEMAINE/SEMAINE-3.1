@@ -7,19 +7,45 @@ package eu.semaine.jms;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
+import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * A relatively lightweight class logging messages to a JMS topic if possible,
+ * and to the local log system if the JMS connection fails. All instances of 
+ * JMSLogger use the same JMS connection and the same session.
  * @author marc
  *
  */
-public class JMSLogger extends Sender
+public class JMSLogger
 {
+	////////// Static stuff, used by all JMSLoggers ///////////
+	private static Connection connection;
+	private static Session session;
+	
+	static {
+		try {
+			String jmsUrl = System.getProperty("jms.url", "tcp://localhost:61616");
+			String jmsUser = System.getProperty("jms.user", null);
+			String jmsPassword = System.getProperty("jms.password", null);
+			ConnectionFactory factory = new ActiveMQConnectionFactory(jmsUser, jmsPassword, jmsUrl);
+			connection = factory.createConnection();
+			session = connection.createSession(false /*not transacted*/, Session.AUTO_ACKNOWLEDGE);
+			connection.start();
+		} catch (JMSException e) {
+			LogFactory.getLog(JMSLogger.class).warn("Cannot set up JMS logger connection and session", e);
+		}
+	};
+	
+	/////////////// Individual stuff ////////////////
 	private enum Level {error, warn, info, debug};
 	
 	private MessageProducer error;
@@ -36,37 +62,17 @@ public class JMSLogger extends Sender
 	 * @throws JMSException
 	 */
 	public JMSLogger(String source)
-			throws JMSException 
 	{
-		super("semaine.log."+source+".info", "log", source);
-		setupLoggers("semaine.log."+source);
-	}
-
-	/**
-	 * @param jmsUrl
-	 * @param jmsUser
-	 * @param jmsPassword
-	 * @param topicName
-	 * @param datatype
-	 * @param source
-	 * @throws JMSException
-	 */
-	public JMSLogger(String jmsUrl, String jmsUser, String jmsPassword, String source)
-	throws JMSException
-	{
-		super(jmsUrl, jmsUser, jmsPassword, "semaine.log."+source+".info", "log", source);
-		setupLoggers("semaine.log."+source);
-	}
-
-	private void setupLoggers(String basename)
-	throws JMSException
-	{
+		String basename = "semaine.log."+source;
 		fallbackLogger = LogFactory.getLog(basename);
-		info = producer; // set up in parent code
-		error = session.createProducer(session.createTopic(basename+".error"));
-		warn = session.createProducer(session.createTopic(basename+".warn"));
-		debug = session.createProducer(session.createTopic(basename+".debug"));
-		startConnection();
+		try {
+			error = session.createProducer(session.createTopic(basename+".error"));
+			warn = session.createProducer(session.createTopic(basename+".warn"));
+			info = session.createProducer(session.createTopic(basename+".info"));
+			debug = session.createProducer(session.createTopic(basename+".debug"));
+		} catch (JMSException e) {
+			fallbackLogger.warn("Cannot set up JMS log connections for "+source+"; will use fallback instead");
+		}
 	}
 	
 	public void error(Object... objects)

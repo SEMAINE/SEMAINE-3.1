@@ -7,11 +7,9 @@ package eu.semaine.jms;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
-import org.w3c.dom.Element;
 
 import eu.semaine.datatypes.SEMAINEEmmaMessage;
 import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.datatypes.SEMAINEXMLMessage;
 import eu.semaine.exceptions.MessageFormatException;
 
 /**

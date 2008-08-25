@@ -41,6 +41,7 @@ public class XMLReceiver extends Receiver
 		super(topicName, messageSelector);
 	}
 
+	@Override
 	protected SEMAINEMessage createSEMAINEMessage(Message message)
 	throws MessageFormatException
 	{

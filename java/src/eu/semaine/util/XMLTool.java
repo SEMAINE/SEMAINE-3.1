@@ -4,6 +4,9 @@
  */
 package eu.semaine.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -219,5 +222,47 @@ public class XMLTool
 			return null;
 		}
 		return e.getAttribute(attributeName);
+	}
+	
+	/**
+	 * Get a list of all direct children with the given tag name and namespace.
+	 * Whereas getChildElementByTagNameNS() returns the single first child,
+	 * this method returns all the children that match.
+	 * @param node
+	 * @param childName
+	 * @param childNamespace
+	 * @return a list containing the children that match, or an empty list if none match.
+	 * @throws MessageFormatException
+	 */
+	public static List<Element> getChildrenByTagNameNS(Node node, String childName, String childNamespace)
+	{
+		List<Element> list = new ArrayList<Element>();
+		Element e = getChildElementByTagNameNS(node, childName, childNamespace);
+		if (e != null) {
+			list.add(e);
+			Node n = e;
+			while ((n = n.getNextSibling()) != null) {
+				if (n.getNodeType() == Node.ELEMENT_NODE &&
+						isSameNamespace(n.getNamespaceURI(), childNamespace) &&
+						n.getNodeName().equals(childName)) {
+					list.add((Element)n);
+				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * Determine whether the two namespaces are the same.
+	 * @param namespaceA a string representing a namespace, or null
+	 * @param namespaceB a string representing a namespace, or null
+	 * @return true if both are null or both are the same string, false otherwise.
+	 */
+	public static boolean isSameNamespace(String namespaceA, String namespaceB)
+	{
+		if (namespaceA != null)
+			return namespaceA.equals(namespaceB);
+		else // namespaceA == null
+			return namespaceB == null;
 	}
 }
