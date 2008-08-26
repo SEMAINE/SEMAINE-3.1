@@ -12,8 +12,6 @@ import javax.jms.JMSException;
 import javax.jms.TextMessage;
 
 import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.Receiver;
 
 /**
@@ -65,5 +63,6 @@ public class MessageLogComponent extends Component
 			buf.append(m.getMessage().getClass().getSimpleName());
 			buf.append("\n");
 		}
+		log.debug(buf);
 	}
 }

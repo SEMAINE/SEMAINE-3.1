@@ -31,7 +31,7 @@ public class UserStateInfo extends StateInfo
 	public UserStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "UserStateInfo", APIVersion);
+		super(doc, "UserStateInfo", APIVersion, SemaineML.USERSTATE, SemaineML.namespace);
 	}
 
 	/**

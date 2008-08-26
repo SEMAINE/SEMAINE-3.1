@@ -54,7 +54,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		receivers = new LinkedList<Receiver>();
 		senders = new LinkedList<Sender>();
 		inputWaiting = new LinkedBlockingQueue<Receiver>();
-		log = new JMSLogger(getName());
+		log = JMSLogger.getLog(getName());
 		meta = new MetaMessenger(getName());
 		meta.reportState(State.starting);
 	}

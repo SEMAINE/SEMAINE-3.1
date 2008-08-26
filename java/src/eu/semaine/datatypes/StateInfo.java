@@ -33,26 +33,26 @@ public abstract class StateInfo
 	protected String stateName;
 	protected String apiVersion;
 
-	protected StateInfo(Document doc, String whatState, String apiVersion)
+	protected StateInfo(Document doc, String whatState, String apiVersion, String rootName, String rootNamespace)
 	throws MessageFormatException
 	{
+		this.doc = doc;
 		this.stateName = whatState;
 		this.apiVersion = apiVersion;
-		log = new JMSLogger(whatState);
+		log = JMSLogger.getLog(whatState);
 		info = new HashMap<String, String>();
 		setupInfoKeys();
-		analyseDocument();
-		assert info != null;
+		analyseDocument(rootName, rootNamespace);
 	}
 
 	public StateInfo(Map<String,String> infoItems, String whatState, String apiVersion)
 	{
 		this.stateName = whatState;
 		this.apiVersion = apiVersion;
-		log = new JMSLogger(whatState);
+		log = JMSLogger.getLog(whatState);
 		info = new HashMap<String, String>(infoItems);
-		createDocumentFromInfo();
-		assert doc != null;
+		// we will only create a Document from this if needed, i.e.
+		// in getDocument().
 	}
 	
 	/**
@@ -105,13 +105,17 @@ public abstract class StateInfo
 	 * @throws MessageFormatException if the structure of the document is
 	 * inconsistent, i.e. structure expectations are violated.
 	 */
-	protected void analyseDocument()
+	protected void analyseDocument(String rootName, String rootNamespace)
 	throws MessageFormatException
 	{
 		Element root = doc.getDocumentElement();
-		if (!root.getTagName().equals(SemaineML.AGENTSTATE)) {
+		if (!root.getTagName().equals(rootName)) {
 			throw new MessageFormatException("XML document should have root node '"+
-					SemaineML.AGENTSTATE+"', but has '"+root.getTagName()+"'!");
+					rootName+"', but has '"+root.getTagName()+"'!");
+		}
+		if (!XMLTool.isSameNamespace(root.getNamespaceURI(), rootNamespace)) {
+			throw new MessageFormatException("root node should have namespace '"+
+					rootNamespace+"' but has '"+root.getNamespaceURI()+"'!");
 		}
 		NodeList nodes = root.getChildNodes();
 		for (int i=0, max=nodes.getLength(); i<max; i++) {
@@ -144,6 +148,11 @@ public abstract class StateInfo
 
 	public Document getDocument()
 	{
+		if (doc == null) {
+			assert info != null : "Both doc and info are null - this shouldn't happen!";
+			createDocumentFromInfo();
+		}
+		assert doc != null : "Couldn't create document";
 		return doc;
 	}
 

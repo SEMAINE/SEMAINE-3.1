@@ -140,7 +140,9 @@ public class DummyInterpreter extends Component
 				Map<String,String> agentInfo = new HashMap<String,String>();
 				agentInfo.put("interest", agentInterest);
 				agentStateSender.sendStateInfo(new AgentStateInfo(agentInfo), time);
+				lastInterest = agentInterest;
 			}
+			lastInterestCheckedTime = time;
 		}
 	}
 

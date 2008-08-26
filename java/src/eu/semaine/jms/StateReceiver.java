@@ -13,6 +13,7 @@ import javax.jms.Message;
 
 import eu.semaine.datatypes.SEMAINEAgentStateMessage;
 import eu.semaine.datatypes.SEMAINEMessage;
+import eu.semaine.datatypes.SEMAINEStateMessage;
 import eu.semaine.exceptions.MessageFormatException;
 
 public class StateReceiver extends XMLReceiver
@@ -61,7 +62,7 @@ public class StateReceiver extends XMLReceiver
 					}
 				}
 			} catch (MessageFormatException mfe) {
-				// TODO: can we log the problem somewhere?
+				log.warn("Problem creating SEMAINE message: ", mfe);
 			}
 		}
 	}
@@ -78,8 +79,8 @@ public class StateReceiver extends XMLReceiver
 
 	private void updateInformationState(SEMAINEMessage m)
 	{
-		assert m instanceof SEMAINEAgentStateMessage;
-		SEMAINEAgentStateMessage as = (SEMAINEAgentStateMessage) m;
+		assert m instanceof SEMAINEStateMessage;
+		SEMAINEStateMessage as = (SEMAINEStateMessage) m;
 		Map<String, String> info = as.getState().getInfo();
 		// Two conditions for adding the entry to our currentBestGuess:
 		// 1. we don't have this key yet (i.e., first message)

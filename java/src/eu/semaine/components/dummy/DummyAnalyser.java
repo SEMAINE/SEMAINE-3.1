@@ -16,9 +16,9 @@ import eu.semaine.datatypes.SEMAINEFeatureMessage;
 import eu.semaine.datatypes.SEMAINEMessage;
 import eu.semaine.datatypes.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
+import eu.semaine.jms.DialogStateReceiver;
 import eu.semaine.jms.EmmaSender;
 import eu.semaine.jms.FeatureReceiver;
-import eu.semaine.jms.UserStateReceiver;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.util.XMLTool;
 
@@ -32,7 +32,7 @@ import eu.semaine.util.XMLTool;
 public class DummyAnalyser extends Component 
 {
 	private EmmaSender userStateSender;
-	private UserStateReceiver dialogStateReceiver;
+	private DialogStateReceiver dialogStateReceiver;
 	private FeatureReceiver featureReceiver;
 	
 	private boolean userIsSpeaking = false;
@@ -46,7 +46,7 @@ public class DummyAnalyser extends Component
 		super("DummyAnalyser");
 		featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
 		receivers.add(featureReceiver); // to set up properly
-		dialogStateReceiver = new UserStateReceiver("semaine.data.state.dialog");
+		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
 		receivers.add(dialogStateReceiver);
 		userStateSender = new EmmaSender("semaine.data.state.user", getName());
 		senders.add(userStateSender); // so it can be started etc
@@ -58,8 +58,7 @@ public class DummyAnalyser extends Component
 		if (m instanceof SEMAINEFeatureMessage) {
 			SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage) m;
 			float[] features = fm.getFeatureVector();
-			log.debug("Received feature vector, features[0]="+features[0]);
-			if (features[0] < 0.02 && userIsSpeaking) { // some arbitrary condition
+			if (features[0] < 0.002 && userIsSpeaking) { // some arbitrary condition
 				// Simulate a turn-yielding event
 				// Create and fill a simple EMMA document
 				Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
@@ -70,7 +69,7 @@ public class DummyAnalyser extends Component
 				behaviour.setAttribute(SemaineML.INTENSITY, "0.9");
 				// Now send it
 				userStateSender.sendXML(document, fm.getUsertime(), Event.single);
-			} else if (features[0] > 0.98 && !userIsSpeaking) {
+			} else if (features[0] > 0.998 && !userIsSpeaking) {
 				// Simulate a turn-request signal
 				// Create and fill a simple EMMA document
 				Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);

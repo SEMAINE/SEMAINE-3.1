@@ -39,7 +39,7 @@ public class DialogStateInfo extends StateInfo
 	public DialogStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "DialogStateInfo", APIVersion);
+		super(doc, "DialogStateInfo", APIVersion, SemaineML.DIALOGSTATE, SemaineML.namespace);
 	}
 
 	/**
@@ -63,6 +63,7 @@ public class DialogStateInfo extends StateInfo
 	@Override
 	protected void createDocumentFromInfo()
 	{
+		assert dialogHistory != null : "method seems to be called before constructor is finished";
 		doc = XMLTool.newDocument(SemaineML.DIALOGSTATE, SemaineML.namespace, SemaineML.version);
 		Element root = doc.getDocumentElement();
 		String item = info.get("speaker");

@@ -6,6 +6,8 @@ package eu.semaine.jms;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -30,6 +32,7 @@ public class JMSLogger
 	////////// Static stuff, used by all JMSLoggers ///////////
 	private static Connection connection;
 	private static Session session;
+	private static Map<String,JMSLogger> loggers = new HashMap<String, JMSLogger>();
 	
 	static {
 		try {
@@ -44,6 +47,16 @@ public class JMSLogger
 			LogFactory.getLog(JMSLogger.class).warn("Cannot set up JMS logger connection and session", e);
 		}
 	};
+	
+	
+	public static JMSLogger getLog(String source)
+	{
+		if (!loggers.containsKey(source)) {
+			loggers.put(source, new JMSLogger(source));
+		}
+		return loggers.get(source);
+
+	}
 	
 	/////////////// Individual stuff ////////////////
 	private enum Level {error, warn, info, debug};
@@ -61,7 +74,7 @@ public class JMSLogger
 	 * @param source
 	 * @throws JMSException
 	 */
-	public JMSLogger(String source)
+	private JMSLogger(String source)
 	{
 		String basename = "semaine.log."+source;
 		fallbackLogger = LogFactory.getLog(basename);

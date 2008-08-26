@@ -67,7 +67,7 @@ public class DummyBMLActionProposer extends Component
 	{
 		// When in the listener role, we nod every second
 		long time = System.currentTimeMillis();
-		if (lastTimeINodded - time > 1000 &&
+		if (time - lastTimeINodded > 1000 &&
 				"user".equals(dialogStateReceiver.getCurrentBestGuess("speaker"))) {
 			Document doc = XMLTool.newDocument(BML.BML, BML.namespace, BML.version);
 			Element root = doc.getDocumentElement();
@@ -85,7 +85,7 @@ public class DummyBMLActionProposer extends Component
 		if (m instanceof SEMAINEFeatureMessage) {
 			SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage) m;
 			float[] features = fm.getFeatureVector();
-			if (features[2] < 0.02) { // some arbitrary condition
+			if (features[2] < 0.001 && !smiling) { // some arbitrary condition
 				// start smiling
 				Document doc = XMLTool.newDocument(BML.BML, BML.namespace, BML.version);
 				Element root = doc.getDocumentElement();
@@ -93,7 +93,7 @@ public class DummyBMLActionProposer extends Component
 				face.setAttribute(BML.TYPE, "smile");
 				bmlSender.sendXML(doc, System.currentTimeMillis(), Event.start);
 				smiling = true;
-			} else if (features[2] > 0.98 && smiling) { // arbitrary
+			} else if (features[2] > 0.99 && smiling) { // arbitrary
 				// stop smiling
 				Document doc = XMLTool.newDocument(BML.BML, BML.namespace, BML.version);
 				Element root = doc.getDocumentElement();

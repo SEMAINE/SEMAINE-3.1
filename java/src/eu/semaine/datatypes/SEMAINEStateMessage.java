@@ -33,7 +33,7 @@ public abstract class SEMAINEStateMessage extends SEMAINEXMLMessage
 		super(message);
 		try {
 			state = createState(doc);
-			log = new JMSLogger(state.toString());
+			log = JMSLogger.getLog(state.toString());
 			String messageVersion = message.getStringProperty(state.toString()+"APIVersion");
 			if (!state.getAPIVersion().equals(messageVersion)) {
 				log.warn("API versions differ: I have '"+state.getAPIVersion()+

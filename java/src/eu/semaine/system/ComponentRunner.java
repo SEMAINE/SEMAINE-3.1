@@ -88,6 +88,7 @@ public class ComponentRunner
 
 	private void addShutdownHook() {
 		// When shutting down, 
+		/*
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				log.info("Shutting down components...");
@@ -104,6 +105,7 @@ public class ComponentRunner
 				}
 			}
 		});
+		*/
 	}
 	
 	public void go()

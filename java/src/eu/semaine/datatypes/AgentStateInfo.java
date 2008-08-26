@@ -31,7 +31,7 @@ public class AgentStateInfo extends StateInfo
 	public AgentStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "AgentStateInfo", APIVersion);
+		super(doc, "AgentStateInfo", APIVersion, SemaineML.AGENTSTATE, SemaineML.namespace);
 	}
 
 	/**

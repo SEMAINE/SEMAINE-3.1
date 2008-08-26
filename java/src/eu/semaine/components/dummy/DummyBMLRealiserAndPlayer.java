@@ -75,8 +75,8 @@ public class DummyBMLRealiserAndPlayer extends Component
 		}
 		Element face = XMLTool.getChildElementByTagNameNS(bml, BML.FACE, BML.namespace);
 		if (face != null) {
-			String type = head.getAttribute(BML.TYPE);
-			if (type.equals("SMILE")) {
+			String type = face.getAttribute(BML.TYPE);
+			if (type.equals("smile")) {
 				String action = event == Event.start ? "starts" : "stops";
 				System.out.println(format.format(new Date(xm.getUsertime()))+ " ("+action+" smiling)");
 			}

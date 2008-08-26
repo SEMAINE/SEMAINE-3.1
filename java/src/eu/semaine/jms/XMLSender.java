@@ -7,6 +7,8 @@ package eu.semaine.jms;
 import java.io.StringWriter;
 
 import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.TextMessage;
 
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -15,6 +17,8 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
+import eu.semaine.datatypes.SEMAINEMessage;
+import eu.semaine.datatypes.SEMAINEXMLMessage;
 import eu.semaine.exceptions.SystemConfigurationException;
 
 /**
@@ -111,12 +115,24 @@ public class XMLSender extends Sender
 			throw new NullPointerException("document passed as argument is null");
 		if (isPeriodic())
 			throw new IllegalStateException("XML sender is expected to be event-based, not periodic");
+		if (!isConnectionStarted)
+			throw new IllegalStateException("Connection is not started!");
+		if (isPeriodic())
+			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
 		LSOutput output = domImplLS.createLSOutput();
 		output.setEncoding("UTF-8");
 		StringWriter buf = new StringWriter();
 		output.setCharacterStream(buf);
 		serializer.write(document, output);
 		sendTextMessage(buf.toString(), usertime, event);
+	}
+	
+	@Override
+	protected void fillMessageProperties(Message message, long usertime)
+	throws JMSException
+	{
+		super.fillMessageProperties(message, usertime);
+		message.setBooleanProperty(SEMAINEXMLMessage.IS_XML, true);
 	}
 }
 

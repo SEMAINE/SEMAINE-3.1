@@ -50,7 +50,7 @@ public class DummyActionSelection extends Component
 	
 
 	@Override
-	public void react(SEMAINEMessage m) throws JMSException
+	protected void react(SEMAINEMessage m) throws JMSException
 	{
 		if (!(m instanceof SEMAINEXMLMessage)) {
 			throw new MessageFormatException("expected XML message, got "+m.getClass().getSimpleName());

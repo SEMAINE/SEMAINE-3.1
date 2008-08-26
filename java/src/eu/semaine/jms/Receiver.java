@@ -47,6 +47,8 @@ public class Receiver extends IOBase implements MessageListener
 	
 	protected SEMAINEMessageAvailableListener listener;
 	
+	protected JMSLogger log;
+	
 	protected SEMAINEMessage message = null;
 		
 	/**
@@ -57,6 +59,7 @@ public class Receiver extends IOBase implements MessageListener
 	{
 		super(topicName);
 		consumer = session.createConsumer(topic);
+		log = JMSLogger.getLog("Receiver");
 	}
 	
 	/**
@@ -71,6 +74,7 @@ public class Receiver extends IOBase implements MessageListener
 	{
 		super(topicName);
 		consumer = session.createConsumer(topic, messageSelector);
+		log = JMSLogger.getLog("Receiver");
 	}
 	
 	/**
@@ -187,7 +191,7 @@ public class Receiver extends IOBase implements MessageListener
 					}
 				}
 			} catch (MessageFormatException mfe) {
-				// TODO: can we log the problem somewhere?
+				log.warn("Problem creating SEMAINE message: ", mfe);
 			}
 		}
 	}
@@ -210,6 +214,7 @@ public class Receiver extends IOBase implements MessageListener
 	public static void main(String[] args) throws Exception
 	{
 		Receiver r = new Receiver("testtopic");
+		r.startConnection();
 		ConnectionMetaData meta = r.getConnection().getMetaData();
 		String provider = meta.getJMSProviderName();
 		String providerVersion = meta.getProviderVersion();
