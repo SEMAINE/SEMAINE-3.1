@@ -37,17 +37,22 @@ public abstract class StateInfo
 	throws MessageFormatException
 	{
 		this.stateName = whatState;
+		this.apiVersion = apiVersion;
 		log = new JMSLogger(whatState);
 		info = new HashMap<String, String>();
 		setupInfoKeys();
 		analyseDocument();
+		assert info != null;
 	}
 
-	public StateInfo(Map<String,String> infoItems, String whatState)
+	public StateInfo(Map<String,String> infoItems, String whatState, String apiVersion)
 	{
+		this.stateName = whatState;
+		this.apiVersion = apiVersion;
 		log = new JMSLogger(whatState);
 		info = new HashMap<String, String>(infoItems);
 		createDocumentFromInfo();
+		assert doc != null;
 	}
 	
 	/**

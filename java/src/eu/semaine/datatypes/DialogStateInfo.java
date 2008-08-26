@@ -51,7 +51,7 @@ public class DialogStateInfo extends StateInfo
 	public DialogStateInfo(Map<String, String> infoItems, Collection<DialogAct> dialogActs)
 	throws JMSException
 	{
-		super(infoItems, "DialogStateInfo");
+		super(infoItems, "DialogStateInfo", APIVersion);
 		if (dialogActs != null) {
 			dialogHistory.addAll(dialogActs);
 		}
@@ -63,7 +63,7 @@ public class DialogStateInfo extends StateInfo
 	@Override
 	protected void createDocumentFromInfo()
 	{
-		Document doc = XMLTool.newDocument(SemaineML.DIALOGSTATE, SemaineML.namespace, SemaineML.version);
+		doc = XMLTool.newDocument(SemaineML.DIALOGSTATE, SemaineML.namespace, SemaineML.version);
 		Element root = doc.getDocumentElement();
 		String item = info.get("speaker");
 		if (item != null) {

@@ -41,7 +41,7 @@ public class AgentStateInfo extends StateInfo
 	public AgentStateInfo(Map<String, String> infoItems)
 	throws JMSException
 	{
-		super(infoItems, "AgentStateInfo");
+		super(infoItems, "AgentStateInfo", APIVersion);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class AgentStateInfo extends StateInfo
 	@Override
 	protected void createDocumentFromInfo()
 	{
-		Document doc = XMLTool.newDocument(SemaineML.AGENTSTATE, SemaineML.namespace, SemaineML.version);
+		doc = XMLTool.newDocument(SemaineML.AGENTSTATE, SemaineML.namespace, SemaineML.version);
 		Element root = doc.getDocumentElement();
 		String item = info.get("emotion-quadrant");
 		if (item != null) {

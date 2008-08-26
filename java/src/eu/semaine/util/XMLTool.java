@@ -70,7 +70,7 @@ public class XMLTool
      */
     public static Document newDocument(String rootTagname, String namespace, String version)
     {
-        Document doc = newDocument(namespace, rootTagname);
+        Document doc = newDocument(rootTagname, namespace);
         Element root = doc.getDocumentElement();
         root.setAttribute("version", version);
         return doc;

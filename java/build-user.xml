@@ -6,7 +6,8 @@
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Main-Class"
                     value="eu.semaine.system.ComponentRunner"/>
-                <attribute name="Class-Path" value="commons-logging-1.1.1.jar activemq-all-5.1.0.jar log4j-1.2.15.jar"/>
+                <attribute name="Class-Path" 
+                  value="commons-logging-1.1.1.jar activemq-all-5.1.0.jar log4j-1.2.15.jar xml-apis.jar xercesImpl.jar serializer.jar"/>
             </manifest>
          </jar>
     </target>

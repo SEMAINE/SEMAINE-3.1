@@ -58,6 +58,7 @@ public class DummyAnalyser extends Component
 		if (m instanceof SEMAINEFeatureMessage) {
 			SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage) m;
 			float[] features = fm.getFeatureVector();
+			log.debug("Received feature vector, features[0]="+features[0]);
 			if (features[0] < 0.02 && userIsSpeaking) { // some arbitrary condition
 				// Simulate a turn-yielding event
 				// Create and fill a simple EMMA document

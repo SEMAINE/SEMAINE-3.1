@@ -19,8 +19,6 @@ import eu.semaine.datatypes.SEMAINEMessage;
 import eu.semaine.datatypes.SEMAINEXMLMessage;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.BMLReceiver;
-import eu.semaine.jms.BMLSender;
-import eu.semaine.jms.FMLReceiver;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.util.XMLTool;
 

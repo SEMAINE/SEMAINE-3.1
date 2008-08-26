@@ -38,7 +38,9 @@ public class DummyFeatureExtractor extends Component
 		});
 	}
 
-	public void act() throws JMSException
+	@Override
+	protected void act()
+	throws JMSException
 	{
 		float[] features = new float[featureSender.getFeatureNames().length];
 		Random random = new Random();
