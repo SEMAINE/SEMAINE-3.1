@@ -36,5 +36,10 @@ public class SEMAINEAgentStateMessage extends SEMAINEStateMessage
 	}
 
 	
+	@Override
+	public AgentStateInfo getState()
+	{
+		return (AgentStateInfo)state;
+	}
 
 }

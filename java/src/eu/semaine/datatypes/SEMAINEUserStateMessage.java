@@ -35,4 +35,10 @@ public class SEMAINEUserStateMessage extends SEMAINEStateMessage
 		return new UserStateInfo(document);
 	}
 	
+	@Override
+	public UserStateInfo getState()
+	{
+		return (UserStateInfo)state;
+	}
+
 }

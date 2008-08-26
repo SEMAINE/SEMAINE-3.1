@@ -11,7 +11,7 @@ import eu.semaine.datatypes.SEMAINEMessage;
 import eu.semaine.datatypes.SEMAINEUserStateMessage;
 import eu.semaine.exceptions.MessageFormatException;
 
-public class UserStateReceiver extends XMLReceiver
+public class UserStateReceiver extends StateReceiver
 {
 	/**
 	 * Create a receiver that will listen for all messages in the given Topic.

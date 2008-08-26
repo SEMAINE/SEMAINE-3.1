@@ -34,4 +34,9 @@ public class SEMAINEDialogStateMessage extends SEMAINEStateMessage
 		return new DialogStateInfo(document);
 	}
 
+	@Override
+	public DialogStateInfo getState()
+	{
+		return (DialogStateInfo)state;
+	}
 }

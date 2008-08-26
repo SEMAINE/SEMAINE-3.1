@@ -6,6 +6,8 @@ package eu.semaine.jms;
 
 import javax.jms.JMSException;
 
+import eu.semaine.datatypes.StateInfo;
+
 /**
  * An abstraction of Sender for state data.
  * @author marc
@@ -51,4 +53,9 @@ public class StateSender extends XMLSender
 		super(jmsUrl, jmsUser, jmsPassword, topicName, datatype, source);
 	}
 
+	public void sendStateInfo(StateInfo s, long usertime)
+	throws JMSException
+	{
+		sendXML(s.getDocument(), usertime);
+	}
 }

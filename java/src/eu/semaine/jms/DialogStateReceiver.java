@@ -17,7 +17,7 @@ import eu.semaine.datatypes.StateInfo;
 import eu.semaine.datatypes.DialogStateInfo.DialogAct;
 import eu.semaine.exceptions.MessageFormatException;
 
-public class DialogStateReceiver extends XMLReceiver
+public class DialogStateReceiver extends StateReceiver
 {
 	/**
 	 * Create a receiver that will listen for all messages in the given Topic.
