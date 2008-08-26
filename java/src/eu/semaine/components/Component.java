@@ -12,11 +12,12 @@ import java.util.concurrent.TimeUnit;
 
 import javax.jms.JMSException;
 
-import eu.semaine.datatypes.SEMAINEMessage;
+import eu.semaine.components.meta.MetaMessenger;
 import eu.semaine.jms.JMSLogger;
-import eu.semaine.jms.Receiver;
 import eu.semaine.jms.SEMAINEMessageAvailableListener;
-import eu.semaine.jms.Sender;
+import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.receiver.Receiver;
+import eu.semaine.jms.sender.Sender;
 
 /**
  * The abstract base class for all components.

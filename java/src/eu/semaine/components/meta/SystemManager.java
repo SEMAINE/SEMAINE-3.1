@@ -15,7 +15,6 @@ import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
 
 import eu.semaine.components.Component;
-import eu.semaine.components.MetaMessenger;
 import eu.semaine.jms.IOBase;
 
 /**

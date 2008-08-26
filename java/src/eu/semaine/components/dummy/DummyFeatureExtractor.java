@@ -9,7 +9,7 @@ import java.util.Random;
 import javax.jms.JMSException;
 
 import eu.semaine.components.Component;
-import eu.semaine.jms.FeatureSender;
+import eu.semaine.jms.sender.FeatureSender;
 
 /**
  * @author marc

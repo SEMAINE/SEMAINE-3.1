@@ -11,8 +11,8 @@ import java.util.Date;
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
 
-import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.jms.Receiver;
+import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.receiver.Receiver;
 
 /**
  * This component can be used to view all or a selection of components.

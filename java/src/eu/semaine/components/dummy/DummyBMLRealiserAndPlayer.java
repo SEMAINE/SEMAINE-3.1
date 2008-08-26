@@ -14,12 +14,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
-import eu.semaine.datatypes.BML;
-import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.datatypes.SEMAINEXMLMessage;
+import eu.semaine.datatypes.xml.BML;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.BMLReceiver;
 import eu.semaine.jms.IOBase.Event;
+import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEXMLMessage;
+import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.util.XMLTool;
 
 /**

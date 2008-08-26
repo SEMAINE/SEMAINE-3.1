@@ -4,6 +4,8 @@
  */
 package eu.semaine.jms;
 
+import eu.semaine.jms.receiver.Receiver;
+
 
 public interface SEMAINEMessageAvailableListener
 {

@@ -7,13 +7,13 @@ package eu.semaine.components.dummy;
 import javax.jms.JMSException;
 
 import eu.semaine.components.Component;
-import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.datatypes.SEMAINEXMLMessage;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.BMLReceiver;
-import eu.semaine.jms.BMLSender;
-import eu.semaine.jms.FMLReceiver;
-import eu.semaine.jms.FMLSender;
+import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEXMLMessage;
+import eu.semaine.jms.receiver.BMLReceiver;
+import eu.semaine.jms.receiver.FMLReceiver;
+import eu.semaine.jms.sender.BMLSender;
+import eu.semaine.jms.sender.FMLSender;
 
 /**
  * This dummy action selection accepts all candidates.

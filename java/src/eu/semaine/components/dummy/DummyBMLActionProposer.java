@@ -11,18 +11,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
-import eu.semaine.datatypes.BML;
-import eu.semaine.datatypes.DialogStateInfo;
-import eu.semaine.datatypes.SEMAINEDialogStateMessage;
-import eu.semaine.datatypes.SEMAINEEmmaMessage;
-import eu.semaine.datatypes.SEMAINEFeatureMessage;
-import eu.semaine.datatypes.SEMAINEMessage;
+import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.xml.BML;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.BMLSender;
-import eu.semaine.jms.DialogStateReceiver;
-import eu.semaine.jms.EmmaReceiver;
-import eu.semaine.jms.FeatureReceiver;
 import eu.semaine.jms.IOBase.Event;
+import eu.semaine.jms.message.SEMAINEDialogStateMessage;
+import eu.semaine.jms.message.SEMAINEEmmaMessage;
+import eu.semaine.jms.message.SEMAINEFeatureMessage;
+import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.receiver.DialogStateReceiver;
+import eu.semaine.jms.receiver.EmmaReceiver;
+import eu.semaine.jms.receiver.FeatureReceiver;
+import eu.semaine.jms.sender.BMLSender;
 import eu.semaine.util.XMLTool;
 
 /**

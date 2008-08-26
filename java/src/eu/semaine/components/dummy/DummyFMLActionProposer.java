@@ -17,12 +17,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
-import eu.semaine.datatypes.BML;
-import eu.semaine.datatypes.FML;
-import eu.semaine.jms.AgentStateReceiver;
-import eu.semaine.jms.DialogStateReceiver;
-import eu.semaine.jms.FMLSender;
-import eu.semaine.jms.UserStateReceiver;
+import eu.semaine.datatypes.xml.BML;
+import eu.semaine.datatypes.xml.FML;
+import eu.semaine.jms.receiver.AgentStateReceiver;
+import eu.semaine.jms.receiver.DialogStateReceiver;
+import eu.semaine.jms.receiver.UserStateReceiver;
+import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.util.XMLTool;
 
 /**
