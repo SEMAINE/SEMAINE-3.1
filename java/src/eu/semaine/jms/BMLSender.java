@@ -23,14 +23,13 @@ public class BMLSender extends XMLSender
 	 * </ul>
 	 * Datatype and source will be sent with every message.
 	 * @param topic the name of the topic to send to.
-	 * @param datatype the name of the type of data being sent.
 	 * @param source the name of the component sending the data.
 	 * @throws NullPointerException if any of the parameters topicName, datatype, or source are null. 
 	 */
-	public BMLSender(String topicName, String datatype, String source)
+	public BMLSender(String topicName, String source)
 	throws JMSException
 	{
-		super(topicName, datatype, source);
+		super(topicName, "BML", source);
 	}
 
 	/**
@@ -40,15 +39,14 @@ public class BMLSender extends XMLSender
 	 * @param jmsUser the username to use (can be null)
 	 * @param jmsPassword the password to use (can be null)
 	 * @param topic the name of the topic to send to.
-	 * @param datatype the name of the type of data being sent.
 	 * @param source the name of the component sending the data.
 	 * @throws JMSException
 	 * @throws NullPointerException if any of the parameters jmsUrl, topicName, datatype, or source are null. 
 	 */
-	public BMLSender(String jmsUrl, String jmsUser, String jmsPassword, String topicName, String datatype, String source)
+	public BMLSender(String jmsUrl, String jmsUser, String jmsPassword, String topicName, String source)
 	throws JMSException
 	{
-		super(jmsUrl, jmsUser, jmsPassword, topicName, datatype, source);
+		super(jmsUrl, jmsUser, jmsPassword, topicName, "BML", source);
 	}
 
 }

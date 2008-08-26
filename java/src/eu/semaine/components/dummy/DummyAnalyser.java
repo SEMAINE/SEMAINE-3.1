@@ -14,7 +14,6 @@ import eu.semaine.datatypes.EMMA;
 import eu.semaine.datatypes.SEMAINEDialogStateMessage;
 import eu.semaine.datatypes.SEMAINEFeatureMessage;
 import eu.semaine.datatypes.SEMAINEMessage;
-import eu.semaine.datatypes.SEMAINEXMLMessage;
 import eu.semaine.datatypes.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.EmmaSender;

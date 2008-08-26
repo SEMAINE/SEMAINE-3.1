@@ -92,7 +92,7 @@ public class DummyInterpreter extends Component
 		receivers.add(featureReceiver); // to set up properly
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
-		userStateReceiver = new UserStateReceiver("semaine.data.state.user", "datatype <> 'EMMA'");
+		userStateReceiver = new UserStateReceiver("semaine.data.state.user", "datatype = 'UserState'");
 		receivers.add(userStateReceiver);
 		agentStateReceiver = new AgentStateReceiver("semaine.data.state.agent");
 		receivers.add(agentStateReceiver);
