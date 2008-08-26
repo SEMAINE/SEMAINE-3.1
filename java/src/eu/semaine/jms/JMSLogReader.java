@@ -77,7 +77,7 @@ public class JMSLogReader extends Receiver
 	public static void main(String[] args)
 	throws Exception
 	{
-		// Use java logging for logging:
+		// Use log4j for logging:
 		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.Log4JLogger");
 		// Configure log4j
 		Logger.getRootLogger().setLevel(Level.DEBUG);
@@ -88,6 +88,7 @@ public class JMSLogReader extends Receiver
 		String level = "*";
 		if (args.length > 0) component = args[0];
 		if (args.length > 1) level = args[1];
+		System.out.println("Looking for log messages in topic 'semaine.log."+component+"."+level+"'");
 		new JMSLogReader("semaine.log."+component+"."+level);
 	}
 
