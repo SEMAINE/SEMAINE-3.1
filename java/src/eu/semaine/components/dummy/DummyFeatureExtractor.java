@@ -29,13 +29,20 @@ public class DummyFeatureExtractor extends Component
 		featureSender = new FeatureSender("semaine.data.analysis.dummy", "", getName(), period);
 		waitingTime = period;
 		senders.add(featureSender); // so it can be started etc
-		featureSender.setFeatureNames(new String[] {
+		/*featureSender.setFeatureNames(new String[] {
 			"f0.level",
 			"f0.range",
 			"energy.db",
 			"optical.flow",
 			"facialfeaturepoint1.x"
-		});
+		});*/
+		// A scalable list of features -- for load testing 
+		String[] dummyFeatureNames = new String[100];
+		for (int i=0; i<dummyFeatureNames.length; i++) {
+			dummyFeatureNames[i] = "feature.name.of.feature"+i;
+		}
+		featureSender.setFeatureNames(dummyFeatureNames);
+		featureSender.setTimeToLive(100); // discard messages after 100 ms
 	}
 
 	@Override
@@ -47,6 +54,7 @@ public class DummyFeatureExtractor extends Component
 		for (int i=0; i<features.length; i++) {
 			features[i] = random.nextFloat();
 		}
+		//log.debug("sending feature vector with "+features.length+" features");
 		featureSender.sendFeatureVector(features, System.currentTimeMillis());
 	}
 }
