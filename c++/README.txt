@@ -39,5 +39,6 @@ described at http://semaine.opendfki.de/wiki/DummySystem
 	
 3. Start the demo system
 
+	export LD_LIBRARY_PATH=/path/to/activemq-dir/lib (on linux)
 	src/test
 
