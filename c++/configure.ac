@@ -1,0 +1,51 @@
+# Input to autoconf
+
+AC_INIT([semaine],1)
+AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_SRCDIR([src/semaine/cms/IOBase.cpp])
+
+AM_INIT_AUTOMAKE([subdir-objects])
+AC_CONFIG_HEADERS([config.h])
+
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_INLINE
+
+# Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+
+
+AM_SANITY_CHECK
+AC_LANG_CPLUSPLUS
+
+DECAF_CONFIGURE_APR
+ACTIVEMQCPP_CONFIGURE_ACTIVEMQCPP
+SEMAINE_CXXFLAGS="$ACTIVEMQCPP_CFLAGS $APR_CPPFLAGS $APR_INCLUDES $APU_INCLUDES"
+#SEMAINE_LIBS="$ACTIVEMQCPP_LIBS $ACTIVEMQCPP_LDFLAGS $APR_LIBS $APR_LDFLAGS $APU_LIBS $APU_LDFLAGS"
+SEMAINE_LIBS="$ACTIVEMQCPP_LIBS $ACTIVEMQCPP_LDFLAGS $APR_LDFLAGS $APU_LDFLAGS"
+
+## Flags for building the semaine code ##
+AC_SUBST([SEMAINE_CXXFLAGS])
+AC_SUBST([SEMAINE_LIBS])
+
+
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([src/Makefile])
+AC_OUTPUT
+
+
+
+
+
+
+

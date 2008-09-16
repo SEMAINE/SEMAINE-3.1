@@ -1,0 +1,363 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 44;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4919B6780E7953ED00024538 /* Sender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B6770E7953ED00024538 /* Sender.cpp */; };
+		4919B75B0E7A419200024538 /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B75A0E7A419200024538 /* Component.cpp */; };
+		4919B7870E7A5A1300024538 /* MetaMessenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7860E7A5A1300024538 /* MetaMessenger.cpp */; };
+		4919B7B90E7A7DF100024538 /* ComponentRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */; };
+		4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */; };
+		49377D360E684D6600C4F871 /* IOBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D340E684D6600C4F871 /* IOBase.cpp */; };
+		49377D3E0E684DCE00C4F871 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D3D0E684DCE00C4F871 /* main.cpp */; };
+		4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
+		4973EF750E76C28400D97DFA /* Receiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF740E76C28400D97DFA /* Receiver.cpp */; };
+		4973EFBD0E76D0CE00D97DFA /* SEMAINEMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8DD76F690486A84900D96B5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4919B6760E7953ED00024538 /* Sender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sender.h; path = sender/Sender.h; sourceTree = "<group>"; };
+		4919B6770E7953ED00024538 /* Sender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sender.cpp; path = sender/Sender.cpp; sourceTree = "<group>"; };
+		4919B6B90E795F7100024538 /* SEMAINEException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEException.h; path = exceptions/SEMAINEException.h; sourceTree = "<group>"; };
+		4919B7590E7A419200024538 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = components/Component.h; sourceTree = "<group>"; };
+		4919B75A0E7A419200024538 /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = components/Component.cpp; sourceTree = "<group>"; };
+		4919B7850E7A5A1300024538 /* MetaMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetaMessenger.h; path = components/meta/MetaMessenger.h; sourceTree = "<group>"; };
+		4919B7860E7A5A1300024538 /* MetaMessenger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MetaMessenger.cpp; path = components/meta/MetaMessenger.cpp; sourceTree = "<group>"; };
+		4919B7B70E7A7DF100024538 /* ComponentRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComponentRunner.h; path = system/ComponentRunner.h; sourceTree = "<group>"; };
+		4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentRunner.cpp; path = system/ComponentRunner.cpp; sourceTree = "<group>"; };
+		4919B7C20E7A8AA500024538 /* GenericTestComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericTestComponent.h; path = components/dummy/GenericTestComponent.h; sourceTree = "<group>"; };
+		4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GenericTestComponent.cpp; path = components/dummy/GenericTestComponent.cpp; sourceTree = "<group>"; };
+		49377D330E684D6600C4F871 /* loglevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loglevel.h; sourceTree = "<group>"; };
+		49377D340E684D6600C4F871 /* IOBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOBase.cpp; sourceTree = "<group>"; };
+		49377D350E684D6600C4F871 /* IOBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOBase.h; sourceTree = "<group>"; };
+		49377D3D0E684DCE00C4F871 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		49377D730E6BC8A100C4F871 /* semaine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = semaine; sourceTree = BUILT_PRODUCTS_DIR; };
+		495D54B40E78045900CA468B /* SystemConfigurationException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemConfigurationException.h; path = exceptions/SystemConfigurationException.h; sourceTree = "<group>"; };
+		4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CMSLogger.cpp; sourceTree = "<group>"; };
+		4973EF1D0E76B60F00D97DFA /* CMSLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSLogger.h; sourceTree = "<group>"; };
+		4973EF730E76C28400D97DFA /* Receiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Receiver.h; path = receiver/Receiver.h; sourceTree = "<group>"; };
+		4973EF740E76C28400D97DFA /* Receiver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Receiver.cpp; path = receiver/Receiver.cpp; sourceTree = "<group>"; };
+		4973EFA20E76CEE600D97DFA /* SEMAINEMessageAvailableListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEMAINEMessageAvailableListener.h; sourceTree = "<group>"; };
+		4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEMessage.h; path = message/SEMAINEMessage.h; sourceTree = "<group>"; };
+		4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEMessage.cpp; path = message/SEMAINEMessage.cpp; sourceTree = "<group>"; };
+		4973EFEB0E76E2C500D97DFA /* MessageFormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageFormatException.h; path = exceptions/MessageFormatException.h; sourceTree = "<group>"; };
+		497C3BE50E767FBC00B3B7A5 /* event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = event.h; path = semaine/cms/event.h; sourceTree = "<group>"; };
+		497C3C0D0E7684D600B3B7A5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = semaine/config.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DD76F660486A84900D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* semaine */ = {
+			isa = PBXGroup;
+			children = (
+				497C3BE50E767FBC00B3B7A5 /* event.h */,
+				49377D3D0E684DCE00C4F871 /* main.cpp */,
+				49377D310E684D6600C4F871 /* semaine */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6859E8C029090F304C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+				497C3C0D0E7684D600B3B7A5 /* config.h */,
+			);
+			name = semaine;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49377D730E6BC8A100C4F871 /* semaine */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4919B6750E7953D100024538 /* sender */ = {
+			isa = PBXGroup;
+			children = (
+				4919B6760E7953ED00024538 /* Sender.h */,
+				4919B6770E7953ED00024538 /* Sender.cpp */,
+			);
+			name = sender;
+			sourceTree = "<group>";
+		};
+		4919B7580E7A417200024538 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				4919B7C10E7A8A8600024538 /* dummy */,
+				4919B7840E7A59F300024538 /* meta */,
+				4919B7590E7A419200024538 /* Component.h */,
+				4919B75A0E7A419200024538 /* Component.cpp */,
+			);
+			name = components;
+			sourceTree = "<group>";
+		};
+		4919B7840E7A59F300024538 /* meta */ = {
+			isa = PBXGroup;
+			children = (
+				4919B7850E7A5A1300024538 /* MetaMessenger.h */,
+				4919B7860E7A5A1300024538 /* MetaMessenger.cpp */,
+			);
+			name = meta;
+			sourceTree = "<group>";
+		};
+		4919B7B60E7A7DC800024538 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				4919B7B70E7A7DF100024538 /* ComponentRunner.h */,
+				4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */,
+			);
+			name = system;
+			sourceTree = "<group>";
+		};
+		4919B7C10E7A8A8600024538 /* dummy */ = {
+			isa = PBXGroup;
+			children = (
+				4919B7C20E7A8AA500024538 /* GenericTestComponent.h */,
+				4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */,
+			);
+			name = dummy;
+			sourceTree = "<group>";
+		};
+		49377D310E684D6600C4F871 /* semaine */ = {
+			isa = PBXGroup;
+			children = (
+				4919B7B60E7A7DC800024538 /* system */,
+				4919B7580E7A417200024538 /* components */,
+				49377D320E684D6600C4F871 /* cms */,
+			);
+			path = semaine;
+			sourceTree = "<group>";
+		};
+		49377D320E684D6600C4F871 /* cms */ = {
+			isa = PBXGroup;
+			children = (
+				4919B6750E7953D100024538 /* sender */,
+				4973EFEA0E76E2A500D97DFA /* exceptions */,
+				4973EFBA0E76D0B100D97DFA /* message */,
+				4973EF720E76C25700D97DFA /* receiver */,
+				4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */,
+				4973EF1D0E76B60F00D97DFA /* CMSLogger.h */,
+				49377D330E684D6600C4F871 /* loglevel.h */,
+				49377D340E684D6600C4F871 /* IOBase.cpp */,
+				49377D350E684D6600C4F871 /* IOBase.h */,
+				4973EFA20E76CEE600D97DFA /* SEMAINEMessageAvailableListener.h */,
+			);
+			path = cms;
+			sourceTree = "<group>";
+		};
+		4973EF720E76C25700D97DFA /* receiver */ = {
+			isa = PBXGroup;
+			children = (
+				4973EF730E76C28400D97DFA /* Receiver.h */,
+				4973EF740E76C28400D97DFA /* Receiver.cpp */,
+			);
+			name = receiver;
+			sourceTree = "<group>";
+		};
+		4973EFBA0E76D0B100D97DFA /* message */ = {
+			isa = PBXGroup;
+			children = (
+				4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */,
+				4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */,
+			);
+			name = message;
+			sourceTree = "<group>";
+		};
+		4973EFEA0E76E2A500D97DFA /* exceptions */ = {
+			isa = PBXGroup;
+			children = (
+				4973EFEB0E76E2C500D97DFA /* MessageFormatException.h */,
+				495D54B40E78045900CA468B /* SystemConfigurationException.h */,
+				4919B6B90E795F7100024538 /* SEMAINEException.h */,
+			);
+			name = exceptions;
+			sourceTree = "<group>";
+		};
+		C6859E8C029090F304C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DD76F620486A84900D96B5E /* semaine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "semaine" */;
+			buildPhases = (
+				8DD76F640486A84900D96B5E /* Sources */,
+				8DD76F660486A84900D96B5E /* Frameworks */,
+				8DD76F690486A84900D96B5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = semaine;
+			productInstallPath = "$(HOME)/bin";
+			productName = semaine;
+			productReference = 49377D730E6BC8A100C4F871 /* semaine */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "semaine" */;
+			compatibilityVersion = "Xcode 3.0";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* semaine */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DD76F620486A84900D96B5E /* semaine */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DD76F640486A84900D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49377D360E684D6600C4F871 /* IOBase.cpp in Sources */,
+				49377D3E0E684DCE00C4F871 /* main.cpp in Sources */,
+				4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */,
+				4973EF750E76C28400D97DFA /* Receiver.cpp in Sources */,
+				4973EFBD0E76D0CE00D97DFA /* SEMAINEMessage.cpp in Sources */,
+				4919B6780E7953ED00024538 /* Sender.cpp in Sources */,
+				4919B75B0E7A419200024538 /* Component.cpp in Sources */,
+				4919B7870E7A5A1300024538 /* MetaMessenger.cpp in Sources */,
+				4919B7B90E7A7DF100024538 /* ComponentRunner.cpp in Sources */,
+				4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB923208733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_GLIBCXX_DEBUG=1",
+					"_GLIBCXX_DEBUG_PEDANTIC=1",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = "-lactivemq-cpp";
+				PRODUCT_NAME = semaine;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB923308733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = "-lactivemq-cpp";
+				PRODUCT_NAME = semaine;
+			};
+			name = Release;
+		};
+		1DEB923608733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include/**",
+					"/Users/marc/src/activemq-cpp-2.2/include/activemq-cpp-2.2",
+				);
+				LIBRARY_SEARCH_PATHS = "/Users/marc/src/activemq-cpp-2.2/lib";
+				OTHER_LDFLAGS = "-lactivemq";
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Debug;
+		};
+		1DEB923708733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = i386;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include/**",
+					"/Users/marc/src/activemq-cpp-2.2/include/activemq-cpp-2.2",
+				);
+				LIBRARY_SEARCH_PATHS = "/Users/marc/src/activemq-cpp-2.2/lib";
+				OTHER_LDFLAGS = "-lactivemq";
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "semaine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923208733DC60010E9CD /* Debug */,
+				1DEB923308733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "semaine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923608733DC60010E9CD /* Debug */,
+				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
