@@ -63,3 +63,4 @@ throw (CMSException)
 {
 	return topic->getTopicName();
 }
+

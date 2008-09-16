@@ -62,3 +62,4 @@ void GenericTestComponent::react(SEMAINEMessage * message) throw(CMSException)
 } // namespace dummy
 } // namespace components
 } // namespace semaine
+

@@ -17,3 +17,4 @@ const std::string SEMAINE_CMS_EVENT_END = "end";
 const std::string SEMAINE_CMS_EVENT_SINGLE = "single";
 
 #endif
+

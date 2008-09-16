@@ -18,3 +18,4 @@ const std::string SEMAINE_CMS_LOGLEVEL_INFO = "info";
 const std::string SEMAINE_CMS_LOGLEVEL_DEBUG = "debug";
 
 #endif
+

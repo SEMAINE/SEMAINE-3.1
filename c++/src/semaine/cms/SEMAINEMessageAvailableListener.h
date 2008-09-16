@@ -48,3 +48,4 @@ class SEMAINEMessageAvailableListener
 } // namespace semaine
 
 #endif
+

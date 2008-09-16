@@ -69,3 +69,4 @@ const std::string SEMAINEMessage::PERIOD = "period";
 } // namespace message
 } // namespace cms
 } // namespace semaine
+

@@ -171,3 +171,4 @@ const std::string Component::STATE_FAILURE = "failure";
 
 } // namespace components
 } // namespace semaine
+
