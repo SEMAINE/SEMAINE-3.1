@@ -62,7 +62,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libactivemq-cppd.lib libapr-1.lib libaprutil-1.lib Ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="C:\Programme\Apache2\lib;C:\Programme\Apache2\bin;&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\activemq-cpp-2.2.1\vs2005-build\Debug&quot;"
+				AdditionalLibraryDirectories="C:\Programme\Apache2\lib;&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\activemq-cpp-2.2.1\vs2005-build\Debug&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
