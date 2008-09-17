@@ -10,6 +10,13 @@
 #ifndef SEMAINE_CONFIG_H
 #define SEMAINE_CONFIG_H
 
+#ifdef _MSC_VER
+// On Visual C++, avoid warnings of the type:
+// warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+#pragma warning( disable : 4290 )
+#endif
+
+
 #include <string>
 
 #include <cassert>
@@ -17,7 +24,6 @@
 const std::string DEFAULT_CMS_URL = "tcp://localhost:61616";
 const std::string DEFAULT_CMS_USER = "";
 const std::string DEFAULT_CMS_PASSWORD = "";
-
 
 
 

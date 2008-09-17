@@ -13,12 +13,13 @@
 #include <exception>
 #include <string>
 
+#include <semaine/config.h>
+
 #include <cms/Connection.h>
 #include <cms/Session.h>
 #include <cms/MessageProducer.h>
 
 #include <semaine/cms/loglevel.h>
-#include <semaine/config.h>
 
 using namespace cms;
 

@@ -10,12 +10,13 @@
 #ifndef SEMAINE_CMS_RECEIVER_RECEIVER_H
 #define SEMAINE_CMS_RECEIVER_RECEIVER_H
 
+#include <semaine/config.h>
+
 #include <cms/MessageListener.h>
 
 #include <decaf/util/concurrent/Concurrent.h>
 #include <decaf/util/concurrent/Mutex.h>
 
-#include <semaine/config.h>
 
 #include <semaine/cms/IOBase.h>
 #include <semaine/cms/CMSLogger.h>

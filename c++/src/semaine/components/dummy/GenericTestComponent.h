@@ -10,6 +10,8 @@
 #ifndef SEMAINE_COMPONENTS_DUMMY_GENERICTESTCOMPONENTS_H
 #define SEMAINE_COMPONENTS_DUMMY_GENERICTESTCOMPONENTS_H
 
+#include <semaine/config.h>
+
 #include <cms/CMSException.h>
 
 #include <semaine/components/Component.h>

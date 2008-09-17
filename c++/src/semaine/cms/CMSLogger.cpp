@@ -75,6 +75,7 @@ CMSLogger::CMSLogger(const std::string & source) :
 		}
 	} catch (CMSException & e) {
 		std::cerr << "Cannot set up CMS log connections for "+source+"; will use fallback instead" << std::endl;
+		e.printStackTrace();
 	}
 }
 

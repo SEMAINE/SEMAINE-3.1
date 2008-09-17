@@ -13,6 +13,8 @@
 
 #include <list>
 
+#include <semaine/config.h>
+
 #include <semaine/components/Component.h>
 
 using namespace semaine::components;

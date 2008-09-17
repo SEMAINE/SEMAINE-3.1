@@ -2,6 +2,8 @@
 #include <iostream>
 #include <list>
 
+#include <semaine/config.h>
+
 #include <decaf/lang/System.h>
 #include <decaf/lang/Thread.h>
 

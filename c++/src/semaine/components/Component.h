@@ -13,6 +13,8 @@
 #include <list>
 #include <queue>
 
+#include <semaine/config.h>
+
 #include <decaf/lang/Thread.h>
 #include <decaf/util/concurrent/Concurrent.h>
 #include <decaf/util/concurrent/Mutex.h>
@@ -62,7 +64,7 @@ public:
 	 * Method called from the corresponding receiver thread, to notify us
 	 * that a message is available.
 	 */
-	void messageAvailableFrom(Receiver * source);
+	virtual void messageAvailableFrom(Receiver * const source);
 
 	/**
 	 * The main method executed for this Thread.

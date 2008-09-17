@@ -10,6 +10,8 @@
 #ifndef SEMAINE_CMS_SEMAINEMESSAGEAVAILABLELISTENER_H
 #define SEMAINE_CMS_SEMAINEMESSAGEAVAILABLELISTENER_H
 
+#include <semaine/config.h>
+
 namespace semaine {
 namespace cms {
 namespace receiver {

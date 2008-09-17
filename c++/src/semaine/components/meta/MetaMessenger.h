@@ -10,6 +10,8 @@
 #ifndef SEMAINE_COMPONENTS_META_METAMESSENGER_H
 #define SEMAINE_COMPONENTS_META_METAMESSENGER_H
 
+#include <semaine/config.h>
+
 #include <decaf/util/concurrent/Concurrent.h>
 #include <decaf/util/concurrent/Mutex.h>
 

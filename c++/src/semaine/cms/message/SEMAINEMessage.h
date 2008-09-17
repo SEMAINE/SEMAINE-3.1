@@ -13,10 +13,11 @@
 
 #include <typeinfo>
 
+#include <semaine/config.h>
+
 #include <cms/Message.h>
 #include <cms/TextMessage.h>
 
-#include <semaine/config.h>
 #include <semaine/cms/exceptions/MessageFormatException.h>
 
 

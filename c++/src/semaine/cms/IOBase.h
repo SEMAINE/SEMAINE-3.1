@@ -10,6 +10,7 @@
 #ifndef SEMAINE_CMS_IOBASE_H
 #define SEMAINE_CMS_IOBASE_H
 
+#include <semaine/config.h>
 
 #include <cms/Connection.h>
 #include <cms/Session.h>
@@ -22,7 +23,6 @@
 #include <iostream>
 
 #include <semaine/cms/event.h>
-#include <semaine/config.h>
 
 using namespace cms;
 

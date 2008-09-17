@@ -10,6 +10,7 @@
 #ifndef SEMAINE_CMS_EXCEPTIONS_SYSTEMCONFIGURATIONEXCEPTION_H
 #define SEMAINE_CMS_EXCEPTIONS_SYSTEMCONFIGURATIONEXCEPTION_H
 
+#include <semaine/config.h>
 #include <semaine/cms/exceptions/SEMAINEException.h>
 
 namespace semaine {

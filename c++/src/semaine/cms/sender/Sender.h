@@ -10,6 +10,8 @@
 #ifndef SEMAINE_CMS_SENDER_SENDER_H
 #define SEMAINE_CMS_SENDER_SENDER_H
 
+#include <semaine/config.h>
+
 #include <cms/MessageProducer.h>
 #include <cms/Message.h>
 
