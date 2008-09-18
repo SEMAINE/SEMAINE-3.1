@@ -4,6 +4,7 @@ semaine_api_sources_cpp = \
 	semaine/cms/CMSLogger.cpp \
 	semaine/cms/IOBase.cpp \
 	semaine/cms/message/SEMAINEMessage.cpp \
+        semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
 	semaine/cms/sender/Sender.cpp \
 	semaine/components/Component.cpp \
@@ -23,6 +24,7 @@ semaine_api_sources_h = \
 	semaine/cms/loglevel.h \
 	semaine/cms/message/SEMAINEMessage.h \
 	semaine/cms/receiver/Receiver.h \
+	semaine/cms/receiver/FeatureReceiver.h \
 	semaine/cms/SEMAINEMessageAvailableListener.h \
 	semaine/cms/sender/Sender.h \
 	semaine/components/Component.h \

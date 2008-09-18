@@ -17,6 +17,7 @@
 		4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
 		4973EF750E76C28400D97DFA /* Receiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF740E76C28400D97DFA /* Receiver.cpp */; };
 		4973EFBD0E76D0CE00D97DFA /* SEMAINEMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */; };
+		4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +60,9 @@
 		4973EFEB0E76E2C500D97DFA /* MessageFormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageFormatException.h; path = exceptions/MessageFormatException.h; sourceTree = "<group>"; };
 		497C3BE50E767FBC00B3B7A5 /* event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = event.h; path = semaine/cms/event.h; sourceTree = "<group>"; };
 		497C3C0D0E7684D600B3B7A5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = semaine/config.h; sourceTree = "<group>"; };
+		4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEFeatureMessage.h; path = message/SEMAINEFeatureMessage.h; sourceTree = "<group>"; };
+		4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEFeatureMessage.cpp; path = message/SEMAINEFeatureMessage.cpp; sourceTree = "<group>"; };
+		498010D60E82215B00C80323 /* FeatureReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeatureReceiver.h; path = receiver/FeatureReceiver.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +184,7 @@
 			children = (
 				4973EF730E76C28400D97DFA /* Receiver.h */,
 				4973EF740E76C28400D97DFA /* Receiver.cpp */,
+				498010D60E82215B00C80323 /* FeatureReceiver.h */,
 			);
 			name = receiver;
 			sourceTree = "<group>";
@@ -189,6 +194,8 @@
 			children = (
 				4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */,
 				4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */,
+				4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */,
+				4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */,
 			);
 			name = message;
 			sourceTree = "<group>";
@@ -263,6 +270,7 @@
 				4919B7870E7A5A1300024538 /* MetaMessenger.cpp in Sources */,
 				4919B7B90E7A7DF100024538 /* ComponentRunner.cpp in Sources */,
 				4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */,
+				4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

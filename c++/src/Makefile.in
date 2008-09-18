@@ -53,6 +53,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = semaine/cms/test-CMSLogger.$(OBJEXT) \
 	semaine/cms/test-IOBase.$(OBJEXT) \
 	semaine/cms/message/test-SEMAINEMessage.$(OBJEXT) \
+	semaine/cms/message/test-SEMAINEFeatureMessage.$(OBJEXT) \
 	semaine/cms/receiver/test-Receiver.$(OBJEXT) \
 	semaine/cms/sender/test-Sender.$(OBJEXT) \
 	semaine/components/test-Component.$(OBJEXT) \
@@ -189,6 +190,7 @@ semaine_api_sources_cpp = \
 	semaine/cms/CMSLogger.cpp \
 	semaine/cms/IOBase.cpp \
 	semaine/cms/message/SEMAINEMessage.cpp \
+        semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
 	semaine/cms/sender/Sender.cpp \
 	semaine/components/Component.cpp \
@@ -206,6 +208,7 @@ semaine_api_sources_h = \
 	semaine/cms/loglevel.h \
 	semaine/cms/message/SEMAINEMessage.h \
 	semaine/cms/receiver/Receiver.h \
+	semaine/cms/receiver/FeatureReceiver.h \
 	semaine/cms/SEMAINEMessageAvailableListener.h \
 	semaine/cms/sender/Sender.h \
 	semaine/components/Component.h \
@@ -293,6 +296,9 @@ semaine/cms/message/$(DEPDIR)/$(am__dirstamp):
 semaine/cms/message/test-SEMAINEMessage.$(OBJEXT):  \
 	semaine/cms/message/$(am__dirstamp) \
 	semaine/cms/message/$(DEPDIR)/$(am__dirstamp)
+semaine/cms/message/test-SEMAINEFeatureMessage.$(OBJEXT):  \
+	semaine/cms/message/$(am__dirstamp) \
+	semaine/cms/message/$(DEPDIR)/$(am__dirstamp)
 semaine/cms/receiver/$(am__dirstamp):
 	@$(MKDIR_P) semaine/cms/receiver
 	@: > semaine/cms/receiver/$(am__dirstamp)
@@ -353,6 +359,7 @@ test$(EXEEXT): $(test_OBJECTS) $(test_DEPENDENCIES)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f semaine/cms/message/test-SEMAINEFeatureMessage.$(OBJEXT)
 	-rm -f semaine/cms/message/test-SEMAINEMessage.$(OBJEXT)
 	-rm -f semaine/cms/receiver/test-Receiver.$(OBJEXT)
 	-rm -f semaine/cms/sender/test-Sender.$(OBJEXT)
@@ -369,6 +376,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/$(DEPDIR)/test-CMSLogger.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/$(DEPDIR)/test-IOBase.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/test-SEMAINEMessage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/receiver/$(DEPDIR)/test-Receiver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/test-Sender.Po@am__quote@
@@ -434,6 +442,20 @@ semaine/cms/message/test-SEMAINEMessage.obj: semaine/cms/message/SEMAINEMessage.
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/message/SEMAINEMessage.cpp' object='semaine/cms/message/test-SEMAINEMessage.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/message/test-SEMAINEMessage.obj `if test -f 'semaine/cms/message/SEMAINEMessage.cpp'; then $(CYGPATH_W) 'semaine/cms/message/SEMAINEMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/cms/message/SEMAINEMessage.cpp'; fi`
+
+semaine/cms/message/test-SEMAINEFeatureMessage.o: semaine/cms/message/SEMAINEFeatureMessage.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/message/test-SEMAINEFeatureMessage.o -MD -MP -MF semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Tpo -c -o semaine/cms/message/test-SEMAINEFeatureMessage.o `test -f 'semaine/cms/message/SEMAINEFeatureMessage.cpp' || echo '$(srcdir)/'`semaine/cms/message/SEMAINEFeatureMessage.cpp
+@am__fastdepCXX_TRUE@	mv -f semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Tpo semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/message/SEMAINEFeatureMessage.cpp' object='semaine/cms/message/test-SEMAINEFeatureMessage.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/message/test-SEMAINEFeatureMessage.o `test -f 'semaine/cms/message/SEMAINEFeatureMessage.cpp' || echo '$(srcdir)/'`semaine/cms/message/SEMAINEFeatureMessage.cpp
+
+semaine/cms/message/test-SEMAINEFeatureMessage.obj: semaine/cms/message/SEMAINEFeatureMessage.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/message/test-SEMAINEFeatureMessage.obj -MD -MP -MF semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Tpo -c -o semaine/cms/message/test-SEMAINEFeatureMessage.obj `if test -f 'semaine/cms/message/SEMAINEFeatureMessage.cpp'; then $(CYGPATH_W) 'semaine/cms/message/SEMAINEFeatureMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/cms/message/SEMAINEFeatureMessage.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Tpo semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/message/SEMAINEFeatureMessage.cpp' object='semaine/cms/message/test-SEMAINEFeatureMessage.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/message/test-SEMAINEFeatureMessage.obj `if test -f 'semaine/cms/message/SEMAINEFeatureMessage.cpp'; then $(CYGPATH_W) 'semaine/cms/message/SEMAINEFeatureMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/cms/message/SEMAINEFeatureMessage.cpp'; fi`
 
 semaine/cms/receiver/test-Receiver.o: semaine/cms/receiver/Receiver.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/receiver/test-Receiver.o -MD -MP -MF semaine/cms/receiver/$(DEPDIR)/test-Receiver.Tpo -c -o semaine/cms/receiver/test-Receiver.o `test -f 'semaine/cms/receiver/Receiver.cpp' || echo '$(srcdir)/'`semaine/cms/receiver/Receiver.cpp
