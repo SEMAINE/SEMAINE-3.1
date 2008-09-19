@@ -731,8 +731,24 @@ APU_INCLUDES
 ACTIVEMQCPP_LIBS
 ACTIVEMQCPP_INCLUDES
 ACTIVEMQCPP_CFLAGS
+build
+build_cpu
+build_vendor
+build_os
+host
+host_cpu
+host_vendor
+host_os
+acx_pthread_config
+PTHREAD_CC
+PTHREAD_LIBS
+PTHREAD_CFLAGS
+XERCES_CPPFLAGS
+XERCES_LDFLAGS
+XERCES_LIBS
+XERCES_VERSION
 SEMAINE_CXXFLAGS
-SEMAINE_LIBS
+SEMAINE_LDFLAGS
 LTLIBOBJS'
 ac_subst_files=''
 ac_user_opts='
@@ -741,6 +757,9 @@ enable_dependency_tracking
 with_apr
 with_apr_util
 with_activemqcpp
+with_xerces
+with_xerces_inc
+with_xerces_lib
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1367,6 +1386,10 @@ Program names:
   --program-prefix=PREFIX            prepend PREFIX to installed program names
   --program-suffix=SUFFIX            append SUFFIX to installed program names
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
 _ACEOF
 fi
 
@@ -1392,6 +1415,10 @@ Optional Packages:
                           or the full path to apu-config
   --with-activemqcpp=PATH         prefix for installed ActiveMQ-CPP, path to ActiveMQ-CPP build tree,
                                or the full path to activemqcpp-config
+  --with-xerces=[ARG]     use Xerces C++ Parser from given prefix (ARG=path);
+                          check standard prefixes (ARG=yes); disable (ARG=no)
+  --with-xerces-inc=[DIR] path to Xerces C++ Parser headers
+  --with-xerces-lib=[ARG] link options for Xerces C++ Parser libraries
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -5127,6 +5154,8 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
+# Our dependencies:
+# APR and APR-Util are needed by ActiveMQ-CPP:
 
   { $as_echo "$as_me:$LINENO: Apache Portable Runtime (APR) library configuration" >&5
 $as_echo "$as_me: Apache Portable Runtime (APR) library configuration" >&6;}
@@ -5435,6 +5464,7 @@ $as_echo "$as_me: error: apu-config --link-libtool --libs failed" >&2;}
 
 
 
+# ActiveMQ-CPP:
 
   { $as_echo "$as_me:$LINENO: Apache ActiveMQ-CPP Library configuration" >&5
 $as_echo "$as_me: Apache ActiveMQ-CPP Library configuration" >&6;}
@@ -5556,9 +5586,895 @@ $as_echo "$as_me: error: activemqcpp-config --libs failed" >&2;}
 
 
 
-SEMAINE_CXXFLAGS="$ACTIVEMQCPP_CFLAGS $APR_CPPFLAGS $APR_INCLUDES $APU_INCLUDES"
+# Xerces:
+# Make sure we can run config.sub.
+$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+  { { $as_echo "$as_me:$LINENO: error: cannot run $SHELL $ac_aux_dir/config.sub" >&5
+$as_echo "$as_me: error: cannot run $SHELL $ac_aux_dir/config.sub" >&2;}
+   { (exit 1); exit 1; }; }
+
+{ $as_echo "$as_me:$LINENO: checking build system type" >&5
+$as_echo_n "checking build system type... " >&6; }
+if test "${ac_cv_build+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  ac_build_alias=$build_alias
+test "x$ac_build_alias" = x &&
+  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+test "x$ac_build_alias" = x &&
+  { { $as_echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" >&5
+$as_echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
+   { (exit 1); exit 1; }; }
+ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+  { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" >&5
+$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_build" >&5
+$as_echo "$ac_cv_build" >&6; }
+case $ac_cv_build in
+*-*-*) ;;
+*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical build" >&5
+$as_echo "$as_me: error: invalid value of canonical build" >&2;}
+   { (exit 1); exit 1; }; };;
+esac
+build=$ac_cv_build
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_build
+shift
+build_cpu=$1
+build_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+build_os=$*
+IFS=$ac_save_IFS
+case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:$LINENO: checking host system type" >&5
+$as_echo_n "checking host system type... " >&6; }
+if test "${ac_cv_host+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  if test "x$host_alias" = x; then
+  ac_cv_host=$ac_cv_build
+else
+  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" >&5
+$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+fi
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_host" >&5
+$as_echo "$ac_cv_host" >&6; }
+case $ac_cv_host in
+*-*-*) ;;
+*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical host" >&5
+$as_echo "$as_me: error: invalid value of canonical host" >&2;}
+   { (exit 1); exit 1; }; };;
+esac
+host=$ac_cv_host
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_host
+shift
+host_cpu=$1
+host_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+host_os=$*
+IFS=$ac_save_IFS
+case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+
+
+
+
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+acx_pthread_ok=no
+
+# We used to check for pthread.h first, but this fails if pthread.h
+# requires special compiler flags (e.g. on True64 or Sequent).
+# It gets checked for in the link test anyway.
+
+# First of all, check if the user has set any of the PTHREAD_LIBS,
+# etcetera environment variables, and if threads linking works using
+# them:
+if test x"$PTHREAD_LIBS$PTHREAD_CFLAGS" != x; then
+        save_CFLAGS="$CFLAGS"
+        CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+        save_LIBS="$LIBS"
+        LIBS="$PTHREAD_LIBS $LIBS"
+        { $as_echo "$as_me:$LINENO: checking for pthread_join in LIBS=$PTHREAD_LIBS with CFLAGS=$PTHREAD_CFLAGS" >&5
+$as_echo_n "checking for pthread_join in LIBS=$PTHREAD_LIBS with CFLAGS=$PTHREAD_CFLAGS... " >&6; }
+        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pthread_join ();
+int
+main ()
+{
+return pthread_join ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+  acx_pthread_ok=yes
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:$LINENO: result: $acx_pthread_ok" >&5
+$as_echo "$acx_pthread_ok" >&6; }
+        if test x"$acx_pthread_ok" = xno; then
+                PTHREAD_LIBS=""
+                PTHREAD_CFLAGS=""
+        fi
+        LIBS="$save_LIBS"
+        CFLAGS="$save_CFLAGS"
+fi
+
+# We must check for the threads library under a number of different
+# names; the ordering is very important because some systems
+# (e.g. DEC) have both -lpthread and -lpthreads, where one of the
+# libraries is broken (non-POSIX).
+
+# Create a list of thread flags to try.  Items starting with a "-" are
+# C compiler flags, and other items are library names, except for "none"
+# which indicates that we try without any flags at all, and "pthread-config"
+# which is a program returning the flags for the Pth emulation library.
+
+acx_pthread_flags="pthreads none -Kthread -kthread lthread -pthread -pthreads -mthreads pthread --thread-safe -mt pthread-config"
+
+# The ordering *is* (sometimes) important.  Some notes on the
+# individual items follow:
+
+# pthreads: AIX (must check this before -lpthread)
+# none: in case threads are in libc; should be tried before -Kthread and
+#       other compiler flags to prevent continual compiler warnings
+# -Kthread: Sequent (threads in libc, but -Kthread needed for pthread.h)
+# -kthread: FreeBSD kernel threads (preferred to -pthread since SMP-able)
+# lthread: LinuxThreads port on FreeBSD (also preferred to -pthread)
+# -pthread: Linux/gcc (kernel threads), BSD/gcc (userland threads)
+# -pthreads: Solaris/gcc
+# -mthreads: Mingw32/gcc, Lynx/gcc
+# -mt: Sun Workshop C (may only link SunOS threads [-lthread], but it
+#      doesn't hurt to check since this sometimes defines pthreads too;
+#      also defines -D_REENTRANT)
+#      ... -mt is also the pthreads flag for HP/aCC
+# pthread: Linux, etcetera
+# --thread-safe: KAI C++
+# pthread-config: use pthread-config program (for GNU Pth library)
+
+case "${host_cpu}-${host_os}" in
+        *solaris*)
+
+        # On Solaris (at least, for some versions), libc contains stubbed
+        # (non-functional) versions of the pthreads routines, so link-based
+        # tests will erroneously succeed.  (We need to link with -pthreads/-mt/
+        # -lpthread.)  (The stubs are missing pthread_cleanup_push, or rather
+        # a function called by this macro, so we could check for that, but
+        # who knows whether they'll stub that too in a future libc.)  So,
+        # we'll just look for -pthreads and -lpthread first:
+
+        acx_pthread_flags="-pthreads pthread -mt -pthread $acx_pthread_flags"
+        ;;
+esac
+
+if test x"$acx_pthread_ok" = xno; then
+for flag in $acx_pthread_flags; do
+
+        case $flag in
+                none)
+                { $as_echo "$as_me:$LINENO: checking whether pthreads work without any flags" >&5
+$as_echo_n "checking whether pthreads work without any flags... " >&6; }
+                ;;
+
+                -*)
+                { $as_echo "$as_me:$LINENO: checking whether pthreads work with $flag" >&5
+$as_echo_n "checking whether pthreads work with $flag... " >&6; }
+                PTHREAD_CFLAGS="$flag"
+                ;;
+
+                pthread-config)
+                # Extract the first word of "pthread-config", so it can be a program name with args.
+set dummy pthread-config; ac_word=$2
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_acx_pthread_config+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$acx_pthread_config"; then
+  ac_cv_prog_acx_pthread_config="$acx_pthread_config" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_acx_pthread_config="yes"
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_prog_acx_pthread_config" && ac_cv_prog_acx_pthread_config="no"
+fi
+fi
+acx_pthread_config=$ac_cv_prog_acx_pthread_config
+if test -n "$acx_pthread_config"; then
+  { $as_echo "$as_me:$LINENO: result: $acx_pthread_config" >&5
+$as_echo "$acx_pthread_config" >&6; }
+else
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+                if test x"$acx_pthread_config" = xno; then continue; fi
+                PTHREAD_CFLAGS="`pthread-config --cflags`"
+                PTHREAD_LIBS="`pthread-config --ldflags` `pthread-config --libs`"
+                ;;
+
+                *)
+                { $as_echo "$as_me:$LINENO: checking for the pthreads library -l$flag" >&5
+$as_echo_n "checking for the pthreads library -l$flag... " >&6; }
+                PTHREAD_LIBS="-l$flag"
+                ;;
+        esac
+
+        save_LIBS="$LIBS"
+        save_CFLAGS="$CFLAGS"
+        LIBS="$PTHREAD_LIBS $LIBS"
+        CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+
+        # Check for various functions.  We must include pthread.h,
+        # since some functions may be macros.  (On the Sequent, we
+        # need a special flag -Kthread to make this header compile.)
+        # We check for pthread_join because it is in -lpthread on IRIX
+        # while pthread_create is in libc.  We check for pthread_attr_init
+        # due to DEC craziness with -lpthreads.  We check for
+        # pthread_cleanup_push because it is one of the few pthread
+        # functions on Solaris that doesn't have a non-functional libc stub.
+        # We try pthread_create on general principles.
+        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <pthread.h>
+int
+main ()
+{
+pthread_t th; pthread_join(th, 0);
+                     pthread_attr_init(0); pthread_cleanup_push(0, 0);
+                     pthread_create(0,0,0,0); pthread_cleanup_pop(0);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+  acx_pthread_ok=yes
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+        LIBS="$save_LIBS"
+        CFLAGS="$save_CFLAGS"
+
+        { $as_echo "$as_me:$LINENO: result: $acx_pthread_ok" >&5
+$as_echo "$acx_pthread_ok" >&6; }
+        if test "x$acx_pthread_ok" = xyes; then
+                break;
+        fi
+
+        PTHREAD_LIBS=""
+        PTHREAD_CFLAGS=""
+done
+fi
+
+# Various other checks:
+if test "x$acx_pthread_ok" = xyes; then
+        save_LIBS="$LIBS"
+        LIBS="$PTHREAD_LIBS $LIBS"
+        save_CFLAGS="$CFLAGS"
+        CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+
+        # Detect AIX lossage: JOINABLE attribute is called UNDETACHED.
+        { $as_echo "$as_me:$LINENO: checking for joinable pthread attribute" >&5
+$as_echo_n "checking for joinable pthread attribute... " >&6; }
+        attr_name=unknown
+        for attr in PTHREAD_CREATE_JOINABLE PTHREAD_CREATE_UNDETACHED; do
+            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <pthread.h>
+int
+main ()
+{
+int attr=$attr; return attr;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+  attr_name=$attr; break
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+        done
+        { $as_echo "$as_me:$LINENO: result: $attr_name" >&5
+$as_echo "$attr_name" >&6; }
+        if test "$attr_name" != PTHREAD_CREATE_JOINABLE; then
+
+cat >>confdefs.h <<_ACEOF
+#define PTHREAD_CREATE_JOINABLE $attr_name
+_ACEOF
+
+        fi
+
+        { $as_echo "$as_me:$LINENO: checking if more special flags are required for pthreads" >&5
+$as_echo_n "checking if more special flags are required for pthreads... " >&6; }
+        flag=no
+        case "${host_cpu}-${host_os}" in
+            *-aix* | *-freebsd* | *-darwin*) flag="-D_THREAD_SAFE";;
+            *solaris* | *-osf* | *-hpux*) flag="-D_REENTRANT";;
+        esac
+        { $as_echo "$as_me:$LINENO: result: ${flag}" >&5
+$as_echo "${flag}" >&6; }
+        if test "x$flag" != xno; then
+            PTHREAD_CFLAGS="$flag $PTHREAD_CFLAGS"
+        fi
+
+        LIBS="$save_LIBS"
+        CFLAGS="$save_CFLAGS"
+
+        # More AIX lossage: must compile with xlc_r or cc_r
+        if test x"$GCC" != xyes; then
+          for ac_prog in xlc_r cc_r
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_PTHREAD_CC+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$PTHREAD_CC"; then
+  ac_cv_prog_PTHREAD_CC="$PTHREAD_CC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_PTHREAD_CC="$ac_prog"
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+fi
+fi
+PTHREAD_CC=$ac_cv_prog_PTHREAD_CC
+if test -n "$PTHREAD_CC"; then
+  { $as_echo "$as_me:$LINENO: result: $PTHREAD_CC" >&5
+$as_echo "$PTHREAD_CC" >&6; }
+else
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$PTHREAD_CC" && break
+done
+test -n "$PTHREAD_CC" || PTHREAD_CC="${CC}"
+
+        else
+          PTHREAD_CC=$CC
+        fi
+else
+        PTHREAD_CC="$CC"
+fi
+
+
+
+
+
+# Finally, execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
+if test x"$acx_pthread_ok" = xyes; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PTHREAD 1
+_ACEOF
+
+        :
+else
+        acx_pthread_ok=no
+
+fi
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+
+
+
+
+
+
+# Check whether --with-xerces was given.
+if test "${with_xerces+set}" = set; then
+  withval=$with_xerces;
+        if test "$withval" = "yes"; then
+            if test -d /usr/local/include/xercesc ; then
+                xerces_prefix=/usr/local
+            elif test -d /usr/include/xercesc ; then
+                xerces_prefix=/usr
+            else
+                xerces_prefix=""
+            fi
+            xerces_requested="yes"
+        elif test -d "$withval"; then
+            xerces_prefix="$withval"
+            xerces_requested="yes"
+        else
+            xerces_prefix=""
+            xerces_requested="no"
+        fi
+
+else
+
+                if test -d /usr/local/include/xercesc ; then
+            xerces_prefix=/usr/local
+        elif test -d /usr/include/xercesc ; then
+            xerces_prefix=/usr
+        else
+            xerces_prefix=""
+        fi
+
+
+fi
+
+
+
+# Check whether --with-xerces-inc was given.
+if test "${with_xerces_inc+set}" = set; then
+  withval=$with_xerces_inc; xerces_include_dir="$withval"
+else
+  xerces_include_dir=""
+
+fi
+
+
+# Check whether --with-xerces-lib was given.
+if test "${with_xerces_lib+set}" = set; then
+  withval=$with_xerces_lib; xerces_ldflags="$withval"
+else
+  xerces_ldflags=""
+
+fi
+
+
+    XERCES_CPPFLAGS=""
+    XERCES_LDFLAGS=""
+    XERCES_VERSION=""
+
+                run_xerces_test="no"
+
+    if test -n "$xerces_prefix"; then
+        xerces_include_dir="$xerces_prefix/include"
+        xerces_include_dir2="$xerces_prefix/include/xercesc"
+        xerces_ldflags="-L$xerces_prefix/lib"
+        run_xerces_test="yes"
+    elif test "$xerces_requested" = "yes"; then
+        if test -n "$xerces_include_dir" -a -n "$xerces_lib_flags"; then
+            xerces_include_dir2="$xerces_include_dir/xercesc"
+            run_xerces_test="yes"
+        fi
+    else
+        run_xerces_test="no"
+    fi
+
+    xerces_libs="-lxerces-c"
+
+                if test "$run_xerces_test" = "yes"; then
+
+        saved_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS -I$xerces_include_dir -I$xerces_include_dir2"
+
+        saved_LDFLAGS="$LDFLAGS"
+        LDFLAGS="$LDFLAGS $xerces_ldflags $PTHREAD_LDFLAGS"
+
+        saved_LIBS="$LIBS"
+        LIBS="$xerces_libs $PTHREAD_LIBS $LIBS"
+
+                                { $as_echo "$as_me:$LINENO: checking for Xerces C++ Parser headers in $xerces_include_dir and $xerces_include_dir2" >&5
+$as_echo_n "checking for Xerces C++ Parser headers in $xerces_include_dir and $xerces_include_dir2... " >&6; }
+
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+        cat >conftest.$ac_ext <<_ACEOF
+
+            /* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <xercesc/util/XercesDefs.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+
+int
+main ()
+{
+
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+
+            XERCES_CPPFLAGS="-I$xerces_include_dir -I$xerces_include_dir2"
+            xerces_header_found="yes"
+            { $as_echo "$as_me:$LINENO: result: found" >&5
+$as_echo "found" >&6; }
+
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+            xerces_header_found="no"
+            { $as_echo "$as_me:$LINENO: result: not found" >&5
+$as_echo "not found" >&6; }
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+                                if test "$xerces_header_found" = "yes"; then
+
+            { $as_echo "$as_me:$LINENO: checking for Xerces C++ Parser libraries" >&5
+$as_echo_n "checking for Xerces C++ Parser libraries... " >&6; }
+
+            ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+            cat >conftest.$ac_ext <<_ACEOF
+
+                /* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <xercesc/util/XercesDefs.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+#if (_XERCES_VERSION >= 20200)
+XERCES_CPP_NAMESPACE_USE
+#endif
+
+int
+main ()
+{
+
+XMLPlatformUtils::Initialize();
+
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+
+                XERCES_LDFLAGS="$xerces_ldflags $PTHREAD_LDFLAGS"
+                XERCES_LIBS="$xerces_libs $PTHREAD_LIBS"
+                xerces_lib_found="yes"
+                { $as_echo "$as_me:$LINENO: result: found" >&5
+$as_echo "found" >&6; }
+
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                xerces_lib_found="no"
+                { $as_echo "$as_me:$LINENO: result: not found" >&5
+$as_echo "not found" >&6; }
+
+
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+            ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+        fi
+
+        CPPFLAGS="$saved_CPPFLAGS"
+        LDFLAGS="$saved_LDFLAGS"
+        LIBS="$saved_LIBS"
+    fi
+
+    { $as_echo "$as_me:$LINENO: checking for Xerces C++ Parser" >&5
+$as_echo_n "checking for Xerces C++ Parser... " >&6; }
+
+    if test "$run_xerces_test" = "yes"; then
+        if test "$xerces_header_found" = "yes" -a "$xerces_lib_found" = "yes"; then
+
+
+
+
+
+            HAVE_XERCES="yes"
+        else
+            HAVE_XERCES="no"
+        fi
+
+        { $as_echo "$as_me:$LINENO: result: $HAVE_XERCES" >&5
+$as_echo "$HAVE_XERCES" >&6; }
+
+                                if test "$HAVE_XERCES" = "yes"; then
+
+            xerces_version_req=
+
+            if test  -n "$xerces_version_req"; then
+
+                { $as_echo "$as_me:$LINENO: checking if Xerces C++ Parser version is >= $xerces_version_req" >&5
+$as_echo_n "checking if Xerces C++ Parser version is >= $xerces_version_req... " >&6; }
+
+                if test -f "$xerces_include_dir2/util/XercesVersion.hpp"; then
+
+                    xerces_major=`cat $xerces_include_dir2/util/XercesVersion.hpp | \
+                                    grep '^#define.*XERCES_VERSION_MAJOR.*[0-9]$' | \
+                                    sed -e 's/#define XERCES_VERSION_MAJOR.//'`
+
+                    xerces_minor=`cat $xerces_include_dir2/util/XercesVersion.hpp | \
+                                    grep '^#define.*XERCES_VERSION_MINOR.*[0-9]$' | \
+                                    sed -e 's/#define XERCES_VERSION_MINOR.//'`
+
+                    xerces_revision=`cat $xerces_include_dir2/util/XercesVersion.hpp | \
+                                    grep '^#define.*XERCES_VERSION_REVISION.*[0-9]$' | \
+                                    sed -e 's/#define XERCES_VERSION_REVISION.//'`
+
+                    XERCES_VERSION="$xerces_major.$xerces_minor.$xerces_revision"
+
+
+                                        xerces_version_req_major=`expr $xerces_version_req : '\([0-9]*\)'`
+                    xerces_version_req_minor=`expr $xerces_version_req : '[0-9]*\.\([0-9]*\)'`
+                    xerces_version_req_revision=`expr $xerces_version_req : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+                    if test "x$xerces_version_req_revision" = "x"; then
+                        xerces_version_req_revision="0"
+                    fi
+
+                    xerces_version_req_number=`expr $xerces_version_req_major \* 10000 \
+                                               \+ $xerces_version_req_minor \* 100 \
+                                               \+ $xerces_version_req_revision`
+
+                                        xerces_version_number=`expr $xerces_major \* 10000 \
+                                          \+ $xerces_minor \* 100 \
+                                           \+ $xerces_revision`
+
+                    xerces_version_check=`expr $xerces_version_number \>\= $xerces_version_req_number`
+                    if test "$xerces_version_check" = "1"; then
+                        { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+                    else
+                        { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+                        { $as_echo "$as_me:$LINENO: WARNING: Found Xerces C++ Parser $XERCES_VERSION, which is older than required. Possible compilation failure." >&5
+$as_echo "$as_me: WARNING: Found Xerces C++ Parser $XERCES_VERSION, which is older than required. Possible compilation failure." >&2;}
+                    fi
+                else
+                    { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+                    { $as_echo "$as_me:$LINENO: WARNING: Missing header XercesVersion.hpp. Unable to determine Xerces version." >&5
+$as_echo "$as_me: WARNING: Missing header XercesVersion.hpp. Unable to determine Xerces version." >&2;}
+                fi
+            fi
+        fi
+
+    else
+        HAVE_XERCES="no"
+        { $as_echo "$as_me:$LINENO: result: $HAVE_XERCES" >&5
+$as_echo "$HAVE_XERCES" >&6; }
+
+        if test "$xerces_requested" = "yes"; then
+            { $as_echo "$as_me:$LINENO: WARNING: Xerces C++ Parser support requested but headers or library not found. Specify valid prefix of Xerces C++ using --with-xerces=[DIR] or provide include directory and linker flags using --with-xerces-inc and --with-xerces-lib" >&5
+$as_echo "$as_me: WARNING: Xerces C++ Parser support requested but headers or library not found. Specify valid prefix of Xerces C++ using --with-xerces=[DIR] or provide include directory and linker flags using --with-xerces-inc and --with-xerces-lib" >&2;}
+        fi
+    fi
+
+
+  if test $HAVE_XERCES = "no" ; then
+
+  echo "The Apache Xerces-C library cannot be found."
+  echo "Please install Xerces-C on this system and supply the appropriate"
+  echo "--with-xerces option to 'configure'."
+  echo "You can download Xerces-C from http://xerces.apache.org/xerces-c/"
+
+  { { $as_echo "$as_me:$LINENO: error: no suitable Xerces-C install found" >&5
+$as_echo "$as_me: error: no suitable Xerces-C install found" >&2;}
+   { (exit 1); exit 1; }; }
+
+  fi
+
+
+SEMAINE_CXXFLAGS="$ACTIVEMQCPP_CFLAGS $APR_CPPFLAGS $APR_INCLUDES $APU_INCLUDES $XERCES_CFLAGS"
 #SEMAINE_LIBS="$ACTIVEMQCPP_LIBS $ACTIVEMQCPP_LDFLAGS $APR_LIBS $APR_LDFLAGS $APU_LIBS $APU_LDFLAGS"
-SEMAINE_LIBS="$ACTIVEMQCPP_LIBS $ACTIVEMQCPP_LDFLAGS $APR_LDFLAGS $APU_LDFLAGS"
+SEMAINE_LDFLAGS="$ACTIVEMQCPP_LIBS $ACTIVEMQCPP_LDFLAGS $APR_LDFLAGS $APU_LDFLAGS $XERCES_LDFLAGS $XERCES_LIBS"
 
 ## Flags for building the semaine code ##
 

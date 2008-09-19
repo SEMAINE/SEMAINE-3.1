@@ -14,12 +14,16 @@
 		4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */; };
 		492B35960E83805500DBE7E1 /* FeatureSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35950E83805500DBE7E1 /* FeatureSender.cpp */; };
 		492B35F10E839C5300DBE7E1 /* DummyFeatureExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */; };
+		492B36090E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */; };
 		49377D360E684D6600C4F871 /* IOBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D340E684D6600C4F871 /* IOBase.cpp */; };
 		49377D3E0E684DCE00C4F871 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D3D0E684DCE00C4F871 /* main.cpp */; };
 		4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
 		4973EF750E76C28400D97DFA /* Receiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF740E76C28400D97DFA /* Receiver.cpp */; };
 		4973EFBD0E76D0CE00D97DFA /* SEMAINEMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */; };
 		4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */; };
+		49A541C10E83D3F200D45016 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		49A541C40E83D42500D45016 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
+		49A5420A0E83E64E00D45016 /* XMLSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49A542080E83E64E00D45016 /* XMLSender.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +54,8 @@
 		492B35950E83805500DBE7E1 /* FeatureSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FeatureSender.cpp; path = sender/FeatureSender.cpp; sourceTree = "<group>"; };
 		492B35EF0E839C5300DBE7E1 /* DummyFeatureExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DummyFeatureExtractor.h; path = components/dummy/DummyFeatureExtractor.h; sourceTree = "<group>"; };
 		492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyFeatureExtractor.cpp; path = components/dummy/DummyFeatureExtractor.cpp; sourceTree = "<group>"; };
+		492B36070E83A86700DBE7E1 /* SEMAINEXMLMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEXMLMessage.h; path = message/SEMAINEXMLMessage.h; sourceTree = "<group>"; };
+		492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEXMLMessage.cpp; path = message/SEMAINEXMLMessage.cpp; sourceTree = "<group>"; };
 		49377D330E684D6600C4F871 /* loglevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loglevel.h; sourceTree = "<group>"; };
 		49377D340E684D6600C4F871 /* IOBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOBase.cpp; sourceTree = "<group>"; };
 		49377D350E684D6600C4F871 /* IOBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOBase.h; sourceTree = "<group>"; };
@@ -69,6 +75,11 @@
 		4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEFeatureMessage.h; path = message/SEMAINEFeatureMessage.h; sourceTree = "<group>"; };
 		4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEFeatureMessage.cpp; path = message/SEMAINEFeatureMessage.cpp; sourceTree = "<group>"; };
 		498010D60E82215B00C80323 /* FeatureReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeatureReceiver.h; path = receiver/FeatureReceiver.h; sourceTree = "<group>"; };
+		49A541C00E83D3F200D45016 /* libxerces-c.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libxerces-c.dylib"; path = "../../../../../../opt/local/lib/libxerces-c.dylib"; sourceTree = SOURCE_ROOT; };
+		49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libactivemq-cpp.4.dylib"; path = "../../../../src/activemq-cpp-install/lib/libactivemq-cpp.4.dylib"; sourceTree = SOURCE_ROOT; };
+		49A542040E83E57F00D45016 /* XMLReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLReceiver.h; path = semaine/cms/receiver/XMLReceiver.h; sourceTree = SOURCE_ROOT; };
+		49A542080E83E64E00D45016 /* XMLSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XMLSender.cpp; path = semaine/cms/sender/XMLSender.cpp; sourceTree = SOURCE_ROOT; };
+		49A542090E83E64E00D45016 /* XMLSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLSender.h; path = semaine/cms/sender/XMLSender.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +87,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49A541C10E83D3F200D45016 /* libxerces-c.dylib in Frameworks */,
+				49A541C40E83D42500D45016 /* libactivemq-cpp.4.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +98,8 @@
 		08FB7794FE84155DC02AAC07 /* semaine */ = {
 			isa = PBXGroup;
 			children = (
+				49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */,
+				49A541C00E83D3F200D45016 /* libxerces-c.dylib */,
 				497C3BE50E767FBC00B3B7A5 /* event.h */,
 				49377D3D0E684DCE00C4F871 /* main.cpp */,
 				49377D310E684D6600C4F871 /* semaine */,
@@ -114,6 +129,8 @@
 		4919B6750E7953D100024538 /* sender */ = {
 			isa = PBXGroup;
 			children = (
+				49A542080E83E64E00D45016 /* XMLSender.cpp */,
+				49A542090E83E64E00D45016 /* XMLSender.h */,
 				4919B6760E7953ED00024538 /* Sender.h */,
 				4919B6770E7953ED00024538 /* Sender.cpp */,
 				492B35940E83805500DBE7E1 /* FeatureSender.h */,
@@ -192,6 +209,7 @@
 		4973EF720E76C25700D97DFA /* receiver */ = {
 			isa = PBXGroup;
 			children = (
+				49A542040E83E57F00D45016 /* XMLReceiver.h */,
 				4973EF730E76C28400D97DFA /* Receiver.h */,
 				4973EF740E76C28400D97DFA /* Receiver.cpp */,
 				498010D60E82215B00C80323 /* FeatureReceiver.h */,
@@ -206,6 +224,8 @@
 				4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */,
 				4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */,
 				4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */,
+				492B36070E83A86700DBE7E1 /* SEMAINEXMLMessage.h */,
+				492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */,
 			);
 			name = message;
 			sourceTree = "<group>";
@@ -283,6 +303,8 @@
 				4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */,
 				492B35960E83805500DBE7E1 /* FeatureSender.cpp in Sources */,
 				492B35F10E839C5300DBE7E1 /* DummyFeatureExtractor.cpp in Sources */,
+				492B36090E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp in Sources */,
+				49A5420A0E83E64E00D45016 /* XMLSender.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +325,11 @@
 					"_GLIBCXX_DEBUG_PEDANTIC=1",
 				);
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+				);
 				OTHER_LDFLAGS = "-lactivemq-cpp";
 				PRODUCT_NAME = semaine;
 				ZERO_LINK = YES;
@@ -316,6 +343,11 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+				);
 				OTHER_LDFLAGS = "-lactivemq-cpp";
 				PRODUCT_NAME = semaine;
 			};
@@ -328,11 +360,14 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"/Users/marc/src/activemq-cpp-install/include/activemq-cpp-2.2.1/",
 					"/opt/local/include/**",
-					"/Users/marc/src/activemq-cpp-2.2/include/activemq-cpp-2.2",
 				);
-				LIBRARY_SEARCH_PATHS = "/Users/marc/src/activemq-cpp-2.2/lib";
-				OTHER_LDFLAGS = "-lactivemq";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"/Users/marc/src/activemq-cpp-install/lib",
+				);
+				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 			};
@@ -346,11 +381,17 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"/Users/marc/src/activemq-cpp-install/include/activemq-cpp-2.2.1/",
 					"/opt/local/include/**",
-					"/Users/marc/src/activemq-cpp-2.2/include/activemq-cpp-2.2",
 				);
-				LIBRARY_SEARCH_PATHS = "/Users/marc/src/activemq-cpp-2.2/lib";
-				OTHER_LDFLAGS = "-lactivemq";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"/Users/marc/src/activemq-cpp-install/lib",
+				);
+				OTHER_LDFLAGS = (
+					"-lactivemq",
+					"-lxerces-c",
+				);
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 			};

@@ -10,10 +10,16 @@ This code provides the API needed for connecting C++ processing components of th
 system to the JMS middleware.
 
 
-Compiling
----------
+Dependencies on installed libraries
+-----------------------------------
 
-1. Install ActiveMQ-CPP from http://activemq.apache.org/cms/. At least version 2.2.1 is required.
+The following third-party libraries are required.
+
+1. ActiveMQ-CPP
+
+This is the C++ client for the Java Messaging Service server ActiveMQ.
+
+Install ActiveMQ-CPP from http://activemq.apache.org/cms/. At least version 2.2.1 is required.
 
 Note the preconditions as listed in the README.
 
@@ -45,13 +51,25 @@ Windows:
 	- Now this should compile OK and create a static library
 	  ....\activemq-cpp-2.2.1\vs2005-build\Debug\libactivemq-cppd.lib.
 
-2. Configure and compile the SEMAINE code.
+
+2. Xerces-C
+
+This is a standards-compliant XML parser.
+
+Install Xerces-C from http://xerces.apache.org/xerces-c/.
+Binary releases exist for very many platforms.
+
+
+Compiling
+---------
+
+Configure and compile the SEMAINE code as follows.
 
 Linux / Mac:
 	cd semaine/c++
 	./autogen.sh
 			this will generate a configure script
-	./configure --with-activemqcpp=/path/to/activemq-cpp-installation
+	./configure --with-activemqcpp=/path/to/activemq-cpp-installation --with-xerces=/path/to/xerces-folder
 	make
 
 This will generate the executable binary src/test.

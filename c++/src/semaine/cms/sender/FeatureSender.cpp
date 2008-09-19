@@ -23,7 +23,8 @@ throw(CMSException) :
 	this->period = period;
 }
 
-FeatureSender::FeatureSender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword, const std::string & topicName, int period)
+FeatureSender::FeatureSender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
+	const std::string & datatype, const std::string & source, const std::string & topicName, int period)
 throw (CMSException) :
 	Sender(cmsUrl, cmsUser, cmsPassword, topicName, datatype, source),
 	sendBinary(false)

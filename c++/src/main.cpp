@@ -15,6 +15,23 @@
 #include <semaine/components/dummy/DummyFeatureExtractor.h>
 #include <semaine/system/ComponentRunner.h>
 
+
+#include <xercesc/parsers/XercesDOMParser.hpp>
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/util/XMLString.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/framework/MemBufInputSource.hpp>
+#include <xercesc/framework/MemBufFormatTarget.hpp>
+
+#if defined(XERCES_NEW_IOSTREAMS)
+  #include <iostream>
+#else
+  #include <iostream.h>
+#endif
+
+XERCES_CPP_NAMESPACE_USE
+
+
 void testCMSLogger()
 {
 	semaine::cms::CMSLogger * log = semaine::cms::CMSLogger::getLog("cmsmain");
@@ -75,6 +92,52 @@ void dummyFeatureExtractor()
 }
 
 
+void testXML()
+{
+	XMLPlatformUtils::Initialize();
+	std::string myXML = std::string("<semaine:text xmlns:semaine=\"http://www.semaine-project.eu\">this is what the user said</semaine:text>");
+	
+	XercesDOMParser* parser = new XercesDOMParser();
+    //parser->setValidationScheme(XercesDOMParser::Val_Always);    
+	parser->setDoNamespaces(true);
+	const char * msgTextC = myXML.c_str();
+	MemBufInputSource* memIS = new MemBufInputSource((const XMLByte *)msgTextC, strlen(msgTextC), "test", false);
+    parser->parse(*memIS);
+	DOMDocument * document = parser->getDocument();
+	DOMElement * root = document->getDocumentElement();
+	char * tagName = XMLString::transcode(root->getTagName());
+	char * nameSpace = XMLString::transcode(root->getNamespaceURI());
+	char * textContent = XMLString::transcode(root->getTextContent());
+	std::cout << "XML root tag name: " << tagName << ", namespace: " << nameSpace << std::endl;
+	std::cout << "text content: " << textContent << std::endl;
+	XMLString::release(&tagName);
+	XMLString::release(&nameSpace);
+	XMLString::release(&textContent);
+
+	std::cout << "serialising using a DOMWriter:" << std::endl;
+	XMLCh tempStr[100];
+	XMLString::transcode("LS", tempStr, 99);
+	DOMImplementation * impl = DOMImplementationRegistry::getDOMImplementation(tempStr);
+	DOMImplementationLS * implLS = dynamic_cast<DOMImplementationLS *>(impl);
+	if (implLS == NULL) {
+		throw new SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*impl).name());
+	}
+	DOMWriter * writer = implLS->createDOMWriter();
+	XMLString::transcode("UTF-8", tempStr, 99);
+	writer->setEncoding(tempStr);
+	MemBufFormatTarget * output = new MemBufFormatTarget();
+	writer->writeNode(output, *document);
+	const XMLByte * buf = output->getRawBuffer();
+	//int len = output->getLen();
+	std::string xmlString((const char *)buf);
+	std::cout << xmlString << std::endl;
+	
+	writer->release();
+	document->release();
+	XMLPlatformUtils::Terminate();
+}
+
+
 int main () {
 	try {
 		//testCMSLogger();
@@ -82,6 +145,7 @@ int main () {
 		//testSender();
 		genericTestComponents();
 		//dummyFeatureExtractor();
+		//testXML();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();
 	} catch (std::exception & e) {

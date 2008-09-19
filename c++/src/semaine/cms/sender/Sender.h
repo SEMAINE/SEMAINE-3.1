@@ -61,6 +61,8 @@ public:
 	 * @param cmsUser the username to use (can be an empty string)
 	 * @param cmsPassword the password to use (can be an empty string)
 	 * @param topicName the name of the topic to send to.
+	 * @param datatype the name of the type of data being sent.
+	 * @param source the name of the component sending the data.
 	 * @throws CMSException
 	 */
 	Sender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
