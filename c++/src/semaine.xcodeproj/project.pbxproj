@@ -12,6 +12,8 @@
 		4919B7870E7A5A1300024538 /* MetaMessenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7860E7A5A1300024538 /* MetaMessenger.cpp */; };
 		4919B7B90E7A7DF100024538 /* ComponentRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */; };
 		4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */; };
+		492B35960E83805500DBE7E1 /* FeatureSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35950E83805500DBE7E1 /* FeatureSender.cpp */; };
+		492B35F10E839C5300DBE7E1 /* DummyFeatureExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */; };
 		49377D360E684D6600C4F871 /* IOBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D340E684D6600C4F871 /* IOBase.cpp */; };
 		49377D3E0E684DCE00C4F871 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D3D0E684DCE00C4F871 /* main.cpp */; };
 		4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
@@ -44,6 +46,10 @@
 		4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentRunner.cpp; path = system/ComponentRunner.cpp; sourceTree = "<group>"; };
 		4919B7C20E7A8AA500024538 /* GenericTestComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericTestComponent.h; path = components/dummy/GenericTestComponent.h; sourceTree = "<group>"; };
 		4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GenericTestComponent.cpp; path = components/dummy/GenericTestComponent.cpp; sourceTree = "<group>"; };
+		492B35940E83805500DBE7E1 /* FeatureSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeatureSender.h; path = sender/FeatureSender.h; sourceTree = "<group>"; };
+		492B35950E83805500DBE7E1 /* FeatureSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FeatureSender.cpp; path = sender/FeatureSender.cpp; sourceTree = "<group>"; };
+		492B35EF0E839C5300DBE7E1 /* DummyFeatureExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DummyFeatureExtractor.h; path = components/dummy/DummyFeatureExtractor.h; sourceTree = "<group>"; };
+		492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyFeatureExtractor.cpp; path = components/dummy/DummyFeatureExtractor.cpp; sourceTree = "<group>"; };
 		49377D330E684D6600C4F871 /* loglevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loglevel.h; sourceTree = "<group>"; };
 		49377D340E684D6600C4F871 /* IOBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOBase.cpp; sourceTree = "<group>"; };
 		49377D350E684D6600C4F871 /* IOBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOBase.h; sourceTree = "<group>"; };
@@ -110,6 +116,8 @@
 			children = (
 				4919B6760E7953ED00024538 /* Sender.h */,
 				4919B6770E7953ED00024538 /* Sender.cpp */,
+				492B35940E83805500DBE7E1 /* FeatureSender.h */,
+				492B35950E83805500DBE7E1 /* FeatureSender.cpp */,
 			);
 			name = sender;
 			sourceTree = "<group>";
@@ -148,6 +156,8 @@
 			children = (
 				4919B7C20E7A8AA500024538 /* GenericTestComponent.h */,
 				4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */,
+				492B35EF0E839C5300DBE7E1 /* DummyFeatureExtractor.h */,
+				492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */,
 			);
 			name = dummy;
 			sourceTree = "<group>";
@@ -271,6 +281,8 @@
 				4919B7B90E7A7DF100024538 /* ComponentRunner.cpp in Sources */,
 				4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */,
 				4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */,
+				492B35960E83805500DBE7E1 /* FeatureSender.cpp in Sources */,
+				492B35F10E839C5300DBE7E1 /* DummyFeatureExtractor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

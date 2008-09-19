@@ -55,16 +55,17 @@ public:
 	Sender(const std::string & topicName, const std::string & datatype, const std::string & source)
 	throw (CMSException);
 
-			/**
-			 * Create a new CMS IOBase connection with the given topic on the given JMS server.
-			 * @param cmsUrl the url where to contact the JMS server
-			 * @param cmsUser the username to use (can be an empty string)
-			 * @param cmsPassword the password to use (can be an empty string)
-			 * @param topicName the name of the topic to send to.
-			 * @throws CMSException
-			 */
-			Sender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword, const std::string & topicName)
-			throw (CMSException);
+	/**
+	 * Create a new CMS IOBase connection with the given topic on the given JMS server.
+	 * @param cmsUrl the url where to contact the JMS server
+	 * @param cmsUser the username to use (can be an empty string)
+	 * @param cmsPassword the password to use (can be an empty string)
+	 * @param topicName the name of the topic to send to.
+	 * @throws CMSException
+	 */
+	Sender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
+		const std::string & topicName, const std::string & datatype, const std::string & source)
+	throw (CMSException);
 
 		
 	/**

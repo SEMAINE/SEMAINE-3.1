@@ -25,7 +25,7 @@ namespace sender {
 		initialise();
 	}
 
-	Sender::Sender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword, const std::string & topicName)
+	Sender::Sender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword, const std::string & topicName, const std::string & datatype, const std::string & source)
 	throw (CMSException) :
 	IOBase(cmsUrl, cmsUser, cmsPassword, topicName),
 	datatype(datatype),

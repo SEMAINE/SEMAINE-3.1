@@ -12,6 +12,7 @@
 #include <semaine/cms/sender/Sender.h>
 #include <semaine/components/Component.h>
 #include <semaine/components/dummy/GenericTestComponent.h>
+#include <semaine/components/dummy/DummyFeatureExtractor.h>
 #include <semaine/system/ComponentRunner.h>
 
 void testCMSLogger()
@@ -60,8 +61,17 @@ void genericTestComponents()
 	comps.push_back(new semaine::components::dummy::GenericTestComponent("John", "semaine.data.chat.theotherway", "semaine.data.chat.oneway"));
 	semaine::system::ComponentRunner cr(comps);
 	cr.go();
-	decaf::lang::Thread::sleep(100000);
 	
+}
+
+
+void dummyFeatureExtractor()
+{
+	std::list<semaine::components::Component *> comps;
+	comps.push_back(new semaine::components::dummy::DummyFeatureExtractor());
+	semaine::system::ComponentRunner cr(comps);
+	cr.go();
+
 }
 
 
@@ -71,6 +81,7 @@ int main () {
 		//testReceiver();
 		//testSender();
 		genericTestComponents();
+		//dummyFeatureExtractor();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();
 	} catch (std::exception & e) {

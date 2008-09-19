@@ -56,8 +56,10 @@ am__objects_1 = semaine/cms/test-CMSLogger.$(OBJEXT) \
 	semaine/cms/message/test-SEMAINEFeatureMessage.$(OBJEXT) \
 	semaine/cms/receiver/test-Receiver.$(OBJEXT) \
 	semaine/cms/sender/test-Sender.$(OBJEXT) \
+	semaine/cms/sender/test-FeatureSender.$(OBJEXT) \
 	semaine/components/test-Component.$(OBJEXT) \
 	semaine/components/dummy/test-GenericTestComponent.$(OBJEXT) \
+	semaine/components/dummy/test-DummyFeatureExtractor.$(OBJEXT) \
 	semaine/components/meta/test-MetaMessenger.$(OBJEXT) \
 	semaine/system/test-ComponentRunner.$(OBJEXT)
 am__objects_2 =
@@ -193,8 +195,10 @@ semaine_api_sources_cpp = \
         semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
 	semaine/cms/sender/Sender.cpp \
+	semaine/cms/sender/FeatureSender.cpp \
 	semaine/components/Component.cpp \
 	semaine/components/dummy/GenericTestComponent.cpp \
+	semaine/components/dummy/DummyFeatureExtractor.cpp \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp
 
@@ -211,8 +215,10 @@ semaine_api_sources_h = \
 	semaine/cms/receiver/FeatureReceiver.h \
 	semaine/cms/SEMAINEMessageAvailableListener.h \
 	semaine/cms/sender/Sender.h \
+	semaine/cms/sender/FeatureSender.h \
 	semaine/components/Component.h \
 	semaine/components/dummy/GenericTestComponent.h  \
+        semaine/components/dummy/DummyFeatureExtractor.h \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \
 	semaine/system/ComponentRunner.h
@@ -317,6 +323,9 @@ semaine/cms/sender/$(DEPDIR)/$(am__dirstamp):
 semaine/cms/sender/test-Sender.$(OBJEXT):  \
 	semaine/cms/sender/$(am__dirstamp) \
 	semaine/cms/sender/$(DEPDIR)/$(am__dirstamp)
+semaine/cms/sender/test-FeatureSender.$(OBJEXT):  \
+	semaine/cms/sender/$(am__dirstamp) \
+	semaine/cms/sender/$(DEPDIR)/$(am__dirstamp)
 semaine/components/$(am__dirstamp):
 	@$(MKDIR_P) semaine/components
 	@: > semaine/components/$(am__dirstamp)
@@ -333,6 +342,9 @@ semaine/components/dummy/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) semaine/components/dummy/$(DEPDIR)
 	@: > semaine/components/dummy/$(DEPDIR)/$(am__dirstamp)
 semaine/components/dummy/test-GenericTestComponent.$(OBJEXT):  \
+	semaine/components/dummy/$(am__dirstamp) \
+	semaine/components/dummy/$(DEPDIR)/$(am__dirstamp)
+semaine/components/dummy/test-DummyFeatureExtractor.$(OBJEXT):  \
 	semaine/components/dummy/$(am__dirstamp) \
 	semaine/components/dummy/$(DEPDIR)/$(am__dirstamp)
 semaine/components/meta/$(am__dirstamp):
@@ -362,9 +374,11 @@ mostlyclean-compile:
 	-rm -f semaine/cms/message/test-SEMAINEFeatureMessage.$(OBJEXT)
 	-rm -f semaine/cms/message/test-SEMAINEMessage.$(OBJEXT)
 	-rm -f semaine/cms/receiver/test-Receiver.$(OBJEXT)
+	-rm -f semaine/cms/sender/test-FeatureSender.$(OBJEXT)
 	-rm -f semaine/cms/sender/test-Sender.$(OBJEXT)
 	-rm -f semaine/cms/test-CMSLogger.$(OBJEXT)
 	-rm -f semaine/cms/test-IOBase.$(OBJEXT)
+	-rm -f semaine/components/dummy/test-DummyFeatureExtractor.$(OBJEXT)
 	-rm -f semaine/components/dummy/test-GenericTestComponent.$(OBJEXT)
 	-rm -f semaine/components/meta/test-MetaMessenger.$(OBJEXT)
 	-rm -f semaine/components/test-Component.$(OBJEXT)
@@ -379,8 +393,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/test-SEMAINEFeatureMessage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/test-SEMAINEMessage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/receiver/$(DEPDIR)/test-Receiver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/test-FeatureSender.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/test-Sender.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/components/$(DEPDIR)/test-Component.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/components/dummy/$(DEPDIR)/test-GenericTestComponent.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/components/meta/$(DEPDIR)/test-MetaMessenger.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/system/$(DEPDIR)/test-ComponentRunner.Po@am__quote@
@@ -485,6 +501,20 @@ semaine/cms/sender/test-Sender.obj: semaine/cms/sender/Sender.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/sender/test-Sender.obj `if test -f 'semaine/cms/sender/Sender.cpp'; then $(CYGPATH_W) 'semaine/cms/sender/Sender.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/cms/sender/Sender.cpp'; fi`
 
+semaine/cms/sender/test-FeatureSender.o: semaine/cms/sender/FeatureSender.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/sender/test-FeatureSender.o -MD -MP -MF semaine/cms/sender/$(DEPDIR)/test-FeatureSender.Tpo -c -o semaine/cms/sender/test-FeatureSender.o `test -f 'semaine/cms/sender/FeatureSender.cpp' || echo '$(srcdir)/'`semaine/cms/sender/FeatureSender.cpp
+@am__fastdepCXX_TRUE@	mv -f semaine/cms/sender/$(DEPDIR)/test-FeatureSender.Tpo semaine/cms/sender/$(DEPDIR)/test-FeatureSender.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/sender/FeatureSender.cpp' object='semaine/cms/sender/test-FeatureSender.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/sender/test-FeatureSender.o `test -f 'semaine/cms/sender/FeatureSender.cpp' || echo '$(srcdir)/'`semaine/cms/sender/FeatureSender.cpp
+
+semaine/cms/sender/test-FeatureSender.obj: semaine/cms/sender/FeatureSender.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/sender/test-FeatureSender.obj -MD -MP -MF semaine/cms/sender/$(DEPDIR)/test-FeatureSender.Tpo -c -o semaine/cms/sender/test-FeatureSender.obj `if test -f 'semaine/cms/sender/FeatureSender.cpp'; then $(CYGPATH_W) 'semaine/cms/sender/FeatureSender.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/cms/sender/FeatureSender.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f semaine/cms/sender/$(DEPDIR)/test-FeatureSender.Tpo semaine/cms/sender/$(DEPDIR)/test-FeatureSender.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/sender/FeatureSender.cpp' object='semaine/cms/sender/test-FeatureSender.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/sender/test-FeatureSender.obj `if test -f 'semaine/cms/sender/FeatureSender.cpp'; then $(CYGPATH_W) 'semaine/cms/sender/FeatureSender.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/cms/sender/FeatureSender.cpp'; fi`
+
 semaine/components/test-Component.o: semaine/components/Component.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/components/test-Component.o -MD -MP -MF semaine/components/$(DEPDIR)/test-Component.Tpo -c -o semaine/components/test-Component.o `test -f 'semaine/components/Component.cpp' || echo '$(srcdir)/'`semaine/components/Component.cpp
 @am__fastdepCXX_TRUE@	mv -f semaine/components/$(DEPDIR)/test-Component.Tpo semaine/components/$(DEPDIR)/test-Component.Po
@@ -512,6 +542,20 @@ semaine/components/dummy/test-GenericTestComponent.obj: semaine/components/dummy
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/components/dummy/GenericTestComponent.cpp' object='semaine/components/dummy/test-GenericTestComponent.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/components/dummy/test-GenericTestComponent.obj `if test -f 'semaine/components/dummy/GenericTestComponent.cpp'; then $(CYGPATH_W) 'semaine/components/dummy/GenericTestComponent.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/components/dummy/GenericTestComponent.cpp'; fi`
+
+semaine/components/dummy/test-DummyFeatureExtractor.o: semaine/components/dummy/DummyFeatureExtractor.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/components/dummy/test-DummyFeatureExtractor.o -MD -MP -MF semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Tpo -c -o semaine/components/dummy/test-DummyFeatureExtractor.o `test -f 'semaine/components/dummy/DummyFeatureExtractor.cpp' || echo '$(srcdir)/'`semaine/components/dummy/DummyFeatureExtractor.cpp
+@am__fastdepCXX_TRUE@	mv -f semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Tpo semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/components/dummy/DummyFeatureExtractor.cpp' object='semaine/components/dummy/test-DummyFeatureExtractor.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/components/dummy/test-DummyFeatureExtractor.o `test -f 'semaine/components/dummy/DummyFeatureExtractor.cpp' || echo '$(srcdir)/'`semaine/components/dummy/DummyFeatureExtractor.cpp
+
+semaine/components/dummy/test-DummyFeatureExtractor.obj: semaine/components/dummy/DummyFeatureExtractor.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/components/dummy/test-DummyFeatureExtractor.obj -MD -MP -MF semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Tpo -c -o semaine/components/dummy/test-DummyFeatureExtractor.obj `if test -f 'semaine/components/dummy/DummyFeatureExtractor.cpp'; then $(CYGPATH_W) 'semaine/components/dummy/DummyFeatureExtractor.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/components/dummy/DummyFeatureExtractor.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Tpo semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/components/dummy/DummyFeatureExtractor.cpp' object='semaine/components/dummy/test-DummyFeatureExtractor.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/components/dummy/test-DummyFeatureExtractor.obj `if test -f 'semaine/components/dummy/DummyFeatureExtractor.cpp'; then $(CYGPATH_W) 'semaine/components/dummy/DummyFeatureExtractor.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/components/dummy/DummyFeatureExtractor.cpp'; fi`
 
 semaine/components/meta/test-MetaMessenger.o: semaine/components/meta/MetaMessenger.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/components/meta/test-MetaMessenger.o -MD -MP -MF semaine/components/meta/$(DEPDIR)/test-MetaMessenger.Tpo -c -o semaine/components/meta/test-MetaMessenger.o `test -f 'semaine/components/meta/MetaMessenger.cpp' || echo '$(srcdir)/'`semaine/components/meta/MetaMessenger.cpp

@@ -7,8 +7,10 @@ semaine_api_sources_cpp = \
         semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
 	semaine/cms/sender/Sender.cpp \
+	semaine/cms/sender/FeatureSender.cpp \
 	semaine/components/Component.cpp \
 	semaine/components/dummy/GenericTestComponent.cpp \
+	semaine/components/dummy/DummyFeatureExtractor.cpp \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp
 
@@ -27,8 +29,10 @@ semaine_api_sources_h = \
 	semaine/cms/receiver/FeatureReceiver.h \
 	semaine/cms/SEMAINEMessageAvailableListener.h \
 	semaine/cms/sender/Sender.h \
+	semaine/cms/sender/FeatureSender.h \
 	semaine/components/Component.h \
 	semaine/components/dummy/GenericTestComponent.h  \
+        semaine/components/dummy/DummyFeatureExtractor.h \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \
 	semaine/system/ComponentRunner.h

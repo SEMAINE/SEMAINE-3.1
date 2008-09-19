@@ -20,14 +20,13 @@ components(components)
 
 ComponentRunner::~ComponentRunner()
 {
-/*    std::list<Component *>::iterator it;
+    std::list<Component *>::iterator it;
 	for (it = components.begin(); it != components.end(); it++) {
 		Component * c = *it;
 		c->requestExit();
 		c->join();
 		delete c;
 	}
-*/
 }
 
 void ComponentRunner::go()
@@ -37,6 +36,11 @@ void ComponentRunner::go()
 		Component * c = *it;
 		c->start();
 	}
+	for (it = components.begin(); it != components.end(); it++) {
+		Component * c = *it;
+		c->join();
+	}
+	
 }
 
 
