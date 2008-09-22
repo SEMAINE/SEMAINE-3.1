@@ -1,6 +1,17 @@
 <?eclipse.ant.import ?>
 <project basedir="." default="jars" name="myname">
-    <target name="jars" depends="build">
+    
+	<path id="SEMAINE-Java.classpath">
+		<pathelement location="bin"/>
+	    <pathelement location="lib/activemq-all-5.1.0.jar"/>
+	    <pathelement location="lib/log4j-1.2.15.jar"/>
+	    <pathelement location="lib/commons-logging-1.1.1.jar"/>
+	    <pathelement location="lib/serializer.jar"/>
+	    <pathelement location="lib/xercesImpl.jar"/>
+	    <pathelement location="lib/xml-apis.jar"/>
+	</path>
+	
+	<target name="jars">
         <jar destfile="lib/semaine.jar" basedir="bin" includes="eu/**/*.class">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
@@ -11,5 +22,22 @@
             </manifest>
          </jar>
     </target>
+	
+	<target name="logger">
+		<java classname="eu.semaine.jms.JMSLogReader" classpathref="SEMAINE-Java.classpath" fork="true" failonerror="true" />
+	</target>	
+	
+	<target name="ComponentRunner">
+		<java classname="eu.semaine.system.ComponentRunner" failonerror="true" fork="yes">
+			<arg line="config/dummy-system.config"/>
+			<classpath refid="Subversion dummy.classpath"/>
+		</java>
+	</target>
+	    
+	<target name="JMSLogReader">
+		<java classname="eu.semaine.jms.JMSLogReader" failonerror="true" fork="yes">
+			<classpath refid="Subversion dummy.classpath"/>
+		</java>
+	</target>
     
 </project>
