@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\semaine\c++\src&quot;;C:\Programme\Apache2\include;&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\activemq-cpp-2.2.1\src\main&quot;"
+				AdditionalIncludeDirectories="&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\xerces-c_2_8_0-x86-windows-vc_8_0\include&quot;;&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\semaine\c++\src&quot;;C:\Programme\Apache2\include;&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\activemq-cpp-2.2.1\src\main&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,9 +60,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libactivemq-cppd.lib libapr-1.lib libaprutil-1.lib Ws2_32.lib"
+				AdditionalDependencies="xerces-c_2D.lib libactivemq-cppd.lib libapr-1.lib libaprutil-1.lib Ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="C:\Programme\Apache2\lib;&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\activemq-cpp-2.2.1\vs2005-build\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\xerces-c_2_8_0-x86-windows-vc_8_0\lib&quot;;C:\Programme\Apache2\lib;&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\activemq-cpp-2.2.1\vs2005-build\Debug&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -185,7 +185,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\components\dummy\DummyFeatureExtractor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\event.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\receiver\FeatureReceiver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\sender\FeatureSender.h"
 				>
 			</File>
 			<File
@@ -225,11 +237,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\cms\message\SEMAINEXMLMessage.h"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\sender\Sender.h"
 				>
 			</File>
 			<File
 				RelativePath=".\semaine\cms\exceptions\SystemConfigurationException.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\receiver\XMLReceiver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\sender\XMLSender.h"
 				>
 			</File>
 		</Filter>
@@ -257,6 +281,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\components\dummy\DummyFeatureExtractor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\sender\FeatureSender.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\components\dummy\GenericTestComponent.cpp"
 				>
 			</File>
@@ -277,11 +309,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\cms\message\SEMAINEFeatureMessage.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\message\SEMAINEMessage.cpp"
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\cms\message\SEMAINEXMLMessage.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\sender\Sender.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\sender\XMLSender.cpp"
 				>
 			</File>
 		</Filter>

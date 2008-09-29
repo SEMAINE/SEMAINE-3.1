@@ -58,6 +58,9 @@ This is a standards-compliant XML parser.
 
 Install Xerces-C from http://xerces.apache.org/xerces-c/.
 Binary releases exist for very many platforms.
+For example, for windows, you can use xerces-c_2_8_0-x86-windows-vc_8_0.zip.
+Unzip into a folder of your choice -- we will refer to this folder as
+.../xerces/ below.
 
 
 Compiling
@@ -82,15 +85,17 @@ Windows:
 	You will need to adapt paths to your setup as follows:
 	- Open the project property page by right-clicking the project "semaine" and selecting
 	  "Properties".
-	- C/C++ settings, the "Additional Include Directories" must contain three entries:
+	- C/C++ settings, the "Additional Include Directories" must contain four entries:
 	  (i) the source folder of the current project (tips of how to do this differently are welcome);
 	  (ii) the APR include folder, e.g. C:\Program Files\Apache2\include
-	  (iii) the Location of the ActiveMQ-CPP sources, ...activemq-cpp-2.2.1\src\main
+	  (iii) the location of the ActiveMQ-CPP sources, ...activemq-cpp-2.2.1\src\main
+	  (iv) the Xerces include folder, ...\xerces\include
 	- Linker settings, the "Additional Library Directories" must contain
 	  (i) the location where libapr-1.lib and libaprutil-1.lib can be found, 
 	      e.g. C:\Program Files\Apache2\lib
 	  (ii) the output folder of ActiveMQ-CPP, containing libactivemq-cppd.lib,
 	       e.g. ...\activemq-cpp-2.2.1\vs2005-build\Debug.
+	  (iii) the Xerces lib folder, ...\xerces\lib.
 
 This will generate the executable binary ...\semaine\c++\src\Debug\semaine.exe. 
 
