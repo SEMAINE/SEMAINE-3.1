@@ -1,8 +1,9 @@
 #!/bin/sh
 
 BINDIR=`dirname "$0"`
+BINDIR=`(cd $BINDIR ; pwd)`
 
-JARDIR=$BINDIR/../java/lib
+JARDIR=`(cd $BINDIR/../java/lib ; pwd)`
 
 if [ ! -e $JARDIR/semaine.jar ] ; then
   echo "No semaine.jar -- you need to do 'ant jars' in the java/ folder first\!"

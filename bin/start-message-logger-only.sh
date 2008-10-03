@@ -13,7 +13,7 @@ fi
 CONFIG=$1
 if [ -z "$CONFIG" ] ; then
   CONFDIR=`(cd $BINDIR/../java/config ; pwd)`
-  CONFIG=$CONFDIR/dummy-system.config
+  CONFIG=$CONFDIR/message-logger-only.config
 fi
 
 echo "Starting SEMAINE ComponentRunner as: 'java -jar $JARDIR/semaine.jar $CONFIG'"
