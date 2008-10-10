@@ -58,7 +58,7 @@ This is a standards-compliant XML parser.
 
 Install Xerces-C from http://xerces.apache.org/xerces-c/.
 Binary releases exist for very many platforms.
-For example, for windows, you can use xerces-c_2_8_0-x86-windows-vc_8_0.zip.
+For windows, you must use xerces-c_2_8_0-x86-windows-vc_8_0.zip.
 Unzip into a folder of your choice -- we will refer to this folder as
 .../xerces/ below.
 
