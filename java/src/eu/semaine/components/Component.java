@@ -57,7 +57,8 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		inputWaiting = new LinkedBlockingQueue<Receiver>();
 		log = JMSLogger.getLog(getName());
 		meta = new MetaMessenger(getName());
-		meta.reportState(State.starting);
+		state = State.starting;
+		meta.reportState(state);
 	}
 	
 	
@@ -84,7 +85,8 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		for (Sender s : senders) {
 			s.startConnection();
 		}
-		meta.reportState(State.ready);
+		state = State.ready;
+		meta.reportState(state);
 	}
 
 	public void run()
@@ -93,7 +95,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			startIO();
 		} catch (JMSException ex) {
 			log.error("Cannot startup component:", ex);
-			exitRequested = true;
+			requestExit();
 		}
 		
 		while (!exitRequested()) {
@@ -116,11 +118,12 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			} catch (Exception e) {
 				log.error("error when trying to act", e);
 				try {
-					meta.reportState(State.failure);
+					state = State.failure;
+					meta.reportState(state);
 				} catch (JMSException me) {
 					log.error("cannot report failure state", me);
 				}
-				exitRequested = true;
+				requestExit();
 				return;
 			}
 			
@@ -144,11 +147,12 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			} catch (Exception e) {
 				log.error("error when trying to react", e);
 				try {
-					meta.reportState(State.failure);
+					state = State.failure;
+					meta.reportState(state);
 				} catch (JMSException me) {
 					log.error("cannot report failure state", me);
 				}
-				exitRequested = true;
+				requestExit();
 				return;
 			}
 		}
@@ -171,7 +175,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	//////////////////////// Methods to override ////////////////////
 	
 	/**
-	 * Proactive actions. This method is called every {@link #MAXWAITINGTIME}
+	 * Proactive actions. This method is called every {@link #waitingTime}
 	 * milliseconds if no messages arrive, and after every message processing.
 	 * 
 	 * This base implementation does nothing; subclasses should implement

@@ -13,7 +13,6 @@ import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 
 import eu.semaine.jms.IOBase;
-import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEMessage;
 
 
@@ -53,6 +52,7 @@ public class Sender extends IOBase
 	 * @param topic the name of the topic to send to.
 	 * @param datatype the name of the type of data being sent.
 	 * @param source the name of the component sending the data.
+	 * @throws JMSException
 	 * @throws NullPointerException if any of the parameters topicName, datatype, or source are null. 
 	 */
 	public Sender(String topicName, String datatype, String source)

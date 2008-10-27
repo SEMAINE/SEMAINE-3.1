@@ -82,6 +82,15 @@ public class XMLSender extends Sender
 	throws JMSException
 	{
 		super(jmsUrl, jmsUser, jmsPassword, topicName, datatype, source);
+		
+		try {
+			DOMImplementation implementation = DOMImplementationRegistry.newInstance().getDOMImplementation("XML 3.0");
+			domImplLS = (DOMImplementationLS) implementation.getFeature("LS", "3.0");
+			serializer = domImplLS.createLSSerializer();
+		} catch (Exception e) {
+			throw new SystemConfigurationException("Problem instantiating XML serializer code", e);
+		}
+
 	}
 
 
@@ -115,8 +124,6 @@ public class XMLSender extends Sender
 			throw new NullPointerException("document passed as argument is null");
 		if (event == null)
 			throw new NullPointerException("document passed as argument is null");
-		if (isPeriodic())
-			throw new IllegalStateException("XML sender is expected to be event-based, not periodic");
 		if (!isConnectionStarted)
 			throw new IllegalStateException("Connection is not started!");
 		if (isPeriodic())

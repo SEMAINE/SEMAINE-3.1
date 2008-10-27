@@ -38,7 +38,6 @@ public class SEMAINEXMLMessage extends SEMAINEMessage
 	}
 	
 	public Document getDocument()
-	throws MessageFormatException
 	{
 		return doc;
 	}
