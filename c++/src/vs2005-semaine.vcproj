@@ -175,6 +175,18 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\semaine\datatypes\xml\BML.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\receiver\BMLReceiver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\sender\BMLSender.h"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\CMSLogger.h"
 				>
 			</File>
@@ -195,6 +207,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\components\dummy\DummyFML2BML.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\datatypes\xml\EMMA.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\sender\EmmaSender.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\datatypes\xml\EmotionML.h"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\event.h"
 				>
 			</File>
@@ -204,6 +232,18 @@
 			</File>
 			<File
 				RelativePath=".\semaine\cms\sender\FeatureSender.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\datatypes\xml\FML.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\receiver\FMLReceiver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\cms\sender\FMLSender.h"
 				>
 			</File>
 			<File
@@ -243,11 +283,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\datatypes\xml\SemaineML.h"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\message\SEMAINEXMLMessage.h"
 				>
 			</File>
 			<File
 				RelativePath=".\semaine\cms\sender\Sender.h"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\datatypes\xml\SSML.h"
 				>
 			</File>
 			<File
@@ -262,6 +310,10 @@
 				RelativePath=".\semaine\cms\sender\XMLSender.h"
 				>
 			</File>
+			<File
+				RelativePath=".\semaine\util\XMLTool.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -274,6 +326,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\semaine\datatypes\xml\BML.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\semaine\cms\CMSLogger.cpp"
 				>
@@ -291,7 +347,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\components\dummy\DummyFML2BML.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\datatypes\xml\EMMA.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\datatypes\xml\EmotionML.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\sender\FeatureSender.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\datatypes\xml\FML.cpp"
 				>
 			</File>
 			<File
@@ -323,6 +395,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\datatypes\xml\SemaineML.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\message\SEMAINEXMLMessage.cpp"
 				>
 			</File>
@@ -331,7 +407,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\datatypes\xml\SSML.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\cms\sender\XMLSender.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\util\XMLTool.cpp"
 				>
 			</File>
 		</Filter>

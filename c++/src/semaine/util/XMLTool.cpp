@@ -54,12 +54,13 @@ DOMDocument * XMLTool::parse(const std::string & xmlAsText)
 
 DOMDocument * XMLTool::newDocument(const std::string & rootTagname, const std::string & aNamespace)
 {
-	XMLCh xmlNamespaceURI[aNamespace.length()+1];
-	XMLString::transcode(aNamespace.c_str(), xmlNamespaceURI, aNamespace.length());
-	XMLCh xmlQualifiedName[rootTagname.length()+1];
-	XMLString::transcode(rootTagname.c_str(), xmlQualifiedName, rootTagname.length());
+	XMLCh * xmlNamespaceURI = XMLString::transcode(aNamespace.c_str());
+	XMLCh * xmlQualifiedName = XMLString::transcode(rootTagname.c_str());
 	DOMImplementation * dom = getDOMImplementation();
-	return dom->createDocument(xmlNamespaceURI, xmlQualifiedName, NULL);
+	DOMDocument * doc = dom->createDocument(xmlNamespaceURI, xmlQualifiedName, NULL);
+	XMLString::release(&xmlNamespaceURI);
+	XMLString::release(&xmlQualifiedName);
+	return doc;
 }
 
 DOMDocument * XMLTool::newDocument(const std::string & rootTagname, const std::string & aNamespace, const std::string & version)
@@ -74,55 +75,61 @@ DOMDocument * XMLTool::newDocument(const std::string & rootTagname, const std::s
 DOMElement * XMLTool::createElement(DOMDocument * doc, const std::string & elementName)
 {
 	const XMLCh * xmlNamespaceURI = doc->getDocumentElement()->getNamespaceURI();
-	XMLCh xmlElementName[elementName.length()+1];
-	XMLString::transcode(elementName.c_str(), xmlElementName, elementName.length());
-	return doc->createElementNS(xmlNamespaceURI, xmlElementName);
+	XMLCh * xmlElementName = XMLString::transcode(elementName.c_str());
+	DOMElement * e = doc->createElementNS(xmlNamespaceURI, xmlElementName);
+	XMLString::release(&xmlElementName);
+	return e;
 }
 
 DOMElement * XMLTool::createElement(DOMDocument * doc, const std::string & elementName, const std::string & aNamespace)
 {
-	XMLCh xmlNamespaceURI[aNamespace.length()+1];
-	XMLString::transcode(aNamespace.c_str(), xmlNamespaceURI, aNamespace.length());
-	XMLCh xmlElementName[elementName.length()+1];
-	XMLString::transcode(elementName.c_str(), xmlElementName, elementName.length());
-	return doc->createElementNS(xmlNamespaceURI, xmlElementName);
+	XMLCh * xmlNamespaceURI = XMLString::transcode(aNamespace.c_str());
+	XMLCh * xmlElementName = XMLString::transcode(elementName.c_str());
+	DOMElement * e = doc->createElementNS(xmlNamespaceURI, xmlElementName);
+	XMLString::release(&xmlNamespaceURI);
+	XMLString::release(&xmlElementName);
+	return e;
 }
 
 DOMElement * XMLTool::appendChildElement(DOMNode * node,  const std::string & childName)
 {
 	const XMLCh * xmlNamespaceURI = node->getNamespaceURI();
-	XMLCh xmlElementName[childName.length()+1];
-	XMLString::transcode(childName.c_str(), xmlElementName, childName.length());
+	XMLCh * xmlElementName = XMLString::transcode(childName.c_str());
 	DOMElement * newElement = node->getOwnerDocument()->createElementNS(xmlNamespaceURI, xmlElementName);
-	return (DOMElement *) node->appendChild(newElement);
+	DOMElement * e = (DOMElement *) node->appendChild(newElement);
+	XMLString::release(&xmlElementName);
+	return e;
 }
 
 DOMElement * XMLTool::appendChildElement(DOMNode * node,  const std::string & childName, const std::string & childNamespace)
 {
-	XMLCh xmlNamespaceURI[childNamespace.length()+1];
-	XMLString::transcode(childNamespace.c_str(), xmlNamespaceURI, childNamespace.length());
-	XMLCh xmlElementName[childName.length()+1];
-	XMLString::transcode(childName.c_str(), xmlElementName, childName.length());
+	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
+	XMLCh * xmlElementName = XMLString::transcode(childName.c_str());
 	DOMElement * newElement = node->getOwnerDocument()->createElementNS(xmlNamespaceURI, xmlElementName);
-	return (DOMElement *) node->appendChild(newElement);
+	DOMElement * e = (DOMElement *) node->appendChild(newElement);
+	XMLString::release(&xmlNamespaceURI);
+	XMLString::release(&xmlElementName);
+	return e;
 }
 
 DOMElement * XMLTool::getChildElementByTagNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
 {
-	XMLCh xmlChildName[childName.length()+1];
-	XMLString::transcode(childName.c_str(), xmlChildName, childName.length());
-	XMLCh xmlNamespaceURI[childNamespace.length()+1];
-	XMLString::transcode(childNamespace.c_str(), xmlNamespaceURI, childNamespace.length());
+	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
+	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
 	DOMNodeList * nl = node->getChildNodes();
+	DOMElement * e = NULL;
 	for (int i=0, max=nl->getLength(); i<max; i++) {
 		DOMNode * n = nl->item(i);
 		if (n->getNodeType() == DOMNode::ELEMENT_NODE
 		  && XMLString::equals(n->getNodeName(), xmlChildName)
 		  && XMLString::equals(n->getNamespaceURI(), xmlNamespaceURI)) {
-			return (DOMElement *) n;
+			e = (DOMElement *) n;
+			break;
 		}
 	}
-	return NULL;
+	XMLString::release(&xmlChildName);
+	XMLString::release(&xmlNamespaceURI);
+	return e;
 }
 
 DOMElement * XMLTool::needChildElementByTagNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
@@ -143,10 +150,8 @@ std::list<DOMElement *> * XMLTool::getChildrenByTagNameNS(DOMNode * node, const 
 throw(MessageFormatException)
 {
 	std::list<DOMElement *> * children = new std::list<DOMElement *>();
-	XMLCh xmlChildName[childName.length()+1];
-	XMLString::transcode(childName.c_str(), xmlChildName, childName.length());
-	XMLCh xmlNamespaceURI[childNamespace.length()+1];
-	XMLString::transcode(childNamespace.c_str(), xmlNamespaceURI, childNamespace.length());
+	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
+	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
 	DOMNodeList * nl = node->getChildNodes();
 	for (int i=0, max=nl->getLength(); i<max; i++) {
 		DOMNode * n = nl->item(i);
@@ -156,6 +161,8 @@ throw(MessageFormatException)
 			children->push_back((DOMElement *)n);
 		}
 	}
+	XMLString::release(&xmlChildName);
+	XMLString::release(&xmlNamespaceURI);
 	return children;
 }
 
@@ -178,31 +185,33 @@ const std::string XMLTool::getTagName(DOMElement * e)
 
 const std::string XMLTool::getAttribute(DOMElement * e, const std::string & attributeName)
 {
-	XMLCh xmlAttributeName[attributeName.length()+1];
-	XMLString::transcode(attributeName.c_str(), xmlAttributeName, attributeName.length());
-	return transcode(e->getAttribute(xmlAttributeName));
+	XMLCh * xmlAttributeName = XMLString::transcode(attributeName.c_str());
+	std::string s = transcode(e->getAttribute(xmlAttributeName));
+	XMLString::release(&xmlAttributeName);
+	return s;
 }
 
 const std::string XMLTool::needAttribute(DOMElement * e, const std::string & attributeName)
 throw(MessageFormatException)
 {
-	XMLCh xmlAttributeName[attributeName.length()+1];
-	XMLString::transcode(attributeName.c_str(), xmlAttributeName, attributeName.length());
+	XMLCh * xmlAttributeName = XMLString::transcode(attributeName.c_str());
 	if (!e->hasAttribute(xmlAttributeName)) {
 		throw MessageFormatException("Element '"+getTagName(e)+"' in namespace '"+
 					getNamespaceURI(e)+"' needs an attribute '"+attributeName+"'");
 	}
-	return transcode(e->getAttribute(xmlAttributeName));
+	std::string s = transcode(e->getAttribute(xmlAttributeName));
+	XMLString::release(&xmlAttributeName);
+	return s;
 }
 
 
-void XMLTool::setAttribute(DOMElement * e, const std::string & attribute, const std::string & value)
+void XMLTool::setAttribute(DOMElement * e, const std::string & attributeName, const std::string & value)
 {
-	XMLCh attributeName[attribute.length()+1];
-	XMLString::transcode(attribute.c_str(), attributeName, attribute.length());
-	XMLCh attributeValue[value.length()+1];
-	XMLString::transcode(value.c_str(), attributeValue, value.length());
-	e->setAttribute(attributeName, attributeValue);
+	XMLCh * xmlAttributeName = XMLString::transcode(attributeName.c_str());
+	XMLCh * xmlAttributeValue = XMLString::transcode(value.c_str());
+	e->setAttribute(xmlAttributeName, xmlAttributeValue);
+	XMLString::release(&xmlAttributeName);
+	XMLString::release(&xmlAttributeValue);
 }
 
 
@@ -210,10 +219,9 @@ void XMLTool::setAttribute(DOMElement * e, const std::string & attribute, const 
 const std::string XMLTool::transcode(const XMLCh * xmlString)
 {
 	if (xmlString == NULL) return std::string("");
-	int len = XMLString::stringLen(xmlString);
-	char chars[2*len+1]; // one XML char can be several bytes in native encoding
-	XMLString::transcode(xmlString, chars, 2*len);
-	return std::string(chars);
+	char * chars =XMLString::transcode(xmlString);
+	std::string s = std::string(chars);
+	XMLString::release(&chars);
 }
 
 
