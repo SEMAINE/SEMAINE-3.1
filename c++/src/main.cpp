@@ -4,6 +4,8 @@
 
 #include <semaine/config.h>
 
+#include <semaine/util/XMLTool.h>
+
 #include <decaf/lang/System.h>
 #include <decaf/lang/Thread.h>
 
@@ -13,23 +15,8 @@
 #include <semaine/components/Component.h>
 #include <semaine/components/dummy/GenericTestComponent.h>
 #include <semaine/components/dummy/DummyFeatureExtractor.h>
+#include <semaine/components/dummy/DummyFML2BML.h>
 #include <semaine/system/ComponentRunner.h>
-
-
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLString.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/framework/MemBufFormatTarget.hpp>
-
-#if defined(XERCES_NEW_IOSTREAMS)
-  #include <iostream>
-#else
-  #include <iostream.h>
-#endif
-
-XERCES_CPP_NAMESPACE_USE
 
 
 void testCMSLogger()
@@ -86,6 +73,7 @@ void dummyFeatureExtractor()
 {
 	std::list<semaine::components::Component *> comps;
 	comps.push_back(new semaine::components::dummy::DummyFeatureExtractor());
+	comps.push_back(new semaine::components::dummy::DummyFML2BML());
 	semaine::system::ComponentRunner cr(comps);
 	cr.go();
 
@@ -94,7 +82,6 @@ void dummyFeatureExtractor()
 
 void testXML()
 {
-	XMLPlatformUtils::Initialize();
 	std::string myXML = std::string("<semaine:text xmlns:semaine=\"http://www.semaine-project.eu\">this is what the user said</semaine:text>");
 	
 	XercesDOMParser* parser = new XercesDOMParser();
@@ -134,18 +121,19 @@ void testXML()
 	
 	writer->release();
 	document->release();
-	XMLPlatformUtils::Terminate();
 }
 
 
 int main () {
 	try {
+		semaine::util::XMLTool::startupXMLTools();
 		//testCMSLogger();
 		//testReceiver();
 		//testSender();
-		genericTestComponents();
-		//dummyFeatureExtractor();
+		//genericTestComponents();
+		dummyFeatureExtractor();
 		//testXML();
+		semaine::util::XMLTool::shutdownXMLTools();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();
 	} catch (std::exception & e) {

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		491237BF0EC2FDEE00ABC267 /* BML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237BE0EC2FDEE00ABC267 /* BML.cpp */; };
+		491237D70EC30B3800ABC267 /* EMMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237CD0EC30B3800ABC267 /* EMMA.cpp */; };
+		491237D80EC30B3800ABC267 /* EmotionML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237CF0EC30B3800ABC267 /* EmotionML.cpp */; };
+		491237D90EC30B3800ABC267 /* FML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D10EC30B3800ABC267 /* FML.cpp */; };
+		491237DA0EC30B3800ABC267 /* SemaineML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D30EC30B3800ABC267 /* SemaineML.cpp */; };
+		491237DB0EC30B3800ABC267 /* SSML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D50EC30B3800ABC267 /* SSML.cpp */; };
+		491237EC0EC3120100ABC267 /* DummyFML2BML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237EA0EC3120100ABC267 /* DummyFML2BML.cpp */; };
 		4919B6780E7953ED00024538 /* Sender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B6770E7953ED00024538 /* Sender.cpp */; };
 		4919B75B0E7A419200024538 /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B75A0E7A419200024538 /* Component.cpp */; };
 		4919B7870E7A5A1300024538 /* MetaMessenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7860E7A5A1300024538 /* MetaMessenger.cpp */; };
@@ -24,6 +31,7 @@
 		49A541C10E83D3F200D45016 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
 		49A541C40E83D42500D45016 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
 		49A5420A0E83E64E00D45016 /* XMLSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49A542080E83E64E00D45016 /* XMLSender.cpp */; };
+		49AF4EE30EBF8BEC008011D8 /* XMLTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,6 +47,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		491237BD0EC2FDEE00ABC267 /* BML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BML.h; path = datatypes/xml/BML.h; sourceTree = "<group>"; };
+		491237BE0EC2FDEE00ABC267 /* BML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BML.cpp; path = datatypes/xml/BML.cpp; sourceTree = "<group>"; };
+		491237CD0EC30B3800ABC267 /* EMMA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EMMA.cpp; path = datatypes/xml/EMMA.cpp; sourceTree = "<group>"; };
+		491237CE0EC30B3800ABC267 /* EMMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EMMA.h; path = datatypes/xml/EMMA.h; sourceTree = "<group>"; };
+		491237CF0EC30B3800ABC267 /* EmotionML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotionML.cpp; path = datatypes/xml/EmotionML.cpp; sourceTree = "<group>"; };
+		491237D00EC30B3800ABC267 /* EmotionML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotionML.h; path = datatypes/xml/EmotionML.h; sourceTree = "<group>"; };
+		491237D10EC30B3800ABC267 /* FML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FML.cpp; path = datatypes/xml/FML.cpp; sourceTree = "<group>"; };
+		491237D20EC30B3800ABC267 /* FML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FML.h; path = datatypes/xml/FML.h; sourceTree = "<group>"; };
+		491237D30EC30B3800ABC267 /* SemaineML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SemaineML.cpp; path = datatypes/xml/SemaineML.cpp; sourceTree = "<group>"; };
+		491237D40EC30B3800ABC267 /* SemaineML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SemaineML.h; path = datatypes/xml/SemaineML.h; sourceTree = "<group>"; };
+		491237D50EC30B3800ABC267 /* SSML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SSML.cpp; path = datatypes/xml/SSML.cpp; sourceTree = "<group>"; };
+		491237D60EC30B3800ABC267 /* SSML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSML.h; path = datatypes/xml/SSML.h; sourceTree = "<group>"; };
+		491237EA0EC3120100ABC267 /* DummyFML2BML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyFML2BML.cpp; path = components/dummy/DummyFML2BML.cpp; sourceTree = "<group>"; };
+		491237EB0EC3120100ABC267 /* DummyFML2BML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DummyFML2BML.h; path = components/dummy/DummyFML2BML.h; sourceTree = "<group>"; };
 		4919B6760E7953ED00024538 /* Sender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sender.h; path = sender/Sender.h; sourceTree = "<group>"; };
 		4919B6770E7953ED00024538 /* Sender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sender.cpp; path = sender/Sender.cpp; sourceTree = "<group>"; };
 		4919B6B90E795F7100024538 /* SEMAINEException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEException.h; path = exceptions/SEMAINEException.h; sourceTree = "<group>"; };
@@ -80,6 +102,13 @@
 		49A542040E83E57F00D45016 /* XMLReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLReceiver.h; path = semaine/cms/receiver/XMLReceiver.h; sourceTree = SOURCE_ROOT; };
 		49A542080E83E64E00D45016 /* XMLSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XMLSender.cpp; path = semaine/cms/sender/XMLSender.cpp; sourceTree = SOURCE_ROOT; };
 		49A542090E83E64E00D45016 /* XMLSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLSender.h; path = semaine/cms/sender/XMLSender.h; sourceTree = SOURCE_ROOT; };
+		49AF4ECE0EBF86F2008011D8 /* BMLSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BMLSender.h; path = sender/BMLSender.h; sourceTree = "<group>"; };
+		49AF4ED30EBF8866008011D8 /* EmmaSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmmaSender.h; path = sender/EmmaSender.h; sourceTree = "<group>"; };
+		49AF4ED40EBF88C9008011D8 /* FMLSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMLSender.h; path = sender/FMLSender.h; sourceTree = "<group>"; };
+		49AF4ED60EBF8953008011D8 /* BMLReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BMLReceiver.h; path = receiver/BMLReceiver.h; sourceTree = "<group>"; };
+		49AF4EDD0EBF8B14008011D8 /* FMLReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMLReceiver.h; path = receiver/FMLReceiver.h; sourceTree = "<group>"; };
+		49AF4EE10EBF8BEC008011D8 /* XMLTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTool.h; path = util/XMLTool.h; sourceTree = "<group>"; };
+		49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XMLTool.cpp; path = util/XMLTool.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,15 +155,45 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		491237BB0EC2FD7A00ABC267 /* datatypes */ = {
+			isa = PBXGroup;
+			children = (
+				491237BC0EC2FD8F00ABC267 /* xml */,
+			);
+			name = datatypes;
+			sourceTree = "<group>";
+		};
+		491237BC0EC2FD8F00ABC267 /* xml */ = {
+			isa = PBXGroup;
+			children = (
+				491237CD0EC30B3800ABC267 /* EMMA.cpp */,
+				491237CE0EC30B3800ABC267 /* EMMA.h */,
+				491237CF0EC30B3800ABC267 /* EmotionML.cpp */,
+				491237D00EC30B3800ABC267 /* EmotionML.h */,
+				491237D10EC30B3800ABC267 /* FML.cpp */,
+				491237D20EC30B3800ABC267 /* FML.h */,
+				491237D30EC30B3800ABC267 /* SemaineML.cpp */,
+				491237D40EC30B3800ABC267 /* SemaineML.h */,
+				491237D50EC30B3800ABC267 /* SSML.cpp */,
+				491237D60EC30B3800ABC267 /* SSML.h */,
+				491237BD0EC2FDEE00ABC267 /* BML.h */,
+				491237BE0EC2FDEE00ABC267 /* BML.cpp */,
+			);
+			name = xml;
+			sourceTree = "<group>";
+		};
 		4919B6750E7953D100024538 /* sender */ = {
 			isa = PBXGroup;
 			children = (
+				49AF4ED40EBF88C9008011D8 /* FMLSender.h */,
+				49AF4ECE0EBF86F2008011D8 /* BMLSender.h */,
 				49A542080E83E64E00D45016 /* XMLSender.cpp */,
 				49A542090E83E64E00D45016 /* XMLSender.h */,
 				4919B6760E7953ED00024538 /* Sender.h */,
 				4919B6770E7953ED00024538 /* Sender.cpp */,
 				492B35940E83805500DBE7E1 /* FeatureSender.h */,
 				492B35950E83805500DBE7E1 /* FeatureSender.cpp */,
+				49AF4ED30EBF8866008011D8 /* EmmaSender.h */,
 			);
 			name = sender;
 			sourceTree = "<group>";
@@ -171,6 +230,8 @@
 		4919B7C10E7A8A8600024538 /* dummy */ = {
 			isa = PBXGroup;
 			children = (
+				491237EA0EC3120100ABC267 /* DummyFML2BML.cpp */,
+				491237EB0EC3120100ABC267 /* DummyFML2BML.h */,
 				4919B7C20E7A8AA500024538 /* GenericTestComponent.h */,
 				4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */,
 				492B35EF0E839C5300DBE7E1 /* DummyFeatureExtractor.h */,
@@ -182,6 +243,8 @@
 		49377D310E684D6600C4F871 /* semaine */ = {
 			isa = PBXGroup;
 			children = (
+				491237BB0EC2FD7A00ABC267 /* datatypes */,
+				49AF4EE00EBF8BC5008011D8 /* util */,
 				4919B7B60E7A7DC800024538 /* system */,
 				4919B7580E7A417200024538 /* components */,
 				49377D320E684D6600C4F871 /* cms */,
@@ -213,6 +276,8 @@
 				4973EF730E76C28400D97DFA /* Receiver.h */,
 				4973EF740E76C28400D97DFA /* Receiver.cpp */,
 				498010D60E82215B00C80323 /* FeatureReceiver.h */,
+				49AF4ED60EBF8953008011D8 /* BMLReceiver.h */,
+				49AF4EDD0EBF8B14008011D8 /* FMLReceiver.h */,
 			);
 			name = receiver;
 			sourceTree = "<group>";
@@ -238,6 +303,15 @@
 				4919B6B90E795F7100024538 /* SEMAINEException.h */,
 			);
 			name = exceptions;
+			sourceTree = "<group>";
+		};
+		49AF4EE00EBF8BC5008011D8 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				49AF4EE10EBF8BEC008011D8 /* XMLTool.h */,
+				49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */,
+			);
+			name = util;
 			sourceTree = "<group>";
 		};
 		C6859E8C029090F304C91782 /* Documentation */ = {
@@ -305,6 +379,14 @@
 				492B35F10E839C5300DBE7E1 /* DummyFeatureExtractor.cpp in Sources */,
 				492B36090E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp in Sources */,
 				49A5420A0E83E64E00D45016 /* XMLSender.cpp in Sources */,
+				49AF4EE30EBF8BEC008011D8 /* XMLTool.cpp in Sources */,
+				491237BF0EC2FDEE00ABC267 /* BML.cpp in Sources */,
+				491237D70EC30B3800ABC267 /* EMMA.cpp in Sources */,
+				491237D80EC30B3800ABC267 /* EmotionML.cpp in Sources */,
+				491237D90EC30B3800ABC267 /* FML.cpp in Sources */,
+				491237DA0EC30B3800ABC267 /* SemaineML.cpp in Sources */,
+				491237DB0EC30B3800ABC267 /* SSML.cpp in Sources */,
+				491237EC0EC3120100ABC267 /* DummyFML2BML.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

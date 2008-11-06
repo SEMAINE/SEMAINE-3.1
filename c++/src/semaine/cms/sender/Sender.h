@@ -241,7 +241,7 @@ protected:
 	 * @param usertime the "user" time that this message refers to,
 	 * in milliseconds since 1970.
 	 */
-	void fillMessageProperties(Message * message, long long usertime)
+	virtual void fillMessageProperties(Message * message, long long usertime)
 	throw(CMSException)
 	{
 		message->setStringProperty(SEMAINEMessage::DATATYPE, getDatatype());

@@ -49,9 +49,9 @@ void DummyFeatureExtractor::act() throw(CMSException)
 	for (int i=0; i<n; i++) {
 		features[i] = float(rand()) / RAND_MAX; // a random number between 0 and 1
 	}
-	std::ostringstream msg;
-	msg << "sending feature vector with " << features.size() << " features.";
-	log->debug(msg.str());
+	//std::ostringstream msg;
+	//msg << "sending feature vector with " << features.size() << " features.";
+	//log->debug(msg.str());
 	featureSender->sendFeatureVector(features, decaf::lang::System::currentTimeMillis());
 }
 

@@ -12,6 +12,8 @@
 
 #include <semaine/config.h>
 
+#include <semaine/util/XMLTool.h>
+
 #include <semaine/cms/message/SEMAINEMessage.h>
 #include <semaine/cms/exceptions/MessageFormatException.h>
 #include <semaine/cms/exceptions/SystemConfigurationException.h>
@@ -20,24 +22,11 @@
 #include <cms/CMSException.h>
 
 
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLString.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-
-#if defined(XERCES_NEW_IOSTREAMS)
-  #include <iostream>
-#else
-  #include <iostream.h>
-#endif
-
-XERCES_CPP_NAMESPACE_USE
-
 
 
 using namespace cms;
 using namespace semaine::cms::exceptions;
+using namespace semaine::util;
 
 namespace semaine {
 namespace cms {

@@ -21,15 +21,6 @@ SEMAINEXMLMessage::SEMAINEXMLMessage(const Message * message)
 throw(MessageFormatException,SystemConfigurationException) :
 	SEMAINEMessage(message)
 {
-	try {
-		XMLPlatformUtils::Initialize();
-	} catch (const XMLException& xe) {
-		char * err = XMLString::transcode(xe.getMessage());
-		std::cerr << err << std::endl;
-		XMLString::release(&err);
-		throw SystemConfigurationException("Cannot initialise XML system");
-	}
-
 	const TextMessage * tm = dynamic_cast<const TextMessage *>(message);
 	if (tm == NULL) {
 		throw MessageFormatException(std::string("Expected a text message, but got a ")+typeid(*message).name());
@@ -48,22 +39,15 @@ throw(MessageFormatException,SystemConfigurationException) :
 
 SEMAINEXMLMessage::~SEMAINEXMLMessage()
 {
-	  XMLPlatformUtils::Terminate();
 }
 
 void SEMAINEXMLMessage::parseDocument()
 throw(MessageFormatException,SystemConfigurationException)
 {
-	XercesDOMParser* parser = new XercesDOMParser();
-    //parser->setValidationScheme(XercesDOMParser::Val_Always);    
-	parser->setDoNamespaces(true);
 
     try {
 		std::string msgText = getText();
-		const char * msgTextC = msgText.c_str();
-		MemBufInputSource* memIS = new MemBufInputSource((const XMLByte *)msgTextC, strlen(msgTextC), "test", false);
-        parser->parse(*memIS);
-		document = parser->getDocument();
+	    document = XMLTool::parse(msgText);
     } catch (const XMLException& toCatch) {
         char* err = XMLString::transcode(toCatch.getMessage());
         std::cerr << err << std::endl;
@@ -78,7 +62,6 @@ throw(MessageFormatException,SystemConfigurationException)
         throw MessageFormatException("Cannot parse xml");
     }
 
-    delete parser;
 
 }
 

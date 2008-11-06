@@ -1,5 +1,5 @@
 /*
- *  FeatureSender.cpp
+ *  XMLSender.cpp
  *  semaine
  *
  *  Created by Marc Schröder on 19.09.08.
@@ -10,8 +10,10 @@
 #include "XMLSender.h"
 
 #include <semaine/cms/message/SEMAINEXMLMessage.h>
+#include <semaine/util/XMLTool.h>
 
 using namespace semaine::cms::message;
+using namespace semaine::util;
 
 namespace semaine {
 namespace cms {
@@ -68,8 +70,11 @@ throw (SystemConfigurationException)
 {
 	try {
 		XMLCh tempStr[100];
-		XMLString::transcode("LS", tempStr, 99);
-		DOMImplementation * impl = DOMImplementationRegistry::getDOMImplementation(tempStr);
+		//XMLString::transcode("LS", tempStr, 99);
+		//XMLCh * ls = XMLString::transcode("LS");
+		//DOMImplementation * impl = DOMImplementationRegistry::getDOMImplementation(ls);
+		//XMLString::release(&ls);
+		DOMImplementation * impl = XMLTool::getDOMImplementation();
 		DOMImplementationLS * implLS = dynamic_cast<DOMImplementationLS *>(impl);
 		if (implLS == NULL) {
 			throw new SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*impl).name());

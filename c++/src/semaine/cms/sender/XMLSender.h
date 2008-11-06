@@ -1,5 +1,5 @@
 /*
- *  FeatureSender.h
+ *  XMLSender.h
  *  semaine
  *
  *  Created by Marc Schröder on 19.09.08.

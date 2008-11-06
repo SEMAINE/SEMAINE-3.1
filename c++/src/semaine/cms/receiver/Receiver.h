@@ -146,7 +146,7 @@ namespace semaine {
 				SEMAINEMessageAvailableListener * listener;
 				CMSLogger * log;
 				SEMAINEMessage * message;
-				util::concurrent::Mutex mutex;
+				decaf::util::concurrent::Mutex mutex;
 				
 				
 				///////////////// The abstraction step: create SEMAINE message ///////
