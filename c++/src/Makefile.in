@@ -67,11 +67,13 @@ am__objects_1 = semaine/util/test-XMLTool.$(OBJEXT) \
 	semaine/components/dummy/test-GenericTestComponent.$(OBJEXT) \
 	semaine/components/dummy/test-DummyFeatureExtractor.$(OBJEXT) \
 	semaine/components/dummy/test-DummyFML2BML.$(OBJEXT) \
+	semaine/components/dummy/test-DummyAnalyser.$(OBJEXT) \
 	semaine/components/meta/test-MetaMessenger.$(OBJEXT) \
 	semaine/system/test-ComponentRunner.$(OBJEXT) \
 	semaine/cms/sender/test-XMLSender.$(OBJEXT) \
 	semaine/datatypes/xml/test-EMMA.$(OBJEXT) \
 	semaine/datatypes/xml/test-EmotionML.$(OBJEXT) \
+	semaine/datatypes/xml/test-SemaineML.$(OBJEXT) \
 	semaine/datatypes/xml/test-FML.$(OBJEXT) \
 	semaine/datatypes/xml/test-BML.$(OBJEXT) \
 	semaine/datatypes/xml/test-SSML.$(OBJEXT)
@@ -231,11 +233,13 @@ semaine_api_sources_cpp = \
 	semaine/components/dummy/GenericTestComponent.cpp \
 	semaine/components/dummy/DummyFeatureExtractor.cpp \
 	semaine/components/dummy/DummyFML2BML.cpp \
+	semaine/components/dummy/DummyAnalyser.cpp \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp \
 	semaine/cms/sender/XMLSender.cpp \
 	semaine/datatypes/xml/EMMA.cpp \
 	semaine/datatypes/xml/EmotionML.cpp \
+	semaine/datatypes/xml/SemaineML.cpp \
 	semaine/datatypes/xml/FML.cpp \
 	semaine/datatypes/xml/BML.cpp \
 	semaine/datatypes/xml/SSML.cpp
@@ -260,6 +264,7 @@ semaine_api_sources_h = \
 	semaine/components/dummy/GenericTestComponent.h  \
 	semaine/components/dummy/DummyFeatureExtractor.h \
 	semaine/components/dummy/DummyFML2BML.h \
+	semaine/components/dummy/DummyAnalyser.h \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \
 	semaine/util/XMLTool.h \
@@ -274,6 +279,7 @@ semaine_api_sources_h = \
 	semaine/cms/sender/EMMASender.h \
 	semaine/datatypes/xml/EMMA.h \
 	semaine/datatypes/xml/EmotionML.h \
+	semaine/datatypes/xml/SemaineML.h \
 	semaine/datatypes/xml/FML.h \
 	semaine/datatypes/xml/BML.h \
 	semaine/datatypes/xml/SSML.h
@@ -416,6 +422,9 @@ semaine/components/dummy/test-DummyFeatureExtractor.$(OBJEXT):  \
 semaine/components/dummy/test-DummyFML2BML.$(OBJEXT):  \
 	semaine/components/dummy/$(am__dirstamp) \
 	semaine/components/dummy/$(DEPDIR)/$(am__dirstamp)
+semaine/components/dummy/test-DummyAnalyser.$(OBJEXT):  \
+	semaine/components/dummy/$(am__dirstamp) \
+	semaine/components/dummy/$(DEPDIR)/$(am__dirstamp)
 semaine/components/meta/$(am__dirstamp):
 	@$(MKDIR_P) semaine/components/meta
 	@: > semaine/components/meta/$(am__dirstamp)
@@ -449,6 +458,9 @@ semaine/datatypes/xml/test-EMMA.$(OBJEXT):  \
 semaine/datatypes/xml/test-EmotionML.$(OBJEXT):  \
 	semaine/datatypes/xml/$(am__dirstamp) \
 	semaine/datatypes/xml/$(DEPDIR)/$(am__dirstamp)
+semaine/datatypes/xml/test-SemaineML.$(OBJEXT):  \
+	semaine/datatypes/xml/$(am__dirstamp) \
+	semaine/datatypes/xml/$(DEPDIR)/$(am__dirstamp)
 semaine/datatypes/xml/test-FML.$(OBJEXT):  \
 	semaine/datatypes/xml/$(am__dirstamp) \
 	semaine/datatypes/xml/$(DEPDIR)/$(am__dirstamp)
@@ -473,6 +485,7 @@ mostlyclean-compile:
 	-rm -f semaine/cms/sender/test-XMLSender.$(OBJEXT)
 	-rm -f semaine/cms/test-CMSLogger.$(OBJEXT)
 	-rm -f semaine/cms/test-IOBase.$(OBJEXT)
+	-rm -f semaine/components/dummy/test-DummyAnalyser.$(OBJEXT)
 	-rm -f semaine/components/dummy/test-DummyFML2BML.$(OBJEXT)
 	-rm -f semaine/components/dummy/test-DummyFeatureExtractor.$(OBJEXT)
 	-rm -f semaine/components/dummy/test-GenericTestComponent.$(OBJEXT)
@@ -483,6 +496,7 @@ mostlyclean-compile:
 	-rm -f semaine/datatypes/xml/test-EmotionML.$(OBJEXT)
 	-rm -f semaine/datatypes/xml/test-FML.$(OBJEXT)
 	-rm -f semaine/datatypes/xml/test-SSML.$(OBJEXT)
+	-rm -f semaine/datatypes/xml/test-SemaineML.$(OBJEXT)
 	-rm -f semaine/system/test-ComponentRunner.$(OBJEXT)
 	-rm -f semaine/util/test-XMLTool.$(OBJEXT)
 
@@ -500,6 +514,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/test-Sender.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/test-XMLSender.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/components/$(DEPDIR)/test-Component.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@semaine/components/dummy/$(DEPDIR)/test-DummyAnalyser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/components/dummy/$(DEPDIR)/test-DummyFML2BML.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/components/dummy/$(DEPDIR)/test-DummyFeatureExtractor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/components/dummy/$(DEPDIR)/test-GenericTestComponent.Po@am__quote@
@@ -509,6 +524,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/datatypes/xml/$(DEPDIR)/test-EmotionML.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/datatypes/xml/$(DEPDIR)/test-FML.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/datatypes/xml/$(DEPDIR)/test-SSML.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@semaine/datatypes/xml/$(DEPDIR)/test-SemaineML.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/system/$(DEPDIR)/test-ComponentRunner.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/util/$(DEPDIR)/test-XMLTool.Po@am__quote@
 
@@ -710,6 +726,20 @@ semaine/components/dummy/test-DummyFML2BML.obj: semaine/components/dummy/DummyFM
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/components/dummy/test-DummyFML2BML.obj `if test -f 'semaine/components/dummy/DummyFML2BML.cpp'; then $(CYGPATH_W) 'semaine/components/dummy/DummyFML2BML.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/components/dummy/DummyFML2BML.cpp'; fi`
 
+semaine/components/dummy/test-DummyAnalyser.o: semaine/components/dummy/DummyAnalyser.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/components/dummy/test-DummyAnalyser.o -MD -MP -MF semaine/components/dummy/$(DEPDIR)/test-DummyAnalyser.Tpo -c -o semaine/components/dummy/test-DummyAnalyser.o `test -f 'semaine/components/dummy/DummyAnalyser.cpp' || echo '$(srcdir)/'`semaine/components/dummy/DummyAnalyser.cpp
+@am__fastdepCXX_TRUE@	mv -f semaine/components/dummy/$(DEPDIR)/test-DummyAnalyser.Tpo semaine/components/dummy/$(DEPDIR)/test-DummyAnalyser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/components/dummy/DummyAnalyser.cpp' object='semaine/components/dummy/test-DummyAnalyser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/components/dummy/test-DummyAnalyser.o `test -f 'semaine/components/dummy/DummyAnalyser.cpp' || echo '$(srcdir)/'`semaine/components/dummy/DummyAnalyser.cpp
+
+semaine/components/dummy/test-DummyAnalyser.obj: semaine/components/dummy/DummyAnalyser.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/components/dummy/test-DummyAnalyser.obj -MD -MP -MF semaine/components/dummy/$(DEPDIR)/test-DummyAnalyser.Tpo -c -o semaine/components/dummy/test-DummyAnalyser.obj `if test -f 'semaine/components/dummy/DummyAnalyser.cpp'; then $(CYGPATH_W) 'semaine/components/dummy/DummyAnalyser.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/components/dummy/DummyAnalyser.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f semaine/components/dummy/$(DEPDIR)/test-DummyAnalyser.Tpo semaine/components/dummy/$(DEPDIR)/test-DummyAnalyser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/components/dummy/DummyAnalyser.cpp' object='semaine/components/dummy/test-DummyAnalyser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/components/dummy/test-DummyAnalyser.obj `if test -f 'semaine/components/dummy/DummyAnalyser.cpp'; then $(CYGPATH_W) 'semaine/components/dummy/DummyAnalyser.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/components/dummy/DummyAnalyser.cpp'; fi`
+
 semaine/components/meta/test-MetaMessenger.o: semaine/components/meta/MetaMessenger.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/components/meta/test-MetaMessenger.o -MD -MP -MF semaine/components/meta/$(DEPDIR)/test-MetaMessenger.Tpo -c -o semaine/components/meta/test-MetaMessenger.o `test -f 'semaine/components/meta/MetaMessenger.cpp' || echo '$(srcdir)/'`semaine/components/meta/MetaMessenger.cpp
 @am__fastdepCXX_TRUE@	mv -f semaine/components/meta/$(DEPDIR)/test-MetaMessenger.Tpo semaine/components/meta/$(DEPDIR)/test-MetaMessenger.Po
@@ -779,6 +809,20 @@ semaine/datatypes/xml/test-EmotionML.obj: semaine/datatypes/xml/EmotionML.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/datatypes/xml/EmotionML.cpp' object='semaine/datatypes/xml/test-EmotionML.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/datatypes/xml/test-EmotionML.obj `if test -f 'semaine/datatypes/xml/EmotionML.cpp'; then $(CYGPATH_W) 'semaine/datatypes/xml/EmotionML.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/datatypes/xml/EmotionML.cpp'; fi`
+
+semaine/datatypes/xml/test-SemaineML.o: semaine/datatypes/xml/SemaineML.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/datatypes/xml/test-SemaineML.o -MD -MP -MF semaine/datatypes/xml/$(DEPDIR)/test-SemaineML.Tpo -c -o semaine/datatypes/xml/test-SemaineML.o `test -f 'semaine/datatypes/xml/SemaineML.cpp' || echo '$(srcdir)/'`semaine/datatypes/xml/SemaineML.cpp
+@am__fastdepCXX_TRUE@	mv -f semaine/datatypes/xml/$(DEPDIR)/test-SemaineML.Tpo semaine/datatypes/xml/$(DEPDIR)/test-SemaineML.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/datatypes/xml/SemaineML.cpp' object='semaine/datatypes/xml/test-SemaineML.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/datatypes/xml/test-SemaineML.o `test -f 'semaine/datatypes/xml/SemaineML.cpp' || echo '$(srcdir)/'`semaine/datatypes/xml/SemaineML.cpp
+
+semaine/datatypes/xml/test-SemaineML.obj: semaine/datatypes/xml/SemaineML.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/datatypes/xml/test-SemaineML.obj -MD -MP -MF semaine/datatypes/xml/$(DEPDIR)/test-SemaineML.Tpo -c -o semaine/datatypes/xml/test-SemaineML.obj `if test -f 'semaine/datatypes/xml/SemaineML.cpp'; then $(CYGPATH_W) 'semaine/datatypes/xml/SemaineML.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/datatypes/xml/SemaineML.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f semaine/datatypes/xml/$(DEPDIR)/test-SemaineML.Tpo semaine/datatypes/xml/$(DEPDIR)/test-SemaineML.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/datatypes/xml/SemaineML.cpp' object='semaine/datatypes/xml/test-SemaineML.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -c -o semaine/datatypes/xml/test-SemaineML.obj `if test -f 'semaine/datatypes/xml/SemaineML.cpp'; then $(CYGPATH_W) 'semaine/datatypes/xml/SemaineML.cpp'; else $(CYGPATH_W) '$(srcdir)/semaine/datatypes/xml/SemaineML.cpp'; fi`
 
 semaine/datatypes/xml/test-FML.o: semaine/datatypes/xml/FML.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_CXXFLAGS) $(CXXFLAGS) -MT semaine/datatypes/xml/test-FML.o -MD -MP -MF semaine/datatypes/xml/$(DEPDIR)/test-FML.Tpo -c -o semaine/datatypes/xml/test-FML.o `test -f 'semaine/datatypes/xml/FML.cpp' || echo '$(srcdir)/'`semaine/datatypes/xml/FML.cpp

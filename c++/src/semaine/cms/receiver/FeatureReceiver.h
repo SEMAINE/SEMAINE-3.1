@@ -12,7 +12,7 @@
 
 #include <semaine/config.h>
 
-#include <cms/CMSException>
+#include <cms/CMSException.h>
 
 #include <semaine/cms/receiver/Receiver.h>
 #include <semaine/cms/exceptions/MessageFormatException.h>
@@ -20,7 +20,7 @@
 
 
 using namespace cms;
-using namespace semaine::cms::exception;
+using namespace semaine::cms::exceptions;
 using namespace semaine::cms::message;
 
 namespace semaine {

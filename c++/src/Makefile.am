@@ -14,11 +14,13 @@ semaine_api_sources_cpp = \
 	semaine/components/dummy/GenericTestComponent.cpp \
 	semaine/components/dummy/DummyFeatureExtractor.cpp \
 	semaine/components/dummy/DummyFML2BML.cpp \
+	semaine/components/dummy/DummyAnalyser.cpp \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp \
 	semaine/cms/sender/XMLSender.cpp \
 	semaine/datatypes/xml/EMMA.cpp \
 	semaine/datatypes/xml/EmotionML.cpp \
+	semaine/datatypes/xml/SemaineML.cpp \
 	semaine/datatypes/xml/FML.cpp \
 	semaine/datatypes/xml/BML.cpp \
 	semaine/datatypes/xml/SSML.cpp
@@ -45,6 +47,7 @@ semaine_api_sources_h = \
 	semaine/components/dummy/GenericTestComponent.h  \
 	semaine/components/dummy/DummyFeatureExtractor.h \
 	semaine/components/dummy/DummyFML2BML.h \
+	semaine/components/dummy/DummyAnalyser.h \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \
 	semaine/util/XMLTool.h \
@@ -59,6 +62,7 @@ semaine_api_sources_h = \
 	semaine/cms/sender/EMMASender.h \
 	semaine/datatypes/xml/EMMA.h \
 	semaine/datatypes/xml/EmotionML.h \
+	semaine/datatypes/xml/SemaineML.h \
 	semaine/datatypes/xml/FML.h \
 	semaine/datatypes/xml/BML.h \
 	semaine/datatypes/xml/SSML.h

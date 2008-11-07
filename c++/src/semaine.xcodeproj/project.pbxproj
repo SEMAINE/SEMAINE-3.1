@@ -27,6 +27,7 @@
 		4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
 		4973EF750E76C28400D97DFA /* Receiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF740E76C28400D97DFA /* Receiver.cpp */; };
 		4973EFBD0E76D0CE00D97DFA /* SEMAINEMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */; };
+		49764C5F0EC3617200270253 /* DummyAnalyser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49764C5D0EC3617200270253 /* DummyAnalyser.cpp */; };
 		4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */; };
 		49A541C10E83D3F200D45016 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
 		49A541C40E83D42500D45016 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
@@ -92,6 +93,8 @@
 		4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEMessage.h; path = message/SEMAINEMessage.h; sourceTree = "<group>"; };
 		4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEMessage.cpp; path = message/SEMAINEMessage.cpp; sourceTree = "<group>"; };
 		4973EFEB0E76E2C500D97DFA /* MessageFormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageFormatException.h; path = exceptions/MessageFormatException.h; sourceTree = "<group>"; };
+		49764C5D0EC3617200270253 /* DummyAnalyser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyAnalyser.cpp; path = components/dummy/DummyAnalyser.cpp; sourceTree = "<group>"; };
+		49764C5E0EC3617200270253 /* DummyAnalyser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DummyAnalyser.h; path = components/dummy/DummyAnalyser.h; sourceTree = "<group>"; };
 		497C3BE50E767FBC00B3B7A5 /* event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = event.h; path = semaine/cms/event.h; sourceTree = "<group>"; };
 		497C3C0D0E7684D600B3B7A5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = semaine/config.h; sourceTree = "<group>"; };
 		4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEFeatureMessage.h; path = message/SEMAINEFeatureMessage.h; sourceTree = "<group>"; };
@@ -230,6 +233,8 @@
 		4919B7C10E7A8A8600024538 /* dummy */ = {
 			isa = PBXGroup;
 			children = (
+				49764C5D0EC3617200270253 /* DummyAnalyser.cpp */,
+				49764C5E0EC3617200270253 /* DummyAnalyser.h */,
 				491237EA0EC3120100ABC267 /* DummyFML2BML.cpp */,
 				491237EB0EC3120100ABC267 /* DummyFML2BML.h */,
 				4919B7C20E7A8AA500024538 /* GenericTestComponent.h */,
@@ -387,6 +392,7 @@
 				491237DA0EC30B3800ABC267 /* SemaineML.cpp in Sources */,
 				491237DB0EC30B3800ABC267 /* SSML.cpp in Sources */,
 				491237EC0EC3120100ABC267 /* DummyFML2BML.cpp in Sources */,
+				49764C5F0EC3617200270253 /* DummyAnalyser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
