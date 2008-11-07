@@ -203,6 +203,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\semaine\components\dummy\DummyAnalyser.h"
+				>
+			</File>
+			<File
 				RelativePath=".\semaine\components\dummy\DummyFeatureExtractor.h"
 				>
 			</File>
@@ -340,6 +344,10 @@
 			</File>
 			<File
 				RelativePath=".\semaine\system\ComponentRunner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\semaine\components\dummy\DummyAnalyser.cpp"
 				>
 			</File>
 			<File
