@@ -51,7 +51,7 @@ semaine_api_sources_h = \
 	semaine/cms/sender/XMLSender.h \
 	semaine/cms/sender/FMLSender.h \
 	semaine/cms/sender/BMLSender.h \
-	semaine/cms/sender/EMMASender.h \
+	semaine/cms/sender/EmmaSender.h \
 	semaine/datatypes/xml/EMMA.h \
 	semaine/datatypes/xml/EmotionML.h \
 	semaine/datatypes/xml/SemaineML.h \
