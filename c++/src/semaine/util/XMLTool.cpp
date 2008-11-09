@@ -222,6 +222,7 @@ const std::string XMLTool::transcode(const XMLCh * xmlString)
 	char * chars =XMLString::transcode(xmlString);
 	std::string s = std::string(chars);
 	XMLString::release(&chars);
+	return s;
 }
 
 

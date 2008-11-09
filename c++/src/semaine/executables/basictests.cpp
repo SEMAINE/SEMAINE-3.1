@@ -13,10 +13,9 @@
 #include <semaine/cms/receiver/Receiver.h>
 #include <semaine/cms/sender/Sender.h>
 #include <semaine/components/Component.h>
-#include <semaine/components/dummy/GenericTestComponent.h>
-#include <semaine/components/dummy/DummyFeatureExtractor.h>
-#include <semaine/components/dummy/DummyFML2BML.h>
 #include <semaine/system/ComponentRunner.h>
+
+#include <xercesc/framework/MemBufFormatTarget.hpp>
 
 
 void testCMSLogger()
@@ -55,28 +54,6 @@ void testSender()
 		    log->error("cannot send message", &e);
 		}
 	}
-}
-
-
-void genericTestComponents()
-{
-	std::list<semaine::components::Component *> comps;
-	comps.push_back(new semaine::components::dummy::GenericTestComponent("Jim", "semaine.data.chat.oneway", "semaine.data.chat.theotherway"));
-	comps.push_back(new semaine::components::dummy::GenericTestComponent("John", "semaine.data.chat.theotherway", "semaine.data.chat.oneway"));
-	semaine::system::ComponentRunner cr(comps);
-	cr.go();
-	
-}
-
-
-void dummyFeatureExtractor()
-{
-	std::list<semaine::components::Component *> comps;
-	comps.push_back(new semaine::components::dummy::DummyFeatureExtractor());
-	comps.push_back(new semaine::components::dummy::DummyFML2BML());
-	semaine::system::ComponentRunner cr(comps);
-	cr.go();
-
 }
 
 
@@ -127,12 +104,10 @@ void testXML()
 int main () {
 	try {
 		semaine::util::XMLTool::startupXMLTools();
-		//testCMSLogger();
-		//testReceiver();
-		//testSender();
-		//genericTestComponents();
-		dummyFeatureExtractor();
-		//testXML();
+		testCMSLogger();
+		testReceiver();
+		testSender();
+		testXML();
 		semaine::util::XMLTool::shutdownXMLTools();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();

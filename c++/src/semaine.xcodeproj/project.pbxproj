@@ -7,45 +7,86 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		491237BF0EC2FDEE00ABC267 /* BML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237BE0EC2FDEE00ABC267 /* BML.cpp */; };
-		491237D70EC30B3800ABC267 /* EMMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237CD0EC30B3800ABC267 /* EMMA.cpp */; };
-		491237D80EC30B3800ABC267 /* EmotionML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237CF0EC30B3800ABC267 /* EmotionML.cpp */; };
-		491237D90EC30B3800ABC267 /* FML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D10EC30B3800ABC267 /* FML.cpp */; };
-		491237DA0EC30B3800ABC267 /* SemaineML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D30EC30B3800ABC267 /* SemaineML.cpp */; };
-		491237DB0EC30B3800ABC267 /* SSML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D50EC30B3800ABC267 /* SSML.cpp */; };
-		491237EC0EC3120100ABC267 /* DummyFML2BML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237EA0EC3120100ABC267 /* DummyFML2BML.cpp */; };
-		4919B6780E7953ED00024538 /* Sender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B6770E7953ED00024538 /* Sender.cpp */; };
-		4919B75B0E7A419200024538 /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B75A0E7A419200024538 /* Component.cpp */; };
-		4919B7870E7A5A1300024538 /* MetaMessenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7860E7A5A1300024538 /* MetaMessenger.cpp */; };
-		4919B7B90E7A7DF100024538 /* ComponentRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */; };
-		4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */; };
-		492B35960E83805500DBE7E1 /* FeatureSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35950E83805500DBE7E1 /* FeatureSender.cpp */; };
-		492B35F10E839C5300DBE7E1 /* DummyFeatureExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */; };
-		492B36090E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */; };
-		49377D360E684D6600C4F871 /* IOBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D340E684D6600C4F871 /* IOBase.cpp */; };
-		49377D3E0E684DCE00C4F871 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D3D0E684DCE00C4F871 /* main.cpp */; };
-		4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
-		4973EF750E76C28400D97DFA /* Receiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF740E76C28400D97DFA /* Receiver.cpp */; };
-		4973EFBD0E76D0CE00D97DFA /* SEMAINEMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */; };
-		49764C5F0EC3617200270253 /* DummyAnalyser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49764C5D0EC3617200270253 /* DummyAnalyser.cpp */; };
-		4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */; };
-		49A541C10E83D3F200D45016 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
-		49A541C40E83D42500D45016 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
-		49A5420A0E83E64E00D45016 /* XMLSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49A542080E83E64E00D45016 /* XMLSender.cpp */; };
-		49AF4EE30EBF8BEC008011D8 /* XMLTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */; };
+		495C9E680EC615EC00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
+		495C9E690EC615EC00B20CD3 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
+		495C9E6A0EC615EC00B20CD3 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		495C9E6D0EC6166800B20CD3 /* basictests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 495C9E6C0EC6166800B20CD3 /* basictests.cpp */; };
+		495C9E8F0EC61B2A00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
+		495C9E900EC61B2A00B20CD3 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
+		495C9E910EC61B2A00B20CD3 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		495C9E920EC61B3200B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
+		495C9E930EC61B3200B20CD3 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
+		495C9E940EC61B3200B20CD3 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		49764C8D0EC46E1000270253 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		49764C8E0EC46E1600270253 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
+		49764C8F0EC46EFB00270253 /* BML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237BE0EC2FDEE00ABC267 /* BML.cpp */; };
+		49764C900EC46EFB00270253 /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
+		49764C910EC46EFB00270253 /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B75A0E7A419200024538 /* Component.cpp */; };
+		49764C920EC46EFB00270253 /* ComponentRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */; };
+		49764C960EC46EFB00270253 /* EMMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237CD0EC30B3800ABC267 /* EMMA.cpp */; };
+		49764C970EC46EFB00270253 /* EmotionML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237CF0EC30B3800ABC267 /* EmotionML.cpp */; };
+		49764C980EC46EFB00270253 /* FeatureSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35950E83805500DBE7E1 /* FeatureSender.cpp */; };
+		49764C990EC46EFB00270253 /* FML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D10EC30B3800ABC267 /* FML.cpp */; };
+		49764C9A0EC46EFB00270253 /* GenericTestComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */; };
+		49764C9B0EC46EFB00270253 /* IOBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49377D340E684D6600C4F871 /* IOBase.cpp */; };
+		49764C9D0EC46EFB00270253 /* MetaMessenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B7860E7A5A1300024538 /* MetaMessenger.cpp */; };
+		49764C9E0EC46EFB00270253 /* Receiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF740E76C28400D97DFA /* Receiver.cpp */; };
+		49764C9F0EC46EFB00270253 /* SEMAINEFeatureMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */; };
+		49764CA00EC46EFB00270253 /* SEMAINEMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */; };
+		49764CA10EC46EFB00270253 /* SemaineML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D30EC30B3800ABC267 /* SemaineML.cpp */; };
+		49764CA20EC46EFB00270253 /* SEMAINEXMLMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */; };
+		49764CA30EC46EFB00270253 /* Sender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4919B6770E7953ED00024538 /* Sender.cpp */; };
+		49764CA40EC46EFB00270253 /* SSML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237D50EC30B3800ABC267 /* SSML.cpp */; };
+		49764CA50EC46EFB00270253 /* XMLSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49A542080E83E64E00D45016 /* XMLSender.cpp */; };
+		49764CA60EC46EFB00270253 /* XMLTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */; };
+		49764CCA0EC470B200270253 /* dummyfeatextr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49764CC90EC470B200270253 /* dummyfeatextr.cpp */; };
+		49764CCE0EC4716F00270253 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
+		49764CCF0EC4716F00270253 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		49764CD80EC472C200270253 /* DummyFeatureExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */; };
+		49764CF20EC476EA00270253 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
+		49764D0A0EC4784000270253 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
+		49764D0B0EC4784000270253 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
+		49764D0C0EC4784000270253 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		49764D0F0EC4786F00270253 /* jimandjohn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49764D0E0EC4786F00270253 /* jimandjohn.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		8DD76F690486A84900D96B5E /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
+/* Begin PBXContainerItemProxy section */
+		495C9E660EC615D500B20CD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49764C880EC46D4600270253 /* semaine-api */;
+			remoteInfo = "semaine-api";
 		};
-/* End PBXCopyFilesBuildPhase section */
+		495C9E840EC61AF900B20CD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49764C880EC46D4600270253 /* semaine-api */;
+			remoteInfo = "semaine-api";
+		};
+		495C9E8D0EC61B1200B20CD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49764C880EC46D4600270253 /* semaine-api */;
+			remoteInfo = "semaine-api";
+		};
+		49764CC00EC46FF500270253 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49764C880EC46D4600270253;
+			remoteInfo = "semaine-api";
+		};
+		49764D080EC4782F00270253 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49764C880EC46D4600270253;
+			remoteInfo = "semaine-api";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		491237BD0EC2FDEE00ABC267 /* BML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BML.h; path = datatypes/xml/BML.h; sourceTree = "<group>"; };
@@ -82,8 +123,12 @@
 		49377D330E684D6600C4F871 /* loglevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loglevel.h; sourceTree = "<group>"; };
 		49377D340E684D6600C4F871 /* IOBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOBase.cpp; sourceTree = "<group>"; };
 		49377D350E684D6600C4F871 /* IOBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOBase.h; sourceTree = "<group>"; };
-		49377D3D0E684DCE00C4F871 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		49377D730E6BC8A100C4F871 /* semaine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = semaine; sourceTree = BUILT_PRODUCTS_DIR; };
+		495C9E620EC615CC00B20CD3 /* basictests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = basictests; path = build/Debug/basictests; sourceTree = "<group>"; };
+		495C9E6C0EC6166800B20CD3 /* basictests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = basictests.cpp; path = executables/basictests.cpp; sourceTree = "<group>"; };
+		495C9E750EC61A7C00B20CD3 /* dummyanalyser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dummyanalyser.cpp; path = executables/dummyanalyser.cpp; sourceTree = "<group>"; };
+		495C9E760EC61A7C00B20CD3 /* dummyfml2bml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dummyfml2bml.cpp; path = executables/dummyfml2bml.cpp; sourceTree = "<group>"; };
+		495C9E800EC61AF200B20CD3 /* dummyanalyser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dummyanalyser; sourceTree = BUILT_PRODUCTS_DIR; };
+		495C9E890EC61B0C00B20CD3 /* dummyfml2bml */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dummyfml2bml; sourceTree = BUILT_PRODUCTS_DIR; };
 		495D54B40E78045900CA468B /* SystemConfigurationException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemConfigurationException.h; path = exceptions/SystemConfigurationException.h; sourceTree = "<group>"; };
 		4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CMSLogger.cpp; sourceTree = "<group>"; };
 		4973EF1D0E76B60F00D97DFA /* CMSLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSLogger.h; sourceTree = "<group>"; };
@@ -95,6 +140,11 @@
 		4973EFEB0E76E2C500D97DFA /* MessageFormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageFormatException.h; path = exceptions/MessageFormatException.h; sourceTree = "<group>"; };
 		49764C5D0EC3617200270253 /* DummyAnalyser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyAnalyser.cpp; path = components/dummy/DummyAnalyser.cpp; sourceTree = "<group>"; };
 		49764C5E0EC3617200270253 /* DummyAnalyser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DummyAnalyser.h; path = components/dummy/DummyAnalyser.h; sourceTree = "<group>"; };
+		49764C890EC46D4600270253 /* libsemaine-api.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libsemaine-api.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49764CBC0EC46FEB00270253 /* dummyfeatextr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dummyfeatextr; sourceTree = BUILT_PRODUCTS_DIR; };
+		49764CC90EC470B200270253 /* dummyfeatextr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dummyfeatextr.cpp; path = executables/dummyfeatextr.cpp; sourceTree = "<group>"; };
+		49764D040EC4782500270253 /* jimandjohn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jimandjohn; sourceTree = BUILT_PRODUCTS_DIR; };
+		49764D0E0EC4786F00270253 /* jimandjohn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jimandjohn.cpp; path = executables/jimandjohn.cpp; sourceTree = "<group>"; };
 		497C3BE50E767FBC00B3B7A5 /* event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = event.h; path = semaine/cms/event.h; sourceTree = "<group>"; };
 		497C3C0D0E7684D600B3B7A5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = semaine/config.h; sourceTree = "<group>"; };
 		4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEFeatureMessage.h; path = message/SEMAINEFeatureMessage.h; sourceTree = "<group>"; };
@@ -115,12 +165,62 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		8DD76F660486A84900D96B5E /* Frameworks */ = {
+		495C9E600EC615CC00B20CD3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49A541C10E83D3F200D45016 /* libxerces-c.dylib in Frameworks */,
-				49A541C40E83D42500D45016 /* libactivemq-cpp.4.dylib in Frameworks */,
+				495C9E680EC615EC00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */,
+				495C9E690EC615EC00B20CD3 /* libsemaine-api.dylib in Frameworks */,
+				495C9E6A0EC615EC00B20CD3 /* libxerces-c.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		495C9E7E0EC61AF200B20CD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				495C9E8F0EC61B2A00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */,
+				495C9E900EC61B2A00B20CD3 /* libsemaine-api.dylib in Frameworks */,
+				495C9E910EC61B2A00B20CD3 /* libxerces-c.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		495C9E870EC61B0C00B20CD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				495C9E920EC61B3200B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */,
+				495C9E930EC61B3200B20CD3 /* libsemaine-api.dylib in Frameworks */,
+				495C9E940EC61B3200B20CD3 /* libxerces-c.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49764C870EC46D4600270253 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49764C8E0EC46E1600270253 /* libactivemq-cpp.4.dylib in Frameworks */,
+				49764C8D0EC46E1000270253 /* libxerces-c.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49764CBA0EC46FEB00270253 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49764CF20EC476EA00270253 /* libsemaine-api.dylib in Frameworks */,
+				49764CCE0EC4716F00270253 /* libactivemq-cpp.4.dylib in Frameworks */,
+				49764CCF0EC4716F00270253 /* libxerces-c.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49764D020EC4782500270253 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49764D0A0EC4784000270253 /* libactivemq-cpp.4.dylib in Frameworks */,
+				49764D0B0EC4784000270253 /* libsemaine-api.dylib in Frameworks */,
+				49764D0C0EC4784000270253 /* libxerces-c.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,7 +233,6 @@
 				49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */,
 				49A541C00E83D3F200D45016 /* libxerces-c.dylib */,
 				497C3BE50E767FBC00B3B7A5 /* event.h */,
-				49377D3D0E684DCE00C4F871 /* main.cpp */,
 				49377D310E684D6600C4F871 /* semaine */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,
@@ -153,7 +252,12 @@
 		1AB674ADFE9D54B511CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				49377D730E6BC8A100C4F871 /* semaine */,
+				49764C890EC46D4600270253 /* libsemaine-api.dylib */,
+				49764CBC0EC46FEB00270253 /* dummyfeatextr */,
+				49764D040EC4782500270253 /* jimandjohn */,
+				495C9E620EC615CC00B20CD3 /* basictests */,
+				495C9E800EC61AF200B20CD3 /* dummyanalyser */,
+				495C9E890EC61B0C00B20CD3 /* dummyfml2bml */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -248,6 +352,7 @@
 		49377D310E684D6600C4F871 /* semaine */ = {
 			isa = PBXGroup;
 			children = (
+				49764CC30EC4702700270253 /* executables */,
 				491237BB0EC2FD7A00ABC267 /* datatypes */,
 				49AF4EE00EBF8BC5008011D8 /* util */,
 				4919B7B60E7A7DC800024538 /* system */,
@@ -310,6 +415,18 @@
 			name = exceptions;
 			sourceTree = "<group>";
 		};
+		49764CC30EC4702700270253 /* executables */ = {
+			isa = PBXGroup;
+			children = (
+				495C9E750EC61A7C00B20CD3 /* dummyanalyser.cpp */,
+				495C9E760EC61A7C00B20CD3 /* dummyfml2bml.cpp */,
+				495C9E6C0EC6166800B20CD3 /* basictests.cpp */,
+				49764D0E0EC4786F00270253 /* jimandjohn.cpp */,
+				49764CC90EC470B200270253 /* dummyfeatextr.cpp */,
+			);
+			name = executables;
+			sourceTree = "<group>";
+		};
 		49AF4EE00EBF8BC5008011D8 /* util */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,22 +446,105 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8DD76F620486A84900D96B5E /* semaine */ = {
+		495C9E610EC615CC00B20CD3 /* basictests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "semaine" */;
+			buildConfigurationList = 495C9E6B0EC6160B00B20CD3 /* Build configuration list for PBXNativeTarget "basictests" */;
 			buildPhases = (
-				8DD76F640486A84900D96B5E /* Sources */,
-				8DD76F660486A84900D96B5E /* Frameworks */,
-				8DD76F690486A84900D96B5E /* CopyFiles */,
+				495C9E5F0EC615CC00B20CD3 /* Sources */,
+				495C9E600EC615CC00B20CD3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				495C9E670EC615D500B20CD3 /* PBXTargetDependency */,
+			);
+			name = basictests;
+			productName = test;
+			productReference = 495C9E620EC615CC00B20CD3 /* basictests */;
+			productType = "com.apple.product-type.tool";
+		};
+		495C9E7F0EC61AF200B20CD3 /* dummyanalyser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 495C9EB20EC61B4300B20CD3 /* Build configuration list for PBXNativeTarget "dummyanalyser" */;
+			buildPhases = (
+				495C9E7D0EC61AF200B20CD3 /* Sources */,
+				495C9E7E0EC61AF200B20CD3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				495C9E850EC61AF900B20CD3 /* PBXTargetDependency */,
+			);
+			name = dummyanalyser;
+			productName = dummyanalyser;
+			productReference = 495C9E800EC61AF200B20CD3 /* dummyanalyser */;
+			productType = "com.apple.product-type.tool";
+		};
+		495C9E880EC61B0C00B20CD3 /* dummyfml2bml */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 495C9EB30EC61B4300B20CD3 /* Build configuration list for PBXNativeTarget "dummyfml2bml" */;
+			buildPhases = (
+				495C9E860EC61B0C00B20CD3 /* Sources */,
+				495C9E870EC61B0C00B20CD3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				495C9E8E0EC61B1200B20CD3 /* PBXTargetDependency */,
+			);
+			name = dummyfml2bml;
+			productName = dummyfml2bml;
+			productReference = 495C9E890EC61B0C00B20CD3 /* dummyfml2bml */;
+			productType = "com.apple.product-type.tool";
+		};
+		49764C880EC46D4600270253 /* semaine-api */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49764C8C0EC46D6900270253 /* Build configuration list for PBXNativeTarget "semaine-api" */;
+			buildPhases = (
+				49764C860EC46D4600270253 /* Sources */,
+				49764C870EC46D4600270253 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = semaine;
-			productInstallPath = "$(HOME)/bin";
-			productName = semaine;
-			productReference = 49377D730E6BC8A100C4F871 /* semaine */;
+			name = "semaine-api";
+			productName = "semaine-api";
+			productReference = 49764C890EC46D4600270253 /* libsemaine-api.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		49764CBB0EC46FEB00270253 /* dummyfeatextr */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49764CC20EC4701300270253 /* Build configuration list for PBXNativeTarget "dummyfeatextr" */;
+			buildPhases = (
+				49764CB90EC46FEB00270253 /* Sources */,
+				49764CBA0EC46FEB00270253 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49764CC10EC46FF500270253 /* PBXTargetDependency */,
+			);
+			name = dummyfeatextr;
+			productName = dummyfeatureprocessor;
+			productReference = 49764CBC0EC46FEB00270253 /* dummyfeatextr */;
+			productType = "com.apple.product-type.tool";
+		};
+		49764D030EC4782500270253 /* jimandjohn */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49764D0D0EC4785E00270253 /* Build configuration list for PBXNativeTarget "jimandjohn" */;
+			buildPhases = (
+				49764D010EC4782500270253 /* Sources */,
+				49764D020EC4782500270253 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49764D090EC4782F00270253 /* PBXTargetDependency */,
+			);
+			name = jimandjohn;
+			productName = jimandjohn;
+			productReference = 49764D040EC4782500270253 /* jimandjohn */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -359,88 +559,114 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8DD76F620486A84900D96B5E /* semaine */,
+				49764C880EC46D4600270253 /* semaine-api */,
+				49764CBB0EC46FEB00270253 /* dummyfeatextr */,
+				49764D030EC4782500270253 /* jimandjohn */,
+				495C9E610EC615CC00B20CD3 /* basictests */,
+				495C9E7F0EC61AF200B20CD3 /* dummyanalyser */,
+				495C9E880EC61B0C00B20CD3 /* dummyfml2bml */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		8DD76F640486A84900D96B5E /* Sources */ = {
+		495C9E5F0EC615CC00B20CD3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49377D360E684D6600C4F871 /* IOBase.cpp in Sources */,
-				49377D3E0E684DCE00C4F871 /* main.cpp in Sources */,
-				4973EF1E0E76B60F00D97DFA /* CMSLogger.cpp in Sources */,
-				4973EF750E76C28400D97DFA /* Receiver.cpp in Sources */,
-				4973EFBD0E76D0CE00D97DFA /* SEMAINEMessage.cpp in Sources */,
-				4919B6780E7953ED00024538 /* Sender.cpp in Sources */,
-				4919B75B0E7A419200024538 /* Component.cpp in Sources */,
-				4919B7870E7A5A1300024538 /* MetaMessenger.cpp in Sources */,
-				4919B7B90E7A7DF100024538 /* ComponentRunner.cpp in Sources */,
-				4919B7C40E7A8AA500024538 /* GenericTestComponent.cpp in Sources */,
-				4980108C0E81762300C80323 /* SEMAINEFeatureMessage.cpp in Sources */,
-				492B35960E83805500DBE7E1 /* FeatureSender.cpp in Sources */,
-				492B35F10E839C5300DBE7E1 /* DummyFeatureExtractor.cpp in Sources */,
-				492B36090E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp in Sources */,
-				49A5420A0E83E64E00D45016 /* XMLSender.cpp in Sources */,
-				49AF4EE30EBF8BEC008011D8 /* XMLTool.cpp in Sources */,
-				491237BF0EC2FDEE00ABC267 /* BML.cpp in Sources */,
-				491237D70EC30B3800ABC267 /* EMMA.cpp in Sources */,
-				491237D80EC30B3800ABC267 /* EmotionML.cpp in Sources */,
-				491237D90EC30B3800ABC267 /* FML.cpp in Sources */,
-				491237DA0EC30B3800ABC267 /* SemaineML.cpp in Sources */,
-				491237DB0EC30B3800ABC267 /* SSML.cpp in Sources */,
-				491237EC0EC3120100ABC267 /* DummyFML2BML.cpp in Sources */,
-				49764C5F0EC3617200270253 /* DummyAnalyser.cpp in Sources */,
+				495C9E6D0EC6166800B20CD3 /* basictests.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		495C9E7D0EC61AF200B20CD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		495C9E860EC61B0C00B20CD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49764C860EC46D4600270253 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49764C8F0EC46EFB00270253 /* BML.cpp in Sources */,
+				49764C900EC46EFB00270253 /* CMSLogger.cpp in Sources */,
+				49764C910EC46EFB00270253 /* Component.cpp in Sources */,
+				49764C920EC46EFB00270253 /* ComponentRunner.cpp in Sources */,
+				49764C960EC46EFB00270253 /* EMMA.cpp in Sources */,
+				49764C970EC46EFB00270253 /* EmotionML.cpp in Sources */,
+				49764C980EC46EFB00270253 /* FeatureSender.cpp in Sources */,
+				49764C990EC46EFB00270253 /* FML.cpp in Sources */,
+				49764C9A0EC46EFB00270253 /* GenericTestComponent.cpp in Sources */,
+				49764C9B0EC46EFB00270253 /* IOBase.cpp in Sources */,
+				49764C9D0EC46EFB00270253 /* MetaMessenger.cpp in Sources */,
+				49764C9E0EC46EFB00270253 /* Receiver.cpp in Sources */,
+				49764C9F0EC46EFB00270253 /* SEMAINEFeatureMessage.cpp in Sources */,
+				49764CA00EC46EFB00270253 /* SEMAINEMessage.cpp in Sources */,
+				49764CA10EC46EFB00270253 /* SemaineML.cpp in Sources */,
+				49764CA20EC46EFB00270253 /* SEMAINEXMLMessage.cpp in Sources */,
+				49764CA30EC46EFB00270253 /* Sender.cpp in Sources */,
+				49764CA40EC46EFB00270253 /* SSML.cpp in Sources */,
+				49764CA50EC46EFB00270253 /* XMLSender.cpp in Sources */,
+				49764CA60EC46EFB00270253 /* XMLTool.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49764CB90EC46FEB00270253 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49764CD80EC472C200270253 /* DummyFeatureExtractor.cpp in Sources */,
+				49764CCA0EC470B200270253 /* dummyfeatextr.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49764D010EC4782500270253 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49764D0F0EC4786F00270253 /* jimandjohn.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		495C9E670EC615D500B20CD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49764C880EC46D4600270253 /* semaine-api */;
+			targetProxy = 495C9E660EC615D500B20CD3 /* PBXContainerItemProxy */;
+		};
+		495C9E850EC61AF900B20CD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49764C880EC46D4600270253 /* semaine-api */;
+			targetProxy = 495C9E840EC61AF900B20CD3 /* PBXContainerItemProxy */;
+		};
+		495C9E8E0EC61B1200B20CD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49764C880EC46D4600270253 /* semaine-api */;
+			targetProxy = 495C9E8D0EC61B1200B20CD3 /* PBXContainerItemProxy */;
+		};
+		49764CC10EC46FF500270253 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49764C880EC46D4600270253 /* semaine-api */;
+			targetProxy = 49764CC00EC46FF500270253 /* PBXContainerItemProxy */;
+		};
+		49764D090EC4782F00270253 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49764C880EC46D4600270253 /* semaine-api */;
+			targetProxy = 49764D080EC4782F00270253 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		1DEB923208733DC60010E9CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_GLIBCXX_DEBUG=1",
-					"_GLIBCXX_DEBUG_PEDANTIC=1",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
-				);
-				OTHER_LDFLAGS = "-lactivemq-cpp";
-				PRODUCT_NAME = semaine;
-				ZERO_LINK = YES;
-			};
-			name = Debug;
-		};
-		1DEB923308733DC60010E9CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
-				);
-				OTHER_LDFLAGS = "-lactivemq-cpp";
-				PRODUCT_NAME = semaine;
-			};
-			name = Release;
-		};
 		1DEB923608733DC60010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -485,23 +711,307 @@
 			};
 			name = Release;
 		};
+		495C9E640EC615CC00B20CD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = test;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		495C9E650EC615CC00B20CD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = test;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		495C9E820EC61AF200B20CD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = dummyanalyser;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		495C9E830EC61AF200B20CD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = dummyanalyser;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		495C9E8B0EC61B0C00B20CD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = dummyfml2bml;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		495C9E8C0EC61B0C00B20CD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = dummyfml2bml;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		49764C8A0EC46D4800270253 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+				);
+				OTHER_LDFLAGS = "-lactivemq-cpp";
+				PREBINDING = NO;
+				PRODUCT_NAME = "semaine-api";
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		49764C8B0EC46D4800270253 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "semaine-api";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		49764CBE0EC46FEB00270253 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+					"\"$(SRCROOT)\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = dummyfeatextr;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		49764CBF0EC46FEB00270253 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+					"\"$(SRCROOT)\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = dummyfeatureprocessor;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		49764D060EC4782500270253 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = jimandjohn;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		49764D070EC4782500270253 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../src/activemq-cpp-install/lib\"",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = jimandjohn;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "semaine" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1DEB923208733DC60010E9CD /* Debug */,
-				1DEB923308733DC60010E9CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "semaine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB923608733DC60010E9CD /* Debug */,
 				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		495C9E6B0EC6160B00B20CD3 /* Build configuration list for PBXNativeTarget "basictests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				495C9E640EC615CC00B20CD3 /* Debug */,
+				495C9E650EC615CC00B20CD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		495C9EB20EC61B4300B20CD3 /* Build configuration list for PBXNativeTarget "dummyanalyser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				495C9E820EC61AF200B20CD3 /* Debug */,
+				495C9E830EC61AF200B20CD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		495C9EB30EC61B4300B20CD3 /* Build configuration list for PBXNativeTarget "dummyfml2bml" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				495C9E8B0EC61B0C00B20CD3 /* Debug */,
+				495C9E8C0EC61B0C00B20CD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49764C8C0EC46D6900270253 /* Build configuration list for PBXNativeTarget "semaine-api" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49764C8A0EC46D4800270253 /* Debug */,
+				49764C8B0EC46D4800270253 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49764CC20EC4701300270253 /* Build configuration list for PBXNativeTarget "dummyfeatextr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49764CBE0EC46FEB00270253 /* Debug */,
+				49764CBF0EC46FEB00270253 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49764D0D0EC4785E00270253 /* Build configuration list for PBXNativeTarget "jimandjohn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49764D060EC4782500270253 /* Debug */,
+				49764D070EC4782500270253 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

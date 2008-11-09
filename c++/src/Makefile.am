@@ -11,10 +11,6 @@ semaine_api_sources_cpp = \
 	semaine/cms/sender/Sender.cpp \
 	semaine/cms/sender/FeatureSender.cpp \
 	semaine/components/Component.cpp \
-	semaine/components/dummy/GenericTestComponent.cpp \
-	semaine/components/dummy/DummyFeatureExtractor.cpp \
-	semaine/components/dummy/DummyFML2BML.cpp \
-	semaine/components/dummy/DummyAnalyser.cpp \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp \
 	semaine/cms/sender/XMLSender.cpp \
@@ -44,10 +40,6 @@ semaine_api_sources_h = \
 	semaine/cms/sender/Sender.h \
 	semaine/cms/sender/FeatureSender.h \
 	semaine/components/Component.h \
-	semaine/components/dummy/GenericTestComponent.h  \
-	semaine/components/dummy/DummyFeatureExtractor.h \
-	semaine/components/dummy/DummyFML2BML.h \
-	semaine/components/dummy/DummyAnalyser.h \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \
 	semaine/util/XMLTool.h \
@@ -68,9 +60,34 @@ semaine_api_sources_h = \
 	semaine/datatypes/xml/SSML.h
 
 
-dummy_sources = main.cpp
 
-bin_PROGRAMS = test
-test_SOURCES = $(semaine_api_sources_cpp) $(semaine_api_sources_h) $(dummy_sources)
-test_CXXFLAGS = $(SEMAINE_CXXFLAGS)
-test_LDADD = $(SEMAINE_LDFLAGS)
+lib_LTLIBRARIES = libsemaineapi.la
+libsemaineapi_la_SOURCES = $(semaine_api_sources_cpp) $(semaine_api_sources_h)
+libsemaineapi_la_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+include_HEADERS = $(semaine_api_sources_h)
+
+bin_PROGRAMS = basictests jimandjohn dummyfeatextr dummyanalyser dummyfml2bml
+
+basictests_SOURCES = semaine/executables/basictests.cpp
+basictests_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+basictests_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
+
+jimandjohn_SOURCES = semaine/executables/jimandjohn.cpp \
+	semaine/components/dummy/GenericTestComponent.cpp
+jimandjohn_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+jimandjohn_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
+
+dummyfeatextr_SOURCES = semaine/executables/dummyfeatextr.cpp \
+	semaine/components/dummy/DummyFeatureExtractor.cpp
+dummyfeatextr_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+dummyfeatextr_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
+
+dummyanalyser_SOURCES = semaine/executables/dummyanalyser.cpp \
+	semaine/components/dummy/DummyAnalyser.cpp
+dummyanalyser_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+dummyanalyser_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
+
+dummyfml2bml_SOURCES = semaine/executables/dummyfml2bml.cpp \
+	semaine/components/dummy/DummyFML2BML.cpp
+dummyfml2bml_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+dummyfml2bml_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
