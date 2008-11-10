@@ -19,8 +19,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dummyfeatextr", "dummyfeate
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dummyanalyser", "dummyanalyser.vcproj", "{329A0EE9-7F6C-47DE-87CF-0C21D2662392}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B43E26F-03F9-4A57-8A9C-7FC32B3D342D} = {9B43E26F-03F9-4A57-8A9C-7FC32B3D342D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dummyfml2bml", "dummyfml2bml.vcproj", "{843C869A-D1A3-41AA-8853-63D8A7CFA384}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B43E26F-03F9-4A57-8A9C-7FC32B3D342D} = {9B43E26F-03F9-4A57-8A9C-7FC32B3D342D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
