@@ -78,6 +78,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	
 	private void startIO() throws JMSException
 	{
+		customStartIO();
 		for (Receiver r : receivers) {
 			r.setMessageListener(this);
 			r.startConnection();
@@ -88,6 +89,8 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		state = State.ready;
 		meta.reportState(state);
 	}
+	
+	protected void customStartIO() throws JMSException{}
 
 	public void run()
 	{

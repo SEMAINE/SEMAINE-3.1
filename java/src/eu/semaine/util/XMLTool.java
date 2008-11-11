@@ -4,12 +4,24 @@
  */
 package eu.semaine.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,8 +30,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
 
 import eu.semaine.exceptions.MessageFormatException;
+import eu.semaine.exceptions.SystemConfigurationException;
 
 
 /**
@@ -265,4 +282,73 @@ public class XMLTool
 		else // namespaceA == null
 			return namespaceB == null;
 	}
+	
+	/**
+	 * Merge two XML files using XSLT
+	 * @param xmlFileContent1, first XML file content 
+	 * @param xmlFileContent2, second XML file content
+	 * @param xmlStyleSheet, XSL style sheet as a inputstream 
+	 * @param refCodeName, code name used in xsl sheet to refer xmlFile2 (example: semaine.mary.intonation ) 
+	 * @return output of merged xml file
+	 * @throws Exception
+	 * @throws FileNotFoundException
+	 */
+	public static String mergeTwoXMLFiles(String xmlFileContent1, final String xmlFileContent2, InputStream xmlStyleSheet, final String refCodeName) throws Exception,FileNotFoundException
+    {
+	     
+	    Templates mergeXML2IntoStylesheet;
+	    TransformerFactory tFactory = TransformerFactory.newInstance();
+	    //StreamSource stylesheetStream = new StreamSource(new FileReader(xmlStyleSheet));
+	    StreamSource stylesheetStream = new StreamSource(xmlStyleSheet);
+        
+        mergeXML2IntoStylesheet = tFactory.newTemplates(stylesheetStream);
+        StreamSource xml1Source = new StreamSource(new StringReader(xmlFileContent1));
+        StringWriter mergedWriter = new StringWriter();
+        StreamResult mergedResult = new StreamResult(mergedWriter);
+        // Transformer is not guaranteed to be thread-safe -- therefore, we
+        // need one per thread.
+        Transformer mergingTransformer = mergeXML2IntoStylesheet.newTransformer();
+        mergingTransformer.setURIResolver(new URIResolver() {
+            public Source resolve(String href, String base) {
+                if (href == null) {
+                    return null;
+                } else if (href.equals(refCodeName)) {
+                	return (new StreamSource(new StringReader(xmlFileContent2)));
+				} else {
+                    return null;
+                }
+            }
+        });
+
+        mergingTransformer.transform(xml1Source, mergedResult);
+        return mergedWriter.toString();
+    }
+	
+	/**
+	 * Document type to String format conversion 
+	 * @param document
+	 * @return
+	 * @throws Exception
+	 * @throws FileNotFoundException
+	 */
+	public static String document2String(Document document) throws Exception,FileNotFoundException
+    {
+		LSSerializer serializer;
+		DOMImplementationLS domImplLS;
+		try {
+			DOMImplementation implementation = DOMImplementationRegistry.newInstance().getDOMImplementation("XML 3.0");
+			domImplLS = (DOMImplementationLS) implementation.getFeature("LS", "3.0");
+			serializer = domImplLS.createLSSerializer();
+		} catch (Exception e) {
+			throw new SystemConfigurationException("Problem instantiating XML serializer code", e);
+		}
+		LSOutput output = domImplLS.createLSOutput();
+		output.setEncoding("UTF-8");
+		StringWriter buf = new StringWriter();
+		output.setCharacterStream(buf);
+		serializer.write(document, output);
+		return buf.toString();
+    }
+	
+
 }
