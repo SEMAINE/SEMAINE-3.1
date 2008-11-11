@@ -29,9 +29,10 @@
 		<java classname="eu.semaine.jms.JMSLogReader" classpathref="SEMAINE-Java.classpath" fork="true" failonerror="true" />
 	</target>	
 	
+	<property name="config" value="config/dummy-system.config"/>
 	<target name="ComponentRunner">
 		<java classname="eu.semaine.system.ComponentRunner" failonerror="true" fork="yes">
-			<arg line="config/dummy-system.config"/>
+			<arg line="${config}"/>
 			<classpath refid="Subversion dummy.classpath"/>
 		</java>
 	</target>
