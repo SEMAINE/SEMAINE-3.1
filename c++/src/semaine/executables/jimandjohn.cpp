@@ -29,6 +29,7 @@ int main () {
 		comps.push_back(new semaine::components::dummy::GenericTestComponent("John", "semaine.data.chat.theotherway", "semaine.data.chat.oneway"));
 		semaine::system::ComponentRunner cr(comps);
 		cr.go();
+		cr.waitUntilCompleted();
 
 		semaine::util::XMLTool::shutdownXMLTools();
 	} catch (cms::CMSException & ce) {

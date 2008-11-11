@@ -27,7 +27,17 @@ class ComponentRunner
 public:
 	ComponentRunner(const std::list<Component *> & components);
 	~ComponentRunner();
+
+	/**
+	 * Start each component in a separate thread, and return.
+	 */
 	void go();
+	
+	/**
+	 * Wait for each component to complete. If the components do not terminate,
+	 * this method blocks forever.
+	 */
+	void waitUntilCompleted();
 
 
 private:

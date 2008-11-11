@@ -20,6 +20,7 @@ int main () {
 		
 		semaine::system::ComponentRunner cr(comps);
 		cr.go();
+		cr.waitUntilCompleted();
 
 		semaine::util::XMLTool::shutdownXMLTools();
 	} catch (cms::CMSException & ce) {

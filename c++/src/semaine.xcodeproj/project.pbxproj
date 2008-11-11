@@ -55,21 +55,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 49764C880EC46D4600270253 /* semaine-api */;
+			remoteGlobalIDString = 49764C880EC46D4600270253;
 			remoteInfo = "semaine-api";
 		};
 		495C9E840EC61AF900B20CD3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 49764C880EC46D4600270253 /* semaine-api */;
+			remoteGlobalIDString = 49764C880EC46D4600270253;
 			remoteInfo = "semaine-api";
 		};
 		495C9E8D0EC61B1200B20CD3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 49764C880EC46D4600270253 /* semaine-api */;
+			remoteGlobalIDString = 49764C880EC46D4600270253;
 			remoteInfo = "semaine-api";
 		};
 		49764CC00EC46FF500270253 /* PBXContainerItemProxy */ = {
@@ -123,7 +123,7 @@
 		49377D330E684D6600C4F871 /* loglevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loglevel.h; sourceTree = "<group>"; };
 		49377D340E684D6600C4F871 /* IOBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOBase.cpp; sourceTree = "<group>"; };
 		49377D350E684D6600C4F871 /* IOBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOBase.h; sourceTree = "<group>"; };
-		495C9E620EC615CC00B20CD3 /* basictests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = basictests; path = build/Debug/basictests; sourceTree = "<group>"; };
+		495C9E620EC615CC00B20CD3 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		495C9E6C0EC6166800B20CD3 /* basictests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = basictests.cpp; path = executables/basictests.cpp; sourceTree = "<group>"; };
 		495C9E750EC61A7C00B20CD3 /* dummyanalyser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dummyanalyser.cpp; path = executables/dummyanalyser.cpp; sourceTree = "<group>"; };
 		495C9E760EC61A7C00B20CD3 /* dummyfml2bml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dummyfml2bml.cpp; path = executables/dummyfml2bml.cpp; sourceTree = "<group>"; };
@@ -255,7 +255,7 @@
 				49764C890EC46D4600270253 /* libsemaine-api.dylib */,
 				49764CBC0EC46FEB00270253 /* dummyfeatextr */,
 				49764D040EC4782500270253 /* jimandjohn */,
-				495C9E620EC615CC00B20CD3 /* basictests */,
+				495C9E620EC615CC00B20CD3 /* test */,
 				495C9E800EC61AF200B20CD3 /* dummyanalyser */,
 				495C9E890EC61B0C00B20CD3 /* dummyfml2bml */,
 			);
@@ -460,7 +460,7 @@
 			);
 			name = basictests;
 			productName = test;
-			productReference = 495C9E620EC615CC00B20CD3 /* basictests */;
+			productReference = 495C9E620EC615CC00B20CD3 /* test */;
 			productType = "com.apple.product-type.tool";
 		};
 		495C9E7F0EC61AF200B20CD3 /* dummyanalyser */ = {

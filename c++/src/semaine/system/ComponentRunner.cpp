@@ -36,14 +36,16 @@ void ComponentRunner::go()
 		Component * c = *it;
 		c->start();
 	}
+}
+
+void ComponentRunner::waitUntilCompleted()
+{
+    std::list<Component *>::iterator it;
 	for (it = components.begin(); it != components.end(); it++) {
 		Component * c = *it;
 		c->join();
 	}
-	
 }
-
-
 
 } // namespace system
 } // namespace semaine
