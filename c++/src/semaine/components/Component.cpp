@@ -62,7 +62,8 @@ const std::string Component::STATE_FAILURE = "failure";
 
 	void Component::startIO() throw(CMSException)
 	{
-	   std::list<Receiver *>::iterator i;
+		customStartIO();
+	    std::list<Receiver *>::iterator i;
 		for (i = receivers.begin(); i != receivers.end(); i++) { 
 			Receiver * r = *i;
 			r->setMessageListener(this);

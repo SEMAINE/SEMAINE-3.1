@@ -111,6 +111,11 @@ protected:
 	 */
 	virtual void react(SEMAINEMessage * message) throw (CMSException) {}
 
+	/**
+	 * Subclasses can implement this method in order to run custom code
+	 * needed at startup time.
+	 */
+	virtual void customStartIO() throw(CMSException) = 0;
 
 private:
 	const std::string name;
