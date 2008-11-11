@@ -115,7 +115,7 @@ protected:
 	 * Subclasses can implement this method in order to run custom code
 	 * needed at startup time.
 	 */
-	virtual void customStartIO() throw(CMSException) = 0;
+	virtual void customStartIO() throw(CMSException) {}
 
 private:
 	const std::string name;
