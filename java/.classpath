@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/serializer.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/mary-common.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
