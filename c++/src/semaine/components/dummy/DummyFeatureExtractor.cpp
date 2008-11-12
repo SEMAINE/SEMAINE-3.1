@@ -41,6 +41,10 @@ DummyFeatureExtractor::~DummyFeatureExtractor()
 	delete featureSender;
 }
 
+void DummyFeatureExtractor::customStartIO() throw(CMSException)
+{
+  printf("customStartIO HERE!!\n");
+}
 
 void DummyFeatureExtractor::act() throw(CMSException)
 {

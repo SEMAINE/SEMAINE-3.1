@@ -33,9 +33,12 @@ public:
 
 protected:
 	virtual void act() throw (CMSException);
+	virtual void customStartIO() throw (CMSException);
+
 
 private:
 	FeatureSender * featureSender;
+	
 };
 
 } // namespace dummy
