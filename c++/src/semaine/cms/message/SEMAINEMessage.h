@@ -17,6 +17,9 @@
 
 #include <cms/Message.h>
 #include <cms/TextMessage.h>
+#include <cms/BytesMessage.h>
+#include <cms/Destination.h>
+#include <cms/Topic.h>
 
 #include <semaine/cms/exceptions/MessageFormatException.h>
 
@@ -167,6 +170,15 @@ public:
 	{
 		return dynamic_cast<const TextMessage*>(message) != NULL;
 	}
+
+	/**
+	 * Determine whether the message is a bytes message.
+	 * @return true if the message is a bytes message, false otherwise.
+	 */
+	bool isBytesMessage()
+	{
+		return dynamic_cast<const BytesMessage*>(message) != NULL;
+	}
 	
 	/**
 	 * For text messages, provide access to the text sent.
@@ -181,6 +193,15 @@ public:
 			throw MessageFormatException(std::string("Cannot get text for a message of type ")+typeid(*message).name());
 		}
 		return tm->getText();
+	}
+	
+	std::string getTopicName() throw(CMSException)
+	{
+		const Destination * dest = message->getCMSDestination();
+		if (dest == NULL) return std::string("unknown");
+		const Topic * topic = dynamic_cast<const Topic *>(dest);
+		if (topic == NULL) return std::string("unknown");
+		return topic->getTopicName();
 	}
 	
 	/**

@@ -4,9 +4,12 @@
  */
 package eu.semaine.jms.message;
 
+import javax.jms.BytesMessage;
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
 
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.IOBase.Event;
@@ -196,6 +199,15 @@ public class SEMAINEMessage
 	}
 	
 	/**
+	 * Determine whether the message is a bytes message.
+	 * @return true if the message is a bytes message, false otherwise.
+	 */
+	public boolean isBytesMessage()
+	{
+		return message instanceof BytesMessage;
+	}
+	
+	/**
 	 * For text messages, provide access to the text sent.
 	 * @return the text sent in the body of the message.
 	 * @throws JMSException if the JMS provider fails to get the property value due to some internal error.
@@ -208,6 +220,18 @@ public class SEMAINEMessage
 		}
 		return ((TextMessage)message).getText();
 	}
+
+	/**
+	 * Get the name of the topic to which this message had been sent.
+	 * @return
+	 * @throws JMSException
+	 */
+	public String getTopicName() throws JMSException
+	{
+		Destination topic = message.getJMSDestination();
+		if (topic == null || !(topic instanceof Topic)) return "unknown";
+		return ((Topic)topic).getTopicName();
+	}
 	
 	/**
 	 * Provide access to the low-level message encapsulated in this object.
@@ -217,4 +241,5 @@ public class SEMAINEMessage
 	{
 		return message;
 	}
+
 }

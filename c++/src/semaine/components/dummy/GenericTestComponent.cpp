@@ -48,7 +48,7 @@ void GenericTestComponent::act() throw(CMSException)
 
 void GenericTestComponent::react(SEMAINEMessage * message) throw(CMSException)
 {
-	std::cout << "Received message from '" << message->getSource() << "' of type '" << message->getDatatype()
+	std::cout << "Received message from '" << message->getTopicName() << "' sent by '" << message->getSource() << "' of type '" << message->getDatatype()
 		<< "'" << std::endl;
 	std::string text = message->getText();
 	std::cout << text << std::endl;
