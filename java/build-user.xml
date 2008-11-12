@@ -15,7 +15,7 @@
         <jar destfile="lib/semaine.jar" basedir="bin"
         	 includes="eu/**/*.class
                              	eu/**/*.xsl
-        			eu/semaine/components/dummy/example2.fap">
+        			eu/semaine/components/dummy/example2.fap         			eu/semaine/components/dummy/example3.fap">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Main-Class"
