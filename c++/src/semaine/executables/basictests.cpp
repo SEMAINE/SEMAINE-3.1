@@ -17,6 +17,7 @@
 
 #include <xercesc/framework/MemBufFormatTarget.hpp>
 
+using namespace XERCES_CPP_NAMESPACE;
 
 void testCMSLogger()
 {

@@ -128,6 +128,13 @@
 			4938B52C0ECAF350000523C5 /* PBXTextBookmark */ = 4938B52C0ECAF350000523C5 /* PBXTextBookmark */;
 			4938B52F0ECAF350000523C5 /* PBXTextBookmark */ = 4938B52F0ECAF350000523C5 /* PBXTextBookmark */;
 			4938B5300ECAF350000523C5 /* PBXTextBookmark */ = 4938B5300ECAF350000523C5 /* PBXTextBookmark */;
+			4938B5480ECAF58D000523C5 /* PBXTextBookmark */ = 4938B5480ECAF58D000523C5 /* PBXTextBookmark */;
+			4938B5490ECAF58D000523C5 /* PBXTextBookmark */ = 4938B5490ECAF58D000523C5 /* PBXTextBookmark */;
+			4938B54A0ECAF58D000523C5 /* PBXTextBookmark */ = 4938B54A0ECAF58D000523C5 /* PBXTextBookmark */;
+			4938B54B0ECAF58D000523C5 /* PBXTextBookmark */ = 4938B54B0ECAF58D000523C5 /* PBXTextBookmark */;
+			4938B54C0ECAF58D000523C5 /* PBXTextBookmark */ = 4938B54C0ECAF58D000523C5 /* PBXTextBookmark */;
+			4938B54D0ECAF58D000523C5 /* PBXTextBookmark */ = 4938B54D0ECAF58D000523C5 /* PBXTextBookmark */;
+			4938B54E0ECAF58D000523C5 /* PBXTextBookmark */ = 4938B54E0ECAF58D000523C5 /* PBXTextBookmark */;
 			4996FEE70EC98601001523B6 = 4996FEE70EC98601001523B6 /* PBXBookmark */;
 			4996FEED0EC9861C001523B6 = 4996FEED0EC9861C001523B6 /* PBXTextBookmark */;
 			4996FEF00EC9861C001523B6 = 4996FEF00EC9861C001523B6 /* PBXTextBookmark */;
@@ -544,17 +551,17 @@
 	};
 	492B36070E83A86700DBE7E1 /* SEMAINEXMLMessage.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {678, 952}}";
-			sepNavSelRange = "{294, 0}";
-			sepNavVisRange = "{0, 985}";
-			sepNavWindowFrame = "{{76, 175}, {737, 803}}";
+			sepNavIntBoundsRect = "{{0, 0}, {678, 924}}";
+			sepNavSelRange = "{1030, 0}";
+			sepNavVisRange = "{268, 944}";
+			sepNavWindowFrame = "{{76, 75}, {737, 803}}";
 		};
 	};
 	492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {757, 1008}}";
 			sepNavSelRange = "{1465, 0}";
-			sepNavVisRange = "{1019, 747}";
+			sepNavVisRange = "{1017, 749}";
 			sepNavWindowFrame = "{{466, 35}, {737, 803}}";
 		};
 	};
@@ -681,6 +688,11 @@
 		name = XercesDefs.hpp;
 		path = /opt/local/include/xercesc/util/XercesDefs.hpp;
 		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {678, 4172}}";
+			sepNavSelRange = "{7793, 38}";
+			sepNavVisRange = "{7095, 1642}";
+		};
 	};
 	4938B52C0ECAF350000523C5 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -711,6 +723,74 @@
 		rType = 0;
 		vrLen = 807;
 		vrLoc = 142;
+	};
+	4938B5480ECAF58D000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */;
+		name = "SEMAINEMessage.h: 23";
+		rLen = 0;
+		rLoc = 418;
+		rType = 0;
+		vrLen = 579;
+		vrLoc = 140;
+	};
+	4938B5490ECAF58D000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */;
+		name = "SEMAINEXMLMessage.cpp: 57";
+		rLen = 0;
+		rLoc = 1465;
+		rType = 0;
+		vrLen = 747;
+		vrLoc = 1019;
+	};
+	4938B54A0ECAF58D000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: expected unqualified-id before ‘*’ token";
+		fRef = 49AF4EE10EBF8BEC008011D8 /* XMLTool.h */;
+		rLen = 1;
+		rLoc = 58;
+		rType = 1;
+	};
+	4938B54B0ECAF58D000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */;
+		name = "SEMAINEMessage.h: 23";
+		rLen = 0;
+		rLoc = 418;
+		rType = 0;
+		vrLen = 579;
+		vrLoc = 140;
+	};
+	4938B54C0ECAF58D000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 49AF4EE10EBF8BEC008011D8 /* XMLTool.h */;
+		name = "XMLTool.h: 202";
+		rLen = 0;
+		rLoc = 7651;
+		rType = 0;
+		vrLen = 1014;
+		vrLoc = 6737;
+	};
+	4938B54D0ECAF58D000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */;
+		name = "SEMAINEXMLMessage.cpp: 57";
+		rLen = 0;
+		rLoc = 1465;
+		rType = 0;
+		vrLen = 747;
+		vrLoc = 1019;
+	};
+	4938B54E0ECAF58D000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 49AF4EE10EBF8BEC008011D8 /* XMLTool.h */;
+		name = "XMLTool.h: 14";
+		rLen = 6;
+		rLoc = 215;
+		rType = 0;
+		vrLen = 569;
+		vrLoc = 0;
 	};
 	495C9E610EC615CC00B20CD3 /* basictests */ = {
 		activeExec = 0;
@@ -1186,18 +1266,18 @@
 	};
 	49AF4EE10EBF8BEC008011D8 /* XMLTool.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1124, 3360}}";
-			sepNavSelRange = "{7673, 0}";
-			sepNavVisRange = "{6737, 1014}";
+			sepNavIntBoundsRect = "{{0, 0}, {757, 3360}}";
+			sepNavSelRange = "{215, 6}";
+			sepNavVisRange = "{0, 569}";
 			sepNavWindowFrame = "{{12, -5}, {737, 878}}";
 		};
 	};
 	49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {848, 3360}}";
-			sepNavSelRange = "{157, 0}";
-			sepNavVisRange = "{0, 1220}";
-			sepNavWindowFrame = "{{368, 124}, {737, 878}}";
+			sepNavIntBoundsRect = "{{0, 0}, {848, 3374}}";
+			sepNavSelRange = "{195, 0}";
+			sepNavVisRange = "{0, 1257}";
+			sepNavWindowFrame = "{{368, 0}, {737, 878}}";
 		};
 	};
 	49D803A20E68436E00F4C296 /* Source Control */ = {
