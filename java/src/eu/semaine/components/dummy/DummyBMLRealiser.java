@@ -37,8 +37,10 @@ public class DummyBMLRealiser extends Component
 	private BMLReceiver bmlReceiver;
 	private Sender fapSender;
 
-	private String dummyFAPData;
-	
+	private String dummyFAPData1;
+	private String dummyFAPData2;
+  private boolean nextIsOne = true;
+  
 	/**
 	 * @param componentName
 	 * @throws JMSException
@@ -52,7 +54,8 @@ public class DummyBMLRealiser extends Component
 		senders.add(fapSender);
 		
 		try {
-			dummyFAPData = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example2.fap"), "ASCII");
+			dummyFAPData1 = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example2.fap"), "ASCII");
+			dummyFAPData2 = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example3.fap"), "ASCII");
 		} catch (IOException ioe) {
 			throw new SystemConfigurationException("Cannot get FAP example", ioe);
 		}
@@ -69,7 +72,14 @@ public class DummyBMLRealiser extends Component
 		boolean isBML = "BML".equals(xm.getDatatype());
 		if (!isBML)
 			throw new MessageFormatException("Expected BML message, got "+xm.getDatatype());
-
+    String dummyFAPData;
+    if (nextIsOne) {
+        dummyFAPData = dummyFAPData1;
+        nextIsOne = false;
+    } else {
+        dummyFAPData = dummyFAPData2;
+        nextIsOne = true;
+    }
 		fapSender.sendTextMessage(dummyFAPData, System.currentTimeMillis());
 	}
 }
