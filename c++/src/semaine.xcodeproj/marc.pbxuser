@@ -17,7 +17,7 @@
 			491238B90EC32A0900ABC267 /* DummyFML2BML.cpp:50 */,
 			491238C00EC32B1200ABC267 /* XMLSender.cpp:60 */,
 			491238CE0EC32DBC00ABC267 /* XMLSender.cpp:59 */,
-			491238D40EC32E0500ABC267 /* SEMAINEXMLMessage.cpp:47 */,
+			491238D40EC32E0500ABC267 /* SEMAINEXMLMessage.cpp:48 */,
 			491239290EC3385C00ABC267 /* XMLSender.cpp:48 */,
 		);
 		codeSenseManager = 49D803A30E68436E00F4C296 /* Code sense */;
@@ -121,6 +121,13 @@
 			4938B51E0ECAC188000523C5 /* PBXTextBookmark */ = 4938B51E0ECAC188000523C5 /* PBXTextBookmark */;
 			4938B51F0ECAC188000523C5 /* PBXTextBookmark */ = 4938B51F0ECAC188000523C5 /* PBXTextBookmark */;
 			4938B5200ECAC188000523C5 /* PBXTextBookmark */ = 4938B5200ECAC188000523C5 /* PBXTextBookmark */;
+			4938B5220ECAF242000523C5 /* PBXBookmark */ = 4938B5220ECAF242000523C5 /* PBXBookmark */;
+			4938B5230ECAF32B000523C5 /* PBXBookmark */ = 4938B5230ECAF32B000523C5 /* PBXBookmark */;
+			4938B5260ECAF350000523C5 /* PBXTextBookmark */ = 4938B5260ECAF350000523C5 /* PBXTextBookmark */;
+			4938B5280ECAF350000523C5 /* PBXTextBookmark */ = 4938B5280ECAF350000523C5 /* PBXTextBookmark */;
+			4938B52C0ECAF350000523C5 /* PBXTextBookmark */ = 4938B52C0ECAF350000523C5 /* PBXTextBookmark */;
+			4938B52F0ECAF350000523C5 /* PBXTextBookmark */ = 4938B52F0ECAF350000523C5 /* PBXTextBookmark */;
+			4938B5300ECAF350000523C5 /* PBXTextBookmark */ = 4938B5300ECAF350000523C5 /* PBXTextBookmark */;
 			4996FEE70EC98601001523B6 = 4996FEE70EC98601001523B6 /* PBXBookmark */;
 			4996FEED0EC9861C001523B6 = 4996FEED0EC9861C001523B6 /* PBXTextBookmark */;
 			4996FEF00EC9861C001523B6 = 4996FEF00EC9861C001523B6 /* PBXTextBookmark */;
@@ -313,7 +320,7 @@
 		modificationTime = 247675067.272004;
 		state = 2;
 	};
-	491238D40EC32E0500ABC267 /* SEMAINEXMLMessage.cpp:47 */ = {
+	491238D40EC32E0500ABC267 /* SEMAINEXMLMessage.cpp:48 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -325,7 +332,7 @@
 		functionName = "SEMAINEXMLMessage::parseDocument()";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 47;
+		lineNumber = 48;
 		location = semaine;
 		modificationTime = 247675067.272063;
 		state = 2;
@@ -407,15 +414,15 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {678, 756}}";
 			sepNavSelRange = "{704, 0}";
-			sepNavVisRange = "{0, 845}";
-			sepNavWindowFrame = "{{49, 0}, {737, 878}}";
+			sepNavVisRange = "{141, 704}";
+			sepNavWindowFrame = "{{49, 132}, {737, 746}}";
 		};
 	};
 	4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {678, 742}}";
 			sepNavSelRange = "{798, 0}";
-			sepNavVisRange = "{42, 907}";
+			sepNavVisRange = "{142, 807}";
 			sepNavWindowFrame = "{{837, 28}, {737, 803}}";
 		};
 	};
@@ -444,10 +451,10 @@
 	};
 	4919B7C30E7A8AA500024538 /* GenericTestComponent.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {926, 910}}";
+			sepNavIntBoundsRect = "{{0, 0}, {926, 924}}";
 			sepNavSelRange = "{1204, 0}";
-			sepNavVisRange = "{182, 1363}";
-			sepNavWindowFrame = "{{684, 75}, {737, 803}}";
+			sepNavVisRange = "{387, 1231}";
+			sepNavWindowFrame = "{{286, 132}, {737, 746}}";
 		};
 	};
 	4919B8290E7A977F00024538 /* GenericTestComponent.cpp:51 */ = {
@@ -545,9 +552,9 @@
 	};
 	492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {686, 994}}";
-			sepNavSelRange = "{1172, 0}";
-			sepNavVisRange = "{438, 1354}";
+			sepNavIntBoundsRect = "{{0, 0}, {757, 1008}}";
+			sepNavSelRange = "{1465, 0}";
+			sepNavVisRange = "{1019, 747}";
 			sepNavWindowFrame = "{{466, 35}, {737, 803}}";
 		};
 	};
@@ -636,6 +643,74 @@
 		rType = 0;
 		vrLen = 845;
 		vrLoc = 0;
+	};
+	4938B5220ECAF242000523C5 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 49AF4EE10EBF8BEC008011D8 /* XMLTool.h */;
+	};
+	4938B5230ECAF32B000523C5 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */;
+	};
+	4938B5260ECAF350000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4938B5270ECAF350000523C5 /* XercesDefs.hpp */;
+		rLen = 1;
+		rLoc = 256;
+		rType = 1;
+	};
+	4938B5270ECAF350000523C5 /* XercesDefs.hpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.h;
+		name = XercesDefs.hpp;
+		path = /opt/local/include/xercesc/util/XercesDefs.hpp;
+		sourceTree = "<absolute>";
+	};
+	4938B5280ECAF350000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4938B5290ECAF350000523C5 /* XercesDefs.hpp */;
+		name = "XercesDefs.hpp: 257";
+		rLen = 38;
+		rLoc = 7793;
+		rType = 0;
+		vrLen = 1642;
+		vrLoc = 7095;
+	};
+	4938B5290ECAF350000523C5 /* XercesDefs.hpp */ = {
+		isa = PBXFileReference;
+		name = XercesDefs.hpp;
+		path = /opt/local/include/xercesc/util/XercesDefs.hpp;
+		sourceTree = "<absolute>";
+	};
+	4938B52C0ECAF350000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 49AF4EE10EBF8BEC008011D8 /* XMLTool.h */;
+		name = "XMLTool.h: 59";
+		rLen = 0;
+		rLoc = 1227;
+		rType = 0;
+		vrLen = 1442;
+		vrLoc = 196;
+	};
+	4938B52F0ECAF350000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */;
+		name = "XMLTool.cpp: 12";
+		rLen = 0;
+		rLoc = 157;
+		rType = 0;
+		vrLen = 1220;
+		vrLoc = 0;
+	};
+	4938B5300ECAF350000523C5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4919B7B80E7A7DF100024538 /* ComponentRunner.cpp */;
+		name = "ComponentRunner.cpp: 44";
+		rLen = 0;
+		rLoc = 798;
+		rType = 0;
+		vrLen = 807;
+		vrLoc = 142;
 	};
 	495C9E610EC615CC00B20CD3 /* basictests */ = {
 		activeExec = 0;
@@ -815,10 +890,10 @@
 	};
 	4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {734, 3220}}";
-			sepNavSelRange = "{6271, 0}";
-			sepNavVisRange = "{5226, 1533}";
-			sepNavWindowFrame = "{{3, 75}, {737, 803}}";
+			sepNavIntBoundsRect = "{{0, 0}, {757, 3542}}";
+			sepNavSelRange = "{418, 0}";
+			sepNavVisRange = "{140, 579}";
+			sepNavWindowFrame = "{{5, 132}, {737, 746}}";
 		};
 	};
 	4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */ = {
@@ -1111,17 +1186,17 @@
 	};
 	49AF4EE10EBF8BEC008011D8 /* XMLTool.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {860, 2996}}";
-			sepNavSelRange = "{6085, 0}";
-			sepNavVisRange = "{5449, 1763}";
+			sepNavIntBoundsRect = "{{0, 0}, {1124, 3360}}";
+			sepNavSelRange = "{7673, 0}";
+			sepNavVisRange = "{6737, 1014}";
 			sepNavWindowFrame = "{{12, -5}, {737, 878}}";
 		};
 	};
 	49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {848, 3458}}";
-			sepNavSelRange = "{7613, 0}";
-			sepNavVisRange = "{6196, 1472}";
+			sepNavIntBoundsRect = "{{0, 0}, {848, 3360}}";
+			sepNavSelRange = "{157, 0}";
+			sepNavVisRange = "{0, 1220}";
 			sepNavWindowFrame = "{{368, 124}, {737, 878}}";
 		};
 	};

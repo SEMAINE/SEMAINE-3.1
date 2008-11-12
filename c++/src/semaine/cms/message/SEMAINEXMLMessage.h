@@ -40,14 +40,14 @@ public:
 	SEMAINEXMLMessage(const Message * message)
 	throw(MessageFormatException, SystemConfigurationException);
 	virtual ~SEMAINEXMLMessage();
-	DOMDocument * getDocument()
+	XERCES_CPP_NAMESPACE::DOMDocument * getDocument()
 	{
 		return document;
 	}
 
 
 protected:
-	DOMDocument * document;
+	XERCES_CPP_NAMESPACE::DOMDocument * document;
 	void parseDocument() throw(MessageFormatException, SystemConfigurationException);
 
 

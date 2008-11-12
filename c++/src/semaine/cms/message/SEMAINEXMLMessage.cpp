@@ -9,6 +9,7 @@
 
 #include "SEMAINEXMLMessage.h"
 
+using namespace XERCES_CPP_NAMESPACE;
 
 namespace semaine {
 namespace cms {

@@ -9,6 +9,9 @@
 
 #include "XMLTool.h"
 
+using namespace XERCES_CPP_NAMESPACE;
+
+
 namespace semaine {
 namespace util {
 
