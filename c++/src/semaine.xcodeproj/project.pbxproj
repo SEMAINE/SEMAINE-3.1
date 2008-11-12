@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4931F7B80ECB0F8E00872418 /* BytesSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4931F7B70ECB0F8E00872418 /* BytesSender.cpp */; };
+		4931F7C50ECB4C3A00872418 /* SEMAINEBytesMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4931F7C30ECB4C3A00872418 /* SEMAINEBytesMessage.cpp */; };
 		495C9E680EC615EC00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
 		495C9E690EC615EC00B20CD3 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
 		495C9E6A0EC615EC00B20CD3 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
@@ -120,6 +122,11 @@
 		492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyFeatureExtractor.cpp; path = components/dummy/DummyFeatureExtractor.cpp; sourceTree = "<group>"; };
 		492B36070E83A86700DBE7E1 /* SEMAINEXMLMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEXMLMessage.h; path = message/SEMAINEXMLMessage.h; sourceTree = "<group>"; };
 		492B36080E83A86700DBE7E1 /* SEMAINEXMLMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEXMLMessage.cpp; path = message/SEMAINEXMLMessage.cpp; sourceTree = "<group>"; };
+		4931F7B60ECB0F8E00872418 /* BytesSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BytesSender.h; path = sender/BytesSender.h; sourceTree = "<group>"; };
+		4931F7B70ECB0F8E00872418 /* BytesSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BytesSender.cpp; path = sender/BytesSender.cpp; sourceTree = "<group>"; };
+		4931F7C30ECB4C3A00872418 /* SEMAINEBytesMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEBytesMessage.cpp; path = message/SEMAINEBytesMessage.cpp; sourceTree = "<group>"; };
+		4931F7C40ECB4C3A00872418 /* SEMAINEBytesMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEBytesMessage.h; path = message/SEMAINEBytesMessage.h; sourceTree = "<group>"; };
+		4931F7C60ECB4C5F00872418 /* BytesReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BytesReceiver.h; path = receiver/BytesReceiver.h; sourceTree = "<group>"; };
 		49377D330E684D6600C4F871 /* loglevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loglevel.h; sourceTree = "<group>"; };
 		49377D340E684D6600C4F871 /* IOBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOBase.cpp; sourceTree = "<group>"; };
 		49377D350E684D6600C4F871 /* IOBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOBase.h; sourceTree = "<group>"; };
@@ -301,6 +308,8 @@
 				492B35940E83805500DBE7E1 /* FeatureSender.h */,
 				492B35950E83805500DBE7E1 /* FeatureSender.cpp */,
 				49AF4ED30EBF8866008011D8 /* EmmaSender.h */,
+				4931F7B60ECB0F8E00872418 /* BytesSender.h */,
+				4931F7B70ECB0F8E00872418 /* BytesSender.cpp */,
 			);
 			name = sender;
 			sourceTree = "<group>";
@@ -382,6 +391,7 @@
 		4973EF720E76C25700D97DFA /* receiver */ = {
 			isa = PBXGroup;
 			children = (
+				4931F7C60ECB4C5F00872418 /* BytesReceiver.h */,
 				49A542040E83E57F00D45016 /* XMLReceiver.h */,
 				4973EF730E76C28400D97DFA /* Receiver.h */,
 				4973EF740E76C28400D97DFA /* Receiver.cpp */,
@@ -395,6 +405,8 @@
 		4973EFBA0E76D0B100D97DFA /* message */ = {
 			isa = PBXGroup;
 			children = (
+				4931F7C30ECB4C3A00872418 /* SEMAINEBytesMessage.cpp */,
+				4931F7C40ECB4C3A00872418 /* SEMAINEBytesMessage.h */,
 				4973EFBB0E76D0CE00D97DFA /* SEMAINEMessage.h */,
 				4973EFBC0E76D0CE00D97DFA /* SEMAINEMessage.cpp */,
 				4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */,
@@ -616,6 +628,8 @@
 				49764CA40EC46EFB00270253 /* SSML.cpp in Sources */,
 				49764CA50EC46EFB00270253 /* XMLSender.cpp in Sources */,
 				49764CA60EC46EFB00270253 /* XMLTool.cpp in Sources */,
+				4931F7B80ECB0F8E00872418 /* BytesSender.cpp in Sources */,
+				4931F7C50ECB4C3A00872418 /* SEMAINEBytesMessage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

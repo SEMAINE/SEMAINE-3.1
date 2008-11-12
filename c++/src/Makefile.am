@@ -7,6 +7,7 @@ semaine_api_sources_cpp = \
 	semaine/cms/message/SEMAINEMessage.cpp \
 	semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/message/SEMAINEXMLMessage.cpp \
+	semaine/cms/message/SEMAINEBytesMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
 	semaine/cms/sender/Sender.cpp \
 	semaine/cms/sender/FeatureSender.cpp \
@@ -14,6 +15,7 @@ semaine_api_sources_cpp = \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp \
 	semaine/cms/sender/XMLSender.cpp \
+	semaine/cms/sender/BytesSender.cpp \
 	semaine/datatypes/xml/EMMA.cpp \
 	semaine/datatypes/xml/EmotionML.cpp \
 	semaine/datatypes/xml/SemaineML.cpp \
@@ -34,11 +36,14 @@ semaine_api_sources_h = \
 	semaine/cms/message/SEMAINEMessage.h \
 	semaine/cms/message/SEMAINEFeatureMessage.h \
 	semaine/cms/message/SEMAINEXMLMessage.h \
+	semaine/cms/message/SEMAINEBytesMessage.h \
 	semaine/cms/receiver/Receiver.h \
 	semaine/cms/receiver/FeatureReceiver.h \
+	semaine/cms/receiver/BytesReceiver.h \
 	semaine/cms/SEMAINEMessageAvailableListener.h \
 	semaine/cms/sender/Sender.h \
 	semaine/cms/sender/FeatureSender.h \
+	semaine/cms/sender/BytesSender.h \
 	semaine/components/Component.h \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \

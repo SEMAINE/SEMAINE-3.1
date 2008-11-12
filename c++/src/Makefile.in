@@ -73,6 +73,7 @@ am__objects_1 = semaine/util/libsemaineapi_la-XMLTool.lo \
 	semaine/cms/message/libsemaineapi_la-SEMAINEMessage.lo \
 	semaine/cms/message/libsemaineapi_la-SEMAINEFeatureMessage.lo \
 	semaine/cms/message/libsemaineapi_la-SEMAINEXMLMessage.lo \
+	semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo \
 	semaine/cms/receiver/libsemaineapi_la-Receiver.lo \
 	semaine/cms/sender/libsemaineapi_la-Sender.lo \
 	semaine/cms/sender/libsemaineapi_la-FeatureSender.lo \
@@ -80,6 +81,7 @@ am__objects_1 = semaine/util/libsemaineapi_la-XMLTool.lo \
 	semaine/components/meta/libsemaineapi_la-MetaMessenger.lo \
 	semaine/system/libsemaineapi_la-ComponentRunner.lo \
 	semaine/cms/sender/libsemaineapi_la-XMLSender.lo \
+	semaine/cms/sender/libsemaineapi_la-BytesSender.lo \
 	semaine/datatypes/xml/libsemaineapi_la-EMMA.lo \
 	semaine/datatypes/xml/libsemaineapi_la-EmotionML.lo \
 	semaine/datatypes/xml/libsemaineapi_la-SemaineML.lo \
@@ -302,6 +304,7 @@ semaine_api_sources_cpp = \
 	semaine/cms/message/SEMAINEMessage.cpp \
 	semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/message/SEMAINEXMLMessage.cpp \
+	semaine/cms/message/SEMAINEBytesMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
 	semaine/cms/sender/Sender.cpp \
 	semaine/cms/sender/FeatureSender.cpp \
@@ -309,6 +312,7 @@ semaine_api_sources_cpp = \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp \
 	semaine/cms/sender/XMLSender.cpp \
+	semaine/cms/sender/BytesSender.cpp \
 	semaine/datatypes/xml/EMMA.cpp \
 	semaine/datatypes/xml/EmotionML.cpp \
 	semaine/datatypes/xml/SemaineML.cpp \
@@ -327,11 +331,14 @@ semaine_api_sources_h = \
 	semaine/cms/message/SEMAINEMessage.h \
 	semaine/cms/message/SEMAINEFeatureMessage.h \
 	semaine/cms/message/SEMAINEXMLMessage.h \
+	semaine/cms/message/SEMAINEBytesMessage.h \
 	semaine/cms/receiver/Receiver.h \
 	semaine/cms/receiver/FeatureReceiver.h \
+	semaine/cms/receiver/BytesReceiver.h \
 	semaine/cms/SEMAINEMessageAvailableListener.h \
 	semaine/cms/sender/Sender.h \
 	semaine/cms/sender/FeatureSender.h \
+	semaine/cms/sender/BytesSender.h \
 	semaine/components/Component.h \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \
@@ -474,6 +481,9 @@ semaine/cms/message/libsemaineapi_la-SEMAINEFeatureMessage.lo:  \
 semaine/cms/message/libsemaineapi_la-SEMAINEXMLMessage.lo:  \
 	semaine/cms/message/$(am__dirstamp) \
 	semaine/cms/message/$(DEPDIR)/$(am__dirstamp)
+semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo:  \
+	semaine/cms/message/$(am__dirstamp) \
+	semaine/cms/message/$(DEPDIR)/$(am__dirstamp)
 semaine/cms/receiver/$(am__dirstamp):
 	@$(MKDIR_P) semaine/cms/receiver
 	@: > semaine/cms/receiver/$(am__dirstamp)
@@ -523,6 +533,9 @@ semaine/system/libsemaineapi_la-ComponentRunner.lo:  \
 	semaine/system/$(am__dirstamp) \
 	semaine/system/$(DEPDIR)/$(am__dirstamp)
 semaine/cms/sender/libsemaineapi_la-XMLSender.lo:  \
+	semaine/cms/sender/$(am__dirstamp) \
+	semaine/cms/sender/$(DEPDIR)/$(am__dirstamp)
+semaine/cms/sender/libsemaineapi_la-BytesSender.lo:  \
 	semaine/cms/sender/$(am__dirstamp) \
 	semaine/cms/sender/$(DEPDIR)/$(am__dirstamp)
 semaine/datatypes/xml/$(am__dirstamp):
@@ -640,6 +653,8 @@ mostlyclean-compile:
 	-rm -f semaine/cms/libsemaineapi_la-CMSLogger.lo
 	-rm -f semaine/cms/libsemaineapi_la-IOBase.$(OBJEXT)
 	-rm -f semaine/cms/libsemaineapi_la-IOBase.lo
+	-rm -f semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.$(OBJEXT)
+	-rm -f semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo
 	-rm -f semaine/cms/message/libsemaineapi_la-SEMAINEFeatureMessage.$(OBJEXT)
 	-rm -f semaine/cms/message/libsemaineapi_la-SEMAINEFeatureMessage.lo
 	-rm -f semaine/cms/message/libsemaineapi_la-SEMAINEMessage.$(OBJEXT)
@@ -648,6 +663,8 @@ mostlyclean-compile:
 	-rm -f semaine/cms/message/libsemaineapi_la-SEMAINEXMLMessage.lo
 	-rm -f semaine/cms/receiver/libsemaineapi_la-Receiver.$(OBJEXT)
 	-rm -f semaine/cms/receiver/libsemaineapi_la-Receiver.lo
+	-rm -f semaine/cms/sender/libsemaineapi_la-BytesSender.$(OBJEXT)
+	-rm -f semaine/cms/sender/libsemaineapi_la-BytesSender.lo
 	-rm -f semaine/cms/sender/libsemaineapi_la-FeatureSender.$(OBJEXT)
 	-rm -f semaine/cms/sender/libsemaineapi_la-FeatureSender.lo
 	-rm -f semaine/cms/sender/libsemaineapi_la-Sender.$(OBJEXT)
@@ -689,10 +706,12 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/$(DEPDIR)/libsemaineapi_la-CMSLogger.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/$(DEPDIR)/libsemaineapi_la-IOBase.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/libsemaineapi_la-SEMAINEBytesMessage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/libsemaineapi_la-SEMAINEFeatureMessage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/libsemaineapi_la-SEMAINEMessage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/message/$(DEPDIR)/libsemaineapi_la-SEMAINEXMLMessage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/receiver/$(DEPDIR)/libsemaineapi_la-Receiver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/libsemaineapi_la-BytesSender.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/libsemaineapi_la-FeatureSender.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/libsemaineapi_la-Sender.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@semaine/cms/sender/$(DEPDIR)/libsemaineapi_la-XMLSender.Plo@am__quote@
@@ -782,6 +801,13 @@ semaine/cms/message/libsemaineapi_la-SEMAINEXMLMessage.lo: semaine/cms/message/S
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/message/libsemaineapi_la-SEMAINEXMLMessage.lo `test -f 'semaine/cms/message/SEMAINEXMLMessage.cpp' || echo '$(srcdir)/'`semaine/cms/message/SEMAINEXMLMessage.cpp
 
+semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo: semaine/cms/message/SEMAINEBytesMessage.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo -MD -MP -MF semaine/cms/message/$(DEPDIR)/libsemaineapi_la-SEMAINEBytesMessage.Tpo -c -o semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo `test -f 'semaine/cms/message/SEMAINEBytesMessage.cpp' || echo '$(srcdir)/'`semaine/cms/message/SEMAINEBytesMessage.cpp
+@am__fastdepCXX_TRUE@	mv -f semaine/cms/message/$(DEPDIR)/libsemaineapi_la-SEMAINEBytesMessage.Tpo semaine/cms/message/$(DEPDIR)/libsemaineapi_la-SEMAINEBytesMessage.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/message/SEMAINEBytesMessage.cpp' object='semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/message/libsemaineapi_la-SEMAINEBytesMessage.lo `test -f 'semaine/cms/message/SEMAINEBytesMessage.cpp' || echo '$(srcdir)/'`semaine/cms/message/SEMAINEBytesMessage.cpp
+
 semaine/cms/receiver/libsemaineapi_la-Receiver.lo: semaine/cms/receiver/Receiver.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/receiver/libsemaineapi_la-Receiver.lo -MD -MP -MF semaine/cms/receiver/$(DEPDIR)/libsemaineapi_la-Receiver.Tpo -c -o semaine/cms/receiver/libsemaineapi_la-Receiver.lo `test -f 'semaine/cms/receiver/Receiver.cpp' || echo '$(srcdir)/'`semaine/cms/receiver/Receiver.cpp
 @am__fastdepCXX_TRUE@	mv -f semaine/cms/receiver/$(DEPDIR)/libsemaineapi_la-Receiver.Tpo semaine/cms/receiver/$(DEPDIR)/libsemaineapi_la-Receiver.Plo
@@ -830,6 +856,13 @@ semaine/cms/sender/libsemaineapi_la-XMLSender.lo: semaine/cms/sender/XMLSender.c
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/sender/XMLSender.cpp' object='semaine/cms/sender/libsemaineapi_la-XMLSender.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/sender/libsemaineapi_la-XMLSender.lo `test -f 'semaine/cms/sender/XMLSender.cpp' || echo '$(srcdir)/'`semaine/cms/sender/XMLSender.cpp
+
+semaine/cms/sender/libsemaineapi_la-BytesSender.lo: semaine/cms/sender/BytesSender.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -MT semaine/cms/sender/libsemaineapi_la-BytesSender.lo -MD -MP -MF semaine/cms/sender/$(DEPDIR)/libsemaineapi_la-BytesSender.Tpo -c -o semaine/cms/sender/libsemaineapi_la-BytesSender.lo `test -f 'semaine/cms/sender/BytesSender.cpp' || echo '$(srcdir)/'`semaine/cms/sender/BytesSender.cpp
+@am__fastdepCXX_TRUE@	mv -f semaine/cms/sender/$(DEPDIR)/libsemaineapi_la-BytesSender.Tpo semaine/cms/sender/$(DEPDIR)/libsemaineapi_la-BytesSender.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='semaine/cms/sender/BytesSender.cpp' object='semaine/cms/sender/libsemaineapi_la-BytesSender.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -c -o semaine/cms/sender/libsemaineapi_la-BytesSender.lo `test -f 'semaine/cms/sender/BytesSender.cpp' || echo '$(srcdir)/'`semaine/cms/sender/BytesSender.cpp
 
 semaine/datatypes/xml/libsemaineapi_la-EMMA.lo: semaine/datatypes/xml/EMMA.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemaineapi_la_CXXFLAGS) $(CXXFLAGS) -MT semaine/datatypes/xml/libsemaineapi_la-EMMA.lo -MD -MP -MF semaine/datatypes/xml/$(DEPDIR)/libsemaineapi_la-EMMA.Tpo -c -o semaine/datatypes/xml/libsemaineapi_la-EMMA.lo `test -f 'semaine/datatypes/xml/EMMA.cpp' || echo '$(srcdir)/'`semaine/datatypes/xml/EMMA.cpp
