@@ -14,6 +14,7 @@
 	<path id="Subversion dummy.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/activemq-all-5.1.0.jar"/>
+        <pathelement location="lib/mary-common.jar"/>
         <pathelement location="lib/log4j-1.2.15.jar"/>
         <pathelement location="lib/commons-logging-1.1.1.jar"/>
         <pathelement location="lib/serializer.jar"/>

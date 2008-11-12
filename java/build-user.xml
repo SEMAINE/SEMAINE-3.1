@@ -14,6 +14,7 @@
 	<target name="jars">
         <jar destfile="lib/semaine.jar" basedir="bin"
         	 includes="eu/**/*.class
+                             	eu/**/*.xsl
         			eu/semaine/components/dummy/example2.fap">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
