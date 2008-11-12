@@ -31,7 +31,7 @@ namespace dummy {
 class DummyAnalyser : public Component
 {
 public:
-	DummyAnalyser(int argc, char *argv[] ) throw (CMSException);
+	DummyAnalyser() throw (CMSException);
 	virtual ~DummyAnalyser();
 
 protected:

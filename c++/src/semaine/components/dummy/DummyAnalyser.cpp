@@ -25,11 +25,10 @@ namespace semaine {
 namespace components {
 namespace dummy {
 
-DummyAnalyser::DummyAnalyser(int argc, char *argv[]) throw(CMSException) :
+DummyAnalyser::DummyAnalyser() throw(CMSException) :
 	Component("DummyAnalyser"),
 	userIsSpeaking(false)
 {
-  printf("Number of arguments: %i\n",argc);
 	featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
 	receivers.push_back(featureReceiver);
 	//dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
