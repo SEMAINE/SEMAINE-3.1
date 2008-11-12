@@ -32,7 +32,7 @@
   #include <iostream.h>
 #endif
 
-XERCES_CPP_NAMESPACE_USE
+
 
 
 
@@ -79,7 +79,7 @@ public:
 
 	virtual ~XMLSender();
 	
-	void sendXML(const DOMDocument * document, long long usertime, const std::string & event = SEMAINE_CMS_EVENT_SINGLE)
+	void sendXML(const XERCES_CPP_NAMESPACE::DOMDocument * document, long long usertime, const std::string & event = SEMAINE_CMS_EVENT_SINGLE)
 	throw(CMSException, SystemConfigurationException);
 	
 	
@@ -90,7 +90,7 @@ protected:
 	throw(CMSException);
 
 private:
-	DOMWriter * writer;
+	XERCES_CPP_NAMESPACE::DOMWriter * writer;
 
 	void setupXMLStuff() throw (SystemConfigurationException);
 };

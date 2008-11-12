@@ -21,6 +21,7 @@
 using namespace semaine::cms::exceptions;
 using namespace semaine::util;
 using namespace semaine::datatypes::xml;
+using namespace XERCES_CPP_NAMESPACE;
 
 namespace semaine {
 namespace components {

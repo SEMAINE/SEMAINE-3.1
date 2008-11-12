@@ -14,6 +14,7 @@
 
 using namespace semaine::cms::message;
 using namespace semaine::util;
+using namespace XERCES_CPP_NAMESPACE;
 
 namespace semaine {
 namespace cms {
