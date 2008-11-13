@@ -20,6 +20,11 @@
         <pathelement location="lib/serializer.jar"/>
         <pathelement location="lib/xercesImpl.jar"/>
         <pathelement location="lib/xml-apis.jar"/>
+		<pathelement location="lib/opennlp-tools-1.4.1/jwnl-1.3.3.jar"/>
+		<pathelement location="lib/opennlp-tools-1.4.1/maxent-2.5.1.jar"/>
+		<pathelement location="lib/opennlp-tools-1.4.1/opennlp-tools-1.4.1.jar"/>
+		<pathelement location="lib/opennlp-tools-1.4.1/trove.jar"/>
+		
     </path>
     
 	<target name="init">
