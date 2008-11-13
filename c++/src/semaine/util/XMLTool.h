@@ -102,6 +102,16 @@ public:
      */
 	static XERCES_CPP_NAMESPACE::DOMElement * createElement(XERCES_CPP_NAMESPACE::DOMDocument * doc, const std::string & elementName, const std::string & aNamespace);
 
+
+    /**
+     * In the given document, create a new text node,
+     * containing the given text content.
+     * @param doc a document
+     * @param textContent the text content
+     * @return a text node which is not yet included in the tree hierarchy of the document.
+     */
+	static XERCES_CPP_NAMESPACE::DOMText * createTextNode(XERCES_CPP_NAMESPACE::DOMDocument * doc, const std::string & textContent);
+
 	/**
      * Create a child element with the given name and append it below node.
      * The new element will have the same namespace as node.
@@ -119,6 +129,14 @@ public:
      * @return the child element
      */
 	static XERCES_CPP_NAMESPACE::DOMElement * appendChildElement(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace);
+
+	/**
+     * Create a text node with the given content, and append it below node.
+     * @param node
+     * @param textContent
+     * @return the text node
+     */
+	static XERCES_CPP_NAMESPACE::DOMText * appendChildTextNode(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & textContent);
 
 
 	/**
@@ -160,6 +178,11 @@ public:
 	 * Get the tag name of the given element.
 	 */ 
 	static const std::string getTagName(XERCES_CPP_NAMESPACE::DOMElement * e);
+
+	/**
+	 * Get the text content below this node.
+	 */
+	 static const std::string getTextContent(XERCES_CPP_NAMESPACE::DOMNode * node);
 
 	/**
 	 * Get the direct child of node that is an element with the given

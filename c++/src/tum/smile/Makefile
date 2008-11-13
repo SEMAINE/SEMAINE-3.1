@@ -27,7 +27,7 @@ PA_LIB = ../../../../thirdparty/inst/lib
 
 # use these lines for linux with portaudio installed in ./pa-inst
 #LIBS =  -lc -lm -lrt -lasound -ljack -lpthread -lportaudio 
-LIBS_LIN_PA =  -lc -lm -lrt -lasound -lpthread $(PA_LIB)/libportaudio.a
+LIBS_LIN_PA =  -lc -lm -lpthread $(PA_LIB)/libportaudio.a
 # 
 LDFLAGS_LIN_PA = 
 #-L$(PA_LIB)
@@ -49,7 +49,7 @@ BIN  = feaTUM feaTUMcpp SEMAINEsync TUMrec feaTUM.exe feaTUMcpp.exe SEMAINEsync.
 
 # use this line for linux  with portaudio installed in prefix ./pa-inst/
 
-CFLAGS = -g 
+CFLAGS = -g
 #-O2 -mtune=i686 -mfpmath=sse -msse -msse2 -mmmx $(INCS)
 CFLAGS_LIN_PA = -I$(PA_INC) $(CFLAGS)
 #CFLAGS_LIN_PA = $(CFLAGS)

@@ -150,16 +150,6 @@ int deltas_compute( pDeltas obj, int id )
 #undef FUNCTION 
 
 
-// compute the deltas for configuration <id>
-// (save deltas to olevel of id in feature memory mem)
-// when this function is called, it computes only the current (i.e. last) functional frame
-// RETURN value: 0 on error, 1 on success, but when nothing was computed, 2 if something was computed
-int deltas_computeNext( pDeltas obj, int id )
-#define FUNCTION "deltas_computeNext"
-{_FUNCTION_ENTER_
-
-// nFramesContext == 0 is a special case... it's the 'incorrect(?)' simple differential, where 2 neighboring values are subtracted
-// nFramesContext == 1 would correspond to a normal differential with left and right 
 inline LONG_IDX oIdxToIidx0 (LONG_IDX oIdx, int nFramesContext) {
   // computes first index for diff. window over input frames         
   if (nFramesContext == 0) { return oIdx-1; }
@@ -170,6 +160,17 @@ inline LONG_IDX oIdxToIidxL (LONG_IDX oIdx, int nFramesContext) {
   // computes last index for diff. window over input frames
   return oIdx + (nFramesContext);
 }
+
+// compute the deltas for configuration <id>
+// (save deltas to olevel of id in feature memory mem)
+// when this function is called, it computes only the current (i.e. last) functional frame
+// RETURN value: 0 on error, 1 on success, but when nothing was computed, 2 if something was computed
+int deltas_computeNext( pDeltas obj, int id )
+#define FUNCTION "deltas_computeNext"
+{_FUNCTION_ENTER_
+
+// nFramesContext == 0 is a special case... it's the 'incorrect(?)' simple differential, where 2 neighboring values are subtracted
+// nFramesContext == 1 would correspond to a normal differential with left and right 
 
   int olevel, ilevel, nFramesContext;
   

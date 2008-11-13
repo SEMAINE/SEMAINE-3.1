@@ -94,6 +94,14 @@ DOMElement * XMLTool::createElement(DOMDocument * doc, const std::string & eleme
 	return e;
 }
 
+DOMText * XMLTool::createTextNode(DOMDocument * doc, const std::string & textContent)
+{
+	XMLCh * xmlTextContent = XMLString::transcode(textContent.c_str());
+	DOMText * t = doc->createTextNode(xmlTextContent);
+	XMLString::release(&xmlTextContent);
+	return t;
+}
+
 DOMElement * XMLTool::appendChildElement(DOMNode * node,  const std::string & childName)
 {
 	const XMLCh * xmlNamespaceURI = node->getNamespaceURI();
@@ -114,6 +122,18 @@ DOMElement * XMLTool::appendChildElement(DOMNode * node,  const std::string & ch
 	XMLString::release(&xmlElementName);
 	return e;
 }
+
+DOMText * XMLTool::appendChildTextNode(DOMNode * node, const std::string & textContent)
+{
+	return (DOMText *) node->appendChild(createTextNode(node->getOwnerDocument(), textContent));
+}
+
+
+const std::string XMLTool::getTextContent(DOMNode * node)
+{
+	return transcode(node->getTextContent());
+}
+
 
 DOMElement * XMLTool::getChildElementByTagNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
 {
@@ -227,7 +247,6 @@ const std::string XMLTool::transcode(const XMLCh * xmlString)
 	XMLString::release(&chars);
 	return s;
 }
-
 
 
 
