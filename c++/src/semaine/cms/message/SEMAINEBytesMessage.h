@@ -12,6 +12,7 @@
 
 #include <semaine/config.h>
 #include <cstdlib>
+#include <string>
 
 #include <semaine/cms/message/SEMAINEMessage.h>
 #include <semaine/cms/exceptions/MessageFormatException.h>
