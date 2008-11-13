@@ -221,6 +221,10 @@ void compute_melFilters(s_mel_descriptor *mel)
       return 700.0*(pow(10.0,fmel/2595.0)-1.0);
 
     }
+    inline int fofm(int m) {
+      return ( (int)round( (2.0*N/Fs)*Binv(BfI + (double)m*(BfH-BfI)/((double)M+1.0) )));    
+    }
+ 
 // blocksize is size of fft block, i.e. pcmFrameLength/2
 int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
 #define FUNCTION "LLDmfcc_recomputeFilters"
@@ -247,10 +251,7 @@ int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
     double M = (double) (obj->nMel);
     double BfI = B(0.0);
     double BfH = B(Fs/2.0-1.0);
-    int fofm(int m) {
-      return ( (int)round( (2.0*N/Fs)*Binv(BfI + (double)m*(BfH-BfI)/((double)M+1.0) )));    
-    }
-  
+ 
       
     int m,n;
     for (m=1; m<obj->nMel+1; m++) {
