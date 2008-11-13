@@ -10,6 +10,7 @@ import java.util.HashSet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.BufferedReader;
@@ -66,21 +67,15 @@ public class DataImporter
 	 */
 	public HashMap<String,ArrayList<String>> importGroupData()
 	{
-		File f = null;
-		try {
-			f = new File( this.getClass().getResource(groupFile).toURI() );
-		}catch( URISyntaxException e ){ e.printStackTrace(); }
-		if( f == null ) {
-			return null;
-		}
-		
+		InputStream is = this.getClass().getResourceAsStream(groupFile);
+				
 		Document doc;
 		try{
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setExpandEntityReferences(true);
             factory.setNamespaceAware(true);
             DocumentBuilder docBuilder = factory.newDocumentBuilder();
-            doc = docBuilder.parse(f);
+            doc = docBuilder.parse(is);
         } catch (Exception e) {
             System.out.println("Error parsing xml file");
             e.printStackTrace();

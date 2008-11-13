@@ -44,8 +44,8 @@ public class UtteranceProposer extends Component
 	private static final int MIN_REPEAT_RATE = 10;
 	
 	/* The files with the response-model */
-	private String contextFile = "../data/Context.csv";
-	private String groupFile = "../data/SentenceGroups.xml";
+	private String contextFile = "/eu/semaine/components/dialogue/data/Context.csv";
+	private String groupFile = "/eu/semaine/components/dialogue/data/SentenceGroups.xml";
 	
 	/* The current personality */
 	private Personality currPersonality;

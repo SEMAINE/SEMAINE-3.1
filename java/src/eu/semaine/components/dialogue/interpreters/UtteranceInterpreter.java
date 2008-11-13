@@ -5,9 +5,13 @@
 
 package eu.semaine.components.dialogue.interpreters;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 import javax.jms.JMSException;
 
@@ -42,6 +47,7 @@ import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
 
 import opennlp.maxent.MaxentModel;
+import opennlp.maxent.io.BinaryGISModelReader;
 import opennlp.maxent.io.SuffixSensitiveGISModelReader;
 import opennlp.tools.postag.DefaultPOSContextGenerator;
 import opennlp.tools.postag.POSDictionary;
@@ -115,11 +121,15 @@ public class UtteranceInterpreter extends Component
 
 		/* Initializing PoS Tagger */
 		try {
-			File modelFile = new File( "java/lib/opennlp-tools-1.4.1/models/tag.bin.gz" );
-			String tagdict = "java/lib/opennlp-tools-1.4.1/models/tagdict";
+			String modelFile = "/eu/semaine/components/dialogue/data/tag.bin.gz";
+			DataInputStream s = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(this.getClass().getResourceAsStream(modelFile)))));
+			//String tagdict = "java/lib/opennlp-tools-1.4.1/models/tagdict";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/eu/semaine/components/dialogue/data/tagdict")));
+			
 
-			if( modelFile != null&& tagdict != null ) {
-				tagger = new POSTaggerME( new SuffixSensitiveGISModelReader(modelFile).getModel(), new DefaultPOSContextGenerator(null),new POSDictionary(tagdict,true) );
+			if( modelFile != null&& reader != null ) {
+				//tagger = new POSTaggerME( new SuffixSensitiveGISModelReader(modelFile).getModel(), new DefaultPOSContextGenerator(null),new POSDictionary(tagdict,true) );
+				tagger = new POSTaggerME( new BinaryGISModelReader(s).getModel(), new DefaultPOSContextGenerator(null),new POSDictionary(reader,true) );
 			}
 		} catch( FileNotFoundException e ) {
 			e.printStackTrace();
