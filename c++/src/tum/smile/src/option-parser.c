@@ -25,8 +25,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
-//#include <stdlib.h>
 
 #include "featum_common.h"
 #include "featum_util.h"       //( optional )

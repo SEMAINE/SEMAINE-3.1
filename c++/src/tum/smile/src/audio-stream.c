@@ -24,7 +24,7 @@
  // this file contains the function definitions and the private class data
 #define MODULE "audio-stream"
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "featum_common.h"
 #include "featum_util.h"       

@@ -25,7 +25,6 @@ This files contains functions for managing pcm data buffers
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 #define MODULE "pcm-buffer"
 
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef __WINDOWS

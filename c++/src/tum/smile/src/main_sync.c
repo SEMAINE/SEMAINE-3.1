@@ -36,7 +36,6 @@ Cut and resample multi chanenl wave files with trigger signal in N-th channel
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <strings.h>
 #include <string.h>
 #include <inttypes.h>

@@ -38,7 +38,6 @@ framing (multiple framesizes possible)
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <strings.h>
 #include <string.h>
 #include <inttypes.h>

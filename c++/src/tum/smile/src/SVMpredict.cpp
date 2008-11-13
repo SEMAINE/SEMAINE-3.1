@@ -37,7 +37,7 @@ extern "C" {
 
 #include "SVMpredict.hpp"
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "../svm/svm.h"
 
 cSvmPredict::cSvmPredict( cFeatureMemory &mem, const char * modelfilename, const char *scalefile ) : cGenOutput(mem), predict_probability(0) {

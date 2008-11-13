@@ -24,7 +24,6 @@
  
  // this file contains the function definitions and the private class data
 
-#include <malloc.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

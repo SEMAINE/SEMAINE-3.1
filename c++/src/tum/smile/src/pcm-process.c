@@ -30,7 +30,7 @@
 #ifndef M_PI
 #define M_PI  3.141592653589793
 #endif
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "featum_common.h"
