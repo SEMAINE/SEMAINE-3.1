@@ -211,20 +211,21 @@ void compute_melFilters(s_mel_descriptor *mel)
 
 #endif
 
-// blocksize is size of fft block, i.e. pcmFrameLength/2
-int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
-#define FUNCTION "LLDmfcc_recomputeFilters"
-{_FUNCTION_ENTER_
-    double B(double fhz) {
+    inline double B(double fhz) {
 //      return 1125.0*log(1.0+fhz/700.0);
       return 2595.0*log10(1.0+fhz/700.0);
     }
-    double Binv(double fmel) {
+    inline double Binv(double fmel) {
 //      return 700.0*(exp(fmel/1125.0)-1.0);
 //      return 700.0*(exp10(fmel/2595.0)-1.0);
       return 700.0*(pow(10.0,fmel/2595.0)-1.0);
 
     }
+// blocksize is size of fft block, i.e. pcmFrameLength/2
+int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
+#define FUNCTION "LLDmfcc_recomputeFilters"
+{_FUNCTION_ENTER_
+
 
 
   if (obj != NULL) {
