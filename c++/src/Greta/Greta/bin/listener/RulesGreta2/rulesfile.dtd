@@ -1,0 +1,51 @@
+<!ELEMENT rules (rule+)>
+	
+<!ELEMENT rule (usersignals,constraints?,response)>
+<!ATTLIST rule
+	name CDATA #REQUIRED>
+
+<!ELEMENT usersignals (usersignal+)>
+
+<!ELEMENT usersignal EMPTY>
+<!ATTLIST usersignal
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+	modality CDATA #REQUIRED>
+
+<!ELEMENT constraints (core?,implications?)>
+
+<!ELEMENT core (item+)>
+
+<!ELEMENT item EMPTY>
+<!ATTLIST item
+	id CDATA #REQUIRED>
+
+<!ELEMENT implications (implication+)>
+
+<!ELEMENT implication (ifpresent,thenpresent)>
+
+<!ELEMENT ifpresent EMPTY>
+<!ATTLIST ifpresent
+	id CDATA #REQUIRED>
+
+<!ELEMENT thenpresent EMPTY>
+<!ATTLIST thenpresent
+	id CDATA #REQUIRED>
+
+<!ELEMENT response (signals?,cognitive?)>
+<!ATTLIST response
+	probability CDATA #REQUIRED
+	priority CDATA #REQUIRED>
+
+<!ELEMENT signals (signal+)>
+<!ATTLIST signals
+	probability CDATA #REQUIRED>
+
+<!ELEMENT signal EMPTY>
+<!ATTLIST signal
+	name CDATA #REQUIRED
+	modality CDATA #REQUIRED>
+
+<!ELEMENT cognitive EMPTY>
+<!ATTLIST cognitive
+	probability CDATA #REQUIRED>

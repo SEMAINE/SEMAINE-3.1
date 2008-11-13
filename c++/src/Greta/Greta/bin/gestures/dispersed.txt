@@ -1,0 +1,28 @@
+// Last modified: 2004-06-09 bjoern
+// created for the "mind your business" demo
+GESTURECLASS adjectival
+GESTUREINSTANCE dispersed
+DURATION 2.0
+SIDE both
+STARTFRAME 0.2
+  FRAMETYPE stroke_start
+  ARM XC:fixed YCC:fixed ZNear:fixed
+  HAND form_fist
+  WRIST FBAway PalmInwards
+  ADDNOISE
+ENDFRAME
+STARTFRAME 0.6
+  FRAMETYPE stroke_end
+  ARM XP YCC ZMiddle
+  HAND form_openapart
+  WRIST FBAway PalmInwards FBOutwards PalmAway 0.2
+  ADDNOISE
+ENDFRAME 
+STARTFRAME 0.6
+  FRAMETYPE post_stroke_hold
+  ARM XP YCC ZMiddle
+  HAND form_open:fixed
+  WRIST FBAway PalmInwards FBOutwards PalmAway 0.1
+  ADDNOISE
+ENDFRAME 
+

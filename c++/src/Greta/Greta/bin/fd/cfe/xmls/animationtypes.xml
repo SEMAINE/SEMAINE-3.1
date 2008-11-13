@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE types SYSTEM "types.dtd">
+<types>
+	<type name="crossing" root="superposition">
+		<point id="a1" x="25" y="100"/>
+		<point id="a2" x="100" y="50"/>
+		<point id="b1" x="55" y="50"/>
+		<point id="b2" x="100" y="120"/>
+		<point id="c1" x="70" y="50"/>
+	</type>
+	<type name="increasing" root="superposition">
+		<point id="a1" x="25" y="20"/>
+		<point id="a2" x="50" y="40"/>
+		<point id="b1" x="75" y="60"/>
+		<point id="b2" x="100" y="80"/> 
+	</type>
+	<type name="decreasing" root="superposition"> 
+		<point id="a2" x="100" y="80"/>
+		<point id="b1" x="75" y="60"/>
+		<point id="b2" x="50" y="40"/>
+		<point id="c1" x="25" y="20"/>
+	</type>
+	<type root="masking" name="masking">
+		<point id="a1" x="25" y="100"/>
+		<point id="a2" x="50" y="30"/>
+		<point id="a3" x="75" y="10"/>
+		<point id="a4" x="80" y="100"/>
+	</type>
+	<type root="masking" name="pretending">
+		<point id="a1" x="25" y="100"/>
+		<point id="a2" x="30" y="10"/>
+		<point id="a3" x="60" y="30"/>
+		<point id="a4" x="80" y="100"/>
+	</type>
+	<type root="masking" name="inhibition">
+		<point id="a1" x="25" y="100"/>
+		<point id="a2" x="30" y="10"/>
+		<point id="a3" x="60" y="30"/>
+		<point id="a4" x="80" y="100"/>
+	</type>
+	<type root="masking" name="suppression">
+		<point id="a1" x="25" y="100"/>
+		<point id="a2" x="30" y="10"/>
+		<point id="a3" x="60" y="30"/>
+		<point id="a4" x="80" y="100"/>
+	</type>
+	<type root="masking" name="facilitation">
+		<point id="a1" x="25" y="100"/>
+		<point id="a2" x="50" y="30"/>
+		<point id="a3" x="75" y="10"/>
+		<point id="a4" x="80" y="100"/>
+	</type>
+	<type name="sequence" root="sequence">
+		<point id="a1" x="25" y="100"/>
+		<point id="a2" x="100" y="50"/>
+		<point id="b1" x="55" y="50"/>
+		<point id="b2" x="100" y="120"/>
+		<point id="c1" x="70" y="70"/>
+		<point id="c2" x="90" y="70"/>
+	</type>
+
+</types>

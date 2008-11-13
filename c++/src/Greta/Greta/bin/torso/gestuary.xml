@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<!DOCTYPE gestuary SYSTEM "gestuary.dtd" []>
+
+<gestuary>
+
+	<entry id="bow">
+		<verbatim>
+		this gesture is used to bow toward the interlocutor
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="stroke" trajectory="linear">
+						<timing min="1" max="3" fixed="0"/>
+						<spine manner="closed"/>
+						<point forward_backward="forward" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="0" compensate_shoulders="1" scaling="0.3"/>
+					</movement>
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+	
+		<entry id="raise">
+		<verbatim>
+		
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.3"/>
+						<spine manner="opened"/>
+						<point forward_backward="backward" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="1" scaling="0.3"/>
+					</movement>
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+	
+	<entry id="depression">
+		<verbatim>
+		this gesture is used close the posture
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.5"/>
+						<spine manner="closed"/>
+						<point forward_backward="center" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="0" compensate_shoulders="1"/>
+					</movement>
+					<movement phase="hold" trajectory="linear">
+						<timing duration="0.8"/>
+						<spine manner="closed"/>
+						<point forward_backward="center" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="0" compensate_shoulders="1"/>
+					</movement>
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+		
+	<entry id="anger">
+		<verbatim>
+		this gesture can be associated to an angry state
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.3"/>
+						<spine manner="closed"/>
+						<point forward_backward="forward" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="1" compensate_shoulders="1" scaling="0.3"/>
+					</movement>
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+	
+
+
+	<entry id="joy">
+		<verbatim>
+		this gesture can be associated to a joy state
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="preparation" trajectory="linear">
+						<timing duration="0.4"/>
+						<spine manner="closed"/>
+						<point forward_backward="center" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="1" scaling="0.4" spatial_fixed="1"/>
+					</movement>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.5"/>
+						<spine manner="opened"/>
+						<point forward_backward="backward" left_right="center" tilt="center" spine_rotation="center" compensate_head="0" compensate_shoulders="0"/>
+					</movement>
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+
+
+	<entry id="relief4">
+		<verbatim>
+		this gesture can be associated to a relief state
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.5"/>
+						<spine manner="opened"/>
+						<point forward_backward="backward" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="0"/>
+					</movement>
+		
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+
+	<entry id="fear">
+		<verbatim>
+
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.2"/>
+						<spine manner="opened"/>
+						<point forward_backward="backward" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="0"/>
+					</movement>
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+
+	<entry id="fear2">
+		<verbatim>
+		this gesture can be associated to a fear state
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="preparation" trajectory="linear">
+						<timing duration="0.05"/>
+						<spine manner="opened"/>
+						<point forward_backward="backward" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="1"/>
+					</movement>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.4"/>
+						<spine manner="opened"/>
+						<point forward_backward="backward" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="0"/>
+					</movement>
+					<movement phase="hold" trajectory="linear">
+						<timing duration="0.9"/>
+						<spine manner="opened"/>
+						<point forward_backward="backward" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="0"/>
+					</movement>
+
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+
+	<entry id="tensed">
+		<verbatim>
+		this gesture can be associated to tension
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="preparation" trajectory="linear">
+						<timing duration="0.7"/>
+						<spine manner="closed"/>
+						<point forward_backward="forward" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="1" compensate_shoulders="1"/>
+					</movement>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.1"/>
+						<spine manner="closed"/>
+						<point forward_backward="forward" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="1" compensate_shoulders="1"/>
+					</movement>
+				 	<movement phase="retraction" trajectory="linear">
+						<timing duration="0.1"/>
+						<spine manner="opened"/>
+						<point forward_backward="center" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="0"/>
+					</movement>
+
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+
+	<entry id="tensed2">
+		<verbatim>
+		this gesture can be associated to tension
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="preparation" trajectory="linear">
+						<timing duration="0.7"/>
+						<spine manner="closed"/>
+						<point forward_backward="forward" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="0" compensate_shoulders="0"/>
+					</movement>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="0.1"/>
+						<spine manner="closed"/>
+						<point forward_backward="forward" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="0" compensate_shoulders="0"/>
+					</movement>
+				 	<movement phase="retraction" trajectory="linear">
+						<timing duration="0.1"/>
+						<spine manner="opened"/>
+						<point forward_backward="center" left_right="center" tilt="center" spine_rotation="center" compensate_head="1" compensate_shoulders="0"/>
+					</movement>
+
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+	
+	<entry id="relief5">
+		<verbatim>
+		this gesture can be associated to a relief state
+		</verbatim>
+		<form>
+			<upperbody>
+				<torso>
+					<movement phase="stroke" trajectory="linear">
+						<timing duration="1.5"/>
+						<spine manner="closed"/>
+						<point forward_backward="center" left_right="center" tilt="center" spine_rotation="center"
+						compensate_head="0" compensate_shoulders="1"/>
+					</movement>
+				</torso>
+			</upperbody>
+		</form>
+	</entry>
+
+</gestuary>

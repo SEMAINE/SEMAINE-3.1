@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE fml-apml SYSTEM "fml-apml.dtd" []>
+<fml-apml>
+
+	<bml>
+		<speech id="s1" start="0.0" language="english" voice="mary.english.man" speed_num="1" speed_sym="medium" type="application/wav" text="When sorrows come, they come not single spies but in battalions.">
+			<description level="1" type="gretabml">
+        <reference>tmp/bml_phonemesfilename.pho</reference>
+      </description>
+			<tm id="tm1"/>
+			When
+			<tm id="tm2"/>
+			sorrows
+			<tm id="tm3"/>
+			come
+			<pause id="pa1" duration_num="0.5"/> 
+			<tm id="tm4"/>
+			they
+			<tm id="tm5"/>
+			come not
+			<tm id="tm6"/>
+			single spies
+			<tm id="tm7"/>
+			but in battalions
+			<tm id="tm8"/>
+			
+			<pitchaccent id="xpa1" type="Hstar" start="s1:tm2" end ="s1:tm3"/>
+			<boundary id="b1" type="LH" start="s1:tm4"/>
+			<pitchaccent id="xpa2" type="Hstar" start="s1:tm7" end ="s1:tm8"/>
+			<boundary id="b2" type="LH" start="s1:tm8"/>
+		</speech>
+	</bml>
+	<fml>
+		<certainty id="c1" type="certain" start="s1:tm1" end="s1:tm2" importance="1"/>
+		
+		<turntaking id="tt1" type="hasthefloor" start="s1:tm1" importance="1"/>
+		
+		<theme id="t1" start="s1:tm3" end="s1:tm4"/>
+		
+		<rheme id="r1" start="s1:tm4" end="s1:tm8"/>
+		
+		<performative id="p1" type="announce" start="s1:tm3" end="s1:tm5" importance="1"/>
+		
+		<emotion id="e1" type="sadness" regulation="felt"  start="s1:tm1" end="s1:tm4" importance="1"/>
+		
+		<emotion id="e2" type="anger" regulation="fake"  start="s1:tm4" end="s1:tm8" importance="1"/>
+		
+		<emotion id="e3" type="sadness" regulation="felt"  start="e2:start" end="e2:end" importance="1"/>
+		
+		<world id="w1" ref_type="place" ref_id="door" start="p1:start"/>
+		
+		<world id="w2" ref_type="object" ref_id="chair" start="w1:start" end="w1:end"/>
+	</fml>
+</fml-apml>

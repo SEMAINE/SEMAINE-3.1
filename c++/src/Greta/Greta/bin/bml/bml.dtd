@@ -1,0 +1,103 @@
+<!ELEMENT bml (speech|head|face|gesture|gaze|torso|file)*>
+
+<!ELEMENT speech (#PCDATA|tm|pause|pitchaccent|boundary|description)*>
+<!ELEMENT head (description)?>
+<!ELEMENT face (description)?>
+<!ELEMENT gesture (description)?>
+<!ELEMENT torso (description)?>
+<!ELEMENT gaze (description)?>
+<!ELEMENT file (description)?>
+
+
+<!ELEMENT tm EMPTY>
+
+<!ELEMENT pause EMPTY>
+
+<!ELEMENT pitchaccent EMPTY>
+
+<!ELEMENT boundary EMPTY>
+
+<!ELEMENT description (reference|intensity|SPC.min|SPC.max|SPC.value|TMP.min|TMP.max|TMP.value|FLD.min|FLD.max|FLD.value|PWR.min|PWR.max|PWR.value|OAC.min|OAC.max|OAC.value|REP.min|REP.max|REP.value|preference.min|preference.max|preference.value|stroke)*>
+
+<!ELEMENT reference (#PCDATA)>
+
+<!ELEMENT intensity (#PCDATA)>
+
+<!ELEMENT SPC.min (#PCDATA)>
+<!ELEMENT SPC.max (#PCDATA)>
+<!ELEMENT SPC.value (#PCDATA)>
+<!ELEMENT TMP.min (#PCDATA)>
+<!ELEMENT TMP.max (#PCDATA)>
+<!ELEMENT TMP.value (#PCDATA)>
+<!ELEMENT FLD.min (#PCDATA)>
+<!ELEMENT FLD.max (#PCDATA)>
+<!ELEMENT FLD.value (#PCDATA)>
+<!ELEMENT PWR.min (#PCDATA)>
+<!ELEMENT PWR.max (#PCDATA)>
+<!ELEMENT PWR.value (#PCDATA)>
+<!ELEMENT OAC.min (#PCDATA)>
+<!ELEMENT OAC.max (#PCDATA)>
+<!ELEMENT OAC.value (#PCDATA)>
+<!ELEMENT REP.min (#PCDATA)>
+<!ELEMENT REP.max (#PCDATA)>
+<!ELEMENT REP.value (#PCDATA)>
+<!ELEMENT preference.min (#PCDATA)>
+<!ELEMENT preference.max (#PCDATA)>
+<!ELEMENT preference.value (#PCDATA)>
+<!ELEMENT stroke EMPTY>
+
+<!ATTLIST speech id ID #REQUIRED start CDATA "0" type CDATA #IMPLIED text CDATA #IMPLIED speed_num CDATA #IMPLIED speed_sym (fast|medium|slow) "medium" language CDATA #REQUIRED voice CDATA #REQUIRED>
+
+<!ATTLIST head id ID #REQUIRED>
+<!ATTLIST head type (NOD|SHAKE|TOSS|ORIENT) "NOD">
+<!ATTLIST head direction (RIGHT|LEFT|UP|DOWN|ROLLRIGHT|ROLLLEFT) "RIGHT">
+<!ATTLIST head start CDATA #REQUIRED>
+<!ATTLIST head stroke CDATA #IMPLIED>
+<!ATTLIST head end CDATA "">
+
+<!ATTLIST face id ID #REQUIRED>
+<!ATTLIST face type (FACS|EYEBROWS|EYELIDS|MOUTH) "MOUTH">
+<!ATTLIST face au CDATA "0">
+<!ATTLIST face separation CDATA "0.5">
+<!ATTLIST face lid (BOTH|UPPER|LOWER) "BOTH">
+<!ATTLIST face shape (POINTDOWN|POINTUP|FLAT|SMILE|LAUGH|PUCKER|FROWN) "FLAT">
+<!ATTLIST face start CDATA #REQUIRED>
+<!ATTLIST face stroke CDATA #IMPLIED>
+<!ATTLIST face end CDATA "">
+
+<!ATTLIST gesture id ID #REQUIRED>
+<!ATTLIST gesture type (POINT|REACH|BEAT|DEPICT|SIGNAL) "BEAT">
+<!ATTLIST gesture name CDATA #IMPLIED>
+<!ATTLIST gesture target CDATA #IMPLIED>
+<!ATTLIST gesture start CDATA #REQUIRED>
+<!ATTLIST gesture stroke CDATA #IMPLIED>
+<!ATTLIST gesture end CDATA "">
+
+<!ATTLIST torso id ID #REQUIRED>
+<!ATTLIST torso posture CDATA #REQUIRED>
+<!ATTLIST torso start CDATA #REQUIRED>
+<!ATTLIST torso stroke CDATA #IMPLIED>
+<!ATTLIST torso end CDATA "">
+
+<!ATTLIST gaze id ID #REQUIRED>
+<!ATTLIST gaze start CDATA #REQUIRED>
+<!ATTLIST gaze stroke CDATA #IMPLIED>
+<!ATTLIST gaze end CDATA "">
+
+<!ATTLIST tm id ID #REQUIRED>
+
+<!ATTLIST tm time CDATA #IMPLIED>
+
+<!ATTLIST pause id ID #REQUIRED duration_num CDATA #IMPLIED duration_sym (short|medium|long) "medium">
+
+<!ATTLIST pitchaccent id ID #REQUIRED type (Hstar|Lstar|LplusHstar|LstarplusH|HstarplusL|HplusLstar) "Hstar" level (strong|medium|weak) "medium" start CDATA #REQUIRED end CDATA #IMPLIED importance CDATA "1">
+                   
+<!ATTLIST boundary id ID #REQUIRED type (L|H|LL|HH|LH|HL) "LL" start CDATA #REQUIRED end CDATA "0.5">
+
+<!ATTLIST description level (1|2|3|4|5|6|7|8|9) #REQUIRED>
+<!ATTLIST description type CDATA #REQUIRED>
+
+<!ATTLIST stroke time CDATA #REQUIRED>
+
+<!ATTLIST file name CDATA #REQUIRED>
+<!ATTLIST file start CDATA #IMPLIED>

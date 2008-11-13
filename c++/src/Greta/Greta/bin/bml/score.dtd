@@ -1,0 +1,57 @@
+<!ELEMENT score (channel*)>
+
+<!ELEMENT channel ((hisignal|losignal|syncsignal|phasesyncsignal)*|expressivesignal*)>
+<!ATTLIST channel
+	name CDATA #REQUIRED
+	type CDATA #REQUIRED
+	r CDATA "255"
+	g CDATA "255"
+	b CDATA "255"
+	y CDATA "">
+	
+<!ELEMENT signal (hisignal|losignal|syncsignal|phasesyncsignal)>
+
+<!ELEMENT hisignal (phase)*>
+<!ATTLIST  hisignal
+	name CDATA #REQUIRED
+	class CDATA #REQUIRED
+	instance CDATA #REQUIRED
+	start CDATA #REQUIRED
+	end CDATA #REQUIRED
+>
+
+<!ELEMENT phase EMPTY>
+<!ATTLIST phase
+	type CDATA #REQUIRED
+	duration CDATA #REQUIRED>
+
+<!ELEMENT losignal (item*)>
+<!ATTLIST    losignal
+	name CDATA #REQUIRED
+	class CDATA #REQUIRED
+	instance CDATA #REQUIRED
+	start CDATA #REQUIRED
+	end CDATA #REQUIRED
+>
+
+<!ELEMENT syncsignal (hisignal|losignal)*>
+<!ATTLIST syncsignal
+	type CDATA #REQUIRED>
+
+<!ELEMENT phasesyncsignal (hisignal+,phasetosync+)>
+<!ATTLIST     phasetosync
+	signal CDATA #REQUIRED
+	phase CDATA #REQUIRED
+>
+
+<!ELEMENT expressivesignal (hisignal|losignal|syncsignal|phasesyncsignal)*>
+<!ATTLIST    expressivesignal
+	OAC CDATA ""
+	SPC CDATA ""
+	TMP CDATA ""
+	FLD CDATA ""
+	PWR CDATA ""
+	REP CDATA ""
+>
+
+

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE CHARACTER SYSTEM "dtds/character.dtd" []>
+<CHARACTER>
+<HEADFILES vertices="heads/vertices/girl_vertices.vtx" fdps="heads/vertices/girl_FDPs.txt" indices="heads/vertices/girl_indices.txt" textured="1"
+ texture_file="textures/head_skin_woman.bmp" eyes_texture="textures/eyes2.bmp"/>
+<BODYFILES mesh="bodies/meshes/body_geometry_woman.txt" hierarchy="bodies/hierarchies/hanim_hierarchy.txt" bones="bodies/bones/local_translations_woman.txt" texture_file="textures/body_materials1.bmp"/>
+<HEADPOSITION x="0" y="21" z="-4" scale="0.48"/>
+<LEFT_EYE x="6.9" y="0" z="14.8"/>
+<RIGHT_EYE x="-6.9" y="0" z="14.8"/>
+<EYE_SCALE factor="2.45"/>
+<TEETHS-TONGUE x="0" y="0.4" z="3.6"/>
+</CHARACTER>

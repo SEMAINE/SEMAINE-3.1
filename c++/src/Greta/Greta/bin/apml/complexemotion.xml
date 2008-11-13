@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE apml SYSTEM "apml.dtd" []>
+<apml>
+
+<performative>
+<rheme affect="complex:anger_maskedby_joy">
+This is the <emphasis x-pitchaccent="Hstar" deictic="u">new</emphasis>expression<boundary type="LL"/>
+</rheme>
+</performative>
+
+<performative>
+and this is 
+<rheme affect="complex:anger_and_joy">
+the<emphasis x-pitchaccent="Hstar" deictic="u">same</emphasis>expression again<boundary type="LL"/>
+<pause sec="5.0"/>
+</rheme>
+</performative>
+    
+
+<performative>
+and this is 
+<rheme affect="complex:worried_maskedby_neutral">
+the<emphasis x-pitchaccent="Hstar" deictic="u">same</emphasis>expression again<boundary type="LL"/>
+<pause sec="5.0"/>
+</rheme>
+
+</performative>
+
+</apml>

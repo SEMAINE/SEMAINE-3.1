@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+
+<selectors
+xmlns="http://www.w3schools.com"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="selectors.xsd">
+
+	
+	<selector name="backchannel-agree">
+		<signals>
+			<signal id="1" name="head=head_nod" modality="head"/>
+			<signal id="2" name="eyes=raise_eyebrows" modality="face"/>
+			<signal id="3" name="gaze=look_at" modality="gaze"/>
+			<signal id="4" name="mouth=smile" modality="face"/>
+		</signals>
+		<constraints>
+			<necessary>
+				<item id="1"/>
+			</necessary>
+			<rules>
+				<implication>
+					<ifpresent id="2"/>
+					<thenpresent id="3"/>
+				</implication>
+				<implication>
+					<ifpresent id="4"/>
+					<thenpresent id="2"/>
+				</implication>
+			</rules>
+		</constraints>
+	</selector>
+
+	<selector name="backchannel-disagree">
+		<signals>
+			<signal id="1" name="head=head_shake" modality="head"/>
+			<signal id="2" name="eyes=frown" modality="face"/>
+			<signal id="3" name="gaze=look_at" modality="gaze"/>
+			<signal id="4" name="mouth=tension" modality="face"/>
+		</signals>
+		<constraints>
+			<necessary>
+				<item id="1"/>
+			</necessary>
+			<rules>
+				<implication>
+					<ifpresent id="2"/>
+					<thenpresent id="3"/>
+				</implication>
+			</rules>
+		</constraints>
+	</selector>
+	
+	<selector name="backchannel-like">
+		<signals>
+			<signal id="1" name="mouth=smile" modality="face"/>
+			<signal id="2" name="gaze=look_at" modality="gaze"/>
+		</signals>
+		<constraints>
+			<necessary>
+			</necessary>
+			<rules>
+			</rules>
+		</constraints>
+	</selector>
+
+	<selector name="backchannel-dislike">
+		<signals>
+			<signal id="1" name="eyes=frown" modality="face"/>
+			<signal id="2" name="mouth=tension" modality="face"/>
+		</signals>
+		<constraints>
+			<necessary>
+			</necessary>
+			<rules>
+				<implication>
+					<ifpresent id="2"/>
+					<thenpresent id="1"/>
+				</implication>
+				<implication>
+					<ifpresent id="1"/>
+					<thenpresent id="2"/>
+				</implication>
+			</rules>
+		</constraints>
+	</selector>
+
+	<selector name="backchannel-dont_understand">
+		<signals>
+			<signal id="1" name="eyes=frown" modality="face"/>
+			<signal id="2" name="head=tilt" modality="head"/>
+		</signals>
+		<constraints>
+			<necessary>
+				<item id="1"/>
+			</necessary>
+			<rules>
+				<implication>
+					<ifpresent id="2"/>
+					<thenpresent id="1"/>
+				</implication>
+			</rules>
+		</constraints>
+	</selector>
+
+	...
+
+</selectors>

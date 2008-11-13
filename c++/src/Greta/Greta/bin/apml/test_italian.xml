@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE apml SYSTEM "apml.dtd" []>
+<apml>
+<performative type="sorry-for">
+	Bienvenue sur plan resto
+	<boundary type="LL"/>
+	ce service vous permet de
+	trouver un restaurant a paris
+	<boundary type="LL"/>
+	pour etre mis en relation avec lui
+	<boundary type="LH"/>
+	vous pouvez a tout moment passer sur votre telephone
+	<boundary type="LL"/>
+	pour consulter le mode d emploi general
+	<boundary type="LH"/>
+	cliquez
+	<emphasis x-pitchaccent="Hstar">
+		ici
+	</emphasis>
+	<boundary type="LL"/>
+	si vous n etes pas un utilisateur regulier
+	<boundary type="LH"/>
+	<rheme affect="joy" intensity="1.0">
+		cliquez
+		<emphasis x-pitchaccent="Hstar">
+			ici
+		</emphasis>
+		<boundary type="LL"/>
+	</rheme>
+</performative>
+</apml>

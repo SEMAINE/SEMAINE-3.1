@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE multimodals SYSTEM "./dtd/multimodal.dtd">
+
+<multimodals>
+<multimodal emotion="worried">
+   <signals>
+	<signal id="1" name="head=head_down" 	repetitivity="0" 	min_duration="4" 	max_duration="6"    occurence="0.5"    probability_start="0.9"    probability_end="0.6"/>
+	<signal id="2" name="gaze=look_down" 	repetitivity="1" 	min_duration="1"    	max_duration="2"    occurence="0.5"    probability_start="0.2"    probability_end="0.5"/>
+	<signal id="3" name="affect=sadness" 	repetitivity="1" 	min_duration="3"   	max_duration="6"    occurence="0.5"    probability_start="0.8"    probability_end="0.6"/>
+	<signal id="4" name="gaze=look_right" 	repetitivity="1" 	min_duration="1"   	max_duration="2"    occurence="0.5"    probability_start="0.4"    probability_end="0.7"/>
+	<signal id="5" name="gaze=look_left" 	repetitivity="1"  	min_duration="1"  	max_duration="2"    occurence="0.5"    probability_start="0.4"    probability_end="0.7"/>
+	<signal id="6" name="head=head_left" 	repetitivity="0"  	min_duration="2"  	max_duration="3"    occurence="0.5"    probability_start="0.4"    probability_end="0.5"/>
+	<signal id="7" name="affect=neutral" 	repetitivity="1"  	min_duration="1"  	max_duration="3"    occurence="0.5"    probability_start="0.3"    probability_end="0.3"/>
+	<signal id="8" name="bow" 		repetitivity="0"  	min_duration="5"  	max_duration="8"    occurence="0.5"    probability_start="0.1"    probability_end="0.9"/>
+	</signals>
+<cons>
+    <con type="minus">
+        <arg id="8" type="start"/> 
+        <arg id="8" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="1" type="start"/> 
+        <arg id="1" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="6" type="start"/> 
+        <arg id="6" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="7" type="start"/> 
+        <arg id="7" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="7" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="7" type="start"/> 
+        <arg id="3" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+   <con type="minus">
+        <arg id="4" type="start"/> 
+        <arg id="5" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="5" type="start"/> 
+        <arg id="4" type="stop"/> 
+        <morethan value="0"/> 
+    </con>
+   <con type="minus">
+        <arg id="2" type="start"/> 
+        <arg id="5" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="5" type="start"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="0"/> 
+    </con>
+   <con type="minus">
+        <arg id="4" type="start"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="2" type="start"/> 
+        <arg id="4" type="stop"/> 
+        <morethan value="0"/> 
+    </con>
+    <con type="minus">
+        <arg id="2" type="start"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="3" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="4" type="start"/> 
+        <arg id="4" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="5" type="start"/> 
+        <arg id="5" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="1" type="start"/> 
+        <arg id="6" type="stop"/> 
+        <morethan value="1"/> 
+    </con>            
+    <con type="minus">
+        <arg id="6" type="start"/> 
+        <arg id="1" type="stop"/> 
+        <morethan value="1"/> 
+    </con>              
+</cons>
+</multimodal>
+<multimodal emotion="embarrassment">
+   <signals>
+<signal id="1" name="head=head_down_strong" 	repetitivity="0" 	min_duration="2" 	max_duration="4"    occurence="0.5"    probability_start="0.8"    probability_end="0.3"/>
+<signal id="2" name="head=head_left_strong" 	repetitivity="0" 	min_duration="5" 	max_duration="9"    occurence="0.5"    probability_start="0.1"    probability_end="0.8"/>
+<signal id="3" name="gaze=look_down" 	repetitivity="0" 	min_duration="2" 	max_duration="4"    occurence="0.5"    probability_start="0.9"    probability_end="0.3"/>
+<signal id="4" name="gaze=look_right_strong"  	repetitivity="0" 	min_duration="1" 	max_duration="2"    occurence="0.5"    probability_start="0.5"    probability_end="0.5"/>
+<signal id="5" name="gaze=look_left_strong"  	repetitivity="0" 	min_duration="1" 	max_duration="2"    occurence="0.5"    probability_start="0.5"    probability_end="0.5"/>
+<signal id="6" name="affect=joy" 	repetitivity="1" 	min_duration="2" 	max_duration="3"    occurence="0.5"    probability_start="0.6"    probability_end="0.6"/>
+<signal id="7" name="affect=nd_joy" 	repetitivity="1" 	min_duration="2" 	max_duration="4"    occurence="0.5"    probability_start="0.6"    probability_end="0.6"/>
+<signal id="8" name="affect=tensed_joy" repetitivity="1" 	min_duration="2" 	max_duration="5"    occurence="0.5"    probability_start="0.6"    probability_end="0.6"/>
+<signal id="9" name="affect=neutral" 	repetitivity="0" 	min_duration="1" 	max_duration="2"    occurence="0.5"    probability_start="0.3"    probability_end="0.3"/>
+<signal id="10" name="emotion=fear11"  	repetitivity="0" 	min_duration="3" 	max_duration="5"    occurence="0.5"    probability_start="0.0"    probability_end="0.0"/>
+<signal id="11" name="tensed2"  	repetitivity="0" 	min_duration="5" 	max_duration="7"    occurence="0.5"    probability_start="0.4"    probability_end="0.9"/>
+	</signals>
+<cons>
+  <con type="minus">
+        <arg id="6" type="start"/> 
+        <arg id="2" type="start"/> 
+        <lessthan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="7" type="start"/> 
+        <arg id="2" type="start"/> 
+        <lessthan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="8" type="start"/> 
+        <arg id="2" type="start"/> 
+        <lessthan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="11" type="start"/> 
+        <arg id="11" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="11" type="start"/> 
+        <arg id="11" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="10" type="start"/> 
+        <arg id="11" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="11" type="start"/> 
+        <arg id="10" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="10" type="start"/> 
+        <arg id="1" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="1" type="start"/> 
+        <arg id="10" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="10" type="start"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="2" type="start"/> 
+        <arg id="10" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+          
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="4" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+        
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="5" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+          
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="6" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+        
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="7" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+             
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="8" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+         
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="9" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+         
+  <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="10" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+         
+    <con type="minus" range="global">
+        <arg id="3" type="start"/> 
+        <arg id="1" type="start"/> 
+        <morethan value="0"/> 
+    </con>        
+ <con type="minus" range="global">
+        <arg id="3" type="start"/> 
+        <arg id="1" type="stop"/> 
+        <lessthan value="0"/> 
+    </con>  
+    <con type="minus">
+        <arg id="1" type="stop"/> 
+        <arg id="3" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="8" type="start"/> 
+        <arg id="8" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="1" type="start"/> 
+        <arg id="1" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="6" type="start"/> 
+        <arg id="6" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="7" type="start"/> 
+        <arg id="7" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+  <con type="minus">
+        <arg id="6" type="start"/> 
+        <arg id="7" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="7" type="start"/> 
+        <arg id="6" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+   <con type="minus">
+        <arg id="7" type="start"/> 
+        <arg id="8" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="8" type="start"/> 
+        <arg id="7" type="stop"/> 
+        <morethan value="0"/> 
+    </con>
+   <con type="minus">
+        <arg id="8" type="start"/> 
+        <arg id="6" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="6" type="start"/> 
+        <arg id="8" type="stop"/> 
+        <morethan value="0"/> 
+    </con>
+   <con type="minus">
+        <arg id="4" type="start"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="2" type="start"/> 
+        <arg id="4" type="stop"/> 
+        <morethan value="0"/> 
+    </con>
+    <con type="minus">
+        <arg id="2" type="start"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="3" type="start"/> 
+        <arg id="3" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="4" type="start"/> 
+        <arg id="4" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="5" type="start"/> 
+        <arg id="5" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="9" type="start"/> 
+        <arg id="9" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="10" type="start"/> 
+        <arg id="10" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+ <con type="minus">
+        <arg id="4" type="start"/> 
+        <arg id="5" type="stop"/> 
+        <morethan value="0"/> 
+    </con>        
+    <con type="minus">
+        <arg id="5" type="start"/> 
+        <arg id="4" type="stop"/> 
+        <morethan value="0"/> 
+    </con>
+</cons>
+</multimodal>
+
+<multimodal emotion="anger">
+   <signals>
+    <signal id="1" type="gesture" name="xxx" repetitivity="0" min_duration="1"   max_duration="3"    occurence="0.5"    probability_start="0.5"    probability_end="0.5"/>
+    <signal id="2" type="face" name="xxx" repetitivity="0"    min_duration="1" max_duration="3"    occurence="0.5"    probability_start="0.5"    probability_end="0.5"/>
+    <signal id="3" type="face" name="xxx" repetitivity="0"    min_duration="1" max_duration="3"    occurence="0.5"    probability_start="0.5" probability_end="0.5"/>
+</signals>
+<cons>
+    <con type="minus">
+        <arg id="1" type="stop"/> 
+        <arg id="2" type="stop"/> 
+        <lessthan value="1"/> 
+    </con>        
+    <con type="simple">
+        <arg id="1" type="start"/>         
+        <morethan value="1"/> 
+    </con>        
+     <con type="minus">
+        <arg id="1" type="stop"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="1"/> 
+    </con>        
+    <con type="simple">
+        <arg id="1" type="start"/>         
+        <lessthan value="1"/> 
+    </con>        
+     <con type="minus">
+        <arg id="1" type="start"/> 
+        <arg id="2" type="start"/> 
+        <equal value="1"/> 
+    </con>        
+    <con type="simple">
+        <arg id="1" type="stop"/>         
+        <equal value="1"/> 
+    </con>
+</cons>
+</multimodal>
+<multimodal emotion="fear">
+   <signals>
+    <signal id="1" type="gesture" name="xxx" repetitivity="0" min_duration="1"   max_duration="5"    occurence="0.5"    probability_start="0.5"    probability_end="0.5"/>
+    <signal id="2" type="face" name="xxx" repetitivity="0"    min_duration="1" max_duration="5"    occurence="0.5"    probability_start="0.5"    probability_end="0.5"/>
+    <signal id="3" type="face" name="xxx" repetitivity="0"    min_duration="1" max_duration="5"    occurence="0.5"    probability_start="0.5"    probability_end="0.5"/>
+</signals>
+<cons>
+    <con type="minus">
+        <arg id="1" type="stop"/> 
+        <arg id="2" type="stop"/> 
+        <lessthan value="1"/> 
+    </con>        
+    <con type="simple">
+        <arg id="1" type="start"/>         
+        <morethan value="1"/> 
+    </con>        
+     <con type="minus">
+        <arg id="1" type="stop"/> 
+        <arg id="2" type="stop"/> 
+        <morethan value="1"/> 
+    </con>        
+    <con type="simple">
+        <arg id="1" type="start"/>         
+        <lessthan value="1"/> 
+    </con>        
+     <con type="minus">
+        <arg id="1" type="start"/> 
+        <arg id="2" type="start"/> 
+        <equal value="1"/> 
+    </con>        
+    <con type="simple">
+        <arg id="1" type="stop"/>         
+        <equal value="1"/> 
+    </con>
+
+</cons>
+</multimodal>
+</multimodals>

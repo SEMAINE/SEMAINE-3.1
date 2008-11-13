@@ -1,0 +1,133 @@
+Psyclone nc 1.1.7
+
+Binary executable, associated documentation and example files.
+
+ Copyright (c) 2007 by Communicative Machines Incorporated
+
+ All rights reserved
+
+ http://www.cmlabs.com
+
+ This original unmodified version of the work is released under a 
+ Communicative Machines Non-Commercial (NC) License version 1.0
+ which is set forth below.
+ 
+ The software is free software in the sense that you can use and 
+ redistribute it under the terms of the NC License
+ as published by Communicative Machines; 
+ http://www.cmlabs.com/licenses/NClicense.html
+
+
+NOTICE - READ THE BELOW LICENSE BEFORE DOWNLOADING, COPYING OR USING THE
+SOFTWARE.
+
+READ ALL OF THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT PRIOR TO
+INSTALLING OR USING THE SOFTWARE. IF YOU DO NOT ACCEPT THESE TERMS, YOU
+MUST DELETE THE SOFTWARE FROM YOUR HARDWARE.
+
+PLEASE NOTE THAT YOU MAY NOT USE, COPY, MODIFY OR TRANSFER THE SOFTWARE
+OR DOCUMENTATION OR ANY COPY, EXCEPT AS EXPRESSLY PROVIDED IN THIS
+AGREEMENT.
+
+
+------------------------------------------------------------------------------
+
+Communicative Machines Non-Commercial (NC) License
+Version 1.0
+
+This License and its list of conditions applies to any and all software, 
+documents and files (henceforth "the Work") which a legally authorized party
+(Owner) claims is released under this "Communicative Machines Non-Commercial
+(NC) License", in source or binary form, and to any and all derived works, as
+specified further herein.
+
+Definitions: 
+1. "Other work" means software and documents other than the Work.
+2. "Co-compilation" means linking and other such actions that extend
+the functionality of the Work through direct combination with third-
+party software, not including communication via sockets and other 
+indirect combinations.
+3. "Derived works" means any software and files, co-compiled or otherwise, 
+that includes, extends, or adds to the functionality of the Work, or 
+is a translation to, or rewriting of the Work in another language, in 
+whole or in part, modified and unmodified, in isolation and as part of 
+other work. 
+4. "Executable binary" means any compiled software designed to run 
+on a computing device.
+5. "Modification" means changes and extensions to the original 
+executable binary including co-compilation.
+6. "Unmodifed compiled executable binary" means a compiled, unmodified 
+version of the Work, as released by its original author, in which 
+executable binary code has not been extended or modified.
+7. "Extension" and "modification" refer to any addition which extends, 
+enhances or modifies the original functioning, operation, meaning or 
+content of the Work.
+8. "Fee" means any compensation, sum or payment, monetary 
+and otherwise.
+
+
+Use and redistribution of the Work, including its incorporation
+in and with third-party software and files, compiled and in source 
+code form, is permitted free of charge, provided that the following 
+conditions are met:
+
+1. The Work is used solely for educational, academic research, or
+other non-profit purposes: No fee may be accepted in exchange for 
+use or redistribution of the Work.
+
+2. No attempt is made to decompile or otherwise reverse engineer 
+executable binaries of the Work.
+
+3. Redistributions must contain a copy of the Work in unmodified
+form, clearly separated from any modifications, additions and 
+co-compilations.
+
+4. Redistributions must contain the source code to all derived works. 
+This does not apply to software for which the Work is intended to be 
+used as an unmodified executable binary.
+
+5. Redistributions of the Work in modified form, and all derived 
+works, must be made readily available to the community of users 
+of the Work through appropriate channels.
+
+6. Redistributions must retain the above copyright notice, the eight
+definitions, this list of ten conditions, and the following disclaimer, 
+in unmodified form, in human-readable files provided 
+with the distribution. 
+
+7. Redistributions must be released under this License 
+and may not be released under any additional licenses.
+
+8. The names "Communicative Machines Laboratories",
+"Communicative Machines", "CMLabs", and the names of
+the contributors to the Work, may not be used to endorse or
+promote projects derived from this software or distributed
+with this Work without express prior written permission from
+the copyright holder.
+
+9. Communicative Machines reserves the right to change 
+this License at any time without notice.Users are responsible 
+for reading this Licensebefore using the Work.
+
+10. Use of the Work implies acceptance of this License.
+
+Questions about this License and alternative licensing
+for any software released by Communicative Machines should 
+be addressed to: infocmlabs.com.
+
+
+DISCLAIMER
+THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY
+OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+OF OR IN CONNECTION WITH THE WORK OR THE USE
+OR OTHER DEALINGS IN THE WORK.
+
+This License Dated: November 19, 2005.
+Copyright (c) 2005 by Communicative Machines Incorporated.
+All rights reserved.

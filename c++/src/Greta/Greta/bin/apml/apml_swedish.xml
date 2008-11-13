@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE apml SYSTEM "apml.dtd" []>
+<apml>
+<performative type="inform">
+
+<rheme affect="joy">
+Hej <boundary type="H"/>
+jag heter Greta och jag kan prata jättebra svenska
+<boundary type="LH"/>
+</rheme>
+
+</performative>
+</apml>

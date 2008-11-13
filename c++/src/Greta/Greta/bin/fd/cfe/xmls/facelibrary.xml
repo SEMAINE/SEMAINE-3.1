@@ -1,0 +1,1649 @@
+﻿<?xml version="1.0"?>
+<!-- INFO: version of facelibrary used by Radek for animations -->
+<!-- VERSION_INFO: latest version facelibrary, author: Radek-->
+<!DOCTYPE facelibrary SYSTEM "facelibrary.dtd">
+
+<facelibrary>
+	<declaration>
+
+<actiondeclaration name="joy3_mouth">
+<fap num="4" value="-210"/>
+<fap num="5" value="140"/>
+<fap num="8" value="-30"/>
+<fap num="9" value="-30"/>
+<fap num="10" value="-120"/>
+<fap num="11" value="-120"/>
+<fap num="18" value="60"/>
+<fap num="41" value="375"/>
+<fap num="42" value="375"/>
+<fap num="51" value="-30"/>
+<fap num="52" value="150"/>
+<fap num="53" value="70"/>
+<fap num="54" value="70"/>
+<fap num="55" value="-10"/>
+<fap num="56" value="-10"/>
+<fap num="59" value="210"/>
+<fap num="60" value="210"/>
+</actiondeclaration>
+
+<actiondeclaration name="joy3_eyelids">
+<fap num="19" value="153"/>
+<fap num="20" value="153"/>
+<fap num="21" value="76"/>
+<fap num="22" value="76"/>
+</actiondeclaration>
+
+<actiondeclaration name="joy3_eyebrows">
+<fap num="31" value="60"/>
+<fap num="32" value="60"/>
+<fap num="33" value="85"/>
+<fap num="34" value="85"/>
+<fap num="35" value="21"/>
+<fap num="36" value="21"/>
+</actiondeclaration>
+
+
+<actiondeclaration name="fear6_mouth">
+<fap num="3" value="150"/>
+<fap num="5" value="-270"/>
+<fap num="10" value="-480"/>
+<fap num="11" value="-480"/>
+<fap num="12" value="-150"/>
+<fap num="13" value="-150"/>
+<fap num="51" value="105"/>
+<fap num="52" value="-20"/>
+<fap num="55" value="90"/>
+<fap num="56" value="90"/>
+<fap num="57" value="510"/>
+<fap num="58" value="740"/>
+<fap num="59" value="-150"/>
+<fap num="60" value="-150"/>
+</actiondeclaration>
+
+<actiondeclaration name="relief2_mouth">
+<fap num="3" value="40"/>
+<fap num="4" value="-60"/>
+<fap num="5" value="40"/>
+<fap num="10" value="-120"/>
+<fap num="11" value="-120"/>
+<fap num="14" value="-50"/>
+<fap num="15" value="-80"/>
+<fap num="16" value="290"/>
+<fap num="17" value="-340"/>
+<fap num="39" value="20"/>
+<fap num="40" value="20"/>
+<fap num="41" value="90"/>
+<fap num="42" value="90"/>
+<fap num="51" value="30"/>
+<fap num="52" value="-90"/>
+<fap num="53" value="70"/>
+<fap num="54" value="70"/>
+<fap num="55" value="30"/>
+<fap num="56" value="30"/>
+<fap num="57" value="440"/>
+<fap num="58" value="470"/>
+<fap num="59" value="120"/>
+<fap num="60" value="120"/>
+</actiondeclaration>
+
+<actiondeclaration name="relief2_eyelids">
+<fap num="19" value="40"/>
+<fap num="20" value="40"/>
+<fap num="21" value="40"/>
+<fap num="22" value="40"/>
+</actiondeclaration>
+
+<actiondeclaration name="relief2_eyebrows">
+<fap num="31" value="40"/>
+<fap num="32" value="40"/>
+<fap num="33" value="80"/>
+<fap num="34" value="80"/>
+<fap num="35" value="40"/>
+<fap num="36" value="40"/>
+</actiondeclaration>
+
+<actiondeclaration name="smile_2">
+<fap num="4" value="-210"/>
+<fap num="5" value="140"/>
+<fap num="8" value="-30"/>
+<fap num="9" value="-30"/>
+<fap num="10" value="-120"/>
+<fap num="11" value="-120"/>
+<fap num="18" value="60"/>
+<fap num="41" value="190"/>
+<fap num="42" value="190"/>
+<fap num="51" value="-30"/>
+<fap num="52" value="150"/>
+<fap num="53" value="70"/>
+<fap num="54" value="70"/>
+<fap num="55" value="-10"/>
+<fap num="56" value="-10"/>
+<fap num="59" value="210"/>
+<fap num="60" value="210"/>
+</actiondeclaration>
+
+<actiondeclaration name="tensed1_mouth">
+<fap num="3" value="-99"/>
+<fap num="6" value="16"/>
+<fap num="7" value="16"/>
+<fap num="10" value="56"/>
+<fap num="11" value="56"/>
+<fap num="39" value="-140"/>
+<fap num="40" value="-140"/>
+<fap num="51" value="165"/>
+<fap num="52" value="198"/>
+<fap num="53" value="11"/>
+<fap num="54" value="11"/>
+<fap num="55" value="99"/>
+<fap num="56" value="99"/>
+<fap num="57" value="17"/>
+<fap num="58" value="17"/>
+<fap num="59" value="-50"/>
+<fap num="60" value="-50"/>
+</actiondeclaration>
+
+<actiondeclaration name="tensed1_eyelids">
+<fap num="19" value="200"/>
+<fap num="20" value="200"/>
+<fap num="21" value="100"/>
+<fap num="22" value="100"/>
+</actiondeclaration>
+
+
+<actiondeclaration name="suprise1_mouth">
+<fap num="3" value="255"/>
+<fap num="4" value="-45"/>
+<fap num="5" value="-660"/>
+<fap num="6" value="-10"/>
+<fap num="7" value="-10"/>
+<fap num="10" value="-290"/>
+<fap num="11" value="-290"/>
+<fap num="51" value="90"/>
+<fap num="52" value="-130"/>
+<fap num="59" value="-100"/>
+<fap num="60" value="-100"/>
+</actiondeclaration>
+
+<actiondeclaration name="suprise1_eyelids">
+<fap num="19" value="-256"/>
+<fap num="20" value="-256"/>
+</actiondeclaration>
+
+<actiondeclaration name="suprise1_eyebrows">
+<fap num="31" value="40"/>
+<fap num="32" value="40"/>
+<fap num="33" value="80"/>
+<fap num="34" value="80"/>
+<fap num="35" value="40"/>
+<fap num="36" value="40"/>
+</actiondeclaration>
+
+		<actiondeclaration name="nothing"/>
+		<actiondeclaration name="jaw">
+			<fap num="3" value="150"/>
+		</actiondeclaration>
+		<actiondeclaration name="tension">
+			<fap num="51" value="150"/>
+			<fap num="52" value="180"/>
+		</actiondeclaration>
+		<actiondeclaration name="stretch">
+			<fap num="7" value="50"/>
+			<fap num="6" value="50"/>
+		</actiondeclaration>
+		<actiondeclaration name="corner_h">
+			<fap num="53" value="25"/>
+			<fap num="54" value="25"/>
+		</actiondeclaration>
+		<actiondeclaration name="corner_v">
+			<fap num="59" value="100"/>
+			<fap num="60" value="100"/>
+		</actiondeclaration>
+		<actiondeclaration name="corners">
+			<action name="corner_h" multiplied="1"/>
+			<action name="corner_v" multiplied="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="upper_lip">
+			<fap num="55" value="-120"/>
+			<fap num="56" value="-120"/>
+			<fap num="17" value="200"/>
+		</actiondeclaration>
+		<actiondeclaration name="pout">
+			<fap num="16" value="300"/>
+		</actiondeclaration>
+		<actiondeclaration name="open_up">
+			<fap num="4" value="150"/>
+		</actiondeclaration>
+		<actiondeclaration name="open_down">
+			<fap num="5" value="-300"/>
+		</actiondeclaration>
+		<actiondeclaration name="old_frown">
+			<fap num="33" value="-50"/>
+			<fap num="34" value="-50"/>
+			<fap num="31" value="-100"/>
+			<fap num="32" value="-100"/>
+			<fap num="37" value="100"/>
+			<fap num="38" value="100"/>
+		</actiondeclaration>
+		<actiondeclaration name="frown">
+			<fap num="31" value="-175"/>
+			<fap num="32" value="-175"/>
+			<fap num="33" value="-200"/>
+			<fap num="34" value="-200"/>
+			<fap num="35" value="-20"/>
+			<fap num="36" value="-20"/>
+			<fap num="37" value="120"/>
+			<fap num="38" value="120"/>
+		</actiondeclaration>
+
+		<actiondeclaration name="small_frown">
+			<action name="frown" multiplied="0.5"/>
+		</actiondeclaration>
+		<actiondeclaration name="disgust_eyebrows">
+			<action name="frown" multiplied="0.65"/>
+		</actiondeclaration>
+		<actiondeclaration name="order_eyebrows">
+			<action name="frown" multiplied="0.6"/>
+		</actiondeclaration>
+		<actiondeclaration name="medium_frown">
+			<action name="frown" multiplied="0.7"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_rising">
+			<fap num="35" value="30"/>
+			<fap num="36" value="30"/>
+			<fap num="33" value="60"/>
+			<fap num="34" value="60"/>
+			<fap num="31" value="30"/>
+			<fap num="32" value="30"/>
+		</actiondeclaration>
+		<actiondeclaration name="medium_rising">
+			<action name="small_rising" multiplied="1.67"/>
+		</actiondeclaration>
+		<actiondeclaration name="praise_eyebrows">
+			<action name="small_rising" multiplied="1.4"/>
+		</actiondeclaration>
+		<actiondeclaration name="rising">
+			<action name="small_rising" multiplied="1.34"/>
+		</actiondeclaration>
+		<actiondeclaration name="sadness_eyebrows">
+			<fap num="31" value="220"/>
+			<fap num="32" value="220"/>
+			<fap num="33" value="25"/>
+			<fap num="34" value="25"/>
+			<fap num="35" value="5"/>
+			<fap num="36" value="5"/>
+			<fap num="37" value="20"/>
+			<fap num="38" value="20"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_updown_eyebrows">
+			<fap num="33" value="25"/>
+			<fap num="34" value="25"/>
+			<fap num="31" value="50"/>
+			<fap num="32" value="50"/>
+			<fap num="37" value="50"/>
+			<fap num="38" value="50"/>
+		</actiondeclaration>
+		<actiondeclaration name="medium_updown_eyebrows">
+			<action name="small_updown_eyebrows" multiplied="1.4"/>
+		</actiondeclaration>
+		<actiondeclaration name="updown_eyebrows">
+			<action name="small_updown_eyebrows" multiplied="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="medium_fear_eyebrows">
+			<fap num="35" value="50"/>
+			<fap num="36" value="50"/>
+			<fap num="33" value="100"/>
+			<fap num="34" value="100"/>
+			<fap num="31" value="50"/>
+			<fap num="32" value="50"/>
+			<fap num="37" value="75"/>
+			<fap num="38" value="75"/>
+		</actiondeclaration>
+		<actiondeclaration name="fear_eyebrows">
+			<action name="medium_fear_eyebrows" multiplied="1.4"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_close_upper_eyelids">
+			<fap num="19" value="100"/>
+			<fap num="20" value="100"/>
+		</actiondeclaration>
+		<actiondeclaration name="medium_close_upper_eyelids">
+			<action name="small_close_upper_eyelids" multiplied="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="close_upper_eyelids">
+			<action name="small_close_upper_eyelids" multiplied="2.56"/>
+		</actiondeclaration>
+		<actiondeclaration name="anger_lower_eyelids">
+			<fap num="21" value="240"/>
+			<fap num="22" value="240"/>
+		</actiondeclaration>
+		<actiondeclaration name="blink">
+			<fap num="19" value="1100"/>
+			<fap num="20" value="1100"/>
+		</actiondeclaration>
+		<actiondeclaration name="reproach_eyelids">
+			<fap num="19" value="50"/>
+			<fap num="20" value="50"/>
+			<fap num="21" value="25"/>
+			<fap num="22" value="25"/>
+		</actiondeclaration>
+		<actiondeclaration name="thinking_eyelids">
+			<fap num="19" value="70"/>
+			<fap num="20" value="70"/>
+			<fap num="21" value="35"/>
+			<fap num="22" value="35"/>
+		</actiondeclaration>
+		<actiondeclaration name="sadness_eyelids">
+			<fap num="19" value="100"/>
+			<fap num="20" value="100"/>
+			<fap num="21" value="50"/>
+			<fap num="22" value="50"/>
+		</actiondeclaration>
+		<actiondeclaration name="joy_eyelids">
+			<fap num="19" value="128"/>
+			<fap num="20" value="128"/>
+			<fap num="21" value="64"/>
+			<fap num="22" value="64"/>
+		</actiondeclaration>
+		<actiondeclaration name="envy_eyelids">
+			<fap num="19" value="150"/>
+			<fap num="20" value="150"/>
+			<fap num="21" value="75"/>
+			<fap num="22" value="75"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_eyelids">
+			<fap num="19" value="100"/>
+			<fap num="20" value="100"/>
+			<fap num="21" value="50"/>
+			<fap num="22" value="50"/>
+		</actiondeclaration>
+		<actiondeclaration name="subtle_eyelids">
+			<action name="small_eyelids" multiplied="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="tiny_eyelids">
+			<action name="small_eyelids" multiplied="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="difficult_eyelids">
+			<action name="small_eyelids" multiplied="4"/>
+		</actiondeclaration>
+		<actiondeclaration name="big_eyelids">
+			<fap num="19" value="-100"/>
+			<fap num="20" value="-100"/>
+		</actiondeclaration>
+		<actiondeclaration name="long_eyelids">
+			<action name="big_eyelids" multiplied="1.5"/>
+		</actiondeclaration>
+		<actiondeclaration name="large_eyelids">
+			<action name="big_eyelids" multiplied="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="surprise_eyelids">
+			<action name="big_eyelids" multiplied="2.56"/>
+		</actiondeclaration>
+		<actiondeclaration name="announce_eyelids">
+			<fap num="19" value="-90"/>
+			<fap num="20" value="-90"/>
+			<fap num="21" value="-45"/>
+			<fap num="22" value="-45"/>
+		</actiondeclaration>
+		<actiondeclaration name="distress_eyelids">
+			<fap num="19" value="-100"/>
+			<fap num="20" value="-100"/>
+			<fap num="21" value="-50"/>
+			<fap num="22" value="-50"/>
+		</actiondeclaration>
+		<actiondeclaration name="great_eyelids">
+			<fap num="19" value="-200"/>
+			<fap num="20" value="-200"/>
+			<fap num="21" value="-100"/>
+			<fap num="22" value="-100"/>
+		</actiondeclaration>
+		<actiondeclaration name="smile">
+			<action name="corner_h" multiplied="1"/>
+			<action name="corner_v" multiplied="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="joy_mouth">
+			<fap num="4" value="-80"/>
+			<fap num="8" value="-120"/>
+			<fap num="9" value="-120"/>
+			<fap num="10" value="-320"/>
+			<fap num="11" value="-320"/>
+			<fap num="16" value="-110"/>
+			<fap num="17" value="-250"/>
+			<fap num="41" value="100"/>
+			<fap num="42" value="100"/>
+			<fap num="51" value="-20"/>
+			<fap num="52" value="-20"/>
+			<fap num="53" value="10"/>
+			<fap num="54" value="10"/>
+			<fap num="55" value="-20"/>
+			<fap num="56" value="-20"/>
+			<fap num="59" value="100"/>
+			<fap num="60" value="100"/>
+		</actiondeclaration>
+		<actiondeclaration name="anger_mouth">
+			<fap num="55" value="90"/>
+			<fap num="56" value="90"/>
+			<fap num="57" value="16"/>
+			<fap num="58" value="16"/>
+			<fap num="10" value="51"/>
+			<fap num="11" value="51"/>
+			<action name="tension" multiplied="1"/>
+			<action name="stretch" multiplied="0.3"/>
+			<action name="jaw" multiplied="-0.6"/>
+			<action name="corner_h" multiplied="0.4"/>
+			<action name="corner_v" multiplied="-1"/>
+		</actiondeclaration>
+		<actiondeclaration name="fear_mouth">
+			<action name="corner_v" multiplied="-1.5"/>
+			<action name="tension" multiplied="0.7"/>
+			<action name="open_down" multiplied="1"/>
+			<action name="jaw" multiplied="1"/>
+			<fap num="55" value="90"/>
+			<fap num="56" value="90"/>
+			<fap num="10" value="-300"/>
+			<fap num="11" value="-300"/>
+			<fap num="12" value="-150"/>
+			<fap num="13" value="-150"/>
+			<fap num="57" value="-300"/>
+			<fap num="58" value="-300"/>
+		</actiondeclaration>
+		<actiondeclaration name="surprise_mouth">
+			<action name="stretch" multiplied="-0.2"/>
+			<action name="corner_v" multiplied="-1"/>
+			<action name="open_up" multiplied="-0.3"/>
+			<action name="open_down" multiplied="2.2"/>
+			<action name="jaw" multiplied="1.7"/>
+			<fap num="51" value="90"/>
+			<fap num="52" value="-130"/>
+			<fap num="10" value="-290"/>
+			<fap num="11" value="-290"/>
+		</actiondeclaration>
+		<actiondeclaration name="disgust_mouth">
+			<fap num="4" value="-80"/>
+			<fap num="5" value="40"/>
+			<fap num="8" value="-100"/>
+			<fap num="9" value="-260"/>
+			<fap num="18" value="300"/>
+			<fap num="51" value="-30"/>
+			<fap num="52" value="50"/>
+			<fap num="55" value="-10"/>
+			<fap num="56" value="-60"/>
+			<fap num="59" value="-60"/>
+			<fap num="60" value="-60"/>
+			<fap num="61" value="10"/>
+			<fap num="62" value="10"/>
+		</actiondeclaration>
+		<actiondeclaration name="simmetric_disgust_mouth">
+			<fap num="8" value="-200"/>
+			<fap num="9" value="-200"/>
+			<action name="upper_lip" multiplied="1"/>
+			<action name="open_up" multiplied="-1.3"/>
+			<action name="tension" multiplied="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="sadness_mouth">
+			<action name="corner_h" multiplied="-1.3"/>
+			<action name="corner_v" multiplied="-1.3"/>
+			<action name="stretch" multiplied="-0.8"/>
+			<action name="open_up" multiplied="-0.3"/>
+			<action name="open_down" multiplied="0.2"/>
+			<action name="jaw" multiplied="0.7"/>
+		</actiondeclaration>
+		<actiondeclaration name="criticize_mouth">
+			<action name="open_down" multiplied="0.5"/>
+			<action name="jaw" multiplied="0.4"/>
+		</actiondeclaration>
+		<actiondeclaration name="disliking_mouth">
+			<action name="disgust_mouth" multiplied="0.5"/>
+		</actiondeclaration>
+		<actiondeclaration name="envy_mouth">
+			<action name="corner_h" multiplied="-0.8"/>
+			<action name="corner_v" multiplied="-0.8"/>
+		</actiondeclaration>
+		<actiondeclaration name="disappointment_mouth">
+			<action name="sadness_mouth" multiplied="0.9"/>
+		</actiondeclaration>
+		<actiondeclaration name="hate_mouth">
+			<action name="anger_mouth" multiplied="1.1"/>
+		</actiondeclaration>
+		<actiondeclaration name="jealousy_mouth">
+			<action name="hate_mouth" multiplied="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="reproach_mouth">
+			<action name="hate_mouth" multiplied="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="shame_mouth">
+			<action name="hate_mouth" multiplied="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_smile">
+			<action name="smile" multiplied="0.5"/>
+		</actiondeclaration>
+		<actiondeclaration name="gloating_mouth">
+			<action name="corner_v" multiplied="0.5"/>
+			<action name="corner_h" multiplied="0.5"/>
+			<action name="stretch" multiplied="0.1"/>
+		</actiondeclaration>
+		<actiondeclaration name="embarrassment_mouth">
+			<action name="corner_v" multiplied="1"/>
+			<action name="corner_h" multiplied="1"/>
+			<action name="stretch" multiplied="1"/>
+			<action name="open_down" multiplied="-1"/>
+			<action name="jaw" multiplied="-1"/>
+		</actiondeclaration>
+		<actiondeclaration name="chin_depress">
+			<fap num="18" value="300"/>
+		</actiondeclaration>
+		<actiondeclaration name="cheek_lift">
+			<fap num="41" value="150"/>
+			<fap num="42" value="150"/>
+		</actiondeclaration>
+		<actiondeclaration name="nose_wrinkler">
+			<fap num="61" value="100"/>
+			<fap num="62" value="100"/>
+		</actiondeclaration>
+		<actiondeclaration name="nose_wrinkler_2">
+			<action name="nose_wrinkler" multiplied="1.4"/>
+		</actiondeclaration>
+		<actiondeclaration name="deictic_head_direction">
+			<headdirection h="0" v="0" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_left">
+			<eyesdirection h="8" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_right">
+			<eyesdirection h="-8" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="great_eyes_left">
+			<eyesdirection h="20" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="great_eyes_right">
+			<eyesdirection h="-20" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up">
+			<headdirection h="0" v="-5" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down">
+			<headdirection h="0" v="5" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_left">
+			<headdirection h="5" v="0" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right">
+			<headdirection h="-5" v="0" t="0"/>
+		</actiondeclaration>
+	<actiondeclaration name="big_head_left">
+			<headdirection h="15" v="0" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="big_head_right">
+			<headdirection h="-15" v="0" t="0"/>
+		</actiondeclaration>
+
+		<actiondeclaration name="head_down_left">
+			<headdirection h="5" v="5" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_right">
+			<headdirection h="-5" v="5" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_left">
+			<headdirection h="5" v="-5" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_right">
+			<headdirection h="-5" v="-5" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_aside_l">
+			<headdirection h="0" v="0" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_aside_r">
+			<headdirection h="0" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_aside_l">
+			<headdirection h="0" v="-5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_aside_r">
+			<headdirection h="0" v="-5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_aside_l">
+			<headdirection h="0" v="5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_aside_r">
+			<headdirection h="0" v="5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_left_aside_l">
+			<headdirection h="5" v="0" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_left_aside_r">
+			<headdirection h="5" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right_aside_l">
+			<headdirection h="-5" v="0" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right_aside_r">
+			<headdirection h="-5" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_right_aside_l">
+			<headdirection h="-5" v="5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_right_aside_r">
+			<headdirection h="-5" v="5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_left_aside_l">
+			<headdirection h="5" v="5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_left_aside_r">
+			<headdirection h="5" v="5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_right_aside_l">
+			<headdirection h="-5" v="-5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_right_aside_r">
+			<headdirection h="-5" v="-5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_left_aside_l">
+			<headdirection h="5" v="-5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_left_aside_r">
+			<headdirection h="5" v="-5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_aside_r">
+			<headdirection h="0" v="0" t="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_aside_l">
+			<headdirection h="0" v="0" t="-2"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right_aside_r">
+			<headdirection h="-5" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_down_l">
+			<headdirection h="2" v="2" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_up_l">
+			<headdirection h="2" v="-3" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_aside_l">
+			<headdirection h="0" v="-5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_aside_r">
+			<headdirection h="0" v="-5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_aside_l">
+			<headdirection h="0" v="5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_aside_r">
+			<headdirection h="0" v="5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_left_aside_l">
+			<headdirection h="5" v="0" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_left_aside_r">
+			<headdirection h="5" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right_aside_l">
+			<headdirection h="-5" v="0" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right_aside_r">
+			<headdirection h="-5" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_right_aside_l">
+			<headdirection h="-5" v="5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_right_aside_r">
+			<headdirection h="-5" v="5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_left_aside_l">
+			<headdirection h="5" v="5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_left_aside_r">
+			<headdirection h="5" v="5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_right_aside_l">
+			<headdirection h="-5" v="-5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_right_aside_r">
+			<headdirection h="-5" v="-5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_left_aside_l">
+			<headdirection h="5" v="-5" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_left_aside_r">
+			<headdirection h="5" v="-5" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_aside_r">
+			<headdirection h="0" v="0" t="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right_aside_r">
+			<headdirection h="-5" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_down_l">
+			<headdirection h="2" v="2" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_up_l">
+			<headdirection h="2" v="-3" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_aside_r">
+			<headdirection h="0" v="0" t="3"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_aside_l">
+			<headdirection h="0" v="0" t="-2"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_aside_l">
+			<headdirection h="0" v="0" t="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down">
+			<headdirection h="0" v="10" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_left">
+			<headdirection h="5" v="0" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_right">
+			<headdirection h="-5" v="0" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_left">
+			<headdirection h="10" v="10" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_down_right">
+			<headdirection h="-10" v="10" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up">
+			<headdirection h="0" v="-6" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_right">
+			<headdirection h="-6" v="-6" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_up_left">
+			<headdirection h="6" v="-6" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="deictic_head_direction">
+			<headdirection h="0" v="0" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="embarrassment_head_direction">
+			<headdirection h="2" v="2" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="resentment_head_direction">
+			<headdirection h="4" v="4" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="shame_head_direction">
+			<headdirection h="0" v="4" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="remorse_head_direction">
+			<headdirection h="0" v="5" t="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="look_at">
+			<eyesdirection h="0" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_down">
+			<eyesdirection h="0" v="5"/>
+		</actiondeclaration>
+		<actiondeclaration name="great_eyes_down">
+			<eyesdirection h="0" v="7"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_up">
+			<eyesdirection h="0" v="-5"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_left">
+			<eyesdirection h="8" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_left_up">
+			<eyesdirection h="8" v="-5"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_left_down">
+			<eyesdirection h="8" v="5"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_right">
+			<eyesdirection h="-8" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_right_up">
+			<eyesdirection h="-8" v="-5"/>
+		</actiondeclaration>
+		<actiondeclaration name="eyes_right_down">
+			<eyesdirection h="-8" v="5"/>
+		</actiondeclaration>
+		<actiondeclaration name="embarrassment_gaze">
+			<eyesdirection h="0" v="4"/>
+		</actiondeclaration>
+		<actiondeclaration name="pride_gaze">
+			<eyesdirection h="0" v="5"/>
+		</actiondeclaration>
+		<actiondeclaration name="recognize_gaze">
+			<eyesdirection h="0" v="7"/>
+		</actiondeclaration>
+		<actiondeclaration name="order_gaze">
+			<eyesdirection h="0" v="7"/>
+		</actiondeclaration>
+		<actiondeclaration name="disappointment_gaze">
+			<eyesdirection h="0" v="10"/>
+		</actiondeclaration>
+		<actiondeclaration name="shame_gaze">
+			<eyesdirection h="10" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="take_turn_gaze_l">
+			<eyesdirection h="6" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="take_turn_gaze_r">
+			<eyesdirection h="-6" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="planning_gaze">
+			<eyesdirection h="15" v="0"/>
+		</actiondeclaration>
+		<actiondeclaration name="resentment_gaze">
+			<eyesdirection h="8" v="8"/>
+		</actiondeclaration>
+		<actiondeclaration name="thinking_gaze">
+			<eyesdirection h="11" v="-3"/>
+		</actiondeclaration>
+		<actiondeclaration name="remembering_gaze">
+			<eyesdirection h="20" v="5"/>
+		</actiondeclaration>
+		<actiondeclaration name="announce_head_m">
+			<headmovement type="nod" amplitude="-6" period="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="praise_head_m">
+			<headmovement type="nod" amplitude="-6" period="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="up_head_nod">
+			<headmovement type="nod" amplitude="-5" period="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_nod">
+			<headmovement type="nod" amplitude="5" period="1"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_nod">
+			<headmovement type="nod" amplitude="3" period="0.8"/>
+		</actiondeclaration>
+		<actiondeclaration name="up_head_nod2">
+			<headmovement type="nod" amplitude="-3" period="10"/>
+		</actiondeclaration>
+		<actiondeclaration name="up_head_nod">
+			<headmovement type="nod" amplitude="-3" period="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_nod">
+			<headmovement type="nod" amplitude="5" period="2"/>
+		</actiondeclaration>
+		<actiondeclaration name="small_head_nod">
+			<headmovement type="nod" amplitude="3" period="0.8"/>
+		</actiondeclaration>
+		<actiondeclaration name="head_shake">
+			<headmovement type="shake" amplitude="8" period="1"/>
+		</actiondeclaration>
+	</declaration>
+
+	<implementation>
+		<expression class="certainty" instance="certain">
+			<action name="small_frown" multiplied="1"/>
+			<channel name="frown"/>
+		</expression>
+		<expression class="certainty" instance="uncertain">
+			<action name="medium_rising" multiplied="1"/>
+			<channel name="raising"/>
+		</expression>
+		<expression class="certainty" instance="certainly_not">
+			<action name="frown" multiplied="1"/>
+			<channel name="frown"/>
+		</expression>
+		<expression class="adjectival" instance="small">
+			<action name="small_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="adjectival" instance="subtle">
+			<action name="subtle_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="adjectival" instance="tiny">
+			<action name="tiny_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="adjectival" instance="difficult">
+			<action name="difficult_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="adjectival" instance="big">
+			<action name="big_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="adjectival" instance="long">
+			<action name="long_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="adjectival" instance="large">
+			<action name="large_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="adjectival" instance="great">
+			<action name="great_eyelids" multiplied="1"/>
+		</expression>
+		<expression class="belief-relation" instance="contrast">
+			<action name="medium_rising" multiplied="1"/>
+			<action name="big_eyelids" multiplied="1"/>
+			<channel name="raising"/>
+		</expression>
+		<expression class="performative" instance="implore">
+			<action name="updown_eyebrows" multiplied="1"/>
+			<action name="head_aside_r" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="updown"/>
+			<channel name="look_at"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="performative" instance="order">
+			<action name="order_eyebrows" multiplied="1"/>
+			<action name="head_up" multiplied="1"/>
+			<action name="order_gaze" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="look_at"/>
+			<channel name="head_up"/>
+		</expression>
+		<expression class="performative" instance="suggest">
+			<action name="medium_rising" multiplied="1"/>
+			<action name="small_head_aside_r" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="raising"/>
+			<channel name="look_at"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="performative" instance="propose">
+			<action name="medium_rising" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="raising"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="performative" instance="warn">
+			<action name="small_frown" multiplied="1"/>
+			<action name="medium_close_upper_eyelids" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="performative" instance="approve">
+			<action name="small_smile" multiplied="1"/>
+			<action name="cheek_lift" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<action name="head_nod" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="performative" instance="praise">
+			<action name="praise_eyebrows" multiplied="1"/>
+			<action name="small_smile" multiplied="1"/>
+			<action name="cheek_lift" multiplied="1"/>
+			<action name="head_aside_l" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<action name="praise_head_m" multiplied="1"/>
+			<channel name="raising"/>
+			<channel name="head_aside"/>
+			<channel name="head_nod"/>
+			<channel name="tense"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="performative" instance="recognize">
+			<action name="recognize_gaze" multiplied="1"/>
+			<channel name="look_away"/>
+		</expression>
+		<expression class="performative" instance="disagree">
+			<action name="look_at" multiplied="1"/>
+			<action name="small_frown" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="frown"/>
+		</expression>
+		<expression class="performative" instance="agree">
+			<action name="look_at" multiplied="1"/>
+			<action name="small_frown" multiplied="1"/>
+			<action name="head_nod" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="frown"/>
+			<channel name="head_nod"/>
+		</expression>
+		<expression class="performative" instance="criticize">
+			<action name="look_at" multiplied="1"/>
+			<action name="small_frown" multiplied="1"/>
+			<action name="criticize_mouth" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="frown"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="performative" instance="accept">
+			<action name="look_at" multiplied="1"/>
+			<action name="head_nod" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="head_nod"/>
+		</expression>
+		<expression class="performative" instance="advice">
+			<action name="look_at" multiplied="1"/>
+			<action name="up_head_nod" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="head_nod"/>
+		</expression>
+		<expression class="performative" instance="confirm">
+			<action name="small_frown" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<action name="head_nod" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="look_at"/>
+			<channel name="head_nod"/>
+		</expression>
+		<expression class="performative" instance="incite">
+			<action name="smile" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="performative" instance="small_incite">
+			<action name="small_smile" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="performative" instance="refuse">
+			<action name="look_at" multiplied="1"/>
+			<action name="head_shake" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="head_shake"/>
+		</expression>
+		<expression class="performative" instance="question">
+			<action name="small_frown" multiplied="1"/>
+			<action name="small_head_aside_l" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="frown"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="performative" instance="ask">
+			<action name="medium_rising" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="raising"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="performative" instance="inform">
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="performative" instance="request">
+			<action name="frown" multiplied="1"/>
+			<action name="head_up" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="look_at"/>
+			<channel name="head_up"/>
+		</expression>
+		<expression class="performative" instance="announce">
+			<action name="announce_eyelids" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<action name="announce_head_m" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="head_nod"/>
+		</expression>
+		<expression class="performative" instance="beg">
+			<action name="small_updown_eyebrows" multiplied="1"/>
+			<action name="head_aside_r" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="updown"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="performative" instance="greet">
+			<action name="small_smile" multiplied="1"/>
+			<action name="cheek_lift" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<action name="head_nod" multiplied="1"/>
+			<channel name="head_nod"/>
+			<channel name="lip_corner_up"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="topic-comment" instance="comment">
+			<action name="medium_rising" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<action name="up_head_nod" multiplied="1"/>
+			<channel name="raising"/>
+			<channel name="lip_corner_up"/>
+			<channel name="head_nod"/>
+		</expression>
+		<expression class="turnallocation" instance="take">
+			<probability value="0.6">
+				<action name="take_turn_gaze_r" multiplied="1"/>
+			</probability>
+			<probability value="0.4">
+				<action name="take_turn_gaze_l" multiplied="1"/>
+			</probability>
+			<channel name="look_away"/>
+		</expression>
+		<expression class="turnallocation" instance="give">
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="meta-cognitive" instance="planning">
+			<action name="planning_gaze" multiplied="1"/>
+			<action name="planning_gaze"/>
+		</expression>
+		<expression class="meta-cognitive" instance="thinking">
+			<action name="thinking_eyelids" multiplied="1"/>
+			<action name="thinking_gaze" multiplied="1"/>
+			<channel name="look_away"/>
+		</expression>
+		<expression class="meta-cognitive" instance="remembering">
+			<action name="close_upper_eyelids" multiplied="1"/>
+			<action name="remembering_gaze" multiplied="1"/>
+			<channel name="look_away"/>
+		</expression>
+		
+<expression class="gaze" instance="look_left">
+<action name="eyes_left" multiplied="1.5"/>
+<channel name="look_away"/>
+</expression>
+
+<expression class="gaze" instance="look_right">
+<action name="eyes_right" multiplied="1.5"/>
+<channel name="look_away"/>
+</expression>
+
+		<expression class="affect" instance="anger">
+			<action name="frown" multiplied="0.9"/>
+			<action name="small_close_upper_eyelids" multiplied="1"/>
+			<action name="anger_lower_eyelids" multiplied="0.9"/>
+			<action name="anger_mouth" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_away"/>
+			<channel name="frown"/>
+			<channel name="tense"/>
+		</expression>
+
+		<expression class="affect" instance="tension">
+	<action name="tensed1_mouth"/>
+	<action name="tensed1_eyelids" multiplied="0.8"/>
+	<channel name="frown"/>
+	<channel name="tense"/>
+	</expression>
+	
+		<expression class="affect" instance="neutral">
+			<action name="nothing" multiplied="1"/>		
+		</expression>
+		
+		<expression class="affect" instance="disgust">
+			<action name="look_at" multiplied="1"/>
+			<action name="disgust_eyebrows" multiplied="1"/>
+			<action name="simmetric_disgust_mouth" multiplied="1"/>
+			<action name="chin_depress" multiplied="1"/>
+			<action name="nose_wrinkler" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="frown"/>
+			<channel name="tense"/>
+		</expression>
+
+		<expression class="affect" instance="contempt">
+			<action name="look_at" multiplied="1"/>
+			<action name="disgust_eyebrows" multiplied="1"/>
+			<action name="disgust_mouth" multiplied="1"/>
+			<action name="chin_depress" multiplied="1"/>
+			<action name="nose_wrinkler" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="frown"/>
+			<channel name="tense"/>
+		</expression>
+
+<expression class="affect" instance="relief">
+	<action name="relief2_mouth"/>
+	<action name="relief2_eyelids"/>
+	<action name="relief2_eyebrows"/>
+	<channel name="lip_corner_up"/>
+	<channel name="look_at"/>
+</expression>
+
+<expression class="affect" instance="b_joy">
+	<action name="look_at" multiplied="1"/>
+	<action name="joy_eyelids" multiplied="1.2"/>
+	<action name="smile_2"/>
+	<action name="cheek_lift" multiplied="2.5"/>
+	<channel name="lip_corner_up"/>
+</expression>
+
+<expression class="affect" instance="joy">
+	<action name="smile_2"/>
+	<action name="joy3_eyelids"/>
+	<action name="joy3_eyebrows"/>
+</expression>
+
+<expression class="affect" instance="small_joy">
+	<action name="look_at" multiplied="1"/>
+	<action name="joy_eyelids" multiplied="1"/>
+	<action name="small_smile" multiplied="1"/>
+	<action name="cheek_lift" multiplied="1"/>
+	<channel name="lip_corner_up"/>
+</expression>
+
+<expression class="affect" instance="distress">
+	<action name="eyes_down" multiplied="1"/>
+	<action name="updown_eyebrows" multiplied="1"/>
+	<action name="distress_eyelids" multiplied="1"/>
+	<channel name="look_away"/>
+	<channel name="updown"/>
+</expression>
+
+<expression class="affect" instance="fear">
+	<action name="medium_fear_eyebrows" multiplied="1"/>
+	<action name="great_eyelids" multiplied="1"/>
+	<action name="fear6_mouth" multiplied="1"/>
+	<channel name="updown"/>
+	<channel name="tense"/>
+</expression>
+
+<expression class="affect" instance="sadness">
+	<action name="sadness_eyebrows" multiplied="1"/>
+	<action name="sadness_eyelids" multiplied="1"/>
+	<action name="sadness_mouth" multiplied="1"/>
+	<action name="eyes_down" multiplied="1"/>
+	<action name="head_down" multiplied="1"/>
+	<channel name="look_away"/>
+	<channel name="head_down"/>
+	<channel name="updown"/>
+	<channel name="lip_corner_up"/>
+</expression>
+
+<expression class="affect" instance="surprise">
+			<action name="rising" multiplied="1"/>
+			<action name="surprise_eyelids" multiplied="1"/>
+			<action name="surprise_mouth" multiplied="1"/>
+			<channel name="raising"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="embarrassment">
+			<action name="embarrassment_mouth" multiplied="1"/>			
+			<action name="embarrassment_head_direction" multiplied="1"/>
+			<action name="embarrassment_gaze" multiplied="1"/>
+			<channel name="look_away"/>
+			<channel name="head_down"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="happy-for">
+			<action name="smile" multiplied="0.5"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="gloating">
+			<action name="small_close_upper_eyelids" multiplied="1"/>
+			<action name="gloating_mouth" multiplied="1"/>
+			<action name="nose_wrinkler_2" multiplied="1"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="resentment">
+			<action name="resentment_head_direction" multiplied="1"/>
+			<action name="resentment_gaze" multiplied="1"/>
+			<channel name="look_away"/>
+			<channel name="head_down"/>
+		</expression>
+		<expression class="affect" instance="relief">
+			<action name="small_smile" multiplied="1"/>
+			<action name="cheek_lift" multiplied="1"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="jealousy">
+			<action name="subtle_eyelids" multiplied="1"/>
+			<action name="jealousy_mouth" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="envy">
+			<action name="envy_eyelids" multiplied="1"/>
+			<action name="envy_mouth" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="sorry-for">
+			<probability value="0.2">
+				<action name="updown_eyebrows" multiplied="0.5"/>
+			</probability>
+			<probability value="0.4">
+				<action name="updown_eyebrows" multiplied="0.5"/>
+				<action name="head_aside_r" multiplied="1"/>
+			</probability>
+			<probability value="0.4">
+				<action name="updown_eyebrows" multiplied="0.5"/>
+				<action name="head_aside_l" multiplied="1"/>
+			</probability>
+			<channel name="updown"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="affect" instance="hope">
+			<action name="medium_rising" multiplied="1"/>
+			<action name="long_eyelids" multiplied="1"/>
+			<channel name="raising"/>
+		</expression>
+		<expression class="affect" instance="satisfaction">
+			<action name="small_rising" multiplied="1"/>
+			<action name="smile" multiplied="1"/>
+			<action name="head_nod" multiplied="1"/>
+			<channel name="raising"/>
+			<channel name="head_nod"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="fear_confirmed">
+			<action name="fear_eyebrows" multiplied="1"/>
+			<action name="great_eyelids" multiplied="1"/>
+			<action name="fear_mouth" multiplied="1"/>
+			<channel name="updown"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="disappointment">
+			<action name="disappointment_mouth" multiplied="1"/>
+			<channel name="look_away"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="pride">
+			<action name="small_smile" multiplied="1"/>
+			<action name="cheek_lift" multiplied="1"/>
+			<action name="head_up" multiplied="1"/>
+			<action name="pride_gaze" multiplied="1"/>
+			<channel name="look_away"/>
+			<channel name="head_up"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="shame">
+			<action name="shame_mouth" multiplied="1"/>
+			<action name="shame_gaze" multiplied="1"/>
+			<channel name="look_away"/>
+			<channel name="head_down"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="reproach">
+			<action name="small_frown" multiplied="1"/>
+			<action name="reproach_eyelids" multiplied="1"/>
+			<action name="reproach_mouth" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="liking">
+			<action name="smile" multiplied="1"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="disliking">
+			<action name="medium_frown" multiplied="1"/>
+			<action name="disliking_mouth" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="tense"/>
+		</expression>
+
+		<expression class="affect" instance="gratitude">
+			<action name="smile" multiplied="1"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="gratification">
+			<action name="smile" multiplied="1"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="remorse">
+			<action name="updown_eyebrows" multiplied="1"/>
+			<channel name="updown"/>
+			<channel name="head_down"/>
+		</expression>
+		<expression class="affect" instance="love">
+			<action name="small_smile" multiplied="1"/>
+			<channel name="look_at"/>
+			<channel name="lip_corner_up"/>
+		</expression>
+		<expression class="affect" instance="hate">
+			<action name="anger_lower_eyelids" multiplied="1"/>
+			<action name="medium_frown" multiplied="1"/>
+			<action name="hate_mouth" multiplied="1"/>
+			<action name="nose_wrinkler" multiplied="1"/>
+			<action name="look_at" multiplied="1"/>
+			<channel name="frown"/>
+			<channel name="look_at"/>
+			<channel name="tense"/>
+		</expression>
+		<expression class="affect" instance="worried">
+			<action name="medium_updown_eyebrows" multiplied="1"/>
+			<action name="sadness_eyelids" multiplied="1"/>
+			<action name="sadness_mouth" multiplied="1"/>
+			<action name="eyes_down" multiplied="1"/>
+			<action name="head_down" multiplied="1"/>
+			<channel name="head_down"/>
+			<channel name="updown"/>
+		</expression>
+		<expression class="emphasis" instance="Hstar">			 
+			<action name="look_at" multiplied="1"/>		
+			<channel name="look_at"/>
+		</expression>
+		<expression class="emphasis" instance="Lstar">			 
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>		 
+		</expression>
+		<expression class="emphasis" instance="LplusHstar">
+			<probability value="0.4">			 
+				<action name="look_at" multiplied="1"/>
+			</probability>
+			<probability value="0.6">
+				<action name="nothing" multiplied="1"/>
+			</probability>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="emphasis" instance="LstarplusH">		 
+			<action name="look_at" multiplied="1"/>
+			 <channel name="look_at"/>
+		</expression>
+		<expression class="emphasis" instance="HstarplusL">			 
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>			 
+		</expression>
+		<expression class="emphasis" instance="HplusLstar">			 
+			<action name="look_at" multiplied="1"/>
+			<channel name="look_at"/>
+		</expression>
+		<expression class="head" instance="head_nod">
+			<action name="head_nod" multiplied="1"/>
+			<channel name="head_nod"/>
+		</expression>
+		<expression class="head" instance="deictic_head_direction">
+			<action name="deictic_head_direction" multiplied="1"/>
+		</expression>
+		<expression class="head" instance="head_up">
+			<action name="head_up" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down">
+			<action name="head_down" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_left">
+			<action name="head_left" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_right">
+			<action name="head_right" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_left">
+			<action name="head_down_left" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_right">
+			<action name="head_down_right" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_r">
+			<action name="head_down_right" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_left">
+			<action name="head_up_left" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_right">
+			<action name="head_up_right" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_aside_l">
+			<action name="head_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_aside_r">
+			<action name="head_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_aside_l">
+			<action name="head_up_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_aside_r">
+			<action name="head_up_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_aside_l">
+			<action name="head_down_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_aside_r">
+			<action name="head_down_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_left_aside_l">
+			<action name="head_left_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_left_aside_r">
+			<action name="head_left_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_right_aside_l">
+			<action name="head_right_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_right_aside_r">
+			<action name="head_right_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_right_aside_l">
+			<action name="head_down_right_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_right_aside_r">
+			<action name="head_down_right_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_left_aside_l">
+			<action name="head_down_left_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_down_left_aside_r">
+			<action name="head_down_left_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_left_aside_l">
+			<action name="head_up_left_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_left_aside_r">
+			<action name="head_up_left_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_right_aside_l">
+			<action name="head_up_right_aside_l" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="head_up_right_aside_r">
+			<action name="head_up_right_aside_r" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="small_head_aside_r">
+			<action name="head_aside_r" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="small_head_aside_l">
+			<action name="head_aside_l" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="small_head_down_l">
+			<action name="head_down_left" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="small_head_up_l">
+			<action name="head_up_left" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="big_head_down_left">
+			<action name="head_down_left" multiplied="2.0"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="big_head_down_right">
+			<action name="head_down_right" multiplied="2.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="big_head_left_aside_r">
+			<action name="head_left_aside_r" multiplied="2.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		
+	<expression class="eyes" instance="great_eyes_left">
+			<action name="great_eyes_left"/>
+<channel name="look_away"/>
+		</expression>
+		<expression class="eyes" instance="eyes_down">
+			<action name="great_eyes_down" multiplied="25000.0"/>
+<channel name="look_away"/>
+		</expression>
+		<expression class="eyes" instance="great_eyes_right">
+			<action name="great_eyes_right"/>
+<channel name="look_away"/>
+		</expression>	
+		<expression class="eyes" instance="eyes_left">
+			<action name="eyes_left" multiplied="1"/>
+<channel name="look_away"/>
+		</expression>
+		<expression class="eyes" instance="eyes_right">
+			<action name="eyes_right" multiplied="1"/>
+<channel name="look_away"/>
+		</expression>
+		<expression class="head" instance="big_head_right">
+			<action name="big_head_right"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="DL">
+			<action name="head_down_left" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="DR">
+			<action name="head_down_right" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="UL">
+			<action name="head_up_left" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="UR">
+			<action name="head_up_right" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="SDL">
+			<action name="head_down_left" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="SDR">
+			<action name="head_down_right" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="SUL">
+			<action name="head_up_left" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="SUR">
+			<action name="head_up_right" multiplied="0.5"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="L">
+			<action name="head_left" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+		<expression class="head" instance="R">
+			<action name="head_right" multiplied="1"/>
+			<channel name="head_aside"/>
+		</expression>
+	 
+<expression class="boundary" instance="HL">
+ <action name="nothing"/>
+  </expression>	
+
+<expression class="boundary" instance="H">
+  <action name="nothing"/>
+ </expression>	
+
+<expression class="boundary" instance="HH">
+  <action name="nothing"/>
+ </expression>	
+
+<expression class="boundary" instance="LL">
+ <action name="nothing"/>
+ </expression>	
+
+<expression class="boundary" instance="LH">
+ <action name="nothing"/>
+ </expression>	
+
+
+	
+	</implementation>
+</facelibrary>

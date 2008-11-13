@@ -1,0 +1,32 @@
+<psySpec name="Greta Whiteboard" version="1.2">
+
+	<global>
+		<port>10000</port>
+		<title>GretaEVO</title>
+		<description>
+		</description>
+		<globaltypes></globaltypes>
+		<system.performance.reports>yes</system.performance.reports>
+		<htmldir>html</htmldir>
+	</global>
+   
+	<whiteboard name="Greta.Whiteboard" maxcount="10000">
+		<description>Greta's whiteboard</description>
+		<streams>
+         <stream name="Greta.Stream.Data.FAP" maxsize="10" />
+      </streams>
+	</whiteboard>
+
+	<whiteboard name="Greta2.Whiteboard" maxcount="10000">
+		<description>Greta2's whiteboard</description>
+		<streams>
+         <stream name="Greta2.Stream.Data.FAP" maxsize="10" />
+      </streams>
+	</whiteboard>
+	
+	<whiteboard name="DataInput.Whiteboard" maxcount="10000">
+		<description>Input whiteboard</description>
+	</whiteboard>
+
+</psySpec>
+

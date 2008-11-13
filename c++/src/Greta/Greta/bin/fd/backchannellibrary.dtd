@@ -1,0 +1,31 @@
+<!ELEMENT backchannellibrary (declaration,implementation)>
+
+<!ELEMENT declaration (variabledeclaration)*>
+
+<!ELEMENT variabledeclaration EMPTY>
+<!ATTLIST variabledeclaration name CDATA #REQUIRED type CDATA #REQUIRED>
+
+<!ELEMENT implementation (rule)*>
+
+<!ELEMENT rule (condition|consequence)*>
+<!ATTLIST rule name CDATA #REQUIRED type CDATA #REQUIRED priority CDATA #REQUIRED> 
+
+<!ELEMENT condition (subcondition|test|operator)*>
+
+<!ELEMENT subcondition (subcondition|test|operator)*>
+
+<!ELEMENT test EMPTY>
+<!ATTLIST test var CDATA #REQUIRED op CDATA #REQUIRED val CDATA #REQUIRED>
+
+<!ELEMENT consequence (subconsequence|variable|operator)*>
+
+<!ELEMENT subconsequence (subconsequence|variable|operator)*>
+
+<!ELEMENT operator EMPTY>
+<!ATTLIST operator symbol CDATA #REQUIRED>
+
+
+<!ELEMENT variable EMPTY>
+<!ATTLIST variable name CDATA #REQUIRED>
+
+

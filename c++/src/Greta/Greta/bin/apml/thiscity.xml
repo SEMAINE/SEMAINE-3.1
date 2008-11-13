@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE fml-apml SYSTEM "fml-apml.dtd" []>
+<fml-apml>
+<bml>
+<speech id="s1" start="0.0" language="english" voice="mary.english.woman" speed_num="1" speed_sym="medium" type="application/wav" text="This city in Szechuan was completely devastated by the earthquake in May two thousands and eight Very few buildings survived intact">
+<description level="1" type="gretabml">
+<reference>tmp/from-fml-apml.pho</reference>
+</description>
+<tm id='tm1'/>
+This 
+<tm id='tm2'/>
+city 
+<tm id='tm3'/>
+in 
+<tm id='tm4'/>
+Szechuan 
+<tm id='tm5'/>
+was 
+<tm id='tm6'/>
+completely 
+<tm id='tm7'/>
+devastated 
+<tm id='tm8'/>
+by the earthquake 
+<tm id='tm9'/>
+in May two thousands and eight
+<tm id='tm10'/>
+Very
+<tm id='tm11'/>
+few buildings 
+<tm id='tm12'/>
+survived intact
+<tm id='tm13'/>
+
+<pitchaccent id='xpa1' type='Hstar' start='s1:tm2' end='s1:tm3' level='medium' importance='1'/>
+<boundary id='b1' type='LL' start='s1:tm5' end='0.3'/>
+<pitchaccent id='xpa2' type='Lstar' start='s1:tm5' end='s1:tm7' level='medium' importance='1'/>
+<boundary id='b2' type='LL' start='s1:tm10' end='0.3'/>
+<pitchaccent id='xpa3' type='Lstar' start='s1:tm11' end='s1:tm12' level='medium' importance='1'/>
+<boundary id='b3' type='LL' start='s1:tm13' end='0.3'/>
+
+</speech>
+</bml>
+<fml>
+<emotion id="e1" type="despair" start="s1:tm1" end="s1:tm10" importance="1"/>
+<emotion id="e2" type="despair" start="s1:tm11" end="s1:tm13" importance="1"/>
+
+
+<belief-relation id="br1" type="metaphoric" start="s1:tm5" end="s1:tm6" importance="1"/>
+
+<world id="p0" ref_type="object" ref_id="location" start="s1:tm2" end="s1:tm3" importance="1"/>
+<world id="p1" ref_type="object" ref_id="location" start="s1:tm8" end="s1:tm9" importance="1"/>
+<world id="p2" ref_type="place" ref_id="location" start="s1:tm11" end="s1:tm12" importance="1"/>		
+</fml>
+</fml-apml>

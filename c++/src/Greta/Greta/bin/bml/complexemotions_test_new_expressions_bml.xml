@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE bml SYSTEM "bml.dtd" []>
+<bml>
+	<face id='f1'  type='MOUTH' start='1.00' end='4.00'>
+		<description level='1' type='gretabml'>
+		<reference>affect=complex:sadness_and_anger</reference>
+			<FLD.value>-0.4</FLD.value>
+			<PWR.value>-0.4</PWR.value>
+			<REP.value>-1</REP.value>
+			<SPC.value>-0.4</SPC.value>
+			<TMP.value>-0.4</TMP.value>
+		</description>
+	</face>
+	<face id='f2'  type='MOUTH' start='6.00' end='4.00'>
+		<description level='1' type='gretabml'>
+		<reference>affect=complex:sadness_maskedby_joy</reference>
+			<FLD.value>-0.4</FLD.value>
+			<PWR.value>-0.4</PWR.value>
+			<REP.value>-1</REP.value>
+			<SPC.value>-0.4</SPC.value>
+			<TMP.value>-0.4</TMP.value>
+		</description>
+	</face>
+
+	<face id='f3'  type='MOUTH' start='12.00' end='4.00'>
+		<description level='1' type='gretabml'>
+		<reference>affect=complex:sadness_maskedby_neutral</reference>
+			<FLD.value>-0.4</FLD.value>
+			<PWR.value>-0.4</PWR.value>
+			<REP.value>-1</REP.value>
+			<SPC.value>-0.4</SPC.value>
+			<TMP.value>-0.4</TMP.value>
+		</description>
+	</face>
+
+	<face id='f4'  type='MOUTH' start='17.00' end='4.00'>
+		<description level='1' type='gretabml'>
+		<reference>affect=complex:neutral_maskedby_sadness</reference>
+			<FLD.value>-0.4</FLD.value>
+			<PWR.value>-0.4</PWR.value>
+			<REP.value>-1</REP.value>
+			<SPC.value>-0.4</SPC.value>
+			<TMP.value>-0.4</TMP.value>
+		</description>
+	</face>
+	<face id='f5'  type='MOUTH' start='22.00' end='4.00'>
+		<description level='1' type='gretabml'>
+		<reference>affect=complex:sadness_exaggerated</reference>
+			<FLD.value>-0.4</FLD.value>
+			<PWR.value>-0.4</PWR.value>
+			<REP.value>-1</REP.value>
+			<SPC.value>-0.4</SPC.value>
+			<TMP.value>-0.4</TMP.value>
+		</description>
+	</face>
+
+	<face id='f6'  type='MOUTH' start='27.00' end='4.00'>
+		<description level='1' type='gretabml'>
+		<reference>affect=complex:sadness_attenuated</reference>
+			<FLD.value>-0.4</FLD.value>
+			<PWR.value>-0.4</PWR.value>
+			<REP.value>-1</REP.value>
+			<SPC.value>-0.4</SPC.value>
+			<TMP.value>-0.4</TMP.value>
+		</description>
+	</face>
+
+	<face id='f7'  type='MOUTH' start='32.00' end='4.00'>
+		<description level='1' type='gretabml'>
+		<reference>affect=sadness</reference>
+			<FLD.value>-0.4</FLD.value>
+			<PWR.value>-0.4</PWR.value>
+			<REP.value>-1</REP.value>
+			<SPC.value>-0.4</SPC.value>
+			<TMP.value>-0.4</TMP.value>
+		</description>
+	</face>
+
+</bml>

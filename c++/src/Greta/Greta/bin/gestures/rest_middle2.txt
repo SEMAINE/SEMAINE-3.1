@@ -1,0 +1,6 @@
+// 04/07/2001 14.05
+// REST GESTURE
+GESTURECLASS rest
+GESTUREINSTANCE middle2
+STOREDPOSE \\rest\\rest_middle.txt 0.0
+STOREDPOSE \\rest\\rest_middle.txt 1.0

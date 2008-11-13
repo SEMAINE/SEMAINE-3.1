@@ -1,0 +1,31 @@
+// Last modified: 2004-06-09 bjoern
+// created for the "mind you business" demo
+GESTURECLASS deictic
+GESTUREINSTANCE self
+DURATION 2.0
+SIDE left
+STARTFRAME 0.2
+  FRAMETYPE stroke_start
+  ARM XCC:fixed YCC ZFar
+  HAND form_fist
+  WRIST FBInwards PalmTowards
+  FINGER thumb bend_straight
+  ADDNOISE
+ENDFRAME
+STARTFRAME 0.6
+  FRAMETYPE stroke_end
+  ARM XCC:fixed YCC ZMiddle
+  HAND form_fist
+  WRIST FBInwards PalmTowards
+  FINGER thumb bend_straight
+  ADDNOISE
+ENDFRAME 
+STARTFRAME 0.8
+  FRAMETYPE post_stroke_hold
+  ARM XCC:fixed YCC ZMiddle
+  HAND form_fist
+  WRIST FBInwards PalmTowards
+  FINGER thumb bend_straight
+  ADDNOISE
+ENDFRAME 
+

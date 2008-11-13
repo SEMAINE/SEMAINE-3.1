@@ -1,0 +1,11 @@
+<!ELEMENT rules (rule*)>
+	
+<!ELEMENT rule (parameter*)>
+<!ATTLIST rule
+	name CDATA #REQUIRED>
+
+<!ELEMENT parameter EMPTY>
+<!ATTLIST parameter
+	name CDATA #REQUIRED
+	value CDATA #REQUIRED>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE ENVIRONMENT SYSTEM "environment.dtd" []>
+<ENVIRONMENT>
+<AGENTS>
+</AGENTS>
+<OBJECTS>
+<OBJECT name="wall1" object_shape="wall" position_x="0" position_y="-90" position_z="-1000" rotation_x="90"/>
+<OBJECT name="wall2" object_shape="wall" position_x="0" position_y="-90" position_z="1000" rotation_x="90" rotation_z="180"/>
+<OBJECT name="wall3" object_shape="wall" position_x="1000" position_y="-90" position_z="0" rotation_x="90" rotation_z="-270"/>
+<OBJECT name="wall4" object_shape="wall" position_x="-1000" position_y="-90" position_z="0" rotation_x="90" rotation_z="-90"/>
+<OBJECT name="floor" object_shape="floor" position_x="0" position_y="-90" position_z="0"/>
+<OBJECT name="roof" object_shape="roof" position_x="0" position_y="-90" position_z="0"/>
+<OBJECT name="cube2" object_shape="cube" position_x="-50" position_y="0" position_z="300"/>
+</OBJECTS>
+</ENVIRONMENT>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE bml SYSTEM "bml/bml.dtd" []>
+
+<bml>
+
+<face id="ex4" start="1" end="5">
+	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>0.8</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+</face>
+<gesture id="ex1" start="1" end="5">
+	<description level="1" type="gretabml">
+	<reference>adjectival=small</reference>
+		<intensity>0.8</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+</gesture>
+
+</bml>

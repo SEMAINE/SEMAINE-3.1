@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE selectors SYSTEM "selectors.dtd" []>
+
+<selectors>
+	<selector name="ALL" type="PRIORITY" frequency="0">
+
+		<queue name="COGNITIVE" frequency="10"/>
+
+		<selector name="VIDEO" type="RANDOM" frequency="2000">
+			<selector name="MIMICRY" type="PRIORITY" probability="0.5" frequency="0">
+				<queue name="HEAD_MOVEMENT" />
+				<queue name="HEAD_DIRECTION" />
+			</selector>
+
+			<selector name="REACTIVE" type="PRIORITY" probability="0.5" frequency="0">
+				<queue name="HEAD_MOVEMENT" />
+				<queue name="HEAD_DIRECTION" />
+				<queue name="SPEECH_PAUSE" />
+				<queue name="SPEECH_PITCH" />
+			</selector>
+		</selector>
+
+	</selector>
+	
+</selectors>

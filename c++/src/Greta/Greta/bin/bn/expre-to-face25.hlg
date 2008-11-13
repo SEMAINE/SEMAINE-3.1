@@ -1,0 +1,251 @@
+
+
+Marriages (bigamy allowed):
+
+Marrying valence and time
+Marrying structure and time
+Marrying structure and valence
+Marrying Metacog and time
+Marrying Metacog and valence
+Marrying Metacog and structure
+Marrying turn and time
+Marrying turn and valence
+Marrying turn and Metacog
+Marrying turn and structure
+Marrying beliefrel and time
+Marrying beliefrel and valence
+Marrying certainty and time
+Marrying certainty and valence
+Marrying certainty and beliefrel
+Marrying comment and time
+Marrying comment and valence
+Marrying comment and certainty
+Marrying comment and beliefrel
+Marrying comment and turn
+Marrying comment and Metacog
+Marrying comment and structure
+Marrying orientation and time
+Marrying orientation and valence
+Marrying orientation and comment
+Marrying orientation and certainty
+Marrying orientation and beliefrel
+Marrying orientation and Metacog
+Marrying dominance and time
+Marrying dominance and valence
+Marrying dominance and orientation
+Marrying dominance and comment
+Marrying dominance and certainty
+Marrying dominance and beliefrel
+Marrying dominance and Metacog
+Marrying performatives and emotion
+
+
+Triangulation by minimum fill-in weight heuristic:
+Fill-in links and node numbering:
+
+   19 GazeListener
+   18 activation
+   17 structure
+   16 turn
+   15 GazeSpeaker
+   14 beliefrel
+   13 certainty
+   12 head_movement
+   11 eyebrow
+   10 comment
+    9 Metacog
+    8 mouth_shape
+    7 head_direction
+    6 emotion
+Adding fill-in between time and performatives
+Adding fill-in between valence and performatives
+    5 time
+    4 valence
+    3 orientation
+    2 dominance
+    1 performatives
+
+
+Cliques:
+
+Clique 10, 5 members (performatives, dominance, orientation, valence, time), table size = 1080
+Clique 9, 4 members (performatives, valence, time, emotion), table size = 3480
+Clique 8, 6 members (dominance, orientation, valence, time, head_direction, Metacog), table size = 648
+Clique 7, 5 members (dominance, orientation, valence, time, mouth_shape), table size = 216
+Clique 6, 6 members (dominance, orientation, valence, time, Metacog, comment), table size = 324
+Clique 5, 8 members (dominance, orientation, valence, time, comment, eyebrow, certainty, beliefrel), table size = 3456
+Clique 4, 4 members (dominance, orientation, comment, head_movement), table size = 54
+Clique 3, 7 members (valence, time, Metacog, comment, GazeSpeaker, turn, structure), table size = 576
+Clique 2, 3 members (performatives, emotion, activation), table size = 1740
+Clique 1, 3 members (comment, turn, GazeListener), table size = 16
+Total clique table size: 11590
+
+
+The junction forest:
+
+Creating junction tree with clique 10 as root ...
+Cliques 9 and 10 linked, separated by {performatives, valence, time} (table size = 120)
+Cliques 8 and 10 linked, separated by {dominance, orientation, valence, time} (table size = 54)
+Cliques 7 and 8 linked, separated by {dominance, orientation, valence, time} (table size = 54)
+Cliques 6 and 8 linked, separated by {dominance, orientation, valence, time, Metacog} (table size = 162)
+Cliques 5 and 6 linked, separated by {dominance, orientation, valence, time, comment} (table size = 108)
+Cliques 4 and 6 linked, separated by {dominance, orientation, comment} (table size = 18)
+Cliques 3 and 6 linked, separated by {valence, time, Metacog, comment} (table size = 36)
+Cliques 2 and 9 linked, separated by {performatives, emotion} (table size = 580)
+Cliques 1 and 3 linked, separated by {comment, turn} (table size = 8)
+
+
+Checking tables for all nodes ...
+
+
+
+Assignment of potentials to cliques:
+
+Node time assigned to clique 9
+Node valence assigned to clique 9
+Node GazeListener assigned to clique 1
+Node activation assigned to clique 2
+Node structure assigned to clique 3
+Node Metacog assigned to clique 6
+Node turn assigned to clique 1
+Node GazeSpeaker assigned to clique 3
+Node emotion assigned to clique 2
+Node beliefrel assigned to clique 5
+Node certainty assigned to clique 5
+Node comment assigned to clique 1
+Node head_movement assigned to clique 4
+Node eyebrow assigned to clique 5
+Node mouth_shape assigned to clique 7
+Node head_direction assigned to clique 8
+Node orientation assigned to clique 10
+Node dominance assigned to clique 10
+Node performatives assigned to clique 10
+
+
+Checking tables for all nodes ...
+
+
+
+Tue Jan 28 11:42:31 2003
+
+
+Beliefs for chance nodes:
+
+   time --
+      past       0.360690
+      current    0.495862
+      future     0.143448
+   valence --
+      positive   0.394828
+      negative   0.605172
+   GazeListener --
+      L1         0.675000
+      L0         0.325000
+   activation --
+      rapid      0.198795
+      slow       0.198795
+      neutral    0.602410
+   structure --
+      rheme      0.500000
+      theme      0.500000
+   Metacog --
+      I'm thinking 0.330000
+      I'm remembering 0.330000
+      none       0.340000
+   turn --
+      take turn  0.250000
+      give turn  0.250000
+      within turn 0.250000
+      other      0.250000
+   GazeSpeaker --
+      S1         0.440144
+      S0         0.559856
+   emotion --
+      joy        0.034483
+      anger      0.034483
+      neutral    0.034483
+      sorry-for  0.034483
+      disgust    0.034483
+      distress   0.034483
+      fear       0.034483
+      sadness    0.034483
+      surprise   0.034483
+      embarrassment 0.034483
+      happy-for  0.034483
+      gloating   0.034483
+      resentment 0.034483
+      jealousy   0.034483
+      envy       0.034483
+      hope       0.034483
+      satisfaction 0.034483
+      fear-confirmed 0.034483
+      disappointment 0.034483
+      pride      0.034483
+      shame      0.034483
+      reproach   0.034483
+      liking     0.034483
+      dislike    0.034483
+      gratitude  0.034483
+      gratification 0.034483
+      remorse    0.034483
+      love       0.034483
+      hate       0.034483
+   beliefrel --
+      contrast   0.500000
+      other      0.500000
+   certainty --
+      certain    0.250000
+      none       0.250000
+      uncertain  0.250000
+      certainly not 0.250000
+   comment --
+      comment    0.500000
+      topic      0.500000
+   head_movement --
+      nod        0.462447
+      shake      0.170413
+      no         0.367141
+   eyebrow --
+      raised     0.264540
+      frown      0.278172
+      up-down    0.193135
+      neutral    0.264153
+   mouth_shape --
+      smile      0.286190
+      tense      0.273533
+      neutral    0.285765
+      lip corner down 0.154512
+   head_direction --
+      aside      0.250438
+      down       0.129257
+      up         0.219769
+      neutral    0.400535
+   orientation --
+      Other-oriented 0.372500
+      Neutral    0.287500
+      Self-oriented 0.340000
+   dominance --
+      D          0.357500
+      B          0.340000
+      S          0.302500
+   performatives --
+      order      0.050000
+      implore    0.050000
+      suggest    0.050000
+      approve    0.050000
+      praise     0.050000
+      criticize  0.050000
+      refuse     0.050000
+      disagree   0.050000
+      announce   0.050000
+      warn       0.050000
+      ask        0.050000
+      inform     0.050000
+      advice     0.050000
+      confirm    0.050000
+      agree      0.050000
+      accept     0.050000
+      incite     0.050000
+      request    0.050000
+      propose    0.050000
+      recognize  0.050000

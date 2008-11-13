@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE expression SYSTEM "./dtd/expression.dtd">
+
+<expression name="very_low_relief">
+	<char>
+		<emotion name="relief"/>
+		<profile name="relief"/>
+		<time min="0.5" max="4"/>
+		<intensity min="0" max="0.25"/>
+		<desciption comment="" author="radek"/>
+	</char>
+	<face>
+		<fap num="41" value="225"/>
+		<fap num="42" value="225"/>
+		<fap num="53" value="18"/>
+		<fap num="54" value="18"/>
+		<fap num="59" value="75"/>
+		<fap num="60" value="75"/>
+		<fap num="19" value="192"/>
+		<fap num="20" value="192"/>
+		<fap num="21" value="96"/>
+		<fap num="22" value="96"/>
+	</face>
+	<cons>
+	</cons>
+</expression>
+

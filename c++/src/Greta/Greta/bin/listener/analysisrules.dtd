@@ -1,0 +1,17 @@
+<!ELEMENT analysisrules (rule*)>
+	
+<!ELEMENT rule (ifthen|modify)*>
+<!ATTLIST rule
+	name CDATA #REQUIRED>
+
+<!ELEMENT ifthen (condition+, modify+)>
+
+<!ELEMENT condition (parameter|operator|value)*>
+
+<!ELEMENT modify (parameter|operator|value)*>
+
+<!ELEMENT parameter ANY>
+
+<!ELEMENT operator ANY>
+
+<!ELEMENT value ANY>

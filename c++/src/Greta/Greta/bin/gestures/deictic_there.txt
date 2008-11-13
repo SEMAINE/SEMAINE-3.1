@@ -1,0 +1,8 @@
+// Last modified: 16/10/2001 10.56
+GESTURECLASS deictic
+GESTUREINSTANCE there
+DURATION 2.0
+SIDE right
+STOREDPOSE \\deictic\\there.txt 0.4
+STOREDPOSE \\deictic\\there.txt 0.6
+

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE CHARACTER SYSTEM "dtds/character.dtd" []>
+<CHARACTER>
+<HEADFILES vertices="heads/vertices/test.vtx" fdps="heads/vertices/sinkman_FDPs.txt" indices="heads/vertices/sinkman_indices.txt" textured="0"/>
+<BODYFILES mesh="bodies/meshes/body_geometry_man.txt" hierarchy="bodies/hierarchies/hanim_hierarchy.txt" bones="bodies/bones/local_translations_man.txt" texture_file="textures/body_materials2.bmp"/>
+<HEADPOSITION x="0" y="14" z="-9" scale="0.46"/>
+<LEFT_EYE x="7.3" y="-0.1" z="15.3"/>
+<RIGHT_EYE x="-7.3" y="-0.1" z="15.3"/>
+<EYE_SCALE factor="2.55"/>
+<TEETHS-TONGUE x="0.2" y="-1" z="4.9"/>
+</CHARACTER>

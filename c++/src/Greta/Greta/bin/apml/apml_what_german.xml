@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE apml SYSTEM "apml.dtd" []>
+<apml xml:lang="de">
+
+<performative type="announce">
+    <rheme>
+        Was f&#252;r <emphasis x-pitchaccent="LplusHstar" deictic="u" intensity="0.4">dich</emphasis>geht<boundary type="LH"/>
+        das betrifft <emphasis x-pitchaccent="Hstar" intensity="0.4">dich</emphasis>
+    </rheme>
+</performative>
+
+<performative type="warn">
+    <theme>Aber
+        <emphasis x-pitchaccent="Hstar" intensity="0.2">bitte</emphasis>
+		erz&#228;hl mir nicht
+    </theme>
+    <rheme> 
+        was f&#252;r
+        <emphasis x-pitchaccent="Hstar" deictic="self" intensity="0.4">mich</emphasis>funktioniert
+    </rheme>
+</performative>
+
+<performative type="suggest"> 
+    <rheme affect="resentment">K&#252;mmer dich gef&#228;lligst um dein 
+    <emphasis x-pitchaccent="Hstar" adjectival="foreign_to_me" intensity="0.6">eigenes</emphasis>
+    Leben<boundary type="L"/>
+    </rheme> 
+</performative>
+<performative type="suggest">
+    und ich k&#252;mmere mich um
+    <emphasis x-pitchaccent="Hstar" deictic="self2" intensity="0.6">mein</emphasis> Leben<boundary type="L"/>
+</performative>
+<performative type="suggest">
+    <rheme>
+         dann haben wir auch keine Probleme
+    </rheme>
+    
+</performative>
+
+<pause sec="2.0"/>
+
+</apml>

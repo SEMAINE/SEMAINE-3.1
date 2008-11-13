@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE bml SYSTEM "bml.dtd" []>
+
+<bml>
+
+<face id='ex3f3' start='1.4238' end='5.40339'>
+	  <description level="1" type="gretabml">
+		<reference>affect=tension</reference>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>0</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+	<gaze id='ex3o2' start='2.0847' stroke='2.3339' end='1.0339'>
+	  <description level="1" type="gretabml">
+		<reference>gaze=look_right</reference>
+		<SPC.value>1</SPC.value>
+		<TMP.value>0.9</TMP.value>
+		<FLD.value>-1.0</FLD.value>
+		<PWR.value>1</PWR.value>
+	  </description>
+	</gaze>
+
+
+	<gaze id='ex3o1' stroke='3.3339' start='3.1864' end='1.01'>
+	  <description level="1" type="gretabml">
+		<reference>gaze=look_left</reference>
+		<SPC.value>1</SPC.value>
+		<TMP.value>0.9</TMP.value>
+		<FLD.value>-1.0</FLD.value>
+		<PWR.value>1</PWR.value>
+	  </description>
+	</gaze>
+
+<!-- expression 8 -->
+
+	<face id='exp9f6' start='6.8256' end='3.188'>
+	  <description level="1" type="gretabml">
+		<reference>affect=fear</reference>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>0</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+	<gesture id='exp9handon2' start='6.3478' stroke='1.0' end='4.35053'>
+	  <description level="1" type="gretabml">
+		<reference>EMOTION=FEAR11</reference>
+		<SPC.value>-0.41</SPC.value>
+		<TMP.value>1</TMP.value>
+		<FLD.value>-1</FLD.value>
+		<PWR.value>0.99</PWR.value>
+	  </description>
+	</gesture>
+
+
+<!-- expression 5 -->
+
+<face id='exp5f5' start='9.5' end='5.67797'>
+	  <description level="1" type="gretabml">
+		<reference>affect=relief</reference>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>0</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+<torso id='exp5t2' posture='extend' start='7.4' end='7.67797' stroke='4.2'>
+	  <description level="1" type="gretabml">
+		<reference>relief5</reference>
+		<SPC.value>-0.5</SPC.value>
+		<TMP.value>1</TMP.value>
+		<FLD.value>1.0</FLD.value>
+		<PWR.value>-0.1</PWR.value>
+	  </description>
+	</torso>
+
+</bml>

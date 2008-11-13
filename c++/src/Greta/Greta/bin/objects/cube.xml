@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE OBJECTSHAPE SYSTEM "object.dtd" []>
+<OBJECTSHAPE num_v="8" num_n="6" num_uv="4" num_t="12">
+<VERTICES>
+<VERTEX n="0" x="0" y="0" z="0"/>
+<VERTEX n="1" x="0" y="0" z="100"/>
+<VERTEX n="2" x="100" y="0" z="0"/>
+<VERTEX n="3" x="100" y="0" z="100"/>
+<VERTEX n="4" x="0" y="100" z="0"/>
+<VERTEX n="5" x="0" y="100" z="100"/>
+<VERTEX n="6" x="100" y="100" z="0"/>
+<VERTEX n="7" x="100" y="100" z="100"/>
+</VERTICES>
+<NORMALS>
+<NORMAL n="0" x="0" y="0" z="-1"/>
+<NORMAL n="1" x="-1" y="0" z="0"/>
+<NORMAL n="2" x="0" y="1" z="0"/>
+<NORMAL n="3" x="1" y="0" z="0"/>
+<NORMAL n="4" x="0" y="-1" z="0"/>
+<NORMAL n="5" x="0" y="0" z="1"/>
+</NORMALS>
+<UVS>
+<UV n="0" x="0" y="0"/>
+<UV n="1" x="8" y="0"/>
+<UV n="2" x="8" y="2"/>
+<UV n="3" x="0" y="2"/>
+</UVS>
+<TRIANGLES>
+<TRIANGLE n="0" v1="0" v2="4" v3="2" n1="0" n2="0" n3="0" uv1="0" uv2="1" uv3="3"/>
+<TRIANGLE n="1" v1="4" v2="6" v3="2" n1="0" n2="0" n3="0" uv1="1" uv2="2" uv3="3"/>
+
+<TRIANGLE n="2" v1="0" v2="1" v3="4" n1="1" n2="1" n3="1" uv1="0" uv2="1" uv3="3"/>
+<TRIANGLE n="3" v1="1" v2="5" v3="4" n1="1" n2="1" n3="1" uv1="1" uv2="2" uv3="3"/>
+
+<TRIANGLE n="4" v1="4" v2="5" v3="6" n1="2" n2="2" n3="2" uv1="0" uv2="1" uv3="3"/>
+<TRIANGLE n="5" v1="5" v2="7" v3="6" n1="2" n2="2" n3="2" uv1="1" uv2="2" uv3="3"/>
+
+<TRIANGLE n="6" v1="2" v2="6" v3="3" n1="0" n2="0" n3="3" uv1="0" uv2="1" uv3="3"/>
+<TRIANGLE n="7" v1="6" v2="7" v3="3" n1="0" n2="0" n3="3" uv1="1" uv2="2" uv3="3"/>
+
+<TRIANGLE n="8" v1="0" v2="1" v3="2" n1="0" n2="0" n3="4" uv1="0" uv2="1" uv3="3"/>
+<TRIANGLE n="9" v1="1" v2="3" v3="2" n1="0" n2="0" n3="4" uv1="1" uv2="2" uv3="3"/>
+
+<TRIANGLE n="10" v1="1" v2="5" v3="3" n1="0" n2="0" n3="5" uv1="0" uv2="1" uv3="3"/>
+<TRIANGLE n="11" v1="5" v2="7" v3="3" n1="0" n2="0" n3="5" uv1="1" uv2="2" uv3="3"/>
+</TRIANGLES>
+<TEXTUREFILE path="plaster2.bmp"/>
+</OBJECTSHAPE>

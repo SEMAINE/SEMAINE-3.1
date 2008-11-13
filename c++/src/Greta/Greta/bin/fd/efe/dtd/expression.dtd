@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT expression (char, face, cons)>
+<!ATTLIST expression
+	name CDATA #REQUIRED
+>
+<!ELEMENT char (emotion?, profile?, time?, intensity?, desciption?)>
+<!ELEMENT emotion EMPTY>
+<!ATTLIST emotion
+	name CDATA #REQUIRED
+>
+<!ELEMENT profile EMPTY>
+<!ATTLIST profile
+	name CDATA #IMPLIED
+>
+<!ELEMENT time EMPTY>
+<!ATTLIST time
+	min CDATA #IMPLIED
+	max CDATA #IMPLIED
+>
+<!ELEMENT intensity EMPTY>
+<!ATTLIST intensity
+	min CDATA #IMPLIED
+	max CDATA #IMPLIED
+>
+<!ELEMENT desciption EMPTY>
+<!ATTLIST desciption
+	comment CDATA #IMPLIED
+	author CDATA #IMPLIED
+>
+<!ELEMENT face (fap+)>
+<!ELEMENT fap EMPTY>
+<!ATTLIST fap
+	num CDATA #IMPLIED
+	value CDATA #IMPLIED
+>
+<!ELEMENT cons (#PCDATA)>

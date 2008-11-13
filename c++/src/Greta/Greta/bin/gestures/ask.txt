@@ -1,0 +1,7 @@
+// Last modified: 05/07/2001 11.42
+GESTURECLASS performative
+GESTUREINSTANCE ask
+DURATION 1.0
+SIDE both
+STOREDPOSE \\ask.txt 0.5
+STOREDPOSE \\ask.txt 0.8

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<bml>
+<face id='face_expression1' type='affect=anger2' start='0.0' end='5.5'/>
+<head id='head_mov1' type='head=head_very_down' start='0.0' end='2.8'/>
+
+<gesture id='gesture' type='BEAT=LEFT2' start='2.5' end='0.800000'/>
+<gesture id='gesture' stroke='0.800000'/>
+
+
+</bml>

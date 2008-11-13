@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<bml>
+<face id='face1' type='AFFECT=ANGER' start='0.0' end='3.24'/>
+<face id='face1' expressivityspc='-0.1'/>
+<face id='face1' expressivitytmp='-0.1'/>
+<face id='face1' expressivityfld='0.1'/>
+<face id='face1' expressivitypwr='-0.1'/>
+<face id='face2' type='AFFECT=RESENTMENT' start='3.25' end='1.75'/>
+<face id='face2' expressivityspc='-0.5'/>
+<face id='face2' expressivitytmp='-0.5'/>
+<face id='face2' expressivityfld='0.7'/>
+<face id='face2' expressivitypwr='-0.5'/>
+<face id='face3' type='AFFECT=ANGER' start='5.01' end='4.0'/>
+<face id='face3' expressivityspc='-0.1'/>
+<face id='face3' expressivitytmp='-0.1'/>
+<face id='face3' expressivityfld='0.1'/>
+<face id='face3' expressivitypwr='-0.1'/>
+<gesture id='ges1' type='DEICTIC=YOU2' start='2.89' end='0.27'/>
+<gesture id='ges1' stroke='0.19'/>
+<gesture id='ges1' expressivityspc='-0.1'/>
+<gesture id='ges1' expressivitytmp='-0.1'/>
+<gesture id='ges1' expressivityfld='0.1'/>
+<gesture id='ges1' expressivitypwr='-0.1'/>
+<lip filename='C:/code/Greta/runtime/tmp/what.pho'/>
+</bml>

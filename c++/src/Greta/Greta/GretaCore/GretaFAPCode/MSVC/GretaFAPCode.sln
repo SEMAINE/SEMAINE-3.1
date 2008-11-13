@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaFAPCode", "GretaFAPCode.vcproj", "{ED46642D-3EF9-46A4-8C55-CC22898F2633}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Debug.ActiveCfg = Debug|Win32
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Debug.Build.0 = Debug|Win32
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Release.ActiveCfg = Release|Win32
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

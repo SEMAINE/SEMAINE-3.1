@@ -1,0 +1,17 @@
+// 04/07/2001 14.05
+// REST GESTURE
+GESTURECLASS rest
+GESTUREINSTANCE both
+SIDE BOTH
+STARTFRAME 0.0
+  ARM XC YLowerEP ZNear
+  HAND form_fist thumb_default
+  WRIST PalmInwards
+  ADDNOISE
+ENDFRAME
+STARTFRAME 1.0
+  ARM XC YLowerEP ZNear
+  HAND form_fist thumb_default
+  WRIST PalmInwards
+  ADDNOISE
+ENDFRAME

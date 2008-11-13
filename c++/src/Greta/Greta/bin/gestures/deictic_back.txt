@@ -1,0 +1,17 @@
+// Last modified: 16/10/2001 10.56
+GESTURECLASS deictic
+GESTUREINSTANCE back
+DURATION 2.0
+SIDE right
+STARTFRAME 0.0
+  HAND form_fist thumb_away
+  ADDNOISE
+ENDFRAME
+STOREDPOSE \\deictic\\backprestroke.txt 0.1
+STOREDPOSE \\deictic\\backendstroke.txt 0.4
+STOREDPOSE \\deictic\\backprestroke.txt 0.6
+STOREDPOSE \\deictic\\backendstroke.txt 0.9
+STARTFRAME 1.0
+  HAND form_fist thumb_away
+  ADDNOISE
+ENDFRAME

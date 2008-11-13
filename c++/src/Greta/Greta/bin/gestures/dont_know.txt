@@ -1,0 +1,23 @@
+// Last modified: 05/07/2001 11.42
+GESTURECLASS certainty
+GESTUREINSTANCE dont_know
+DURATION 2.0
+SIDE both
+//STARTFRAME 0.1
+// WRIST FBAway PalmInwards
+//ENDFRAME
+STARTFRAME 0.5
+  ARM XEP YLowerP ZMiddle
+  HAND form_open thumb_away
+  WRIST FBAway PalmUp
+//  FINGER index bend_angled
+ENDFRAME
+STARTFRAME 0.8
+  ARM XEP YLowerP ZMiddle
+  HAND form_open thumb_away
+  WRIST FBAway PalmUp
+//  FINGER index bend_angled
+ENDFRAME
+//STARTFRAME 1.0
+//  WRIST FBAway PalmInwards
+//ENDFRAME

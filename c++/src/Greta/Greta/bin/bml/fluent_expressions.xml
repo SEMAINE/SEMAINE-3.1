@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE bml SYSTEM "bml.dtd" []>
+
+<bml>
+
+<face id='ex4' start='2' end='3'>
+	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>0.8</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+<face id='ex6' start='5' end='3'>
+	<description level="1" type="gretabml">
+	<reference>affect=sadness</reference>
+		<intensity>1</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+<face id='ex61' start='7.5' end='3'>
+	<description level="1" type="gretabml">
+	<reference>affect=joy</reference>
+		<intensity>1</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+
+<face id='ex161' start='12' end='10'>
+	<description level="1" type="gretabml">
+	<reference>affect=anger</reference>
+		<intensity>1</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+<face id='ex621' start='14' end='2'>
+	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>1</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+
+<face id='ex261' start='25' end='4'>
+	<description level="1" type="gretabml">
+	<reference>affect=sadness</reference>
+		<intensity>1</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+<face id='ex221' start='26.5' end='4'>
+	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>1</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+
+</bml>

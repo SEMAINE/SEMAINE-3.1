@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!DOCTYPE gestuary SYSTEM "gestuary.dtd" []>
+
+<gestuary>
+
+	<entry id="shake">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="-10" y="0" z="0"/>
+					<point x="10" y="0" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+	<entry id="nod">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="0" y="5" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+	<entry id="up">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="0" y="-5" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+	
+	<entry id="down">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="0" y="5" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+	
+	<entry id="right">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="-10" y="0" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+	<entry id="left">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="10" y="0" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+	
+	<entry id="up_left">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="10" y="-5" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+	<entry id="up_right">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="-10" y="-5" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+	<entry id="down_left">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="10" y="5" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+	<entry id="down_right">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="-10" y="5" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+	
+	<entry id="down_aside_right">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="4" fixed="0"/>
+					<point x="0" y="4" z="2"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+	<entry id="down_aside_left">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="0" y="4" z="-2"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+
+	<entry id="look_at">
+		<verbatim>
+		</verbatim>
+		<form>
+			<head>
+				<movement phase="stroke" trajectory="linear">
+					<timing min="1" max="3" fixed="0"/>
+					<point x="0" y="0" z="0"/>
+				</movement>
+			</head>
+		</form>
+	</entry>
+
+</gestuary>

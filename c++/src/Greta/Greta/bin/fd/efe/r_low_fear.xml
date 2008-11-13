@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE expression SYSTEM "./dtd/expression.dtd">
+
+<expression name="low_fear">
+	<char>
+		<emotion name="fear"/>
+		<profile name="fear"/>
+		<time min="0.5" max="4"/>
+		<intensity min="0.25" max="0.5"/>
+		<desciption comment="" author="radek"/>
+	</char>
+	<face>
+<fap num="3" value="120"/>
+<fap num="5" value="-216"/>
+<fap num="10" value="-384"/>
+<fap num="11" value="-384"/>
+<fap num="12" value="-120"/>
+<fap num="13" value="-120"/>
+<fap num="51" value="84"/>
+<fap num="52" value="-16"/>
+<fap num="55" value="72"/>
+<fap num="56" value="72"/>
+<fap num="57" value="408"/>
+<fap num="58" value="592"/>
+<fap num="59" value="-120"/>
+<fap num="60" value="-120"/>
+<fap num="21" value="-100"/>
+<fap num="22" value="-100"/>
+	</face>
+	<cons>
+	</cons>
+</expression>
+
+

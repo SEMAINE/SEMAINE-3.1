@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE bml SYSTEM "bml.dtd" []>
+
+<bml>
+
+<!-- expression 1 -->
+
+<face id='ex1' start='1' end='3'>
+	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>0.2</intensity>
+		<SPC.value>0.8</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0.7</PWR.value>
+	  </description>
+	</face>
+
+<!-- expression 2 -->
+
+<face id='ex2' start='4' end='3'>
+	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>0.4</intensity>
+		<SPC.value>-0.8</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>-0.7</PWR.value>
+	  </description>
+	</face>
+
+
+<!-- expression 3 -->
+
+<face id='ex3' start='7' end='3'>
+ 	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>0.7</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+
+<!-- expression 4 -->
+
+<face id='ex4' start='10' end='3'>
+ 	<description level="1" type="gretabml">
+	<reference>affect=fear</reference>
+		<intensity>1</intensity>
+		<SPC.value>0</SPC.value>
+		<TMP.value>0</TMP.value>
+		<FLD.value>1</FLD.value>
+		<PWR.value>0</PWR.value>
+	  </description>
+	</face>
+</bml>

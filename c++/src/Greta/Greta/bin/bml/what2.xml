@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<bml>
+<face id='face1' type='AFFECT=ANGER' start='0.0' end='3.24'/>
+<face id='face1' expressivityspc='1.0'/>
+<face id='face1' expressivitytmp='1.0'/>
+<face id='face1' expressivityfld='-0.4'/>
+<face id='face1' expressivitypwr='0.9'/>
+<face id='face2' type='AFFECT=RESENTMENT' start='3.25' end='1.75'/>
+<face id='face2' expressivityspc='0.5'/>
+<face id='face2' expressivitytmp='0.5'/>
+<face id='face2' expressivityfld='0.2'/>
+<face id='face2' expressivitypwr='0.5'/>
+<face id='face3' type='AFFECT=ANGER' start='5.01' end='4.0'/>
+<face id='face3' expressivityspc='1.0'/>
+<face id='face3' expressivitytmp='1.0'/>
+<face id='face3' expressivityfld='-0.4'/>
+<face id='face3' expressivitypwr='0.9'/>
+<gesture id='ges1' type='EMOTION=ANGER' start='0.62' end='0.31'/>
+<gesture id='ges1' stroke='0.23'/>
+<gesture id='ges1' expressivityspc='1.0'/>
+<gesture id='ges1' expressivitytmp='1.0'/>
+<gesture id='ges1' expressivityfld='-0.4'/>
+<gesture id='ges1' expressivitypwr='0.9'/>
+<gesture id='ges2' type='DEICTIC=YOU2' start='2.86' end='0.50'/>
+<gesture id='ges2' stroke='0.22'/>
+<gesture id='ges2' stroke='0.72'/>
+<gesture id='ges2' expressivityspc='1.0'/>
+<gesture id='ges2' expressivitytmp='1.0'/>
+<gesture id='ges2' expressivityfld='-0.4'/>
+<gesture id='ges2' expressivitypwr='0.9'/>
+<gesture id='ges3' type='EMOTION=ANGER' start='4.13' end='0.50'/>
+<gesture id='ges3' stroke='0.52'/>
+<gesture id='ges3' expressivityspc='0.5'/>
+<gesture id='ges3' expressivitytmp='0.5'/>
+<gesture id='ges3' expressivityfld='0.2'/>
+<gesture id='ges3' expressivitypwr='0.5'/>
+<gesture id='ges4' type='DEICTIC=HERE' start='5.39' end='0.88'/>
+<gesture id='ges4' stroke='0.22'/>
+<gesture id='ges4' stroke='0.72'/>
+<gesture id='ges4' stroke='1.22'/>
+<gesture id='ges4' expressivityspc='1.0'/>
+<gesture id='ges4' expressivitytmp='1.0'/>
+<gesture id='ges4' expressivityfld='-0.4'/>
+<gesture id='ges4' expressivitypwr='0.9'/>
+<lip filename='C:/code/Greta/runtime/tmp/what.pho'/>
+</bml>

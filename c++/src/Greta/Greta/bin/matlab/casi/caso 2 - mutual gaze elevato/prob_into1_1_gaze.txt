@@ -1,0 +1,28 @@
+Percentuali di look away/look at per lo Speaker su 29.51 secondi
+
+look away:	24.72%
+look at:	75.28%
+
+Percentuali di look away/look at per il Listener su 29.51 secondi
+
+look away:	15.63%
+look at:	84.38%
+
+Percentuale di mutual gaze su 29.51 secondi: 66.19%
+
+Percentuale di gaze (0,1)-(1,0) su 29.51 secondi: 27.27%
+
+Percentuale di gaze (0,0) su 29.51 secondi: 6.53%
+
+Probabilita' di passare dallo stato (S1,L1) allo stato (S2,L2)
+
+S\L	00	01	10	11
+
+00	5.98	0.28	0.28	0.00
+
+01	0.28	16.52	0.00	1.42
+
+10	0.28	0.00	7.69	1.14
+
+11	0.00	1.14	1.14	63.82
+

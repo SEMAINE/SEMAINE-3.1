@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE expression SYSTEM "./dtd/expression.dtd">
+
+<expression name="very_low_anger">
+	<char>
+		<emotion name="anger"/>
+		<profile name="anger"/>
+		<time min="0.5" max="4"/>
+		<intensity min="0" max="0.25"/>
+		<desciption comment="" author="radek"/>
+	</char>
+	<face>
+		<fap num="19" value="70"/>
+		<fap num="20" value="70"/>
+		<fap num="21" value="168"/>
+		<fap num="22" value="168"/>
+	</face>
+	<cons>
+	</cons>
+</expression>
+
+
+

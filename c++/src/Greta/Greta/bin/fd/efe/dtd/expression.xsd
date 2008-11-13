@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.7.0 (http://www.liquid-technologies.com) -->
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="expression">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" name="char">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="emotion">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="profile">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="time">
+                <xs:complexType>
+                  <xs:attribute name="min" type="xs:string" use="optional" />
+                  <xs:attribute name="max" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="intensity">
+                <xs:complexType>
+                  <xs:attribute name="min" type="xs:string" use="optional" />
+                  <xs:attribute name="max" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="desciption">
+                <xs:complexType>
+                  <xs:attribute name="comment" type="xs:string" use="optional" />
+                  <xs:attribute name="author" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="face">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="unbounded" name="fap">
+                <xs:complexType>
+                  <xs:attribute name="num" type="xs:string" use="optional" />
+                  <xs:attribute name="value" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="cons" type="xs:string" />
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

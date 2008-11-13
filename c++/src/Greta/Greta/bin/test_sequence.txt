@@ -1,0 +1,8 @@
+C:\\code\\Greta\\runtime\\output\\baseline1-3.avi
+C:\\code\\Greta\\runtime\\output\\fromapml2.wav
+C:\\code\\Greta\\runtime\\output\\baseline3-3.avi
+C:\\code\\Greta\\runtime\\output\\fromapml2.wav
+C:\\code\\Greta\\runtime\\output\\baseline4-3.avi
+C:\\code\\Greta\\runtime\\output\\fromapml2.wav
+C:\\code\\Greta\\runtime\\output\\baseline2-3.avi
+C:\\code\\Greta\\runtime\\output\\fromapml2.wav

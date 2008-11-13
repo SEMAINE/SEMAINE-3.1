@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE CHARACTER SYSTEM "dtds/character.dtd" []>
+<CHARACTER>
+<HEADFILES vertices="heads/vertices/greta_vertices.vtx" fdps="heads/vertices/greta_FDPs.txt" indices="heads/vertices/greta_indices.txt" hair="heads/hairs/greta_hair.xml" lips_texture="textures/lips.bmp"
+eyes_texture="textures/eyes.bmp"/>
+<BODYFILES mesh="bodies/meshes/body_geometry_woman.txt" hierarchy="bodies/hierarchies/hanim_hierarchy.txt" bones="bodies/bones/local_translations_woman.txt" texture_file="textures/body_materials1.bmp" />
+<HEADPOSITION x="0" y="24" z="0" scale="0.5116"/>
+<LEFT_EYE x="7.6" y="0" z="12"/>
+<RIGHT_EYE x="-7.6" y="0" z="12"/>
+<EYE_SCALE factor="2.75"/>
+<TEETHS-TONGUE x="0" y="-0.3" z="0.4"/>
+</CHARACTER>

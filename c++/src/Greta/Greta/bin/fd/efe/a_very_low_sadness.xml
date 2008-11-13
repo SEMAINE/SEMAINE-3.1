@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE expression SYSTEM "./dtd/expression.dtd">
+
+<expression name="very_low_sadness">
+	<char>
+		<emotion name="sadness"/>
+		<profile name="sadness"/>
+		<time min="0.5" max="4"/>
+		<intensity min="0" max="0.25"/>
+		<desciption comment="" author="radek"/>
+	</char>
+	<face>
+<fap num="19" value="100"/>
+<fap num="20" value="100"/>
+<fap num="21" value="50"/>
+<fap num="22" value="50"/>
+<fap num="31" value="220"/>
+<fap num="32" value="220"/>
+<fap num="33" value="25"/>
+<fap num="34" value="25"/>
+<fap num="35" value="5"/>
+<fap num="36" value="5"/>
+<fap num="37" value="20"/>
+<fap num="38" value="20"/>
+	</face>
+	<cons>
+	</cons>
+</expression>
+

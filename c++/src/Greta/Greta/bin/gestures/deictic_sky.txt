@@ -1,0 +1,17 @@
+// Last modified: 16/10/2001 10.56
+GESTURECLASS deictic
+GESTUREINSTANCE sky
+DURATION 2.0
+SIDE left
+STARTFRAME 0.0
+  ARM XC YUpperP ZNear
+  HAND form_point1
+  wrist palmdefault fbdefault
+  ADDNOISE
+ENDFRAME
+STOREDPOSE \\deictic\\inthesky.txt 0.5
+//STARTFRAME 1.0
+ wrist palmdefault fbdefault
+  HAND form_point1
+  ADDNOISE
+ENDFRAME

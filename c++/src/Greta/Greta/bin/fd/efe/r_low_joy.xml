@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE expression SYSTEM "./dtd/expression.dtd">
+
+<expression name="low_joy">
+	<char>
+		<emotion name="joy"/>
+		<profile name="joy"/>
+		<time min="0.5" max="4"/>
+		<intensity min="0.25" max="0.5"/>
+		<desciption comment="" author="radek"/>
+	</char>
+	<face>
+<fap num="41" value="150"/>
+<fap num="42" value="150"/>
+<fap num="53" value="25"/>
+<fap num="54" value="25"/>
+<fap num="59" value="100"/>
+<fap num="60" value="100"/>
+<fap num="19" value="128"/>
+<fap num="20" value="128"/>
+<fap num="21" value="64"/>
+<fap num="22" value="64"/>
+	</face>
+	<cons>
+	</cons>
+</expression>
+

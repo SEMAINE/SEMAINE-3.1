@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE score SYSTEM "score.dtd" []>
+<score>
+<channel name='face1' type='face' r='100' g='0' b='0' y='105'>
+<losignal name='expr1' class='AFFECT' instance='sadness' start='0.101692' end='4.32203'/>
+</channel>
+<channel name='face2' type='face' r='0' g='100' b='0' y='175'>
+</channel>
+<channel name='face3' type='face' r='0' g='0' b='100' y='245'>
+</channel>
+<channel name='gestures' type='gesture' r='100' g='100' b='0' y='315'>
+<losignal name='gest1' class='PERFORMATIVE' instance='GREET' start='1.01695' end='2.66102'/>
+<losignal name='gest2' class='BEAT' instance='BEAT1' start='3.74576' end='6.52542'/>
+</channel>
+</score>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE fml-apml SYSTEM "fml-apml.dtd" []>
+<fml-apml>
+	<bml>
+		<speech id="s1" start="0.0" language="english" voice="mary.english.man" speed_num="1" speed_sym="medium" type="application/wav" text="When sorrows come, they come not single spies but in battalions.">
+			<description level="1" type="gretabml">
+        <reference>tmp/from-fml-apml.pho</reference>
+      </description>
+			<tm id="tm1"/>
+			 what are you
+			<tm id="tm2"/>
+			doing
+			<tm id="tm3"/>
+			here
+			<tm id="tm4"/>
+			Did you
+			<tm id="tm5"/>
+			pay
+			<tm id="tm6"/>
+			attention to what I said or
+			<tm id="tm7"/>
+			not
+			<tm id="tm8"/>
+			you should
+			<tm id="tm9"/>
+			take all of
+			<tm id="tm10"/>
+			your suff
+			<tm id="tm11"/>
+			and
+			<tm id="tm12"/>
+			get
+			<tm id="tm13"/>
+			out of
+			<tm id="tm14"/>
+			this
+			<tm id="tm15"/>
+			place immediately
+			<tm id="tm16"/>
+			
+			<tm id="tm17" time="13"/>
+			
+			<pitchaccent id="xpa1" type="Hstar" start="s1:tm2" end ="s1:tm4"/>
+			<boundary id="b1" type="HH" start="s1:tm4"/>
+			<pitchaccent id="xpa2" type="Hstar" start="s1:tm5" end ="s1:tm6"/>
+			<pitchaccent id="xpa3" type="Lstar" start="s1:tm7" end ="s1:tm8"/>
+			<boundary id="b2" type="HH" start="s1:tm8"/>
+			<pitchaccent id="xpa4" type="Hstar" start="s1:tm10" end ="s1:tm11"/>
+			<boundary id="b3" type="H" start="s1:tm11"/>
+			<pitchaccent id="xpa5" type="Hstar" start="s1:tm12" end ="s1:tm13" importance="0.5"/>
+			<pitchaccent id="xpa6" type="Lstar" start="s1:tm14" end ="s1:tm15" importance="0.5"/>
+			<boundary id="b4" type="L" start="s1:tm16"/>
+		</speech>
+	</bml>
+
+	 
+	<fml>
+		
+		<emotion id="e1" type="worried" start="1.0" end="15" importance="1"/>
+		
+	</fml>
+</fml-apml>

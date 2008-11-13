@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE expression SYSTEM "./dtd/expression.dtd">
+
+<expression name="high_relief">
+	<char>
+		<emotion name="relief"/>
+		<profile name="relief"/>
+		<time min="0.5" max="4"/>
+		<intensity min="0.5" max="1"/>
+		<desciption comment="" author="radek"/>
+	</char>
+	<face>
+<fap num="3" value="40"/>
+<fap num="4" value="-60"/>
+<fap num="5" value="40"/>
+<fap num="10" value="-120"/>
+<fap num="11" value="-120"/>
+<fap num="14" value="-50"/>
+<fap num="15" value="-80"/>
+<fap num="16" value="290"/>
+<fap num="17" value="-340"/>
+<fap num="39" value="20"/>
+<fap num="40" value="20"/>
+<fap num="41" value="90"/>
+<fap num="42" value="90"/>
+<fap num="51" value="30"/>
+<fap num="52" value="-90"/>
+<fap num="53" value="70"/>
+<fap num="54" value="70"/>
+<fap num="55" value="30"/>
+<fap num="56" value="30"/>
+<fap num="57" value="440"/>
+<fap num="58" value="470"/>
+<fap num="59" value="120"/>
+<fap num="60" value="120"/>
+<fap num="19" value="40"/>
+<fap num="20" value="40"/>
+<fap num="21" value="40"/>
+<fap num="22" value="40"/>
+<fap num="31" value="40"/>
+<fap num="32" value="40"/>
+<fap num="33" value="80"/>
+<fap num="34" value="80"/>
+<fap num="35" value="40"/>
+<fap num="36" value="40"/>
+	</face>
+	<cons>
+	</cons>
+</expression>

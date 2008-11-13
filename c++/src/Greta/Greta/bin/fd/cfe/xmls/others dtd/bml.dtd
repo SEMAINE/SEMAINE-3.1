@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT face EMPTY>
+<!ATTLIST face
+	id CDATA #REQUIRED
+	type CDATA #REQUIRED
+	end CDATA #REQUIRED
+	start CDATA #REQUIRED
+>
+<!ELEMENT bml (face+)>

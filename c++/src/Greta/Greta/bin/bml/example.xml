@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE bml SYSTEM "bml.dtd" []>
+<bml>
+<speech id='s1' start='2.0' language='english' voice='mary.english.woman' speed_num='1' speed_sym='medium' type='application/wav' text='what are you doing here? did you pay attention to what I said or not? you should take all of your stuff and get out of this place immediately.'>
+<description level='1' type='gretabml'>
+<reference>
+tmp/from-fml-apml.pho
+</reference>
+</description>
+<tm id='tm1'/>
+ what are you
+<tm id='tm2'/>
+doing
+<tm id='tm3'/>
+here
+<tm id='tm4'/>
+Did you
+<tm id='tm5'/>
+pay
+<tm id='tm6'/>
+attention to what I said or
+<tm id='tm7'/>
+not
+<tm id='tm8'/>
+you should
+<tm id='tm9'/>
+take all of
+<tm id='tm10'/>
+your suff
+<tm id='tm11'/>
+and
+<tm id='tm12'/>
+get
+<tm id='tm13'/>
+out of
+<tm id='tm14'/>
+this
+<tm id='tm15'/>
+place immediately
+<tm id='tm16'/>
+<tm id='tm17' time='13'/>
+<pitchaccent id='xpa1' type='Hstar' start='s1:tm2' end='s1:tm4' level='medium' importance='0.5'/>
+<boundary id='b1' type='HH' start='s1:tm4' end='1.0'/>
+<pitchaccent id='xpa2' type='Hstar' start='s1:tm5' end='s1:tm6' level='medium' importance='0.5'/>
+<pitchaccent id='xpa3' type='Lstar' start='s1:tm7' end='s1:tm8' level='medium' importance='0.5'/>
+<boundary id='b2' type='HH' start='s1:tm8' end='1.0'/>
+<pitchaccent id='xpa4' type='Hstar' start='s1:tm10' end='s1:tm11' level='medium' importance='0.5'/>
+<boundary id='b3' type='H' start='s1:tm11' end='1.0'/>
+<pitchaccent id='xpa5' type='Hstar' start='s1:tm12' end='s1:tm13' level='medium' importance='0.5'/>
+<pitchaccent id='xpa6' type='Lstar' start='s1:tm14' end='s1:tm15' level='medium' importance='0.5'/>
+<boundary id='b4' type='L' start='s1:tm16' end='1.0'/>
+</speech>
+	<head id="emotion-0"  start="5.71" end="7.29" stroke="0.56">
+		<description level="1" type="gretabml">
+		<reference>look_at</reference>
+		<intensity>1.00</intensity>
+		<stroke time="2.690"/>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.85</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>1.00</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.90</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.50</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.55</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.90</preference.value>
+		</description>
+	</head>
+	<face id="emotion-1"  start="5.71" end="7.29" stroke="0.56">
+		<description level="1" type="gretabml">
+		<reference>affect=anger</reference>
+		<intensity>1.00</intensity>
+		<stroke time="2.690"/>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.85</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>1.00</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.90</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.50</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.55</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>1.00</preference.value>
+		</description>
+	</face>
+	<gaze id="performative-2"  start="0.00" end="1.97" stroke="1.81">
+		<description level="1" type="gretabml">
+		<reference>gaze=look_at</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>1.00</preference.value>
+		</description>
+	</gaze>
+	<head id="boundary-3"  start="0.97" end="1.00" stroke="0.84">
+		<description level="1" type="gretabml">
+		<reference>down_aside_left</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>1.00</preference.value>
+		</description>
+	</head>
+	<face id="performative-4"  start="1.97" end="3.38" stroke="0.68">
+		<description level="1" type="gretabml">
+		<reference>performative=warn</reference>
+		<intensity>-107374176.00</intensity>
+		<stroke time="1.829"/>
+		<stroke time="3.208"/>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>1.00</preference.value>
+		</description>
+	</face>
+	<head id="boundary-5"  start="4.34" end="1.00" stroke="0.83">
+		<description level="1" type="gretabml">
+		<reference>down_aside_left</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>1.00</preference.value>
+		</description>
+	</head>
+	<gesture id="performative-6"  start="5.34" end="2.62" stroke="0.68">
+		<description level="1" type="gretabml">
+		<reference>adjectival=WARNING_HAND</reference>
+		<intensity>-107374176.00</intensity>
+		<stroke time="2.462"/>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.85</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.75</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.90</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.50</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.55</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.50</preference.value>
+		</description>
+	</gesture>
+	<gaze id="boundary-7"  start="6.97" end="1.00" stroke="0.84">
+		<description level="1" type="gretabml">
+		<reference>gaze=look_at</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.90</preference.value>
+		</description>
+	</gaze>
+	<gaze id="world-8"  start="8.15" end="0.37">
+		<description level="1" type="gretabml">
+		<reference>gaze=look_left</reference>
+		<intensity>1.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.90</preference.value>
+		</description>
+	</gaze>
+	<gesture id="world-9"  start="8.85" end="0.24">
+		<description level="1" type="gretabml">
+		<reference>deictic=there</reference>
+		<intensity>1.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.85</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.75</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.90</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.50</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.55</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.90</preference.value>
+		</description>
+	</gesture>
+	<gaze id="boundary-10"  start="10.52" end="1.00">
+		<description level="1" type="gretabml">
+		<reference>gaze=look_at</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.90</preference.value>
+		</description>
+	</gaze>
+	<face id="pitchaccent-11"  start="0.44" end="1.53" stroke="1.37">
+		<description level="1" type="gretabml">
+		<reference>emphasis=Hstar</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.90</preference.value>
+		</description>
+	</face>
+	<head id="pitchaccent-12"  start="2.27" end="0.38">
+		<description level="1" type="gretabml">
+		<reference>down_aside_left</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.05</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.95</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.10</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.00</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.05</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.90</preference.value>
+		</description>
+	</head>
+	<gesture id="pitchaccent-13"  start="8.15" end="0.37">
+		<description level="1" type="gretabml">
+		<reference>beat=beat5</reference>
+		<intensity>-107374176.00</intensity>
+			<FLD.max>1.00</FLD.max>
+			<FLD.min>-1.00</FLD.min>
+			<FLD.value>-0.85</FLD.value>
+			<OAC.max>1.00</OAC.max>
+			<OAC.min>0.00</OAC.min>
+			<OAC.value>0.75</OAC.value>
+			<PWR.max>1.00</PWR.max>
+			<PWR.min>-1.00</PWR.min>
+			<PWR.value>0.90</PWR.value>
+			<REP.max>1.00</REP.max>
+			<REP.min>-1.00</REP.min>
+			<REP.value>-0.10</REP.value>
+			<SPC.max>1.00</SPC.max>
+			<SPC.min>-1.00</SPC.min>
+			<SPC.value>0.50</SPC.value>
+			<TMP.max>1.00</TMP.max>
+			<TMP.min>-1.00</TMP.min>
+			<TMP.value>0.55</TMP.value>
+			<preference.max>1.00</preference.max>
+			<preference.min>0.00</preference.min>
+			<preference.value>0.40</preference.value>
+		</description>
+	</gesture>
+</bml>

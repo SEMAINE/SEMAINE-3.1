@@ -1,0 +1,114 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IntentionPlanner", "IntentionPlanner.vcproj", "{89CED097-C9A9-445E-BCE7-995C9E26FC9B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633} = {ED46642D-3EF9-46A4-8C55-CC22898F2633}
+		{908D7C38-D075-4F5B-BB5F-4287E05DA811} = {908D7C38-D075-4F5B-BB5F-4287E05DA811}
+		{7078D645-7D93-4449-8E74-024CED43CD0B} = {7078D645-7D93-4449-8E74-024CED43CD0B}
+		{9C57D268-5B10-4C58-8B61-0D730FE68121} = {9C57D268-5B10-4C58-8B61-0D730FE68121}
+		{E5A1266E-D255-45B2-82AA-93C0ADF5060C} = {E5A1266E-D255-45B2-82AA-93C0ADF5060C}
+		{F0134079-52BC-49F6-90C1-2A048C5CEC6F} = {F0134079-52BC-49F6-90C1-2A048C5CEC6F}
+		{EE04817B-FC3D-4261-BD71-A0EB2271BD7C} = {EE04817B-FC3D-4261-BD71-A0EB2271BD7C}
+		{7CC4D8BC-2F7F-4CAE-BC5B-20B28A7DC405} = {7CC4D8BC-2F7F-4CAE-BC5B-20B28A7DC405}
+		{2EFBDDCD-1089-4F97-BB06-52F2D91DF399} = {2EFBDDCD-1089-4F97-BB06-52F2D91DF399}
+		{7427CBF1-5D54-4C47-907E-17A2B6504AED} = {7427CBF1-5D54-4C47-907E-17A2B6504AED}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaAgentEngine", "..\..\..\..\GretaCore\GretaAgentEngine\MSVC\GretaAgentEngine.vcproj", "{7427CBF1-5D54-4C47-907E-17A2B6504AED}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaBAPCode", "..\..\..\..\GretaCore\GretaBAPCode\MSVC\GretaBAPCode.vcproj", "{F0134079-52BC-49F6-90C1-2A048C5CEC6F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaDataModule", "..\..\..\..\GretaCore\GretaDataModule\MSVC\GretaDataModule.vcproj", "{2EFBDDCD-1089-4F97-BB06-52F2D91DF399}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaFaceEngine", "..\..\..\..\GretaCore\GretaFaceEngine\MSVC\GretaFaceEngine.vcproj", "{7078D645-7D93-4449-8E74-024CED43CD0B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaFAPCode", "..\..\..\..\GretaCore\GretaFAPCode\MSVC\GretaFAPCode.vcproj", "{ED46642D-3EF9-46A4-8C55-CC22898F2633}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaGestureEngine", "..\..\..\..\GretaCore\GretaGestureEngine\MSVC\GretaGestureEngine.vcproj", "{7CC4D8BC-2F7F-4CAE-BC5B-20B28A7DC405}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaMisc", "..\..\..\..\GretaCore\GretaMisc\MSVC\GretaMisc.vcproj", "{EE04817B-FC3D-4261-BD71-A0EB2271BD7C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaMMSystem", "..\..\..\..\GretaCore\GretaMMSystem\MSVC\GretaMMSystem.vcproj", "{9C57D268-5B10-4C58-8B61-0D730FE68121}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GretaTorsoEngine", "..\..\..\..\GretaCore\GretaTorsoEngine\MSVC\GretaTorsoEngine.vcproj", "{908D7C38-D075-4F5B-BB5F-4287E05DA811}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComplexExpressionsManager", "..\..\..\..\GretaCore\GretaComplexExpressions\MSVC\ComplexExpressionsManager.vcproj", "{E5A1266E-D255-45B2-82AA-93C0ADF5060C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{89CED097-C9A9-445E-BCE7-995C9E26FC9B}.Debug.ActiveCfg = Debug|Win32
+		{89CED097-C9A9-445E-BCE7-995C9E26FC9B}.Debug.Build.0 = Debug|Win32
+		{89CED097-C9A9-445E-BCE7-995C9E26FC9B}.Release.ActiveCfg = Release|Win32
+		{89CED097-C9A9-445E-BCE7-995C9E26FC9B}.Release.Build.0 = Release|Win32
+		{7427CBF1-5D54-4C47-907E-17A2B6504AED}.Debug.ActiveCfg = Debug|Win32
+		{7427CBF1-5D54-4C47-907E-17A2B6504AED}.Debug.Build.0 = Debug|Win32
+		{7427CBF1-5D54-4C47-907E-17A2B6504AED}.Release.ActiveCfg = Release|Win32
+		{7427CBF1-5D54-4C47-907E-17A2B6504AED}.Release.Build.0 = Release|Win32
+		{F0134079-52BC-49F6-90C1-2A048C5CEC6F}.Debug.ActiveCfg = Debug|Win32
+		{F0134079-52BC-49F6-90C1-2A048C5CEC6F}.Debug.Build.0 = Debug|Win32
+		{F0134079-52BC-49F6-90C1-2A048C5CEC6F}.Release.ActiveCfg = Release|Win32
+		{F0134079-52BC-49F6-90C1-2A048C5CEC6F}.Release.Build.0 = Release|Win32
+		{2EFBDDCD-1089-4F97-BB06-52F2D91DF399}.Debug.ActiveCfg = Debug|Win32
+		{2EFBDDCD-1089-4F97-BB06-52F2D91DF399}.Debug.Build.0 = Debug|Win32
+		{2EFBDDCD-1089-4F97-BB06-52F2D91DF399}.Release.ActiveCfg = Release|Win32
+		{2EFBDDCD-1089-4F97-BB06-52F2D91DF399}.Release.Build.0 = Release|Win32
+		{7078D645-7D93-4449-8E74-024CED43CD0B}.Debug.ActiveCfg = Debug|Win32
+		{7078D645-7D93-4449-8E74-024CED43CD0B}.Debug.Build.0 = Debug|Win32
+		{7078D645-7D93-4449-8E74-024CED43CD0B}.Release.ActiveCfg = Release|Win32
+		{7078D645-7D93-4449-8E74-024CED43CD0B}.Release.Build.0 = Release|Win32
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Debug.ActiveCfg = Debug|Win32
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Debug.Build.0 = Debug|Win32
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Release.ActiveCfg = Release|Win32
+		{ED46642D-3EF9-46A4-8C55-CC22898F2633}.Release.Build.0 = Release|Win32
+		{7CC4D8BC-2F7F-4CAE-BC5B-20B28A7DC405}.Debug.ActiveCfg = Debug|Win32
+		{7CC4D8BC-2F7F-4CAE-BC5B-20B28A7DC405}.Debug.Build.0 = Debug|Win32
+		{7CC4D8BC-2F7F-4CAE-BC5B-20B28A7DC405}.Release.ActiveCfg = Release|Win32
+		{7CC4D8BC-2F7F-4CAE-BC5B-20B28A7DC405}.Release.Build.0 = Release|Win32
+		{EE04817B-FC3D-4261-BD71-A0EB2271BD7C}.Debug.ActiveCfg = Debug|Win32
+		{EE04817B-FC3D-4261-BD71-A0EB2271BD7C}.Debug.Build.0 = Debug|Win32
+		{EE04817B-FC3D-4261-BD71-A0EB2271BD7C}.Release.ActiveCfg = Release|Win32
+		{EE04817B-FC3D-4261-BD71-A0EB2271BD7C}.Release.Build.0 = Release|Win32
+		{9C57D268-5B10-4C58-8B61-0D730FE68121}.Debug.ActiveCfg = Debug|Win32
+		{9C57D268-5B10-4C58-8B61-0D730FE68121}.Debug.Build.0 = Debug|Win32
+		{9C57D268-5B10-4C58-8B61-0D730FE68121}.Release.ActiveCfg = Release|Win32
+		{9C57D268-5B10-4C58-8B61-0D730FE68121}.Release.Build.0 = Release|Win32
+		{908D7C38-D075-4F5B-BB5F-4287E05DA811}.Debug.ActiveCfg = Debug|Win32
+		{908D7C38-D075-4F5B-BB5F-4287E05DA811}.Debug.Build.0 = Debug|Win32
+		{908D7C38-D075-4F5B-BB5F-4287E05DA811}.Release.ActiveCfg = Release|Win32
+		{908D7C38-D075-4F5B-BB5F-4287E05DA811}.Release.Build.0 = Release|Win32
+		{E5A1266E-D255-45B2-82AA-93C0ADF5060C}.Debug.ActiveCfg = Debug|Win32
+		{E5A1266E-D255-45B2-82AA-93C0ADF5060C}.Debug.Build.0 = Debug|Win32
+		{E5A1266E-D255-45B2-82AA-93C0ADF5060C}.Release.ActiveCfg = Release|Win32
+		{E5A1266E-D255-45B2-82AA-93C0ADF5060C}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		..\..\..\..\include\Common\definitions.h = ..\..\..\..\include\Common\definitions.h
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
