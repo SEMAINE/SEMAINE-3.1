@@ -5,6 +5,7 @@
 package eu.semaine.components.mary;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -15,6 +16,9 @@ import java.util.Locale;
 import javax.jms.JMSException;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -64,20 +68,26 @@ import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
 import eu.semaine.jms.sender.BMLSender;
+import eu.semaine.jms.sender.BytesSender;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.util.XMLTool;
 
 /**
- * Speech BML realiser
+ * Speech preprocessor : To find pitch accent and boundaries
+ * Speech BML realiser : Audio synthesis and phone timings
  * 
  * @author Sathish Chandra Pammi
  *
  */
-public class SpeechPreProcessor extends Component 
+public class SemaineMary extends Component 
 {
 	private FMLReceiver fmlReceiver;
 	private BMLReceiver bmlReceiver;
+	private BMLReceiver bmlPlanReceiver;
 	private FMLSender fmlbmlSender;
+	private BMLSender bmlSender;
+	private BytesSender audioSender;
+	
 	private static TransformerFactory tFactory = null;
 	private static Templates stylesheet = null;
     private Transformer transformer;
@@ -86,16 +96,22 @@ public class SpeechPreProcessor extends Component
 	 * @param componentName
 	 * @throws JMSException
 	 */
-	public SpeechPreProcessor() throws JMSException 
+	public SemaineMary() throws JMSException 
 	{
-		super("SpeechPreProcessor");
+		super("SemaineMary");
 		fmlReceiver = new FMLReceiver("semaine.data.action.selected.function");
 		receivers.add(fmlReceiver); // to set up properly
 		bmlReceiver = new BMLReceiver("semaine.data.action.selected.behaviour");
 		receivers.add(bmlReceiver);
+		bmlPlanReceiver = new BMLReceiver("semaine.data.synthesis.plan");
+		receivers.add(bmlPlanReceiver);
 		
 		fmlbmlSender = new FMLSender("semaine.data.action.selected.speechpreprocessed", getName());
 		senders.add(fmlbmlSender); // so it can be started etc
+		bmlSender = new BMLSender("semaine.data.synthesis.plan.speechtimings", getName());
+		senders.add(bmlSender);
+		audioSender = new BytesSender("semaine.data.lowlevel.audio","AUDIO",getName());
+		senders.add(audioSender); // so it can be started etc
 	}
 	
 	protected void customStartIO() throws JMSException{
@@ -129,28 +145,42 @@ public class SpeechPreProcessor extends Component
 			throw new MessageFormatException("expected XML message, got "+m.getClass().getSimpleName());
 		}
 		
+		if(m.getTopicName().equals("semaine.data.action.selected.function")){
+			speechPreProcessor(m);
+		}
+		if(m.getTopicName().equals("semaine.data.synthesis.plan")){
+			speechBMLRealiser(m);
+		}
+		if(m.getTopicName().equals("semaine.data.action.selected.behaviour")){
+			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
+			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+		}
+		
+	}
+	
+	
+	// Speech Preprocessor
+	private void speechPreProcessor(SEMAINEMessage m) throws JMSException{	
+		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
-		boolean isFML = "FML".equals(xm.getDatatype());
 		Request request = new Request(MaryDataType.SSML,MaryDataType.INTONATION,Locale.US,Voice.getDefaultVoice(Locale.ENGLISH),null,null,1,null);
+		Document inputDoc = xm.getDocument();
+		String inputText = xm.getText();
 		
-		try{
-			
-		  if (isFML) {
-			Document inputDoc = xm.getDocument();
-			String inputText = xm.getText();
-			
+		try{	
 			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			//factory.setNamespaceAware(true);
 			//DocumentBuilder builder = factory.newDocumentBuilder();
 			//inputDoc = builder.parse(new InputSource(new FileReader("dataformat1.xml")));
-			//String outData = XMLTool.document2String(inputDoc);
+			//inputText = XMLTool.document2String(inputDoc);
+			
 			if (tFactory == null) {
 	            tFactory = TransformerFactory.newInstance();
 			 }
 			if (stylesheet == null) {
 		        StreamSource stylesheetStream =
-		        new StreamSource( SpeechPreProcessor.class.getResourceAsStream(          
+		        new StreamSource( SemaineMary.class.getResourceAsStream(          
 		                 "FML2SSML.xsl"));
 		        stylesheet = tFactory.newTemplates(stylesheetStream);
 		     }
@@ -162,13 +192,10 @@ public class SpeechPreProcessor extends Component
 			request.readInputData(reader);
 			request.process();
 			request.writeOutputData(intonationOS);	
-			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreProcessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
+			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SemaineMary.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
+			//System.out.println("PreProcessor: "+finalData);
 			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
 			
-		   } else { // BML -- send as is
-			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
-		  }
-		
 		} catch (TransformerConfigurationException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -180,4 +207,75 @@ public class SpeechPreProcessor extends Component
 			e.printStackTrace();
 		}
 	}
+	
+	
+	private void speechBMLRealiser(SEMAINEMessage m) throws JMSException{
+		
+		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
+		Document input = xm.getDocument();
+		String inputText = xm.getText();
+		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
+
+		try {
+			
+			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			//factory.setNamespaceAware(true);
+			//DocumentBuilder builder = factory.newDocumentBuilder();
+			//input = builder.parse(new InputSource(new FileReader("dataformat3.xml")));
+			
+			// Extracting SSML content from BML
+			if (tFactory == null) {
+            tFactory = TransformerFactory.newInstance();
+			}
+			if (stylesheet == null) {
+	            StreamSource stylesheetStream =
+	                new StreamSource(  SpeechBMLRealiser.class.getResourceAsStream("BML2SSML.xsl"));     
+	            stylesheet = tFactory.newTemplates(stylesheetStream);
+	        }
+			transformer = stylesheet.newTransformer();
+			transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
+			//String inputText = XMLTool.document2String(input);
+			
+			// SSML to Realised Acoustics using MARY 
+			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
+			AudioFormat af = voice.dbAudioFormat();
+	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
+	            af, AudioSystem.NOT_SPECIFIED);
+			Request request = new Request(MaryDataType.get("SSML"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.US,voice,"","",1,aff);
+			
+			
+			Reader reader = new StringReader(ssmlos.toString());
+			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
+			request.readInputData(reader);
+			request.process();
+			request.writeOutputData(realisedOS);
+			//Merge realised acoustics into output format
+			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("BML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
+			//System.out.println("BML Realiser: "+finalData);
+			// SSML to AUDIO using MARY 
+	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.US, 
+	            voice, "", "", 1, aff);
+			reader = new StringReader(ssmlos.toString());
+			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
+			request.readInputData(reader);
+			request.process();
+			request.writeOutputData(audioos);
+			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
+			
+			
+		} catch (TransformerConfigurationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+	
+	
 }
