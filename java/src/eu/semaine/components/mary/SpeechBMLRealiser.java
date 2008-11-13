@@ -5,9 +5,12 @@
 package eu.semaine.components.mary;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Locale;
@@ -15,6 +18,9 @@ import java.util.Locale;
 import javax.jms.JMSException;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -46,25 +52,19 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
-import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.bootstrap.DOMImplementationRegistry;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSOutput;
-import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.InputSource;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
 import eu.semaine.jms.sender.BMLSender;
-import eu.semaine.jms.sender.FMLSender;
+import eu.semaine.jms.sender.BytesSender;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -73,11 +73,12 @@ import eu.semaine.util.XMLTool;
  * @author Sathish Chandra Pammi
  *
  */
-public class SpeechPreProcessor extends Component 
+public class SpeechBMLRealiser extends Component 
 {
-	private FMLReceiver fmlReceiver;
 	private BMLReceiver bmlReceiver;
-	private FMLSender fmlbmlSender;
+	private BMLSender bmlSender;
+	private BytesSender audioSender;
+	
 	private static TransformerFactory tFactory = null;
 	private static Templates stylesheet = null;
     private Transformer transformer;
@@ -86,17 +87,18 @@ public class SpeechPreProcessor extends Component
 	 * @param componentName
 	 * @throws JMSException
 	 */
-	public SpeechPreProcessor() throws JMSException 
+	public SpeechBMLRealiser() throws JMSException 
 	{
-		super("SpeechPreProcessor");
-		fmlReceiver = new FMLReceiver("semaine.data.action.selected.function");
-		receivers.add(fmlReceiver); // to set up properly
+		super("SpeechBMLRealiser");
 		bmlReceiver = new BMLReceiver("semaine.data.action.selected.behaviour");
 		receivers.add(bmlReceiver);
 		
-		fmlbmlSender = new FMLSender("semaine.data.action.selected.speechpreprocessed", getName());
-		senders.add(fmlbmlSender); // so it can be started etc
+		bmlSender = new BMLSender("semaine.data.selected.behaviour.speechrealised", getName());
+		senders.add(bmlSender);
+		audioSender = new BytesSender("semaine.data.synthesis.audio","AUDIO",getName());
+		senders.add(audioSender); // so it can be started etc
 	}
+	
 	
 	protected void customStartIO() throws JMSException{
 		
@@ -115,10 +117,12 @@ public class SpeechPreProcessor extends Component
                 }
             });
             System.err.println(" started in " + (System.currentTimeMillis()-startTime)/1000. + " s");
+            
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
 	}
 	
   
@@ -130,45 +134,57 @@ public class SpeechPreProcessor extends Component
 		}
 		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
+		Document input = xm.getDocument();
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
-		boolean isFML = "FML".equals(xm.getDatatype());
-		Request request = new Request(MaryDataType.SSML,MaryDataType.INTONATION,Locale.US,Voice.getDefaultVoice(Locale.ENGLISH),null,null,1,null);
-		
-		try{
-			
-		  if (isFML) {
-			Document inputDoc = xm.getDocument();
-			String inputText = xm.getText();
+
+		try {
 			
 			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			//factory.setNamespaceAware(true);
 			//DocumentBuilder builder = factory.newDocumentBuilder();
-			//inputDoc = builder.parse(new InputSource(new FileReader("dataformat1.xml")));
-			//String outData = XMLTool.document2String(inputDoc);
+			//input = builder.parse(new InputSource(new FileReader("dataformat3.xml")));
+			
+			// Extracting SSML content from BML
 			if (tFactory == null) {
-	            tFactory = TransformerFactory.newInstance();
-			 }
+            tFactory = TransformerFactory.newInstance();
+			}
 			if (stylesheet == null) {
-		        StreamSource stylesheetStream =
-		        new StreamSource( SpeechPreProcessor.class.getResourceAsStream(          
-		                 "FML2SSML.xsl"));
-		        stylesheet = tFactory.newTemplates(stylesheetStream);
-		     }
+	            StreamSource stylesheetStream =
+	                new StreamSource(  SpeechBMLRealiser.class.getResourceAsStream("BML2SSML.xsl"));     
+	            stylesheet = tFactory.newTemplates(stylesheetStream);
+	        }
 			transformer = stylesheet.newTransformer();
-			transformer.transform(new DOMSource(inputDoc), new StreamResult(ssmlos));
-				
+			transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
+			String inputText = XMLTool.document2String(input);
+
+			// SSML to Realised Acoustics using MARY 
+			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
+			AudioFormat af = voice.dbAudioFormat();
+	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
+	            af, AudioSystem.NOT_SPECIFIED);
+			Request request = new Request(MaryDataType.get("SSML"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.US,voice,"","",1,aff);
+			
+			
 			Reader reader = new StringReader(ssmlos.toString());
-			ByteArrayOutputStream  intonationOS = new ByteArrayOutputStream();
+			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
 			request.readInputData(reader);
 			request.process();
-			request.writeOutputData(intonationOS);	
-			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreProcessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
-			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
+			request.writeOutputData(realisedOS);
+			//Merge realised acoustics into output format
+			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("BML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
 			
-		   } else { // BML -- send as is
-			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
-		  }
-		
+			// SSML to AUDIO using MARY 
+	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.US, 
+	            voice, "", "", 1, aff);
+			reader = new StringReader(ssmlos.toString());
+			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
+			request.readInputData(reader);
+			request.process();
+			request.writeOutputData(audioos);
+			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
+			
+			
 		} catch (TransformerConfigurationException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -179,5 +195,6 @@ public class SpeechPreProcessor extends Component
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 }
