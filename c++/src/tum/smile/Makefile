@@ -94,7 +94,7 @@ src/main.o: src/main.c
 	$(CC) -c src/main.c -o src/main.o $(CFLAGS)
 
 src/maincpp.o: src/main.cpp
-	$(CPP) -c src/main.cpp -o src/maincpp.o $(CFLAGS)
+	$(CPP) -c src/main.cpp -o src/maincpp.o $(CFLAGS_LIN_PA)
 
 src/main_recorder.o: src/main_recorder.c
 	$(CC) -c src/main_recorder.c -o src/main_recorder.o $(CFLAGS)
@@ -121,7 +121,7 @@ src/pcm-process.o: src/pcm-process.c
 	$(CC) -c src/pcm-process.c -o src/pcm-process.o $(CFLAGS)
 
 src/audio-stream.o: src/audio-stream.c
-	$(CC) -c src/audio-stream.c -o src/audio-stream.o $(CFLAGS)
+	$(CC) -c src/audio-stream.c -o src/audio-stream.o $(CFLAGS_LIN_PA)
 
 src/option-parser.o: src/option-parser.c
 	$(CC) -c src/option-parser.c -o src/option-parser.o $(CFLAGS)
