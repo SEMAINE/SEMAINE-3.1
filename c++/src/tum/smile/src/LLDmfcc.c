@@ -221,7 +221,7 @@ void compute_melFilters(s_mel_descriptor *mel)
       return 700.0*(pow(10.0,fmel/2595.0)-1.0);
 
     }
-    inline int fofm(int m) {
+    inline int fofm(int m, double N, double Fs, double BfH, double BfI, double M ) {
       return ( (int)round( (2.0*N/Fs)*Binv(BfI + (double)m*(BfH-BfI)/((double)M+1.0) )));    
     }
  
@@ -258,9 +258,10 @@ int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
       FLOAT_TYPE_FFT *filter = obj->filters + ((m-1)*blocksize);
       //    printf("MEL fof %i : %i\n",m,fofm(m));
       
-      int fofm_mm1 = obj->filters_start[m-1] = fofm(m-1);
-      int fofm_mp1 = obj->filters_end[m-1] = fofm(m+1);
-      int fofm_m = fofm(m);
+//(int m, double N, double Fs, double BfH, double BfI, double M )
+      int fofm_mm1 = obj->filters_start[m-1] = fofm(m-1,N,Fs,BfH,BfI,M);
+      int fofm_mp1 = obj->filters_end[m-1] = fofm(m+1,N,Fs,BfH,BfI,M);
+      int fofm_m = fofm(m,N,Fs,BfH,BfI,M);
       if (obj->filters_end[m-1] >= obj->blocksize) obj->filters_end[m-1] = obj->blocksize;
 
       for (n=0; (n<fofm_mm1)&&(n<blocksize); n++) {
