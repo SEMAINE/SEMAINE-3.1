@@ -1,0 +1,209 @@
+Go on – tell me how angry you feel;Spike;angry;;(about current character);tell me more + angry;;;;;;;; -
+Do go on -  I love hearing all this happiness;Poppy;happy;(positive);;tell me more + happy;;;;;;;; -
+Tell me all the awful details;Obadiah;;negative;;tell me more + negative;;1;;;;;; -
+Well, what happened ;Spike;;;;tell me more + past_event;;;1;;;;; -
+Tell me all the awful details;Obadiah;sad;;;tell me more + sad;;;;;;;; -
+Tell me just how bad you feel ;Obadiah;sad;;;tell me more + sad;;;;;;;; -
+Amazing!;Poppy;happy;(positive);;;;;1;;;;; -
+Amazing!;Poppy;happy;(positive);;;;1;;;-1;;; -
+aren't you just great?;Poppy;happy;(positive);;;;1;;;-1;;; -
+As one door closes another one slams in your face, I always say ;Obadiah;sad;;(about own feelings)/(agree);;;;;;;;; -
+As one door closes another one slams in your face, I always say ;Obadiah;;negative;(about own feelings)/(agree);;;;;;;;; -
+Boo hoo ;Spike;angry;(negative);;;;-1;;;;;; -
+Boo hoo ;Spike;sad;(negative);;;;-1;;;;;; -
+Buddha says when you expect nothing everything is a gift;Prudence;(happy);positive;;;;;;-1;;1;; -
+But how will you get through this? ;Obadiah;;;;;based on history;;;;;;; -
+Can you remember feeling more miserable?;Obadiah;sad;;about own feelings;;;;;;;;; -
+can't you do anything about it?;Poppy/Prudence;sad;(negative);;;;;;1;;;; -
+can't you do anything about it?;Poppy/Prudence;sad;(negative);;;;;;;;1;; -
+Can't you take a joke?;Spike;(angry);negative;about current character;;;;;;;;; -
+Can't you take a joke?;Spike;angry;;about current character;;;;;;;;; -
+Come off it ;Spike;happy;;about own feelings;;;;;;;;; -
+Come off it ;Spike;happy;;;;;1;;;;;; -
+Do you feel a little unsure? ;Prudence;;;;;;;;;;1;; -
+Do you think being angry makes people want to help you?;Prudence;angry;;(about own feelings) / about other people;;;;;;;;; -
+Do you think that you are wise?;Prudence/Spike;(happy);positive;(about own feelings);;;1;;;;;; -
+Do you think that you are wise?;Prudence/Spike;happy;(positive);about own feelings;;;-1;;;;;; -
+Don't get carried away;Prudence;happy;(positive);;;;;;;;-1;; -
+Don't get carried away;Prudence;;positive;;;;;;;;1;; -
+Don't let the bastards grind you down ;Spike;(angry);negative;about other people;;;;-1;;;;; -
+don't take it out on me ;Prudence/Obadiah;angry;;about current character;;;;;;;;; -
+don't take it out on me ;Prudence/Obadiah;angry;;;;;;;;;;; -
+Don't you ever get angry at the world?;Spike;happy;;;;;;;;;;; -
+Don't you ever get angry at the world?;Spike;sad;;;;;;;;;;; -
+Don't you ever get angry at the world?;Spike;;positive;;;;;;;;;; -
+Don't you get sad sometimes? ;Obadiah;happy;;;;;;;;;;; -
+Don't you get sad sometimes? ;Obadiah;;positive;;;;;;;;;; -
+Enjoy it while it lasts ;Prudence;(happy);positive;(about own feelings);;;1;;;;;; -
+Enjoy it while it lasts ;Prudence;happy;(positive);about own feelings;;;-1;;;;;; -
+Everything can be just crap! ;Spike;angry;;(about own feelings)/(about other people)/(about other character);;;-1;-1;-1;-1;-1;; -
+Everything can be just crap! ;Spike;sad;;(about own feelings)/(about other people)/(about other character);;;-1;-1;-1;-1;-1;; -
+Everything can be just crap! ;Spike;;negative;(about own feelings)/(about other people)/(about other character);;;-1;-1;-1;-1;-1;; -
+Everything will work out – you'll see;Poppy;sad;;;;;;;1;;-1;; -
+get a grip ;Prudence;sad;;;;;;;;;;; -
+get a grip ;Prudence;;negative;;;;1;;;;;; -
+Have I said something wrong?;Poppy/Spike/Obadiah/Prudence;angry;(negative);about current character;;;;;;;;; -
+Have you ever regretted being so headstrong?;Prudence;;;;;Remove?;;;;;;; -
+How do you do it? ;Poppy;;;;;Special;;;;;;; -
+How?;Poppy/Spike/Obadiah/Prudence;;;;;Special case based on context;;;;;;; -
+I can't help thinking about the black side of things;Obadiah;;;about current character;;;;;;;;; -
+I don't believe you sit there and take it all. ;Spike;;(negative);about other people;;;;;;;;; -
+I don't suppose it really matters, though ;Obadiah;;;;;Special;;;;;;; -
+I know just how you feel, what's happened?;Obadiah;sad;;about own feelings;;;;;;;;; -
+I suppose you really think you're something.;Spike;(angry);negative;about current character;;;-1;;;;;; -
+I suppose you really think you're something.;Spike;(happy);positive;(about own feelings);;;1;;;;;; -
+I think you should feel really happy today;Poppy;sad;;;;;;;;;;; -
+I think you should feel really happy today;Poppy;;negative;;;;1;;;;;; -
+I think you've done really well;Poppy;;(negative);;;;1;;;-1;-1;; -
+I understand - but it does no good to be angry;Poppy;angry;(negative);about current character;;;;;;;;; -
+If you're laughing, people won't take you seriously ;Obadiah;;;;;;;;;;;1; -
+I'm not a cynic, I'm a realist;Obadiah;angry;(negative);about current character;;;;;;;;; -
+I'm not angry, I'm just a realist;Spike;(angry);negative;about current character;;;;;;;;; -
+I'm not angry, I'm just a realist;Spike;angry;;about current character;;;;;;;;; -
+I'm not so sure you should be so neutral about it all;Obadiah;;;pragmatic;;;;;;;;; -
+I'm not sure that you should be so enthusiastic. ;Prudence;(happy);positive;(about own feelings);;;1;;;;;; -
+I'm not sure that you should be so enthusiastic. ;Prudence;happy;(positive);about own feelings;;;-1;;;;;; -
+I'm not sure that you should be so pragmatic;Obadiah;;;pragmatic;;;;;;;;; -
+I'm so pleased for you;Poppy;happy;(positive);(about own feelings);;;;;-1;;;1; -
+I'm so pleased for you;Poppy;happy;(positive);(about own feelings);;;;;1;;;; -
+I'm so pleased for you;Poppy;happy;(positive);(about own feelings);;;;1;;;;; -
+I'm so pleased for you;Poppy;happy;(positive);(about own feelings);;;;;;;1;; -
+I'm sure everything will turn out fine;Prudence;sad;;;;;;;1;;;; -
+I'm sure everything will turn out fine;Prudence;sad;;;;;;;;;1;; -
+I'm sure that you can solve the problem, what ever it is ;Prudence;;;;;;;;;;;; -
+is there anyone who could help;Prudence;sad;;;;;-1;;1;;;; -
+is there anyone who could help;Prudence;;negative;;;;-1;;1;;;; -
+is there anyone who could help;Prudence;sad;;;;;-1;;;;1;; -
+is there anyone who could help;Prudence;;negative;;;;-1;;;;1;; -
+is there anyone who could help;Prudence;sad;;about own feelings;;;-1;;;;;; -
+is there anyone who could help;Prudence;;negative;about own feelings;;;-1;;;;;; -
+It can be so painful can't it?;Obadiah;sad;;about own feelings;;;;;;;;; -
+It could all go terribly wrong, though, what do you think?;Obadiah;happy;;;;;;;1;;;; -
+It could all go terribly wrong, though, what do you think?;Obadiah;happy;;;;;;;;;1;; -
+It could all go terribly wrong, though, what do you think?;Obadiah;;positive;;;;;;1;;;; -
+It could all go terribly wrong, though, what do you think?;Obadiah;;positive;;;;;;;;1;; -
+It just makes you so angry! ;Spike;;negative;;;;;1;;;;; -
+It shouldn't happen to a dog;Spike;angry;;;;;;1;;;;; -
+It shouldn't happen to a dog;Spike;;negative;;;;;1;;;;; -
+It's a bloody disgrace;Spike;angry;;;;;;1;;;;; -
+It's a bloody disgrace;Spike;sad;;;;;;1;;;;; -
+It's all too hard, why bother? ;Obadiah;sad;;;;;-1;;;;;; -
+It's always good to be rational;Prudence;;;about own feelings;;agree with emotion ?;;;;;;; -
+It's not natural being so logical ;Obadiah;;;pragmatic;;;;;;;;; -
+Laugh*;Poppy;happy;;;;;;;;;;1; -
+Life's a war, you're either a winner or a loser ;Spike;angry;;about other people;;;;;;;;; -
+Life's a war, you're either a winner or a loser ;Spike;;;pragmatic;;;;;;;;; -
+Life's not fair;Obadiah;sad;(negative);(about own feelings);;;;;;;;; -
+Maybe I misunderstood;Poppy/Spike/Obadiah/Prudence;angry;(negative);about current character;;;;;;;;; -
+Moan, moan, moan, not a bundle of fun really are you? ;Spike;angry;;;;;;;;;;; -
+Oh you're so pragmatic ;Spike;;;about own feelings;;;;;;;;; -
+Oh, yeah, you are oh so reasonable;Spike;(angry);(negative);about current character;;;;;;;;; -
+People can be so hopeless;Obadiah;angry;;about other people;;;;;;;;; -
+People can be so hopeless;Obadiah;sad;;about other people;;;;;;;;; -
+People can be so hopeless;Obadiah;;negative;about other people;;;;;;;;; -
+Perhaps you need to get your mind off it;Prudence;sad;;;;;;;1;;;; -
+Perhaps you need to get your mind off it;Prudence;sad;;;;;;;;;1;; -
+Perhaps you need to take it easy;Prudence;sad;(negative);;;;;;;;;; -
+Really? ;Prudence;;;;;Special;;;;;;; -
+So you just sit there and take everything?;Spike;;negative;about other people;;;;;;;;; -
+So you never get angry at the world? ;Spike;(happy);positive;(about own feelings) / (pragmatic);;;1;;;;;; -
+Stay out of arguments with others ;Prudence;angry;(negative);about other people;;;;;;;;; -
+That should make you very happy. ;Poppy;happy;;;;;;1;;;;; -
+That sounds exciting;Poppy;happy;(positive);;;;;;1;;;; -
+That sounds exciting;Poppy;happy;(positive);;;;;;;;1;; -
+That sounds lovely!;Poppy;happy;(positive);;;;;-1;-1;-1;-1;; -
+that's awfully sad ;Obadiah;sad;(negative);about own feelings;;;;;;;;; -
+That's better.;Prudence;;;;;Special, higher level (positive after negative or the other way around);;;;;;; -
+That's pathetic;Spike;angry;;;;;;1;;;;; -
+That's pathetic;Spike;;negative;;;;;1;;;;; -
+That's the way it goes;Prudence;sad;;;;;;;;;;; -
+They're a right shower;Spike;;;;;Meaning?;;;;;;; -
+Things have a way of sorting themselves out;Poppy;sad;;;;;;;1;;-1;; -
+What about when people let you down? ;Obadiah;happy;(positive);(about other people);;;-1;;;;;; -
+What about when people let you down? ;Obadiah;(happy);positive;about own feelings;;;-1;;;;;; -
+What do you mean?;Poppy/Spike/Obadiah/Prudence;;;;;Special;;;;;;; -
+What exactly is so wonderful about that?;Prudence;happy;;;;;;1;;;;; -
+What exactly is so wonderful about that?;Prudence;happy;;;;;;;1;;;; -
+What exactly is so wonderful about that?;Prudence;happy;;;;;;;;1;;; -
+What exactly is so wonderful about that?;Prudence;happy;;;;;;;;;1;; -
+What makes you say that?;Spike;;;;;Special;;;;;;; -
+What will help you? ;Prudence;sad;(negative);;;;;;1;;;; -
+What will help you? ;Prudence;sad;(negative);;;;;;;;1;; -
+What will help you? ;Prudence;sad;(negative);;;;;;;-1;;; -
+What would help you?;Prudence;sad;(negative);;;;;;;-1;;; -
+What's the matter?;Obadiah;;;;;Special: Do after the first indication of 'sad';;;;;;; -
+What's the worst that can happen?;Poppy;sad;;;;;;;1;;-1;; -
+When was the last time you really said what you meant?;Spike;angry;(negative);about other people;;;;;;;;; -
+When was the last time you really said what you meant?;Spike;(angry);negative;about other people;;;;;;;;; -
+When was the last time you stood up for yourself? ;Spike;(angry);negative;about other people;;;;;;;;; -
+When?;Poppy/Spike/Obadiah/Prudence;;;;;Special;;;;;;; -
+Where do you think it will lead?;Obadiah/Prudence;;;;;Unknown;;;;;;; -
+Where do you think your attitude to life comes from?;Prudence;happy;;about own feelings;;;;;;;;; -
+Where do you think your attitude to life comes from?;Prudence;;positive;about own feelings;;;-1;;;;;; -
+Who are you trying to kid?;Spike;happy;;about own feelings;;;;;;;;; -
+Who are you trying to kid?;Spike;happy;;;;;1;;;;;; -
+Who are you trying to kid?;Spike;;positive;;;;1;;;;;; -
+Who cares? ;Poppy;;;;;Special;;;;;;; -
+Why do allow it to happen? ;Spike;sad;;;;;;1;;;;; -
+Why do allow it to happen? ;Spike;;negative;;;;;1;;;;; -
+Why do you feel hopeful? ;Obadiah;happy;;;;;;;;;;; -
+Why do you feel hopeful? ;Obadiah;;positive;;;;;;;;;; -
+Why do you feel so sure? ;Spike;;positive;;;;;;;;;; -
+Why do you say that? ;Poppy/Spike/Obadiah/Prudence;;;;;Special;;;;;;; -
+Why do you say that? I don't think you're right;Spike;;;;;Special;;;;;;; -
+Why don't you stop moaning and go and tell people what you think of them ;Spike;angry;(negative);;;;;;;;;; -
+Why don't you stop moaning and go and tell people what you think of them ;Spike;sad;(negative);;;;;;;;;; -
+Why should I think that's so good? ;Poppy;happy;;;;;;;;;;; -
+Why should I think that's so good? ;Poppy;;positive;;;;;;;;;; -
+Would you like to talk to someone else;Poppy/Spike/Obadiah/Prudence;;;;;Special;;;;;;; -
+Would you say that you're a little of touch with reality?;Prudence;;;(about own feelings);;;1;;;;;; -
+Would you say you have everything under control. ;Prudence;;;about own feelings;;;;;;;;; -
+Yeah, yeah;Spike;;;;;Unknown;;;;;;; -
+Yeah, yeah, always an answer for everything;Spike;;negative;;;;;;;;;; -
+You can look forward to that! ;Poppy;happy;(positive);;;;;;1;;;-1; -
+You need a good, long rest;Poppy;sad;;;;;;;;;;; -
+You obviously have your head screwed on;Prudence;;;pragmatic;;;;;;;;; -
+you seem a bit flat ;Prudence;sad;(negative);;;;-1;;;;;; -
+you seem a bit flat ;Prudence;sad;;;;;1;;;;;; -
+You should be more assertive ;Spike;angry;;(about other people);;;;;;;;; -
+You should consider everything very carefully;Prudence;(happy);positive;;;;;;-1;;1;; -
+You should remain calm ;Prudence;;;;;Special: empowered emotion, or speaker is busy;;;;;;; -
+You shouldn't have to put up with it;Spike;(angry);negative;about other people;;;;-1;;;;; -
+You shouldn't let people off with it ;Spike;angry;(negative);about other people;;;;;;;;; -
+You shouldn't let people off with it ;Spike;(angry);negative;about other people;;;;;;;;; -
+You sure are Mr/Ms dependable ;Poppy;;;;;Unknown;;;;;;; -
+You won't change things by getting angry!;Prudence;angry;;about current character;;;;;;;;; -
+You won't change things by getting angry!;Prudence;angry;;about other people;;;;;;;;; -
+You won't change things by getting angry!;Prudence;angry;;;;;;;;;;; -
+It just makes you so angry! ;Spike;sad;;;;;;1;;;;; -
+You'll never let anyone down, that's for sure!;Poppy;;;about other people;;;;;;;;; -
+You're a bit of a cold fish, aren't you?;Obadiah;;;pragmatic;;;;;;;;; -
+You're being a bit aggressive;Obadiah;angry;(negative);about other character;;;;;;;;; -
+You're being a bit aggressive;Obadiah;angry;(negative);about other people;;;;;;;;; -
+You're being a bit aggressive;Obadiah;angry;(negative);about current character;;;;;;;;; -
+You're just a stupid romantic, no idea of the real world ;Spike;happy;;about own feelings;;;;;;;;; -
+You're just a stupid romantic, no idea of the real world ;Spike;happy;;;;;1;;;;;; -
+You're just letting them walk all over you ;Spike;(angry);negative;about other people;;;;-1;;;;; -
+You're probably stuck with it ;Obadiah;;;;;Unknown;;;;;;; -
+You're putting a brave face on it ;Obadiah;sad;;(about other character)/(about other people);;;;;;;;; -
+You're putting a brave face on it ;Obadiah;;negative;(about other character)/(about other people);;;;;;;;; -
+You're such a wet blanket, be more proactive!;Spike;(angry);(negative);about other people;;;;;;;;; -
+You've certainly got your head screwed on. ;Poppy;;positive;;;;;;;;;; -
+You've got rights too, you know;Spike;angry;;;;;;1;;;;; -
+You've got to show people who's boss! ;Spike;(angry);negative;about other people;;;;-1;;;;; -
+You've got to show people who's boss! ;Spike;(angry);;about current character;;;;-1;;;;; -
+You've had it rough ;Obadiah;sad;(negative);;;;-1;1;;-1;;; -
+You've had it rough ;Obadiah;(sad);negative;;;;-1;1;;-1;;; -
+You've had it rough ;Obadiah;sad;(negative);;;;-1;-1;;1;;; -
+You've had it rough ;Obadiah;(sad);negative;;;;-1;-1;;1;;; -
+Agree with emotion;Poppy;happy;(positive);(about own feelings);;;-1;;;;;; -
+Agree with emotion;Obadiah;sad;(negative);(about own feelings);;;-1;;;;;; -
+Agree with emotion;Prudence;;;agree;;;;;;;;; -
+Agree with emotion;Prudence;;;pragmatic;;;;;;;;; -
+Agree with emotion;Spike;angry;(negative);(about other people);;;;;;;;; -
+Cheer down;Obadiah/Prudence/Spike;happy;(positive);(about own feelings) / (about other people);;;-1;;;;;; -
+Cheer down;Obadiah/Prudence/Spike;;positive;(about own feelings) / (about other people);;;-1;;;;;; -
+Cheer up;Poppy/Prudence;sad;(negative);(about own feelings) / (about other people);;;-1;;;;;; -
+Cheer up;Poppy/Prudence;;negative;(about own feelings) / (about other people);;;-1;;;;;; -
+Insult;Spike;(angry);(negative);about current character;;;;;;;;; -
+Insult;Spike;;negative;about other people;;;;;;;;; -
