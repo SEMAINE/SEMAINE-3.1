@@ -67,6 +67,7 @@ all: all-before smileLib feaTUMcpp all-after
 
 clean: clean-custom
 	${RM} $(OBJSYNC) $(OBJAREC) $(OBJFT) $(OBJFTcpp) smileLib.a src/maincpp.o $(BIN) svm/svm.o 2>/dev/null
+	${RM} src/*.cpp~ src/*.c~ src/*.h~ src/*.hpp~
 
 smileLib: smileLib.a
 
