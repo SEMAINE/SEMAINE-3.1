@@ -22,8 +22,8 @@ LINKOBJAREC  = src/main_recorder.o src/featum_util.o src/wave-input.o src/wave-o
 LINKOBJSYNC  = src/main_sync.o src/featum_util.o src/wave-input.o src/wave-output.o src/pcm-data.o src/option-parser.o
 
 
-PA_INC = /semaine/dummy/libs/inst/include
-PA_LIB = /semaine/dummy/libs/inst/lib
+PA_INC = ../../../../thirdparty/inst/include
+PA_LIB = ../../../../thirdparty/inst/lib
 
 # use these lines for linux with portaudio installed in ./pa-inst
 #LIBS =  -lc -lm -lrt -lasound -ljack -lpthread -lportaudio 
