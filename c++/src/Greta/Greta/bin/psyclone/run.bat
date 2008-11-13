@@ -1,1 +1,0 @@
-psyclone spec="GretaEVOSpec.xml" verbose=0

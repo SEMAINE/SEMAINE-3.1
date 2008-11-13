@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE fml-apml SYSTEM "fml-apml.dtd" []>
-<fml-apml>
-<fml>
-<backchannel id="p1" type="agreement" start="0.0" end="1.5" importance="1.0"/>
-<backchannel id="p2" type="understanding" start="0.0" end="1.5" importance="1.0"/>
-</fml>
-</fml-apml>

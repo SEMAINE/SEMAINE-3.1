@@ -1,6 +1,0 @@
-COPYRIGHT NOTICE
-
-Copyright © 2006 by Communicative Machines, Inc.
-All rights reserved
-
-The content of these documents is the property of Communicative Machines. Permission to make digital or hard copies of part or all of this work, to distribute for personal or academic use, is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice. For all other use, special permissions are required. Contact info@cmlabs.com. Psyclone is a trademark of Communicative Machines.

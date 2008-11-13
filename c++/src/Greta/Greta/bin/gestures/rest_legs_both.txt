@@ -1,7 +1,0 @@
-// 04/07/2001 14.05
-// REST GESTURE
-GESTURECLASS rest
-GESTUREINSTANCE legs_both
-SIDE BOTH
-STOREDPOSE \\rest\\legs_rest.txt 0.0
-STOREDPOSE \\rest\\legs_rest.txt 1.0

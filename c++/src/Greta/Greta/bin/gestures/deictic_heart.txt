@@ -1,8 +1,0 @@
-// Last modified: 06/07/2001 10.51
-GESTURECLASS deictic
-GESTUREINSTANCE heart
-DURATION 1.0
-SIDE left
-
-STOREDPOSE \\deictic\\heart.txt 0.4
-STOREDPOSE \\deictic\\heart.txt 0.6

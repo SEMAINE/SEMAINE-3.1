@@ -1,1 +1,0 @@
-java -classpath ./;QuickBlending.jar;JavaAIRPlug.jar it.unipg.dipmat.radek.blends.SimpleApplication Properties1.ini

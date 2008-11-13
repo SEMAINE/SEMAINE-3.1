@@ -1,6 +1,0 @@
-// Last modified: 05/07/2001 11.42
-GESTURECLASS performative
-GESTUREINSTANCE greet
-DURATION 1.0
-STOREDPOSE \\greet.txt 0.4
-STOREDPOSE \\greet.txt 0.6

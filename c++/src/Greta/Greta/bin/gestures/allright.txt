@@ -1,8 +1,0 @@
-// Last modified: 05/07/2001 11.42
-GESTURECLASS performative
-GESTUREINSTANCE confirm
-DURATION 1.0
-SIDE both
-
-STOREDPOSE \\allright.txt 0.4
-STOREDPOSE \\allright.txt 0.6

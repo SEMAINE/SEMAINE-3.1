@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE agent SYSTEM "agent.dtd" []>
-<agent name="Agent1" gender="female" age="20" hand="right" origin="native">
-	<baseline reference=""/>
-</agent>

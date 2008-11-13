@@ -1,1 +1,0 @@
-facelibraryviewer radek_greta.ini
