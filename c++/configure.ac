@@ -24,7 +24,7 @@ AC_C_INLINE
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
-
+AC_CHECK_FUNCS([memcpy])
 
 AM_SANITY_CHECK
 AC_LANG_CPLUSPLUS
