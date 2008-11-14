@@ -31,8 +31,8 @@ Cut and resample multi chanenl wave files with trigger signal in N-th channel
 
 */
 
-#define MODULE "main"
-
+#define MODULE "tumsync"
+#include "featum_common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +41,6 @@ Cut and resample multi chanenl wave files with trigger signal in N-th channel
 #include <inttypes.h>
 #include <math.h>
 
-#include "featum_common.h"
 #undef LIVE_REC
 #include "featum_util.h"       //( optional )
 #include "wave-output.h"

@@ -21,11 +21,9 @@
      See the corresponding header file (.h) for documentation!  */
 
 #define MODULE "GENoutput"
- 
+#include "featum_common.h"
+
 /*
-
-
-
 */
 
  
@@ -34,7 +32,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "GENoutput.h"
 

@@ -25,6 +25,7 @@ Utility functions shared among all modules and classes:
         
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+#include "featum_common.h"
 
 #include <stdio.h>
 #include <inttypes.h>

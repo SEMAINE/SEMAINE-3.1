@@ -23,6 +23,7 @@
 global config variables for LLD extractors
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+#include "featum_common.h"
 
 #include <stdio.h>
 #include "LLDs.h"

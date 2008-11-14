@@ -34,7 +34,8 @@ framing (multiple framesizes possible)
 
 
 */
-#define MODULE "main"
+#define MODULE "tumrecorder_main"
+#include "featum_common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +44,6 @@ framing (multiple framesizes possible)
 #include <inttypes.h>
 #include <math.h>
 
-#include "featum_common.h"
 #ifndef LIVE_REC
 #warning compiling main_recorder.c without LIVE_REC support enabled!
 #endif

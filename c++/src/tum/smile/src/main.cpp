@@ -19,6 +19,7 @@
 
 
 #define MODULE "main"
+#include "featum_common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,14 +28,7 @@
 #include <inttypes.h>
 #include <math.h>
 
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
-
-
-/*
-
-#include "pcm-process.h"
-*/
 #ifdef LIVE_REC
 #include "live-input.hpp"
 #endif

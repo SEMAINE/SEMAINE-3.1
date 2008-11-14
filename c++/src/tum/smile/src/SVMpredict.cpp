@@ -20,13 +20,8 @@
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-This class saves features from featureMemory in CSV format
+Get frames from the feature memory and pass on to LibSVM for classification
 
-input can be joined from multiple levels in the featureMemory
-However, the levels must have the same frameStep!
-
-Merging data from asynchronus level might be supported in the future
- (then frames from levels with greater frameStep will be duplicated, etc.)
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
  
 

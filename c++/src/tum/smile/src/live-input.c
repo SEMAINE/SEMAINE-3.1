@@ -31,6 +31,7 @@
 // probably it should be changed after n bytes have been READ from the file
 // since curPosBlocks is the file block pointer and should have nothing to do with the ringbuffer
 
+#include "featum_common.h"
 
 #include <stdio.h>
 #include <strings.h>
@@ -38,7 +39,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <strings.h>
-#include "featum_common.h"
 
 #ifdef LIVE_REC
 

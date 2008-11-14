@@ -23,10 +23,10 @@
  
  // this file contains the function definitions and the private class data
 #define MODULE "audio-stream"
+#include "featum_common.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "featum_common.h"
 #include "featum_util.h"       
 #include "audio-stream.h"
 #include "wave-input.h"

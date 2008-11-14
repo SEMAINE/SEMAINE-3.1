@@ -21,13 +21,13 @@
      See the corresponding header file (.h) for documentation!  */
 
 #define MODULE "ARFFoutput"
- 
+#include "featum_common.h"
+
  // this file contains the function definitions and the private class data
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "ARFFoutput.h"
 

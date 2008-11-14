@@ -18,11 +18,12 @@
  *******************************************************************************/
  
  /* See the corresponding header file (.h) for documentation! */
- #define MODULE "input-framer"
+#define MODULE "input-framer"
+#include "featum_common.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "featum_common.h"
+
 #include "featum_util.h" 
 #include "input-framer.h"
  

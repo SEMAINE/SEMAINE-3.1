@@ -21,14 +21,14 @@
      See the corresponding header file (.h) for documentation!  */
 
 #define MODULE "Functionals"
- 
+#include "featum_common.h"
+
  // this file contains the function definitions and the private class data
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "functionals.h"
 

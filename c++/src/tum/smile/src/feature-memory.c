@@ -21,7 +21,8 @@
      See the corresponding header file (.h) for documentation!  */
 
 #define MODULE "feature-memory"
- 
+#include "featum_common.h"
+
  // TODOOOO: implement a compatible featureMemoryRB  with ringbuffer capabilities & absolute indicies (possibly warping)
  
  // this file contains the function definitions and the private class data
@@ -30,7 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
-#include "featum_common.h"
+
 #include "featum_util.h"       //( optional )
 #include "feature-memory.h"
 #include "LLDs.h"

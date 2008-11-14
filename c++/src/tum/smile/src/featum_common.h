@@ -27,6 +27,10 @@ Common defines and typedefs
 #ifndef __FEATUM_COMMON_H
 #define __FEATUM_COMMON_H
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 // compile on windows
 //#define __WINDOWS
 #define USE_FOPEN 1

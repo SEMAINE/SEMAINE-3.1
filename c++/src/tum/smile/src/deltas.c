@@ -21,6 +21,7 @@
      See the corresponding header file (.h) for documentation!  */
 
 #define MODULE "Deltas"
+#include "featum_common.h"
  
  // this file contains the function definitions and the private class data
 
@@ -28,7 +29,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "deltas.h"
 
@@ -150,6 +150,8 @@ int deltas_compute( pDeltas obj, int id )
 #undef FUNCTION 
 
 
+// nFramesContext == 0 is a special case... it's the 'incorrect(?)' simple differential, where 2 neighboring values are subtracted
+// nFramesContext == 1 would correspond to a normal differential with left and right 
 inline LONG_IDX oIdxToIidx0 (LONG_IDX oIdx, int nFramesContext) {
   // computes first index for diff. window over input frames         
   if (nFramesContext == 0) { return oIdx-1; }
@@ -169,8 +171,6 @@ int deltas_computeNext( pDeltas obj, int id )
 #define FUNCTION "deltas_computeNext"
 {_FUNCTION_ENTER_
 
-// nFramesContext == 0 is a special case... it's the 'incorrect(?)' simple differential, where 2 neighboring values are subtracted
-// nFramesContext == 1 would correspond to a normal differential with left and right 
 
   int olevel, ilevel, nFramesContext;
   

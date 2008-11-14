@@ -19,8 +19,9 @@
  
  /*  IMPLEMENTATION of the class <waveOutput>
      See the corresponding header file (.h) for documentation!  */
- #define MODULE "wave-output"
- 
+#define MODULE "wave-output"
+#include "featum_common.h"
+
  // this file contains the function definitions and the private class data
 
 #include <stdio.h>
@@ -35,7 +36,6 @@
 #include <string.h>  // for memcpy function
 #endif 
 
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "wave-output.h"
 #include "pcm-data.h"

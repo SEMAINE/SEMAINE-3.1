@@ -20,13 +20,14 @@
  /*  IMPLEMENTATION of the class <classTemplate>
      See the corresponding header file (.h) for documentation!  */
  
- #define MODULE "option-parser"
+#define MODULE "option-parser"
+#include "featum_common.h"
+
  // commandline option parser and config file reader
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "option-parser.h"
 

@@ -24,6 +24,7 @@ This files contains functions for managing pcm data buffers
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 #define MODULE "pcm-buffer"
+#include "featum_common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +43,6 @@ extern double
 extern float
      roundf(float x);
      
-#include "featum_common.h"
 #include "featum_util.h"
 #include "pcm-data.h"
 

@@ -21,13 +21,13 @@
      See the corresponding header file (.h) for documentation!  */
 
 #define MODULE "LLDlpc"
- 
+#include "featum_common.h"
+
  // this file contains the function definitions and the private class data
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "feature-memory.h"
 //#include "LLDlpc.h"

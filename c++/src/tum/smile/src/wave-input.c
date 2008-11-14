@@ -19,8 +19,9 @@
  
  /*  IMPLEMENTATION of the class <waveInput>
      See the corresponding header file (.h) for documentation!  */
- #define MODULE "wave-input"
- 
+#define MODULE "wave-input"
+#include "featum_common.h"
+
  // this file contains the function definitions and the private class data
 
 //!!!! TODO: check correct handling of obj->curPosBlocks !!! 
@@ -39,7 +40,6 @@
 #include <string.h>  // for memcpy function
 #endif 
 
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "wave-input.h"
 #include "pcm-data.h"

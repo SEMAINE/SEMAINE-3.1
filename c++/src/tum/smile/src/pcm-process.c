@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *******************************************************************************/
 #define MODULE "pcmProcess"
+#include "featum_common.h"
 
  // Functions for simple processing and analysis of pcmBuffers
  // see pcm-process.h for more detailed documentation
@@ -33,7 +34,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "featum_common.h"
 #include "featum_util.h"       //( optional )
 #include "pcm-process.h"
 

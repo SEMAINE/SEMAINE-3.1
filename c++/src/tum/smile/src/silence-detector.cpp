@@ -1,3 +1,11 @@
+/*
+ * featum silence/turn detector
+ * first , simple, energy based version
+ * (C) 2008 by Florian Eyben, TUM. All rights reserved.
+ *
+ */
+
+#include "featum_common.h"
 
 #include <stdio.h>
 #include "silence-detector.hpp"

@@ -281,6 +281,7 @@ Appendix :
     w[] and ip[] are compatible with all routines.
 */
 
+#include "featum_common.h"
 
 void cdft(int n, int isgn, double *a, int *ip, double *w)
 {
