@@ -229,7 +229,7 @@ public class SemaineMary extends Component
 			}
 			if (stylesheet == null) {
 	            StreamSource stylesheetStream =
-	                new StreamSource(  SpeechBMLRealiser.class.getResourceAsStream("BML2SSML.xsl"));     
+	                new StreamSource(  SemaineMary.class.getResourceAsStream("BML2SSML.xsl"));     
 	            stylesheet = tFactory.newTemplates(stylesheetStream);
 	        }
 			transformer = stylesheet.newTransformer();
@@ -250,7 +250,7 @@ public class SemaineMary extends Component
 			request.process();
 			request.writeOutputData(realisedOS);
 			//Merge realised acoustics into output format
-			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("BML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SemaineMary.class.getResourceAsStream("BML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
 			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
 			//System.out.println("BML Realiser: "+finalData);
 			// SSML to AUDIO using MARY 
