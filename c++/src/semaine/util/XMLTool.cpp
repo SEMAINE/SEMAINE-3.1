@@ -8,6 +8,7 @@
  */
 
 #include "XMLTool.h"
+#include <typeinfo>
 
 using namespace XERCES_CPP_NAMESPACE;
 
