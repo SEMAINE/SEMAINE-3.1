@@ -40,6 +40,15 @@ throw (SystemConfigurationException)
 	featureNames = aFeatureNames;
 }
 
+int FeatureSender::areFeatureNamesSet()
+{
+	if (featureNames.empty()) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
 void FeatureSender::sendFeatureVector(const std::vector<float> & features, long long usertime)
 throw(CMSException, SystemConfigurationException)
 {

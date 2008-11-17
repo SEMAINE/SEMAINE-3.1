@@ -75,6 +75,12 @@ public:
 	throw (SystemConfigurationException);
 
 	/**
+	 * Returns 1, when feature names were already set and 0 otherwise. 
+	 *
+	 */
+	int areFeatureNamesSet();
+
+	/**
 	 * Provides access to the array of feature names. May be useful for debugging.
 	 * @return the internal feature names array.
 	 */
