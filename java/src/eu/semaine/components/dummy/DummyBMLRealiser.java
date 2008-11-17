@@ -5,26 +5,17 @@
 package eu.semaine.components.dummy;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.jms.JMSException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import eu.semaine.components.Component;
-import eu.semaine.datatypes.xml.BML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
-import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.sender.Sender;
 import eu.semaine.util.SEMAINEUtils;
-import eu.semaine.util.XMLTool;
 
 /**
  * This dummy action selection accepts all candidates.
@@ -80,6 +71,6 @@ public class DummyBMLRealiser extends Component
         dummyFAPData = dummyFAPData2;
         nextIsOne = true;
     }
-		fapSender.sendTextMessage(dummyFAPData, System.currentTimeMillis());
+		fapSender.sendTextMessage(dummyFAPData, meta.getTime());
 	}
 }

@@ -18,7 +18,7 @@ dnl
 dnl  This Macro File defines functions that help to manage the libraries
 dnl  dependance on the Xerces Library.
 dnl
-dnl  XERCES_CONFIGURE_XERCES()
+dnl  XERCES_CONFIGURE_XERCES([required-version])
 dnl
 dnl  Check configure options and assign variables related to
 dnl  the XERCES Library.
@@ -26,7 +26,7 @@ dnl
 
 AC_DEFUN([XERCES_CONFIGURE_XERCES],
 [
-  AX_LIB_XERCES
+  AX_LIB_XERCES([$1])
 
   if test $HAVE_XERCES = "no" ; then
     XERCES_DOWNLOAD_XERCES

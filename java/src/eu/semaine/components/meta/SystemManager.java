@@ -59,6 +59,12 @@ public class SystemManager extends Component implements MessageListener
 		log.info("System is "+(ready ? "" : "not ")+"ready");
 		Message m = iobase.getSession().createMessage();
 		m.setBooleanProperty(MetaMessenger.SYSTEM_READY, ready);
+		if (ready) {
+			// When we get ready, we set the system time to 0
+			// Alternatively, we could set it to System.currentTimeMillis(),
+			// which would set all clocks to this process's system clock.
+			m.setLongProperty(MetaMessenger.SYSTEM_READY_TIME, 0);
+		}
 		producer.send(m);
 		lastReportSystemReady = ready;
 	}

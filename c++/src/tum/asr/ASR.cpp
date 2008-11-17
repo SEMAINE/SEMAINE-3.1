@@ -209,7 +209,7 @@ void ASR::act() throw(CMSException)
 					XMLTool::setAttribute(interpretation, EMMA::A_CONFIDENCE, confstring);
 					XMLTool::setAttribute(text, SemaineML::A_NAME, sentence);
 					// Now send it
-					emmaSender->sendXML(document, decaf::lang::System::currentTimeMillis());
+					emmaSender->sendXML(document, meta.getTime());
 				}
 			}
 	 	}

@@ -34,6 +34,7 @@ public:
 	static const std::string COMPONENT_NAME;
 	static const std::string COMPONENT_STATE;
 	static const std::string SYSTEM_READY;
+	static const std::string SYSTEM_READY_TIME;
 
 	MetaMessenger(const std::string & componentName) throw(CMSException);
 	
@@ -42,6 +43,16 @@ public:
 	virtual void onMessage(const Message * m);
 
 	bool isSystemReady();
+	
+	/**
+	 * Get the current time in common, normalised time space.
+	 * Processes should use only this method for determining the time.
+	 * The value is counting milliseconds since some arbitrary point
+	 * in time; therefore, the absolute time is not informative,
+	 * but differences of time values are. 
+	 * @return
+	 */
+	long long getTime();
 
 
 private:
@@ -49,9 +60,10 @@ private:
 	MessageProducer * producer;
 	MessageConsumer * consumer;
 	bool systemReady;
+	long long timeDelta;
 
 	void setSystemReady(bool ready);	
-
+	void setTime(long long systemTime);
 
 };
 

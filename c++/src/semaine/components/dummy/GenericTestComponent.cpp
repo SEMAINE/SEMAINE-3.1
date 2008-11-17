@@ -9,7 +9,6 @@
 
 #include "GenericTestComponent.h"
 
-#include <decaf/lang/System.h>
 #include <decaf/lang/Thread.h>
 
 using namespace semaine::cms::receiver;
@@ -38,7 +37,7 @@ GenericTestComponent::~GenericTestComponent()
 
 void GenericTestComponent::act() throw(CMSException)
 {
-	long long time = decaf::lang::System::currentTimeMillis();
+	long long time = meta.getTime();
 	if (time - lastMessageTime > boredTime) {
 		senders.front()->sendTextMessage("I'm bored", time);
 		lastMessageTime = time;
@@ -53,7 +52,7 @@ void GenericTestComponent::react(SEMAINEMessage * message) throw(CMSException)
 	std::string text = message->getText();
 	std::cout << text << std::endl;
 	decaf::lang::Thread::sleep(1000);
-	long long time = decaf::lang::System::currentTimeMillis();
+	long long time = meta.getTime();
 	senders.front()->sendTextMessage("Hello there", time);
 	lastMessageTime = time;
 }

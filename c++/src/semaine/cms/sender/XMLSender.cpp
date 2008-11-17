@@ -24,7 +24,6 @@ XMLSender::XMLSender(const std::string & topicName, const std::string & datatype
 throw(CMSException, SystemConfigurationException) :
 	Sender(topicName, datatype, source)
 {
-	setupXMLStuff();
 }
 
 XMLSender::XMLSender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
@@ -32,14 +31,11 @@ XMLSender::XMLSender(const std::string & cmsUrl, const std::string & cmsUser, co
 throw (CMSException, SystemConfigurationException) :
 	Sender(cmsUrl, cmsUser, cmsPassword, topicName, datatype, source)
 {
-	setupXMLStuff();
 }
 
 
 XMLSender::~XMLSender()
 {
-	writer->release();
-	writer = NULL;
 }
 
 
@@ -57,44 +53,10 @@ throw(CMSException, SystemConfigurationException)
 		throw SystemConfigurationException("XML sender is expected to be event-based, but sender is in periodic mode.");
 	if (!isConnectionStarted)
 		throw SystemConfigurationException("Connection is not started!");
-	MemBufFormatTarget * output = new MemBufFormatTarget();
-	writer->writeNode(output, *document);
-	const XMLByte * buf = output->getRawBuffer();
-	//int len = output->getLen();
-	std::string xmlString((const char *)buf);
+	const std::string xmlString = XMLTool::dom2string(document);
 	sendTextMessage(xmlString, usertime, event);
 }
 
-
-void XMLSender::setupXMLStuff()
-throw (SystemConfigurationException)
-{
-	try {
-		XMLCh tempStr[100];
-		//XMLString::transcode("LS", tempStr, 99);
-		//XMLCh * ls = XMLString::transcode("LS");
-		//DOMImplementation * impl = DOMImplementationRegistry::getDOMImplementation(ls);
-		//XMLString::release(&ls);
-		DOMImplementation * impl = XMLTool::getDOMImplementation();
-		DOMImplementationLS * implLS = dynamic_cast<DOMImplementationLS *>(impl);
-		if (implLS == NULL) {
-			throw new SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*impl).name());
-		}
-		writer = implLS->createDOMWriter();
-		XMLString::transcode("UTF-8", tempStr, 99);
-		writer->setEncoding(tempStr);
-	} catch (XMLException &xe) {
-		char * err = XMLString::transcode(xe.getMessage());
-		std::cerr << err << std::endl;
-		XMLString::release(&err);
-		throw SystemConfigurationException("Cannot initialise XML system");
-	} catch (DOMException &de) {
-		char * err = XMLString::transcode(de.getMessage());
-		std::cerr << err << std::endl;
-		XMLString::release(&err);
-		throw SystemConfigurationException("Cannot initialise XML system");
-	}
-}
 
 } // namespace sender
 } // namespace cms

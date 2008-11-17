@@ -16,13 +16,21 @@ namespace semaine {
 namespace util {
 
 XercesDOMParser * XMLTool::parser;
+DOMImplementationLS * XMLTool::impl;
 
 void XMLTool::startupXMLTools()
+throw (SystemConfigurationException)
 {
     XMLPlatformUtils::Initialize();
 	parser = new XercesDOMParser();
     //parser->setValidationScheme(XercesDOMParser::Val_Always);    
-	parser->setDoNamespaces(true);
+	parser->setDoNamespaces(true);	XMLCh tempStr[100];
+	XMLString::transcode("LS", tempStr, 99);
+	DOMImplementation * anImpl = DOMImplementationRegistry::getDOMImplementation(tempStr);
+	impl = dynamic_cast<DOMImplementationLS *>(anImpl);
+	if (impl == NULL) {
+		throw new SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*anImpl).name());
+	}
 }
 
 void XMLTool::shutdownXMLTools()
@@ -35,11 +43,7 @@ void XMLTool::shutdownXMLTools()
 
 DOMImplementation * XMLTool::getDOMImplementation()
 {
-	XMLCh tempStr[100];
-	XMLString::transcode("LS", tempStr, 99);
-	DOMImplementation * impl = DOMImplementationRegistry::getDOMImplementation(tempStr);
-	//DOMImplementationLS * implLS = dynamic_cast<DOMImplementationLS *>(impl);
-	return impl;
+	return (DOMImplementation *) impl;
 }
 
 
@@ -249,6 +253,47 @@ const std::string XMLTool::transcode(const XMLCh * xmlString)
 }
 
 
+const std::string XMLTool::dom2string(const DOMDocument * doc)
+{
+	if (doc == NULL) return std::string("");
+	try {
+		XMLCh utf8[10];
+		XMLString::transcode("UTF-8", utf8, 9);
+		MemBufFormatTarget * outTarget = new MemBufFormatTarget();
+#if (_XERCES_VERSION < 30000)
+		DOMWriter * writer = impl->createDOMWriter();
+		writer->setEncoding(utf8);
+		writer->writeNode(outTarget, *doc);
+		const XMLByte * buf = outTarget->getRawBuffer();
+		//int len = outTarget->getLen();
+		std::string result((const char *)buf);
+		writer->release();		
+#else
+		DOMLSSerializer * serializer = impl->createLSSerializer();
+		DOMLSOutput * output = impl->createLSOutput();
+		output->setEncoding(utf8);
+		output->setByteStream(outTarget);
+		serializer->write(doc, output);
+		const XMLByte * buf = outTarget->getRawBuffer();
+		//int len = outTarget->getLen();
+		std::string result((const char *)buf);
+		serializer->release();
+		output->release();
+#endif
+		return result;
+	} catch (XMLException &xe) {
+		char * err = XMLString::transcode(xe.getMessage());
+		std::cerr << err << std::endl;
+		XMLString::release(&err);
+		throw SystemConfigurationException("Cannot initialise XML system");
+	} catch (DOMException &de) {
+		char * err = XMLString::transcode(de.getMessage());
+		std::cerr << err << std::endl;
+		XMLString::release(&err);
+		throw SystemConfigurationException("Cannot initialise XML system");
+	}
+	
+}
 
 
 

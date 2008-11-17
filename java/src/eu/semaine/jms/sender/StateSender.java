@@ -14,7 +14,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.ls.LSOutput;
 
 import eu.semaine.datatypes.stateinfo.StateInfo;
-import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 

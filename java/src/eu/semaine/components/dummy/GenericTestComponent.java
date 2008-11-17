@@ -24,7 +24,7 @@ public class GenericTestComponent extends Component
 	protected void act()
 	throws JMSException
 	{
-		long time = System.currentTimeMillis();
+		long time = meta.getTime();
 		if (time - lastMessageTime > boredTime) {
 			senders.get(0).sendTextMessage("I'm bored", time);
 			lastMessageTime = time;
@@ -43,7 +43,7 @@ public class GenericTestComponent extends Component
 		} catch (InterruptedException ie) {
 			log.debug("sleep interrupted", ie);
 		}
-		long time = System.currentTimeMillis();
+		long time = meta.getTime();
 		senders.get(0).sendTextMessage("Hello there", time);
 		lastMessageTime = time;
 	}

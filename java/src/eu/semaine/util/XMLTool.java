@@ -5,7 +5,6 @@
 package eu.semaine.util;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;

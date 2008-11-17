@@ -19,21 +19,7 @@
 #include <semaine/cms/sender/Sender.h>
 #include <semaine/cms/exceptions/SystemConfigurationException.h>
 
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLString.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/framework/MemBufFormatTarget.hpp>
-
-#if defined(XERCES_NEW_IOSTREAMS)
-  #include <iostream>
-#else
-  #include <iostream.h>
-#endif
-
-
-
+#include <semaine/util/XMLTool.h>
 
 
 using namespace cms;
@@ -89,10 +75,6 @@ protected:
 	virtual void fillMessageProperties(Message * message, long long usertime)
 	throw(CMSException);
 
-private:
-	XERCES_CPP_NAMESPACE::DOMWriter * writer;
-
-	void setupXMLStuff() throw (SystemConfigurationException);
 };
 
 } // namespace sender

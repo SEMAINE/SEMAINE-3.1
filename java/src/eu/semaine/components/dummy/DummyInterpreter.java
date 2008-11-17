@@ -111,7 +111,7 @@ public class DummyInterpreter extends Component
 	@Override
 	public void act() throws JMSException
 	{
-		long time = System.currentTimeMillis();
+		long time = meta.getTime();
 		// Example for a change with no relation to any messages:
 		// every ten seconds, the agent's emotional state changes
 		if (time - lastEmotionChangeTime > 10000) {

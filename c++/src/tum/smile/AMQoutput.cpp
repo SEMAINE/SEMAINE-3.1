@@ -84,7 +84,7 @@ int cAmqOutput::sendCurrentFrame() {
     for (i=0; i<n; i++) 
       features[i] = (float)(vec->data[i]);
 
-    featureSender->sendFeatureVector(features, decaf::lang::System::currentTimeMillis());
+    featureSender->sendFeatureVector(features, meta.getTime());
     
     _FUNCTION_RETURN_(1);
 }

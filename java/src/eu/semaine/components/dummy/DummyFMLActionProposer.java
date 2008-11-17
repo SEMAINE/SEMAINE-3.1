@@ -92,7 +92,7 @@ public class DummyFMLActionProposer extends Component
 	public void act() throws JMSException
 	{
 		// As a speaker, say something every 4 seconds.
-		long time = System.currentTimeMillis();
+		long time = meta.getTime();
 		if (time - lastTimeISaidSomething > 4000 &&
 				"agent".equals(dialogStateReceiver.getCurrentBestGuess("speaker"))) {
 			String emotion = agentStateReceiver.getCurrentBestGuess("emotion-quadrant");

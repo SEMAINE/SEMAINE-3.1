@@ -66,7 +66,7 @@ public class DummyBMLActionProposer extends Component
 	public void act() throws JMSException
 	{
 		// When in the listener role, we nod every second
-		long time = System.currentTimeMillis();
+		long time = meta.getTime();
 		if (time - lastTimeINodded > 1000 &&
 				"user".equals(dialogStateReceiver.getCurrentBestGuess("speaker"))) {
 			Document doc = XMLTool.newDocument(BML.BML, BML.namespace, BML.version);
@@ -91,7 +91,7 @@ public class DummyBMLActionProposer extends Component
 				Element root = doc.getDocumentElement();
 				Element face = XMLTool.appendChildElement(root, BML.FACE);
 				face.setAttribute(BML.TYPE, "smile");
-				bmlSender.sendXML(doc, System.currentTimeMillis(), Event.start);
+				bmlSender.sendXML(doc, meta.getTime(), Event.start);
 				smiling = true;
 			} else if (features[2] > 0.99 && smiling) { // arbitrary
 				// stop smiling
@@ -99,7 +99,7 @@ public class DummyBMLActionProposer extends Component
 				Element root = doc.getDocumentElement();
 				Element face = XMLTool.appendChildElement(root, BML.FACE);
 				face.setAttribute(BML.TYPE, "smile");
-				bmlSender.sendXML(doc, System.currentTimeMillis(), Event.end);
+				bmlSender.sendXML(doc, meta.getTime(), Event.end);
 				smiling = false;
 			}
 		} else if (m instanceof SEMAINEEmmaMessage) {

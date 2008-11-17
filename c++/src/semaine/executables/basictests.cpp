@@ -14,10 +14,10 @@
 #include <semaine/cms/sender/Sender.h>
 #include <semaine/components/Component.h>
 #include <semaine/system/ComponentRunner.h>
-
-#include <xercesc/framework/MemBufFormatTarget.hpp>
+#include <semaine/util/XMLTool.h>
 
 using namespace XERCES_CPP_NAMESPACE;
+using namespace semaine::util;
 
 void testCMSLogger()
 {
@@ -62,13 +62,7 @@ void testXML()
 {
 	std::string myXML = std::string("<semaine:text xmlns:semaine=\"http://www.semaine-project.eu\">this is what the user said</semaine:text>");
 	
-	XercesDOMParser* parser = new XercesDOMParser();
-    //parser->setValidationScheme(XercesDOMParser::Val_Always);    
-	parser->setDoNamespaces(true);
-	const char * msgTextC = myXML.c_str();
-	MemBufInputSource* memIS = new MemBufInputSource((const XMLByte *)msgTextC, strlen(msgTextC), "test", false);
-    parser->parse(*memIS);
-	DOMDocument * document = parser->getDocument();
+	DOMDocument * document = XMLTool::parse(myXML);
 	DOMElement * root = document->getDocumentElement();
 	char * tagName = XMLString::transcode(root->getTagName());
 	char * nameSpace = XMLString::transcode(root->getNamespaceURI());
@@ -79,25 +73,9 @@ void testXML()
 	XMLString::release(&nameSpace);
 	XMLString::release(&textContent);
 
-	std::cout << "serialising using a DOMWriter:" << std::endl;
-	XMLCh tempStr[100];
-	XMLString::transcode("LS", tempStr, 99);
-	DOMImplementation * impl = DOMImplementationRegistry::getDOMImplementation(tempStr);
-	DOMImplementationLS * implLS = dynamic_cast<DOMImplementationLS *>(impl);
-	if (implLS == NULL) {
-		throw new SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*impl).name());
-	}
-	DOMWriter * writer = implLS->createDOMWriter();
-	XMLString::transcode("UTF-8", tempStr, 99);
-	writer->setEncoding(tempStr);
-	MemBufFormatTarget * output = new MemBufFormatTarget();
-	writer->writeNode(output, *document);
-	const XMLByte * buf = output->getRawBuffer();
-	//int len = output->getLen();
-	std::string xmlString((const char *)buf);
-	std::cout << xmlString << std::endl;
+	std::cout << "serialising:" << std::endl;
+	std::cout << XMLTool::dom2string(document) << std::endl;
 	
-	writer->release();
 	document->release();
 }
 
@@ -105,10 +83,10 @@ void testXML()
 int main () {
 	try {
 		semaine::util::XMLTool::startupXMLTools();
+		testXML();
 		testCMSLogger();
 		testReceiver();
 		testSender();
-		testXML();
 		semaine::util::XMLTool::shutdownXMLTools();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();

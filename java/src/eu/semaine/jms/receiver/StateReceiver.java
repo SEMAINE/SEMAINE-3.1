@@ -12,7 +12,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.message.SEMAINEAgentStateMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 

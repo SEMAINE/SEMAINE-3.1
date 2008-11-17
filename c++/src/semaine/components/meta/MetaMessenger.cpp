@@ -9,6 +9,8 @@
 
 #include "MetaMessenger.h"
 
+#include <decaf/lang/System.h>
+
 namespace semaine {
 namespace components {
 namespace meta {
@@ -65,7 +67,15 @@ namespace meta {
 		}
 	}
 
-
+	void MetaMessenger::setTime(long long systemTime)
+	{
+		timeDelta = systemTime - decaf::lang::System::currentTimeMillis();
+	}
+	
+	long long MetaMessenger::getTime()
+	{
+		return decaf::lang::System::currentTimeMillis() + timeDelta;
+	}
 
 
 } // namespace meta

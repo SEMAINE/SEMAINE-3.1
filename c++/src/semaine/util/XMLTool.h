@@ -14,6 +14,7 @@
 #include <semaine/config.h>
 
 #include <semaine/cms/exceptions/MessageFormatException.h>
+#include <semaine/cms/exceptions/SystemConfigurationException.h>
 
 #include <list>
 
@@ -22,6 +23,7 @@
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
+#include <xercesc/framework/MemBufFormatTarget.hpp>
 
 #if defined(XERCES_NEW_IOSTREAMS)
   #include <iostream>
@@ -41,7 +43,9 @@ public:
 	/**
 	 * This needs to be called once before any of the methods here can be used.
 	 */
-	static void startupXMLTools();
+	static void startupXMLTools()
+	throw (SystemConfigurationException);
+
 	/**
 	 * This should be called to clean up after the code is done.
 	 */
@@ -220,9 +224,15 @@ public:
 	 */
 	static std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getChildrenByTagNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
 	 throw(MessageFormatException);
+	 
+	 /**
+	  * Serialise the given DOM document to a std::string.
+	  */
+	 static const std::string dom2string(const XERCES_CPP_NAMESPACE::DOMDocument * doc);
 
 private:
-	static 	XERCES_CPP_NAMESPACE::XercesDOMParser * parser;
+	static XERCES_CPP_NAMESPACE::XercesDOMParser * parser;
+	static XERCES_CPP_NAMESPACE::DOMImplementationLS * impl;
 	
 };
 

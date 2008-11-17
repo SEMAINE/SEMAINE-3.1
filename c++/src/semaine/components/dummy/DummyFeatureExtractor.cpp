@@ -11,7 +11,6 @@
 
 #include <cstdlib>
 #include <sstream>
-#include <decaf/lang/System.h>
 
 namespace semaine {
 namespace components {
@@ -56,7 +55,7 @@ void DummyFeatureExtractor::act() throw(CMSException)
 	//std::ostringstream msg;
 	//msg << "sending feature vector with " << features.size() << " features.";
 	//log->debug(msg.str());
-	featureSender->sendFeatureVector(features, decaf::lang::System::currentTimeMillis());
+	featureSender->sendFeatureVector(features, meta.getTime());
 }
 
 

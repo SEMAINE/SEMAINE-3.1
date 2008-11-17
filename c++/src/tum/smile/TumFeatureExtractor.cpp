@@ -15,7 +15,6 @@
 
 #include <cstdlib>
 #include <sstream>
-#include <decaf/lang/System.h>
 
 #include <semaine/util/XMLTool.h>
 #include <semaine/datatypes/xml/EMMA.h>
@@ -556,7 +555,7 @@ void TumFeatureExtractor::act() throw(CMSException)
 					XMLTool::setAttribute(valence, EmotionML::A_VALUE, valStr);
 					
 					// Now send it
-					emmaSender->sendXML(document, decaf::lang::System::currentTimeMillis());
+					emmaSender->sendXML(document, meta.getTime());
 
 /*
           printf("<emotion>\n");

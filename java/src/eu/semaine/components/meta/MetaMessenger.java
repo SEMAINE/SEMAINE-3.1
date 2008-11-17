@@ -10,7 +10,6 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
 
-import eu.semaine.components.Component;
 import eu.semaine.components.Component.State;
 import eu.semaine.jms.IOBase;
 
@@ -26,11 +25,13 @@ public class MetaMessenger extends IOBase implements MessageListener
 	public static final String COMPONENT_NAME = "ComponentName";
 	public static final String COMPONENT_STATE = "ComponentState";
 	public static final String SYSTEM_READY = "SystemReady";
+	public static final String SYSTEM_READY_TIME = "SystemReadyTime";
 	
 	private String componentName;
 	private MessageProducer producer;
 	private MessageConsumer consumer;
 	private boolean systemReady = false;
+	private long timeDelta;
 	
 	public MetaMessenger(String componentName)
 	throws JMSException
@@ -58,6 +59,9 @@ public class MetaMessenger extends IOBase implements MessageListener
 		try {
 			assert m.propertyExists(SYSTEM_READY) : "message should contain header field '"+SYSTEM_READY+"'";
 			setSystemReady(m.getBooleanProperty(SYSTEM_READY));
+			if (m.propertyExists(SYSTEM_READY_TIME)) {
+				setTime(m.getLongProperty(SYSTEM_READY_TIME));
+			}
 		} catch (JMSException e) {
 			e.printStackTrace(System.err);
 		}
@@ -72,5 +76,23 @@ public class MetaMessenger extends IOBase implements MessageListener
 	public synchronized boolean isSystemReady()
 	{
 		return systemReady;
+	}
+	
+	private void setTime(long systemTime)
+	{
+		timeDelta = systemTime - System.currentTimeMillis();
+	}
+	
+	/**
+	 * Get the current time in common, normalised time space.
+	 * Processes should use only this method for determining the time.
+	 * The value is counting milliseconds since some arbitrary point
+	 * in time; therefore, the absolute time is not informative,
+	 * but differences of time values are. 
+	 * @return
+	 */
+	public long getTime()
+	{
+		return System.currentTimeMillis() + timeDelta;
 	}
 }

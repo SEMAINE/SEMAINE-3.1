@@ -55,6 +55,6 @@ public class DummyFeatureExtractor extends Component
 			features[i] = random.nextFloat();
 		}
 		//log.debug("sending feature vector with "+features.length+" features");
-		featureSender.sendFeatureVector(features, System.currentTimeMillis());
+		featureSender.sendFeatureVector(features, meta.getTime());
 	}
 }
