@@ -624,7 +624,7 @@ public class UtteranceProposer extends Component
 		speech.setAttribute(BML.ID, "s1");
 		Element text = XMLTool.appendChildElement(speech, BML.TEXT);
 		text.setTextContent(response);
-		fmlSender.sendXML(doc, System.currentTimeMillis());
+		fmlSender.sendXML(doc, meta.getTime());
 		
 	}
 }

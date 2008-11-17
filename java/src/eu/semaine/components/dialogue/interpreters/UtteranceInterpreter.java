@@ -258,7 +258,7 @@ public class UtteranceInterpreter extends Component
 		System.out.println("Analysis: " + act.toString());
 		Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
-		interpretation.setAttribute(EMMA.START, String.valueOf(System.currentTimeMillis()));
+		interpretation.setAttribute(EMMA.START, String.valueOf(meta.getTime()));
 		interpretation.setAttribute( "processed", "true" );
 		Element text = XMLTool.appendChildElement(interpretation, SemaineML.TEXT, SemaineML.namespace);
 		text.setTextContent( act.getUtterance() );
@@ -334,7 +334,7 @@ public class UtteranceInterpreter extends Component
 		}
 		
 		try {
-			userStateSender.sendXML(document, System.currentTimeMillis());
+			userStateSender.sendXML(document, meta.getTime());
 		}catch( JMSException e ){}
 	}
 

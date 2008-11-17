@@ -64,7 +64,7 @@ public class TestGui extends Component
 	private String outputText = "++++++++ Welcome ++++++++";
 	
 	/* The last time a keypress was registered */
-	public long lastTickTime = System.currentTimeMillis();
+	public long lastTickTime = meta.getTime();
 	
 	/* A boolean to check if the GUI is started or not */
 	private boolean started = false;
@@ -284,9 +284,10 @@ public class TestGui extends Component
 	 */
 	public void keyPressed()
 	{
-		lastTickTime = System.currentTimeMillis();
+		lastTickTime = meta.getTime();
 		if( !typing ) {
 			typing = true;
+			lastTickTime = meta.getTime();
 			//sendSpeakingSignal();
 		}
 	}
@@ -302,9 +303,9 @@ public class TestGui extends Component
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
 		Element text = XMLTool.appendChildElement(interpretation, SemaineML.TEXT, SemaineML.namespace);
 		text.setTextContent( line );
-		interpretation.setAttribute(EMMA.START, String.valueOf(System.currentTimeMillis()));
+		interpretation.setAttribute(EMMA.START, String.valueOf(meta.getTime()));
 		try {
-			userStateSender.sendXML(document, System.currentTimeMillis(), Event.single);
+			userStateSender.sendXML(document, meta.getTime(), Event.single);
 		}catch( JMSException e ){}
 	}
 	
@@ -322,7 +323,7 @@ public class TestGui extends Component
 		}
 
 		try {
-			featureSender.sendFeatureVector(features, System.currentTimeMillis());
+			featureSender.sendFeatureVector(features, meta.getTime());
 		}catch( JMSException e ){e.printStackTrace();}
 	}
 	
@@ -335,8 +336,13 @@ public class TestGui extends Component
 		features[0] = -15;
 		features[1] = 0;
 		try {
-			featureSender.sendFeatureVector(features, System.currentTimeMillis());
+			featureSender.sendFeatureVector(features, meta.getTime());
 		}catch( JMSException e ){e.printStackTrace();}
+	}
+	
+	public long getTime()
+	{
+		return meta.getTime();
 	}
 }
 
@@ -424,7 +430,7 @@ class MyTimer extends Thread
 			} catch( InterruptedException e ) {
 				e.printStackTrace();
 			}
-			if( gui.lastTickTime + 200 < System.currentTimeMillis() && gui.typing ) {
+			if( gui.lastTickTime + 200 < gui.getTime() && gui.typing ) {
 				gui.typing = false;
 				//gui.sendSilenceSignal();
 			}

@@ -83,13 +83,13 @@ public class TurnTakingInterpreter extends Component
 	@Override
 	public void act() throws JMSException
 	{
-		if( pauseTime != 0 && turntakingState == State.USER_SPEAKING && pauseTime + 1500 < System.currentTimeMillis() ) {
-			changeTurnState( true, System.currentTimeMillis() );
+		if( pauseTime != 0 && turntakingState == State.USER_SPEAKING && pauseTime + 1500 < meta.getTime() ) {
+			changeTurnState( true, meta.getTime() );
 			turntakingState = State.AGENT_WAITING;
-			pauseTime = System.currentTimeMillis();
-		} else if( pauseTime != 0 && turntakingState == State.AGENT_WAITING && pauseTime + 5000 < System.currentTimeMillis() ) {
-			changeTurnState( true, System.currentTimeMillis() );
-			pauseTime = System.currentTimeMillis();
+			pauseTime = meta.getTime();
+		} else if( pauseTime != 0 && turntakingState == State.AGENT_WAITING && pauseTime + 5000 < meta.getTime() ) {
+			changeTurnState( true, meta.getTime() );
+			pauseTime = meta.getTime();
 		}
 	}
 	
@@ -115,7 +115,7 @@ public class TurnTakingInterpreter extends Component
 		*/
 		
 		if( isSilence(m) ) {
-			pauseTime = System.currentTimeMillis();
+			pauseTime = meta.getTime();
 		} else if( isSpeaking(m) ) {
 			if( turntakingState == State.AGENT_WAITING ) {
 				turntakingState = State.USER_SPEAKING;

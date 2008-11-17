@@ -52,6 +52,7 @@ public class SpeakingAnalyser extends Component
 			for( int i=0; i<featureNames.length; i++ ) {
 				String name = featureNames[i];
 				if( name.equals("logEnergy") ) {
+					
 					float value = featuresValues[i];
 					logEnergyBuffer.putValue(value);
 					ArrayList<Float> values = logEnergyBuffer.getValues();
@@ -122,7 +123,7 @@ public class SpeakingAnalyser extends Component
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
 		Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.BEHAVIOUR, SemaineML.namespace);
 		behaviour.setAttribute( SemaineML.NAME, "speaking" );
-		userStateSender.sendXML(document, System.currentTimeMillis(), Event.single);
+		userStateSender.sendXML(document, meta.getTime(), Event.single);
 	}
 	
 	public void sendSilent() throws JMSException
@@ -131,6 +132,6 @@ public class SpeakingAnalyser extends Component
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
 		Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.BEHAVIOUR, SemaineML.namespace);
 		behaviour.setAttribute( SemaineML.NAME, "silence" );
-		userStateSender.sendXML(document, System.currentTimeMillis(), Event.single);
+		userStateSender.sendXML(document, meta.getTime(), Event.single);
 	}
 }
