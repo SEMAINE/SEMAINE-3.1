@@ -66,6 +66,9 @@ public class TestGui extends Component
 	/* The last time a keypress was registered */
 	public long lastTickTime = System.currentTimeMillis();
 	
+	/* A boolean to check if the GUI is started or not */
+	private boolean started = false;
+	
 	/* A boolean to keep track if the user is typing or not */
 	public boolean typing = false;
 	
@@ -90,7 +93,7 @@ public class TestGui extends Component
 		super("GUI");
 		userStateSender = new EmmaSender("semaine.data.state.user", "GUI");
 		senders.add(userStateSender); // so it can be started etc
-		featureSender = new FeatureSender("semaine.data.analysis.dummy", "", "GUI", 10);
+		featureSender = new FeatureSender("semaine.data.analysis.features.voice", "", "GUI", 10);
 		String[] featureNames = new String[2];
 		featureNames[0] = "logEnergy";
 		featureNames[1] = "F0strength";
@@ -102,10 +105,17 @@ public class TestGui extends Component
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
 		
-		MyTimer timer = new MyTimer(this);
-		//timer.start();
-		
 		initGui();
+	}
+	
+	public void act()
+	{
+		if( !started ) {
+			MyTimer timer = new MyTimer(this);
+			timer.start();
+			System.out.println("Started");
+			started = true;
+		}
 	}
 	
 	/**
@@ -172,15 +182,15 @@ public class TestGui extends Component
 			if (interpretation != null) {
 				List<Element> texts = em.getTextElements(interpretation);
 				for (Element text : texts) {
-					/*
+					
 					String utterance = text.getTextContent();
 					if( utterance != null ) {
 						return utterance;
 					}
-					*/
+					/*
 					if( text.getAttribute("name") != null ) {
 						return text.getAttribute("name");
-					}
+					}*/
 				}
 			}
 		}
@@ -287,6 +297,7 @@ public class TestGui extends Component
 	 */
 	public void sendUtterance( String line )
 	{
+		System.out.println("Sending line");
 		Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
 		Element text = XMLTool.appendChildElement(interpretation, SemaineML.TEXT, SemaineML.namespace);
@@ -407,11 +418,6 @@ class MyTimer extends Thread
 	
 	public void run()
 	{
-		try {
-			Thread.sleep(3000);
-		} catch( InterruptedException e ) {
-			e.printStackTrace();
-		}
 		while( !stop ) {
 			try {
 				Thread.sleep(10);

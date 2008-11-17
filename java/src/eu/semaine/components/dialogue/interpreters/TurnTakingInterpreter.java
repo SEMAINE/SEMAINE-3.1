@@ -100,6 +100,7 @@ public class TurnTakingInterpreter extends Component
 	@Override
 	public void react( SEMAINEMessage m ) throws JMSException
 	{
+		/* old
 		System.out.print(".");
 		if( processSpeakingFeatures(m) ) {
 			if( userSpeaking ) {
@@ -111,10 +112,8 @@ public class TurnTakingInterpreter extends Component
 				pauseTime = System.currentTimeMillis();
 			}
 		}
+		*/
 		
-		
-		
-		/* old
 		if( isSilence(m) ) {
 			pauseTime = System.currentTimeMillis();
 		} else if( isSpeaking(m) ) {
@@ -123,87 +122,6 @@ public class TurnTakingInterpreter extends Component
 			}
 			pauseTime = 0;
 		}
-		*/
-	}
-	
-	/**
-	 * Processes the speaking-features and update the speaking/listening state
-	 * @param m
-	 */
-	public boolean processSpeakingFeatures(SEMAINEMessage m) throws JMSException
-	{
-		if( m instanceof SEMAINEFeatureMessage ) {
-			System.out.println(m.getText());
-			SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage)m;
-			String[] featureNames = fm.getFeatureNames();
-			float[] featuresValues = fm.getFeatureVector();
-			for( int i=0; i<featureNames.length; i++ ) {
-				String name = featureNames[i];
-				if( name.equals("logEnergy") ) {
-					float value = featuresValues[i];
-					logEnergyBuffer.putValue(value);
-					ArrayList<Float> values = logEnergyBuffer.getValues();
-					float avg = 0;
-					for( Float f : values ) {
-						if( f != null ) {
-							avg = avg + f;
-						}
-					}
-					avg = avg / values.size();
-					if( userSpeaking ) {
-						if( avg < -10 ) {
-							userSpeaking = false;
-							System.out.println("User silent");
-							return true;
-						}
-					} else {
-						if( avg > -8 ) {
-							System.out.println("User speaking");
-							userSpeaking = true;
-							return true;
-						}
-					}
-					
-				} else if( name.equals("F0strength") ) {
-					float value = featuresValues[i];
-					foStrengthBuffer.putValue(value);
-					ArrayList<Float> values = foStrengthBuffer.getValues();
-					
-					boolean hasPeaks = false;
-					int peakCount = 0;
-					int peakSubCount = 0;
-					float threshold;
-					if( userSpeaking ) {
-						threshold = 0.45f;
-					} else {
-						threshold = 0.55f;
-					}
-					for( Float f : values ) {
-						if( f != null ) {
-							if( f >= threshold ) {
-								peakSubCount++;
-								
-							} else {
-								if( peakSubCount >= 3 ) {
-									peakCount++;
-									peakSubCount = 0;
-								}
-							}
-						}
-					}
-					if( peakCount >= 3 && !userSpeaking ) {
-						userSpeaking = true;
-						System.out.println("User speaking");
-						return true;
-					} else if( peakCount < 3 & userSpeaking ) {
-						userSpeaking = false;
-						System.out.println("User silent");
-						return true;
-					}
-				}
-			}
-		}
-		return false;
 	}
 
 	
@@ -214,7 +132,6 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public boolean isSilence( SEMAINEMessage m ) throws JMSException
 	{
-		/* This code should be used when the silence-behaviour is send in an EMMA message
 		if( m instanceof SEMAINEEmmaMessage ) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			Element interpretation = em.getTopLevelInterpretation();
@@ -230,7 +147,9 @@ public class TurnTakingInterpreter extends Component
 			}
 		}
 		return false;
-		*/
+		
+		
+		/* old
 		if( m instanceof SEMAINEFeatureMessage ) {
 			SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage)m;
 			String[] featureNames = fm.getFeatureNames();
@@ -247,6 +166,7 @@ public class TurnTakingInterpreter extends Component
 			}
 		}
 		return false;
+		*/
 	}
 	
 	/**
@@ -256,7 +176,6 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public boolean isSpeaking( SEMAINEMessage m ) throws JMSException
 	{
-		/* This code should be used when the silence-behaviour is send in an EMMA message
 		if( m instanceof SEMAINEEmmaMessage ) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			Element interpretation = em.getTopLevelInterpretation();
@@ -272,7 +191,8 @@ public class TurnTakingInterpreter extends Component
 			}
 		}
 		return false;
-		*/
+		
+		/* old
 		if( m instanceof SEMAINEFeatureMessage ) {
 			SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage)m;
 			String[] featureNames = fm.getFeatureNames();
@@ -289,6 +209,7 @@ public class TurnTakingInterpreter extends Component
 			}
 		}
 		return false;
+		*/
 	}
 	
 	/**
