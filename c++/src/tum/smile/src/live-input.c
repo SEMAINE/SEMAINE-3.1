@@ -118,9 +118,8 @@ _FUNCTION_ENTER_
   LONG_IDX copied = 0;
   LONG_IDX tocopy = tmpBuf->nBlocks;
   #ifndef USE_PORTAUDIO
-  FEATUM_DEBUG(11,"readblocks = %i (to copy)",readblocks);  
-  FEATUM_DEBUG(12,"obj->maxBufferSizeBlocks = %i , obj->buffer.nBlocksAlloc = %i", obj->maxBufferSizeBlocks, obj->buffer.nBlocksAlloc);      
-  FEATUM_DEBUG(12,"obj->idxCurEnd = %i",obj->idxCurEnd);
+  //FEATUM_DEBUG(12,"obj->maxBufferSizeBlocks = %i , obj->buffer.nBlocksAlloc = %i", obj->maxBufferSizeBlocks, obj->buffer.nBlocksAlloc);      
+  //FEATUM_DEBUG(12,"obj->idxCurEnd = %i",obj->idxCurEnd);
   #endif
   
   // check for space in buffer and if necessary, limit "tocopy" length
@@ -133,10 +132,10 @@ _FUNCTION_ENTER_
     tocopy = free;
   }
   if (tocopy <= 0) {
-    obj->rbLock = 0;
     #ifndef USE_PORTAUDIO
     _FUNCTION_RETURN_(0);  // TODO: maybe timeout counter here, after when 0 will be returned?
     #else
+    obj->rbLock = 0;
     return 0;
     #endif
   }
@@ -170,9 +169,9 @@ _FUNCTION_ENTER_
   obj->rbLock = 0;
   #endif
             
-  #ifndef USE_PORTAUDIO
+/*  #ifndef USE_PORTAUDIO
   FEATUM_DEBUG(12,"(at end) obj->idxCurEnd = %i",obj->idxCurEnd);
-  #endif
+  #endif*/
   
   #ifdef USE_PORTAUDIO
   return 1;
@@ -194,8 +193,12 @@ _FUNCTION_ENTER_
 */
 static int liveInput_pa_recordCallback( const void *inputBuffer, void *outputBuffer,
                            unsigned long framesPerBuffer,
+#ifdef HAVE_PORTAUDIO_V19
                            const PaStreamCallbackTimeInfo* timeInfo,
                            PaStreamCallbackFlags statusFlags,
+#else // V18 (old API)
+                           PaTimestamp outTime,
+#endif
                            void *userData )
 {
   pLiveInput obj = (pLiveInput)userData;
@@ -203,7 +206,7 @@ static int liveInput_pa_recordCallback( const void *inputBuffer, void *outputBuf
   if (obj == NULL) { return paAbort; }
   if (obj->abort) { return paAbort; }
   if (obj->bufWrapper == NULL) { return paAbort; }
-//printf("fpb: %i\n",framesPerBuffer);
+
   pPcmBuffer b = pcmBufferMakeWrapper( obj->bufWrapper, (LONG_IDX)framesPerBuffer, obj->parameters.nChan, 
                                obj->parameters.sampleType, MEMORGA_INTERLV, obj->parameters.sampleRate, inputBuffer);
   if (b!=NULL) {
@@ -225,13 +228,17 @@ int liveInput_startRecording (pLiveInput obj)
 
     if (obj == NULL) _FUNCTION_RETURN_(0);
     if (obj->paFrames == 0) _FUNCTION_RETURN_(0);
+#ifdef HAVE_PORTAUDIO_V19
     if (Pa_IsStreamActive( obj->stream ) == 1) {
+#else
+    if (Pa_StreamActive( obj->stream ) == 1) {
+#endif
       FEATUM_WARNING(3,"stream is already active!");
       _FUNCTION_RETURN_(1);                       
     }
     
     FEATUM_DEBUG(4,"nChan=%i nBPS=%i sampleRate=%i\n",obj->parameters.nChan, obj->parameters.nBPS, obj->parameters.sampleRate);
-    inputParameters.device = Pa_GetDefaultInputDevice(); /* default input device */
+    inputParameters.device = obj->deviceId; //Pa_GetDefaultInputDevice(); /* default input device */
     inputParameters.channelCount = obj->parameters.nChan;
     switch (obj->parameters.sampleType) {
       case SAMPLETYPE_I8: inputParameters.sampleFormat = paInt8; break;
@@ -242,21 +249,35 @@ int liveInput_startRecording (pLiveInput obj)
       default:
         FEATUM_ERROR_FATAL(1,"invalid number of bits requested: %i (allowed: 8, 16, 24, 32)\n",obj->parameters.nBPS);
     }
+
+#ifdef HAVE_PORTAUDIO_V19
     inputParameters.suggestedLatency =
       Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency;
     inputParameters.hostApiSpecificStreamInfo = NULL;
+#endif
 
     obj->bufWrapper  = pcmBufferMakeWrapper( obj->bufWrapper, 0, 1, SAMPLETYPE_I16, 0, 0, NULL);
     /* Setup recording stream -------------------------------------------- */
     err = Pa_OpenStream(
               &(obj->stream),
+#ifdef HAVE_PORTAUDIO_V19
               &inputParameters,
               NULL,                  /* &outputParameters, */
+#else // V18 (old API)
+              inputParameters.device,
+              inputParameters.channelCount,
+              inputParameters.sampleFormat,
+              NULL,
+              paNoDevice, 0, 0, NULL,
+#endif
               obj->parameters.sampleRate,
               obj->paFrames,
+#ifndef HAVE_PORTAUDIO_V19
+              1,
+#endif
               paClipOff,      /* we won't output out of range samples so don't bother clipping them */
               liveInput_pa_recordCallback,
-              obj );
+              (void*) obj );
     if( err != paNoError ) {
         FEATUM_ERROR_FATAL(0,"error opening portaudio recording stream (code %i) (check samplerate! -> %i)\n",err,obj->parameters.sampleRate);
         _FUNCTION_RETURN_(0);
@@ -439,7 +460,11 @@ int liveInput_listDevices(void)
   // query devices:
   int numDevices;
 
+#ifdef HAVE_PORTAUDIO_V19
   numDevices = Pa_GetDeviceCount();
+#else
+  numDevices = Pa_CountDevices();
+#endif
   FEATUM_MESSAGE(0, "There are %i audio devices:\n", numDevices );
   if( numDevices <= 0 )
   {
@@ -449,7 +474,11 @@ int liveInput_listDevices(void)
   }
 
   const PaDeviceInfo *deviceInfo;
+#ifdef HAVE_PORTAUDIO_V19
   printf("  The default device is #%i\n",Pa_GetDefaultInputDevice());
+#else
+  printf("  The default device is #%i\n",Pa_GetDefaultInputDeviceID());
+#endif
 
   int i;
   for( i=0; i<numDevices; i++ )
@@ -506,17 +535,13 @@ pLiveInput liveInput_create( pLiveInput obj, const char *devicename, int deviceI
        _FUNCTION_RETURN_(NULL);      
      }
 
-     #ifndef USE_PORTAUDIO
-     obj->fd = -1;
-     liveInput_getBlkSize( obj );
-     // ??
-     //if (maxBuf > obj->blkSize) maxBuf = obj->blkSize;
-     //if (maxBuf < 2*obj->blkSize) maxBuf = 2*obj->blkSize;
-     #endif
-     
      #ifdef USE_PORTAUDIO
      if (deviceId < 0) {
+     #ifdef HAVE_PORTAUDIO_V19
        deviceId = Pa_GetDefaultInputDevice();
+     #else
+       deviceId = Pa_GetDefaultInputDeviceID();
+     #endif
      }
      const PaDeviceInfo *deviceInfo;
      deviceInfo = Pa_GetDeviceInfo( deviceId );
@@ -524,9 +549,13 @@ pLiveInput liveInput_create( pLiveInput obj, const char *devicename, int deviceI
        strncpy((char *)&(obj->devicename),deviceInfo->name,sizeof(obj->devicename));
        FEATUM_MESSAGE(2,"Recording from device \"%s\" [id=%i]",deviceInfo->name, deviceId);
      }
+     obj->deviceId = deviceId;
      #else
+     obj->fd = -1;
+     liveInput_getBlkSize( obj );
      strncpy((char *)&(obj->devicename),devicename,sizeof(obj->devicename));
      #endif
+
      obj->parameters.sampleType = sampleType; // pcmBitsToSampleType( bits );
      obj->parameters.nBPS = pcmSampleTypeToNBPS( obj->parameters.sampleType );
      obj->parameters.sampleRate = samplerate;
@@ -763,13 +792,21 @@ int liveInput_reloadBuffer( pLiveInput obj )
     // instead wait for buffer to be filled by callback and then return...
     obj->bufUpdate = 0;
     obj->rbLock = 0;
+#ifdef HAVE_PORTAUDIO_V19
     status = Pa_IsStreamActive( obj->stream );
+#else
+    status = Pa_StreamActive( obj->stream );
+#endif
     //if (status != 1) Pa_Sleep(1);
     int cnt = 0;
     while ((obj->bufUpdate == 0)&&(status==1) &&(cnt<200) ) { //&&( status == 1 )
       Pa_Sleep(1);
       FEATUM_DEBUG(9,"wait for data loop...%i\n",cnt);
+#ifdef HAVE_PORTAUDIO_V19
       status = Pa_IsStreamActive( obj->stream );
+#else
+      status = Pa_StreamActive( obj->stream );
+#endif
       cnt++;
     }
     if (cnt>=200) {

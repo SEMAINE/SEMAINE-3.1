@@ -57,7 +57,10 @@ Common defines and typedefs
 
 // use the portaudio library for sound recording (and possibly later playback)
 //#ifdef __WINDOWS
+#ifdef HAVE_PORTAUDIO
 #define USE_PORTAUDIO 1
+#endif
+
 #define LIVE_REC 1
 //#endif
 #define ENABLE_FUNCTIONALS

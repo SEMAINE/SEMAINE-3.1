@@ -77,6 +77,7 @@ typedef struct {
   int              abort;
   
   #ifdef USE_PORTAUDIO
+  int              deviceId;
   PaStream*        stream;
   int              bufUpdate;  // set to 1 after each buffer update via the callback function
   pPcmBuffer       bufWrapper;
@@ -107,6 +108,26 @@ typedef struct {
   
 } sLiveInput;
 typedef sLiveInput* pLiveInput;
+
+
+#ifndef HAVE_PORTAUDIO_V19
+
+// define struct from V19 for compatibility ...
+typedef struct PaStreamParameters
+{
+    PaDeviceID device;
+    int channelCount;
+    PaSampleFormat sampleFormat;
+    long suggestedLatency;
+    void *hostApiSpecificStreamInfo;
+
+} PaStreamParameters;
+
+#define paContinue 0
+#define paAbort    1
+
+#endif
+
 
 // list available audio devices  (object does not have to be created)
 int liveInput_listDevices(void);
