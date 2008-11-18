@@ -11,13 +11,14 @@ package eu.semaine.datatypes.xml;
 public class BML 
 {
     public static final String version = "1.0";
-    public static final String namespace = "org.mindmakers.bml";
+    public static final String namespace = "http://www.mindmakers.org/projects/BML";
 
     // Elements
     public static final String BML = "bml";
 	public static final String ROOT_TAGNAME = BML;
 	public static final String SPEECH = "speech";
 	public static final String TEXT = "text";
+	public static final String LANGUAGE = "language";
 	public static final String SYNC = "sync";
 	public static final String DESCRIPTION = "description";
 	public static final String HEAD = "head";
