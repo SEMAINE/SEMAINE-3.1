@@ -281,7 +281,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	/*************************** create output objects *****************************/
 	// ActiveMQ output for 10ms low-level features (periodic)
 	//if (opts->amqout != NULL) {
-		amqLowLevel = new cAmqOutput( *ftMem, featureSender );
+		amqLowLevel = new cAmqOutput( *ftMem, featureSender, &meta );
 		#define nAMQels 9
 		sElID amqEls[nAMQels];
 		// energy:

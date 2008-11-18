@@ -38,13 +38,13 @@ Merging data from asynchronus level might be supported in the future
 #include <sstream>
 #include <decaf/lang/System.h>
 
-cAmqOutput::cAmqOutput( cFeatureMemory &mem, FeatureSender *_featureSender ) : 
-	cGenOutput(mem)
+cAmqOutput::cAmqOutput( cFeatureMemory &mem, FeatureSender *_featureSender, MetaMessenger * _meta ) : 
+	cGenOutput(mem),
+        featureSender(_featureSender),
+        meta(_meta)
 {
-
-  // connect ??
-  featureSender = _featureSender; 
-
+  //featureSender = _featureSender; 
+  //MetaMessenger = _meta;
 }
 
 cAmqOutput::~cAmqOutput()
@@ -84,8 +84,11 @@ int cAmqOutput::sendCurrentFrame() {
     for (i=0; i<n; i++) 
       features[i] = (float)(vec->data[i]);
 
-    featureSender->sendFeatureVector(features, meta.getTime());
-    
+    if (meta != NULL) {
+      featureSender->sendFeatureVector(features, meta->getTime());
+    } else {
+      featureSender->sendFeatureVector(features, 0);
+    }
     _FUNCTION_RETURN_(1);
 }
 

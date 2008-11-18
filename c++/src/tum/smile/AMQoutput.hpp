@@ -46,7 +46,7 @@ class cAmqOutput : public cGenOutput {
   public:
     // _data is declared in base class cGenOutput !!
     
-    cAmqOutput( cFeatureMemory &mem, FeatureSender * _featureSender );
+    cAmqOutput( cFeatureMemory &mem, FeatureSender * _featureSender, MetaMessenger * _meta );
     
     static int writeFrame( pGenOutput obj, pOutputVector vec );
     
@@ -56,6 +56,7 @@ class cAmqOutput : public cGenOutput {
     ~cAmqOutput ();
 
   private:
+    MetaMessenger * meta;
     FeatureSender * featureSender;
 
 };
