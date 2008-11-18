@@ -16,9 +16,16 @@ exclude-result-prefixes="bml mary #default"
   </xsl:template>
 
   <xsl:template match="bml:speech">
-    <xsl:apply-templates/>
-        <xsl:apply-templates select="document('semaine.mary.intonation')">
-    </xsl:apply-templates>
+    <speech>	
+        <xsl:copy-of select="@id"/>  
+	<xsl:copy-of select="@type"/> 
+	<xsl:copy-of select="@voice"/> 
+	<xsl:copy-of select="@language"/>
+        <xsl:copy-of select="@text"/> 
+	<xsl:copy-of select="@speed_sym"/> 
+        <xsl:apply-templates/>
+        <xsl:apply-templates select="document('semaine.mary.intonation')"/>
+    </speech>
   </xsl:template>
 
   <xsl:template match="mary:*">
