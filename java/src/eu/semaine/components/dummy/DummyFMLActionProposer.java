@@ -109,8 +109,10 @@ public class DummyFMLActionProposer extends Component
 			fml.setAttribute(FML.ID, "fml1");
 			Element speech = XMLTool.appendChildElement(bml, BML.SPEECH);
 			speech.setAttribute(BML.ID, "s1");
-			Element text = XMLTool.appendChildElement(speech, BML.TEXT);
-			text.setTextContent(utterance);
+			speech.setAttribute(BML.TEXT, utterance);
+			speech.setAttribute(BML.LANGUAGE, "en_US");
+			speech.setTextContent(utterance);
+			
 			fmlSender.sendXML(doc, time);
 			lastTimeISaidSomething = time;
 		}
