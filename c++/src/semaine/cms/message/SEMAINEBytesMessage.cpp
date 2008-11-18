@@ -10,6 +10,27 @@
 #include "SEMAINEBytesMessage.h"
 
 #include <sstream>
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
+
+#ifndef HAVE_MEMCPY
+void * memcpy(void *s1, void *s2, int n) 
+{
+  int i;
+  if (n % sizeof(int) == 0) {
+    int *s1i = (int*)s1;
+    int *s2i = (int*)s2;
+    for (i=0; i<n; n += sizeof(int)) { *s1i = *s2i; s1i++; s2i++; }
+
+  } else {
+    char *s1c = (char*)s1;
+    char *s2c = (char*)s2;
+    for (i=0; i<n; n++) { *s1c = *s2c; s1c++; s2c++; }
+  } 
+  return s1;
+}
+#endif
 
 namespace semaine {
 namespace cms {
