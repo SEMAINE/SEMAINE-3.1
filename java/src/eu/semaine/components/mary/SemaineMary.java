@@ -89,7 +89,8 @@ public class SemaineMary extends Component
 	private BytesSender audioSender;
 	
 	private static TransformerFactory tFactory = null;
-	private static Templates stylesheet = null;
+	private static Templates fml2ssmlStylesheet = null;
+	private static Templates bml2ssmlStylesheet = null;
     private Transformer transformer;
     
 	/**
@@ -116,7 +117,16 @@ public class SemaineMary extends Component
 	
 	protected void customStartIO() throws JMSException{
 		
-	    try {
+		try {
+			if (tFactory == null) {
+	            tFactory = TransformerFactory.newInstance();
+			 }
+	    	StreamSource stylesheetStream =
+		        new StreamSource( SemaineMary.class.getResourceAsStream(          
+		                 "FML2SSML.xsl"));
+			fml2ssmlStylesheet = tFactory.newTemplates(stylesheetStream);
+			stylesheetStream = new StreamSource(  SemaineMary.class.getResourceAsStream("BML2SSML.xsl"));     
+			bml2ssmlStylesheet = tFactory.newTemplates(stylesheetStream);
         	long startTime = System.currentTimeMillis();
         	Mary.addJarsToClasspath();
             // Read properties:
@@ -132,7 +142,6 @@ public class SemaineMary extends Component
             });
             System.err.println(" started in " + (System.currentTimeMillis()-startTime)/1000. + " s");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -152,14 +161,17 @@ public class SemaineMary extends Component
 			speechBMLRealiser(m);
 		}
 		if(m.getTopicName().equals("semaine.data.action.selected.behaviour")){
-			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
-			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+			//SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
+			//fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
 		}
 		
 	}
 	
 	
-	// Speech Preprocessor
+	
+	/**
+	 * Speech Preprocessor
+	 */
 	private void speechPreProcessor(SEMAINEMessage m) throws JMSException{	
 		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
@@ -175,16 +187,7 @@ public class SemaineMary extends Component
 			//inputDoc = builder.parse(new InputSource(new FileReader("dataformat1.xml")));
 			//inputText = XMLTool.document2String(inputDoc);
 			
-			if (tFactory == null) {
-	            tFactory = TransformerFactory.newInstance();
-			 }
-			if (stylesheet == null) {
-		        StreamSource stylesheetStream =
-		        new StreamSource( SemaineMary.class.getResourceAsStream(          
-		                 "FML2SSML.xsl"));
-		        stylesheet = tFactory.newTemplates(stylesheetStream);
-		     }
-			transformer = stylesheet.newTransformer();
+			transformer = fml2ssmlStylesheet.newTransformer();
 			transformer.transform(new DOMSource(inputDoc), new StreamResult(ssmlos));
 				
 			Reader reader = new StringReader(ssmlos.toString());
@@ -197,18 +200,19 @@ public class SemaineMary extends Component
 			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
 			
 		} catch (TransformerConfigurationException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	
+	/**
+	 * speech BML Realiser
+	 * @param m
+	 * @throws JMSException
+	 */
 	private void speechBMLRealiser(SEMAINEMessage m) throws JMSException{
 		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
@@ -218,23 +222,8 @@ public class SemaineMary extends Component
 
 		try {
 			
-			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			//factory.setNamespaceAware(true);
-			//DocumentBuilder builder = factory.newDocumentBuilder();
-			//input = builder.parse(new InputSource(new FileReader("dataformat3.xml")));
-			
-			// Extracting SSML content from BML
-			if (tFactory == null) {
-            tFactory = TransformerFactory.newInstance();
-			}
-			if (stylesheet == null) {
-	            StreamSource stylesheetStream =
-	                new StreamSource(  SemaineMary.class.getResourceAsStream("BML2SSML.xsl"));     
-	            stylesheet = tFactory.newTemplates(stylesheetStream);
-	        }
-			transformer = stylesheet.newTransformer();
+			transformer = bml2ssmlStylesheet.newTransformer();
 			transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
-			//String inputText = XMLTool.document2String(input);
 			
 			// SSML to Realised Acoustics using MARY 
 			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
@@ -242,7 +231,6 @@ public class SemaineMary extends Component
 	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
 	            af, AudioSystem.NOT_SPECIFIED);
 			Request request = new Request(MaryDataType.get("SSML"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.US,voice,"","",1,aff);
-			
 			
 			Reader reader = new StringReader(ssmlos.toString());
 			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
@@ -252,7 +240,7 @@ public class SemaineMary extends Component
 			//Merge realised acoustics into output format
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SemaineMary.class.getResourceAsStream("BML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
 			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
-			//System.out.println("BML Realiser: "+finalData);
+			
 			// SSML to AUDIO using MARY 
 	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.US, 
 	            voice, "", "", 1, aff);
@@ -265,13 +253,10 @@ public class SemaineMary extends Component
 			
 			
 		} catch (TransformerConfigurationException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	

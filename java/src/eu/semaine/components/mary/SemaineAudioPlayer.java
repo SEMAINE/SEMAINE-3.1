@@ -100,8 +100,7 @@ public class SemaineAudioPlayer extends Component
 	            	AudioPlayer player = new AudioPlayer(ais);
 					player.start();
 					player.join();
-					sleep(1000);
-					//this.wait(300);
+					//sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} 
