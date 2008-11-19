@@ -46,7 +46,7 @@ if BUILD_featumamq
   bin_PROGRAMS += featumamq
 
   featumamq_SOURCES = \
-	featum.cpp \
+	src/featum.cpp \
         src/audio-stream.c \
         src/wave-input.c \
         src/wave-output.c \
@@ -76,8 +76,8 @@ if BUILD_featumamq
         src/pcm-data.c \
         src/option-parser.c \
         src/fftsg.c \
-	AMQoutput.cpp \
-	TumFeatureExtractor.cpp \
+	src/AMQoutput.cpp \
+	src/TumFeatureExtractor.cpp \
 	svm/svm.cpp
   featumamq_CPPFLAGS =  $(PORTAUDIO_CPPFLAGS) $(SEMAINEAPI_CPPFLAGS)
   featumamq_LDADD = $(PORTAUDIO_LDFLAGS) $(SEMAINEAPI_LDFLAGS) -lm

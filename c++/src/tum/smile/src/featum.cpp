@@ -9,7 +9,7 @@
 #include <semaine/components/Component.h>
 #include <semaine/system/ComponentRunner.h>
 
-#include <tum/smile/TumFeatureExtractor.h>
+#include "TumFeatureExtractor.h"
 #undef MODULE
 #define MODULE "featum_main"
 #undef FUNCTION

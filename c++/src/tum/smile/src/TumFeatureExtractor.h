@@ -29,27 +29,27 @@
 #include <inttypes.h>
 #include <math.h>
 
-#include <tum/smile/src/featum_common.h>
-#include <tum/smile/src/featum_util.h>      
+#include "featum_common.h"
+#include "featum_util.h"      
 
 #ifdef LIVE_REC
-#include <tum/smile/src/live-input.hpp>
+#include "live-input.hpp"
 #endif
 
 #ifdef DEBUG_SILDET
-#include <tum/smile/src/wave-output.hpp>
+#include "wave-output.hpp"
 #endif
 
-#include <tum/smile/src/silence-detector.hpp>
-#include <tum/smile/src/option-parser.hpp>
-#include <tum/smile/src/input-framer.hpp>
-#include <tum/smile/src/LLDex.hpp>
-#include <tum/smile/src/LLDs.hpp>
-#include <tum/smile/src/deltas.hpp>
-#include <tum/smile/src/functionals.hpp>
+#include "silence-detector.hpp"
+#include "option-parser.hpp"
+#include "input-framer.hpp"
+#include "LLDex.hpp"
+#include "LLDs.hpp"
+#include "deltas.hpp"
+#include "functionals.hpp"
 
-#include <tum/smile/src/SVMpredict.hpp>
-#include <tum/smile/AMQoutput.hpp>
+#include "SVMpredict.hpp"
+#include "AMQoutput.hpp"
 
 /** definition of featureMemory levels **/
 // TODO: define all levels in ONE central location...!
