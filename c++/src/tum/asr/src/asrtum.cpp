@@ -8,7 +8,7 @@
 #include <semaine/components/Component.h>
 #include <semaine/system/ComponentRunner.h>
 
-#include <tum/asr/ASR.h>
+#include "ASR.h"
 
 int main () {
 	try {

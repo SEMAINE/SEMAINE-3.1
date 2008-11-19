@@ -17,10 +17,10 @@
 
 #include <string>
 
-#include <tum/asr/ATKLib/AMonitor.h>
-#include <tum/asr/ATKLib/ASource.h>
-#include <tum/asr/ATKLib/ACode.h>
-#include <tum/asr/ATKLib/ARec.h>
+#include <AMonitor.h>
+#include <ASource.h>
+#include <ACode.h>
+#include <ARec.h>
 
 using namespace semaine::util;
 using namespace semaine::datatypes::xml;
