@@ -38,6 +38,10 @@ function register_build {
     builds_enabled[$builds_regCounter]='yes'
     builds_clean[$builds_regCounter]='distclean'
   fi
+  if test "x$5" = "xrebuild" ; then
+    builds_enabled[$builds_regCounter]='yes'
+    builds_clean[$builds_regCounter]='rebuild'
+  fi
 }
 
 # register a semaine internal build (i.e. code in c++/src/...)

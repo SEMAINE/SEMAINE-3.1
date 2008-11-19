@@ -23,8 +23,8 @@ function func_build_portaudio {
       fi
     fi
     
-    # do not install portaudio, since it may conflict with locally installed portaudio
-    make #&& make install
+    # OBSOLETE: do not install portaudio, since it may conflict with locally installed portaudio
+    make && make install
     if test "x$?" != "x0" ; then
       return 1;
     fi

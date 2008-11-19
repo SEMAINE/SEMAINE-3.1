@@ -16,9 +16,10 @@ function func_build_smile {
     fi
 
     if test "x$doconf" = "xyes" ; then
+echo "PA: $PORTAUDIOPATH"
     ./autogen.sh &&
     if test "x$PORTAUDIOPATH" != "x" ; then
-      ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$PORTAUDIOPATH
+      ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX
     else
       ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src
     fi
