@@ -18,6 +18,7 @@ namespace meta {
 	const std::string MetaMessenger::COMPONENT_NAME = "ComponentName";
 	const std::string MetaMessenger::COMPONENT_STATE = "ComponentState";
 	const std::string MetaMessenger::SYSTEM_READY = "SystemReady";
+	const std::string MetaMessenger::SYSTEM_READY_TIME = "SystemReadyTime";
 
 	MetaMessenger::MetaMessenger(const std::string & aComponentName) throw(CMSException) :
 		IOBase("semaine.meta"),
@@ -45,6 +46,10 @@ namespace meta {
 		try {
 			assert(m->propertyExists(SYSTEM_READY)); // "message should contain header field '"+SYSTEM_READY+"'";
 			setSystemReady(m->getBooleanProperty(SYSTEM_READY));
+			if (m->propertyExists(SYSTEM_READY_TIME)) {
+				setTime(m->getLongProperty(SYSTEM_READY_TIME));
+			}
+
 		} catch (CMSException & e) {
 			e.printStackTrace(std::cerr);
 		}
