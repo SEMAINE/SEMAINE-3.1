@@ -34,8 +34,7 @@ BASE="../thirdparty"
 
 
 ######### SYSTEM CONFIGURATION ###
-WINDOWS="no"        # build on cygwin (NOT SUPPORTED YET)
-MACOSX="no"
+BUILDSYSTEM="linux"   # supported: linux, macosx, cygwin (currently not working)
 #default is linux/unix
 ##################################
 
