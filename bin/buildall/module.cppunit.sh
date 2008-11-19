@@ -1,24 +1,21 @@
 
 #################### Package Configuration    #########################
-XERCES_BASE="xerces-c-src_2_8_0"
+CPPUNIT_BASE="cppunit-1.12.1"
+#-libs
+#UUID_URL="http://surfnet.dl.sourceforge.net/sourceforge/e2fsprogs/e2fsprogs-libs-1.41.3.tar.gz"
+CPPUNIT_URL="http://dfn.dl.sourceforge.net/sourceforge/cppunit/$CPPUNIT_BASE.tar.gz"
 
-XERCES_URL="http://apache.linux-mirror.org/xerces/c/2/sources/$XERCES_BASE.tar.gz"
-
-register_build "xerces-c" "$XERCES_URL" "$XERCES_BASE" "func_build_xerces" $1
+register_build "cppunit" "$CPPUNIT_URL" "$CPPUNIT_BASE" "func_build_cppunit" $1
 
 #######################################################################
 
 # build_nr var must be set before this function is called
-function func_build_xerces {
-  
-    export XERCESCROOT=$PWD
-    cd src/xercesc
+function func_build_cppunit {
 
-    ./runConfigure -p linux -P $INSTALL_PREFIX
+    ./configure --prefix=$INSTALL_PREFIX 
     if test "x$?" != "x0" ; then
       return 1;
     fi
-
     if test "x$1" = "xclean" ; then
       make clean 
       if test "x$?" != "x0" ; then
@@ -31,10 +28,9 @@ function func_build_xerces {
       return 1;
     fi
     
-    addConf "XERCESCROOT" "${builds_dirs[$build_nr]}"
+    addConf "CPPUNITPATH" "${builds_dirs[$build_nr]}"
 
     return 0;
 }
-
 
 

@@ -1,20 +1,17 @@
 
 #################### Package Configuration    #########################
-XERCES_BASE="xerces-c-src_2_8_0"
+PA_BASE="portaudio"
+PA_URL="http://www.portaudio.com/archives/pa_stable_v19_20071207.tar.gz"
+#PA_URL="http://www.portaudio.com/archives/pa_snapshot.tgz"
 
-XERCES_URL="http://apache.linux-mirror.org/xerces/c/2/sources/$XERCES_BASE.tar.gz"
-
-register_build "xerces-c" "$XERCES_URL" "$XERCES_BASE" "func_build_xerces" $1
+register_build "portaudio" "$PA_URL" "$PA_BASE" "func_build_portaudio" $1
 
 #######################################################################
 
 # build_nr var must be set before this function is called
-function func_build_xerces {
-  
-    export XERCESCROOT=$PWD
-    cd src/xercesc
+function func_build_portaudio {
 
-    ./runConfigure -p linux -P $INSTALL_PREFIX
+    ./configure --prefix=$INSTALL_PREFIX 
     if test "x$?" != "x0" ; then
       return 1;
     fi
@@ -26,15 +23,15 @@ function func_build_xerces {
       fi
     fi
     
-    make && make install
+    # do not install portaudio, since it may conflict with locally installed portaudio
+    make #&& make install
     if test "x$?" != "x0" ; then
       return 1;
     fi
     
-    addConf "XERCESCROOT" "${builds_dirs[$build_nr]}"
+    addConf "PORTAUDIOPATH" "${builds_dirs[$build_nr]}"
 
     return 0;
 }
-
 
 

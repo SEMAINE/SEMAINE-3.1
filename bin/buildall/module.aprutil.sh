@@ -11,8 +11,6 @@ register_build "aprutil" "$APRUTIL_URL" "$APRUTIL_BASE" "func_build_aprutil" $1
 # build_nr var must be set before this function is called
 function func_build_aprutil {
   
-    cd $BUILD_PREFIX/${builds_dirs[$build_nr]}
-
     ./configure --prefix=$INSTALL_PREFIX --with-apr=$INSTALL_PREFIX 
     if test "x$?" != "x0" ; then
       return 1;
@@ -30,7 +28,7 @@ function func_build_aprutil {
       return 1;
     fi
     
-    addConf "APRUTILPATH" "$BUILD_PREFIX/${builds_dirs[$build_nr]}"
+    addConf "APRUTILPATH" "${builds_dirs[$build_nr]}"
 
     return 0;
 }

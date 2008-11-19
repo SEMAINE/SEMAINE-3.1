@@ -11,20 +11,21 @@ register_build "activemqcpp" "$AMQCPP_URL" "$AMQCPP_BASE" "func_build_activemqcp
 # build_nr var must be set before this function is called
 function func_build_activemqcpp {
   
-    cd $BUILD_PREFIX/${builds_dirs[$build_nr]}
-
-    #ACTIVEMQCPPPATH=$PWD
-
         # cygwin:  requires activemq patch!!   error in some thread file...
     ./autogen.sh
     if test "x$?" != "x0" ; then
       return 1;
     fi
 
-    ./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --prefix=$INSTALL_PREFIX 
+    #./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --prefix=$INSTALL_PREFIX 
+    export LDFLAGS="-L$INSTALL_PREFIX/lib" 
+    export CPPFLAGS="-I$INSTALL_PREFIX/include" 
+    ./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --with-cppunit=$INSTALL_PREFIX --prefix=$INSTALL_PREFIX 
     if test "x$?" != "x0" ; then
       return 1;
     fi
+    unset LDFLAGS
+    unset CPPFLAGS
 
     if test "x$1" = "xclean" ; then
       make clean 
@@ -38,7 +39,7 @@ function func_build_activemqcpp {
       return 1;
     fi
     
-    addConf "ACTIVEMQCPPPATH" "$BUILD_PREFIX/${builds_dirs[$build_nr]}"
+    addConf "ACTIVEMQCPPPATH" "${builds_dirs[$build_nr]}"
 
     return 0;
 }

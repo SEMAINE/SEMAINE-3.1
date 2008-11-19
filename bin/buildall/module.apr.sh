@@ -7,16 +7,10 @@ APR_URL="http://apache.linux-mirror.org/apr/$APR_BASE.tar.gz"
 register_build "apr" "$APR_URL" "$APR_BASE" "func_build_apr" $1
 
 #######################################################################
-#function func_build_apr {
-#  echo "dummy called"
-#}
 
-# build_nr var will be set before this function is called
+# build_nr var must be set before this function is called
 function func_build_apr {
   
-  #build APR
-    cd $BUILD_PREFIX/${builds_dirs[$build_nr]}
-
     ./configure --prefix=$INSTALL_PREFIX --enable-threads
     if test "x$?" != "x0" ; then
       return 1;
@@ -34,7 +28,7 @@ function func_build_apr {
     fi
     
     # APRPATH=`pwd`
-    addConf "APRPATH" "$BUILD_PREFIX/${builds_dirs[$build_nr]}"
+    addConf "APRPATH" "${builds_dirs[$build_nr]}"
     #echo "APRPATH=\"$APRPATH\"" >> conf/semaine-api.conf
 
     return 0;

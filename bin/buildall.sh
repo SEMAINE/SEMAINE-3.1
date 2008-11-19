@@ -17,6 +17,8 @@
 # The following variables are available within modules:
 #  INSTALL_PREFIX  : prefix where everything gets installed to
 #  BUILD_PREFIX    : Prefix where the unpacked build directories are
+#  SEMAINE_ROOT    : top level root directory of SEMAINE build tree
+#  bdir            : current build directory root
 #
 # To build the semaine system just type:  sh buildall.sh
 #
@@ -33,6 +35,8 @@ BASE="../thirdparty"
 
 ######### SYSTEM CONFIGURATION ###
 WINDOWS="no"        # build on cygwin (NOT SUPPORTED YET)
+MACOSX="no"
+#default is linux/unix
 ##################################
 
 
@@ -41,6 +45,10 @@ INCDIR=$PWD/buildall
 
 # create build directory, if it doesn't exist
 MYPWD=$PWD
+SEMAINE_ROOT=$PWD/..
+cd $SEMAINE_ROOT
+SEMAINE_ROOT=$PWD
+cd $MYPWD
 if [ ! -d $BASE ]; then
   mkdir $BASE 
 fi
@@ -83,7 +91,7 @@ do
 done
 
 echo ""
-echo " buildall.sh has finished without erros."
+echo " buildall.sh has finished without errors."
 
 exit;
 
