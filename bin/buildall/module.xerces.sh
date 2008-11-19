@@ -14,14 +14,14 @@ function func_build_xerces {
     export XERCESCROOT=$PWD
     cd src/xercesc
 
-    if test "x$BUILDSYSTEM" = "xcygwin" then
+    if test "x$BUILDSYSTEM" = "xcygwin" ; then
       ./runConfigure -p cygwin -P $INSTALL_PREFIX
-    elif test "x$BUILDSYSTEM" = "xmacosx" then
+    elif test "x$BUILDSYSTEM" = "xmacosx" ; then
       ./runConfigure -p macosx -P $INSTALL_PREFIX
     else
       ./runConfigure -p linux -P $INSTALL_PREFIX
     fi
-    
+
     if test "x$?" != "x0" ; then
       return 1;
     fi
