@@ -7,7 +7,16 @@ register_semaine_build "libsemaineapi" "c++" "func_build_semaineapi" $1
 
 # build_nr var must be set before this function is called
 function func_build_semaineapi {
-  
+    doconf='yes'
+
+    if test "x$1" = "xrebuild" ; then
+      if test -f Makefile ; then
+        doconf='no'
+      fi
+    fi
+
+    if test "x$doconf" = "xyes" ; then
+ 
     aclocal
     ./autogen.sh
     if test "x$?" != "x0" ; then
@@ -20,6 +29,7 @@ function func_build_semaineapi {
     sh doconfig.sh
     if test "x$?" != "x0" ; then
       return 1;
+    fi
     fi
 
     if test "x$1" = "xclean" ; then

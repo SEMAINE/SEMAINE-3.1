@@ -83,7 +83,8 @@ function download_missing {
   do
     if test "x${builds_enabled[$myI]}" = "xyes" ; then
       dnURL=${builds_urls[$myI]};
-      if test "x$dnURL" != "x" ; then
+      if test "x`echo $dnURL | grep /`" != "x" ; then 
+      #if test "x$dnURL" != "x" ; then
       if test -f `basename "$dnURL"` ; then
         echo "download file for ${builds_names[$myI]} already exists, skipping."
       else 
@@ -103,11 +104,16 @@ function unpack_missing {
     if test "x${builds_enabled[$myI]}" = "xyes" ; then
       if test "x${builds_urls[$myI]}" != "x" ; then
       dnBASE=`basename ${builds_urls[$myI]}`;
-      ext=`echo $dnBASE | grep .gz`;
+
+      ext=`echo $dnBASE | grep .tar.gz`;
       if test "x$ext" != "x" ; then
         UNZ='-z'
       fi
-      ext=`echo $dnBASE | grep .bz2`;
+      ext=`echo $dnBASE | grep .tgz`;
+      if test "x$ext" != "x" ; then
+        UNZ='-z'
+      fi
+      ext=`echo $dnBASE | grep .tar.bz2`;
       if test "x$ext" != "x" ; then
         UNZ='-j'
       fi
