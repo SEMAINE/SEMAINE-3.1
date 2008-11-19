@@ -90,32 +90,9 @@ do
 done
 
 echo ""
-echo " buildall.sh has finished without errors."
+echo " buildall.sh has finished successfully!"
 
 exit;
 
-########## obsolete code:: ############################
 
-if [ "$BUILD_SEMAINEAPI" = "yes" ]; then
-#cd $MYPWD/..
-# get svn code
-#if [ ! -e semaine ]; then
-#svn checkout --username florian.eyben https://semaine.opendfki.de/repos/trunk semaine
-#fi
-cd $MYPWD/../c++
-./autogen.sh
-./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --with-xerces=$INSTALL_PREFIX --with-activemqcpp=$INSTALL_PREFIX
-#export LD_LIBRARY_PATH=$LIB_PREFIX/lib
-echo "#!/bin/sh" > config.sh
-echo "./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --with-xerces=$INSTALL_PREFIX --with-activemqcpp=$INSTALL_PREFIX" >> config.sh
-chmod +x config.sh
-echo "#!/bin/sh" > src/run.sh
-echo "export LD_LIBRARY_PATH=$INSTALL_PREFIX/lib" >> src/run.sh
-echo "\$*" >> src/run.sh
-if [ "$DO_CLEAN" = "yes" ]; then
-  make clean 
-fi
-make && echo "YEAH! Semaine API has compiled!!"
-SEMAINEAPIPATH="$MYPWD"
-fi
 

@@ -223,11 +223,13 @@ function dobuild {
       echo "---->>>> building ${builds_names[$build_nr]}"
       ${builds_funcs[$build_nr]} $doclean
       if test "x$?" != "x0" ; then
+        cd $bdir
         if test -f "$BUILDDONE" ; then 
           rm -f $BUILDDONE
         fi
         builderror
       else
+        cd $bdir
         echo "yes" > $BUILDDONE
       fi
     fi
