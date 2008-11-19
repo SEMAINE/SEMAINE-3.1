@@ -38,7 +38,7 @@ public class DummyVisualFML2BML extends Component
 	 */
 	public DummyVisualFML2BML() throws JMSException 
 	{
-		super("DummyFML2BML");
+		super("DummyVisualFML2BML");
 		fmlReceiver = new FMLReceiver("semaine.data.action.selected.speechpreprocessed");
 		receivers.add(fmlReceiver); // to set up properly
 		

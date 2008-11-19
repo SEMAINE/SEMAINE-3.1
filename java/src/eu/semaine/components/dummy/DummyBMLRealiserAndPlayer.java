@@ -62,8 +62,8 @@ public class DummyBMLRealiserAndPlayer extends Component
 		Element bml = doc.getDocumentElement();
 		Element speech = XMLTool.getChildElementByTagNameNS(bml, BML.SPEECH, BML.namespace);
 		if (speech != null) {
-			Element text = XMLTool.needChildElementByTagNameNS(speech, BML.TEXT, BML.namespace);
-			String utterance = text.getTextContent();
+			//Element text = XMLTool.needChildElementByTagNameNS(speech, BML.TEXT, BML.namespace);
+			String utterance = speech.getTextContent();
 			System.out.println(format.format(new Date(xm.getUsertime()))+ " " + utterance);
 		}
 		Element head = XMLTool.getChildElementByTagNameNS(bml, BML.HEAD, BML.namespace);

@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:mary="http://mary.dfki.de/2002/MaryXML"
 xmlns:bml="http://www.mindmakers.org/projects/BML"
+xmlns="http://www.mindmakers.org/projects/BML"
 xmlns:ssml="http://www.w3.org/2001/10/synthesis"
 exclude-result-prefixes="bml mary #default"
 >
