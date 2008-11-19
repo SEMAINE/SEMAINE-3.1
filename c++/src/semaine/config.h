@@ -16,6 +16,11 @@
 #pragma warning( disable : 4290 )
 #endif
 
+#ifdef HAVE_CONFIG_H
+// config.h created by autoconf
+#include "../../config.h"
+#endif
+
 
 #include <string>
 
