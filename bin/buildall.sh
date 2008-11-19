@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # SEMAINE C++ buildall unix shell script
 # written 11/2008 by Florian Eyben, TUM
@@ -20,7 +20,7 @@
 #  SEMAINE_ROOT    : top level root directory of SEMAINE build tree
 #  bdir            : current build directory root
 #
-# To build the semaine system just type:  sh buildall.sh
+# To build the semaine system just type:  ./buildall.sh    (or "bash buildall.sh")
 #
 # If you get download errors (wget) then you might need to change the 
 # download URLs. They are defined in each module's shell script
