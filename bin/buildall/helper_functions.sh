@@ -196,6 +196,7 @@ function createRunScript {
   echo "echo \"COMPONENT START SCRIPT: starting semaine c++ component \"${builds_names[$build_nr]}\"\"" >> $scriptname
   echo "./$runcmd $runpath $*" >> $scriptname
   echo "echo \"COMPONENT START SCRIPT: component \"${builds_names[$build_nr]}\" exited with status \$?\"" >> $scriptname
+  chmod +x $scriptname
 }
 
 . $INCDIR/modules.config
