@@ -73,21 +73,21 @@ AC_DEFUN([CHECK_HAVE_ATKLIB],
 	 AC_MSG_ERROR(ATKLib/HTKLib not found! Cannot build without ATK!)
       fi
 
-      AC_MSG_CHECKING(if libx11-dev is present [required by atklib]);
-      if test ! -f /usr/include/X11/Xlib.h ; then
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(X11 headers not found in /usr/include/X11 !  Install the libx11-dev package [ Debian/Ubuntu: as root: apt-get install libx11-dev ] )
-      else
-        AC_MSG_RESULT(yes)
-      fi
+dnl      AC_MSG_CHECKING(if libx11-dev is present [required by atklib]);
+dnl      if test ! -f /usr/include/X11/Xlib.h ; then
+dnl        AC_MSG_RESULT(no)
+dnl        AC_MSG_ERROR(X11 headers not found in /usr/include/X11 !  Install the libx11-dev package [ Debian/Ubuntu: as root: apt-get install libx11-dev ] )
+dnl      else
+dnl        AC_MSG_RESULT(yes)
+dnl      fi
 
-      AC_MSG_CHECKING(if libasound2-dev is present [required by atklib]);
-      if test ! -f /usr/include/sound/asound.h ; then
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(Alsasound headers not found in /usr/include/sound !  Install the libasound2-dev package [ Debian/Ubuntu: as root: apt-get install libasound2-dev ] )
-      else
-        AC_MSG_RESULT(yes)
-      fi
+dnl      AC_MSG_CHECKING(if libasound2-dev is present [required by atklib]);
+dnl      if test ! -f /usr/include/sound/asound.h ; then
+dnl        AC_MSG_RESULT(no)
+dnl        AC_MSG_ERROR(Alsasound headers not found in /usr/include/sound !  Install the libasound2-dev package [ Debian/Ubuntu: as root: apt-get install libasound2-dev ] )
+dnl      else
+dnl        AC_MSG_RESULT(yes)
+dnl      fi
 
       dnl Restore all the variables now that we are done testing.
       CFLAGS="$save_CFLAGS"
