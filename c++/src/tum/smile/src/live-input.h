@@ -109,7 +109,7 @@ typedef struct {
 } sLiveInput;
 typedef sLiveInput* pLiveInput;
 
-
+#ifdef HAVE_PORTAUDIO
 #ifndef HAVE_PORTAUDIO_V19
 
 // define struct from V19 for compatibility ...
@@ -126,6 +126,7 @@ typedef struct PaStreamParameters
 #define paContinue 0
 #define paAbort    1
 
+#endif
 #endif
 
 

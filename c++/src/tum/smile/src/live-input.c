@@ -64,7 +64,9 @@
 #endif
 #endif
 
+#ifdef USE_PORTAUDIO
 #include "portaudio.h"
+#endif
 
 // private functions:
 pPcmBuffer liveInput_readRawDataFromDevice( pLiveInput obj, pPcmBuffer dataread, LONG_IDX length );
