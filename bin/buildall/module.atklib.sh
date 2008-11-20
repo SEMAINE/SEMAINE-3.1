@@ -34,7 +34,7 @@ if test "x`find /usr/include -name *.h | grep /Xlib.h`" = "x" ; then
 fi
 
 #"find /usr/include -name *.h | grep /asound.h"
-if test "x`find /usr/include -name *.h | grep /asound.h`" = "x" ; then
+if test "x`find /usr/include -name *.h | grep /asoundlib.h`" = "x" ; then
     echo "Alsasound headers not found in /usr/include ! "
     echo "Install the libasound2-dev package !"
     echo "on Debian/Ubuntu: sudo apt-get install libasound2-dev"
