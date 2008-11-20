@@ -30,7 +30,7 @@ namespace semaine {
 namespace components {
 namespace asr {
 
-ASR::ASR() throw(CMSException) :
+ASR::ASR(char * configfile) throw(CMSException) :
 	Component("ASR"),
 	p(NULL),
 	auChan(NULL),
@@ -52,7 +52,12 @@ ASR::ASR() throw(CMSException) :
 
 	static const char * version="[ASR 11/11/08]";
 	int argc=3;
-	char* argv[3]={"ASR","-C","tum/asr/asr.cfg"};
+	char* argv[3] = {"ASR","-C",NULL};
+        if (configfile != NULL) 
+          argv[2]=configfile;
+        else 
+          argv[2]="asr.cfg";
+
       	if (InitHTK(argc,argv,version)<SUCCESS){
          	ReportErrors("Main",0); exit(-1);
       	}

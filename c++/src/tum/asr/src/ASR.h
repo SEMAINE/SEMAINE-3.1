@@ -31,7 +31,7 @@ namespace asr {
 class ASR : public Component
 {
 public:
-	ASR() throw (CMSException);
+	ASR(char *configfile) throw (CMSException);
 	virtual ~ASR();
 
 protected:
