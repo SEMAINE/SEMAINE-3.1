@@ -18,7 +18,7 @@
 
 #ifdef HAVE_CONFIG_H
 // config.h created by autoconf
-#include "../../config.h"
+#include <config.h>
 #endif
 
 
