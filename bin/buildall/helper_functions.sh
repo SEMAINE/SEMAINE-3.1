@@ -128,7 +128,7 @@ function unpack_missing {
       fi
 
       #if clean option is given, untar always
-      if test "x${builds_clean[$myI]}" = "xdistclean" ; then
+      if test "x${builds_clean[$myI]}" = "xclean" ; then
         tar -C $BUILD_PREFIX $UNZ -xvf $DOWNLOAD_PREFIX/$dnBASE
         if test "x$?" != "x0" ; then
           builderror "Unpack failed!"
@@ -194,7 +194,7 @@ function createRunScript {
   echo "export LD_LIBRARY_PATH=\"$INSTALL_PREFIX/lib:$SEMAINE_ROOT/c++/src/.libs\"" >> $scriptname
   echo "cd $rundir" >> $scriptname
   echo "echo \"COMPONENT START SCRIPT: starting semaine c++ component \"${builds_names[$build_nr]}\"\"" >> $scriptname
-  echo "./$runcmd $runpath $*" >> $scriptname
+  echo "./$runcmd $runpath \$*" >> $scriptname
   echo "echo \"COMPONENT START SCRIPT: component \"${builds_names[$build_nr]}\" exited with status \$?\"" >> $scriptname
   chmod +x $scriptname
 }
