@@ -404,7 +404,7 @@ void TumFeatureExtractor::act() throw(CMSException)
 	}
 
 	if (frame1 == NULL) FEATUM_DEBUG(9,"FRAME1 ==  NULL\n");
-  
+
     	// add frame to short term ringbuffer
     	if (lldex->addFrame(LLD_LEVEL0, *frame1 )) { 
                              
@@ -412,13 +412,12 @@ void TumFeatureExtractor::act() throw(CMSException)
 		llds->flushToFtMem( *ftMem, LLD_LEVEL0 );
 
 		deltas->autoCompute();
-
 		if (amqLowLevel != NULL) amqLowLevel->sendCurrentFrame();
 
 		if (opts->displayenergy) {
 			if (!frameE->found()) { ftMem->findFeature( "logEnergy", *frameE ); }
 			FLOAT_TYPE_FTMEM *fen = ftMem->getFeaturesByID( *frameE, 0 );
-			fprintf(stderr,"frameE = %f\n",*fen);
+			printf("frameE = %f\n",*fen); fflush(stdout);
 		}
 
 		#ifdef ENABLE_FUNCTIONALS

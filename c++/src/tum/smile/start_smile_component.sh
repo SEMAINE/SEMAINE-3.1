@@ -4,6 +4,7 @@ if test "x$1" = "x" ; then
   models="$PWD/models"
 else
   models="$1/models"
+  shift
 fi
 
 # which models to use for arousal and valence 
