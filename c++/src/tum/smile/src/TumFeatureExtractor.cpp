@@ -108,16 +108,17 @@ TumFeatureExtractor::~TumFeatureExtractor()
 
 void TumFeatureExtractor::customStartIO() throw(CMSException)
 {
-	printf("customStartIO Here... %i",(long)opts); fflush(stdout);
+	//printf("customStartIO Here... %i",(long)opts); fflush(stdout);
 
 	/***************************** soundcard audio input *****************************/    
-	FEATUM_DEBUG(4,"opening live input audio: %i Hz, %i bit, %i channel(s)",opts->samplerate, opts->bits, opts->channels);
+	FEATUM_DEBUG(2,"opening live input audio: %i Hz, %i bit, %i channel(s)",opts->samplerate, opts->bits, opts->channels);
 
 	liveIn = new cLiveInput(NULL, opts->device, opts->buffersize, opts->samplerate, opts->bits, opts->channels, LI_STREAM_STARTED);
   	/*------------------------------------end--------------------------------------*/
 
 
-	/***************************** create input framer *****************************/    
+	/***************************** create input framer *****************************/
+	FEATUM_DEBUG(4,"creating input framer component");    
 	framedInput = new cInputFramer(*liveIn);
 
 	framedInput->setAudioParameters(1, WORK_SAMPLETYPE, MEMORGA_INTERLV);
@@ -138,6 +139,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 
   	/***************************** create LLDex ************************************/
+	FEATUM_DEBUG(4,"creating LLDex component");
   	// -> temporary extractor data struct
   	int *nHist = (int*)calloc(1,sizeof(int)*n_ll_levels);
   	int i;
@@ -150,6 +152,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 
 	/***************************** create LLDs (main lld config) *******************/
+        FEATUM_DEBUG(4,"creating LLDs component");
 	llds = new cLLDs(*lldex, 1);
 
 	// setup LLDs : enable, NULL obj (to auto create)
@@ -176,7 +179,8 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	// TODO: function to automatically compute capacity 
 	// based on: a) time (sec.),  b) whole file
 	int ids[] = {framerId1,0};    // -> todo ?  auto assign from framer object
-  
+
+	FEATUM_DEBUG(4,"creating featureMemory component");
  	ftMem = new cFeatureMemory(FTMEM_RING_BUFFER, ftMEM_nLevels);
   
  	// setup the levels and allocate memory for each level  
@@ -186,6 +190,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 
 	/************************ create differentiator object for LLD *****************/
+	FEATUM_DEBUG(4,"creating delta extractor");
 	deltas = new cDeltas( 2 ); // two ids for delta and delta delta
 
 	if (!deltas->setupID( *ftMem, 0, LLD0_DE, LLD_LEVEL0, 3)) {
@@ -203,6 +208,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 	/***************************** create functionals object ***********************/
 	#ifdef ENABLE_FUNCTIONALS
+	FEATUM_DEBUG(4,"creating functionals extractor");
 	functs = new cFunctionals( 9 );
 
 	if (!opts->HRF) 
@@ -280,37 +286,36 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
  
 	/*************************** create output objects *****************************/
 	// ActiveMQ output for 10ms low-level features (periodic)
-	//if (opts->amqout != NULL) {
-		amqLowLevel = new cAmqOutput( *ftMem, featureSender, &meta );
-		#define nAMQels 9
-		sElID amqEls[nAMQels];
-		// energy:
-		amqEls[0] = outputObject(LLD_LEVEL0, ft_lld_energy, 0, -1, 0, EL_ENABLED);
-		amqEls[1] = outputObject(LLD0_DE, ft_lld_energy, 0, -1, 0, EL_ENABLED);
-		amqEls[2] = outputObject(LLD0_DEDE, ft_lld_energy, 0, -1, 0, EL_ENABLED);
-		// pitch:
-		amqEls[3] = outputObject(LLD_LEVEL0, ft_lld_pitch, 0, -1, 0, EL_ENABLED);
-		amqEls[4] = outputObject(LLD0_DE, ft_lld_pitch, 0, -1, 0, EL_ENABLED);
-		amqEls[5] = outputObject(LLD0_DEDE, ft_lld_pitch, 0, -1, 0, EL_ENABLED);
+	FEATUM_DEBUG(4,"creating ActiveMQ output component");
+	amqLowLevel = new cAmqOutput( *ftMem, featureSender, &meta );
+	#define nAMQels 9
+	sElID amqEls[nAMQels];
+	// energy:
+	amqEls[0] = outputObject(LLD_LEVEL0, ft_lld_energy, 0, -1, 0, EL_ENABLED);
+	amqEls[1] = outputObject(LLD0_DE, ft_lld_energy, 0, -1, 0, EL_ENABLED);
+	amqEls[2] = outputObject(LLD0_DEDE, ft_lld_energy, 0, -1, 0, EL_ENABLED);
+	// pitch:
+	amqEls[3] = outputObject(LLD_LEVEL0, ft_lld_pitch, 0, -1, 0, EL_ENABLED);
+	amqEls[4] = outputObject(LLD0_DE, ft_lld_pitch, 0, -1, 0, EL_ENABLED);
+	amqEls[5] = outputObject(LLD0_DEDE, ft_lld_pitch, 0, -1, 0, EL_ENABLED);
 
-		// MFCC:
-		amqEls[6] = outputObjectFull(LLD_LEVEL0, ft_lld_mfcc);
-		amqEls[7] = outputObjectFull(LLD0_DE, ft_lld_mfcc);    
-		amqEls[8] = outputObjectFull(LLD0_DEDE, ft_lld_mfcc);
+	// MFCC:
+	amqEls[6] = outputObjectFull(LLD_LEVEL0, ft_lld_mfcc);
+	amqEls[7] = outputObjectFull(LLD0_DE, ft_lld_mfcc);    
+	amqEls[8] = outputObjectFull(LLD0_DEDE, ft_lld_mfcc);
 
-		/*
-		// time domain features (zero crossings, etc.)
-		amqEls[9] = outputObjectFull(LLD_LEVEL0, ft_lld_time);		amqEls[10] = outputObjectFull(LLD0_DE, ft_lld_time);
-		amqEls[11] = outputObjectFull(LLD0_DEDE, ft_lld_time);
+	/*
+	// time domain features (zero crossings, etc.)
+	amqEls[9] = outputObjectFull(LLD_LEVEL0, ft_lld_time);	amqEls[10] = outputObjectFull(LLD0_DE, ft_lld_time);
+	amqEls[11] = outputObjectFull(LLD0_DEDE, ft_lld_time);
 
-		// spectral
-		amqEls[12] = outputObjectFull(LLD_LEVEL0, ft_lld_spectral);
-		amqEls[13] = outputObjectFull(LLD0_DE, ft_lld_spectral);
-		amqEls[14] = outputObjectFull(LLD0_DEDE, ft_lld_spectral);
-		*/
+	// spectral
+	amqEls[12] = outputObjectFull(LLD_LEVEL0, ft_lld_spectral);
+	amqEls[13] = outputObjectFull(LLD0_DE, ft_lld_spectral);
+	amqEls[14] = outputObjectFull(LLD0_DEDE, ft_lld_spectral);
+	*/
 
-		amqLowLevel->configure(amqEls, nAMQels);
-	//}
+	amqLowLevel->configure(amqEls, nAMQels);
 
 
 	#ifdef ENABLE_FUNCTIONALS
@@ -363,14 +368,17 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	#endif
 
 	if (opts->sildet) {
+		FEATUM_DEBUG(4,"initializing silence detector");
 		sildet = new cSilenceDetector(*lldex, opts->sil_thresh);
 	}
 
 	#ifdef DEBUG_SILDET
 	frame2 = NULL;
 	if (!opts->sildet) 
-		if (waveOut == NULL) 
+		if (waveOut == NULL) {
+			FEATUM_DEBUG(4,"initializing debug wave output");
 			waveOut = new cWaveOutput( "dbg_out.wav", 16000, SAMPLETYPE_I16, 1 );
+		}
 	#endif 
 
 	meanE = new cFtIdentifier(LLD0_FUNC_L0f);

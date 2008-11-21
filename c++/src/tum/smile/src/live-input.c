@@ -239,8 +239,13 @@ int liveInput_startRecording (pLiveInput obj)
       _FUNCTION_RETURN_(1);                       
     }
     
-    FEATUM_DEBUG(4,"nChan=%i nBPS=%i sampleRate=%i\n",obj->parameters.nChan, obj->parameters.nBPS, obj->parameters.sampleRate);
-    inputParameters.device = obj->deviceId; //Pa_GetDefaultInputDevice(); /* default input device */
+    FEATUM_DEBUG(5,"nChan=%i nBPS=%i sampleRate=%i\n",obj->parameters.nChan, obj->parameters.nBPS, obj->parameters.sampleRate);
+    if (obj->deviceId < 0) {
+      inputParameters.device = Pa_GetDefaultInputDevice(); /* default input device */
+    } else {
+      inputParameters.device = obj->deviceId; 
+    }
+    printf("recording device index = %i \n",inputParameters.device);
     inputParameters.channelCount = obj->parameters.nChan;
     switch (obj->parameters.sampleType) {
       case SAMPLETYPE_I8: inputParameters.sampleFormat = paInt8; break;
@@ -253,8 +258,13 @@ int liveInput_startRecording (pLiveInput obj)
     }
 
 #ifdef HAVE_PORTAUDIO_V19
-    inputParameters.suggestedLatency =
-      Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency;
+    const PaDeviceInfo * info = Pa_GetDeviceInfo( inputParameters.device );
+    if (info != NULL) {
+      inputParameters.suggestedLatency =
+        info->defaultLowInputLatency;
+    } else {
+      inputParameters.suggestedLatency = 0; 
+    }
     inputParameters.hostApiSpecificStreamInfo = NULL;
 #endif
 
@@ -281,7 +291,7 @@ int liveInput_startRecording (pLiveInput obj)
               liveInput_pa_recordCallback,
               (void*) obj );
     if( err != paNoError ) {
-        FEATUM_ERROR_FATAL(0,"error opening portaudio recording stream (code %i) (check samplerate! -> %i)\n",err,obj->parameters.sampleRate);
+        FEATUM_ERROR_FATAL(0,"error opening portaudio recording stream (code %i) \n  check samplerate! -> %i \n  maybe incorrect device? (-l displays a list of devices))\n",err,obj->parameters.sampleRate);
         _FUNCTION_RETURN_(0);
     }
 
