@@ -1,8 +1,8 @@
 
 #################### Package Configuration    #########################
 PA_BASE="portaudio"
-PA_URL="http://www.portaudio.com/archives/pa_stable_v19_20071207.tar.gz"
-#PA_URL="http://www.portaudio.com/archives/pa_snapshot.tgz"
+#PA_URL="http://www.portaudio.com/archives/pa_stable_v19_20071207.tar.gz"
+PA_URL="http://www.portaudio.com/archives/pa_snapshot.tgz"
 
 register_build "portaudio" "$PA_URL" "$PA_BASE" "func_build_portaudio" $1
 
