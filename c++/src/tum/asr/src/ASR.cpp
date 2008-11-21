@@ -201,7 +201,7 @@ void ASR::act() throw(CMSException)
 				char strtmp3[50];
 				sprintf(strtmp3,"%.2f",sentconf/wordcounter);
 				std::string confstring(strtmp3);
-
+				cerr << sentence << "\n";
 				if(wordcounter!=0) {
 					// Create and fill a simple EMMA document
 					DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
