@@ -14,7 +14,11 @@ function func_build_cppunit {
 
     ./configure --prefix=$INSTALL_PREFIX 
     if test "x$?" != "x0" ; then
-      return 1;
+      if test "$BUILDSYSTEM" == "macosx" ; then
+        echo "Ignoring error reported by cppunit configure on Mac OS X, and continuing."
+      else
+        return 1;
+      fi
     fi
     if test "x$1" = "xclean" ; then
       make clean 

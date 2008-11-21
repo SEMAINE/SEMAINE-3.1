@@ -83,7 +83,7 @@ function builderror {
 function download_missing {
   cd $DOWNLOAD_PREFIX
 
-  for myI in `seq 1 $builds_regCounter`;
+  for (( myI=1; myI <= $builds_regCounter; myI += 1 )) ;
   do
     if test "x${builds_enabled[$myI]}" = "xyes" ; then
       dnURL=${builds_urls[$myI]};
@@ -92,7 +92,13 @@ function download_missing {
       if test -f `basename "$dnURL"` ; then
         echo "download file for ${builds_names[$myI]} already exists, skipping."
       else 
-        wget "$dnURL"
+        if test -n "`which wget`"; then
+          wget "$dnURL"
+        elif test -n "`which curl`"; then
+          curl -o `basename "$dnURL"` "$dnURL"
+        else
+          builderror "could not find any download tool"
+        fi
         if test "x$?" != "x0" ; then
           builderror "Download failed!"
         fi
@@ -103,7 +109,7 @@ function download_missing {
 }
 
 function unpack_missing {
-  for myI in `seq 1 $builds_regCounter`;
+  for (( myI=1; myI<=$builds_regCounter; myI+=1 )) ;
   do
     if test "x${builds_enabled[$myI]}" = "xyes" ; then
       if test "x${builds_urls[$myI]}" != "x" ; then

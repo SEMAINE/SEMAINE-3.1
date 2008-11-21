@@ -26,6 +26,8 @@
 # download URLs. They are defined in each module's shell script
 #
 
+cd `dirname $0`
+
 # directory where all the builds will be performed
 # everything will be installed in $BASE/inst by default
 # this path can be absolute or relative
@@ -36,6 +38,10 @@ BASE="../thirdparty"
 ######### SYSTEM CONFIGURATION ###
 BUILDSYSTEM="linux"   # supported: linux, macosx, cygwin (currently not working)
 #default is linux/unix
+case "`uname`" in
+  CYGWIN*) BUILDSYSTEM="cygwin" ;;
+  Darwin*) BUILDSYSTEM="macosx"
+esac
 ##################################
 
 
@@ -84,7 +90,7 @@ fi
 # do the work:
 download_missing 
 unpack_missing
-for i in `seq 1 $builds_regCounter`;
+for ((i=1; i<=$builds_regCounter; i+=1));
 do
   dobuild $i
 done

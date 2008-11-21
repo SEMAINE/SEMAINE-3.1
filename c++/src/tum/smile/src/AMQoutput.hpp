@@ -26,7 +26,7 @@
 #define __AMQ_OUTPUT_HPP
 
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 #include <semaine/config.h>
 #include <cms/CMSException.h>
