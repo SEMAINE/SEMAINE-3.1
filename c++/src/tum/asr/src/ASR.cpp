@@ -212,7 +212,7 @@ void ASR::act() throw(CMSException)
 					XMLTool::setAttribute(interpretation, EMMA::A_VERBAL, "true");
 					XMLTool::setAttribute(interpretation, EMMA::A_MODE, "voice");
 					XMLTool::setAttribute(interpretation, EMMA::A_CONFIDENCE, confstring);
-					XMLTool::setAttribute(text, SemaineML::A_NAME, sentence);
+					XMLTool::appendChildTextNode(text, sentence);
 					// Now send it
 					emmaSender->sendXML(document, meta.getTime());
 				}
