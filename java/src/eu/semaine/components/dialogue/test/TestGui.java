@@ -132,8 +132,7 @@ public class TestGui extends Component
 			if (isFML) {
 				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.BML, BML.namespace);
 				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.SPEECH, BML.namespace);
-				Element text = XMLTool.needChildElementByTagNameNS(speech, BML.TEXT, BML.namespace);
-				printLine( "+ " + text.getTextContent() );
+				printLine( "+ " + speech.getTextContent() );
 			}
 		}
 		if( isSentence(m) ) {

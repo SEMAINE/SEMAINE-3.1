@@ -273,17 +273,17 @@ public class UtteranceProposer extends Component
 			if( currPersonality == Personality.Poppy ) {
 				if( personalityHistory.get( Personality.Poppy ) ) {
 					// Character has talked before
-					response = "Hi! I’m Poppy. How are you?";
+					response = "Hi! Iï¿½m Poppy. How are you?";
 					convState = 0;
 				} else {
 					// Character hasn't talked before
-					response = "Hi, I’m Poppy, the eternal optimist. What's your name? ";
+					response = "Hi, Iï¿½m Poppy, the eternal optimist. What's your name? ";
 					convState = 2;
 				}
 			} else if( currPersonality == Personality.Obadiah ) {
 				if( personalityHistory.get( Personality.Obadiah ) ) {
 					// Character has talked before
-					response = "Hello, I’m Obidiah. What’s the matter?";
+					response = "Hello, Iï¿½m Obidiah. Whatï¿½s the matter?";
 					convState = 0;
 				} else {
 					// Character hasn't talked before
@@ -293,7 +293,7 @@ public class UtteranceProposer extends Component
 			} else if( currPersonality == Personality.Spike ) {
 				if( personalityHistory.get( Personality.Spike ) ) {
 					// Character has talked before
-					response = "Well I’m Spike, what’s your problem?";
+					response = "Well Iï¿½m Spike, whatï¿½s your problem?";
 					convState = 0;
 				} else {
 					// Character hasn't talked before
@@ -303,11 +303,11 @@ public class UtteranceProposer extends Component
 			} else if( currPersonality == Personality.Prudence ) {
 				if( personalityHistory.get( Personality.Prudence ) ) {
 					// Character has talked before
-					response = "Hello, it’s Prudence. What would you like to talk about?";
+					response = "Hello, itï¿½s Prudence. What would you like to talk about?";
 					convState = 0;
 				} else {
 					// Character hasn't talked before
-					response = "Hello there, I’m Prudence and I'm very matter of fact. So tell me, what is your name?";
+					response = "Hello there, Iï¿½m Prudence and I'm very matter of fact. So tell me, what is your name?";
 					convState = 2;
 				}
 			}
@@ -339,7 +339,7 @@ public class UtteranceProposer extends Component
 		if( convState == 7 ) {
 			String response = "";
 			if( currPersonality == Personality.Poppy ) {
-				response = "Is that so – tell me about it";
+				response = "Is that so ï¿½ tell me about it";
 				convState = 0;
 			} else if( currPersonality == Personality.Obadiah ) {
 				response = "Is that so - Tell me more about it ";
@@ -622,8 +622,10 @@ public class UtteranceProposer extends Component
 		fml.setAttribute(FML.ID, "fml1");
 		Element speech = XMLTool.appendChildElement(bml, BML.SPEECH);
 		speech.setAttribute(BML.ID, "s1");
-		Element text = XMLTool.appendChildElement(speech, BML.TEXT);
-		text.setTextContent(response);
+		speech.setAttribute(BML.TEXT, response);
+		speech.setAttribute(BML.LANGUAGE, "en_US");
+		speech.setTextContent(response);
+		
 		fmlSender.sendXML(doc, meta.getTime());
 		
 	}
