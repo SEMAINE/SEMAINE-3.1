@@ -145,22 +145,14 @@ public class UtteranceInterpreter extends Component
 
 	}
 
-	/**
-	 * Called when a new message is received
-	 * Checks if the message contains an input-sentence.
-	 * Also checks if the user is finished speaking
-	 */
-	@Override
-	public void react( SEMAINEMessage m ) throws JMSException
-	{
-		if( isSentence(m) ) {
-			utterance = utterance + " " + getSentence(m);
-		}
-		checkUserFinished(m);
-	}
+	/** * Called when a new message is received * Checks if the message contains 
+	an input-sentence. * Also checks if the user is finished speaking */ 
+	@Override public void react( SEMAINEMessage m ) throws JMSException { if( 
+	isSentence(m) ) { utterance = utterance + " " + getSentence(m); } 
+	checkUserFinished(m); }
 
 	/**
-	 * Checks if the Message is ASR output and if it contains a sentence.
+ 	 * Checks if the Message is ASR output and if it contains a sentence.
 	 * @param m the message to check
 	 * @return true if the message says that the user is currently silent
 	 */
@@ -461,11 +453,11 @@ public class UtteranceInterpreter extends Component
 		String utterance = act.getUtterance();
 		String pattern0 = ".* people .*";
 		String replacePattern0 = " people ";
-		String pattern1 = ".*(( they )|( they['’])|( their )|( them )).*";
-		String replacePattern1 = "(( they )|( they['’])|( their )|( them ))";
+		String pattern1 = ".*(( they )|( they[''])|( their )|( them )).*";
+		String replacePattern1 = "(( they )|( they[''])|( their )|( them ))";
 
-		String negPattern0 = ".*(( i )|( i['’] ) ).*";
-		String replaceNegPattern0 = "(( i )|( i['’] ) )";
+		String negPattern0 = ".*(( i )|( i[''] ) ).*";
+		String replaceNegPattern0 = "(( i )|( i[''] ) )";
 
 		int count = 0;
 		int negCount = 0;
@@ -511,8 +503,8 @@ public class UtteranceInterpreter extends Component
 	public boolean detectAboutCurrentCharacter( DialogueAct act )
 	{
 		String utterance = act.getUtterance();
-		String pattern0 = ".*(( you )|( you[’']re )).*";
-		String replacePattern0 = "(( you )|( you[’']re ))";
+		String pattern0 = ".*(( you )|( you['']re )).*";
+		String replacePattern0 = "(( you )|( you['']re ))";
 
 		String negPattern0 = ".*you know.*";
 		String replaceNegPattern0 = "you know";
@@ -548,7 +540,7 @@ public class UtteranceInterpreter extends Component
 		}
 		emotionalWordsString = emotionalWordsString.substring(0, emotionalWordsString.length()-1);
 
-		String pattern1 = ".*(\\s|^)i((['’]m)| ((\\S)+ +){0,3}(am|was|get)) +((\\S)+ +){0,6}("+emotionalWordsString+").*";
+		String pattern1 = ".*(\\s|^)i((['']m)| ((\\S)+ +){0,3}(am|was|get)) +((\\S)+ +){0,6}("+emotionalWordsString+").*";
 		String pattern2 = ".*(\\s|^)i ((\\S)+ +){0,3}feel.*";
 		String pattern3 = ".*(\\s|^)i ((\\S)+ +){0,3}felt.*";
 		String pattern4 = ".*(\\s|^)i ((\\S)+ +){0,5}feeling.*";
@@ -575,8 +567,8 @@ public class UtteranceInterpreter extends Component
 		String words = "(sensible|pragmatic|reasonable|rational|practical|rationale|realistically|balance|objectively)";
 		String pattern1 = ".*"+words+".*";
 		String replacePattern1 = words;
-		String pattern2 = ".*((not )|(n[’']t )|( appearing )|( she)|( she[’'])|( he)|( he[’'])|( them ))((\\S)+ +){0,4}"+words+".*";
-		String replacePattern2 = "((not )|(n[’']t )|( you )|( you[’'])|( appearing )|( she)|( she[’'])|( he)|( he[’'])|( them ))((\\S)+ +){0,4}"+words+"";
+		String pattern2 = ".*((not )|(n['']t )|( appearing )|( she)|( she[''])|( he)|( he[''])|( them ))((\\S)+ +){0,4}"+words+".*";
+		String replacePattern2 = "((not )|(n['']t )|( you )|( you[''])|( appearing )|( she)|( she[''])|( he)|( he[''])|( them ))((\\S)+ +){0,4}"+words+"";
 
 		int count = 0;
 
@@ -607,8 +599,8 @@ public class UtteranceInterpreter extends Component
 
 		String pattern0 = ".*(^| )i'(m|ve) .*";
 		String replacePattern0 = "(^| )i'(m|ve) ";
-		String pattern1 = ".*(^| )i(( )|(')|(’)).*";
-		String replacePattern1 = "(^| )i(( )|(')|(’))";
+		String pattern1 = ".*(^| )i(( )|(')|(')).*";
+		String replacePattern1 = "(^| )i(( )|(')|('))";
 		String pattern2 = ".* am .*";
 		String replacePattern2 = " am ";
 		String pattern3 = ".* my .*";
@@ -662,16 +654,16 @@ public class UtteranceInterpreter extends Component
 		/* Regex Patterns */
 		String pattern1 = ".* going to .*";
 		String replacePattern1 = " going to ";
-		String pattern2 = ".*(( will )|('ll )|(’ll)).*";
-		String replacePattern2 = "(( will )|('ll )|(’ll))";
+		String pattern2 = ".*(( will )|('ll )|('ll)).*";
+		String replacePattern2 = "(( will )|('ll )|('ll))";
 		String pattern3 = ".* gonna .*";
 		String replacePattern3 = " gonna ";
 		String pattern4 = ".* i ((\\S)+ +){0,3}need ((\\S)+ +){0,3}to .*";
 		String replacePattern4 = " i ((\\S)+ +){0,3}need ((\\S)+ +){0,3}to ";
 		String pattern5 = ".* is (\\S)+ing .*";
 		String replacePattern5 = " is (\\S)+ing ";
-		String pattern6 = ".*(( tomorrow )|( next week )|( planning )|( coming )( i’ve got to )|( coming up )).*";
-		String replacePattern6 = "(( tomorrow )|( next week )|( planning )|( coming )( i’ve got to )|( coming up ))";
+		String pattern6 = ".*(( tomorrow )|( next week )|( planning )|( coming )( i've got to )|( coming up )).*";
+		String replacePattern6 = "(( tomorrow )|( next week )|( planning )|( coming )( i've got to )|( coming up ))";
 
 		String utterance = act.getUtterance();
 		int score = 0;
@@ -736,10 +728,10 @@ public class UtteranceInterpreter extends Component
 		/* Regex Patterns */
 		String pattern1 = ".*(( was )|( wasn't )).*";
 		String pattern2 = ".* been .*";
-		String pattern3 = ".*(( had )|( hadn't )|( hadn’t )).*";
+		String pattern3 = ".*(( had )|( hadn't )|( hadn't )).*";
 		String pattern4 = "..* went .*";
-		String pattern5 = ".*(( were )|( weren't )|( weren’t )).*";
-		String pattern6 = ".*(( did )|( didn't )|( didn’t )).*";
+		String pattern5 = ".*(( were )|( weren't )|( weren't )).*";
+		String pattern6 = ".*(( did )|( didn't )|( didn't )).*";
 
 		String utterance = act.getUtterance();
 
@@ -951,8 +943,8 @@ public class UtteranceInterpreter extends Component
 		str = str.replaceAll("\\?", " ? ");
 
 		/* Write short-hand words out */
-		str = str.replace("’", "'");
-		str = str.replace("‘", "'");
+		str = str.replace("'", "'");
+		str = str.replace("â€˜", "'");
 		str = str.replace(" I'll ", " I will ");
 		str = str.replaceAll("^I'll ", "I will ");
 		str = str.replace(" i'll ", " I will ");
