@@ -11,11 +11,17 @@
 	    <pathelement location="lib/xml-apis.jar"/>
 	</path>
 	
-	<target name="jars">
+      <target name="cleanjars" depends="clean">
+        <delete>
+          <fileset dir="." includes="lib/semaine*.jar"/>
+        </delete>
+      </target>	
+
+      <target name="jars" depends="build">
         <jar destfile="lib/semaine.jar" basedir="bin"
         	 includes="eu/**/*.class
-                    eu/semaine/components/dummy/example2.fap         			
-        	        eu/semaine/components/dummy/example3.fap"
+                    eu/semaine/components/dummy/example2.fap
+      	            eu/semaine/components/dummy/example3.fap"
         	excludes="eu/semaine/components/dialogue/**/*.*
         	          eu/semaine/components/mary/**/*.*">
             <manifest>
@@ -23,7 +29,7 @@
                 <attribute name="Main-Class"
                     value="eu.semaine.system.ComponentRunner"/>
                 <attribute name="Class-Path" 
-                  value="commons-logging-1.1.1.jar activemq-all-5.1.0.jar log4j-1.2.15.jar xml-apis.jar xercesImpl.jar serializer.jar mary-common.jar"/>
+                  value="commons-logging-1.1.1.jar activemq-all-5.1.0.jar log4j-1.2.15.jar xml-apis.jar xercesImpl.jar serializer.jar"/>
             </manifest>
          </jar>
 		<jar destfile="lib/semaine-dialogue.jar" basedir="bin"
@@ -35,18 +41,16 @@
 					value="eu.semaine.system.ComponentRunner"/>
 				<attribute name="Class-Path" 
 					value="semaine.jar opennlp-tools-1.4.1/jwnl-1.3.3.jar opennlp-tools-1.4.1/maxent-2.5.1.jar opennlp-tools-1.4.1/opennlp-tools-1.4.1.jar opennlp-tools-1.4.1/trove.jar"/>
-				</manifest>
+			</manifest>
 		</jar>
 		<jar destfile="lib/semaine-mary.jar" basedir="bin"
-					includes="eu/semaine/components/mary/**/*.class
-							eu/semaine/components/mary/**/*.xsl">
-					<manifest>
-						<attribute name="Built-By" value="${user.name}"/>
-						<attribute name="Main-Class"
-							value="eu.semaine.system.ComponentRunner"/>
-						<attribute name="Class-Path" 
-							value="semaine.jar mary-common.jar"/>
-						</manifest>
+			includes="eu/semaine/components/mary/**/*.class
+				eu/semaine/components/mary/**/*.xsl">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Main-Class" value="eu.semaine.system.ComponentRunner"/>
+				<attribute name="Class-Path" value="semaine.jar mary-common.jar"/>
+			</manifest>
 		</jar>
     </target>
 	
