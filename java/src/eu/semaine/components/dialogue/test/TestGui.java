@@ -128,7 +128,6 @@ public class TestGui extends Component
 	{
 		if ( m instanceof SEMAINEXMLMessage ) {
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
-			System.out.println(xm.getText());
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
 				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.BML, BML.namespace);
