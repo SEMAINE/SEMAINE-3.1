@@ -88,7 +88,7 @@ public class TurnTakingInterpreter extends Component
 			turntakingState = State.AGENT_WAITING;
 			pauseTime = meta.getTime();
 		} else if( pauseTime != 0 && turntakingState == State.AGENT_WAITING && pauseTime + 5000 < meta.getTime() ) {
-			changeTurnState( true, meta.getTime() );
+			//changeTurnState( true, meta.getTime() );
 			pauseTime = meta.getTime();
 		}
 	}
@@ -119,6 +119,7 @@ public class TurnTakingInterpreter extends Component
 		} else if( isSpeaking(m) ) {
 			if( turntakingState == State.AGENT_WAITING ) {
 				turntakingState = State.USER_SPEAKING;
+				changeTurnState(false, meta.getTime());
 			}
 			pauseTime = 0;
 		}
