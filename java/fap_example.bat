@@ -1,1 +1,0 @@
-ant -Dconfig=config\dummy-system-no-player.config ComponentRunner
