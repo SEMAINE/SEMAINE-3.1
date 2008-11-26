@@ -62,7 +62,7 @@ AC_DEFUN([CHECK_HAVE_ATKLIB],
       fi
 
       if test "x$have_atklib" = "xyes" ; then
-         ATKLIB_LDFLAGS="$ATKLIB_ROOT/ATKLib/ATKLib..a $ATKLIB_ROOT/HTKLib/HTKLib..a -lX11 -lpthread -lasound -L/usr/X11R6/lib "
+         ATKLIB_LDFLAGS="$ATKLIB_ROOT/ATKLib/ATKLib.$CPU.a $ATKLIB_ROOT/HTKLib/HTKLib.$CPU.a -lX11 -lpthread -lasound -L/usr/X11R6/lib "
          ATKLIB_CPPFLAGS="-I$ATKLIB_ROOT/ATKLib -I$ATKLIB_ROOT/HTKLib"
 
          AC_DEFINE([HAVE_ATKLIB],1,[Indicates whether ATKLib and HTKLib is present])
