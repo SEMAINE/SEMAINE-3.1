@@ -54,8 +54,11 @@ import eu.semaine.datatypes.xml.BML;
 
 public class TestGui extends Component
 {
+	/* Specifies if the gui should send speech/silence signals as well */
+	private boolean sendSpeechSignals = false;
+	
 	/* GUI Elements */
-	public JFrame jframe;
+	private JFrame jframe;
 	private JTextField input;
 	private JEditorPane output;
 	private JScrollPane scroller;
@@ -110,7 +113,7 @@ public class TestGui extends Component
 	
 	public void act()
 	{
-		if( !started ) {
+		if( !started && sendSpeechSignals ) {
 			MyTimer timer = new MyTimer(this);
 			timer.start();
 			System.out.println("Started");
@@ -305,6 +308,11 @@ public class TestGui extends Component
 	 */
 	public void sendUtterance( String line )
 	{
+		/* If speech signals are not continuously send, send a speaking signal to indicate that an utterance has been spoken */
+		if( !sendSpeechSignals ) {
+			sendSpeakingSignal();
+		}
+		
 		System.out.println("Sending line");
 		Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
@@ -314,6 +322,11 @@ public class TestGui extends Component
 		try {
 			userStateSender.sendXML(document, meta.getTime(), Event.single);
 		}catch( JMSException e ){}
+		
+		/* If speech signals are not continuously send, send a silence signal to indicate that the utterance is over */
+		if( !sendSpeechSignals ) {
+			sendSilenceSignal();
+		}
 	}
 	
 	/**
