@@ -378,7 +378,7 @@ pLLDs LLDs_destroyData( pLLDs obj )
 #undef FUNCTION 
 
 
-int LLDs_setupFeatureMemLevels( pLLDs llds, pFeatureMemory mem, pInputFramer framer, int *framerIDs, LONG_IDX *capacity )
+int LLDs_setupFeatureMemLevels( pLLDs llds, pFeatureMemory mem, pInputFramer framer, int *framerIDs, LONG_IDX *capacity, int nConf )  // configure only the first nConf levels from inputFramer
 #define FUNCTION "LLDs_setupFeatureMemLevels"
 {_FUNCTION_ENTER_
    int i;
@@ -390,6 +390,7 @@ int LLDs_setupFeatureMemLevels( pLLDs llds, pFeatureMemory mem, pInputFramer fra
           } else {
             minlevels = mem->nLevels;       
           }
+          if ((nConf != -1)&&(minlevels > nConf)) minlevels = nConf;
           mem->ll_levels = minlevels;
           FEATUM_DEBUG(5,"ftMem status: ll_levels=%i, minlevels=%i, framer->nClients=%i, nLevels=%i", mem->ll_levels, minlevels, framer->nClients, mem->nLevels);
 

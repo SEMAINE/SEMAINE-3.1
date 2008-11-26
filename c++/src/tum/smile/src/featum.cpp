@@ -58,6 +58,7 @@ pOptions setupOptions( cOptionParser &parser )
   parser.addBoolean( "displayenergy", 'E', &(parser.opt.displayenergy), 0, "print log frame energy for debugging audio problems" );  
   #endif
   parser.addPchar( "waveout", 'w', &(parser.opt.waveout), NULL, "wave file output of pcm stream", MANDATORY_ARG, OPTIONAL_PARAM);
+  parser.addPchar( "pipeaudio", 0, &(parser.opt.pipeaudio), NULL, "output wave data to a named pipe", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addFloat( "silthresh", 0, &(parser.opt.sil_thresh), 0.01, "Silence threshold", MANDATORY_ARG, OPTIONAL_PARAM );  
 
   #ifdef LIVE_REC

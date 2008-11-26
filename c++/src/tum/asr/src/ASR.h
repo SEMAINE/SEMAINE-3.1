@@ -16,7 +16,8 @@
 #include <semaine/cms/sender/EmmaSender.h>
 
 #include <AMonitor.h>
-#include <ASource.h>
+//#include <ASource.h>
+#include "APipeSource.h"
 #include <ACode.h>
 #include <ARec.h>
 
@@ -45,7 +46,7 @@ private:
 	ABuffer * feChan;
 	ABuffer * ansChan;
 	ARMan * rman;
-	ASource * ain;
+	APipeSource * ain;
 	ACode * acode;
 	ARec * arec;
 	AHmms * hset;

@@ -35,9 +35,7 @@
 #include "live-input.hpp"
 #endif
 
-#ifdef DEBUG_SILDET
 #include "wave-output.hpp"
-#endif
 
 #include "silence-detector.hpp"
 #include "option-parser.hpp"
@@ -132,8 +130,10 @@ private:
 	cPcmBuffer * frame2;
 	#endif
 
+	cWaveOutput *pipeOut;
 	cSilenceDetector *sildet;
 	cPcmBuffer * frame1;
+	cPcmBuffer * framePipe;
 
 	cFtIdentifier *meanE;
 	cFtIdentifier *meanF0; 
@@ -143,6 +143,7 @@ private:
 
 	int  getFrame_flag;
 	int framerId1, framerId2;
+	int framerIdPipe;
 
 	LONG_IDX turntime;
 	int speaking;

@@ -48,6 +48,13 @@
 //pPcmBuffer waveInput_readRawDataFromFile( pWaveInput obj, pPcmBuffer dataread, LONG_IDX start, LONG_IDX length );
 //int rb_copy( pWaveInput obj, pPcmBuffer data, LONG_IDX lng );
 
+// enable streaming functionality (i.e. do not attempt to seek on stream to write wave header)
+void waveOutput_setStreaming( pWaveOutput obj, int isStream )
+{
+  if (obj != NULL) {
+    obj->isStream = isStream;
+  }
+}
 
 
 pWaveOutput waveOutput_create( pWaveOutput obj, const char *filename, long sampleRate, int sampleType, int channels )
@@ -289,7 +296,7 @@ int waveOutput_writeHeader( pWaveOutput obj )
 #define FUNCTION "waveOutput_writeHeader"
 {_FUNCTION_ENTER_
   if (obj == NULL) _FUNCTION_RETURN_(0);
-  
+  if (obj->isStream)  _FUNCTION_RETURN_(1);  // do not write wave header for streams
  
   #ifdef USE_FOPEN
   if (obj->fileHandle != NULL) {

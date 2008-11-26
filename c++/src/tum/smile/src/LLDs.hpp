@@ -86,7 +86,11 @@ class cLLDs {
          }
 
          inline int setupFeatureMemLevels( cFeatureMemory &mem, cInputFramer &framer, int *framerIDs, LONG_IDX *capacity ){
-           return LLDs_setupFeatureMemLevels( &_data, &(mem._data), &(framer._data), framerIDs, capacity );
+           return LLDs_setupFeatureMemLevels( &_data, &(mem._data), &(framer._data), framerIDs, capacity, -1 );
+         }
+
+         inline int setupFeatureMemLevels( cFeatureMemory &mem, cInputFramer &framer, int *framerIDs, LONG_IDX *capacity, int nConf ){
+           return LLDs_setupFeatureMemLevels( &_data, &(mem._data), &(framer._data), framerIDs, capacity, nConf );
          }
          
          ~cLLDs() { LLDs_destroyData( &_data ); }

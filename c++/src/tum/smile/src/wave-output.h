@@ -85,6 +85,7 @@ typedef struct {
   uint32_t startSec, startUSec;
   uint32_t stopSec, stopUSec;
   
+  int isStream;
 } sWaveOutput;
 typedef sWaveOutput* pWaveOutput;
 
@@ -99,6 +100,8 @@ typedef sWaveOutput* pWaveOutput;
 // usage: pClassName testObj = NULL;
 //        testObj = testClass_create( testObj, ... );
 pWaveOutput waveOutput_create( pWaveOutput obj, const char *filename, long sampleRate, int sampleType, int channels );
+
+void waveOutput_setStreaming( pWaveOutput obj, int isStream );
 
 LONG_IDX waveOutput_secondsToSamples( pWaveOutput obj, double se );
 double waveOutput_samplesToSeconds( pWaveOutput obj, LONG_IDX sa );

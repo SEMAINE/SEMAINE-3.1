@@ -36,7 +36,17 @@ extern "C" {
 class cWaveOutput: public cAudioStream {
   sWaveOutput _data; 
 
-  public:
+  public: 
+
+    inline cWaveOutput( const char *filename, long sampleRate, int sampleType, int channels, int _isStream ) : cAudioStream() {
+      waveOutput_create( &(_data), filename, sampleRate, sampleType, channels );
+      // TODO: error handling!
+      param = new cWaveParameters(_data.parameters);
+      streamDirection = AUDIOSTREAM_WRITE;
+      streamType = TYPE_WAVEOUTPUT;    
+      waveOutput_setStreaming( &(_data), _isStream );   
+    }
+
     inline cWaveOutput( const char *filename, long sampleRate, int sampleType, int channels ) : cAudioStream() {
       waveOutput_create( &(_data), filename, sampleRate, sampleType, channels );
       // TODO: error handling!
@@ -53,7 +63,10 @@ class cWaveOutput: public cAudioStream {
       streamDirection = AUDIOSTREAM_WRITE;
       streamType = TYPE_WAVEOUTPUT;             
     }
-     
+
+    void setStreaming( int isStream ) {
+      waveOutput_setStreaming( &(_data), isStream );
+    }
     //    long getSampleRate() { return waveInput_getSampleRate( &(_data) ); }
   /*  
     LONG_IDX secondsToSamples( FLOAT_TYPE se ) 

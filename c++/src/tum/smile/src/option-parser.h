@@ -58,6 +58,7 @@ typedef struct {
   char *waveout1;
   char *waveout2;
   char *waveout3;
+  char *pipeaudio;
   char *svmmodelA;
   char *svmmodelV;
   char *svmscaleA;

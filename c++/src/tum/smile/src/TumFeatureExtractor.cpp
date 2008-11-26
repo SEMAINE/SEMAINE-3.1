@@ -101,9 +101,10 @@ TumFeatureExtractor::~TumFeatureExtractor()
 	if (frame2 != NULL) delete frame2;
 	#endif
 
+	if (pipeOut != NULL) delete pipeOut;
 	if (sildet != NULL) delete sildet;
 	if (frame1 != NULL) delete frame1;
-
+	if (framePipe != NULL) delete framePipe;
 }
 
 void TumFeatureExtractor::customStartIO() throw(CMSException)
@@ -130,6 +131,11 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
  	framedInput->setPreEmphasis(framerId1, opts->preEmphasis);
 
 	FEATUM_DEBUG(5,"frame size id0 = %i",framedInput->_data.client[framerId1]->frameLength);
+
+	if (opts->pipeaudio) {
+	  framerIdPipe = framedInput->addClientSecStep(opts->frameStep, opts->frameStep, 0);
+	  framedInput->setWindowing(framerIdPipe, WIN_NONE);
+	} else { framerIdPipe = -1; }
 
 	#ifdef DEBUG_SILDET
 	framerId2 = framedInput->addClientSecStep(opts->frameStep, opts->frameStep, 0);
@@ -184,7 +190,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
  	ftMem = new cFeatureMemory(FTMEM_RING_BUFFER, ftMEM_nLevels);
   
  	// setup the levels and allocate memory for each level  
-	llds->setupFeatureMemLevels( *ftMem, *framedInput, ids, cap );
+	llds->setupFeatureMemLevels( *ftMem, *framedInput, ids, cap, 1 );
 	llds->configureFeatureMemoryNames( *ftMem, LLD_LEVEL0 );
 	/*------------------------------------end--------------------------------------*/    
 
@@ -380,6 +386,9 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 			waveOut = new cWaveOutput( "dbg_out.wav", 16000, SAMPLETYPE_I16, 1 );
 		}
 	#endif 
+	if ((pipeOut == NULL)&&(opts->pipeaudio != NULL)) {
+		pipeOut = new cWaveOutput( opts->pipeaudio, 16000, SAMPLETYPE_I16, 1, 1 );
+	}
 
 	meanE = new cFtIdentifier(LLD0_FUNC_L0f);
 	meanF0 = new cFtIdentifier(LLD0_FUNC_L0f); 
@@ -401,6 +410,10 @@ void TumFeatureExtractor::act() throw(CMSException)
 		#ifdef DEBUG_SILDET
 		framedInput->getFrame(framerId2, &frame2);
 		#endif
+		if (opts->pipeaudio) {
+			framedInput->getFrame(framerIdPipe, &framePipe);
+			if ((framePipe != NULL)&&(pipeOut != NULL)) pipeOut->writeFrame(*framePipe);
+		}
 	}
 
 	if (frame1 == NULL) FEATUM_DEBUG(9,"FRAME1 ==  NULL\n");
@@ -410,6 +423,7 @@ void TumFeatureExtractor::act() throw(CMSException)
                              
 		llds->callExtractors(LLD_LEVEL0);
 		llds->flushToFtMem( *ftMem, LLD_LEVEL0 );
+		
 
 		deltas->autoCompute();
 		if (amqLowLevel != NULL) amqLowLevel->sendCurrentFrame();

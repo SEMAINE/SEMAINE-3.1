@@ -18,9 +18,10 @@
 #include <string>
 
 #include <AMonitor.h>
-#include <ASource.h>
+//#include <ASource.h>
 #include <ACode.h>
 #include <ARec.h>
+#include "APipeSource.h"
 
 using namespace semaine::util;
 using namespace semaine::datatypes::xml;
@@ -104,7 +105,9 @@ void ASR::customStartIO() throw(CMSException)
       	rman = new ARMan();
 
       	// Create Audio Source and Coder
-      	ain = new ASource("AIn",auChan);
+	const string pipelistfile="pipelist.txt";
+      	ain = new APipeSource("AIn",auChan,pipelistfile);
+//      	ain = new ASource("AIn",auChan);
       	acode = new ACode("ACode",auChan,feChan);
       	arec = new ARec("ARec",feChan,ansChan,rman,0);
 

@@ -131,7 +131,7 @@ int LLDs_checkDependencies( pLLDs obj );
 pLLDs LLDs_destroy( pLLDs obj );
 pLLDs LLDs_destroyData( pLLDs obj );
 
-int LLDs_setupFeatureMemLevels( pLLDs llds, pFeatureMemory mem, pInputFramer framer, int *framerIDs, LONG_IDX *capacity );
+int LLDs_setupFeatureMemLevels( pLLDs llds, pFeatureMemory mem, pInputFramer framer, int *framerIDs, LONG_IDX *capacity, int nConf );
 
 
 
