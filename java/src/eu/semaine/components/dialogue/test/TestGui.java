@@ -128,11 +128,15 @@ public class TestGui extends Component
 	{
 		if ( m instanceof SEMAINEXMLMessage ) {
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
+			System.out.println(xm.getText());
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
 				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.BML, BML.namespace);
 				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.SPEECH, BML.namespace);
-				printLine( "+ " + speech.getTextContent() );
+				try {
+					printLine( "+ " + speech.getAttribute(BML.TEXT) );
+				}catch(Exception e){e.printStackTrace();}
+				//printLine( "+ " + speech.getTextContent() );
 			}
 		}
 		if( isSentence(m) ) {
@@ -154,14 +158,16 @@ public class TestGui extends Component
 			if (interpretation != null && interpretation.getAttribute("processed").equals("")) {
 				List<Element> texts = em.getTextElements(interpretation);
 				for (Element text : texts) {
-					/*
+					
 					String utterance = text.getTextContent();
 					if( utterance != null ) {
 						return true;
 					}
-					*/
-					if( text.getAttribute("name") != null )
+					/*
+					if( text.getAttribute("name") != null ) {
 						return true;
+					}
+					*/
 				}
 			}
 		}
@@ -209,9 +215,11 @@ public class TestGui extends Component
 		/* Create output textarea */
 		output = new JEditorPane( "text/html", "<html><body>" + outputText + "</body></html>" );
 		output.setEditable( false );
+		output.setPreferredSize( new Dimension( 600, 200 ) );
 		scroller = new JScrollPane (output);
 		scroller.setPreferredSize( new Dimension( 600, 200 ) );
 		jframe.add( scroller, BorderLayout.CENTER );
+		//jframe.add( output, BorderLayout.CENTER );
 		
 		/* Create input area */
 		JPanel panel = createInputSide();
@@ -273,9 +281,10 @@ public class TestGui extends Component
 	public void printLine( String line )
 	{
 		outputText = outputText + "<br>" + line;
-		output.setText( "<html><body>" + outputText + "</body></html>" );
-		JViewport view = scroller.getViewport();
-		view.setViewPosition(new java.awt.Point(10, 99999999));
+		output.setText( ("<html><body>" + outputText + "</body></html>").trim() );
+		output.setCaretPosition(output.getDocument().getLength());
+		//JViewport view = scroller.getViewport();
+		//view.setViewPosition(new java.awt.Point(10, 99999999));
 	}
 	
 	/**
