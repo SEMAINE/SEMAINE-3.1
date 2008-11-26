@@ -3,12 +3,15 @@
 ATK_BASE="atk160"
 ATK_URL="atk160.tgz"  # you must download this .tgz manually and put it into
                       # the download/ folder in BASEDIR
-#PA_URL="http://www.portaudio.com/archives/pa_snapshot.tgz"
+ATK_PATCHES_BASE="atkpatches"
+ATK_PATCHES="atkpatches.tgz"  # download this file manually from the wiki and put it
+                              # into the download/ folder in BASEDIR (thirdparty/)
 
 register_build "atk" "$ATK_URL" "$ATK_BASE" "func_build_atk" $1
 
 #######################################################################
 
+if test ! "x$1" = "xdisabled" ; then
 # check if atk download exists, if not display instructions on how to download:
 if test ! -f $DOWNLOAD_PREFIX/$ATK_URL ; then
   echo ""
@@ -41,6 +44,8 @@ if test "x`find /usr/include -name *.h | grep /asoundlib.h`" = "x" ; then
     builderror
 fi
 
+fi
+
 # build_nr var must be set before this function is called
 function func_build_atk {
 
@@ -51,13 +56,33 @@ function func_build_atk {
         return 1;
       fi
     fi
-    
+
+    # apply HTKLib patches
+    MYPWD=$PWD
+    if test -f $DOWNLOAD_PREFIX/$ATK_PATCHES ; then
+      if test ! -d $BUILD_PREFIX/$ATK_PATCHES_BASE ; then
+        tar -C $BUILD_PREFIX -zxvf $DOWNLOAD_PREFIX/$ATK_PATCHES
+      else
+        if test "x$1" = "xclean" ; then
+          tar -C $BUILD_PREFIX -zxvf $DOWNLOAD_PREFIX/$ATK_PATCHES
+        fi
+      fi
+      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/HWave*.patch $BUILD_PREFIX/$ATK_BASE/HTKLib
+      cd $BUILD_PREFIX/$ATK_BASE/HTKLib
+      echo -n "Patching HWave to add PAUDIO input type... "
+      patch -N -p0 < HWave.c.patch
+      patch -N -p0 < HWave.h.patch
+      echo "done."
+    fi
+    cd $MYPWD
+
     # do not install portaudio, since it may conflict with locally installed portaudio
-    make ATKLib && make HTKLib  #&& make install
+    make HTKLib && make ATKLib   #&& make install
     if test "x$?" != "x0" ; then
       return 1;
     fi
     
+    addConf "ATKPATCHES" "$BUILD_PREFIX/$ATK_PATCHES_BASE"
     addConf "ATKPATH" "${builds_dirs[$build_nr]}"
     addConf "ATKCPPFLAGS" "-I${builds_dirs[$build_nr]}/ATKLib -I${builds_dirs[$build_nr]}/HTKLib"
     addConf "ATKLDFLAGS" "-L${builds_dirs[$build_nr]}/ATKLib -L${builds_dirs[$build_nr]}/HTKLib"
