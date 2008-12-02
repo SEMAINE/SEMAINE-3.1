@@ -381,9 +381,11 @@ void functionals_comp_regression(FLOAT_TYPE_FTMEM *unsorted, LONG_IDX bufLen, FL
   
   if ((shared != NULL)&&(bufLen>0)) {
     N=(FLOAT_TYPE_FTMEM)bufLen;
-    NNm1=N*(N-1.0);
-    m = (shared->centroid_numerator - shared->mean) / ( NNm1*(2.0*N-1.0)/6.0 - NNm1*(N-1.0)/4.0 );
-    t = (shared->mean - m * NNm1/2.0);
+    if (N > 1.0) {
+      NNm1=N*(N-1.0);
+      m = (shared->centroid_numerator - shared->mean) / ( NNm1*(2.0*N-1.0)/6.0 - NNm1*(N-1.0)/4.0 );
+      t = (shared->mean - m * NNm1/2.0);
+    } else { m = 0.0; t = 0.0; }
 
     if (oCnt > 0) output[0] = m;
     if (oCnt > 1) output[1] = t;
@@ -402,14 +404,19 @@ void functionals_comp_regression(FLOAT_TYPE_FTMEM *unsorted, LONG_IDX bufLen, FL
         eqsum += e*e;
         easum += ftAbs(e);
       }
-      output[2] = easum / N;
-      if (oCnt > 3) 
-        if (eqsum > 0.0) output[3] = sqrt( eqsum ) / N;
-        else output[3]  = 0.0;
-//      printf(" Aerr: %f  N:%f\n",output[2],N);
-//      printf(" Qerr: %f\n",output[3]);
-    }
-    
+      if (N>0.0) {
+      	output[2] = easum / N;
+       
+        if (oCnt > 3) 
+          if (eqsum > 0.0) output[3] = sqrt( eqsum ) / N;
+          else output[3]  = 0.0;
+//        printf(" Aerr: %f  N:%f\n",output[2],N);
+//        printf(" Qerr: %f\n",output[3]);
+        }
+      } else {
+      	output[2] = 0.0;
+      	output[3] = 0.0;
+      }
     if (oCnt > 4) {
       // compute quadratic regression
       FLOAT_TYPE_FTMEM s1, s2, s3, s4, m1, m2, m3;
@@ -454,10 +461,16 @@ void functionals_comp_regression(FLOAT_TYPE_FTMEM *unsorted, LONG_IDX bufLen, FL
           eqsum += e*e;
           easum += ftAbs(e);
         }
-        output[7] = easum / N;
-        if (oCnt > 8) 
-          if (eqsum > 0.0) output[8] = sqrt( eqsum ) / N;
-          else output[8]  = 0.0;
+        if (N>0.0) {
+          output[7] = easum / N;
+          if (oCnt > 8) 
+            if (eqsum > 0.0) output[8] = sqrt( eqsum ) / N;
+            else output[8]  = 0.0;
+        } else {
+        	output[7] = 0.0;
+        	output[8] = 0.0;
+        }
+           	
      // printf(" Aerr: %f  N:%f\n",output[7],N);
      // printf(" Qerr: %f\n",output[8]);
         
