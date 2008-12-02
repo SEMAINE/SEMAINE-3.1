@@ -69,7 +69,7 @@ public class DummyBMLActionProposer extends Component
 		long time = meta.getTime();
 		if (time - lastTimeINodded > 1000 &&
 				"user".equals(dialogStateReceiver.getCurrentBestGuess("speaker"))) {
-			Document doc = XMLTool.newDocument(BML.E_BML, BML.namespace, BML.version);
+			Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI, BML.version);
 			Element root = doc.getDocumentElement();
 			Element head = XMLTool.appendChildElement(root, BML.E_HEAD);
 			head.setAttribute(BML.A_TYPE, "NOD");
@@ -87,7 +87,7 @@ public class DummyBMLActionProposer extends Component
 			float[] features = fm.getFeatureVector();
 			if (features[2] < 0.001 && !smiling) { // some arbitrary condition
 				// start smiling
-				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespace, BML.version);
+				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI, BML.version);
 				Element root = doc.getDocumentElement();
 				Element face = XMLTool.appendChildElement(root, BML.E_FACE);
 				face.setAttribute(BML.A_TYPE, "smile");
@@ -95,7 +95,7 @@ public class DummyBMLActionProposer extends Component
 				smiling = true;
 			} else if (features[2] > 0.99 && smiling) { // arbitrary
 				// stop smiling
-				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespace, BML.version);
+				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI, BML.version);
 				Element root = doc.getDocumentElement();
 				Element face = XMLTool.appendChildElement(root, BML.E_FACE);
 				face.setAttribute(BML.A_TYPE, "smile");

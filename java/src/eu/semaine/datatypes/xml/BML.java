@@ -11,7 +11,7 @@ package eu.semaine.datatypes.xml;
 public class BML 
 {
     public static final String version = "1.0";
-    public static final String namespace = "http://www.mindmakers.org/projects/BML";
+    public static final String namespaceURI = "http://www.mindmakers.org/projects/BML";
 
     // Elements
     public static final String E_BML = "bml";

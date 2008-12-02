@@ -10,7 +10,7 @@ package eu.semaine.datatypes.xml;
  */
 public class EmotionML 
 {
-	public static final String namespace = "http://www.w3.org/2005/Incubator/emotion";
+	public static final String namespaceURI = "http://www.w3.org/2005/Incubator/emotion";
 	public static final String version = "0.0.1";
 
 	// Elements

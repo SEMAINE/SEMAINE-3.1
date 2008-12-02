@@ -133,8 +133,8 @@ public class TestGui extends Component
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
-				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespace);
-				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespace);
+				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
+				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
 				try {
 					printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
 				}catch(Exception e){e.printStackTrace();}
@@ -314,9 +314,9 @@ public class TestGui extends Component
 		}
 		
 		System.out.println("Sending line");
-		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
-		Element text = XMLTool.appendChildElement(interpretation, SemaineML.E_TEXT, SemaineML.namespace);
+		Element text = XMLTool.appendChildElement(interpretation, SemaineML.E_TEXT, SemaineML.namespaceURI);
 		text.setTextContent( line );
 		interpretation.setAttribute(EMMA.A_START, String.valueOf(meta.getTime()));
 		try {

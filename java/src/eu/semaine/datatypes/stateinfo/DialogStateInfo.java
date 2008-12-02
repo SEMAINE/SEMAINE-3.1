@@ -40,7 +40,7 @@ public class DialogStateInfo extends StateInfo
 	public DialogStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "DialogStateInfo", APIVersion, SemaineML.E_DIALOGSTATE, SemaineML.namespace);
+		super(doc, "DialogStateInfo", APIVersion, SemaineML.E_DIALOGSTATE, SemaineML.namespaceURI);
 	}
 
 	/**
@@ -65,27 +65,27 @@ public class DialogStateInfo extends StateInfo
 	protected void createDocumentFromInfo()
 	{
 		assert dialogHistory != null : "method seems to be called before constructor is finished";
-		doc = XMLTool.newDocument(SemaineML.E_DIALOGSTATE, SemaineML.namespace, SemaineML.version);
+		doc = XMLTool.newDocument(SemaineML.E_DIALOGSTATE, SemaineML.namespaceURI, SemaineML.version);
 		Element root = doc.getDocumentElement();
 		String item = info.get("speaker");
 		if (item != null) {
-			Element speaker = XMLTool.appendChildElement(root, SemaineML.E_SPEAKER, SemaineML.namespace);
+			Element speaker = XMLTool.appendChildElement(root, SemaineML.E_SPEAKER, SemaineML.namespaceURI);
 			speaker.setAttribute(SemaineML.A_WHO, item);
 		}
 		item = info.get("listener");
 		if (item != null) {
-			Element listener = XMLTool.appendChildElement(root, SemaineML.E_LISTENER, SemaineML.namespace);
+			Element listener = XMLTool.appendChildElement(root, SemaineML.E_LISTENER, SemaineML.namespaceURI);
 			listener.setAttribute(SemaineML.A_WHO, item);
 		}
 		item = info.get("topic");
 		if (item != null) {
-			Element topic = XMLTool.appendChildElement(root, SemaineML.E_TOPIC, SemaineML.namespace);
+			Element topic = XMLTool.appendChildElement(root, SemaineML.E_TOPIC, SemaineML.namespaceURI);
 			topic.setAttribute(SemaineML.A_NAME, item);
 		}
 		if (dialogHistory.size() > 0) {
-			Element dh = XMLTool.appendChildElement(root, SemaineML.E_DIALOG_HISTORY, SemaineML.namespace);
+			Element dh = XMLTool.appendChildElement(root, SemaineML.E_DIALOG_HISTORY, SemaineML.namespaceURI);
 			for (DialogAct dialogAct : dialogHistory) {
-				Element da = XMLTool.appendChildElement(dh, SemaineML.E_DIALOG_ACT, SemaineML.namespace);
+				Element da = XMLTool.appendChildElement(dh, SemaineML.E_DIALOG_ACT, SemaineML.namespaceURI);
 				da.setAttribute(SemaineML.A_SPEAKER, dialogAct.getSpeaker());
 				da.setAttribute(SemaineML.A_TOPIC, dialogAct.getTopic());
 				da.setAttribute(SemaineML.A_TIME, String.valueOf(dialogAct.getTime()));
@@ -116,7 +116,7 @@ public class DialogStateInfo extends StateInfo
 		
 		String namespace = el.getNamespaceURI();
 		String tagname = el.getTagName();
-		if (namespace.equals(SemaineML.namespace)) {
+		if (namespace.equals(SemaineML.namespaceURI)) {
 			if (tagname.equals(SemaineML.E_SPEAKER)) {
 				String value = XMLTool.needAttribute(el, SemaineML.A_WHO);
 				info.put("speaker", value);
@@ -138,7 +138,7 @@ public class DialogStateInfo extends StateInfo
 					}
 					assert n instanceof Element : "Should only see elements here";
 					Element child = (Element) n;
-					if (!(child.getNamespaceURI().equals(SemaineML.namespace)
+					if (!(child.getNamespaceURI().equals(SemaineML.namespaceURI)
 						  && child.getTagName().equals(SemaineML.E_DIALOG_ACT))) {
 						throw new MessageFormatException("Element '"+SemaineML.E_DIALOG_HISTORY+
 								"' in namespace '"+el.getNamespaceURI()+

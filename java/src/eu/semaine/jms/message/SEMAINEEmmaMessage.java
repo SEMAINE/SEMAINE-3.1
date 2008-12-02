@@ -33,33 +33,33 @@ public class SEMAINEEmmaMessage extends SEMAINEXMLMessage {
 
 	public Element getOneOf()
 	{
-		return XMLTool.getChildElementByTagNameNS(doc.getDocumentElement(), EMMA.E_ONEOF, EMMA.namespace);
+		return XMLTool.getChildElementByTagNameNS(doc.getDocumentElement(), EMMA.E_ONEOF, EMMA.namespaceURI);
 	}
 	
 	public Element getTopLevelInterpretation()
 	{
-		return XMLTool.getChildElementByTagNameNS(doc.getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespace);
+		return XMLTool.getChildElementByTagNameNS(doc.getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);
 	}
 
 
 	public List<Element> getEmotionElements(Element interpretation)
 	{
-		return XMLTool.getChildrenByTagNameNS(interpretation, EmotionML.E_EMOTION, EmotionML.namespace);
+		return XMLTool.getChildrenByTagNameNS(interpretation, EmotionML.E_EMOTION, EmotionML.namespaceURI);
 	}
 
 	public List<Element> getFeatureElements(Element interpretation)
 	{
-		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_FEATURE, SemaineML.namespace);
+		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_FEATURE, SemaineML.namespaceURI);
 	}
 
 	public List<Element> getBehaviourElements(Element interpretation)
 	{
-		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespaceURI);
 	}
 	
 	public List<Element> getTextElements(Element interpretation)
 	{
-		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_TEXT, SemaineML.namespace);
+		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_TEXT, SemaineML.namespaceURI);
 	}
 
 }

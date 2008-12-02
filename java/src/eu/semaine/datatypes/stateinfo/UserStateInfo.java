@@ -33,7 +33,7 @@ public class UserStateInfo extends StateInfo
 	public UserStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "UserStateInfo", APIVersion, SemaineML.E_USERSTATE, SemaineML.namespace);
+		super(doc, "UserStateInfo", APIVersion, SemaineML.E_USERSTATE, SemaineML.namespaceURI);
 	}
 
 	/**
@@ -52,30 +52,30 @@ public class UserStateInfo extends StateInfo
 	@Override
 	protected void createDocumentFromInfo()
 	{
-		doc = XMLTool.newDocument(SemaineML.E_USERSTATE, SemaineML.namespace, SemaineML.version);
+		doc = XMLTool.newDocument(SemaineML.E_USERSTATE, SemaineML.namespaceURI, SemaineML.version);
 		Element root = doc.getDocumentElement();
 		String item = info.get("emotion-quadrant");
 		if (item != null) {
-			Element category = XMLTool.appendChildElement(root, EmotionML.E_CATEGORY, EmotionML.namespace);
+			Element category = XMLTool.appendChildElement(root, EmotionML.E_CATEGORY, EmotionML.namespaceURI);
 			category.setAttribute(EmotionML.A_SET, "emotion-quadrant");
 			category.setAttribute(EmotionML.A_NAME, item);
 		}
 		item = info.get("interest");
 		if (item != null) {
-			Element category = XMLTool.appendChildElement(root, EmotionML.E_CATEGORY, EmotionML.namespace);
+			Element category = XMLTool.appendChildElement(root, EmotionML.E_CATEGORY, EmotionML.namespaceURI);
 			category.setAttribute(EmotionML.A_SET, "interest");
 			category.setAttribute(EmotionML.A_NAME, item);
 		}
 		item = info.get("engagement");
 		if (item != null) {
-			Element dimensions = XMLTool.appendChildElement(root, EmotionML.E_DIMENSIONS, EmotionML.namespace);
+			Element dimensions = XMLTool.appendChildElement(root, EmotionML.E_DIMENSIONS, EmotionML.namespaceURI);
 			dimensions.setAttribute(EmotionML.A_SET, "engagement");
 			Element engagement = XMLTool.appendChildElement(dimensions, "engagement");
 			engagement.setAttribute(EmotionML.A_VALUE, item);
 		}
 		item = info.get("turn-event");
 		if (item != null) {
-			Element event = XMLTool.appendChildElement(root, SemaineML.E_EVENT, SemaineML.namespace);
+			Element event = XMLTool.appendChildElement(root, SemaineML.E_EVENT, SemaineML.namespaceURI);
 			event.setAttribute(SemaineML.A_NAME, "turn-event");
 			event.setAttribute(SemaineML.A_VALUE, item);
 			String time = info.get("turn-event time");
@@ -85,7 +85,7 @@ public class UserStateInfo extends StateInfo
 		}
 		item = info.get("behaviour");
 		if (item != null) {
-			Element behaviour = XMLTool.appendChildElement(root, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+			Element behaviour = XMLTool.appendChildElement(root, SemaineML.E_BEHAVIOUR, SemaineML.namespaceURI);
 			behaviour.setAttribute(SemaineML.A_NAME, item);
 			String intensity = info.get("behaviour intensity");
 			if (intensity != null) {
@@ -120,18 +120,18 @@ public class UserStateInfo extends StateInfo
 		
 		String namespace = el.getNamespaceURI();
 		String tagname = el.getTagName();
-		if (namespace.equals(EmotionML.namespace)) {
+		if (namespace.equals(EmotionML.namespaceURI)) {
 			if (tagname.equals(EmotionML.E_DIMENSIONS)) {
 				String set = XMLTool.needAttribute(el, EmotionML.A_SET);
 				if (set.equals("engagement")) {
-					Element engagement = XMLTool.needChildElementByTagNameNS(el, "engagement", EmotionML.namespace);
+					Element engagement = XMLTool.needChildElementByTagNameNS(el, "engagement", EmotionML.namespaceURI);
 					String value = XMLTool.needAttribute(engagement, EmotionML.A_VALUE);
 					// And finally...
 					info.put("engagement", value);
 					return true;
 				}
 			}
-		} else if (namespace.equals(SemaineML.namespace)) {
+		} else if (namespace.equals(SemaineML.namespaceURI)) {
 			if (tagname.equals(SemaineML.E_EVENT)) {
 				String name = XMLTool.needAttribute(el, SemaineML.A_NAME);
 				String value = XMLTool.needAttribute(el, SemaineML.A_VALUE);

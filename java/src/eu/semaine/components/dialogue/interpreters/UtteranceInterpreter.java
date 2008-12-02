@@ -248,79 +248,79 @@ public class UtteranceInterpreter extends Component
 	public void addDialogueActToUserState( DialogueAct act ) throws JMSException
 	{
 		System.out.println("Analysis: " + act.toString());
-		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
 		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
 		interpretation.setAttribute(EMMA.A_START, String.valueOf(meta.getTime()));
 		interpretation.setAttribute( "processed", "true" );
-		Element text = XMLTool.appendChildElement(interpretation, SemaineML.E_TEXT, SemaineML.namespace);
+		Element text = XMLTool.appendChildElement(interpretation, SemaineML.E_TEXT, SemaineML.namespaceURI);
 		text.setTextContent( act.getUtterance() );
 		
 		if( act.isPositive() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "positive");
 		}
 		if( act.isNegative() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "negative");
 		}
 		if( act.isAgree() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "agree");
 		}
 		if( act.isDisagree() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "disagree");
 		}
 		if( act.isAboutOtherPeople() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "about other people");
 		}
 		if( act.isAboutOtherCharacter() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "about other character");
 		}
 		if( act.isAboutCurrentCharacter() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "about current character");
 		}
 		if( act.isAboutOwnFeelings() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "about own feelings");
 		}
 		if( act.isPragmatic() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "pragmatic");
 		}
 		if( act.isTalkAboutSelf() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "about self");
 		}
 		if( act.isFuture() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "future");
 		}
 		if( act.isPast() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "past");
 		}
 		if( act.isEvent() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "event");
 		}
 		if( act.isAction() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "action");
 		}
 		if( act.isLaugh() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "laugh");
 		}
 		if( act.isChangeSpeaker() ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "change speaker");
 		}
 		if( act.getTargetCharacter() != null ) {
-			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespace);
+			Element feature = XMLTool.appendChildElement(interpretation, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "target character");
 			feature.setAttribute("target", act.getTargetCharacter());
 		}

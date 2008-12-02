@@ -11,7 +11,7 @@ package eu.semaine.datatypes.xml;
 public class SSML 
 {
     public static final String version = "1.0";
-    public static final String namespace = "http://www.w3.org/2001/10/synthesis";
+    public static final String namespaceURI = "http://www.w3.org/2001/10/synthesis";
 
     // Elements
     public static final String E_SSML = "speak";

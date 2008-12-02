@@ -12,7 +12,7 @@ package eu.semaine.datatypes.xml;
 public class EMMA 
 {
     public static final String version = "1.0";
-    public static final String namespace = "http://www.w3.org/2003/04/emma";
+    public static final String namespaceURI = "http://www.w3.org/2003/04/emma";
 
     // Elements
     public static final String E_EMMA = "emma";

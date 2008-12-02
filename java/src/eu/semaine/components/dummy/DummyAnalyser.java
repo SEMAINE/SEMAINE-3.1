@@ -63,9 +63,9 @@ public class DummyAnalyser extends Component
 			if (features[0] < 0.002 && userIsSpeaking) { // some arbitrary condition
 				// Simulate a turn-yielding event
 				// Create and fill a simple EMMA document
-				Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+				Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
 				Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
-				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespaceURI);
 				interpretation.setAttribute(EMMA.A_START, String.valueOf(fm.getUsertime()));
 				behaviour.setAttribute(SemaineML.A_NAME, "gaze-away");
 				behaviour.setAttribute(SemaineML.A_INTENSITY, "0.9");
@@ -74,9 +74,9 @@ public class DummyAnalyser extends Component
 			} else if (features[0] > 0.998 && !userIsSpeaking) {
 				// Simulate a turn-request signal
 				// Create and fill a simple EMMA document
-				Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+				Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
 				Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
-				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespaceURI);
 				interpretation.setAttribute(EMMA.A_START, String.valueOf(fm.getUsertime()));
 				behaviour.setAttribute(SemaineML.A_NAME, "gaze-at-agent");
 				behaviour.setAttribute(SemaineML.A_INTENSITY, "0.9");

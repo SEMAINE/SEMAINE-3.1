@@ -11,7 +11,7 @@ package eu.semaine.datatypes.xml;
 public class SemaineML
 {
     public static final String version = "0.0.1";
-    public static final String namespace = "http://www.semaine-project.eu/semaineml";
+    public static final String namespaceURI = "http://www.semaine-project.eu/semaineml";
 
     // Elements
     public static final String E_USERSTATE = "user-state";

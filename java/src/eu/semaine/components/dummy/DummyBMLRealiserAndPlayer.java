@@ -60,20 +60,20 @@ public class DummyBMLRealiserAndPlayer extends Component
 		Event event = xm.getEventType();
 		Document doc = xm.getDocument();
 		Element bml = doc.getDocumentElement();
-		Element speech = XMLTool.getChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespace);
+		Element speech = XMLTool.getChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
 		if (speech != null) {
 			//Element text = XMLTool.needChildElementByTagNameNS(speech, BML.TEXT, BML.namespace);
 			String utterance = speech.getTextContent();
 			System.out.println(format.format(new Date(xm.getUsertime()))+ " " + utterance);
 		}
-		Element head = XMLTool.getChildElementByTagNameNS(bml, BML.E_HEAD, BML.namespace);
+		Element head = XMLTool.getChildElementByTagNameNS(bml, BML.E_HEAD, BML.namespaceURI);
 		if (head != null) {
 			String type = head.getAttribute(BML.A_TYPE);
 			if (type.equals("NOD")) {
 				System.out.println(format.format(new Date(xm.getUsertime()))+ " (nods)");
 			}
 		}
-		Element face = XMLTool.getChildElementByTagNameNS(bml, BML.E_FACE, BML.namespace);
+		Element face = XMLTool.getChildElementByTagNameNS(bml, BML.E_FACE, BML.namespaceURI);
 		if (face != null) {
 			String type = face.getAttribute(BML.A_TYPE);
 			if (type.equals("smile")) {
