@@ -108,6 +108,9 @@ public class ComponentRunner
 		*/
 	}
 	
+	/**
+	 * Start all components, and return.
+	 */
 	public void go()
 	{
 		for (Component c : components) {
@@ -115,6 +118,18 @@ public class ComponentRunner
 		}
 	}
 	
+	/**
+	 * Block until all components exit. This may never return.
+	 */
+	public void waitUntilCompleted()
+	{
+		for (Component c : components) {
+			try {
+				c.join();
+			} catch (InterruptedException ie) {}
+		}
+		
+	}
 	
 	/**
 	 * @param args
