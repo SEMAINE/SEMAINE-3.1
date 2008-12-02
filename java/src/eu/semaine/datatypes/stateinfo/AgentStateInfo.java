@@ -33,7 +33,7 @@ public class AgentStateInfo extends StateInfo
 	public AgentStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "AgentStateInfo", APIVersion, SemaineML.AGENTSTATE, SemaineML.namespace);
+		super(doc, "AgentStateInfo", APIVersion, SemaineML.E_AGENTSTATE, SemaineML.namespace);
 	}
 
 	/**
@@ -52,44 +52,44 @@ public class AgentStateInfo extends StateInfo
 	@Override
 	protected void createDocumentFromInfo()
 	{
-		doc = XMLTool.newDocument(SemaineML.AGENTSTATE, SemaineML.namespace, SemaineML.version);
+		doc = XMLTool.newDocument(SemaineML.E_AGENTSTATE, SemaineML.namespace, SemaineML.version);
 		Element root = doc.getDocumentElement();
 		String item = info.get("emotion-quadrant");
 		if (item != null) {
-			Element category = XMLTool.appendChildElement(root, EmotionML.CATEGORY, EmotionML.namespace);
-			category.setAttribute(EmotionML.SET, "emotion-quadrant");
-			category.setAttribute(EmotionML.NAME, item);
+			Element category = XMLTool.appendChildElement(root, EmotionML.E_CATEGORY, EmotionML.namespace);
+			category.setAttribute(EmotionML.A_SET, "emotion-quadrant");
+			category.setAttribute(EmotionML.A_NAME, item);
 		}
 		item = info.get("interest");
 		if (item != null) {
-			Element category = XMLTool.appendChildElement(root, EmotionML.CATEGORY, EmotionML.namespace);
-			category.setAttribute(EmotionML.SET, "interest");
-			category.setAttribute(EmotionML.NAME, item);
+			Element category = XMLTool.appendChildElement(root, EmotionML.E_CATEGORY, EmotionML.namespace);
+			category.setAttribute(EmotionML.A_SET, "interest");
+			category.setAttribute(EmotionML.A_NAME, item);
 		}
 		item = info.get("stance to user");
 		if (item != null) {
-			Element emotion = XMLTool.appendChildElement(root, EmotionML.EMOTION, EmotionML.namespace);
-			emotion.setAttribute(EmotionML.TYPE, "stance");
-			Element category = XMLTool.appendChildElement(emotion, EmotionML.CATEGORY, EmotionML.namespace);
-			category.setAttribute(EmotionML.SET, "like-dislike");
-			category.setAttribute(EmotionML.NAME, item);
-			Element object = XMLTool.appendChildElement(emotion, EmotionML.OBJECT, EmotionML.namespace);
-			object.setAttribute(EmotionML.NAME, "user");
+			Element emotion = XMLTool.appendChildElement(root, EmotionML.E_EMOTION, EmotionML.namespace);
+			emotion.setAttribute(EmotionML.A_TYPE, "stance");
+			Element category = XMLTool.appendChildElement(emotion, EmotionML.E_CATEGORY, EmotionML.namespace);
+			category.setAttribute(EmotionML.A_SET, "like-dislike");
+			category.setAttribute(EmotionML.A_NAME, item);
+			Element object = XMLTool.appendChildElement(emotion, EmotionML.E_OBJECT, EmotionML.namespace);
+			object.setAttribute(EmotionML.A_NAME, "user");
 		}
 		item = info.get("stance to topic");
 		if (item != null) {
-			Element emotion = XMLTool.appendChildElement(root, EmotionML.EMOTION, EmotionML.namespace);
-			emotion.setAttribute(EmotionML.TYPE, "stance");
-			Element category = XMLTool.appendChildElement(emotion, EmotionML.CATEGORY, EmotionML.namespace);
-			category.setAttribute(EmotionML.SET, "like-dislike");
-			category.setAttribute(EmotionML.NAME, item);
-			Element object = XMLTool.appendChildElement(emotion, EmotionML.OBJECT, EmotionML.namespace);
-			object.setAttribute(EmotionML.NAME, "topic");
+			Element emotion = XMLTool.appendChildElement(root, EmotionML.E_EMOTION, EmotionML.namespace);
+			emotion.setAttribute(EmotionML.A_TYPE, "stance");
+			Element category = XMLTool.appendChildElement(emotion, EmotionML.E_CATEGORY, EmotionML.namespace);
+			category.setAttribute(EmotionML.A_SET, "like-dislike");
+			category.setAttribute(EmotionML.A_NAME, item);
+			Element object = XMLTool.appendChildElement(emotion, EmotionML.E_OBJECT, EmotionML.namespace);
+			object.setAttribute(EmotionML.A_NAME, "topic");
 		}
 		item = info.get("emotionally-concordant-with-user");
 		if (item != null) {
-			Element conc = XMLTool.appendChildElement(root, SemaineML.EMOTIONALLY_CONCORDANT_WITH_USER, SemaineML.namespace);
-			conc.setAttribute(SemaineML.VALUE, item);
+			Element conc = XMLTool.appendChildElement(root, SemaineML.E_EMOTIONALLY_CONCORDANT_WITH_USER, SemaineML.namespace);
+			conc.setAttribute(SemaineML.A_VALUE, item);
 		}
 	}
 
@@ -118,29 +118,29 @@ public class AgentStateInfo extends StateInfo
 		String namespace = el.getNamespaceURI();
 		String tagname = el.getTagName();
 		if (namespace.equals(EmotionML.namespace)) {
-			if (tagname.equals(EmotionML.EMOTION)) {
-				String type = el.getAttribute(EmotionML.TYPE);
+			if (tagname.equals(EmotionML.E_EMOTION)) {
+				String type = el.getAttribute(EmotionML.A_TYPE);
 				if (type.equals("stance")) {
-					Element object = XMLTool.needChildElementByTagNameNS(el, EmotionML.OBJECT, EmotionML.namespace);
-					String objectName = object.getAttribute(EmotionML.NAME);
+					Element object = XMLTool.needChildElementByTagNameNS(el, EmotionML.E_OBJECT, EmotionML.namespace);
+					String objectName = object.getAttribute(EmotionML.A_NAME);
 					String infoKey = "stance to "+objectName;
 					if (!info.containsKey(infoKey)) {
 						throw new MessageFormatException("unknown object '"+objectName+"'");
 					}
-					Element category = XMLTool.needChildElementByTagNameNS(el, EmotionML.CATEGORY, EmotionML.namespace);
-					String set = XMLTool.needAttribute(category, EmotionML.SET);
+					Element category = XMLTool.needChildElementByTagNameNS(el, EmotionML.E_CATEGORY, EmotionML.namespace);
+					String set = XMLTool.needAttribute(category, EmotionML.A_SET);
 					if (!set.equals("like-dislike")) {
 						throw new MessageFormatException("a stance needs a category with set 'like-dislike'");
 					}
-					String value = XMLTool.needAttribute(category, EmotionML.NAME);
+					String value = XMLTool.needAttribute(category, EmotionML.A_NAME);
 					// And finally...
 					info.put(infoKey, value);
 					return true;
 				}
 			}
 		} else if (namespace.equals(SemaineML.namespace)) {
-			if (tagname.equals(SemaineML.EMOTIONALLY_CONCORDANT_WITH_USER)) {
-				String value = XMLTool.needAttribute(el, SemaineML.VALUE);
+			if (tagname.equals(SemaineML.E_EMOTIONALLY_CONCORDANT_WITH_USER)) {
+				String value = XMLTool.needAttribute(el, SemaineML.A_VALUE);
 				info.put("emotionally-concordant-with-user", value);
 				return true;
 			}

@@ -84,10 +84,10 @@ public abstract class StateInfo
 		String namespace = el.getNamespaceURI();
 		String tagname = el.getTagName();
 		if (namespace.equals(EmotionML.namespace)) {
-			if (tagname.equals(EmotionML.CATEGORY)) {
-				String set = el.getAttribute(EmotionML.SET);
+			if (tagname.equals(EmotionML.E_CATEGORY)) {
+				String set = el.getAttribute(EmotionML.A_SET);
 				if (info.containsKey(set)) {
-					String name = XMLTool.needAttribute(el, EmotionML.NAME);
+					String name = XMLTool.needAttribute(el, EmotionML.A_NAME);
 					info.put(set, name);
 					return true;
 				}

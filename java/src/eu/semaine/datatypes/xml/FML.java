@@ -14,19 +14,19 @@ public class FML
     public static final String namespace = "http://www.mindmakers.org/fml";
 
     // Elements
-    public static final String FML = "fml";
-	public static final String ROOT_TAGNAME = FML;
-	public static final String PERFORMATIVE = "performative";
-	public static final String THEME = "theme";
-	public static final String RHEME = "rheme";
-	public static final String WORLD = "world";
-	public static final String EMOTION = "emotion";
+    public static final String E_FML = "fml";
+	public static final String ROOT_TAGNAME = E_FML;
+	public static final String E_PERFORMATIVE = "performative";
+	public static final String E_THEME = "theme";
+	public static final String E_RHEME = "rheme";
+	public static final String E_WORLD = "world";
+	public static final String E_EMOTION = "emotion";
 
 	// Attributes
-	public static final String ID = "id";
-	public static final String START = "start";
-	public static final String END = "end";
-	public static final String TYPE = "type";
+	public static final String A_ID = "id";
+	public static final String A_START = "start";
+	public static final String A_END = "end";
+	public static final String A_TYPE = "type";
 
 
 }

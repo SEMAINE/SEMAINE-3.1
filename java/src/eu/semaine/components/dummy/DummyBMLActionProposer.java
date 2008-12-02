@@ -69,10 +69,10 @@ public class DummyBMLActionProposer extends Component
 		long time = meta.getTime();
 		if (time - lastTimeINodded > 1000 &&
 				"user".equals(dialogStateReceiver.getCurrentBestGuess("speaker"))) {
-			Document doc = XMLTool.newDocument(BML.BML, BML.namespace, BML.version);
+			Document doc = XMLTool.newDocument(BML.E_BML, BML.namespace, BML.version);
 			Element root = doc.getDocumentElement();
-			Element head = XMLTool.appendChildElement(root, BML.HEAD);
-			head.setAttribute(BML.TYPE, "NOD");
+			Element head = XMLTool.appendChildElement(root, BML.E_HEAD);
+			head.setAttribute(BML.A_TYPE, "NOD");
 			bmlSender.sendXML(doc, time);
 			lastTimeINodded = time;
 		}
@@ -87,18 +87,18 @@ public class DummyBMLActionProposer extends Component
 			float[] features = fm.getFeatureVector();
 			if (features[2] < 0.001 && !smiling) { // some arbitrary condition
 				// start smiling
-				Document doc = XMLTool.newDocument(BML.BML, BML.namespace, BML.version);
+				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespace, BML.version);
 				Element root = doc.getDocumentElement();
-				Element face = XMLTool.appendChildElement(root, BML.FACE);
-				face.setAttribute(BML.TYPE, "smile");
+				Element face = XMLTool.appendChildElement(root, BML.E_FACE);
+				face.setAttribute(BML.A_TYPE, "smile");
 				bmlSender.sendXML(doc, meta.getTime(), Event.start);
 				smiling = true;
 			} else if (features[2] > 0.99 && smiling) { // arbitrary
 				// stop smiling
-				Document doc = XMLTool.newDocument(BML.BML, BML.namespace, BML.version);
+				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespace, BML.version);
 				Element root = doc.getDocumentElement();
-				Element face = XMLTool.appendChildElement(root, BML.FACE);
-				face.setAttribute(BML.TYPE, "smile");
+				Element face = XMLTool.appendChildElement(root, BML.E_FACE);
+				face.setAttribute(BML.A_TYPE, "smile");
 				bmlSender.sendXML(doc, meta.getTime(), Event.end);
 				smiling = false;
 			}

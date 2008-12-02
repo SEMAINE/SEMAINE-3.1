@@ -63,23 +63,23 @@ public class DummyAnalyser extends Component
 			if (features[0] < 0.002 && userIsSpeaking) { // some arbitrary condition
 				// Simulate a turn-yielding event
 				// Create and fill a simple EMMA document
-				Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
-				Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
-				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.BEHAVIOUR, SemaineML.namespace);
-				interpretation.setAttribute(EMMA.START, String.valueOf(fm.getUsertime()));
-				behaviour.setAttribute(SemaineML.NAME, "gaze-away");
-				behaviour.setAttribute(SemaineML.INTENSITY, "0.9");
+				Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+				Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
+				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+				interpretation.setAttribute(EMMA.A_START, String.valueOf(fm.getUsertime()));
+				behaviour.setAttribute(SemaineML.A_NAME, "gaze-away");
+				behaviour.setAttribute(SemaineML.A_INTENSITY, "0.9");
 				// Now send it
 				userStateSender.sendXML(document, fm.getUsertime(), Event.single);
 			} else if (features[0] > 0.998 && !userIsSpeaking) {
 				// Simulate a turn-request signal
 				// Create and fill a simple EMMA document
-				Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
-				Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
-				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.BEHAVIOUR, SemaineML.namespace);
-				interpretation.setAttribute(EMMA.START, String.valueOf(fm.getUsertime()));
-				behaviour.setAttribute(SemaineML.NAME, "gaze-at-agent");
-				behaviour.setAttribute(SemaineML.INTENSITY, "0.9");
+				Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+				Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
+				Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+				interpretation.setAttribute(EMMA.A_START, String.valueOf(fm.getUsertime()));
+				behaviour.setAttribute(SemaineML.A_NAME, "gaze-at-agent");
+				behaviour.setAttribute(SemaineML.A_INTENSITY, "0.9");
 				// Now send it
 				userStateSender.sendXML(document, fm.getUsertime(), Event.single);
 			}

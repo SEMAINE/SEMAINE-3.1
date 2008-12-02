@@ -171,7 +171,7 @@ public class DummyInterpreter extends Component
 			if (interpretation != null) {
 				List<Element> behaviours = em.getBehaviourElements(interpretation);
 				for (Element behaviour : behaviours) {
-					String fName = XMLTool.needAttribute(behaviour, SemaineML.NAME);
+					String fName = XMLTool.needAttribute(behaviour, SemaineML.A_NAME);
 					//String fIntensity = XMLTool.needAttribute(behaviour, SemaineML.INTENSITY);
 					if (fName.equals("gaze-away")) {
 						// when user gazes away, the agent becomes the speaker

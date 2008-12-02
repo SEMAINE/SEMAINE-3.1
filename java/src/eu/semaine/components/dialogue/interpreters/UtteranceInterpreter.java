@@ -248,11 +248,11 @@ public class UtteranceInterpreter extends Component
 	public void addDialogueActToUserState( DialogueAct act ) throws JMSException
 	{
 		System.out.println("Analysis: " + act.toString());
-		Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
-		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
-		interpretation.setAttribute(EMMA.START, String.valueOf(meta.getTime()));
+		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
+		interpretation.setAttribute(EMMA.A_START, String.valueOf(meta.getTime()));
 		interpretation.setAttribute( "processed", "true" );
-		Element text = XMLTool.appendChildElement(interpretation, SemaineML.TEXT, SemaineML.namespace);
+		Element text = XMLTool.appendChildElement(interpretation, SemaineML.E_TEXT, SemaineML.namespace);
 		text.setTextContent( act.getUtterance() );
 		
 		if( act.isPositive() ) {

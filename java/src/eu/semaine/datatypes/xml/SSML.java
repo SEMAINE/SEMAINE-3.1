@@ -14,12 +14,12 @@ public class SSML
     public static final String namespace = "http://www.w3.org/2001/10/synthesis";
 
     // Elements
-    public static final String SSML = "speak";
-	public static final String ROOT_TAGNAME = SSML;
-	public static final String MARK = "mark";
+    public static final String E_SSML = "speak";
+	public static final String ROOT_TAGNAME = E_SSML;
+	public static final String E_MARK = "mark";
 	
 	// Attributes
-	public static final String NAME = "name";
+	public static final String A_NAME = "name";
 
 
 }

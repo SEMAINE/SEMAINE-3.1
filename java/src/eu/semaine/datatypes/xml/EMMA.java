@@ -15,18 +15,18 @@ public class EMMA
     public static final String namespace = "http://www.w3.org/2003/04/emma";
 
     // Elements
-    public static final String EMMA = "emma";
-	public static final String ROOT_TAGNAME = EMMA;
-	public static final String INTERPRETATION = "interpretation";
-	public static final String ONEOF = "one-of";
+    public static final String E_EMMA = "emma";
+	public static final String ROOT_TAGNAME = E_EMMA;
+	public static final String E_INTERPRETATION = "interpretation";
+	public static final String E_ONEOF = "one-of";
 	
 	// Attributes
-	public static final String START = "start";
-	public static final String END = "end";
-	public static final String DURATION = "duration";
-	public static final String VERBAL = "verbal";
-	public static final String MODE = "mode";
-	public static final String CONFIDENCE = "confidence";
+	public static final String A_START = "start";
+	public static final String A_END = "end";
+	public static final String A_DURATION = "duration";
+	public static final String A_VERBAL = "verbal";
+	public static final String A_MODE = "mode";
+	public static final String A_CONFIDENCE = "confidence";
 
 
 }

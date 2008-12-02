@@ -119,19 +119,19 @@ public class SpeakingAnalyser extends Component
 	
 	public void sendSpeaking() throws JMSException
 	{
-		Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
-		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
-		Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.BEHAVIOUR, SemaineML.namespace);
-		behaviour.setAttribute( SemaineML.NAME, "speaking" );
+		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
+		Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+		behaviour.setAttribute( SemaineML.A_NAME, "speaking" );
 		userStateSender.sendXML(document, meta.getTime(), Event.single);
 	}
 	
 	public void sendSilent() throws JMSException
 	{
-		Document document = XMLTool.newDocument(EMMA.EMMA, EMMA.namespace, EMMA.version);
-		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.INTERPRETATION);
-		Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.BEHAVIOUR, SemaineML.namespace);
-		behaviour.setAttribute( SemaineML.NAME, "silence" );
+		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespace, EMMA.version);
+		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
+		Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespace);
+		behaviour.setAttribute( SemaineML.A_NAME, "silence" );
 		userStateSender.sendXML(document, meta.getTime(), Event.single);
 	}
 }

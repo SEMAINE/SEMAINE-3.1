@@ -616,14 +616,14 @@ public class UtteranceProposer extends Component
 		
 		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
 		Element root = doc.getDocumentElement();
-		Element bml = XMLTool.appendChildElement(root, BML.BML, BML.namespace);
-		bml.setAttribute(BML.ID, "bml1");
-		Element fml = XMLTool.appendChildElement(root, FML.FML, FML.namespace);
-		fml.setAttribute(FML.ID, "fml1");
-		Element speech = XMLTool.appendChildElement(bml, BML.SPEECH);
-		speech.setAttribute(BML.ID, "s1");
-		speech.setAttribute(BML.TEXT, response);
-		speech.setAttribute(BML.LANGUAGE, "en_US");
+		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespace);
+		bml.setAttribute(BML.A_ID, "bml1");
+		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespace);
+		fml.setAttribute(FML.A_ID, "fml1");
+		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
+		speech.setAttribute(BML.A_ID, "s1");
+		speech.setAttribute(BML.E_TEXT, response);
+		speech.setAttribute(BML.E_LANGUAGE, "en_US");
 		speech.setTextContent(response);
 		
 		fmlSender.sendXML(doc, meta.getTime());

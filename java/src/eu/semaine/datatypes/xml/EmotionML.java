@@ -14,20 +14,20 @@ public class EmotionML
 	public static final String version = "0.0.1";
 
 	// Elements
-	public static final String EMOTION = "emotion";
-	public static final String ROOT_ELEMENT = EMOTION;
-	public static final String CATEGORY = "category";
-	public static final String DIMENSIONS = "dimensions";
-	public static final String AROUSAL = "arousal";
-	public static final String VALENCE = "valence";
-	public static final String POTENCY = "potency";
-	public static final String OBJECT = "object";
+	public static final String E_EMOTION = "emotion";
+	public static final String ROOT_ELEMENT = E_EMOTION;
+	public static final String E_CATEGORY = "category";
+	public static final String E_DIMENSIONS = "dimensions";
+	public static final String E_AROUSAL = "arousal";
+	public static final String E_VALENCE = "valence";
+	public static final String E_POTENCY = "potency";
+	public static final String E_OBJECT = "object";
 	
 	// Attributes
-	public static final String SET = "set";
-	public static final String NAME = "name";
-	public static final String VALUE = "value";
-	public static final String CONFIDENCE = "confidence";
-	public static final String TYPE = "type";
+	public static final String A_SET = "set";
+	public static final String A_NAME = "name";
+	public static final String A_VALUE = "value";
+	public static final String A_CONFIDENCE = "confidence";
+	public static final String A_TYPE = "type";
 
 }
