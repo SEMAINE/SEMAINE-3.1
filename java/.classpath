@@ -2,7 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/activemq-all-5.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/activemq-all-5.1.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://activemq.apache.org/maven/activemq-core/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/mary-common.jar"/>
@@ -13,5 +17,6 @@
 	<classpathentry kind="lib" path="lib/opennlp-tools-1.4.1/maxent-2.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/opennlp-tools-1.4.1/opennlp-tools-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/opennlp-tools-1.4.1/trove.jar"/>
+	<classpathentry kind="lib" path="lib/jgraph.jar" sourcepath="/Users/marc/src/jgraph/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
