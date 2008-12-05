@@ -14,6 +14,7 @@ import javax.jms.JMSException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.util.DialogueAct;
@@ -24,6 +25,8 @@ import eu.semaine.jms.receiver.UserStateReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
+import eu.semaine.datatypes.xml.SSML;
+import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -612,21 +615,35 @@ public class UtteranceProposer extends Component
 	 */
 	public void respond( String response ) throws JMSException
 	{
+		String id = "s1";
 		pastResponses.add(response);
 		
 		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
 		Element root = doc.getDocumentElement();
-		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
+
+		Element bml = XMLTool.appendChildElement(root, BML.E_BML, SSML.namespaceURI);
 		bml.setAttribute(BML.A_ID, "bml1");
 		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
 		fml.setAttribute(FML.A_ID, "fml1");
 		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
-		speech.setAttribute(BML.A_ID, "s1");
+		speech.setAttribute(BML.A_ID, id);
 		speech.setAttribute(BML.E_TEXT, response);
 		speech.setAttribute(BML.E_LANGUAGE, "en_US");
-		speech.setTextContent(response);
+
+		//speech.setTextContent(response);
+		
+		int counter=1;
+		for( String word : response.split(" ") ) {
+			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK);
+			mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
+			Node text = doc.createTextNode(word);
+			speech.appendChild(text);
+			counter++;
+		}
+		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK);
+		mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
+		
 		
 		fmlSender.sendXML(doc, meta.getTime());
-		
 	}
 }

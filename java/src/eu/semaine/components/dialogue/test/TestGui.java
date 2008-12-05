@@ -42,6 +42,7 @@ import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.jms.sender.FeatureSender;
 import eu.semaine.util.XMLTool;
 import eu.semaine.datatypes.xml.BML;
+import eu.semaine.datatypes.xml.SSML;
 
 /**
  * This class creates a GUI to test the Dialogue Management.
@@ -133,8 +134,9 @@ public class TestGui extends Component
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
-				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
-				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
+				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, SSML.namespaceURI);
+				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.E_SPEECH, SSML.namespaceURI);
+
 				try {
 					printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
 				}catch(Exception e){e.printStackTrace();}
