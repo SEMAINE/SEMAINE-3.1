@@ -323,7 +323,7 @@ public class SystemMonitor extends Thread
 		if (numGroups == 0) return;
 		int maxX = frameSize.width;
 		int maxY = frameSize.height-30;
-		Rectangle2D.Double[][] coords = new Rectangle2D.Double[numGroups][];
+		Point2D.Double[][] coords = new Point2D.Double[numGroups][];
 		
 		layoutLeftMidRight(maxX, maxY, numGroups, coords);
 		//layoutHalfCircle(maxX, maxY, numGroups, coords);
@@ -338,68 +338,119 @@ public class SystemMonitor extends Thread
 						attributes = new HashMap<Object, Object>();
 						allChanges.put(cell, attributes);
 					}
-					GraphConstants.setBounds(attributes, coords[i][j]);
+					Rectangle2D.Double bounds = new Rectangle2D.Double(
+							coords[i][j].getX()-componentWidth/2,
+							coords[i][j].getY()-componentHeight/2,
+							componentWidth, componentHeight);
+					GraphConstants.setBounds(attributes, bounds);
 				}
 			}
 		}
 		
 	}
 
+	/**
+	 * A three-section layout:
+	 * <pre>
+	 * L\M   M M   M/R
+	 *  L\M  M M  M/R
+	 *   L\M M M M/R
+	 * 
+	 * L L L     R R R
+	 * 
+	 * L L L     R R R
+	 * </pre>
+	 * @param maxX
+	 * @param maxY
+	 * @param numGroups
+	 * @param coords
+	 */
 	private void layoutLeftMidRight(int maxX, int maxY, int numGroups,
-			Rectangle2D.Double[][] coords) {
+			Point2D.Double[][] coords)
+	{
 		int numLeft = (int) Math.ceil(numGroups/3.);
 		int numRight = numLeft;
 		int numMid = numGroups - numLeft - numRight;
-		int avgSpaceX = (maxX - (numMid+2) * componentWidth) / (numMid+2);
-		int avgSpaceY = (2 * maxY - (numLeft+numRight+2) * componentHeight) 
-			/ (numLeft+numRight);
-		int leftX = avgSpaceX/2;
-		int rightX = leftX + (numMid+1)*(avgSpaceX+componentWidth);
-		int leftXMid = leftX + componentWidth + avgSpaceX;
-		int stepsLeft = numLeft;
-		if (numMid == numLeft) {
-			stepsLeft = numLeft+1;
-			avgSpaceX = (maxX - (numMid+1) * componentWidth) / (numMid+1);
-			avgSpaceY = (2 * maxY - (numLeft+numRight+2) * componentHeight) 
-				/ (numLeft+numRight+2);
-			leftXMid = componentWidth/2 + avgSpaceX;
-		}
-		int midY = maxY + avgSpaceY/2 - stepsLeft*(avgSpaceY+componentHeight);
-		int stepsRight = stepsLeft;
+
+		double SPACE = 50;
+		// Coordinates of the middle of the respective section:
+		double leftCenterX = 0.15 * maxX;
+		double rightCenterX = 0.85 * maxX;
+		double midCenterY = 0.15 * maxY;
+		double leftFirstY = maxY - SPACE; // the center point of the lowest (first) component
+		double leftLastY = midCenterY + 2*SPACE; // the center point of the highest left component
+		double midFirstX = leftCenterX + 2*SPACE; // the center point of the first mid component
+		double midLastX = rightCenterX - 2*SPACE; // the center point of the last mid component
+		double rightLastY = maxY - SPACE;
+		double rightFirstY = numRight > 1 ? midCenterY + 2*SPACE: rightLastY;
+		// width of the respective section:
+		double spanX = 0.2 * maxX;
+		double spanY = 0.2 * maxY;
+		
+		double leftStepY = numLeft > 1 ? (leftFirstY-leftLastY)/(numLeft-1) : 0;
 		for (int i=0; i<numLeft; i++) {
 			int numInGroup = infoGroups.get(i).size();
-			coords[i] = new Rectangle2D.Double[numInGroup];
-			int avgSpaceXInGroup = (maxX/3-leftX-numInGroup*componentWidth)/numInGroup;
+			coords[i] = new Point2D.Double[numInGroup];
+			double centerY = leftFirstY - i * leftStepY;
+			double outerY = centerY;
+			double innerY = centerY;
+			if (centerY < midCenterY+spanY/2+SPACE) { // danger of overlap
+				innerY += SPACE;
+				outerY = centerY - (innerY-centerY);
+			}
+			double outerX = numInGroup == 1 ? leftCenterX : leftCenterX - spanX / 2;
+			double innerX = numInGroup == 1 ? leftCenterX : leftCenterX + spanX / 2;
+			double stepX = numInGroup == 1 ? 0 : (innerX-outerX)/(numInGroup-1);
+			double stepY = numInGroup == 1 ? 0 : (innerY-outerY)/(numInGroup-1);
 			for (int j=0; j<numInGroup; j++) {
-				coords[i][j] = new Rectangle2D.Double(
-					leftX + j * (componentWidth+avgSpaceXInGroup),
-					maxY + avgSpaceY/2 - (i+1)*(avgSpaceY+componentHeight),
-					componentWidth,
-					componentHeight);
+				coords[i][j] = new Point2D.Double(
+						outerX + j*stepX,
+						outerY + j*stepY);
 			}
 		}
+		double midStepX = numMid > 1 ? (midLastX-midFirstX)/(numMid-1) : 0;
 		for (int i=0; i<numMid; i++) {
 			int numInGroup = infoGroups.get(numLeft+i).size();
-			coords[numLeft+i] = new Rectangle2D.Double[numInGroup];
-			int avgSpaceYInGroup = (maxY/3 - midY - numInGroup*componentHeight)/numInGroup;
+			coords[numLeft+i] = new Point2D.Double[numInGroup];
+			double centerX = midFirstX + i * midStepX;
+			double outerX = centerX;
+			double innerX = centerX;
+			if ( centerX < leftCenterX+spanX/2+SPACE) { // danger of overlap left
+				innerX += SPACE;
+				outerX = centerX - (innerX-centerX);
+			} else if (centerX > rightCenterX-spanX/2-SPACE) { // danger of overlap right
+				innerX -= SPACE;
+				outerX = centerX + (centerX-innerX);
+			}
+			double outerY = numInGroup == 1 ? midCenterY : midCenterY - spanY / 2;
+			double innerY = numInGroup == 1 ? midCenterY : midCenterY + spanY / 2;
+			double stepY = numInGroup == 1 ? 0 : (innerY-outerY)/(numInGroup-1);
+			double stepX = numInGroup == 1 ? 0 : (innerX-outerX)/(numInGroup-1);
 			for (int j=0; j<numInGroup; j++) {
-				coords[numLeft+i][j] = new Rectangle2D.Double(
-					leftXMid+i*(avgSpaceX+componentWidth),
-					midY+j * (componentHeight+avgSpaceYInGroup),
-					componentWidth,
-					componentHeight);
+				coords[numLeft+i][j] = new Point2D.Double(
+						outerX + j*stepX,
+						outerY + j*stepY);
 			}
 		}
+		double rightStepY = numRight > 1 ? (rightLastY - rightFirstY)/(numRight-1) : 0;
 		for (int i=0; i<numRight; i++) {
 			int numInGroup = infoGroups.get(numLeft+numMid+i).size();
-			coords[numLeft+numMid+i] = new Rectangle2D.Double[numInGroup];
-			int avgSpaceXInGroup = (maxX/3-leftX-numInGroup*componentWidth)/numInGroup;
+			coords[numLeft+numMid+i] = new Point2D.Double[numInGroup];
+			double centerY = rightFirstY + i * rightStepY;
+			double outerY = centerY;
+			double innerY = centerY;
+			if (centerY < midCenterY+spanY/2+SPACE) { // danger of overlap
+				innerY += SPACE;
+				outerY = centerY - (innerY-centerY);
+			}
+			double outerX = numInGroup == 1 ? rightCenterX : rightCenterX + spanX / 2;
+			double innerX = numInGroup == 1 ? rightCenterX : rightCenterX - spanX / 2;
+			double stepX = numInGroup == 1 ? 0 : (innerX-outerX)/(numInGroup-1); // negative in this case
+			double stepY = numInGroup == 1 ? 0 : (innerY-outerY)/(numInGroup-1);
 			for (int j=0; j<numInGroup; j++) {
-				coords[numLeft+numMid+i][j] = new Rectangle2D.Double(
-					rightX- j * (componentWidth+avgSpaceXInGroup),
-					midY+(i+stepsRight-numRight)*(avgSpaceY+componentHeight),
-					componentWidth,
-					componentHeight);
+				coords[numLeft+numMid+i][j] = new Point2D.Double(
+						outerX + j*stepX,
+						outerY + j*stepY);
 			}
 		}
 	}
