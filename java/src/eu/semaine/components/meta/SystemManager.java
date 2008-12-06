@@ -4,7 +4,11 @@
  */
 package eu.semaine.components.meta;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -13,9 +17,16 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
 
 import eu.semaine.components.Component;
+import eu.semaine.components.MessageLogComponent;
+import eu.semaine.gui.monitor.ComponentInfo;
+import eu.semaine.gui.monitor.SystemMonitor;
+import eu.semaine.gui.monitor.TopicInfo;
 import eu.semaine.jms.IOBase;
+import eu.semaine.jms.message.SEMAINEMessage;
 
 /**
  * Communication between a component and the
@@ -30,19 +41,24 @@ import eu.semaine.jms.IOBase;
  */
 public class SystemManager extends Component implements MessageListener
 {
+	private static final Set<String> IGNORE_COMPONENTS = new HashSet<String>(
+			Arrays.asList("SystemManager", "MessageLogComponent"));
+
 	private IOBase iobase;
 	private MessageProducer producer;
 	private MessageConsumer consumer;
-	private Map<String, State> componentStates;
+	private Map<String, ComponentInfo> componentInfos;
 	// what was the last value we reported for "system ready"?
 	private boolean lastReportSystemReady = false;
+	private SystemMonitor systemMonitor;
+	private MessageConsumer dataConsumer;
 
 	public SystemManager()
 	throws JMSException
 	{
 		super("SystemManager");
 		iobase = new IOBase("semaine.meta");
-		componentStates = new TreeMap<String, State>();
+		componentInfos = new TreeMap<String, ComponentInfo>();
 		consumer = iobase.getSession().createConsumer(iobase.getTopic(), MetaMessenger.COMPONENT_NAME + " IS NOT NULL");
 		producer = iobase.getSession().createProducer(iobase.getTopic());
 		consumer.setMessageListener(this);
@@ -50,6 +66,27 @@ public class SystemManager extends Component implements MessageListener
 		// need to send our own start again because when super() sent it,
 		// we weren't listening yet:
 		meta.reportState(State.starting);
+		if (Boolean.getBoolean("semaine.systemmanager.gui")) {
+			systemMonitor = new SystemMonitor(null);
+			systemMonitor.start();
+			dataConsumer = iobase.getSession().createConsumer(iobase.getSession().createTopic("semaine.data.>"));
+			dataConsumer.setMessageListener(new MessageListener() {
+				public void onMessage(Message m) {
+					try {
+						String topicName = ((Topic)m.getJMSDestination()).getTopicName();
+						TopicInfo ti = systemMonitor.getTopicInfo(topicName);
+						if (ti != null) {
+							StringBuilder buf = new StringBuilder();
+							SEMAINEMessage sm = new SEMAINEMessage(m);
+							ti.addMessage(MessageLogComponent.message2logString(sm), sm.getSource());
+						}
+					} catch (JMSException e) {
+						System.err.println("Cannot log message:");
+						e.printStackTrace();
+					}
+				}
+			});
+		}
 	}
 	
 	
@@ -73,38 +110,60 @@ public class SystemManager extends Component implements MessageListener
 	{
 		try {
 			assert m.propertyExists(MetaMessenger.COMPONENT_NAME) : "message should contain header field '"+MetaMessenger.COMPONENT_NAME+"'";
-			assert m.propertyExists(MetaMessenger.COMPONENT_STATE) : "message should contain header field '"+MetaMessenger.COMPONENT_STATE+"'";
 			String componentName = m.getStringProperty(MetaMessenger.COMPONENT_NAME);
-			State componentState = null;
-			try {
-				componentState = State.valueOf(m.getStringProperty(MetaMessenger.COMPONENT_STATE));
-			} catch (IllegalArgumentException e) {
-				log.warn("unknown component state '"+m.getStringProperty(MetaMessenger.COMPONENT_STATE)+"'");
-				componentState = State.failure;
-			}
-			componentStates.put(componentName, componentState);
-			if (log.isDebugEnabled()) {
-				StringBuilder builder = new StringBuilder("Components:\n");
-				for (Entry<String,State>entry : componentStates.entrySet()) {
-					builder.append(entry.getKey()+": "+entry.getValue()+"\n");
+			ComponentInfo ci = componentInfos.get(componentName);
+			if (ci == null) {
+				ci = new ComponentInfo(componentName, null, null, false, false);
+				componentInfos.put(componentName, ci);
+				if (systemMonitor != null && !IGNORE_COMPONENTS.contains(componentName)) {
+					// Tell GUI there is something new
+					systemMonitor.addComponentInfo(ci);
 				}
-				log.debug(builder);
 			}
-			if (componentState != State.ready) { // system not ready
-				if (lastReportSystemReady == true) {
-					reportSystemReady(false);
-				} // else, we were not ready anyway
-			} else { // this component is ready, how about the others?
-				boolean allReady = true;
-				for (Entry<String,State> entry : componentStates.entrySet()) {
-					if (entry.getValue() != State.ready) {
-						allReady = false;
-						break; // no point looking further
+			if (m.propertyExists(MetaMessenger.COMPONENT_STATE)) {
+				State componentState = null;
+				try {
+					componentState = State.valueOf(m.getStringProperty(MetaMessenger.COMPONENT_STATE));
+				} catch (IllegalArgumentException e) {
+					log.warn("unknown component state '"+m.getStringProperty(MetaMessenger.COMPONENT_STATE)+"'");
+					componentState = State.failure;
+				}
+				ci.setState(componentState);
+				if (log.isDebugEnabled()) {
+					StringBuilder builder = new StringBuilder("Components:\n");
+					for (Entry<String,ComponentInfo>entry : componentInfos.entrySet()) {
+						builder.append(entry.getKey()+": "+entry.getValue().getState()+"\n");
+					}
+					log.debug(builder);
+				}
+				if (componentState != State.ready) { // system not ready
+					if (lastReportSystemReady == true) {
+						reportSystemReady(false);
+					} // else, we were not ready anyway
+				} else { // this component is ready, how about the others?
+					boolean allReady = true;
+					for (Entry<String,ComponentInfo> entry : componentInfos.entrySet()) {
+						if (entry.getValue().getState() != State.ready) {
+							allReady = false;
+							break; // no point looking further
+						}
+					}
+					if (allReady != lastReportSystemReady) {
+						reportSystemReady(allReady);
 					}
 				}
-				if (allReady != lastReportSystemReady) {
-					reportSystemReady(allReady);
-				}
+			}
+			if (m.propertyExists(MetaMessenger.RECEIVE_TOPICS)) {
+				String receiveTopicsString = m.getStringProperty(MetaMessenger.RECEIVE_TOPICS);
+				String[] receiveTopics = receiveTopicsString.length() > 0 ?
+						receiveTopicsString.split(" ") : null;
+				ci.setReceiveTopics(receiveTopics);
+			}
+			if (m.propertyExists(MetaMessenger.SEND_TOPICS)) {
+				String sendTopicsString = m.getStringProperty(MetaMessenger.SEND_TOPICS);
+				String[] sendTopics = sendTopicsString.length() > 0 ?
+						sendTopicsString.split(" ") : null;
+				ci.setSendTopics(sendTopics);
 			}
 		} catch (JMSException e) {
 			log.error(e);

@@ -10,9 +10,9 @@ public class TopicInfo extends Info
 {
 	private static final int MEMORY = 100; // number of topic posts to remember
 	private static final Color ACTIVECOLOR = new Color(255, 255, 100);
-	private static final Color PASSIVECOLOR = new Color(150, 150, 150);
-	private static final int STEPS = 5;
-	private static final int STEPTIME = 100; // in ms
+	private static final Color PASSIVECOLOR = new Color(180, 180, 180);
+	private static final int STEPS = 6;
+	private static final int STEPTIME = 500; // in ms
 	
 	private String name;
 	private Map<String,ConnectionInfo> sendingComponents;
@@ -81,8 +81,10 @@ public class TopicInfo extends Info
 		if (currentStep == STEPS) return ACTIVECOLOR;
 		// interpolate
 		assert currentStep > 0 && currentStep < STEPS;
-		int rgb = PASSIVECOLOR.getRGB() + (ACTIVECOLOR.getRGB()-PASSIVECOLOR.getRGB())*currentStep/STEPS;
-		return new Color(rgb);
+		int red = PASSIVECOLOR.getRed() + (ACTIVECOLOR.getRed()-PASSIVECOLOR.getRed())*currentStep/STEPS;
+		int green = PASSIVECOLOR.getGreen() + (ACTIVECOLOR.getGreen()-PASSIVECOLOR.getGreen())*currentStep/STEPS;
+		int blue = PASSIVECOLOR.getBlue() + (ACTIVECOLOR.getBlue()-PASSIVECOLOR.getBlue())*currentStep/STEPS;
+		return new Color(red, green, blue);
 	}
 	
 	@Override

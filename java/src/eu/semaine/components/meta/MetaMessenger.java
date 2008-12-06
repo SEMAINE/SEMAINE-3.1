@@ -4,6 +4,8 @@
  */
 package eu.semaine.components.meta;
 
+import java.util.List;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
@@ -12,6 +14,8 @@ import javax.jms.MessageProducer;
 
 import eu.semaine.components.Component.State;
 import eu.semaine.jms.IOBase;
+import eu.semaine.jms.receiver.Receiver;
+import eu.semaine.jms.sender.Sender;
 
 /**
  * Communication between a component and the
@@ -26,6 +30,8 @@ public class MetaMessenger extends IOBase implements MessageListener
 	public static final String COMPONENT_STATE = "ComponentState";
 	public static final String SYSTEM_READY = "SystemReady";
 	public static final String SYSTEM_READY_TIME = "SystemReadyTime";
+	public static final String RECEIVE_TOPICS = "ReceiveTopics";
+	public static final String SEND_TOPICS = "SendTopics";
 	
 	private String componentName;
 	private MessageProducer producer;
@@ -38,12 +44,31 @@ public class MetaMessenger extends IOBase implements MessageListener
 	{
 		super("semaine.meta");
 		this.componentName = componentName;
-		consumer = session.createConsumer(topic, SYSTEM_READY + " IS NOT NULL");
+		consumer = session.createConsumer(topic);
 		producer = session.createProducer(topic);
 		consumer.setMessageListener(this);
 		startConnection();
 	}
 	
+	public void reportTopics(List<Receiver> receivers, List<Sender> senders)
+	throws JMSException
+	{
+		StringBuilder rec = new StringBuilder();
+		for (Receiver r : receivers) {
+			if (rec.length()>0) rec.append(" ");
+			rec.append(r.getTopicName());
+		}
+		StringBuilder snd = new StringBuilder();
+		for (Sender s : senders) {
+			if (snd.length()>0) snd.append(" ");
+			snd.append(s.getTopicName());
+		}
+		Message m = session.createMessage();
+		m.setStringProperty(COMPONENT_NAME, componentName);
+		m.setStringProperty(RECEIVE_TOPICS, rec.toString());
+		m.setStringProperty(SEND_TOPICS, snd.toString());
+		producer.send(m);
+	}
 	
 	public void reportState(State state)
 	throws JMSException
@@ -57,11 +82,13 @@ public class MetaMessenger extends IOBase implements MessageListener
 	public void onMessage(Message m)
 	{
 		try {
-			assert m.propertyExists(SYSTEM_READY) : "message should contain header field '"+SYSTEM_READY+"'";
-			setSystemReady(m.getBooleanProperty(SYSTEM_READY));
+			if (m.propertyExists(SYSTEM_READY)) {
+				setSystemReady(m.getBooleanProperty(SYSTEM_READY));
+			}
 			if (m.propertyExists(SYSTEM_READY_TIME)) {
 				setTime(m.getLongProperty(SYSTEM_READY_TIME));
 			}
+			
 		} catch (JMSException e) {
 			e.printStackTrace(System.err);
 		}

@@ -23,8 +23,8 @@ public class ComponentInfo extends Info
 			boolean isInput, boolean isOutput)
 	{
 		this.name = name;
-		this.receiveTopics = receiveTopics != null ? new ArrayList<String>(Arrays.asList(receiveTopics)) : null;
-		this.sendTopics = sendTopics != null ? new ArrayList<String>(Arrays.asList(sendTopics)) : null;
+		this.receiveTopics = receiveTopics != null ? Arrays.asList(receiveTopics) : null;
+		this.sendTopics = sendTopics != null ? Arrays.asList(sendTopics) : null;
 		this.isInput = isInput;
 		this.isOutput = isOutput;
 	}
@@ -54,29 +54,29 @@ public class ComponentInfo extends Info
 		return state;
 	}
 	
-	public synchronized void addReceiveTopics(String... newReceiveTopics) {
-		if (newReceiveTopics == null || newReceiveTopics.length == 0) return;
-		if (receiveTopics != null) {
-			receiveTopics.addAll(Arrays.asList(newReceiveTopics));
-		} else {
-			receiveTopics = new ArrayList<String>(Arrays.asList(newReceiveTopics));
-		}
+	public synchronized void setReceiveTopics(String... newReceiveTopics) {
+		if (newReceiveTopics == null) receiveTopics = null;
+		else
+			receiveTopics = Arrays.asList(newReceiveTopics);
 		setTopicsChanged(true);
 	}
 	
-	public synchronized void addSendTopics(String... newSendTopics) {
-		if (newSendTopics == null || newSendTopics.length == 0) return;
-		if (sendTopics != null) {
-			sendTopics.addAll(Arrays.asList(newSendTopics));
-		} else {
-			sendTopics = new ArrayList<String>(Arrays.asList(newSendTopics));
-		}
+	public synchronized void setSendTopics(String... newSendTopics) {
+		if (newSendTopics == null) sendTopics = null;
+		else
+			sendTopics = Arrays.asList(newSendTopics);
 		setTopicsChanged(true);
 	}
 	
 	
 	public synchronized void setState(Component.State newState)
 	{
+		if (newState != null && newState.equals(state) ||
+				newState == null && state == null) {
+			// state unchanged
+			return;
+		} 
+		// else state changed
 		state = newState;
 		setChanged(true);
 		if (dialog != null) {

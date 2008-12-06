@@ -78,6 +78,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	
 	private void startIO() throws JMSException
 	{
+		meta.reportTopics(receivers, senders);
 		customStartIO();
 		for (Receiver r : receivers) {
 			r.setMessageListener(this);

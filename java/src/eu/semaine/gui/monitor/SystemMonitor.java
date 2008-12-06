@@ -3,6 +3,7 @@ package eu.semaine.gui.monitor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,8 +42,8 @@ public class SystemMonitor extends Thread
 	private static int componentHeight = 30;
 	
 	private List<ComponentInfo> sortedComponentList;
+	private boolean componentListChanged = false;
 	private List<List<Info>> infoGroups;
-	private Map<String, ComponentInfo> components;
 	private Map<String, TopicInfo> topics;
 	private List<DefaultGraphCell> cells;
 	private List<DefaultEdge> edges;
@@ -69,12 +70,13 @@ public class SystemMonitor extends Thread
 		frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 
 		// Sort components:
-		sortedComponentList = Arrays.asList(componentInfos);
-		components = new HashMap<String, ComponentInfo>();
-		for (ComponentInfo ci : sortedComponentList) {
-			components.put(ci.toString(), ci);
-		}
+		if (componentInfos != null)
+			sortedComponentList = new ArrayList<ComponentInfo>(Arrays.asList(componentInfos));
+		else
+			sortedComponentList = new ArrayList<ComponentInfo>();
 		topics = new HashMap<String, TopicInfo>();
+		cells = new ArrayList<DefaultGraphCell>();
+		infoGroups = new LinkedList<List<Info>>();
 		updateCells();
 				
 		frame.setVisible(true);
@@ -82,9 +84,15 @@ public class SystemMonitor extends Thread
 
 	}
 	
+	public void addComponentInfo(ComponentInfo ci)
+	{
+		sortedComponentList.add(ci);
+		componentListChanged = true;
+	}
 	
 	private void redraw()
 	{
+		assert cells != null;
 		Map<DefaultGraphCell, Map<Object,Object>> allChanges = new HashMap<DefaultGraphCell, Map<Object,Object>>();
 		boolean mustUpdateCells = false;
 		boolean mustLayoutCells = false;
@@ -92,6 +100,11 @@ public class SystemMonitor extends Thread
 		if (!newFrameSize.equals(frameSize)) {
 			frameSize = newFrameSize;
 			mustLayoutCells = true;
+		}
+		if (componentListChanged) {
+			mustUpdateCells = true;
+			mustLayoutCells = true;
+			componentListChanged = false;
 		}
 
 		for (DefaultGraphCell cell : cells) {
@@ -160,13 +173,15 @@ public class SystemMonitor extends Thread
 
 	private void updateCells()
 	{
+		assert cells != null;
+		if (sortedComponentList.isEmpty()) return;
 		// each time we get here, we expect to know about new topics,
 		// so we need to sort again the components:
 		Comparator<ComponentInfo> ciComparator = new ComponentInfo.Comparator(
 				new HashSet<ComponentInfo>(sortedComponentList)); 
 		Collections.sort(sortedComponentList, ciComparator);
 		// Group components:
-		infoGroups = new LinkedList<List<Info>>();
+		infoGroups.clear();
 		List<Info> currentGroup = new LinkedList<Info>();
 		currentGroup.add(sortedComponentList.get(0));
 		infoGroups.add(currentGroup);
@@ -233,11 +248,7 @@ public class SystemMonitor extends Thread
 			newCells.add(cell);
 			ti.setCell(cell);
 		}
-		if (cells != null) {
-			cells.addAll(newCells);
-		} else {
-			cells = newCells;
-		}
+		cells.addAll(newCells);
 		graph.getGraphLayoutCache().insert(newCells.toArray());
 
 	}
@@ -308,10 +319,34 @@ public class SystemMonitor extends Thread
 	
 	private void layoutCells(Map<DefaultGraphCell, Map<Object,Object>> allChanges)
 	{
+		int numGroups = infoGroups.size();
+		if (numGroups == 0) return;
 		int maxX = frameSize.width;
 		int maxY = frameSize.height-30;
-		int numGroups = infoGroups.size();
 		Rectangle2D.Double[][] coords = new Rectangle2D.Double[numGroups][];
+		
+		layoutLeftMidRight(maxX, maxY, numGroups, coords);
+		//layoutHalfCircle(maxX, maxY, numGroups, coords);
+		
+		for (int i=0; i<numGroups; i++) {
+			int numInGroup = infoGroups.get(i).size();
+			for (int j=0; j<numInGroup; j++) {
+				DefaultGraphCell cell = infoGroups.get(i).get(j).getCell();
+				if (cell != null) {
+					Map<Object,Object> attributes = allChanges.get(cell);
+					if (attributes == null) {
+						attributes = new HashMap<Object, Object>();
+						allChanges.put(cell, attributes);
+					}
+					GraphConstants.setBounds(attributes, coords[i][j]);
+				}
+			}
+		}
+		
+	}
+
+	private void layoutLeftMidRight(int maxX, int maxY, int numGroups,
+			Rectangle2D.Double[][] coords) {
 		int numLeft = (int) Math.ceil(numGroups/3.);
 		int numRight = numLeft;
 		int numMid = numGroups - numLeft - numRight;
@@ -367,21 +402,47 @@ public class SystemMonitor extends Thread
 					componentHeight);
 			}
 		}
-		for (int i=0; i<numGroups; i++) {
-			int numInGroup = infoGroups.get(i).size();
+	}
+	
+	/**
+	 * Arrange coordinates on a half circle.
+	 * @param maxX
+	 * @param maxY
+	 * @param numGroups
+	 * @param coords
+	 */
+	private void layoutHalfCircle(int maxX, int maxY, int numGroups,
+			Rectangle2D.Double[][] coords)
+	{
+		double angleDelta = Math.PI/(numGroups-1);
+		double radiusX = maxX*0.4;
+		double radiusY = maxY* 0.8;
+		double spanX = maxX*0.2;
+		double spanY = maxY*0.3;
+		Point2D center = new Point2D.Double(maxX/2, maxY - componentHeight/2);
+		for (int i=0; i<infoGroups.size(); i++) {
+			List<Info> group = infoGroups.get(i);
+			double angle = i*angleDelta;
+			int numInGroup = group.size();
+			coords[i] = new Rectangle2D.Double[numInGroup];
+			double outerRadiusX = numInGroup == 1 ? radiusX : radiusX + spanX/2;
+			double outerRadiusY = numInGroup == 1 ? radiusY : radiusY + spanY/2;
+			double deltaX = numInGroup == 1 ? 0 : spanX / (numInGroup-1);
+			double deltaY = numInGroup == 1 ? 0 : spanY / (numInGroup-1);
 			for (int j=0; j<numInGroup; j++) {
-				DefaultGraphCell cell = infoGroups.get(i).get(j).getCell();
-				if (cell != null) {
-					Map<Object,Object> attributes = allChanges.get(cell);
-					if (attributes == null) {
-						attributes = new HashMap<Object, Object>();
-						allChanges.put(cell, attributes);
-					}
-					GraphConstants.setBounds(attributes, coords[i][j]);
-				}
+				Point2D compCenter = toLocation(angle, outerRadiusX-j*deltaX, outerRadiusY-j*deltaY, center);
+				coords[i][j] = new Rectangle2D.Double(compCenter.getX() - componentWidth/2,
+						compCenter.getY() - componentHeight/2,
+						componentWidth, componentHeight);
 			}
 		}
-		
+	}
+	
+	Point2D toLocation(double angle, double radiusX, double radiusY, Point2D center)
+	{
+		double deltaX = -Math.cos(angle) * radiusX;
+		double deltaY = Math.sin(angle) * radiusY;
+		return new Point2D.Double(center.getX()+deltaX, center.getY()-deltaY);
 	}
 	
 	public void run()
@@ -397,6 +458,23 @@ public class SystemMonitor extends Thread
 			redraw();
 		}
 	}
+	
+	
+	public ComponentInfo getComponentInfo(String componentName)
+	{
+		for(ComponentInfo ci : sortedComponentList) {
+			if (ci.toString().equals(componentName)) {
+				return ci;
+			}
+		}
+		return null;
+	}
+
+	public TopicInfo getTopicInfo(String topicName)
+	{
+		return topics.get(topicName);
+	}
+	
 	
 	/**
 	 * @param args
@@ -459,7 +537,7 @@ public class SystemMonitor extends Thread
 				new ComponentInfo("BML realiser", 
 						new String[] {"semaine.data.synthesis.plan.speechtimings"},
 						new String[] {"semaine.data.lowlevel.video"},
-						false, false),
+						false, false)
 		};
 		SystemMonitor mon = new SystemMonitor(cis);
 		mon.start();
@@ -469,11 +547,12 @@ public class SystemMonitor extends Thread
 			} catch (InterruptedException ie) {}
 			cis[i].setState(Component.State.ready);
 		}
-		ComponentInfo audioFeatures = mon.components.get("audio features");
-		audioFeatures.addSendTopics("semaine.data.analysis.audio");
+		ComponentInfo audioFeatures = mon.getComponentInfo("audio features");
+		audioFeatures.setSendTopics("semaine.data.analysis.audio");
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(3000);
 		} catch (InterruptedException ie) {}
+		//mon.addComponentInfo();
 		TopicInfo ti = mon.topics.get("semaine.data.state.user.emma");
 		for (int i=0; i<1000; i++) {
 			ti.addMessage("Test message "+i, "emotion detection");

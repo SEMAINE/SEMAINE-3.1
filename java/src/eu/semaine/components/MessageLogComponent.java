@@ -4,6 +4,8 @@
  */
 package eu.semaine.components;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class MessageLogComponent extends Component
 {
 	private Receiver receiver;
 	
-	private DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	public static final DateFormat TIME_FORMAT = new SimpleDateFormat("mm:ss.SSS");
 
 
 	/**
@@ -46,23 +48,37 @@ public class MessageLogComponent extends Component
 	throws JMSException
 	{
 		// log message content
-		StringBuilder buf = new StringBuilder();
-		buf.append("[").append(format.format(new Date(m.getUsertime()))).append("] ");
-		buf.append(m.getDatatype()).append(" ");
-		buf.append(m.getSource()).append("->").append(m.getMessage().getJMSDestination().toString()).append(" ");
-		if (m.isEventBased()) {
-			buf.append(m.getEventType()).append(" event ");
-		} else {
-			buf.append("period=").append(m.getPeriod()).append(" ");
-		}
-		if (m.getMessage() instanceof TextMessage) {
-			buf.append("\n");
-			buf.append(m.getText());
-			buf.append("\n");
-		} else {
-			buf.append(m.getMessage().getClass().getSimpleName());
-			buf.append("\n");
-		}
-		log.debug(buf);
+		log.debug(message2logString(m));
 	}
+
+	public static String message2logString(SEMAINEMessage m)
+	{
+		try {
+			StringBuilder buf = new StringBuilder();
+			buf.append("[").append(TIME_FORMAT.format(new Date(m.getUsertime()))).append("] ");
+			buf.append(m.getDatatype()).append(" ");
+			buf.append(m.getSource()).append("->").append(m.getMessage().getJMSDestination().toString()).append(" ");
+			if (m.isEventBased()) {
+				buf.append(m.getEventType()).append(" event ");
+			} else {
+				buf.append("period=").append(m.getPeriod()).append(" ");
+			}
+			if (m.getMessage() instanceof TextMessage) {
+				buf.append("\n");
+				buf.append(m.getText());
+				buf.append("\n");
+			} else {
+				buf.append(m.getMessage().getClass().getSimpleName());
+				buf.append("\n");
+			}
+			return buf.toString();
+		} catch (JMSException je) {
+			StringWriter errWriter = new StringWriter();
+			PrintWriter pw = new PrintWriter(errWriter);
+			pw.println("Exception trying to log message content: ");
+			je.printStackTrace(pw);
+			return errWriter.toString();
+		}
+	}
+
 }
