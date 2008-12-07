@@ -24,6 +24,7 @@
         <pathelement location="lib/opennlp-tools-1.4.1/maxent-2.5.1.jar"/>
         <pathelement location="lib/opennlp-tools-1.4.1/opennlp-tools-1.4.1.jar"/>
         <pathelement location="lib/opennlp-tools-1.4.1/trove.jar"/>
+        <pathelement location="lib/jgraph.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
