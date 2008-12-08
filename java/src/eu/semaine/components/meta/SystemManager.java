@@ -139,8 +139,8 @@ public class SystemManager extends Component implements MessageListener
 					for (Entry<String,ComponentInfo>entry : componentInfos.entrySet()) {
 						builder.append(entry.getKey()+": "+entry.getValue().getState());
 						String entryDetails = entry.getValue().getStateDetails();
-						if (details != null)
-							builder.append(" (").append(details).append(")");
+						if (entryDetails != null)
+							builder.append(" (").append(entryDetails).append(")");
 						builder.append("\n");
 					}
 					log.debug(builder);
