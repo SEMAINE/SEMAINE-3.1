@@ -110,21 +110,7 @@ public class JMSLogger
 
 	private void log(MessageProducer target, Level level, Object... objects)
 	{
-		StringBuilder builder = new StringBuilder();
-		for (Object o : objects) {
-			if (builder.length() > 0) {
-				builder.append(" ");
-			}
-			if (o instanceof Throwable) {
-				Throwable t = (Throwable) o;
-				StringWriter sw = new StringWriter();
-				t.printStackTrace(new PrintWriter(sw));
-				builder.append(sw.toString());
-			} else {
-				builder.append(o.toString());
-			}
-		}
-		String logMessageText = builder.toString();
+		String logMessageText = toLogMessageText(objects);
 		try {
 			TextMessage message = session.createTextMessage(logMessageText);
 			target.send(message);
@@ -144,6 +130,25 @@ public class JMSLogger
 			}
 		}
 		
+	}
+
+	public static String toLogMessageText(Object... objects) {
+		StringBuilder builder = new StringBuilder();
+		for (Object o : objects) {
+			if (builder.length() > 0) {
+				builder.append(" ");
+			}
+			if (o instanceof Throwable) {
+				Throwable t = (Throwable) o;
+				StringWriter sw = new StringWriter();
+				t.printStackTrace(new PrintWriter(sw));
+				builder.append(sw.toString());
+			} else {
+				builder.append(o.toString());
+			}
+		}
+		String logMessageText = builder.toString();
+		return logMessageText;
 	}
 	
 	

@@ -76,8 +76,9 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	}
 	
 	
-	private void startIO() throws JMSException
+	private void startIO() throws Exception
 	{
+		long startTime = System.currentTimeMillis();
 		meta.reportTopics(receivers, senders);
 		customStartIO();
 		for (Receiver r : receivers) {
@@ -87,18 +88,26 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		for (Sender s : senders) {
 			s.startConnection();
 		}
+		long endTime = System.currentTimeMillis();
+		long startupDuration = endTime - startTime;
 		state = State.ready;
-		meta.reportState(state);
+		meta.reportState(state, "Startup took "+startupDuration+" ms");
 	}
 	
-	protected void customStartIO() throws JMSException{}
+	protected void customStartIO() throws Exception{}
 
 	public void run()
 	{
 		try {
 			startIO();
-		} catch (JMSException ex) {
+		} catch (Throwable ex) {
 			log.error("Cannot startup component:", ex);
+			try {
+				state = State.failure;
+				meta.reportState(state, "Cannot startup component:", ex);
+			} catch (JMSException me) {
+				log.error("cannot report failure state", me);
+			}
 			requestExit();
 		}
 		
@@ -119,11 +128,11 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			try {
 				// Check if we should do something proactively:
 				act();
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				log.error("error when trying to act", e);
 				try {
 					state = State.failure;
-					meta.reportState(state);
+					meta.reportState(state, "error when trying to act", e);
 				} catch (JMSException me) {
 					log.error("cannot report failure state", me);
 				}
@@ -148,11 +157,13 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 				// Now, do something meaningful with the message,
 				// and possibly send output via the Senders.
 				react(message);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				log.error("error when trying to react", e);
+				log.debug("(message was: ", MessageLogComponent.message2logString(message), ")");
 				try {
 					state = State.failure;
-					meta.reportState(state);
+					meta.reportState(state, "error when trying to react", e,
+							" (message was: ", MessageLogComponent.message2logString(message), ")");
 				} catch (JMSException me) {
 					log.error("cannot report failure state", me);
 				}
@@ -185,9 +196,10 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	 * This base implementation does nothing; subclasses should implement
 	 * suitable behaviour here.
 	 * @throws JMSException if communication with the JMS server goes wrong.
+	 * @throws Exception if anything goes wrong in the internal processing of the component.
 	 */
 	protected void act()
-	throws JMSException
+	throws Exception
 	{
 		
 	}
@@ -198,9 +210,10 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	 * This base implementation does nothing; subclasses should implement
 	 * suitable behaviour here.
 	 * @throws JMSException if communication with the JMS server goes wrong.
+	 * @throws Exception if anything goes wrong in the internal processing of the component.
 	 */
 	protected void react(SEMAINEMessage message)
-	throws JMSException
+	throws Exception
 	{
 		
 	}

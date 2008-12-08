@@ -14,6 +14,7 @@ import javax.jms.MessageProducer;
 
 import eu.semaine.components.Component.State;
 import eu.semaine.jms.IOBase;
+import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.sender.Sender;
 
@@ -28,6 +29,7 @@ public class MetaMessenger extends IOBase implements MessageListener
 {
 	public static final String COMPONENT_NAME = "ComponentName";
 	public static final String COMPONENT_STATE = "ComponentState";
+	public static final String COMPONENT_STATE_DETAILS = "ComponentStateDetails";
 	public static final String SYSTEM_READY = "SystemReady";
 	public static final String SYSTEM_READY_TIME = "SystemReadyTime";
 	public static final String RECEIVE_TOPICS = "ReceiveTopics";
@@ -73,9 +75,18 @@ public class MetaMessenger extends IOBase implements MessageListener
 	public void reportState(State state)
 	throws JMSException
 	{
+		reportState(state, null);
+	}
+
+	public void reportState(State state, Object... details)
+	throws JMSException
+	{
 		Message m = session.createMessage();
 		m.setStringProperty(COMPONENT_NAME, componentName);
 		m.setStringProperty(COMPONENT_STATE, state.toString());
+		if (details != null) {
+			m.setStringProperty(COMPONENT_STATE_DETAILS, JMSLogger.toLogMessageText(details));
+		}
 		producer.send(m);
 	}
 

@@ -17,6 +17,7 @@ public class ComponentInfo extends Info
 	private boolean isInput;
 	private boolean isOutput;
 	private Component.State state;
+	private String stateDetails;
 	private boolean topicsChanged;
 	
 	public ComponentInfo(String name, String[] receiveTopics, String[] sendTopics,
@@ -27,6 +28,8 @@ public class ComponentInfo extends Info
 		this.sendTopics = sendTopics != null ? Arrays.asList(sendTopics) : null;
 		this.isInput = isInput;
 		this.isOutput = isOutput;
+		this.state = null;
+		this.stateDetails = null;
 	}
 	
 	public boolean isInput()
@@ -53,6 +56,31 @@ public class ComponentInfo extends Info
 	{
 		return state;
 	}
+
+	public synchronized void setState(Component.State newState)
+	{
+		if (newState != null && newState.equals(state) ||
+				newState == null && state == null) {
+			// state unchanged
+			return;
+		} 
+		// else state changed
+		state = newState;
+		setChanged(true);
+		if (dialog != null) {
+			dialog.setText(getInfo());
+		}
+	}
+
+	public void setStateDetails(String details)
+	{
+		stateDetails = details;
+	}
+	
+	public String getStateDetails()
+	{
+		return stateDetails;
+	}
 	
 	public synchronized void setReceiveTopics(String... newReceiveTopics) {
 		if (newReceiveTopics == null) receiveTopics = null;
@@ -69,20 +97,6 @@ public class ComponentInfo extends Info
 	}
 	
 	
-	public synchronized void setState(Component.State newState)
-	{
-		if (newState != null && newState.equals(state) ||
-				newState == null && state == null) {
-			// state unchanged
-			return;
-		} 
-		// else state changed
-		state = newState;
-		setChanged(true);
-		if (dialog != null) {
-			dialog.setText(getInfo());
-		}
-	}
 		
 	public boolean canReceive(String topicName)
 	{
@@ -138,7 +152,10 @@ public class ComponentInfo extends Info
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("Component name: ").append(name).append("\n");
-		sb.append("State: ").append(state).append("\n");
+		sb.append("State: ").append(state);
+		if (stateDetails != null)
+			sb.append(" (").append(stateDetails).append(")");
+		sb.append("\n");
 		if (receiveTopics != null && receiveTopics.size() > 0) {
 			sb.append("Receiving from topics:\n");
 			for (String t : receiveTopics) {

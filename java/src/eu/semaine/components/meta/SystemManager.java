@@ -129,10 +129,19 @@ public class SystemManager extends Component implements MessageListener
 					componentState = State.failure;
 				}
 				ci.setState(componentState);
+				String details = "";
+				if (m.propertyExists(MetaMessenger.COMPONENT_STATE_DETAILS)) {
+					details = m.getStringProperty(MetaMessenger.COMPONENT_STATE_DETAILS);
+					ci.setStateDetails(details);
+				}
 				if (log.isDebugEnabled()) {
 					StringBuilder builder = new StringBuilder("Components:\n");
 					for (Entry<String,ComponentInfo>entry : componentInfos.entrySet()) {
-						builder.append(entry.getKey()+": "+entry.getValue().getState()+"\n");
+						builder.append(entry.getKey()+": "+entry.getValue().getState());
+						String entryDetails = entry.getValue().getStateDetails();
+						if (details != null)
+							builder.append(" (").append(details).append(")");
+						builder.append("\n");
 					}
 					log.debug(builder);
 				}

@@ -259,12 +259,15 @@ public class SystemMonitor extends Thread
 		// Create cells for arrows
 		for (ComponentInfo ci : sortedComponentList) {
 			String[] sendTopics = ci.sendTopics();
+			if (ci.getCell() == null) continue;
 			if (sendTopics != null) {
 				for (String topicName : sendTopics) {
 					TopicInfo ti = topics.get(topicName);
-					assert ti != null;
-					ConnectionInfo arrow = addArrow(newEdges, ci.getCell(), ti.getCell());
-					ti.sendingComponents().put(ci.toString(), arrow);
+					if (ti != null) {
+						assert ti.getCell() != null;
+						ConnectionInfo arrow = addArrow(newEdges, ci.getCell(), ti.getCell());
+						ti.sendingComponents().put(ci.toString(), arrow);
+					}
 				}
 			}
 			String[] receiveTopics = ci.receiveTopics();
