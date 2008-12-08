@@ -134,8 +134,8 @@ public class TestGui extends Component
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
-				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, SSML.namespaceURI);
-				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.E_SPEECH, SSML.namespaceURI);
+				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
+				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
 
 				try {
 					printLine( "+ " + speech.getAttribute(BML.E_TEXT) );

@@ -621,7 +621,7 @@ public class UtteranceProposer extends Component
 		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
 		Element root = doc.getDocumentElement();
 
-		Element bml = XMLTool.appendChildElement(root, BML.E_BML, SSML.namespaceURI);
+		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
 		bml.setAttribute(BML.A_ID, "bml1");
 		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
 		fml.setAttribute(FML.A_ID, "fml1");
@@ -634,7 +634,7 @@ public class UtteranceProposer extends Component
 		
 		int counter=1;
 		for( String word : response.split(" ") ) {
-			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK);
+			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
 			mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
 			Node text = doc.createTextNode(word);
 			speech.appendChild(text);
