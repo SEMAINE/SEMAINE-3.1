@@ -20,8 +20,10 @@ const std::string Component::STATE_STOPPED = "stopped";
 const std::string Component::STATE_FAILURE = "failure";
 
 
-	Component::Component(const std::string & componentName) throw (CMSException) :
+	Component::Component(const std::string & componentName, bool isInput, bool isOutput) throw (CMSException) :
 		name(componentName),
+		isInput(isInput),
+		isOutput(isOutput),
 		_exitRequested(false),
 		waitingTime(100),
 		state(STATE_STOPPED),
@@ -37,12 +39,12 @@ const std::string Component::STATE_FAILURE = "failure";
 	Component::~Component()
 	{
 	   std::list<Receiver *>::iterator i;
-		for (i = receivers.begin(); i != receivers.end(); i++) { 
+		for (i = receivers.begin(); i != receivers.end(); i++) {
 			Receiver * r = *i;
 			delete r;
 		}
 	   std::list<Sender *>::iterator j;
-		for (j = senders.begin(); j != senders.end(); j++) { 
+		for (j = senders.begin(); j != senders.end(); j++) {
 			Sender * s = *j;
 			delete s;
 		}
@@ -60,35 +62,47 @@ const std::string Component::STATE_FAILURE = "failure";
 	}
 
 
-	void Component::startIO() throw(CMSException)
+	void Component::startIO() throw(std::exception)
 	{
+		long long startTime = System::currentTimeMillis();
+		meta.reportTopics(receivers, senders, isInput, isOutput);
 		customStartIO();
 	    std::list<Receiver *>::iterator i;
-		for (i = receivers.begin(); i != receivers.end(); i++) { 
+		for (i = receivers.begin(); i != receivers.end(); i++) {
 			Receiver * r = *i;
 			r->setMessageListener(this);
 			r->startConnection();
 		}
 	   std::list<Sender *>::iterator j;
-		for (j = senders.begin(); j != senders.end(); j++) { 
+		for (j = senders.begin(); j != senders.end(); j++) {
 			Sender * s = *j;
 			s->startConnection();
 		}
+		long long endTime = System::currentTimeMillis();
+		long long startupDuration = endTime - startTime;
 		state = STATE_READY;
-		meta.reportState(state);
+		std::stringstream buf;
+		buf << "Startup took " << startupDuration << " ms";
+		meta.reportState(state, buf.str());
 	}
 
 	void Component::run()
 	{
 		try {
-			std::cerr << "starting component " << name << "..." << std::endl; 
+			std::cerr << "starting component " << name << "..." << std::endl;
 			startIO();
 			std::cerr << "    ... " << name << " ready." << std::endl;
-		} catch (CMSException & ex) {
+		} catch (std::exception & ex) {
 			log->error("Cannot startup component:", &ex);
+			try {
+				state = STATE_FAILURE;
+				meta.reportState(state, "Cannot startup component:", &ex);
+			} catch (CMSException & me) {
+				log->error("cannot report failure state", & me);
+			}
 			requestExit();
 		}
-		
+
 		while (!exitRequested()) {
 			// Check at every loop that the total system is ready
 			synchronized (&meta) {
@@ -106,18 +120,18 @@ const std::string Component::STATE_FAILURE = "failure";
 			try {
 				// Check if we should do something proactively:
 				act();
-			} catch (CMSException & e) {
+			} catch (std::exception & e) {
 				log->error("error when trying to act", & e);
 				try {
 					state = STATE_FAILURE;
-					meta.reportState(state);
+					meta.reportState(state, "error when trying to act", &e);
 				} catch (CMSException & me) {
 					log->error("cannot report failure state", & me);
 				}
 				requestExit();
 				return;
 			}
-			
+
 			Receiver * r = NULL;
 			synchronized (&mutex) {
 				if (inputWaiting.empty()) {
@@ -130,21 +144,23 @@ const std::string Component::STATE_FAILURE = "failure";
 					inputWaiting.pop();
 				}
 			}
-			if (r == NULL) continue; 
+			if (r == NULL) continue;
 			//assert(receivers.contains(r)); // the receiver that alerted us is not one of our receivers;
 			SEMAINEMessage * message = r->getMessage();
 			assert(message != NULL); // Receiver alerted me but has no message
-			
+
 			try {
 				// Now, do something meaningful with the message,
 				// and possibly send output via the Senders.
 				react(message);
 				delete message;
-			} catch (CMSException & e) {
+			} catch (std::exception & e) {
 				log->error("error when trying to react", &e);
 				try {
 					state = STATE_FAILURE;
-					meta.reportState(state);
+					std::string errMsg = CMSLogger::toLogMessageText("error when trying to react", &e)
+						+ "(message was: " + CMSLogger::message2logString(message) + ")";
+					meta.reportState(state, errMsg);
 				} catch (CMSException & me) {
 					log->error("cannot report failure state", & me);
 				}

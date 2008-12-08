@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <sstream>
 
 #include <activemq/core/ActiveMQConnectionFactory.h>
 #include <cms/ConnectionFactory.h>
@@ -112,10 +113,10 @@ CMSLogger::~CMSLogger()
 		log(debugMP, SEMAINE_CMS_LOGLEVEL_DEBUG, message, exc);
 	}
 
-	void CMSLogger::log(MessageProducer * mp, const std::string & level, const std::string & message, const std::exception * exc)
-	{
-		std::string logMessageText;
-		if (exc == NULL) {
+std::string CMSLogger::toLogMessageText(const std::string & message, const std::exception *exc)
+{
+    std::string logMessageText;
+    if (exc == NULL) {
 		    logMessageText = message;
 		} else {
 			const CMSException * cmsExc = dynamic_cast<const CMSException *>(exc);
@@ -125,7 +126,43 @@ CMSLogger::~CMSLogger()
 				logMessageText = message + " " + exc->what();
 			}
 		}
-		try {
+    return logMessageText;
+}
+
+std::string CMSLogger::message2logString(SEMAINEMessage * m)
+{
+	try {
+		std::stringstream buf;
+		buf << "[" << m->getUsertime() << "] ";
+		buf << m->getDatatype() << " ";
+		buf << m->getSource() << "->" << m->getMessage()->getCMSDestination()->toProviderString() << " ";
+		if (m->isEventBased()) {
+			buf << m->getEventType() << " event ";
+		} else {
+			buf << "period=" << m->getPeriod() << " ";
+		}
+		const Message * message = m->getMessage();
+		const TextMessage * tm = dynamic_cast<const TextMessage *>(message);
+		if (tm != NULL) {
+			buf << "\n";
+			buf << tm->getText();
+			buf << "\n";
+		} else {
+			buf << typeid(*message).name();
+			buf << "\n";
+		}
+		return buf.str();
+	} catch (CMSException & je) {
+		return toLogMessageText("Exception trying to log message content: ", &je);
+	}
+
+
+}
+
+void CMSLogger::log(MessageProducer * mp, const std::string & level, const std::string & message, const std::exception * exc)
+	{
+		std::string logMessageText = toLogMessageText(message, exc);
+	    try {
 			if (session != NULL) {
 				TextMessage * message = session->createTextMessage(logMessageText);
 				mp->send(message);
@@ -137,7 +174,7 @@ CMSLogger::~CMSLogger()
 		    std::cerr << "problem with CMS logger: " << e.getStackTraceString() << std::endl;
 			std::cerr << "[" << level << "] " << logMessageText << std::endl;
 		}
-		
+
 	}
 
 

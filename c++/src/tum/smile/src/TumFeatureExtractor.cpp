@@ -6,7 +6,7 @@
  *    Created by Marc Schröder on 19.09.08.
  *
  *  Modified by Florian Eyben on 11.11.08
- *  
+ *
  */
 
 #include "TumFeatureExtractor.h"
@@ -29,8 +29,8 @@ namespace components {
 namespace smile {
 
 
-TumFeatureExtractor::TumFeatureExtractor(pOptions _opts) throw(CMSException) : 
-	Component("TumFeatureExtractor"),
+TumFeatureExtractor::TumFeatureExtractor(pOptions _opts) throw(CMSException) :
+	Component("TumFeatureExtractor", true, false),
 	opts(_opts),
 	liveIn(NULL),
 	#ifdef DEBUG_SILDET
@@ -80,13 +80,13 @@ TumFeatureExtractor::~TumFeatureExtractor()
 	if (liveIn != NULL) delete liveIn;
 	if (amqLowLevel != NULL) delete amqLowLevel;
 
-	if (meanE != NULL) delete meanE; 
-	if (meanF0 != NULL) delete meanF0; 
-	if (meanF0n != NULL) delete meanF0n; 
-	if (meanF0s != NULL) delete meanF0s;  
+	if (meanE != NULL) delete meanE;
+	if (meanF0 != NULL) delete meanF0;
+	if (meanF0n != NULL) delete meanF0n;
+	if (meanF0s != NULL) delete meanF0s;
 	if (frameE != NULL) delete frameE;
 
-	if (framedInput != NULL) delete framedInput; 
+	if (framedInput != NULL) delete framedInput;
 	if (svmPredA != NULL) delete svmPredA;
 	if (svmPredV != NULL) delete svmPredV;
 
@@ -111,7 +111,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 {
 	//printf("customStartIO Here... %i",(long)opts); fflush(stdout);
 
-	/***************************** soundcard audio input *****************************/    
+	/***************************** soundcard audio input *****************************/
 	FEATUM_DEBUG(2,"opening live input audio: %i Hz, %i bit, %i channel(s)",opts->samplerate, opts->bits, opts->channels);
 
 	liveIn = new cLiveInput(NULL, opts->device, opts->buffersize, opts->samplerate, opts->bits, opts->channels, LI_STREAM_STARTED);
@@ -119,14 +119,14 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 
 	/***************************** create input framer *****************************/
-	FEATUM_DEBUG(4,"creating input framer component");    
+	FEATUM_DEBUG(4,"creating input framer component");
 	framedInput = new cInputFramer(*liveIn);
 
 	framedInput->setAudioParameters(1, WORK_SAMPLETYPE, MEMORGA_INTERLV);
 	int n_ll_levels = 0;   // low level levels (see below)
 
 	// add framer clients:
-	framerId1 = framedInput->addClientSecStep(opts->frameSize, opts->frameStep, 1); 
+	framerId1 = framedInput->addClientSecStep(opts->frameSize, opts->frameStep, 1);
 	n_ll_levels++;
  	framedInput->setPreEmphasis(framerId1, opts->preEmphasis);
 
@@ -168,7 +168,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	llds->setupLLD("mfcc",1,NULL,LLD_LEVEL0);
 	llds->setupLLD("time",1,NULL,LLD_LEVEL0);
 	llds->setupLLD("spectral",1,NULL,LLD_LEVEL0);
-  
+
 
 	// check dependencies of extractors
 	if (llds->checkDependencies() == 0) {
@@ -177,22 +177,22 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 		throw SystemConfigurationException("LLD extractor dependency check failed");
 	}
 	llds->countEnabled();
-	/*------------------------------------end--------------------------------------*/   
+	/*------------------------------------end--------------------------------------*/
 
 
 	/***************************** create featureMemory ****************************/
-	LONG_IDX cap[] = {100000,100000}; 
-	// TODO: function to automatically compute capacity 
+	LONG_IDX cap[] = {100000,100000};
+	// TODO: function to automatically compute capacity
 	// based on: a) time (sec.),  b) whole file
 	int ids[] = {framerId1,0};    // -> todo ?  auto assign from framer object
 
 	FEATUM_DEBUG(4,"creating featureMemory component");
  	ftMem = new cFeatureMemory(FTMEM_RING_BUFFER, ftMEM_nLevels);
-  
- 	// setup the levels and allocate memory for each level  
+
+ 	// setup the levels and allocate memory for each level
 	llds->setupFeatureMemLevels( *ftMem, *framedInput, ids, cap, 1 );
 	llds->configureFeatureMemoryNames( *ftMem, LLD_LEVEL0 );
-	/*------------------------------------end--------------------------------------*/    
+	/*------------------------------------end--------------------------------------*/
 
 
 	/************************ create differentiator object for LLD *****************/
@@ -202,14 +202,14 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	if (!deltas->setupID( *ftMem, 0, LLD0_DE, LLD_LEVEL0, 3)) {
 		FEATUM_ERR_FATAL(0,"Failed setting up Delta extractor! (out of memory?)");
 		log->error("Failed setting up delta extractor! (out of memory?)");
-		throw SystemConfigurationException("Failed setting up delta extractor! (out of memory?");                     
-	} 
+		throw SystemConfigurationException("Failed setting up delta extractor! (out of memory?");
+	}
 	if (!deltas->setupID( *ftMem, 1, LLD0_DEDE, LLD0_DE, 3)) {
 		FEATUM_ERR_FATAL(0,"Failed setting up delta delta extractor! (out of memory?)");
 		log->error("Failed setting up delta delta extractor! (out of memory?)");
-		throw SystemConfigurationException("Failed setting up delta delta extractor! (out of memory?");                 
-	} 
-	/*------------------------------------end--------------------------------------*/  
+		throw SystemConfigurationException("Failed setting up delta delta extractor! (out of memory?");
+	}
+	/*------------------------------------end--------------------------------------*/
 
 
 	/***************************** create functionals object ***********************/
@@ -217,7 +217,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	FEATUM_DEBUG(4,"creating functionals extractor");
 	functs = new cFunctionals( 9 );
 
-	if (!opts->HRF) 
+	if (!opts->HRF)
 	{
 		// enable all functionals for all hierarchies (>180.000 features!)
 		functs->enable("maxmin",NULL);
@@ -239,7 +239,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 		int functsL0[] = {0,1,2,6,7,8, -1};
 		int functsL1[] = {3,4,5, -1};
-  
+
 		// enbale the functionals required on the first hierarchy...
 		//functs->enable("maxmin",functsL0);
 		functs->enable("percentile",NULL);
@@ -262,7 +262,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 		//functs->enable("regression",functsL1);
 		//functs->enable("dct",functsL1);
 	}
-    
+
   	float funcL0_T = 0.5;
   	float funcL0_fs = 0.5;
 	//if (opts->HRF) {   // TODO:::: fix bug in computeFunctionals, when not all levels are set up!
@@ -286,10 +286,10 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	functs->finalizeConfiguration( );
 
 	#endif
-	/*------------------------------------end--------------------------------------*/   
-  
-  
- 
+	/*------------------------------------end--------------------------------------*/
+
+
+
 	/*************************** create output objects *****************************/
 	// ActiveMQ output for 10ms low-level features (periodic)
 	FEATUM_DEBUG(4,"creating ActiveMQ output component");
@@ -307,7 +307,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 	// MFCC:
 	amqEls[6] = outputObjectFull(LLD_LEVEL0, ft_lld_mfcc);
-	amqEls[7] = outputObjectFull(LLD0_DE, ft_lld_mfcc);    
+	amqEls[7] = outputObjectFull(LLD0_DE, ft_lld_mfcc);
 	amqEls[8] = outputObjectFull(LLD0_DEDE, ft_lld_mfcc);
 
 	/*
@@ -325,20 +325,20 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 
 	#ifdef ENABLE_FUNCTIONALS
-	
+
 	#define nFUNCels0 15
 	sElID funcEls0[nFUNCels0];
-    
+
 	int l0=LLD0_FUNC_L0f;
 	int l1=LLD0_DE_FUNC_L0f;
 	int l2=LLD0_DEDE_FUNC_L0f;
-    
+
 	if (opts->HRF) {
 		l0 = LLD0_FUNC_L1;
-		l1 = LLD0_DE_FUNC_L1;      
-		l2 = LLD0_DEDE_FUNC_L1;        
+		l1 = LLD0_DE_FUNC_L1;
+		l2 = LLD0_DEDE_FUNC_L1;
 	}
-                   
+
 	funcEls0[0] = outputObjectFull(l0, ft_lld_energy);
 	funcEls0[1] = outputObjectFull(l1, ft_lld_energy);
 	funcEls0[2] = outputObjectFull(l2, ft_lld_energy);
@@ -380,20 +380,20 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 	#ifdef DEBUG_SILDET
 	frame2 = NULL;
-	if (!opts->sildet) 
+	if (!opts->sildet)
 		if (waveOut == NULL) {
 			FEATUM_DEBUG(4,"initializing debug wave output");
 			waveOut = new cWaveOutput( "dbg_out.wav", 16000, SAMPLETYPE_I16, 1 );
 		}
-	#endif 
+	#endif
 	if ((pipeOut == NULL)&&(opts->pipeaudio != NULL)) {
 		pipeOut = new cWaveOutput( opts->pipeaudio, 16000, SAMPLETYPE_I16, 1, 1 );
 	}
 
 	meanE = new cFtIdentifier(LLD0_FUNC_L0f);
-	meanF0 = new cFtIdentifier(LLD0_FUNC_L0f); 
-	meanF0n = new cFtIdentifier(LLD0_FUNC_L0f); 
-	meanF0s = new cFtIdentifier(LLD0_FUNC_L0f);  
+	meanF0 = new cFtIdentifier(LLD0_FUNC_L0f);
+	meanF0n = new cFtIdentifier(LLD0_FUNC_L0f);
+	meanF0s = new cFtIdentifier(LLD0_FUNC_L0f);
 	frameE = new cFtIdentifier(LLD_LEVEL0);
 
 	getFrame_flag = 0;
@@ -419,8 +419,8 @@ void TumFeatureExtractor::act() throw(CMSException)
 	if (frame1 == NULL) FEATUM_DEBUG(9,"FRAME1 ==  NULL\n");
 
     	// add frame to short term ringbuffer
-    	if (lldex->addFrame(LLD_LEVEL0, *frame1 )) { 
-                             
+    	if (lldex->addFrame(LLD_LEVEL0, *frame1 )) {
+
 		llds->callExtractors(LLD_LEVEL0);
 		llds->flushToFtMem( *ftMem, LLD_LEVEL0 );
 		
@@ -443,7 +443,7 @@ void TumFeatureExtractor::act() throw(CMSException)
 		}
 		#endif
 
-    
+
 		#ifdef ENABLE_FUNCTIONALS
 		if (opts->sildet) {
 			int sres = sildet->process(LLD_LEVEL0);
@@ -459,33 +459,33 @@ void TumFeatureExtractor::act() throw(CMSException)
 					functs->setFrameStart( 6, -10 );
 					functs->setFrameStart( 7, -10 );
 					functs->setFrameStart( 8, -10 );
-				}        
+				}
 				turntime = 0;
 				speaking = 1;
 
 				#ifdef DEBUG_SILDET
 				// open output wave file
-				if (waveOut == NULL) 
+				if (waveOut == NULL)
 					waveOut = new cWaveOutput( "dbg_out.wav", 16000, SAMPLETYPE_I16, 1 );
 				#endif
 
 			}
-      
+
 			#ifdef DEBUG_SILDET
 			// save pcm frame  (non overlap...! non pre emph, non windowed!!!)
 			if (waveOut != NULL) waveOut->writeFrame(*frame2);
 			#endif
 
 			if (speaking == 1) turntime++;
-                                          
+
 			if (( sres == 1 )||(turntime>1000)) {  // ||(turnlength > 10s)
 				printf("-- detected turn end [t=%f] [l=%i]--\n",(*frame1)._data.timestamp,turntime); fflush(stdout);
-        
+
 				#ifdef DEBUG_SILDET
 				// close output wave file, increment counter
 				delete waveOut; waveOut = NULL;
 				#endif
-	
+
 				if (opts->HRF) {
 					functs->computeNow(  0, 1 );
 					functs->computeNow(  1, 1 );
@@ -493,26 +493,26 @@ void TumFeatureExtractor::act() throw(CMSException)
 					functs->computeNow(  3, 1 );
 					functs->computeNow(  4, 1 );
 					functs->computeNow(  5, 1 );
-				} else {        
+				} else {
 					functs->computeNow(  6, 1 );
 					functs->computeNow(  7, 1 );
 					functs->computeNow(  8, 1 );
 				}
 				speaking = 0;
-        
+
 				// get voicing and energy parameters + mean pitch
 				// warning: the names are not unique, they occur on other levels (0.5s functionals...)
-				if (!meanE->found()) { 
-					ftMem->findFeature( "logEnergy-max", *meanE ); 
+				if (!meanE->found()) {
+					ftMem->findFeature( "logEnergy-max", *meanE );
 				}
-				if (!meanF0->found()) { 
-					ftMem->findFeature( "F0freq-nzmean", *meanF0 ); 
+				if (!meanF0->found()) {
+					ftMem->findFeature( "F0freq-nzmean", *meanF0 );
 				}
-				if (!meanF0n->found()) { 
-					ftMem->findFeature( "F0freq-nzN", *meanF0n ); 
+				if (!meanF0n->found()) {
+					ftMem->findFeature( "F0freq-nzN", *meanF0n );
 				}
-				if (!meanF0s->found()) { 
-					ftMem->findFeature( "F0strength-percentile95", *meanF0s ); 
+				if (!meanF0s->found()) {
+					ftMem->findFeature( "F0strength-percentile95", *meanF0s );
 				}
 				FLOAT_TYPE_FTMEM *en = ftMem->getFeaturesByID( *meanE, 0 );
 				FLOAT_TYPE_FTMEM *f0 = ftMem->getFeaturesByID( *meanF0, 0 );
@@ -523,16 +523,16 @@ void TumFeatureExtractor::act() throw(CMSException)
 				if (f0n != NULL) printf(" voiced \% = %f\n",*f0n);fflush(stdout);
 				if (f0s != NULL) printf(" voicing = %f\n",*f0s);fflush(stdout);
 
-       
+
 				if ( (f0 != NULL)&&(f0n != NULL)&&(en!= NULL)&&(f0s!=NULL)
 					&&(turntime > 100)
-					//&& (*f0* MAX_PITCH > 40.0) 
-					&& (*f0* MAX_PITCH < 495.0) 
-					&& 
-					( 
-						//(*f0n > 0.001) && 
+					//&& (*f0* MAX_PITCH > 40.0)
+					&& (*f0* MAX_PITCH < 495.0)
+					&&
+					(
+						//(*f0n > 0.001) &&
 						(*f0s > 0.40) && (*en > -11.0)  )
-						|| ( (*en > -9.0) && (*f0s > 0.5) ) 
+						|| ( (*en > -9.0) && (*f0s > 0.5) )
 					) {
 
 
@@ -540,9 +540,9 @@ void TumFeatureExtractor::act() throw(CMSException)
 					// classify:
 					if (svmPredA != NULL) {
 						svmPredA->setIdxToLastFrame();
-						printf(">>>> arousal: "); 
+						printf(">>>> arousal: ");
 						fflush(stdout);
-						svmPredA->processNextFrame(); 
+						svmPredA->processNextFrame();
 						fflush(stdout);
 					}
 					if (svmPredV != NULL) {
@@ -551,7 +551,7 @@ void TumFeatureExtractor::act() throw(CMSException)
 						svmPredV->processNextFrame(); fflush(stdout);
 					}
 					printf("\n");
-          
+
 					float a,v;
 					a = svmPredA->getLastResult();
 					v = svmPredV->getLastResult();
@@ -575,7 +575,7 @@ void TumFeatureExtractor::act() throw(CMSException)
 					XMLTool::setAttribute(interpretation, EMMA::A_START, "time not implemented");
 					XMLTool::setAttribute(arousal, EmotionML::A_VALUE, aroStr);
 					XMLTool::setAttribute(valence, EmotionML::A_VALUE, valStr);
-					
+
 					// Now send it
 					emmaSender->sendXML(document, meta.getTime());
 
@@ -598,10 +598,10 @@ void TumFeatureExtractor::act() throw(CMSException)
 			}
 		}
 		#endif
-           
+
 	}
-    
-   
+
+
 
 }
 

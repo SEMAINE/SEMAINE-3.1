@@ -15,6 +15,7 @@
 
 #include <semaine/config.h>
 
+#include <decaf/lang/System.h>
 #include <decaf/lang/Thread.h>
 #include <decaf/util/concurrent/Concurrent.h>
 #include <decaf/util/concurrent/Mutex.h>
@@ -55,11 +56,11 @@ public:
 	static const std::string STATE_READY;
 	static const std::string STATE_STOPPED;
 	static const std::string STATE_FAILURE;
-	
+
 	virtual ~Component();
-	
+
 	const std::string getName() { return name; }
-	
+
 	/**
 	 * Method called from the corresponding receiver thread, to notify us
 	 * that a message is available.
@@ -70,11 +71,11 @@ public:
 	 * The main method executed for this Thread.
 	 */
 	void run();
-	
+
 	void requestExit();
-	
-	
-	
+
+
+
 protected:
 	std::list<Receiver *> receivers;
 	std::list<Sender *> senders;
@@ -84,43 +85,48 @@ protected:
 	std::string state;
 	MetaMessenger meta;
 	int waitingTime;
+	bool isInput;
+	bool isOutput;
 	decaf::util::concurrent::Mutex mutex;
-	
-	Component(const std::string & componentName) throw (CMSException);
+
+	Component(const std::string & componentName, bool isInput=false, bool isOutput=false) throw (CMSException);
 
 	bool exitRequested();
-	
+
 		//////////////////////// Methods to override ////////////////////
-	
+
 	/**
 	 * Proactive actions. This method is called every {@link #waitingTime}
 	 * milliseconds if no messages arrive, and after every message processing.
-	 * 
+	 *
 	 * This base implementation does nothing; subclasses should implement
 	 * suitable behaviour here.
 	 * @throws CMSException if communication with the JMS server goes wrong.
+	 * @throws std::exception if anything goes wrong in the internal processing of the component.
 	 */
-	virtual void act() throw(CMSException) {}
+	virtual void act() throw(std::exception) {}
 
 	/**
 	 * Reactions to messages.
-	 * 
+	 *
 	 * This base implementation does nothing; subclasses should implement
 	 * suitable behaviour here.
 	 * @throws CMSException if communication with the JMS server goes wrong.
+	 * @throws std::exception if anything goes wrong in the internal processing of the component.
 	 */
-	virtual void react(SEMAINEMessage * message) throw (CMSException) {}
+	virtual void react(SEMAINEMessage * message) throw (std::exception) {}
 
 	/**
 	 * Subclasses can implement this method in order to run custom code
 	 * needed at startup time.
+	 * @throws std::exception if anything goes wrong in the internal processing of the component.
 	 */
-	virtual void customStartIO() throw(CMSException) {}
+	virtual void customStartIO() throw(std::exception) {}
 
 private:
 	const std::string name;
-	
-	void startIO() throw(CMSException);
+
+	void startIO() throw(std::exception);
 
 
 

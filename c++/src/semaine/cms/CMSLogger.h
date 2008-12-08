@@ -20,48 +20,52 @@
 #include <cms/MessageProducer.h>
 
 #include <semaine/cms/loglevel.h>
+#include <semaine/cms/message/SEMAINEMessage.h>
 
 using namespace cms;
+using namespace semaine::cms::message;
 
-namespace semaine { 
+namespace semaine {
 	namespace cms {
 		/**
 		 * A relatively lightweight class logging messages to a CMS topic if possible,
-		 * and to the local log system if the JMS connection fails. All instances of 
+		 * and to the local log system if the JMS connection fails. All instances of
 		 * CMSLogger use the same CMS connection and the same session.
 		 * @author marc
 		 *
 		 */
 		class CMSLogger {
-			
+
 		public:
 			static CMSLogger * getLog(const std::string& source);
-			
+		    static std::string toLogMessageText(const std::string & message, const std::exception *exc = NULL);
+		    static std::string message2logString(SEMAINEMessage * m);
+
 			~CMSLogger();
 
 			void error(const std::string & message, const std::exception * exc = NULL);
 			void warn(const std::string & message, const std::exception * exc = NULL);
 			void info(const std::string & message, const std::exception * exc = NULL);
 			void debug(const std::string & message, const std::exception * exc = NULL);
-			
+
 			bool isDebugEnabled();
-			
-			
+
+
 		private:
 			static Connection * connection;
 			static Session * session;
 			static std::map<const std::string, CMSLogger *> loggers;
-			
+
 			CMSLogger(const std::string & source);
-			
+
 			MessageProducer * errorMP;
 			MessageProducer * warnMP;
 			MessageProducer * infoMP;
 			MessageProducer * debugMP;
 			const std::string source;
-			
+
 			void log(MessageProducer * mp, const std::string & level, const std::string & message, const std::exception * exc);
-			
+
 		}; // class CMSLogger
     } // namespace cms
 } // namespace semaine

@@ -17,7 +17,7 @@ namespace components {
 namespace dummy {
 
 DummyFeatureExtractor::DummyFeatureExtractor() throw(CMSException) :
-	Component("DummyFeatureExtractor")
+	Component("DummyFeatureExtractor", true, false)
 {
 	int period = 10; // ms
 	featureSender = new FeatureSender("semaine.data.analysis.dummy", "", getName(), period);
