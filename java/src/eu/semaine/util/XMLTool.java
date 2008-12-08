@@ -24,6 +24,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -330,7 +331,7 @@ public class XMLTool
 	 * @throws Exception
 	 * @throws FileNotFoundException
 	 */
-	public static String document2String(Document document) throws Exception,FileNotFoundException
+	public static String document2String(Document document) throws SystemConfigurationException
     {
 		LSSerializer serializer;
 		DOMImplementationLS domImplLS;
@@ -338,6 +339,9 @@ public class XMLTool
 			DOMImplementation implementation = DOMImplementationRegistry.newInstance().getDOMImplementation("XML 3.0");
 			domImplLS = (DOMImplementationLS) implementation.getFeature("LS", "3.0");
 			serializer = domImplLS.createLSSerializer();
+			DOMConfiguration config = serializer.getDomConfig();
+			config.setParameter("format-pretty-print", Boolean.TRUE);
+			//config.setParameter("canonical-form", Boolean.TRUE);
 		} catch (Exception e) {
 			throw new SystemConfigurationException("Problem instantiating XML serializer code", e);
 		}

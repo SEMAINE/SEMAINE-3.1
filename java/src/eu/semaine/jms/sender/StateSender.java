@@ -16,6 +16,7 @@ import org.w3c.dom.ls.LSOutput;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
+import eu.semaine.util.XMLTool;
 
 /**
  * An abstraction of Sender for state data.
@@ -76,12 +77,7 @@ public class StateSender extends XMLSender
 			throw new IllegalStateException("Connection is not started!");
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
-		LSOutput output = domImplLS.createLSOutput();
-		output.setEncoding("UTF-8");
-		StringWriter buf = new StringWriter();
-		output.setCharacterStream(buf);
-		serializer.write(document, output);
-		TextMessage message = session.createTextMessage(buf.toString());
+		TextMessage message = session.createTextMessage(XMLTool.document2String(document));
 		fillMessageProperties(message, usertime);
 		message.setStringProperty(s.toString()+"APIVersion", s.getAPIVersion());
 		message.setStringProperty(SEMAINEMessage.EVENT, Event.single.toString());

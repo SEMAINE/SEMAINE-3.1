@@ -18,6 +18,7 @@ import org.w3c.dom.ls.LSSerializer;
 
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
+import eu.semaine.util.XMLTool;
 
 /**
  * An abstraction of Sender for feature vectors.
@@ -26,10 +27,6 @@ import eu.semaine.jms.message.SEMAINEXMLMessage;
  */
 public class XMLSender extends Sender
 {
-	
-	protected LSSerializer serializer;
-	protected DOMImplementationLS domImplLS;
-
 	
 	/**
 	 * Create a new Sender to the given topic on the default JMS server.
@@ -50,15 +47,6 @@ public class XMLSender extends Sender
 	throws JMSException, SystemConfigurationException
 	{
 		super(topicName, datatype, source);
-		
-		try {
-			DOMImplementation implementation = DOMImplementationRegistry.newInstance().getDOMImplementation("XML 3.0");
-			domImplLS = (DOMImplementationLS) implementation.getFeature("LS", "3.0");
-			serializer = domImplLS.createLSSerializer();
-		} catch (Exception e) {
-			throw new SystemConfigurationException("Problem instantiating XML serializer code", e);
-		}
-		
 	}
 
 	/**
@@ -78,15 +66,6 @@ public class XMLSender extends Sender
 	throws JMSException
 	{
 		super(jmsUrl, jmsUser, jmsPassword, topicName, datatype, source);
-		
-		try {
-			DOMImplementation implementation = DOMImplementationRegistry.newInstance().getDOMImplementation("XML 3.0");
-			domImplLS = (DOMImplementationLS) implementation.getFeature("LS", "3.0");
-			serializer = domImplLS.createLSSerializer();
-		} catch (Exception e) {
-			throw new SystemConfigurationException("Problem instantiating XML serializer code", e);
-		}
-
 	}
 
 
@@ -124,12 +103,7 @@ public class XMLSender extends Sender
 			throw new IllegalStateException("Connection is not started!");
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
-		LSOutput output = domImplLS.createLSOutput();
-		output.setEncoding("UTF-8");
-		StringWriter buf = new StringWriter();
-		output.setCharacterStream(buf);
-		serializer.write(document, output);
-		sendTextMessage(buf.toString(), usertime, event);
+		sendTextMessage(XMLTool.document2String(document), usertime, event);
 	}
 	
 	@Override
