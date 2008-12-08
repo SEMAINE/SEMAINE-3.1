@@ -39,6 +39,8 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	 */
 	public static enum State {starting, ready, stopped, failure};
 	
+	protected boolean isInput;
+	protected boolean isOutput;
 	protected List<Receiver> receivers;
 	protected List<Sender> senders;
 	protected BlockingQueue<Receiver> inputWaiting;
@@ -51,7 +53,15 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	protected Component(String componentName)
 	throws JMSException
 	{
+		this(componentName, false, false);
+	}
+	
+	protected Component(String componentName, boolean isInput, boolean isOutput)
+	throws JMSException
+	{
 		super(componentName);
+		this.isInput = isInput;
+		this.isOutput = isOutput;
 		receivers = new LinkedList<Receiver>();
 		senders = new LinkedList<Sender>();
 		inputWaiting = new LinkedBlockingQueue<Receiver>();
@@ -79,7 +89,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	private void startIO() throws Exception
 	{
 		long startTime = System.currentTimeMillis();
-		meta.reportTopics(receivers, senders);
+		meta.reportTopics(receivers, senders, isInput, isOutput);
 		customStartIO();
 		for (Receiver r : receivers) {
 			r.setMessageListener(this);
@@ -94,6 +104,10 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		meta.reportState(state, "Startup took "+startupDuration+" ms");
 	}
 	
+	/**
+	 * Any custom startup code can go here.
+	 * @throws Exception if anything goes wrong in the internal processing of the component.
+	 */
 	protected void customStartIO() throws Exception{}
 
 	public void run()

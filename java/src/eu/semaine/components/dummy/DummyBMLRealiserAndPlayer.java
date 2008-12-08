@@ -40,7 +40,7 @@ public class DummyBMLRealiserAndPlayer extends Component
 	 */
 	public DummyBMLRealiserAndPlayer() throws JMSException 
 	{
-		super("DummyBMLRealiserAndPlayer");
+		super("DummyBMLRealiserAndPlayer", false, true);
 		bmlReceiver = new BMLReceiver("semaine.data.synthesis.plan");
 		receivers.add(bmlReceiver);
 	}

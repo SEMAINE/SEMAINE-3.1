@@ -34,6 +34,8 @@ public class MetaMessenger extends IOBase implements MessageListener
 	public static final String SYSTEM_READY_TIME = "SystemReadyTime";
 	public static final String RECEIVE_TOPICS = "ReceiveTopics";
 	public static final String SEND_TOPICS = "SendTopics";
+	public static final String IS_INPUT = "IsInputComponent";
+	public static final String IS_OUTPUT = "IsOutputComponent";
 	
 	private String componentName;
 	private MessageProducer producer;
@@ -52,7 +54,8 @@ public class MetaMessenger extends IOBase implements MessageListener
 		startConnection();
 	}
 	
-	public void reportTopics(List<Receiver> receivers, List<Sender> senders)
+	public void reportTopics(List<Receiver> receivers, List<Sender> senders,
+			boolean isInput, boolean isOutput)
 	throws JMSException
 	{
 		StringBuilder rec = new StringBuilder();
@@ -69,6 +72,8 @@ public class MetaMessenger extends IOBase implements MessageListener
 		m.setStringProperty(COMPONENT_NAME, componentName);
 		m.setStringProperty(RECEIVE_TOPICS, rec.toString());
 		m.setStringProperty(SEND_TOPICS, snd.toString());
+		m.setBooleanProperty(IS_INPUT, isInput);
+		m.setBooleanProperty(IS_OUTPUT, isOutput);
 		producer.send(m);
 	}
 	

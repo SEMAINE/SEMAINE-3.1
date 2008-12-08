@@ -37,11 +37,23 @@ public class ComponentInfo extends Info
 		return isInput;
 	}
 	
+	public void setIsInput(boolean b)
+	{
+		isInput = b;
+		setTopicsChanged(true);
+	}
+	
 	public boolean isOutput()
 	{
 		return isOutput;
 	}
 	
+	public void setIsOutput(boolean b)
+	{
+		isOutput = b;
+		setTopicsChanged(true);
+	}
+
 	public String[] receiveTopics()
 	{
 		return receiveTopics != null ? receiveTopics.toArray(new String[0]) : null;

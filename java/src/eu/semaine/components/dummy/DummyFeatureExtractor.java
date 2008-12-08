@@ -24,7 +24,7 @@ public class DummyFeatureExtractor extends Component
 	 */
 	public DummyFeatureExtractor() throws JMSException 
 	{
-		super("DummyFeatureExtractor");
+		super("DummyFeatureExtractor", true, false);
 		int period = 10; // ms
 		featureSender = new FeatureSender("semaine.data.analysis.dummy", "", getName(), period);
 		waitingTime = period;

@@ -174,6 +174,12 @@ public class SystemManager extends Component implements MessageListener
 						sendTopicsString.split(" ") : null;
 				ci.setSendTopics(sendTopics);
 			}
+			if (m.propertyExists(MetaMessenger.IS_INPUT)) {
+				ci.setIsInput(m.getBooleanProperty(MetaMessenger.IS_INPUT));
+			}
+			if (m.propertyExists(MetaMessenger.IS_OUTPUT)) {
+				ci.setIsOutput(m.getBooleanProperty(MetaMessenger.IS_OUTPUT));
+			}
 		} catch (JMSException e) {
 			log.error(e);
 		}
