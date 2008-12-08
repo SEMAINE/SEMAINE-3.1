@@ -24,7 +24,7 @@ throw (SystemConfigurationException)
 {
     XMLPlatformUtils::Initialize();
 	parser = new XercesDOMParser();
-    //parser->setValidationScheme(XercesDOMParser::Val_Always);    
+    //parser->setValidationScheme(XercesDOMParser::Val_Always);
 	parser->setDoNamespaces(true);	XMLCh tempStr[100];
 	XMLString::transcode("LS", tempStr, 99);
 	DOMImplementation * anImpl = DOMImplementationRegistry::getDOMImplementation(tempStr);
@@ -263,14 +263,19 @@ const std::string XMLTool::dom2string(const DOMDocument * doc)
 		MemBufFormatTarget * outTarget = new MemBufFormatTarget();
 #if (_XERCES_VERSION < 30000)
 		DOMWriter * writer = impl->createDOMWriter();
+		// set "format-pretty-print" to true:
+		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 		writer->setEncoding(utf8);
 		writer->writeNode(outTarget, *doc);
 		const XMLByte * buf = outTarget->getRawBuffer();
 		//int len = outTarget->getLen();
 		std::string result((const char *)buf);
-		writer->release();		
+		writer->release();
 #else
 		DOMLSSerializer * serializer = impl->createLSSerializer();
+		DOMConfiguration * config = serializer->getDomConfig();
+		// set "format-pretty-print" to true:
+		config->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 		DOMLSOutput * output = impl->createLSOutput();
 		output->setEncoding(utf8);
 		output->setByteStream(outTarget);
@@ -293,7 +298,7 @@ const std::string XMLTool::dom2string(const DOMDocument * doc)
 		XMLString::release(&err);
 		throw SystemConfigurationException("Cannot initialise XML system");
 	}
-	
+
 }
 
 
