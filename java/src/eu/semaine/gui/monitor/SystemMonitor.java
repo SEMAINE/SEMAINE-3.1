@@ -64,7 +64,7 @@ public class SystemMonitor extends Thread
 		GraphLayoutCache view = graph.getGraphLayoutCache();
 		view.setFactory(new MyCellViewFactory());
 		
-		frame = new JFrame();
+		frame = new JFrame("SEMAINE System Monitor");
 		frame.getContentPane().add(new JScrollPane(graph));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -84,13 +84,13 @@ public class SystemMonitor extends Thread
 
 	}
 	
-	public void addComponentInfo(ComponentInfo ci)
+	public synchronized void addComponentInfo(ComponentInfo ci)
 	{
 		sortedComponentList.add(ci);
 		componentListChanged = true;
 	}
 	
-	private void redraw()
+	private synchronized void redraw()
 	{
 		assert cells != null;
 		Map<DefaultGraphCell, Map<Object,Object>> allChanges = new HashMap<DefaultGraphCell, Map<Object,Object>>();
