@@ -55,6 +55,15 @@ private:
 	ResourceGroup *main;
 	ANGram * ngram;
 	AMonitor * amon;
+
+	string sentence;
+	bool newsentence;
+	float sentstart;
+	float sentend;
+	float sentconf;
+	int wordcounter;
+      	Boolean terminated;
+
 };
 
 } // namespace asr

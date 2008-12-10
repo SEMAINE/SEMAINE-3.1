@@ -51,6 +51,14 @@ ASR::ASR(char * configfile) throw(CMSException) :
 	emmaSender = new EmmaSender("semaine.data.state.user", getName());
 	senders.push_back(emmaSender);
 
+	sentence="";
+	newsentence=1;
+	sentstart=0.0;
+	sentend=0.0;
+	sentconf=0.0;
+	wordcounter=0;
+      	terminated = FALSE;
+
 	static const char * version="[ASR 11/11/08]";
 	int argc=3;
 	char* argv[3] = {"ASR","-C",NULL};
@@ -156,6 +164,7 @@ void ASR::customStartIO() throw(CMSException)
 void ASR::act() throw(CMSException)
 {	
 	const char * EXCL = "!SILENCE";
+/*	
 	string sentence="";
 	bool newsentence=1;
 	float sentstart=0.0;
@@ -163,8 +172,10 @@ void ASR::act() throw(CMSException)
 	float sentconf=0.0;
 	int wordcounter=0;
       	Boolean terminated = FALSE;
+*/
+      	//while (!terminated) {
+        if (ansChan->DataAvailable()) {
 
-      	while (!terminated) {
          	APacket p = ansChan->GetPacket();
          	if (p.GetKind() == StringPacket){
             		AStringData * sd = (AStringData *)p.GetData();
@@ -185,8 +196,8 @@ void ASR::act() throw(CMSException)
 				else{
 					sentence=sentence+' '+(pd->word.c_str());
 				}
-			sentconf=sentconf+pd->confidence;
-			wordcounter=wordcounter+1;
+				sentconf=sentconf+pd->confidence;
+				wordcounter=wordcounter+1;
 			}
 			else if(strcmp(pd->word.c_str(),EXCL)==0){
 				sentend=p.GetEndTime()/10000;
@@ -219,6 +230,8 @@ void ASR::act() throw(CMSException)
 					// Now send it
 					emmaSender->sendXML(document, meta.getTime());
 				}
+				sentence="";
+				newsentence=1;
 			}
 	 	}
       	}
