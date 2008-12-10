@@ -18,6 +18,7 @@ import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.util.CyclicBuffer;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.xml.SemaineML;
+import eu.semaine.jms.message.SEMAINEDialogStateMessage;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -43,6 +44,7 @@ public class TurnTakingInterpreter extends Component
 	private EmmaReceiver emmaReceiver;
 	private UserStateReceiver userStateReceiver;
 	private FeatureReceiver featureReceiver;
+	private DialogStateReceiver dialogStateReceiver;
 	
 	/* Senders */
 	private StateSender dialogStateSender;
@@ -54,6 +56,8 @@ public class TurnTakingInterpreter extends Component
 	private boolean userSpeaking = false;
 	private CyclicBuffer<Float> logEnergyBuffer = new CyclicBuffer<Float>(20);
 	private CyclicBuffer<Float> foStrengthBuffer = new CyclicBuffer<Float>(30);
+	
+	int counter = 0;
 	
 	
 	/**
@@ -70,6 +74,8 @@ public class TurnTakingInterpreter extends Component
 		receivers.add(userStateReceiver);
 		featureReceiver = new FeatureReceiver("semaine.data.analysis.features.voice");
 		receivers.add(featureReceiver);
+		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
+		receivers.add(dialogStateReceiver);
 		
 		/* Define Senders */
 		dialogStateSender = new StateSender("semaine.data.state.dialog", "DialogState", getName());
@@ -83,6 +89,11 @@ public class TurnTakingInterpreter extends Component
 	@Override
 	public void act() throws JMSException
 	{
+		counter++;
+		if( counter == 10 ) {
+			System.out.println("State: " + turntakingState.toString() + ", startPauseTime: " + pauseTime + ", currentTime: " + meta.getTime());
+			counter = 0;
+		}
 		if( pauseTime != 0 && turntakingState == State.USER_SPEAKING && pauseTime + 1500 < meta.getTime() ) {
 			changeTurnState( true, meta.getTime() );
 			turntakingState = State.AGENT_WAITING;
@@ -114,15 +125,34 @@ public class TurnTakingInterpreter extends Component
 		}
 		*/
 		
-		if( isSilence(m) ) {
-			pauseTime = meta.getTime();
-		} else if( isSpeaking(m) ) {
-			if( turntakingState == State.AGENT_WAITING ) {
-				turntakingState = State.USER_SPEAKING;
-				changeTurnState(false, meta.getTime());
+		if( !processTurnMessage(m) ) {
+			if( isSilence(m) ) {
+				pauseTime = meta.getTime();
+			} else if( isSpeaking(m) ) {
+				if( turntakingState == State.AGENT_WAITING ) {
+					turntakingState = State.USER_SPEAKING;
+					changeTurnState(false, meta.getTime());
+				}
+				pauseTime = 0;
 			}
-			pauseTime = 0;
 		}
+	}
+	
+	public boolean processTurnMessage(SEMAINEMessage m)
+	{
+		if( m instanceof SEMAINEDialogStateMessage ) {
+			DialogStateInfo dialogInfo = ((SEMAINEDialogStateMessage)m).getState();
+			Map<String,String> dialogInfoMap = dialogInfo.getInfo();
+			
+			if( dialogInfoMap.get("speaker").equals("agent") ) {
+				turntakingState = State.AGENT_WAITING;
+				return true;
+			} else if( dialogInfoMap.get("speaker").equals("user") ) {
+				turntakingState = State.USER_SPEAKING;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	
@@ -220,11 +250,13 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void changeTurnState( boolean agentTurn, long time ) throws JMSException
 	{
-		Map<String,String>dialogInfo = new HashMap<String,String>();
+		Map<String,String> dialogInfo = new HashMap<String,String>();
 		if( agentTurn ) {
+			System.out.println("Agent is speaker!");
 			dialogInfo.put("speaker", "agent");
 			dialogInfo.put("listener", "user");
 		} else {
+			System.out.println("User is speaker!");
 			dialogInfo.put("listener", "agent");
 			dialogInfo.put("speaker", "user");
 		}

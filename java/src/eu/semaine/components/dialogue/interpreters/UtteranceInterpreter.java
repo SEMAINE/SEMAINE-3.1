@@ -147,12 +147,16 @@ public class UtteranceInterpreter extends Component
 
 	/** * Called when a new message is received * Checks if the message contains 
 	an input-sentence. * Also checks if the user is finished speaking */ 
-	@Override public void react( SEMAINEMessage m ) throws JMSException { if( 
-	isSentence(m) ) { utterance = utterance + " " + getSentence(m); } 
-	checkUserFinished(m); }
+	@Override public void react( SEMAINEMessage m ) throws JMSException { 
+		if( isSentence(m) ) {
+			System.out.println("UtteranceInterpreter: Sentence received");
+			utterance = utterance + " " + getSentence(m); 
+		} 
+		checkUserFinished(m); 
+	}
 
 	/**
- 	 * Checks if the Message is ASR output and if it contains a sentence.
+	 * Checks if the Message is ASR output and if it contains a sentence.
 	 * @param m the message to check
 	 * @return true if the message says that the user is currently silent
 	 */
@@ -219,12 +223,19 @@ public class UtteranceInterpreter extends Component
 			Map<String,String> dialogInfoMap = dialogInfo.getInfo();
 			
 			if( dialogInfoMap.get("speaker").equals("agent") ) {
+				System.out.println("UtteranceInterpreter: Speaker is agent");
 				if( utterance.length() > 0 ) {
 					System.out.println("Processing utterance");
 					processUtterance();
 					utterance = "";
 				} else {
-					// TODO: Motivate
+					/* User hasn't said anything yet, so user still has turn */
+					Map<String,String> dInfo = new HashMap<String,String>();
+					dInfo.put("listener", "agent");
+					dInfo.put("speaker", "user");
+					DialogStateInfo dsi = new DialogStateInfo(dInfo, null);
+					dialogStateSender.sendStateInfo(dsi, meta.getTime());
+					
 				}
 			}
 		}
