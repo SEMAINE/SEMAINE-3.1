@@ -12,6 +12,15 @@ register_build "atk" "$ATK_URL" "$ATK_BASE" "func_build_atk" $1
 #######################################################################
 
 if test ! "x$1" = "xdisabled" ; then
+
+
+if test ! -f $DOWNLOAD_PREFIX/$ATK_PATCHES ; then
+  echo ""
+  echo "ERROR: ATKpatches ($ATK_URL) were not found in $DOWNLOAD_PREFIX. Please download the file from the wiki and place it in the download directory!"
+  echo ""
+  builderror
+fi
+
 # check if atk download exists, if not display instructions on how to download:
 if test ! -f $DOWNLOAD_PREFIX/$ATK_URL ; then
   echo ""
@@ -68,10 +77,15 @@ function func_build_atk {
         fi
       fi
       cp $BUILD_PREFIX/$ATK_PATCHES_BASE/HWave*.patch $BUILD_PREFIX/$ATK_BASE/HTKLib
+      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/ABuffer.patch $BUILD_PREFIX/$ATK_BASE/ATKLib
       cd $BUILD_PREFIX/$ATK_BASE/HTKLib
       echo -n "Patching HWave to add PAUDIO input type... "
       patch -N -p0 < HWave.c.patch
       patch -N -p0 < HWave.h.patch
+      echo "done."
+      cd $BUILD_PREFIX/$ATK_BASE/ATKLib
+      echo -n "Patching ABuffer to add DataAvailable() method for non-blocking operation... "
+      patch -N -p0 < ABuffer.patch
       echo "done."
     fi
     cd $MYPWD
