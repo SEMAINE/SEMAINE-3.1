@@ -9,7 +9,6 @@
 
 #include "SEMAINEMessage.h"
 
-
 namespace semaine {
 namespace cms {
 namespace message {
@@ -37,20 +36,20 @@ const std::string SEMAINEMessage::PERIOD = "period";
 
 	void SEMAINEMessage::verifyProperties() throw(MessageFormatException)
 	{
-		try { 
-			getUsertime(); 
+		try {
+			getUsertime();
 		} catch (CMSException & e) {
-			throw MessageFormatException("Problem with message property '"+USERTIME+"': "+e.getStackTraceString()); 
+			throw MessageFormatException("Problem with message property '"+USERTIME+"': "+e.getStackTraceString());
 		}
-		try { 
-			getDatatype(); 
+		try {
+			getDatatype();
 		} catch (CMSException & e) {
-			throw MessageFormatException("Problem with message property '"+DATATYPE+"': "+e.getStackTraceString()); 
+			throw MessageFormatException("Problem with message property '"+DATATYPE+"': "+e.getStackTraceString());
 		}
-		try { 
-			getSource(); 
+		try {
+			getSource();
 		} catch (CMSException & e) {
-			throw new MessageFormatException("Problem with message property '"+SOURCE+"': "+e.getStackTraceString()); 
+			throw new MessageFormatException("Problem with message property '"+SOURCE+"': "+e.getStackTraceString());
 		}
 		try {
 			if (!isPeriodic() && !isEventBased())

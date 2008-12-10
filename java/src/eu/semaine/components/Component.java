@@ -37,7 +37,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	 * @author marc
 	 *
 	 */
-	public static enum State {starting, ready, stopped, failure};
+	public static enum State {starting, ready, stopped, failure, stalled};
 	
 	protected boolean isInput;
 	protected boolean isOutput;
@@ -139,9 +139,13 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 					}
 				}
 			}
+			meta.IamAlive();
 			try {
 				// Check if we should do something proactively:
+				long before = System.currentTimeMillis();
 				act();
+				long timeSpentInAct = System.currentTimeMillis() - before;
+				meta.statistics().actTime(timeSpentInAct);
 			} catch (Throwable e) {
 				log.error("error when trying to act", e);
 				try {
@@ -166,11 +170,18 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			assert receivers.contains(r) : "the receiver that alerted us is not one of our receivers -- it is a "+r;
 			SEMAINEMessage message = r.getMessage();
 			assert message != null : "Receiver "+r+" alerted me but has no message";
+			meta.statistics().countMessageReceived();
 			
 			try {
+				// time travelled, ignoring clock differences between sender and receiver:
+				long timeMessageTravelled = System.currentTimeMillis() - message.getMessage().getJMSTimestamp();
+				meta.statistics().transmitTime(timeMessageTravelled);
 				// Now, do something meaningful with the message,
 				// and possibly send output via the Senders.
+				long before = System.currentTimeMillis();
 				react(message);
+				long timeSpentInReact = System.currentTimeMillis() - before;
+				meta.statistics().reactTime(timeSpentInReact);
 			} catch (Throwable e) {
 				log.error("error when trying to react", e);
 				log.debug("(message was: ", MessageLogComponent.message2logString(message), ")");

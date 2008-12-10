@@ -249,6 +249,12 @@ public class SystemMonitor extends Thread
 			ti.setCell(cell);
 		}
 		cells.addAll(newCells);
+		if (newCells.size() > 0) {
+			System.out.println("Adding new cells:");
+			for (DefaultGraphCell c : newCells) {
+				System.out.println("    "+c.toString());
+			}
+		}
 		graph.getGraphLayoutCache().insert(newCells.toArray());
 
 	}

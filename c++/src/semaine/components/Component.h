@@ -56,6 +56,7 @@ public:
 	static const std::string STATE_READY;
 	static const std::string STATE_STOPPED;
 	static const std::string STATE_FAILURE;
+	static const std::string STATE_STALLED;
 
 	virtual ~Component();
 

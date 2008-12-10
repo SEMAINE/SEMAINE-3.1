@@ -5,7 +5,6 @@
 package eu.semaine.components.meta;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +16,6 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
-import javax.jms.TextMessage;
 import javax.jms.Topic;
 
 import eu.semaine.components.Component;
@@ -43,6 +41,7 @@ public class SystemManager extends Component implements MessageListener
 {
 	private static final Set<String> IGNORE_COMPONENTS = new HashSet<String>(
 			Arrays.asList("SystemManager", "MessageLogComponent"));
+	private static long PING_PERIOD = 1000; // in ms 
 
 	private IOBase iobase;
 	private MessageProducer producer;
@@ -52,7 +51,8 @@ public class SystemManager extends Component implements MessageListener
 	private boolean lastReportSystemReady = false;
 	private SystemMonitor systemMonitor;
 	private MessageConsumer dataConsumer;
-
+	private long systemZeroTime;
+	
 	public SystemManager()
 	throws JMSException
 	{
@@ -76,7 +76,6 @@ public class SystemManager extends Component implements MessageListener
 						String topicName = ((Topic)m.getJMSDestination()).getTopicName();
 						TopicInfo ti = systemMonitor.getTopicInfo(topicName);
 						if (ti != null) {
-							StringBuilder buf = new StringBuilder();
 							SEMAINEMessage sm = new SEMAINEMessage(m);
 							ti.addMessage(MessageLogComponent.message2logString(sm), sm.getSource());
 						}
@@ -90,22 +89,58 @@ public class SystemManager extends Component implements MessageListener
 	}
 	
 	
-	public void reportSystemReady(boolean ready)
+	private void reportSystemReady(boolean ready)
 	throws JMSException
 	{
 		log.info("System is "+(ready ? "" : "not ")+"ready");
 		Message m = iobase.getSession().createMessage();
+		m.setStringProperty(SEMAINEMessage.SOURCE, getName());
 		m.setBooleanProperty(MetaMessenger.SYSTEM_READY, ready);
 		if (ready) {
 			// When we get ready, we set the system time to 0
 			// Alternatively, we could set it to System.currentTimeMillis(),
 			// which would set all clocks to this process's system clock.
 			m.setLongProperty(MetaMessenger.SYSTEM_READY_TIME, 0);
+			systemZeroTime = System.currentTimeMillis();
 		}
 		producer.send(m);
 		lastReportSystemReady = ready;
 	}
 
+	private void pingComponents()
+	throws JMSException
+	{
+		Message m = iobase.getSession().createMessage();
+		m.setStringProperty(SEMAINEMessage.SOURCE, getName());
+		m.setStringProperty(MetaMessenger.PING, "");
+		producer.send(m);
+	}
+	
+	private void checkComponentsAlive()
+	throws JMSException
+	{
+		long time = getTime();
+		for (ComponentInfo ci : componentInfos.values()) {
+			if (time - ci.lastSeenAlive() > 3*PING_PERIOD) {
+				ci.setState(Component.State.stalled, 
+						"Component was last seen at time "+ci.lastSeenAlive());
+			}
+			if (ci.receiveTopics() == null && ci.sendTopics() == null) {
+				// we need to ask for the information
+				Message m = iobase.getSession().createMessage();
+				m.setStringProperty(SEMAINEMessage.SOURCE, getName());
+				m.setStringProperty(MetaMessenger.REPORT_TOPICS, "");
+				producer.send(m);
+				
+			}
+		}
+	}
+	
+	private long getTime()
+	{
+		return System.currentTimeMillis() - systemZeroTime;
+	}
+	
 	public void onMessage(Message m)
 	{
 		try {
@@ -128,12 +163,11 @@ public class SystemManager extends Component implements MessageListener
 					log.warn("unknown component state '"+m.getStringProperty(MetaMessenger.COMPONENT_STATE)+"'");
 					componentState = State.failure;
 				}
-				ci.setState(componentState);
-				String details = "";
+				String details = null;
 				if (m.propertyExists(MetaMessenger.COMPONENT_STATE_DETAILS)) {
 					details = m.getStringProperty(MetaMessenger.COMPONENT_STATE_DETAILS);
-					ci.setStateDetails(details);
 				}
+				ci.setState(componentState, details);
 				if (log.isDebugEnabled()) {
 					StringBuilder builder = new StringBuilder("Components:\n");
 					for (Entry<String,ComponentInfo>entry : componentInfos.entrySet()) {
@@ -164,14 +198,18 @@ public class SystemManager extends Component implements MessageListener
 			}
 			if (m.propertyExists(MetaMessenger.RECEIVE_TOPICS)) {
 				String receiveTopicsString = m.getStringProperty(MetaMessenger.RECEIVE_TOPICS);
-				String[] receiveTopics = receiveTopicsString.length() > 0 ?
-						receiveTopicsString.split(" ") : null;
+				String[] receiveTopics = null;
+				if (receiveTopicsString != null && receiveTopicsString.length() > 0) {
+					receiveTopics = receiveTopicsString.split(" ");
+				}
 				ci.setReceiveTopics(receiveTopics);
 			}
 			if (m.propertyExists(MetaMessenger.SEND_TOPICS)) {
 				String sendTopicsString = m.getStringProperty(MetaMessenger.SEND_TOPICS);
-				String[] sendTopics = sendTopicsString.length() > 0 ?
-						sendTopicsString.split(" ") : null;
+				String[] sendTopics = null;
+				if (sendTopicsString != null && sendTopicsString.length() > 0) {
+						sendTopics = sendTopicsString.split(" ");
+				}
 				ci.setSendTopics(sendTopics);
 			}
 			if (m.propertyExists(MetaMessenger.IS_INPUT)) {
@@ -180,11 +218,27 @@ public class SystemManager extends Component implements MessageListener
 			if (m.propertyExists(MetaMessenger.IS_OUTPUT)) {
 				ci.setIsOutput(m.getBooleanProperty(MetaMessenger.IS_OUTPUT));
 			}
+			if (m.propertyExists(MetaMessenger.LAST_SEEN_ALIVE)) {
+				ci.setLastSeenAlive(m.getLongProperty(MetaMessenger.LAST_SEEN_ALIVE));
+			}
+			if (m.propertyExists(MetaMessenger.AVERAGE_ACT_TIME)) {
+				ci.setAverageActTime(m.getLongProperty(MetaMessenger.AVERAGE_ACT_TIME));
+			}
+			if (m.propertyExists(MetaMessenger.AVERAGE_REACT_TIME)) {
+				ci.setAverageReactTime(m.getLongProperty(MetaMessenger.AVERAGE_REACT_TIME));
+			}
+			if (m.propertyExists(MetaMessenger.AVERAGE_TRANSMIT_TIME)) {
+				ci.setAverageTransmitTime(m.getLongProperty(MetaMessenger.AVERAGE_TRANSMIT_TIME));
+			}
+			if (m.propertyExists(MetaMessenger.TOTAL_MESSAGES_RECEIVED)) {
+				ci.setTotalMessagesReceived(m.getIntProperty(MetaMessenger.TOTAL_MESSAGES_RECEIVED));
+			}
 		} catch (JMSException e) {
 			log.error(e);
 		}
 	}
 
+	@Override
 	public void run()
 	{
 		try {
@@ -196,8 +250,17 @@ public class SystemManager extends Component implements MessageListener
 		while (!exitRequested()) {
 			synchronized (this) {
 				try {
-					wait();
+					wait(PING_PERIOD);
 				} catch (InterruptedException ie) {}
+			}
+			meta.IamAlive();
+			if (lastReportSystemReady) { // System manager thinks everything is fine
+				try {
+					pingComponents();
+					checkComponentsAlive();
+				} catch (JMSException e) {
+					log.error("cannot ping components");
+				}
 			}
 		}
 		try {

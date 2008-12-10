@@ -18,6 +18,7 @@ const std::string Component::STATE_STARTING = "starting";
 const std::string Component::STATE_READY = "ready";
 const std::string Component::STATE_STOPPED = "stopped";
 const std::string Component::STATE_FAILURE = "failure";
+const std::string Component::STATE_STALLED = "stalled";
 
 
 	Component::Component(const std::string & componentName, bool isInput, bool isOutput) throw (CMSException) :
@@ -117,9 +118,13 @@ const std::string Component::STATE_FAILURE = "failure";
 					}
 				}
 			}
+			meta.IamAlive();
 			try {
 				// Check if we should do something proactively:
+				long long before = System::currentTimeMillis();
 				act();
+				long long timeSpentInAct = System::currentTimeMillis() - before;
+				meta.statistics()->actTime(timeSpentInAct);
 			} catch (std::exception & e) {
 				log->error("error when trying to act", & e);
 				try {
@@ -148,12 +153,19 @@ const std::string Component::STATE_FAILURE = "failure";
 			//assert(receivers.contains(r)); // the receiver that alerted us is not one of our receivers;
 			SEMAINEMessage * message = r->getMessage();
 			assert(message != NULL); // Receiver alerted me but has no message
+			meta.statistics()->countMessageReceived();
 
 			try {
+				// time travelled, ignoring clock differences between sender and receiver:
+				long long timeMessageTravelled = System::currentTimeMillis() - message->getMessage()->getCMSTimestamp();
+				meta.statistics()->transmitTime(timeMessageTravelled);
 				// Now, do something meaningful with the message,
 				// and possibly send output via the Senders.
+				long long before = System::currentTimeMillis();
 				react(message);
 				delete message;
+				long long timeSpentInReact = System::currentTimeMillis() - before;
+				meta.statistics()->reactTime(timeSpentInReact);
 			} catch (std::exception & e) {
 				log->error("error when trying to react", &e);
 				try {

@@ -32,18 +32,30 @@ namespace semaine {
 namespace components {
 namespace meta {
 
+class Statistics;
+
 class MetaMessenger : public IOBase, public MessageListener, public decaf::util::concurrent::Mutex
 {
 public:
+	// Properties sent by the Meta messenger:
 	static const std::string COMPONENT_NAME;
 	static const std::string COMPONENT_STATE;
 	static const std::string COMPONENT_STATE_DETAILS;
-	static const std::string SYSTEM_READY;
-	static const std::string SYSTEM_READY_TIME;
 	static const std::string RECEIVE_TOPICS;
 	static const std::string SEND_TOPICS;
 	static const std::string IS_INPUT;
 	static const std::string IS_OUTPUT;
+	static const std::string LAST_SEEN_ALIVE;
+	static const std::string AVERAGE_ACT_TIME;
+	static const std::string AVERAGE_REACT_TIME;
+	static const std::string AVERAGE_TRANSMIT_TIME;
+	static const std::string TOTAL_MESSAGES_RECEIVED;
+
+	// Properties sent by the System manager:
+	static const std::string SYSTEM_READY;
+	static const std::string SYSTEM_READY_TIME;
+	static const std::string PING;
+	static const std::string REPORT_TOPICS;
 
 	MetaMessenger(const std::string & componentName) throw(CMSException);
 
@@ -69,6 +81,10 @@ public:
 	 */
 	long long getTime();
 
+	void IamAlive();
+
+	Statistics * statistics() { return _statistics; }
+
 
 private:
 	const std::string componentName;
@@ -76,12 +92,54 @@ private:
 	MessageConsumer * consumer;
 	bool systemReady;
 	long long timeDelta;
+	long long lastSeenAlive;
+	std::string lastSeenState;
+	std::string receiveTopics;
+	std::string sendTopics;
+	bool isInput;
+	bool isOutput;
+	Statistics * _statistics;
 
 	void setSystemReady(bool ready);
 	void setTime(long long systemTime);
+	void _reportTopics()
+	throw(CMSException);
 
 };
 
+
+class Statistics
+{
+public:
+	Statistics(int memory) : memory(memory), messagesReceived(0)
+	{}
+
+	void actTime(long millis);
+
+	void reactTime(long millis);
+
+	void transmitTime(long millis);
+
+	void countMessageReceived() { messagesReceived++; }
+
+	int getTotalMessagesReceived() { return messagesReceived; }
+
+	long avgActTime() { return average(actTimes); }
+
+	long avgReactTime() { return average(reactTimes); }
+
+	long avgTransmitTime() { return average(transmitTimes); }
+
+private:
+	int memory;
+	std::list<long> actTimes;
+	std::list<long> reactTimes;
+	std::list<long> transmitTimes;
+	int messagesReceived;
+
+	long average(std::list<long> & values);
+
+};
 
 } // namespace meta
 } // namespace components

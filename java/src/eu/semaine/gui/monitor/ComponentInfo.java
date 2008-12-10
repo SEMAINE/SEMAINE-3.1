@@ -19,6 +19,11 @@ public class ComponentInfo extends Info
 	private Component.State state;
 	private String stateDetails;
 	private boolean topicsChanged;
+	private long lastSeenAlive;
+	private long avgActTime = -1;
+	private long avgReactTime = -1;
+	private long avgTransmitTime = -1;
+	private int messagesReceived = -1;
 	
 	public ComponentInfo(String name, String[] receiveTopics, String[] sendTopics,
 			boolean isInput, boolean isOutput)
@@ -30,6 +35,7 @@ public class ComponentInfo extends Info
 		this.isOutput = isOutput;
 		this.state = null;
 		this.stateDetails = null;
+		this.lastSeenAlive = 0;
 	}
 	
 	public boolean isInput()
@@ -53,6 +59,19 @@ public class ComponentInfo extends Info
 		isOutput = b;
 		setTopicsChanged(true);
 	}
+	
+	public long lastSeenAlive()
+	{
+		return lastSeenAlive;
+	}
+	
+	public void setLastSeenAlive(long time)
+	{
+		lastSeenAlive = time;
+		if (dialog != null) {
+			dialog.setText(getInfo());
+		}
+	}
 
 	public String[] receiveTopics()
 	{
@@ -71,6 +90,11 @@ public class ComponentInfo extends Info
 
 	public synchronized void setState(Component.State newState)
 	{
+		setState(newState, null);
+	}
+	
+	public synchronized void setState(Component.State newState, String details)
+	{
 		if (newState != null && newState.equals(state) ||
 				newState == null && state == null) {
 			// state unchanged
@@ -78,16 +102,13 @@ public class ComponentInfo extends Info
 		} 
 		// else state changed
 		state = newState;
+		stateDetails = details;
 		setChanged(true);
 		if (dialog != null) {
 			dialog.setText(getInfo());
 		}
 	}
 
-	public void setStateDetails(String details)
-	{
-		stateDetails = details;
-	}
 	
 	public String getStateDetails()
 	{
@@ -130,9 +151,10 @@ public class ComponentInfo extends Info
 		if (state == null) return Color.gray;
 		switch (state) {
 		case failure: return Color.red;
-		case starting: return new Color(100, 255, 100);
+		case starting: return new Color(255, 200, 100);
 		case ready: return Color.green;
 		case stopped: return Color.blue;
+		case stalled: return new Color(255, 100, 255);
 		default: return Color.gray;
 		}
 	}
@@ -158,6 +180,26 @@ public class ComponentInfo extends Info
 		return topicsChanged;
 	}
 	
+	public void setAverageActTime(long millis)
+	{
+		avgActTime = millis;
+	}
+	
+	public void setAverageReactTime(long millis)
+	{
+		avgReactTime = millis;
+	}
+
+	public void setAverageTransmitTime(long millis)
+	{
+		avgTransmitTime = millis;
+	}
+	
+	public void setTotalMessagesReceived(int number)
+	{
+		messagesReceived = number;
+	}
+
 	public String toString() { return name; }
 
 	public String getInfo()
@@ -168,6 +210,19 @@ public class ComponentInfo extends Info
 		if (stateDetails != null)
 			sb.append(" (").append(stateDetails).append(")");
 		sb.append("\n");
+		sb.append("Last seen alive: ").append(lastSeenAlive).append("\n");
+		if (avgActTime != -1) {
+			sb.append("Average time spent in act(): ").append(avgActTime).append(" ms").append("\n");
+		}
+		if (avgReactTime != -1) {
+			sb.append("Average time spent in react(): ").append(avgReactTime).append(" ms").append("\n");
+		}
+		if (avgTransmitTime != -1) {
+			sb.append("Average travel time of incoming messages (ignoring clock differences!): ").append(avgTransmitTime).append(" ms").append("\n");
+		}
+		if (messagesReceived != -1) {
+			sb.append("Total messages received: ").append(messagesReceived).append("\n");
+		}
 		if (receiveTopics != null && receiveTopics.size() > 0) {
 			sb.append("Receiving from topics:\n");
 			for (String t : receiveTopics) {
