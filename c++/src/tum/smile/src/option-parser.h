@@ -79,6 +79,9 @@ typedef struct {
   int samplerate;
   int bits;
   int useFloat32;   // use float32 instead of int32 samples
+  int recordtime;
+  int minrectime;
+  int silwait;
   // sync:
   int triggerchan;
   char *triggerfile;

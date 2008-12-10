@@ -96,6 +96,23 @@ void debug_printOptions( pOptions opts )
 /****************************************/
 
 
+#ifdef WIN32
+#include <windows.h>
+#include "stdio.h"
+
+static BOOL WINAPI handler(DWORD dwCtrlType)
+{
+    switch (dwCtrlType) {
+    case CTRL_C_EVENT:
+    case CTRL_BREAK_EVENT:
+        printf("caught event!\n");
+        return TRUE;
+    }
+    return FALSE;
+}
+
+#endif
+
 
 
 /************** Ctrl+C signal handler **/
@@ -108,7 +125,7 @@ void INThandler(int);
 void  INThandler(int sig)
 {
      char  c;
-
+printf("SIGINT\n");fflush(stdout);
      signal(sig, SIG_IGN);
      featum_quit = 1;
      signal(SIGINT, INThandler);
@@ -211,6 +228,15 @@ int main(int argc, char *argv[])
   FEATUM_DEBUG(4,"entering main loop");
   // install Ctrl+C signal handler
   signal(SIGINT, INThandler);
+//  signal(SIGQUIT, INThandler);
+  signal(SIGABRT, INThandler);
+  signal(SIGTERM, INThandler);
+
+  #ifdef WIN32
+    if ( !SetConsoleCtrlHandler(handler, TRUE) ) {
+        exit(1);
+    }
+  #endif
   
   pPcmBuffer buf = pcmBufferAllocate(NULL, opts->buffersize/2, inputStream->nChan, inputStream->sampleType, MEMORGA_INTERLV, inputStream->sampleRate);
   int running = 1;
