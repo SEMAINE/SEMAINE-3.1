@@ -57,8 +57,6 @@ public class TurnTakingInterpreter extends Component
 	private CyclicBuffer<Float> logEnergyBuffer = new CyclicBuffer<Float>(20);
 	private CyclicBuffer<Float> foStrengthBuffer = new CyclicBuffer<Float>(30);
 	
-	int counter = 0;
-	
 	
 	/**
 	 * Constructor DialogInterpreter
@@ -89,11 +87,6 @@ public class TurnTakingInterpreter extends Component
 	@Override
 	public void act() throws JMSException
 	{
-		counter++;
-		if( counter == 10 ) {
-			System.out.println("State: " + turntakingState.toString() + ", startPauseTime: " + pauseTime + ", currentTime: " + meta.getTime());
-			counter = 0;
-		}
 		if( pauseTime != 0 && turntakingState == State.USER_SPEAKING && pauseTime + 1500 < meta.getTime() ) {
 			changeTurnState( true, meta.getTime() );
 			turntakingState = State.AGENT_WAITING;
@@ -252,11 +245,9 @@ public class TurnTakingInterpreter extends Component
 	{
 		Map<String,String> dialogInfo = new HashMap<String,String>();
 		if( agentTurn ) {
-			System.out.println("Agent is speaker!");
 			dialogInfo.put("speaker", "agent");
 			dialogInfo.put("listener", "user");
 		} else {
-			System.out.println("User is speaker!");
 			dialogInfo.put("listener", "agent");
 			dialogInfo.put("speaker", "user");
 		}

@@ -223,7 +223,6 @@ public class UtteranceInterpreter extends Component
 			Map<String,String> dialogInfoMap = dialogInfo.getInfo();
 			
 			if( dialogInfoMap.get("speaker").equals("agent") ) {
-				System.out.println("UtteranceInterpreter: Speaker is agent");
 				if( utterance.length() > 0 ) {
 					System.out.println("Processing utterance");
 					processUtterance();
