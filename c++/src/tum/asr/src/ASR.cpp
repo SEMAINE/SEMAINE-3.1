@@ -48,7 +48,7 @@ ASR::ASR(char * configfile) throw(CMSException) :
 	amon(NULL)
 {
 	
-	emmaSender = new EmmaSender("semaine.data.state.user", getName());
+	emmaSender = new EmmaSender("semaine.data.state.user.emma", getName());
 	senders.push_back(emmaSender);
 
 	sentence="";

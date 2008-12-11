@@ -57,7 +57,7 @@ TumFeatureExtractor::TumFeatureExtractor(pOptions _opts) throw(CMSException) :
 	senders.push_back(featureSender);
 	featureSender->setTimeToLive(100); // discard messages after 100 ms
 
-	emmaSender = new EmmaSender("semaine.data.state.user", getName());
+	emmaSender = new EmmaSender("semaine.data.state.user.emma", getName());
 	senders.push_back(emmaSender);
 
 	// A scalable list of features -- for load testing
