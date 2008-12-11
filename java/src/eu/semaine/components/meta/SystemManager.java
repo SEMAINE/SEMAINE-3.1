@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -52,6 +53,7 @@ public class SystemManager extends Component implements MessageListener
 	private SystemMonitor systemMonitor;
 	private MessageConsumer dataConsumer;
 	private long systemZeroTime;
+	private Set<String> ignoreStalledComponents;
 	
 	public SystemManager()
 	throws JMSException
@@ -86,6 +88,14 @@ public class SystemManager extends Component implements MessageListener
 				}
 			});
 		}
+		ignoreStalledComponents = new HashSet<String>();
+		String isc = System.getProperty("semaine.systemmanager.ignorestalled");
+		if (isc != null) {
+			StringTokenizer st = new StringTokenizer(isc);
+			while (st.hasMoreElements()) {
+				ignoreStalledComponents.add(st.nextToken());
+			}
+		}
 	}
 	
 	
@@ -116,16 +126,18 @@ public class SystemManager extends Component implements MessageListener
 		producer.send(m);
 	}
 	
-	private void checkComponentsAlive()
+	private synchronized void checkComponentsAlive()
 	throws JMSException
 	{
 		long time = getTime();
 		for (ComponentInfo ci : componentInfos.values()) {
-			if (time - ci.lastSeenAlive() > 3*PING_PERIOD) {
+			if (time - ci.lastSeenAlive() > 3*PING_PERIOD
+					&& !ignoreStalledComponents.contains(ci.toString())) {
 				ci.setState(Component.State.stalled, 
 						"Component was last seen at time "+ci.lastSeenAlive());
 			}
 			if (ci.receiveTopics() == null && ci.sendTopics() == null) {
+				log.info("Component "+ci.toString()+" has no topic info -- will ask");
 				// we need to ask for the information
 				Message m = iobase.getSession().createMessage();
 				m.setStringProperty(SEMAINEMessage.SOURCE, getName());
@@ -146,13 +158,17 @@ public class SystemManager extends Component implements MessageListener
 		try {
 			assert m.propertyExists(MetaMessenger.COMPONENT_NAME) : "message should contain header field '"+MetaMessenger.COMPONENT_NAME+"'";
 			String componentName = m.getStringProperty(MetaMessenger.COMPONENT_NAME);
+			if (IGNORE_COMPONENTS.contains(componentName)) return;
+			
 			ComponentInfo ci = componentInfos.get(componentName);
 			if (ci == null) {
-				ci = new ComponentInfo(componentName, null, null, false, false);
-				componentInfos.put(componentName, ci);
-				if (systemMonitor != null && !IGNORE_COMPONENTS.contains(componentName)) {
-					// Tell GUI there is something new
-					systemMonitor.addComponentInfo(ci);
+				synchronized(this) {
+					ci = new ComponentInfo(componentName, null, null, false, false);
+					componentInfos.put(componentName, ci);
+					if (systemMonitor != null) {
+						// Tell GUI there is something new
+						systemMonitor.addComponentInfo(ci);
+					}
 				}
 			}
 			if (m.propertyExists(MetaMessenger.COMPONENT_STATE)) {
@@ -168,19 +184,9 @@ public class SystemManager extends Component implements MessageListener
 					details = m.getStringProperty(MetaMessenger.COMPONENT_STATE_DETAILS);
 				}
 				ci.setState(componentState, details);
-				if (log.isDebugEnabled()) {
-					StringBuilder builder = new StringBuilder("Components:\n");
-					for (Entry<String,ComponentInfo>entry : componentInfos.entrySet()) {
-						builder.append(entry.getKey()+": "+entry.getValue().getState());
-						String entryDetails = entry.getValue().getStateDetails();
-						if (entryDetails != null)
-							builder.append(" (").append(entryDetails).append(")");
-						builder.append("\n");
-					}
-					log.debug(builder);
-				}
 				if (componentState != State.ready) { // system not ready
 					if (lastReportSystemReady == true) {
+						logComponentStates();
 						reportSystemReady(false);
 					} // else, we were not ready anyway
 				} else { // this component is ready, how about the others?
@@ -192,6 +198,7 @@ public class SystemManager extends Component implements MessageListener
 						}
 					}
 					if (allReady != lastReportSystemReady) {
+						logComponentStates();
 						reportSystemReady(allReady);
 					}
 				}
@@ -235,6 +242,21 @@ public class SystemManager extends Component implements MessageListener
 			}
 		} catch (JMSException e) {
 			log.error(e);
+		}
+	}
+
+
+	private void logComponentStates() {
+		if (log.isDebugEnabled()) {
+			StringBuilder builder = new StringBuilder("Components:\n");
+			for (Entry<String,ComponentInfo>entry : componentInfos.entrySet()) {
+				builder.append(entry.getKey()+": "+entry.getValue().getState());
+				String entryDetails = entry.getValue().getStateDetails();
+				if (entryDetails != null)
+					builder.append(" (").append(entryDetails).append(")");
+				builder.append("\n");
+			}
+			log.debug(builder);
 		}
 	}
 
