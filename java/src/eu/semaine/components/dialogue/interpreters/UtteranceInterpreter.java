@@ -70,11 +70,10 @@ public class UtteranceInterpreter extends Component
 	private FeatureReceiver featureReceiver;
 	private EmmaReceiver emmaReceiver;
 	private UserStateReceiver userStateReceiver;
-	private AgentStateReceiver agentStateReceiver;
+	//private AgentStateReceiver agentStateReceiver;
 	private DialogStateReceiver dialogStateReceiver;
 
 	/* Senders */
-	private StateSender dialogStateSender;
 	private XMLSender userStateSender;
 	
 	/* PoS Tagger */
@@ -108,8 +107,6 @@ public class UtteranceInterpreter extends Component
 		receivers.add(userStateReceiver);
 
 		/* Define Senders */
-		dialogStateSender = new StateSender("semaine.data.state.dialog", "DialogState", getName());
-		senders.add(dialogStateSender);
 		userStateSender = new XMLSender("semaine.data.state.user.behaviour", "datatype = 'UserState'", "");
 		senders.add(userStateSender); // so it can be started etc
 		
@@ -227,19 +224,10 @@ public class UtteranceInterpreter extends Component
 			Map<String,String> dialogInfoMap = dialogInfo.getInfo();
 			
 			if( dialogInfoMap.get("speaker").equals("agent") ) {
-				if( utterance.length() > 0 ) {
-					System.out.println("Processing utterance");
-					processUtterance();
-					utterance = "";
-				} else {
-					/* User hasn't said anything yet, so user still has turn */
-					Map<String,String> dInfo = new HashMap<String,String>();
-					dInfo.put("listener", "agent");
-					dInfo.put("speaker", "user");
-					DialogStateInfo dsi = new DialogStateInfo(dInfo, null);
-					dialogStateSender.sendStateInfo(dsi, meta.getTime());
-					
-				}
+				System.out.println("Processing utterance");
+				processUtterance();
+				utterance = "";
+
 			}
 		}
 		return false;
