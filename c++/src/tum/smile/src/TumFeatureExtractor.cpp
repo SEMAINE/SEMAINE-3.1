@@ -19,6 +19,7 @@
 #include <semaine/util/XMLTool.h>
 #include <semaine/datatypes/xml/EMMA.h>
 #include <semaine/datatypes/xml/EmotionML.h>
+#include <semaine/datatypes/xml/SemaineML.h>
 
 using namespace semaine::util;
 using namespace semaine::datatypes::xml;
@@ -450,7 +451,16 @@ void TumFeatureExtractor::act() throw(CMSException)
 
 			if (sres == 2) { // begin of turn (10 frames before current position)
 				printf("** detected turn start [t=%f]--\n",(*frame1)._data.timestamp); fflush(stdout);
-          			// ++AMQ++ send turn start
+
+	       			// ++AMQ++ send turn end emma message
+       				{
+				  DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
+				  DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
+				  DOMElement * behaviour = XMLTool::appendChildElement(interpretation, SemaineML::E_BEHAVIOUR, SemaineML::namespaceURI);
+				  XMLTool::setAttribute(behaviour, SemaineML::A_NAME, "silent");
+				  emmaSender->sendXML(document, meta.getTime());				  
+				}
+
 				if (opts->HRF) {
 					functs->setFrameStart( 3, -10 );
 					functs->setFrameStart( 4, -10 );
@@ -480,6 +490,15 @@ void TumFeatureExtractor::act() throw(CMSException)
 
 			if (( sres == 1 )||(turntime>1000)) {  // ||(turnlength > 10s)
 				printf("-- detected turn end [t=%f] [l=%i]--\n",(*frame1)._data.timestamp,turntime); fflush(stdout);
+
+       				// ++AMQ++ send turn end emma message
+	       			{
+				  DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
+				  DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
+				  DOMElement * behaviour = XMLTool::appendChildElement(interpretation, SemaineML::E_BEHAVIOUR, SemaineML::namespaceURI);
+				  XMLTool::setAttribute(behaviour, SemaineML::A_NAME, "silent");
+				  emmaSender->sendXML(document, meta.getTime());				  
+				}
 
 				#ifdef DEBUG_SILDET
 				// close output wave file, increment counter
