@@ -105,6 +105,10 @@ const std::string Component::STATE_STALLED = "stalled";
 		}
 
 		while (!exitRequested()) {
+			// Report that we are alive before we check system ready status,
+			// (in case we were stalled due to a long act() or react() this
+			// means we "report back" to the rest of the system)
+			meta.IamAlive();
 			// Check at every loop that the total system is ready
 			synchronized (&meta) {
 				while (!meta.isSystemReady()) {
@@ -118,7 +122,6 @@ const std::string Component::STATE_STALLED = "stalled";
 					}
 				}
 			}
-			meta.IamAlive();
 			try {
 				// Check if we should do something proactively:
 				long long before = System::currentTimeMillis();
