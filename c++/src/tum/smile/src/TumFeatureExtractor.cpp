@@ -452,12 +452,12 @@ void TumFeatureExtractor::act() throw(CMSException)
 			if (sres == 2) { // begin of turn (10 frames before current position)
 				printf("** detected turn start [t=%f]--\n",(*frame1)._data.timestamp); fflush(stdout);
 
-	       			// ++AMQ++ send turn end emma message
+	       			// ++AMQ++ send turn start emma message
        				{
 				  DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
 				  DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
 				  DOMElement * behaviour = XMLTool::appendChildElement(interpretation, SemaineML::E_BEHAVIOUR, SemaineML::namespaceURI);
-				  XMLTool::setAttribute(behaviour, SemaineML::A_NAME, "silent");
+				  XMLTool::setAttribute(behaviour, SemaineML::A_NAME, "speaking");
 				  emmaSender->sendXML(document, meta.getTime());				  
 				}
 
