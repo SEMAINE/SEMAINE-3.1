@@ -32,7 +32,7 @@ public class CyclicBuffer <type>
 		ArrayList<type> result = new ArrayList<type>();
 		int p = pointer;
 		for( int i=0; i<buffer.length; i++ ) {
-			result.add( (type)buffer[p] );
+			if( (type)buffer[p] != null )result.add( (type)buffer[p] );
 			p = (p + 1)%buffer.length;
 		}
 		return result;

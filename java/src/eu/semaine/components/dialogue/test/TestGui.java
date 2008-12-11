@@ -95,7 +95,7 @@ public class TestGui extends Component
 	public TestGui() throws JMSException
 	{
 		super("GUI");
-		userStateSender = new EmmaSender("semaine.data.state.user", "GUI");
+		userStateSender = new EmmaSender("semaine.data.state.user.emma", "GUI");
 		senders.add(userStateSender); // so it can be started etc
 		featureSender = new FeatureSender("semaine.data.analysis.features.voice", "", "GUI", 10);
 		String[] featureNames = new String[2];
@@ -106,7 +106,7 @@ public class TestGui extends Component
 		
 		fmlReceiver = new FMLReceiver("semaine.data.action.candidate.function");
 		receivers.add(fmlReceiver); // to set up properly
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
 		
 		initGui();

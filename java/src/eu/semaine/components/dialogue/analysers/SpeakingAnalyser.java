@@ -35,7 +35,7 @@ public class SpeakingAnalyser extends Component
 		receivers.add(featureReceiver);
 		
 		/* Define senders */
-		userStateSender = new EmmaSender("semaine.data.state.user", "SpeakingAnalyser");
+		userStateSender = new EmmaSender("semaine.data.state.user.emma", "SpeakingAnalyser");
 		senders.add(userStateSender);
 	}
 	

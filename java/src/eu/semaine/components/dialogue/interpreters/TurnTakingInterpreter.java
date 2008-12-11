@@ -42,9 +42,9 @@ public class TurnTakingInterpreter extends Component
 {	
 	/* Receivers */
 	private EmmaReceiver emmaReceiver;
-	private UserStateReceiver userStateReceiver;
-	private FeatureReceiver featureReceiver;
 	private DialogStateReceiver dialogStateReceiver;
+	//private UserStateReceiver userStateReceiver;
+	//private FeatureReceiver featureReceiver;
 	
 	/* Senders */
 	private StateSender dialogStateSender;
@@ -66,14 +66,14 @@ public class TurnTakingInterpreter extends Component
 		super("TurnTakingInterpreter");
 		
 		/* Define Receivers */
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
-		userStateReceiver = new UserStateReceiver("semaine.data.state.user", "datatype = 'UserState'");
-		receivers.add(userStateReceiver);
-		featureReceiver = new FeatureReceiver("semaine.data.analysis.features.voice");
-		receivers.add(featureReceiver);
 		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
 		receivers.add(dialogStateReceiver);
+		//userStateReceiver = new UserStateReceiver("semaine.data.state.user.emma", "datatype = 'UserState'");
+		//receivers.add(userStateReceiver);
+		//featureReceiver = new FeatureReceiver("semaine.data.analysis.features.voice");
+		//receivers.add(featureReceiver);
 		
 		/* Define Senders */
 		dialogStateSender = new StateSender("semaine.data.state.dialog", "DialogState", getName());

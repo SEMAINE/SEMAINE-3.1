@@ -20,8 +20,10 @@ import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.util.DialogueAct;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.UserStateReceiver;
+import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
@@ -94,8 +96,9 @@ public class UtteranceProposer extends Component
 	private ArrayList<String> safeResponses = new ArrayList<String>();
 	
 	/* Receivers and Senders */
-	private UserStateReceiver userStateReceiver;
-	private EmmaReceiver emmaReceiver;
+	//private UserStateReceiver userStateReceiver;
+	//private EmmaReceiver emmaReceiver;
+	private XMLReceiver userStateReceiver;
 	private FMLSender fmlSender;
 	
 	
@@ -111,9 +114,11 @@ public class UtteranceProposer extends Component
 		super("UtteranceProposer");
 		
 		/* Creates the Senders and Receivers */
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
-		receivers.add(emmaReceiver);
-		userStateReceiver = new UserStateReceiver("semaine.data.state.user", "datatype = 'UserState'");
+//		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
+//		receivers.add(emmaReceiver);
+//		userStateReceiver = new UserStateReceiver("semaine.data.state.user", "datatype = 'UserState'");
+//		receivers.add(userStateReceiver);
+		userStateReceiver = new XMLReceiver("semaine.data.state.user.behaviour", "");
 		receivers.add(userStateReceiver);
 		
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
@@ -160,20 +165,15 @@ public class UtteranceProposer extends Component
 	@Override
 	protected void react(SEMAINEMessage m) throws JMSException
 	{
-		if( m instanceof SEMAINEEmmaMessage ) {
-			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
-			Element interpretation = em.getTopLevelInterpretation();
-			if ( interpretation != null && interpretation.getAttribute("processed").equals("true") ) {
-				List<Element> texts = em.getTextElements(interpretation);
-				DialogueAct act = null;
-				for (Element text : texts) {
-					String utterance = text.getTextContent();
-					if( utterance != null ) {
-						act = new DialogueAct(utterance);
-					}
-				}
+		if( m instanceof SEMAINEXMLMessage ) {
+			SEMAINEXMLMessage xml = (SEMAINEXMLMessage)m;
+			Element text = XMLTool.getChildElementByTagNameNS(xml.getDocument().getDocumentElement(), SemaineML.E_TEXT, SemaineML.namespaceURI);
+			if( text != null ) {
+				String utterance = text.getTextContent();
+				DialogueAct act = new DialogueAct(utterance);
+				
 				if( act != null ) {
-					List<Element> features = em.getFeatureElements( interpretation );
+					List<Element> features = XMLTool.getChildrenByTagNameNS(text, SemaineML.E_FEATURE, SemaineML.namespaceURI);
 					for( Element feature : features ) {
 						String f = feature.getAttribute( "name" );
 						if( f.equals("positive") ) act.setPositive(true);
@@ -194,11 +194,50 @@ public class UtteranceProposer extends Component
 						if( f.equals("change speaker") ) act.setChangeSpeaker(true);
 						if( f.equals("target character") ) act.setTargetCharacter( feature.getAttribute("target") );
 					}
-					System.out.println("Choosing response");
 					pickResponse(act);
 				}
 			}
 		}
+		
+//		if( m instanceof SEMAINEEmmaMessage ) {
+//			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
+//			Element interpretation = em.getTopLevelInterpretation();
+//			if ( interpretation != null && interpretation.getAttribute("processed").equals("true") ) {
+//				List<Element> texts = em.getTextElements(interpretation);
+//				DialogueAct act = null;
+//				for (Element text : texts) {
+//					String utterance = text.getTextContent();
+//					if( utterance != null ) {
+//						act = new DialogueAct(utterance);
+//					}
+//				}
+//				if( act != null ) {
+//					List<Element> features = em.getFeatureElements( interpretation );
+//					for( Element feature : features ) {
+//						String f = feature.getAttribute( "name" );
+//						if( f.equals("positive") ) act.setPositive(true);
+//						if( f.equals("negative") ) act.setNegative(true);
+//						if( f.equals("agree") ) act.setAgree(true);
+//						if( f.equals("disagree") ) act.setDisagree(true);
+//						if( f.equals("about other people") ) act.setAboutOtherPeople(true);
+//						if( f.equals("about other character") ) act.setAboutOtherCharacter(true);
+//						if( f.equals("about current character") ) act.setAboutCurrentCharacter(true);
+//						if( f.equals("about own feelings") ) act.setAboutOwnFeelings(true);
+//						if( f.equals("pragmatic") ) act.setPragmatic(true);
+//						if( f.equals("about self") ) act.setTalkAboutSelf(true);
+//						if( f.equals("future") ) act.setFuture(true);
+//						if( f.equals("past") ) act.setPast(true);
+//						if( f.equals("event") ) act.setEvent(true);
+//						if( f.equals("action") ) act.setAction(true);
+//						if( f.equals("laugh") ) act.setLaugh(true);
+//						if( f.equals("change speaker") ) act.setChangeSpeaker(true);
+//						if( f.equals("target character") ) act.setTargetCharacter( feature.getAttribute("target") );
+//					}
+//					System.out.println("Choosing response");
+//					pickResponse(act);
+//				}
+//			}
+//		}
 	}
 	
 	/**
