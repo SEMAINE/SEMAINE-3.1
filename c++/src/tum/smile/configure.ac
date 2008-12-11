@@ -12,9 +12,8 @@ CHECK_HAVE_SEMAINEAPI
 CHECK_HAVE_PORTAUDIO
 
 CONFIGURE_TARGETS
-AC_DEFINE([WIN32],[],[Compile on MinGW32-Msys])
 if test x`uname | grep mingw` != x ; then
-  AC_DEFINE([WIN32],[1])
+  AC_DEFINE([WIN32],[1], [Compile on MinGW32-Msys])
 fi 
 
 AM_CONFIG_HEADER(config.h)
