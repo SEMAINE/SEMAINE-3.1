@@ -30,6 +30,7 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.EMMA;
+import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
@@ -134,13 +135,23 @@ public class TestGui extends Component
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
-				Element bml = XMLTool.needChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
-				Element speech = XMLTool.needChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
-
-				try {
-					printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
-				}catch(Exception e){e.printStackTrace();}
-				//printLine( "+ " + speech.getTextContent() );
+				Element bml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
+				if( bml != null ) {
+					Element speech = XMLTool.getChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
+					if( speech != null ) {
+						try {
+							printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
+						}catch(Exception e){e.printStackTrace();}
+						//printLine( "+ " + speech.getTextContent() );
+					}
+				}
+				Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
+				if( fml != null ) {
+					Element backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
+					if( backchannel != null ) {
+						printLine("** Nods **");
+					}
+				}
 			}
 		}
 		if( isSentence(m) ) {

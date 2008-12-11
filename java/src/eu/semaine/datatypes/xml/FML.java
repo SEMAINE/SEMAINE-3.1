@@ -21,6 +21,7 @@ public class FML
 	public static final String E_RHEME = "rheme";
 	public static final String E_WORLD = "world";
 	public static final String E_EMOTION = "emotion";
+	public static final String E_BACKCHANNEL = "backchannel";
 
 	// Attributes
 	public static final String A_ID = "id";
