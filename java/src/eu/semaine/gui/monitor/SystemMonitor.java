@@ -1,7 +1,9 @@
 package eu.semaine.gui.monitor;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -17,10 +19,22 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import javax.jms.JMSException;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextPane;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.BadLocationException;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.jgraph.JGraph;
 import org.jgraph.event.GraphSelectionEvent;
 import org.jgraph.event.GraphSelectionListener;
@@ -32,11 +46,14 @@ import org.jgraph.graph.GraphLayoutCache;
 import org.jgraph.graph.GraphModel;
 
 import eu.semaine.components.Component;
+import eu.semaine.jms.JMSLogReader;
 
 public class SystemMonitor extends Thread
 {
 	private JFrame frame;
 	private JGraph graph;
+	private JTextPane systemStatus;
+	private JTextPane logPane;
 	private Dimension frameSize = null;
 	private static int componentWidth = 120;
 	private static int componentHeight = 30;
@@ -47,6 +64,7 @@ public class SystemMonitor extends Thread
 	private Map<String, TopicInfo> topics;
 	private List<DefaultGraphCell> cells;
 	private List<DefaultEdge> edges;
+	private JMSLogReader logReader;
 	
 	public SystemMonitor(ComponentInfo[] componentInfos)
 	{
@@ -65,10 +83,47 @@ public class SystemMonitor extends Thread
 		view.setFactory(new MyCellViewFactory());
 		
 		frame = new JFrame("SEMAINE System Monitor");
-		frame.getContentPane().add(new JScrollPane(graph));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		//frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		JPanel rightSide = new JPanel();
+		rightSide.setLayout(new BorderLayout());
+		systemStatus = new JTextPane();
+		TitledBorder title = BorderFactory.createTitledBorder(
+				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
+				"System status");
+		title.setTitleJustification(TitledBorder.LEFT);
+		systemStatus.setBorder(title);
+		systemStatus.setPreferredSize(new Dimension(200, 200));
+		systemStatus.setBackground(new Color(230, 230, 230));
+		logPane = new JTextPane();
+		JScrollPane logScrollPane = new JScrollPane(logPane);
+		logScrollPane.setBorder(BorderFactory.createTitledBorder(
+				BorderFactory.createEmptyBorder(),
+				"Log messages"));
+		logScrollPane.setBackground(systemStatus.getBackground());
+		rightSide.add(systemStatus, BorderLayout.PAGE_START);
+		rightSide.add(logScrollPane, BorderLayout.CENTER);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		                           graph, rightSide);
+		splitPane.setOneTouchExpandable(true);
+		frame.getContentPane().add(splitPane);
+		splitPane.setDividerLocation(Toolkit.getDefaultToolkit().getScreenSize().width*3/4);
 
+		// Set up log reader:
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.Log4JLogger");
+		// Configure log4j
+		Logger.getRootLogger().setLevel(Level.DEBUG);
+		Logger.getLogger("org.apache").setLevel(Level.INFO);
+		PatternLayout layout = new PatternLayout("%-5p %-10c %m\n");
+		BasicConfigurator.configure();
+		Logger.getLogger("semaine.log").addAppender(new TextPaneAppender(layout, "log-appender", logPane));
+		String component = "*";
+		String level = "*";
+		setupLogReader(component, level);
+		
+		
+		
 		// Sort components:
 		if (componentInfos != null)
 			sortedComponentList = new ArrayList<ComponentInfo>(Arrays.asList(componentInfos));
@@ -90,13 +145,27 @@ public class SystemMonitor extends Thread
 		componentListChanged = true;
 	}
 	
+	private void setupLogReader(String component, String level)
+	{
+		System.out.println("Looking for log messages in topic 'semaine.log."+component+"."+level+"'");
+		try {
+			if (logReader != null) {
+				logReader.getConnection().stop();
+			}
+			logReader = new JMSLogReader("semaine.log."+component+"."+level);
+		} catch (JMSException je) {
+			System.err.println("Problem with log reader:");
+			je.printStackTrace();
+		}
+	}
+	
 	private synchronized void redraw()
 	{
 		assert cells != null;
 		Map<DefaultGraphCell, Map<Object,Object>> allChanges = new HashMap<DefaultGraphCell, Map<Object,Object>>();
 		boolean mustUpdateCells = false;
 		boolean mustLayoutCells = false;
-		Dimension newFrameSize = frame.getSize();
+		Dimension newFrameSize = graph.getSize();
 		if (!newFrameSize.equals(frameSize)) {
 			frameSize = newFrameSize;
 			mustLayoutCells = true;
@@ -534,6 +603,26 @@ public class SystemMonitor extends Thread
 	{
 		return topics.get(topicName);
 	}
+	
+	
+	public void setSystemStatus(String text)
+	{
+		systemStatus.setText(text);
+	}
+	
+	public void appendLogMessage(String msg)
+	{
+		try {
+			logPane.getDocument().insertString(logPane.getDocument().getLength(), msg, null);
+			logPane.setCaretPosition(logPane.getDocument().getLength());
+		} catch (BadLocationException ble) {
+			ble.printStackTrace();
+		}
+	}
+	
+	
+	
+	
 	
 	
 	/**

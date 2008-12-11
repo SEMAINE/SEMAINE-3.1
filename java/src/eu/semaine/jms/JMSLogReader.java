@@ -56,7 +56,7 @@ public class JMSLogReader extends Receiver
 			String[] parts = dest.split("\\.");
 			String level = parts[parts.length-1].toLowerCase();
 			String component = parts[parts.length-2];
-			Log log = LogFactory.getLog(component);
+			Log log = LogFactory.getLog("semaine.log."+component);
 			String text = ((TextMessage)m).getText();
 			text = time.format(new Date(m.getJMSTimestamp())) + " " + text;
 			if (level.equals("info")) log.info(text);

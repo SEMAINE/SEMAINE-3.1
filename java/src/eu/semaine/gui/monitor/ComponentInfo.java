@@ -185,9 +185,19 @@ public class ComponentInfo extends Info
 		avgActTime = millis;
 	}
 	
+	public long getAverageActTime()
+	{
+		return avgActTime;
+	}
+	
 	public void setAverageReactTime(long millis)
 	{
 		avgReactTime = millis;
+	}
+	
+	public long getAverageReactTime()
+	{
+		return avgReactTime;
 	}
 
 	public void setAverageTransmitTime(long millis)
@@ -195,9 +205,19 @@ public class ComponentInfo extends Info
 		avgTransmitTime = millis;
 	}
 	
+	public long getAverageTransmitTime()
+	{
+		return avgTransmitTime;
+	}
+	
 	public void setTotalMessagesReceived(int number)
 	{
 		messagesReceived = number;
+	}
+	
+	public int getTotalMessagesReceived()
+	{
+		return messagesReceived;
 	}
 
 	public String toString() { return name; }

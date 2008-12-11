@@ -284,11 +284,70 @@ public class SystemManager extends Component implements MessageListener
 					log.error("cannot ping components");
 				}
 			}
+			updateSystemStatus();
 		}
 		try {
 			iobase.getConnection().close();
 		} catch (JMSException e) {
 			log.error("cannot close connection");
 		}
+	}
+	
+	private synchronized void updateSystemStatus()
+	{
+		if (systemMonitor == null) return;
+		StringBuilder sb = new StringBuilder();
+		sb.append("System status: ");
+		if (lastReportSystemReady) {
+			sb.append("ready\n");
+			sb.append("time: ").append(getTime()).append("\n");
+			sb.append("average...\n");
+			long actTime = 0;
+			int nAct = 0;
+			long reactTime = 0;
+			int nReact = 0;
+			long transmitTime = 0;
+			int nTransmit = 0;
+			int numMsg = 0;
+			int nNumMsg = 0;
+			for (ComponentInfo ci : componentInfos.values()) {
+				long val = ci.getAverageActTime();
+				if (val != -1) {
+					actTime += val;
+					nAct++;
+				}
+				val = ci.getAverageReactTime();
+				if (val != -1) {
+					reactTime += val;
+					nReact++;
+				}
+				val = ci.getAverageTransmitTime();
+				if (val != -1) {
+					transmitTime += val;
+					nTransmit++;
+				}
+				int msg = ci.getTotalMessagesReceived();
+				if (msg != -1) {
+					numMsg += msg;
+					nNumMsg++;
+				}
+			}
+			if (nAct == 0) nAct = 1;
+			if (nReact == 0) nReact = 1;
+			if (nTransmit == 0) nTransmit = 1;
+			if (nNumMsg == 0) nNumMsg = 1;
+			sb.append("...time spent in act(): ").append(actTime/nAct).append(" ms\n");
+			sb.append("...time spent in react(): ").append(reactTime/nReact).append(" ms\n");
+			sb.append("...message travel time (ignoring clock async): ").append(transmitTime/nTransmit).append(" ms\n");
+			sb.append("...number of messages received: ").append(numMsg/nNumMsg).append("\n");
+		} else {
+			sb.append("not ready:\n");
+			for (ComponentInfo ci : componentInfos.values()) {
+				if (ci.getState() != State.ready) {
+					sb.append("    ").append(ci.toString()).append(" ").append(ci.getState()).append("\n");
+				}
+			}
+		}
+		systemMonitor.setSystemStatus(sb.toString());
 	}
 }
