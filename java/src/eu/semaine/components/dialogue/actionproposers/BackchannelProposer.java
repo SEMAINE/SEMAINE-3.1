@@ -110,7 +110,7 @@ public class BackchannelProposer extends Component
 				for (Element behaviour : behaviours) {
 					String fName = XMLTool.needAttribute(behaviour, SemaineML.A_NAME);
 					//String fIntensity = XMLTool.needAttribute(behaviour, SemaineML.INTENSITY);
-					if (fName.equals("silence")) {
+					if (fName.equals("silent")) {
 						return true;
 					}
 				}

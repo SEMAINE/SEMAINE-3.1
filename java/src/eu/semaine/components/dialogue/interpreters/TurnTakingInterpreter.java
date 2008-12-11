@@ -120,11 +120,13 @@ public class TurnTakingInterpreter extends Component
 		
 		if( !processTurnMessage(m) ) {
 			if( isSilence(m) ) {
+				System.out.println("Silence");
 				pauseTime = meta.getTime();
 			} else if( isSpeaking(m) ) {
 				if( turntakingState == State.AGENT_WAITING ) {
 					turntakingState = State.USER_SPEAKING;
 					changeTurnState(false, meta.getTime());
+					System.out.println("Speaking");
 				}
 				pauseTime = 0;
 			}
@@ -164,7 +166,7 @@ public class TurnTakingInterpreter extends Component
 				for (Element behaviour : behaviours) {
 					String fName = XMLTool.needAttribute(behaviour, SemaineML.A_NAME);
 					//String fIntensity = XMLTool.needAttribute(behaviour, SemaineML.INTENSITY);
-					if (fName.equals("silence")) {
+					if (fName.equals("silent")) {
 						return true;
 					}
 				}

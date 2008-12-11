@@ -323,7 +323,7 @@ public class TestGui extends Component
 	{
 		/* If speech signals are not continuously send, send a speaking signal to indicate that an utterance has been spoken */
 		if( !sendSpeechSignals ) {
-			sendSpeakingSignal();
+			sendSpeaking();
 		}
 		
 		System.out.println("Sending line");
@@ -338,39 +338,30 @@ public class TestGui extends Component
 		
 		/* If speech signals are not continuously send, send a silence signal to indicate that the utterance is over */
 		if( !sendSpeechSignals ) {
-			sendSilenceSignal();
+			sendSilent();
 		}
 	}
 	
-	/**
-	 * Sends a signal that the user is speaking (in the gui -> typing)
-	 */
-	public void sendSpeakingSignal()
+	public void sendSpeaking()
 	{
-		float[] features = new float[2];
-		features[0] = -1;
-		if( r.nextInt(6) == 0 ) {
-			features[1] = 0;
-		} else {
-			features[1] = 1;
-		}
-
 		try {
-			featureSender.sendFeatureVector(features, meta.getTime());
-		}catch( JMSException e ){e.printStackTrace();}
+			Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
+			Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
+			Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespaceURI);
+			behaviour.setAttribute( SemaineML.A_NAME, "speaking" );
+			userStateSender.sendXML(document, meta.getTime(), Event.single);
+		} catch( JMSException e){ e.printStackTrace(); }
 	}
 	
-	/**
-	 * Sends a signal that the user is silent (in the gui -> not typing)
-	 */
-	public void sendSilenceSignal()
+	public void sendSilent()
 	{
-		float[] features = new float[2];
-		features[0] = -15;
-		features[1] = 0;
 		try {
-			featureSender.sendFeatureVector(features, meta.getTime());
-		}catch( JMSException e ){e.printStackTrace();}
+			Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
+			Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
+			Element behaviour = XMLTool.appendChildElement(interpretation, SemaineML.E_BEHAVIOUR, SemaineML.namespaceURI);
+			behaviour.setAttribute( SemaineML.A_NAME, "silent" );
+			userStateSender.sendXML(document, meta.getTime(), Event.single);
+		} catch( JMSException e){ e.printStackTrace(); }
 	}
 	
 	public long getTime()
@@ -468,9 +459,9 @@ class MyTimer extends Thread
 				//gui.sendSilenceSignal();
 			}
 			if( gui.typing ) {
-				gui.sendSpeakingSignal();
+				gui.sendSpeaking();
 			} else {
-				gui.sendSilenceSignal();
+				gui.sendSilent();
 			}
 		}
 	}
