@@ -117,33 +117,36 @@ public class SystemManager extends Component implements MessageListener
 		lastReportSystemReady = ready;
 	}
 
-	private void pingComponents()
+	private synchronized void pingComponents()
 	throws JMSException
 	{
 		Message m = iobase.getSession().createMessage();
 		m.setStringProperty(SEMAINEMessage.SOURCE, getName());
 		m.setStringProperty(MetaMessenger.PING, "");
 		producer.send(m);
-	}
-	
-	private synchronized void checkComponentsAlive()
-	throws JMSException
-	{
-		long time = getTime();
+		
 		for (ComponentInfo ci : componentInfos.values()) {
-			if (time - ci.lastSeenAlive() > 3*PING_PERIOD
-					&& !ignoreStalledComponents.contains(ci.toString())) {
-				ci.setState(Component.State.stalled, 
-						"Component was last seen at time "+ci.lastSeenAlive());
-			}
 			if (ci.receiveTopics() == null && ci.sendTopics() == null) {
 				log.info("Component "+ci.toString()+" has no topic info -- will ask");
 				// we need to ask for the information
-				Message m = iobase.getSession().createMessage();
+				m = iobase.getSession().createMessage();
 				m.setStringProperty(SEMAINEMessage.SOURCE, getName());
 				m.setStringProperty(MetaMessenger.REPORT_TOPICS, "");
 				producer.send(m);
 				
+			}
+		}
+	}
+	
+	private synchronized void checkComponentsAlive()
+	{
+		assert lastReportSystemReady == true : "Checking for stalled components makes no sense when the system is not ready";
+		long time = getTime();
+		for (ComponentInfo ci : componentInfos.values()) {
+			if (time - ci.lastSeenAlive() > MetaMessenger.TIMEOUT_PERIOD
+					&& !ignoreStalledComponents.contains(ci.toString())) {
+				ci.setState(Component.State.stalled, 
+						"Component was last seen at time "+ci.lastSeenAlive());
 			}
 		}
 	}
@@ -276,13 +279,13 @@ public class SystemManager extends Component implements MessageListener
 				} catch (InterruptedException ie) {}
 			}
 			meta.IamAlive();
+			try {
+				pingComponents();
+			} catch (JMSException e) {
+				log.error("cannot ping components");
+			}
 			if (lastReportSystemReady) { // System manager thinks everything is fine
-				try {
-					pingComponents();
-					checkComponentsAlive();
-				} catch (JMSException e) {
-					log.error("cannot ping components");
-				}
+				checkComponentsAlive();
 			}
 			updateSystemStatus();
 		}

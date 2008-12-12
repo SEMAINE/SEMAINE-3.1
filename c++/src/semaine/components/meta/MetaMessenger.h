@@ -57,6 +57,8 @@ public:
 	static const std::string PING;
 	static const std::string REPORT_TOPICS;
 
+	static const long long TIMEOUT_PERIOD;
+
 	MetaMessenger(const std::string & componentName) throw(CMSException);
 
 	void reportState(const std::string & state, const std::string & message = "", const std::exception * exc = NULL)

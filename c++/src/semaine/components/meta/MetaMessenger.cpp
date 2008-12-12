@@ -12,8 +12,11 @@
 #include <decaf/lang/System.h>
 #include <semaine/cms/message/SEMAINEMessage.h>
 
+#include <semaine/components/Component.h>
+
 using namespace semaine::cms::receiver;
 using namespace semaine::cms::sender;
+using namespace semaine::components;
 
 namespace semaine {
 namespace components {
@@ -38,6 +41,8 @@ namespace meta {
 	const std::string MetaMessenger::PING = "Ping";
 	const std::string MetaMessenger::REPORT_TOPICS = "DoReportTopics";
 
+	const long long MetaMessenger::TIMEOUT_PERIOD = 3000; // ms
+
 	MetaMessenger::MetaMessenger(const std::string & aComponentName) throw(CMSException) :
 		IOBase("semaine.meta"),
 		componentName(aComponentName),
@@ -54,7 +59,10 @@ namespace meta {
 
 	void MetaMessenger::IamAlive()
 	{
-		lastSeenAlive = getTime();
+		if (timeDelta != 0) { // only set time when we have a meaningful system time
+			lastSeenAlive = getTime();
+		}
+		lastSeenState = Component::STATE_READY;
 	}
 
 	void MetaMessenger::reportState(const std::string & state, const std::string & message, const std::exception * exc)
@@ -126,6 +134,14 @@ namespace meta {
 			if (m->propertyExists(PING)) {
 				Message * reply = session->createMessage();
 				reply->setStringProperty(COMPONENT_NAME, componentName);
+				// Do some sensibility checks to see if the component really seems alive
+				if (lastSeenState == Component::STATE_READY && systemReady) {
+					long long time = getTime();
+					if (lastSeenAlive > time // maybe an outdated value after a clock reset?
+							|| time - lastSeenAlive > TIMEOUT_PERIOD) {
+						lastSeenState = Component::STATE_STALLED;
+					}
+				}
 				reply->setStringProperty(COMPONENT_STATE, lastSeenState);
 				reply->setLongProperty(LAST_SEEN_ALIVE, lastSeenAlive);
 				long val = _statistics->avgActTime();

@@ -49,6 +49,7 @@ public class MetaMessenger extends IOBase implements MessageListener
 	public static final String PING = "Ping";
 	public static final String REPORT_TOPICS = "DoReportTopics";
 	
+	public static final long TIMEOUT_PERIOD = 3000;
 	private String componentName;
 	private MessageProducer producer;
 	private MessageConsumer consumer;
@@ -76,7 +77,10 @@ public class MetaMessenger extends IOBase implements MessageListener
 	
 	public void IamAlive()
 	{
-		lastSeenAlive = getTime();
+		if (timeDelta != 0) { // only set time when we have a meaningful system time
+			lastSeenAlive = getTime();
+		}
+		lastSeenState = State.ready;
 	}
 	
 	public void reportTopics(List<Receiver> receivers, List<Sender> senders,
@@ -143,6 +147,15 @@ public class MetaMessenger extends IOBase implements MessageListener
 			if (m.propertyExists(PING)) {
 				Message reply = session.createMessage();
 				reply.setStringProperty(COMPONENT_NAME, componentName);
+				// Do some sensibility checks to see if the component really seems alive
+				if (lastSeenState == State.ready && systemReady) {
+					long time = getTime();
+					if (lastSeenAlive > time // maybe an outdated value after a clock reset?
+							|| time - lastSeenAlive > TIMEOUT_PERIOD) {
+						lastSeenState = State.stalled;
+					}
+				}
+				
 				reply.setStringProperty(COMPONENT_STATE, lastSeenState.toString());
 				reply.setLongProperty(LAST_SEEN_ALIVE, lastSeenAlive);
 				long val = statistics.avgActTime();
