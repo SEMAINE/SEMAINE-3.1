@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) 2008 DFKI GmbH. All rights reserved.
+ * Use is subject to license terms -- see license.txt.
+ */
 package eu.semaine.gui.monitor;
 
 import java.awt.Color;
@@ -13,15 +17,12 @@ import javax.swing.JScrollPane;
 import org.jgraph.JGraph;
 import org.jgraph.event.GraphSelectionEvent;
 import org.jgraph.event.GraphSelectionListener;
-import org.jgraph.graph.DefaultCellViewFactory;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultGraphModel;
-import org.jgraph.graph.DefaultGraphSelectionModel;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.GraphLayoutCache;
 import org.jgraph.graph.GraphModel;
-import org.jgraph.plaf.basic.BasicGraphUI;
 
 public class JGraphTest {
 

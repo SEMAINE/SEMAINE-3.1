@@ -1,10 +1,10 @@
+/**
+ * Copyright (C) 2008 DFKI GmbH. All rights reserved.
+ * Use is subject to license terms -- see license.txt.
+ */
 package eu.semaine.gui.monitor;
 
-import java.awt.Frame;
-
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 

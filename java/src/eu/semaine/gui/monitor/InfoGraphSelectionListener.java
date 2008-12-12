@@ -1,14 +1,8 @@
+/**
+ * Copyright (C) 2008 DFKI GmbH. All rights reserved.
+ * Use is subject to license terms -- see license.txt.
+ */
 package eu.semaine.gui.monitor;
-
-import java.awt.Frame;
-import java.awt.Window;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 
 import org.jgraph.event.GraphSelectionEvent;
 import org.jgraph.event.GraphSelectionListener;
