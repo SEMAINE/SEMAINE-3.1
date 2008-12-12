@@ -97,8 +97,8 @@ public class UtteranceInterpreter extends Component
 		super("UtteranceInterpreter");
 
 		/* Define Receivers */
-		featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
-		receivers.add( featureReceiver );
+		//featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
+		//receivers.add( featureReceiver );
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
 		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");

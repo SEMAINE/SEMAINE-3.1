@@ -98,12 +98,12 @@ public class TestGui extends Component
 		super("GUI");
 		userStateSender = new EmmaSender("semaine.data.state.user.emma", "GUI");
 		senders.add(userStateSender); // so it can be started etc
-		featureSender = new FeatureSender("semaine.data.analysis.features.voice", "", "GUI", 10);
-		String[] featureNames = new String[2];
-		featureNames[0] = "logEnergy";
-		featureNames[1] = "F0strength";
-		featureSender.setFeatureNames(featureNames);
-		senders.add(featureSender);
+		//featureSender = new FeatureSender("semaine.data.analysis.features.voice", "", "GUI", 10);
+		//String[] featureNames = new String[2];
+		//featureNames[0] = "logEnergy";
+		//featureNames[1] = "F0strength";
+		//featureSender.setFeatureNames(featureNames);
+		//senders.add(featureSender);
 		
 		fmlReceiver = new FMLReceiver("semaine.data.action.candidate.function");
 		receivers.add(fmlReceiver); // to set up properly
