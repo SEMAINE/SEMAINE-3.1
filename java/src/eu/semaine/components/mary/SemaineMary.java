@@ -130,8 +130,8 @@ public class SemaineMary extends Component
     	Mary.addJarsToClasspath();
         // Read properties:
         // (Will throw exceptions if problems are found)
-		MaryProperties.readProperties();
-		System.err.print("MARY server " + Version.specificationVersion() + " starting...");
+    	System.setProperty("log.level", "WARN"); // avoid flood of MARY messages
+    	MaryProperties.readProperties();
 		Mary.startup();
     	//startup();
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -139,7 +139,6 @@ public class SemaineMary extends Component
                 Mary.shutdown();
             }
         });
-        System.err.println(" started in " + (System.currentTimeMillis()-startTime)/1000. + " s");
 	}
 	
   
@@ -177,27 +176,32 @@ public class SemaineMary extends Component
 		Document inputDoc = xm.getDocument();
 		String inputText = xm.getText();
 		
-		//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		//factory.setNamespaceAware(true);
-		//DocumentBuilder builder = factory.newDocumentBuilder();
-		//inputDoc = builder.parse(new InputSource(new FileReader("dataformat1.xml")));
-		//inputText = XMLTool.document2String(inputDoc);
-		
-		transformer = fml2ssmlStylesheet.newTransformer();
-		transformer.transform(new DOMSource(inputDoc), new StreamResult(ssmlos));
-		String ssml = ssmlos.toString();
-		Reader reader = new StringReader(ssml);
-		ByteArrayOutputStream  intonationOS = new ByteArrayOutputStream();
-		try {
-			request.readInputData(reader);
-			request.process();
-			request.writeOutputData(intonationOS);
-		} catch (Exception e) {
-			throw new Exception("MARY cannot process input -- SSML input was:\n"+ssml, e);
+		if (XMLTool.getChildElementByTagNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
+			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			//factory.setNamespaceAware(true);
+			//DocumentBuilder builder = factory.newDocumentBuilder();
+			//inputDoc = builder.parse(new InputSource(new FileReader("dataformat1.xml")));
+			//inputText = XMLTool.document2String(inputDoc);
+			
+			transformer = fml2ssmlStylesheet.newTransformer();
+			transformer.transform(new DOMSource(inputDoc), new StreamResult(ssmlos));
+			String ssml = ssmlos.toString();
+			Reader reader = new StringReader(ssml);
+			ByteArrayOutputStream  intonationOS = new ByteArrayOutputStream();
+			try {
+				request.readInputData(reader);
+				request.process();
+				request.writeOutputData(intonationOS);
+			} catch (Exception e) {
+				throw new Exception("MARY cannot process input -- SSML input was:\n"+ssml, e);
+			}
+			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SemaineMary.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
+			//System.out.println("PreProcessor: "+finalData);
+			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
+		} else {
+			log.debug("Received fml document without bml content -- ignoring.");
 		}
-		String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SemaineMary.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
-		//System.out.println("PreProcessor: "+finalData);
-		fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
+		
 	}
 	
 	/**
