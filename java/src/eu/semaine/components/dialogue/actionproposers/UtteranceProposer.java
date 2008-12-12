@@ -288,9 +288,10 @@ public class UtteranceProposer extends Component
 			}
 		}
 		if( groupData.containsKey(currPersonality+":"+response) ) {
-			ArrayList<String> options = groupData.get(currPersonality+":"+response);
+			ArrayList<String> options = new ArrayList<String>(groupData.get(currPersonality+":"+response));
 			response = options.get( rand.nextInt(options.size()) );
-			while( pastResponses.contains(response) ) {
+			while( pastResponses.contains(response) && options.size() > 1) {
+				options.remove(response);
 				response = options.get( rand.nextInt(options.size()) );
 			}
 		}

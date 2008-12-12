@@ -103,8 +103,8 @@ public class UtteranceInterpreter extends Component
 		receivers.add(emmaReceiver);
 		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
 		receivers.add(dialogStateReceiver);
-		userStateReceiver = new UserStateReceiver("semaine.data.state.user.emma", "");
-		receivers.add(userStateReceiver);
+		//userStateReceiver = new UserStateReceiver("semaine.data.state.user.emma", "");
+		//receivers.add(userStateReceiver);
 
 		/* Define Senders */
 		userStateSender = new XMLSender("semaine.data.state.user.behaviour", "datatype = 'UserState'", "");
