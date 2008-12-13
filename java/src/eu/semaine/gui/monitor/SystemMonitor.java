@@ -72,6 +72,18 @@ public class SystemMonitor extends Thread
 	
 	public SystemMonitor(ComponentInfo[] componentInfos)
 	{
+		// Sort components:
+		if (componentInfos != null)
+			sortedComponentList = new ArrayList<ComponentInfo>(Arrays.asList(componentInfos));
+		else
+			sortedComponentList = new ArrayList<ComponentInfo>();
+		topics = new HashMap<String, TopicInfo>();
+		cells = new ArrayList<DefaultGraphCell>();
+		infoGroups = new LinkedList<List<Info>>();
+
+	}
+
+	private void setupGraphGUI() {
 		// Construct Model and Graph
 		GraphModel model = new DefaultGraphModel();
 		graph = new JGraph(model);
@@ -126,21 +138,10 @@ public class SystemMonitor extends Thread
 		String level = "*";
 		setupLogReader(component, level);
 		
-		
-		
-		// Sort components:
-		if (componentInfos != null)
-			sortedComponentList = new ArrayList<ComponentInfo>(Arrays.asList(componentInfos));
-		else
-			sortedComponentList = new ArrayList<ComponentInfo>();
-		topics = new HashMap<String, TopicInfo>();
-		cells = new ArrayList<DefaultGraphCell>();
-		infoGroups = new LinkedList<List<Info>>();
 		updateCells();
 				
 		frame.setVisible(true);
 		redraw();
-
 	}
 	
 	public synchronized void addComponentInfo(ComponentInfo ci)
@@ -210,10 +211,10 @@ public class SystemMonitor extends Thread
 			updateCells();
 		}
 		if (mustLayoutCells) {
-			if (edges != null) {
-				graph.getGraphLayoutCache().remove(edges.toArray());
-				edges = null;
-			}
+			//if (edges != null) {
+				//graph.getGraphLayoutCache().remove(edges.toArray());
+				//edges = null;
+			//}
 			layoutCells(allChanges);
 		}
 		if (edges != null) {
@@ -237,7 +238,7 @@ public class SystemMonitor extends Thread
 			graph.getGraphLayoutCache().edit(allChanges);
 			
 			if (mustLayoutCells) {
-				createAllArrows();
+				//createAllArrows();
 			}
 		}
 		
@@ -329,6 +330,7 @@ public class SystemMonitor extends Thread
 			}
 		}
 		graph.getGraphLayoutCache().insert(newCells.toArray());
+		createAllArrows();
 
 	}
 	
@@ -580,10 +582,11 @@ public class SystemMonitor extends Thread
 	
 	public void run()
 	{
+		setupGraphGUI();
 		// Give the GUI some time to set up properly before sending edit requests
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException ie) {}
+		//try {
+			//Thread.sleep(1000);
+		//} catch (InterruptedException ie) {}
 		while (true) {
 			try {
 				Thread.sleep(100);
@@ -693,15 +696,18 @@ public class SystemMonitor extends Thread
 						false, false)
 		};
 		SystemMonitor mon = new SystemMonitor(cis);
-		mon.start();
+		//mon.start();
+		mon.setupGraphGUI();
 		for (int i=0; i<cis.length; i++) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException ie) {}
 			cis[i].setState(Component.State.ready);
+			mon.redraw();
 		}
 		ComponentInfo audioFeatures = mon.getComponentInfo("audio features");
 		audioFeatures.setSendTopics("semaine.data.analysis.audio");
+		mon.redraw();
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException ie) {}
@@ -709,6 +715,7 @@ public class SystemMonitor extends Thread
 		TopicInfo ti = mon.topics.get("semaine.data.state.user.emma");
 		for (int i=0; i<1000; i++) {
 			ti.addMessage("Test message "+i, "emotion detection");
+			mon.redraw();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException ie) {}

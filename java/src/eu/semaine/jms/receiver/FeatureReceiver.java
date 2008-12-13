@@ -18,6 +18,8 @@ import eu.semaine.jms.message.SEMAINEMessage;
  */
 public class FeatureReceiver extends Receiver
 {
+	private String[] featureNames;
+
 	/**
 	 * Create a receiver that will listen for all messages in the given Topic.
 	 * @param topic the name of the JMS Topic to listen to.
@@ -44,7 +46,17 @@ public class FeatureReceiver extends Receiver
 	protected SEMAINEMessage createSEMAINEMessage(Message message)
 	throws MessageFormatException
 	{
-		return new SEMAINEFeatureMessage(message);
+		SEMAINEFeatureMessage fm = new SEMAINEFeatureMessage(message);
+		try {
+			if (featureNames == null && fm.getFeatureNames() != null) {
+				featureNames = fm.getFeatureNames();
+			} else if (featureNames != null && fm.getFeatureNames() == null) {
+				fm.setFeatureNames(featureNames);
+			}
+		} catch (JMSException e) {
+			throw new MessageFormatException("Problem accessing feature names", e);
+		}
+		return fm;
 	}
 
 }

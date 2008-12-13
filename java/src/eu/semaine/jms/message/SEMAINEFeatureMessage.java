@@ -60,10 +60,36 @@ public class SEMAINEFeatureMessage extends SEMAINEMessage
 		return featureNames;
 	}
 	
+	/**
+	 * Set the feature names corresponding to the features.
+	 * @param names an array of feature names, which must correspond
+	 * in number and in their order to the features in this message.
+	 * @throws MessageFormatException if the number of feature names
+	 * does not match the number of features saved in the message
+	 */
+	public void setFeatureNames(String[] names)
+	throws MessageFormatException
+	{
+		if (names != null && features != null && names.length != features.length)
+		{
+			throw new MessageFormatException("There are "+features.length+" features but "+names.length+" feature names");
+		}
+		featureNames = names;
+	}
+	
 	protected void readFromBytesMessage()
 	throws JMSException
 	{
-		throw new RuntimeException("not yet implemented");
+		assert message instanceof BytesMessage : "this method should only be called for bytes messages, but message is a "+message.getClass().getName();
+		BytesMessage bm = (BytesMessage) message;
+		int len = bm.readInt();
+		if (bm.getBodyLength() != 4*(len+1)) {
+			throw new MessageFormatException("Inconsistent bytes message: expected length "+(4*(len+1))+" (one int and "+len+" floats), but have "+bm.getBodyLength()+" bytes");
+		}
+		features = new float[len];
+		for (int i=0; i<len; i++) {
+			features[i] = bm.readFloat();
+		}
 	}
 	
 	protected void readFromTextMessage()

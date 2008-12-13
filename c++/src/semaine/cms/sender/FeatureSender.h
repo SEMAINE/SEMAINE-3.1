@@ -45,7 +45,7 @@ public:
 	 */
 	FeatureSender(const std::string & topicName, const std::string & datatype, const std::string & source, int period)
 	throw(CMSException);
-	
+
 	virtual ~FeatureSender()
 	{}
 
@@ -75,7 +75,7 @@ public:
 	throw (SystemConfigurationException);
 
 	/**
-	 * Returns 1, when feature names were already set and 0 otherwise. 
+	 * Returns 1, when feature names were already set and 0 otherwise.
 	 *
 	 */
 	bool areFeatureNamesSet();
@@ -88,7 +88,7 @@ public:
 	{
 		return featureNames;
 	}
-	
+
 	/**
 	 * Send a vector of float features. Before sending features,
 	 * {@link #setFeatureNames() must be called, and the
@@ -96,23 +96,22 @@ public:
 	 * @param features the features to send.
 	 * @param usertime the time in "user" space that these features
 	 * refer to, in milliseconds since 1970.
+	 * @param sendBinary whether to send the message as a binary message
+	 * (defaults to false)
 	 * @throws CMSException
 	 * @throws SystemConfigurationException if the feature names have not been set,
 	 * or if the number of features is not the same as the number of feature names
 	 */
-	void sendFeatureVector(const std::vector<float> & features, long long usertime)
+	void sendFeatureVector(const std::vector<float> & features, long long usertime,
+			bool sendBinary = false)
 	throw(CMSException, SystemConfigurationException);
 
 protected:
-	bool sendBinary;
 	std::vector<std::string> featureNames;
 
 	void sendBinaryFeatureVector(const std::vector<float> & features, long long usertime)
-	throw(CMSException, SystemConfigurationException)
-	{
-		throw SystemConfigurationException("not yet implemented");
-	}
-	
+	throw(CMSException);
+
 	void sendTextFeatureVector(const std::vector<float> & features, long long usertime)
 	throw(CMSException);
 

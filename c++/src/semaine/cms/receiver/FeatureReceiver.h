@@ -42,10 +42,10 @@ public:
 	FeatureReceiver(const std::string & topicName) throw(CMSException) :
 		Receiver(topicName)
 	{}
-	
+
 	/**
 	 * Create a receiver that will listen only to the messages in the given Topic
-	 * that will pass the given messageSelector. 
+	 * that will pass the given messageSelector.
 	 * @param topicName the name of the JMS Topic to listen to.
 	 * @param messageSelector a message selector expression, see e.g. http://java.sun.com/javaee/5/docs/api/javax/jms/Message.html
 	 * for the detailed description.
@@ -60,11 +60,25 @@ protected:
 	virtual SEMAINEMessage * createSEMAINEMessage(const Message * message)
 	throw(MessageFormatException)
 	{
-		return new SEMAINEFeatureMessage(message);
+		SEMAINEFeatureMessage * fm = new SEMAINEFeatureMessage(message);
+		try {
+			if (featureNames.empty() && fm->hasFeatureNames()) {
+				featureNames = fm->getFeatureNames();
+			} else if (!featureNames.empty() && !fm->hasFeatureNames()) {
+				fm->setFeatureNames(featureNames);
+			}
+		} catch (CMSException & e) {
+			std::stringstream buf;
+			buf << "Problem accessing feature names: ";
+			e.printStackTrace(buf);
+			throw MessageFormatException(buf.str());
+		}
+		return fm;
 	}
 
 
-
+private:
+	std::vector<std::string> featureNames;
 };
 
 } // namespace receiver

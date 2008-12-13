@@ -4,7 +4,11 @@
  */
 package eu.semaine.jms.sender;
 
+import javax.jms.BytesMessage;
 import javax.jms.JMSException;
+
+import eu.semaine.jms.IOBase.Event;
+import eu.semaine.jms.message.SEMAINEMessage;
 
 /**
  * An abstraction of Sender for feature vectors.
@@ -13,7 +17,6 @@ import javax.jms.JMSException;
  */
 public class FeatureSender extends Sender
 {
-	protected boolean sendBinary = false;
 	protected String[] featureNames = null;
 	
 	/**
@@ -88,7 +91,8 @@ public class FeatureSender extends Sender
 	}
 	
 	/**
-	 * Send a vector of float features. Before sending features,
+	 * Send a vector of float features as a text message. 
+	 * Before sending features,
 	 * {@link #setFeatureNames(String[]) must be called, and the
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
@@ -97,6 +101,20 @@ public class FeatureSender extends Sender
 	 * @throws JMSException
 	 */
 	public void sendFeatureVector(float[] features, long usertime)
+	throws JMSException
+	{
+		sendFeatureVector(features, usertime, false);
+	}
+	/**
+	 * Send a vector of float features. Before sending features,
+	 * {@link #setFeatureNames(String[]) must be called, and the
+	 * names must correspond to the features passed in the argument.
+	 * @param features the features to send.
+	 * @param usertime the time in "user" space that these features
+	 * refer to, in milliseconds since 1970.
+	 * @throws JMSException
+	 */
+	public void sendFeatureVector(float[] features, long usertime, boolean sendBinary)
 	throws JMSException
 	{
 		if (featureNames == null)
@@ -114,7 +132,19 @@ public class FeatureSender extends Sender
 	protected void sendBinaryFeatureVector(float[] features, long usertime)
 	throws JMSException
 	{
-		throw new RuntimeException("not yet implemented");
+		if (!isConnectionStarted)
+			throw new IllegalStateException("Connection is not started!");
+		BytesMessage message = session.createBytesMessage();
+		message.writeInt(features.length);
+		for (int i=0; i<features.length; i++) {
+			message.writeFloat(features[i]);
+		}
+		fillMessageProperties(message, usertime);
+		if (isPeriodic())
+			message.setIntProperty(SEMAINEMessage.PERIOD, getPeriod());
+		else // event-based
+			message.setStringProperty(SEMAINEMessage.EVENT, Event.single.toString());
+		producer.send(message);
 	}
 	
 	protected void sendTextFeatureVector(float[] features, long usertime)

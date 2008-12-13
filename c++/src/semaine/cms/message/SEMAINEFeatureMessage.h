@@ -20,6 +20,8 @@
 #include <cms/BytesMessage.h>
 #include <cms/CMSException.h>
 
+#include <sstream>
+
 using namespace cms;
 using namespace semaine::cms::exceptions;
 
@@ -44,13 +46,37 @@ public:
 
 	/**
 	 * Get the list of feature names if available.
-	 * @return an array of strings containing the names of features if available, 
-	 * or null if the feature names are not available.
+	 * @return an array of strings containing the names of features if available,
+	 * or an empty vector if the feature names are not available.
 	 * @throws JMSException
 	 */
 	std::vector<std::string> getFeatureNames()
 	throw(CMSException);
 
+	/**
+	 * Check if the feature message has a list of feature names set.
+	 */
+	bool hasFeatureNames() { return !featureNames.empty(); }
+
+	/**
+	 * Set the feature names corresponding to the features.
+	 * @param names a vector of feature names, which must correspond
+	 * in number and in their order to the features in this message.
+	 * @throws MessageFormatException if the number of feature names
+	 * does not match the number of features saved in the message
+	 *
+	 */
+	void setFeatureNames(std::vector<std::string> const & names)
+	throw (MessageFormatException)
+	{
+		if (names.size() != features.size())
+		{
+			std::stringstream buf;
+			buf << "There are " << features.size() << " features but " << names.size() << " feature names";
+			throw MessageFormatException(buf.str());
+		}
+		featureNames = names;
+	}
 
 protected:
 	std::vector<float> features;

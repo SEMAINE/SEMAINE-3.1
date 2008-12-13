@@ -8,6 +8,7 @@
  */
 
 #include "FeatureSender.h"
+#include <semaine/cms/event.h>
 
 #include <sstream>
 
@@ -17,8 +18,7 @@ namespace sender {
 
 FeatureSender::FeatureSender(const std::string & topicName, const std::string & datatype, const std::string & source, int period)
 throw(CMSException) :
-	Sender(topicName, datatype, source),
-	sendBinary(false)
+	Sender(topicName, datatype, source)
 {
 	this->period = period;
 }
@@ -26,8 +26,7 @@ throw(CMSException) :
 FeatureSender::FeatureSender(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
 	const std::string & datatype, const std::string & source, const std::string & topicName, int period)
 throw (CMSException) :
-	Sender(cmsUrl, cmsUser, cmsPassword, topicName, datatype, source),
-	sendBinary(false)
+	Sender(cmsUrl, cmsUser, cmsPassword, topicName, datatype, source)
 {
 	this->period = period;
 }
@@ -45,7 +44,8 @@ bool FeatureSender::areFeatureNamesSet()
 	return (!featureNames.empty());
 }
 
-void FeatureSender::sendFeatureVector(const std::vector<float> & features, long long usertime)
+void FeatureSender::sendFeatureVector(const std::vector<float> & features, long long usertime,
+		bool sendBinary)
 throw(CMSException, SystemConfigurationException)
 {
 	if (featureNames.empty())
@@ -72,6 +72,24 @@ throw(CMSException)
 	sendTextMessage(buf.str(), usertime);
 }
 
+void FeatureSender::sendBinaryFeatureVector(const std::vector<float> & features, long long usertime)
+throw(CMSException)
+{
+	if (!isConnectionStarted)
+		throw SystemConfigurationException("Connection is not started!");
+	BytesMessage * message = session->createBytesMessage();
+	message->writeInt(features.size());
+	for (int i=0, len=features.size(); i<len; i++) {
+		message->writeFloat(features[i]);
+	}
+	fillMessageProperties(message, usertime);
+	if (isPeriodic())
+		message->setIntProperty(SEMAINEMessage::PERIOD, getPeriod());
+	else // event-based
+		message->setStringProperty(SEMAINEMessage::EVENT, SEMAINE_CMS_EVENT_SINGLE);
+	producer->send(message);
+	delete message;
+}
 
 
 
