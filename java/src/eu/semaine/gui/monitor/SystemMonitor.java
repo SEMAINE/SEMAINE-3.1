@@ -7,8 +7,14 @@ package eu.semaine.gui.monitor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -21,15 +27,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 import java.util.Map.Entry;
 
 import javax.jms.JMSException;
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
@@ -54,21 +67,27 @@ import eu.semaine.jms.JMSLogReader;
 
 public class SystemMonitor extends Thread
 {
+	public static final String ALL_COMPONENTS = "all components";
 	private JFrame frame;
 	private JGraph graph;
 	private JTextPane systemStatus;
-	private JTextPane logPane;
+	private JTextPane logTextPane;
 	private Dimension frameSize = null;
 	private static int componentWidth = 120;
 	private static int componentHeight = 30;
+	private boolean mustUpdateCells = true;
 	
 	private List<ComponentInfo> sortedComponentList;
+	private JComboBox logComponentBox;
+	private JComboBox logLevelBox;
 	private boolean componentListChanged = false;
 	private List<List<Info>> infoGroups;
 	private Map<String, TopicInfo> topics;
 	private List<DefaultGraphCell> cells;
 	private List<DefaultEdge> edges;
 	private JMSLogReader logReader;
+	private String currentLogComponent;
+	private String currentLogLevel;
 	
 	public SystemMonitor(ComponentInfo[] componentInfos)
 	{
@@ -102,6 +121,36 @@ public class SystemMonitor extends Thread
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		//frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+
+		// Menu
+		//Create the menu bar.
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
+		menuBar.add(fileMenu);
+		JMenuItem exitItem = new JMenuItem("Exit", KeyEvent.VK_X);
+		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.META_MASK));
+		exitItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				System.exit(0);
+			}
+		});
+		fileMenu.add(exitItem);
+		JMenu guiMenu = new JMenu("GUI");
+		guiMenu.setMnemonic(KeyEvent.VK_G);
+		guiMenu.getAccessibleContext().setAccessibleDescription("GUI menu");
+		menuBar.add(guiMenu);
+		JMenuItem resetItem = new JMenuItem("Reset GUI", KeyEvent.VK_R);
+		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.META_MASK));
+		resetItem.getAccessibleContext().setAccessibleDescription("Reset the GUI");
+		resetItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				setMustUpdateCells(true);
+			}
+		});
+		guiMenu.add(resetItem);
+		frame.setJMenuBar(menuBar);
+		
 		JPanel rightSide = new JPanel();
 		rightSide.setLayout(new BorderLayout());
 		systemStatus = new JTextPane();
@@ -112,14 +161,36 @@ public class SystemMonitor extends Thread
 		systemStatus.setBorder(title);
 		systemStatus.setPreferredSize(new Dimension(200, 200));
 		systemStatus.setBackground(new Color(230, 230, 230));
-		logPane = new JTextPane();
-		JScrollPane logScrollPane = new JScrollPane(logPane);
-		logScrollPane.setBorder(BorderFactory.createTitledBorder(
+		logTextPane = new JTextPane();
+		JScrollPane logScrollPane = new JScrollPane(logTextPane);
+		JPanel logPane = new JPanel();
+		logPane.setLayout(new BorderLayout());
+		JPanel logConfig = new JPanel();
+		logConfig.setLayout(new BorderLayout());
+		logComponentBox = new JComboBox();
+		logComponentBox.setMinimumSize(new Dimension(10,10));// can get really small if needed
+		updateLogComponents();
+		logConfig.add(logComponentBox, BorderLayout.CENTER);
+		logLevelBox = new JComboBox(new String[] {"DEBUG", "INFO", "WARN", "ERROR"});
+		logLevelBox.setSelectedItem("INFO");
+		logConfig.add(logLevelBox, BorderLayout.LINE_END);
+		ItemListener logListener = new ItemListener() {
+			public void itemStateChanged(ItemEvent ie) {
+				setupLogReader();
+			}
+		};
+		logLevelBox.addItemListener(logListener);
+		logComponentBox.addItemListener(logListener);
+		
+		
+		logPane.add(logConfig, BorderLayout.PAGE_START);
+		logPane.add(logScrollPane, BorderLayout.CENTER);
+		logPane.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createEmptyBorder(),
 				"Log messages"));
-		logScrollPane.setBackground(systemStatus.getBackground());
+		logPane.setBackground(systemStatus.getBackground());
 		rightSide.add(systemStatus, BorderLayout.PAGE_START);
-		rightSide.add(logScrollPane, BorderLayout.CENTER);
+		rightSide.add(logPane, BorderLayout.CENTER);
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 		                           graph, rightSide);
 		splitPane.setOneTouchExpandable(true);
@@ -133,12 +204,11 @@ public class SystemMonitor extends Thread
 		Logger.getLogger("org.apache").setLevel(Level.INFO);
 		PatternLayout layout = new PatternLayout("%-5p %-10c %m\n");
 		BasicConfigurator.configure();
-		Logger.getLogger("semaine.log").addAppender(new TextPaneAppender(layout, "log-appender", logPane));
-		String component = "*";
-		String level = "*";
-		setupLogReader(component, level);
+		Logger.getLogger("semaine.log").addAppender(new TextPaneAppender(layout, "log-appender", logTextPane));
+		Logger.getLogger("semaine.log").setLevel(Level.DEBUG);
+		setupLogReader();
 		
-		updateCells();
+		//updateCells();
 				
 		frame.setVisible(true);
 		redraw();
@@ -150,25 +220,70 @@ public class SystemMonitor extends Thread
 		componentListChanged = true;
 	}
 	
-	private void setupLogReader(String component, String level)
+	private synchronized void updateLogComponents()
 	{
-		System.out.println("Looking for log messages in topic 'semaine.log."+component+"."+level+"'");
+		Object selected = logComponentBox.getSelectedItem();
+		// avoid sending item changed messages upon remove:
+		ItemListener[] ils = logComponentBox.getItemListeners();
+		for (ItemListener il : ils) {
+			logComponentBox.removeItemListener(il);
+		}
+		logComponentBox.removeAllItems();
+		logComponentBox.addItem(ALL_COMPONENTS);
+		for (ComponentInfo ci : sortedComponentList) {
+			logComponentBox.addItem(ci.toString());
+		}
+		// Now, add the item listeners back:
+		for (ItemListener il : ils) {
+			logComponentBox.addItemListener(il);
+		}
+		if (selected != null)
+			logComponentBox.setSelectedItem(selected);
+		else
+			logComponentBox.setSelectedItem(ALL_COMPONENTS);
+	}
+	
+	private synchronized void setupLogReader()
+	{
+		String component = (String) logComponentBox.getSelectedItem();
+		if (component == null || component.equals(ALL_COMPONENTS))
+			component = "*";
+		String level = (String) logLevelBox.getSelectedItem();
+		if (level == null) level = "DEBUG";
+		if (component.equals(currentLogComponent) && level.equals(currentLogLevel)) {
+			return; // nothing changed
+		}
+		try {
+			// empty the log text pane
+			logTextPane.getDocument().remove(0, logTextPane.getDocument().getLength());
+		} catch (BadLocationException ble) {
+			ble.printStackTrace();
+		}
+		System.out.println("Looking for log messages in topic 'semaine.log."+component+".*', showing log level "+level+" and higher");
+		String loggerName = (component.equals("*")) ? "semaine.log" : "semaine.log."+component;
+		Logger.getLogger(loggerName).setLevel(Level.toLevel(level));
 		try {
 			if (logReader != null) {
 				logReader.getConnection().stop();
 			}
-			logReader = new JMSLogReader("semaine.log."+component+"."+level);
+			logReader = new JMSLogReader("semaine.log."+component+".*");
+			currentLogComponent = component;
+			currentLogLevel = level;
 		} catch (JMSException je) {
 			System.err.println("Problem with log reader:");
 			je.printStackTrace();
 		}
 	}
 	
+	private synchronized void setMustUpdateCells(boolean value)
+	{
+		mustUpdateCells = value;
+	}
+	
 	private synchronized void redraw()
 	{
 		assert cells != null;
 		Map<DefaultGraphCell, Map<Object,Object>> allChanges = new HashMap<DefaultGraphCell, Map<Object,Object>>();
-		boolean mustUpdateCells = false;
 		boolean mustLayoutCells = false;
 		Dimension newFrameSize = graph.getSize();
 		if (!newFrameSize.equals(frameSize)) {
@@ -241,6 +356,7 @@ public class SystemMonitor extends Thread
 				//createAllArrows();
 			}
 		}
+		mustUpdateCells = false;
 		
 	}
 	
@@ -254,6 +370,7 @@ public class SystemMonitor extends Thread
 		Comparator<ComponentInfo> ciComparator = new ComponentInfo.Comparator(
 				new HashSet<ComponentInfo>(sortedComponentList)); 
 		Collections.sort(sortedComponentList, ciComparator);
+		updateLogComponents();
 		// Group components:
 		infoGroups.clear();
 		List<Info> currentGroup = new LinkedList<Info>();
@@ -591,7 +708,11 @@ public class SystemMonitor extends Thread
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException ie) {}
-			redraw();
+			try {
+				redraw();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -617,15 +738,6 @@ public class SystemMonitor extends Thread
 		systemStatus.setText(text);
 	}
 	
-	public void appendLogMessage(String msg)
-	{
-		try {
-			logPane.getDocument().insertString(logPane.getDocument().getLength(), msg, null);
-			logPane.setCaretPosition(logPane.getDocument().getLength());
-		} catch (BadLocationException ble) {
-			ble.printStackTrace();
-		}
-	}
 	
 	
 	
