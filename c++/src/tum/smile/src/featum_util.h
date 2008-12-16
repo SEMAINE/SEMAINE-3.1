@@ -43,7 +43,11 @@ extern "C" {
 #include <stdarg.h>
 #include "featum_common.h"
 
-extern int loglevel;
+extern int loglevel_print_debug; 
+extern int loglevel_print_warning;
+extern int loglevel_print_fatal_err;
+extern int loglevel_print_err;
+extern int loglevel_print_message;
 
 // TODO: more extensive error handling capabilities and log-file support
 

@@ -18,9 +18,9 @@
  *******************************************************************************/
 
 
-#define TRIGGER_FREQ_MIN  55
-#define TRIGGER_FREQ      60
-#define TRIGGER_FREQ_MAX  65
+#define TRIGGER_FREQ_MIN  45
+#define TRIGGER_FREQ      50
+#define TRIGGER_FREQ_MAX  55
 
 #define BUFFERSIZE 48000
 
@@ -141,9 +141,9 @@ LONG_IDX printTriggerRiseTimes(FILE *triggertimes, LONG_IDX numtriggers, SAMPLE3
   {
     if (wisdom->firstTrigger) wisdom->lastPeak--;
     if ((wisdom->lastPeak < (wisdom->sampleRate / TRIGGER_FREQ_MAX)*(-1)) || (!wisdom->firstTrigger)) {
-      if (i) dataI1 = data[i-1];
-      else dataI1 = wisdom->prev;
-      if (data[i]-dataI1 > thresh) {
+      //if (i) dataI1 = data[i-1];
+      //else dataI1 = wisdom->prev;
+      if (data[i] > thresh) {
          wisdom->lastTime =   (double)sampleIndex / (double)wisdom->sampleRate;
          //printf("trigger: %i  [%f sec.]\n",sampleIndex, wisdom->lastTime);
          fprintf(triggertimes,"%i,%f\n",sampleIndex,wisdom->lastTime);
@@ -166,12 +166,11 @@ LONG_IDX printTriggerRiseTimes(FILE *triggertimes, LONG_IDX numtriggers, SAMPLE3
       }
     }
     if ((wisdom->lastPeak < (wisdom->sampleRate / TRIGGER_FREQ_MIN)*(-1)) && (wisdom->firstTrigger)) {
-       //printf("trigger: %i  [%f sec.]   [missed -> FORCED!!] ",sampleIndex, (double)sampleIndex / (double)wisdom->sampleRate);
+       fprintf(stderr,"trigger: %i  [%f sec.]   [missed -> FORCED!!] \n",sampleIndex, (double)sampleIndex / (double)wisdom->sampleRate);
        if (wisdom->nTriggers < numtriggers) {
          fprintf(triggertimes,"%i,%f\n",sampleIndex,(double)sampleIndex / (double)wisdom->sampleRate);
-         printf("\n");
        } else {
-         printf(" skipping (>numtriggers)\n");
+         fprintf(stderr," skipping (>numtriggers)\n");
        }
        wisdom->lastPeak = 0;
        wisdom->nForced++;
@@ -191,8 +190,10 @@ LONG_IDX getTriggerRiseLevel(SAMPLE32i *data, LONG_IDX nBlocks, LONG_IDX sampleI
     
   for (i=0; i<nBlocks; i++)
   {
-    if (sampleIndex > 10)
+    if (sampleIndex > 10) {
       if (data[i] > wisdom->max) wisdom->max = data[i];
+      //printf("data[i]=%i\n",data[i]);
+    }
     sampleIndex++;
   }
   wisdom->thresh = wisdom->max/3;
@@ -224,9 +225,7 @@ int main(int argc, char *argv[])
   debug_printOptions( opts );
   #endif
   
-  
-  
- 
+  loglevel_print_debug = 0;
   
   /***************************** create wave input *****************************/    
   pWaveInput waveIn=NULL;
@@ -236,7 +235,10 @@ int main(int argc, char *argv[])
   }
 
   FEATUM_DEBUG(4,"wave file %s was sucessfully opened",opts->infile);
-  FEATUM_DEBUG(5,"sample rate of wave file: %i\n",waveInput_getSampleRate(waveIn));
+  FEATUM_DEBUG(5,"sample rate of wave file: %i",waveInput_getSampleRate(waveIn));
+  FEATUM_DEBUG(5,"# of channels in wave file: %i",waveIn->parameters.nChan);
+  FEATUM_DEBUG(5,"nBPS in wave file: %i",waveIn->parameters.nBPS);
+
   /*------------------------------------end--------------------------------------*/
 
   if (opts->triggerchan < waveIn->parameters.nChan) {
@@ -264,10 +266,10 @@ int main(int argc, char *argv[])
 //    waveOut = waveOutput_create(waveOut, opts->waveout, waveIn->parameters.sampleRate, SAMPLETYPE_I24, waveIn->parameters.nChan-1);
 
   if ((opts->waveout0)&&(opts->waveout1)&&(opts->waveout2)&&(opts->waveout3)) {
-    waveOut0 = waveOutput_create(waveOut0, opts->waveout0, waveIn->parameters.sampleRate, SAMPLETYPE_I24, 1);
-    waveOut1 = waveOutput_create(waveOut1, opts->waveout1, waveIn->parameters.sampleRate, SAMPLETYPE_I24, 1);
-    waveOut2 = waveOutput_create(waveOut2, opts->waveout2, waveIn->parameters.sampleRate, SAMPLETYPE_I24, 1);
-    waveOut3 = waveOutput_create(waveOut3, opts->waveout3, waveIn->parameters.sampleRate, SAMPLETYPE_I24, 1);
+    waveOut0 = waveOutput_create(waveOut0, opts->waveout0, waveIn->parameters.sampleRate, waveIn->parameters.sampleType, 1);
+    waveOut1 = waveOutput_create(waveOut1, opts->waveout1, waveIn->parameters.sampleRate, waveIn->parameters.sampleType, 1);
+    waveOut2 = waveOutput_create(waveOut2, opts->waveout2, waveIn->parameters.sampleRate, waveIn->parameters.sampleType, 1);
+    waveOut3 = waveOutput_create(waveOut3, opts->waveout3, waveIn->parameters.sampleRate, waveIn->parameters.sampleType, 1);
 
     if (waveOut0 == NULL) {
       return exitApp(-1);            
@@ -353,10 +355,8 @@ int main(int argc, char *argv[])
           
         case 2:
           copied = pcmBuffer_copy_ext(bufA, bufT, 0, -1, 0, chConv);
-          // analyze trigger channel:
-//          sampleIndex = getTriggerRiseLevel(SAMPLE32i *data, LONG_IDX nBlocks, LONG_IDX sampleIndex, sMemory *wisdom)
+          // find triggers:
           sampleIndex = printTriggerRiseTimes(triggertimes, opts->numtriggers, bufT->data, copied, sampleIndex, &triggerMem);
-          //sampleIndex += copied;
      
           if ((triggerMem.firstTrigger)) { //&&(triggerMem.nTriggers < opts->numtriggers)) {
             LONG_IDX s1=0, s2=0;
@@ -368,6 +368,7 @@ int main(int argc, char *argv[])
             else {lng = -1; }
 //                                                        printf("-->%i\n",lng);
             pcmBuffer_clear(bufB); s1=pcmBuffer_copy_ext(bufA, bufB, skip, lng, 0, chConv0);  
+            //printf("c0: %i  %i  \n",((int32_t*)(bufA->data))[0],((int32_t*)(bufB->data))[0]);
             waveOutput_writeDataSequential(waveOut0, bufB);
             pcmBuffer_clear(bufB); s2=pcmBuffer_copy_ext(bufA, bufB, skip, lng, 0, chConv1);  
             if (s2 != s1) { FEATUM_WARNING(1,"number of samples copied for ch1 and ch0 differ!"); }
@@ -393,6 +394,8 @@ int main(int argc, char *argv[])
       running++;
       // reset file position to beginning of file
       waveInput_setPos( waveIn, 0);
+      if (running==2) FEATUM_MESSAGE(1,"first pass finished.");
+      FEATUM_DEBUG(5,"levels: max=%i  thresh=%i",triggerMem.max,triggerMem.thresh);
       sampleIndex = 0;
     }
     // TODO: maybe use getch() to watch for "q" input to quit without Ctrl+C ??

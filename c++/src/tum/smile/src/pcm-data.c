@@ -51,16 +51,18 @@ extern float
 // unpack 3-byte signed 24-bit little endian samples into a int32_t
 inline int32_t unpack24i_le(sample24_t * x) 
 {
-  return ( (int32_t)(x->x[0]) + (int32_t)(x->x[1]*(1<<8)) + (int32_t)(x->x[2]*(1<<16)) );
+  uint32_t i=(uint32_t)(x->x[2]) + (uint32_t)(x->x[1])*(1<<8) + (uint32_t)(x->x[0])*(1<<16);
+  if (i&0x00800000) i+=0xFF000000; // negative number...
+  return ( (int32_t)i );
 }
 
 // warning: this function will clip samples, if they are out of the 24-bit range!
 inline sample24_t pack24i_le(int32_t x) 
 {
   sample24_t p;
-  p.x[0] = (uint8_t)( x & 0xFF);
-  p.x[1] = (uint8_t)( x & 0xFF00);
-  p.x[2] = (uint8_t)( x & 0xFF0000);
+  p.x[2] = (uint8_t)( (uint32_t)x & 0xFF);
+  p.x[1] = (uint8_t)( ((uint32_t)x & 0xFF00) >> 8 );
+  p.x[0] = (uint8_t)( ((uint32_t)x & 0xFF0000 ) >> 16 );
   return p;
 }
 
@@ -1018,6 +1020,7 @@ int pcmBuffer_copy_ext(pPcmBuffer src, pPcmBuffer dst, int start, int len, int s
                   for ( psrc = psrc0; psrc < psrc0 + len*src->blockSize; psrc += src->blockSize) { psrc1 = psrc; 
                     FEATUM_DEBUG(12,"psrc %i, psrc0 %i, psrc1 %i, pdst %i, src->blockSize %i",(unsigned long)psrc,(unsigned long)psrc0,(unsigned long)psrc1,(unsigned long)pdst,src->blockSize);
                     for ( from = 0; psrc1 < psrc + src->nChan * src->chanSize; psrc1 += src->chanSize) {
+					//	printf("c%i: %i  [scs=%i]\n",from,(SAMPLE32i)round((double)unpack24i_le((SAMPLE24i *)psrc1) * (double)pcmConversion_getRoute(conv, from, i) ), src->chanSize);
                        add_sample24i_le_32( (SAMPLE24i *)pdst, (SAMPLE32i)round((double)unpack24i_le((SAMPLE24i *)psrc1) * (double)pcmConversion_getRoute(conv, from++, i) ) );
                        //*(SAMPLE32i *)pdst += (SAMPLE32i)round(  (double)unpack24i_le((SAMPLE24i *)psrc1) * (double)pcmConversion_getRoute(conv, from++, i) * 256.0);
                     } pdst += dst->blockSize;

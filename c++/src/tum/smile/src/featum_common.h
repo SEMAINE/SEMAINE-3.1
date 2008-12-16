@@ -42,7 +42,7 @@ Common defines and typedefs
 //#define SHOW_WARNINGS  1
 #define SHOW_ERRORS    1
 #define SHOW_FATAL_ERRORS  1
-//#define DEBUG 1
+#define DEBUG 1
 //#define DEBUG_SHOW_FUNCTION_ENTRY 1
 #define FTMEM_NO_FUNCTION_ENTRY_DEBUG 1 
 
@@ -74,7 +74,6 @@ Common defines and typedefs
 // TODO: add --with-XXX autoconf options for these:
 #define ENABLE_FUNCTIONALS
 //#define DEBUG_SILDET
-
 
 //************ ERROR codes ****************************
 #define NO_ERROR      0
