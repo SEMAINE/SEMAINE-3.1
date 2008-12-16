@@ -1,4 +1,34 @@
-// exceptions
+/*******************************************************************************
+ * feaTUM, fast, efficient audio feature extractor by TUM
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *******************************************************************************/
+ 
+
+
+/****
+
+This is the main file of the smile SEMAINE component.
+It handles the option parsing and creates an instance of
+the semaine::components::smile::TumFeatureExtractor class
+and runs the main loop in a separate thread.
+
+****/
+
+
 #include <iostream>
 #include <stdio.h>
 #include <list>
@@ -20,7 +50,7 @@ pOptions setupOptions( cOptionParser &parser )
 #define FUNCTION "setupOptions"
 {_FUNCTION_ENTER_
 
-  // add your parameters:::  (don't forget to define variables in the struct in option-parser.h !!)
+  // when adding new parameters don't forget to define variables in the struct in option-parser.h !!
   parser.addBoolean( "help", 'h', &(parser.opt.help), 0, "Display this usage message" );
   parser.addFloat( "frameSize", 'S', &(parser.opt.frameSize), 0.032, "frame size in seconds", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addFloat(  "frameStep", 's', &(parser.opt.frameStep), 0.01, "frame step in seconds", MANDATORY_ARG, OPTIONAL_PARAM);
@@ -61,6 +91,18 @@ pOptions setupOptions( cOptionParser &parser )
   parser.addPchar( "pipeaudio", 0, &(parser.opt.pipeaudio), NULL, "output wave data to a named pipe", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addFloat( "silthresh", 0, &(parser.opt.sil_thresh), 0.01, "Silence threshold", MANDATORY_ARG, OPTIONAL_PARAM );  
 
+  // CMS on mfcc
+  parser.addFloat( "cmsAlpha", 0, &(parser.opt.cmsAlpha), 0.995, "time constant alpha for running average CMS (mfccz)", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addPchar( "cmsInitial", 0, &(parser.opt.cmsInitial), NULL, "initial mean vector for mfcc CMS (mfccz)", MANDATORY_ARG, OPTIONAL_PARAM );  
+
+  // mfcc config:
+  parser.addInt( "nMel", 0, &(parser.opt.nMel), 26, "number of mel frequency bands in filter bank", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addInt( "firstMFCC", 0, &(parser.opt.firstMFCC), 0, "first mel-frequency coefficient to compute", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addInt( "nMFCC", 0, &(parser.opt.nMFCC), 13, "number of mel-frequency coefficients to compute (starting from firstMFCC)", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addInt( "cepLifter", 0, &(parser.opt.cepLifter), 22, "cepLifter parameter", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addBoolean( "usePower", 0, &(parser.opt.usePower), 1, "use power spectrum when computing MFCC");  
+
+
   #ifdef LIVE_REC
   #ifdef USE_PORTAUDIO  
   parser.addBoolean( "listdevices", 'l', &(parser.opt.listdevices), 0, "List portaudio devices" );  
@@ -82,38 +124,7 @@ pOptions setupOptions( cOptionParser &parser )
   _FUNCTION_RETURN_(opts); 
 }
 #undef FUNCTION
-
-void debug_printOptions( pOptions opts )
-#define FUNCTION "debug_printOptions"
-{_FUNCTION_ENTER_
-  FEATUM_DEBUG(0, " opts->help = %i", opts->help);
-
-  FEATUM_DEBUG(0, " opts->frameSize = %f", opts->frameSize);
-  FEATUM_DEBUG(0, " opts->frameStep = %f", opts->frameStep);
-  FEATUM_DEBUG(0, " opts->preEmphasis = %f", opts->preEmphasis);
-
-  if (opts->infile != NULL) FEATUM_DEBUG(0, " opts->infile = %s", opts->infile);
-}
-#undef FUNCTION
 /****************************************/
-
-
-/************** Ctrl+C signal handler **/
-//int featum_quit = 0;
-//#include  <signal.h>
-/*
-void INThandler(int);
-
-void  INThandler(int sig)
-{
-     char  c;
-
-     signal(sig, SIG_IGN);
-     featum_quit = 1;
-     signal(SIGINT, INThandler);
-}
-*/
-/*******************************************/
 
 
 
@@ -121,21 +132,17 @@ int main (int argc, char *argv[]) {
 #define FUNCTION "main"
 
 
-        pOptions opts;
+	pOptions opts;
 
 	try {
-		/*** option parser *******/
 
+		/*** option parser *******/
 		cOptionParser parser(argc, argv); 
 		opts = setupOptions( parser );
 		if (opts == NULL) {
 			FEATUM_ERROR_FATAL(0,"Error parsing commandline options!");
 			return exitApp(ERR_CMDLINE);
 		}
-
-		#ifdef ENABLE_PRINT_OPTIONS
-		debug_printOptions( opts );
-		#endif
 
 		#ifndef LIVE_REC
 		FEATUM_ERROR_FATAL(0,"This component only works, when live recording is enabled");
@@ -144,17 +151,17 @@ int main (int argc, char *argv[]) {
  
 		#ifdef LIVE_REC
 		#ifdef USE_PORTAUDIO
-		
 		if (opts->listdevices) {
+			printf("DEVICE LIST:\n"); fflush(stdout);
 			liveInput_listDevices();
 			return 0;
 		}
  		#endif
 		#endif
-	} catch (int e) {
+		
+	} catch (int e) {}
 
-	}
-
+	// start the actual component and its main loop
 	try {
 		semaine::util::XMLTool::startupXMLTools();
 

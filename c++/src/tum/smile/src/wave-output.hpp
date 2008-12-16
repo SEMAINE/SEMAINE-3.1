@@ -20,8 +20,7 @@
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-This class handles the reading of PCM WAVE files (RIFF format).
-Other file types, such as compressed audio (MP3 or OGG) are not yet supported!
+This class handles the writing of PCM WAVE files (RIFF format) and RAW wave streams.
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
  
@@ -38,18 +37,21 @@ class cWaveOutput: public cAudioStream {
 
   public: 
 
+    /* constructor that allows specification of the isStream attribute, 
+       which disables/enabled the writing of a pcm header to the output */
     inline cWaveOutput( const char *filename, long sampleRate, int sampleType, int channels, int _isStream ) : cAudioStream() {
       waveOutput_create( &(_data), filename, sampleRate, sampleType, channels );
-      // TODO: error handling!
+      // TODO: error handling! if (... == NULL) then throw....
       param = new cWaveParameters(_data.parameters);
       streamDirection = AUDIOSTREAM_WRITE;
       streamType = TYPE_WAVEOUTPUT;    
       waveOutput_setStreaming( &(_data), _isStream );   
     }
 
+    /* default constructor for pcm files */
     inline cWaveOutput( const char *filename, long sampleRate, int sampleType, int channels ) : cAudioStream() {
       waveOutput_create( &(_data), filename, sampleRate, sampleType, channels );
-      // TODO: error handling!
+      // TODO: error handling! if (... == NULL) then throw....
       param = new cWaveParameters(_data.parameters);
       streamDirection = AUDIOSTREAM_WRITE;
       streamType = TYPE_WAVEOUTPUT;       
@@ -58,46 +60,46 @@ class cWaveOutput: public cAudioStream {
     // create cd quality (44.1kHz 16bit, stereo) by default
     inline cWaveOutput( const char *filename ) {
       waveOutput_create( &(_data), filename, 44100, SAMPLETYPE_I16, 2 );
-      // TODO: error handling!
+      // TODO: error handling!   if (... == NULL) then throw....
       param = new cWaveParameters(_data.parameters);
       streamDirection = AUDIOSTREAM_WRITE;
       streamType = TYPE_WAVEOUTPUT;             
     }
 
+    /* isStream = 1 : set the output to streaming mode, i.e. do not write a pcm header
+       isStream = 0 : write a wave file header after file open and before file close 
+                      (seek back to beginning) */
     void setStreaming( int isStream ) {
       waveOutput_setStreaming( &(_data), isStream );
     }
-    //    long getSampleRate() { return waveInput_getSampleRate( &(_data) ); }
-  /*  
-    LONG_IDX secondsToSamples( FLOAT_TYPE se ) 
-      { return waveOutut_secondsToSamples( &(_data), se ); }
-    
-    FLOAT_TYPE samplesToSeconds( LONG_IDX sa ) 
-      { return waveOutput_samplesToSeconds( &(_data), sa ); }
-*/
-    int writeDataRandom( cPcmBuffer &data, LONG_IDX start ) 
-      { int ret = waveOutput_writeDataRandom( &(_data), &(data._data), start ); 
-        return ret ; // TODO: error handling!
-      }  // TODO: pcmBuffer as c++ object!
 
-    /* gets data from current position, data must be allocated by calling function
-       data->nSamp must be initialized with the number of samples to read
-       after reading in the data, nSamp will be set to the actual number of samples
-       read
+    int writeDataRandom( cPcmBuffer &data, LONG_IDX start ) 
+    { 
+        int ret = waveOutput_writeDataRandom( &(_data), &(data._data), start ); 
+        return ret ; // TODO: error handling!
+    }
+
+    /* 
+      write the pcmBuffer in "data" to the file, increment file write pointer
+      this functions performs necessary audio format conversions, if applicable
+      (i.e. if file format parameters mismatch with pcmBuffer format)
      */
     virtual int writeFrame( cPcmBuffer &data )
       { int ret = waveOutput_writeDataSequential ( &_data, &(data._data) ); 
         return ret; // TODO: error handling!
-      } // TODO: pcmBuffer as c++ object!
+      } 
  
+    /* reading of frames is not supported, so it will always fail and return 0 */
     virtual int readFrame( cPcmBuffer &data ) { return 0; }
  
-     // set file position in BLOCKS(!) 
-     // return value: file position in bytes seeked to (inkl. header...), 0 on error
-     int setPos( LONG_IDX pos ) 
+    // TODO:
+    /* set file position in BLOCKS(!) 
+       return value: file position in bytes seeked to (inkl. header...), 0 on error
+     */
+    int setPos( LONG_IDX pos ) 
        { } //return waveOutput_setPos ( &_data, pos ); }
-
-     ~cWaveOutput() { waveOutput_destroyData( &_data ); }
+  
+    ~cWaveOutput() { waveOutput_destroyData( &_data ); }
 };
 
 

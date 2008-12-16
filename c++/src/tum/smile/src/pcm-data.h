@@ -173,6 +173,9 @@ int pcmBuffer_copy_ext(pPcmBuffer src, pPcmBuffer dst, int start, int len, int s
 pPcmBuffer pcmBuffer_duplicate( pPcmBuffer src );
 void pcmBuffer_duplicateData( pPcmBuffer src, pPcmBuffer dst );
 
+// creates a copy of the buffer <src>, allocate a new object for the new buffer with different size, pad with zeros if new size is larger
+pPcmBuffer pcmBuffer_duplicateResize( pPcmBuffer src, LONG_IDX nBlocksDst );
+
 /* free buffer object if noObjFree==0, else free only internal data 
     -> this option (1) is important when passing a pointer like this: &(wavebuffer)
 */

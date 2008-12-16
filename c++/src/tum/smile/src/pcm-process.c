@@ -73,7 +73,8 @@ void pcmProcess_windowingSetup( pPcmBuffer b, int recomp, int type )
     switch (type) {
       case WIN_HAMMING:
         for (n=0.0; n <= N; n += 1.0) {
-          *coeffs = 0.53836 - 0.46164 * cos( 2 * M_PI * (FLOAT_TYPE)n / N );
+//          *coeffs = 0.53836 - 0.46164 * cos( 2.0 * M_PI * (FLOAT_TYPE)n / N );
+          *coeffs = 0.54 - 0.46 * cos( 2.0 * M_PI * (FLOAT_TYPE)n / N );
           coeffs++;
         }
         break;
@@ -188,15 +189,13 @@ FLOAT_TYPE pcmProcess_energy( pPcmBuffer b )
   
   if (b != NULL) {
     if (b->nBlocks == 0) _FUNCTION_RETURN_( 0.0 );
-    FLOAT_TYPE sum = 0; //FLOAT_TYPE max = (FLOAT_TYPE)((WORK_SAMPLE *)b->data)[0];
+    double sum = 0; //FLOAT_TYPE max = (FLOAT_TYPE)((WORK_SAMPLE *)b->data)[0];
     for (i=0; i < b->nBlocks; i++) {
-      //sum +=  (double)((SAMPLEFP *)b->data)[i] * (double)((SAMPLEFP *)b->data)[i] * 32767.0 *32767.0 ;
-      sum +=  (FLOAT_TYPE)((WORK_SAMPLE *)b->data)[i] * (FLOAT_TYPE)((WORK_SAMPLE *)b->data)[i];
+      sum +=  (double)((SAMPLEFP *)b->data)[i] * (double)((SAMPLEFP *)b->data)[i];
+//      sum +=  (FLOAT_TYPE)((WORK_SAMPLE *)b->data)[i] * (FLOAT_TYPE)((WORK_SAMPLE *)b->data)[i];
 //      if ((FLOAT_TYPE)((WORK_SAMPLE *)b->data)[i] > max) max = (FLOAT_TYPE)((WORK_SAMPLE *)b->data)[i];
     }
-//    if (maxi < max ) maxi = max;
-//    FEATUM_DEBUG(1,"max sample val: %f  (highest: %f)",max,maxi);
-    ret = sqrt( (FLOAT_TYPE)(sum)/(FLOAT_TYPE)b->nBlocks );
+    ret = sqrt( (FLOAT_TYPE)(sum) / (FLOAT_TYPE)b->nBlocks );
     if (ret == 0.0) {
        FEATUM_DEBUG(1,"0.0 output : nBlocks = %i",b->nBlocks);
     }
@@ -278,12 +277,7 @@ void slow_rdft(int N, int sign, FLOAT_TYPE_FFT *input_pcm, FLOAT_TYPE_FFT *ip, F
 
 
 // the array complex_interleaved must be at least p->nBlocks elements in size!
-#ifdef USE_SLOW_DFT
-int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, FLOAT_TYPE_FFT *ip, FLOAT_TYPE_FFT *w )
-#else
-void rdft(int n, int isgn, double *a, int *ip, double *w);
-int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, int *ip, double *w )
-#endif
+int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, int *ip, FLOAT_TYPE_FFT *w )
 #define FUNCTION "pcmProcess_fft"
 {_FUNCTION_ENTER_
   LONG_IDX i;
@@ -299,26 +293,16 @@ int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, int *ip
     #endif
 
     FLOAT_TYPE_FFT *input_pcm = complex_interleaved;
-    #if WORK_SAMPLE == FLOAT_TYPE_FFT
-      FEATUM_DEBUG(5,"no conversion of sample data necessary");
-      memcpy(input_pcm,pcm->data,sizeof(FLOAT_TYPE_FFT)*pcm->nBlocks);
-    #else
-      FEATUM_DEBUG(5,"sample data needs conversion!!");
-      FLOAT_TYPE_FFT * out = input_pcm;
-      WORK_SAMPLE * in = pcm->data;
-      for (i=0; i<pcm->nBlocks; i++) {
+    FLOAT_TYPE_FFT * out = input_pcm;
+    WORK_SAMPLE * in = pcm->data;
+    for (i=0; i<pcm->nBlocks; i++) {
         *out = (FLOAT_TYPE_FFT)(*in);
         out++; in++;
-      }
-    #endif
+    }
 
     // do the dft (inplace)
     FEATUM_DEBUG(10,"before rdft");
-    #ifdef USE_SLOW_DFT
-    slow_rdft(pcm->nBlocks, 1, input_pcm, ip, w);
-    #else
     rdft(pcm->nBlocks, 1, input_pcm, ip, w);
-    #endif
     FEATUM_DEBUG(10,"done with rdft");
   
     _FUNCTION_RETURN_(1);
@@ -328,12 +312,8 @@ int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, int *ip
 }
 #undef FUNCTION
 
-// magnitudes and phases must be size pcm->nBlocks/2
-#ifdef USE_SLOW_DFT
-int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, FLOAT_TYPE_FFT *ip, FLOAT_TYPE_FFT *w )
-#else
-int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, double *w )
-#endif
+// magnitudes and phases must be size pcm->nBlocks/2 
+int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, FLOAT_TYPE_FFT *w )
 #define FUNCTION "pcmProcess_fft_magphase"
 {_FUNCTION_ENTER_
   LONG_IDX i;
@@ -351,11 +331,11 @@ int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_T
       // save output to lldex (mag + phase..)
       // output is stored in input_pcm array by the rdft function
       if (magnitudes != NULL) {
-        for (i=2; i < (pcm->nBlocks); i += 2) {
+        for (i=2; (i < (pcm->nBlocks-1))&&(i<pcm->nBlocksAlloc-1); i += 2) {
            magnitudes[i/2] = sqrt(input_pcm[i]*input_pcm[i] + input_pcm[i+1]*input_pcm[i+1]);
         }
         magnitudes[0] = input_pcm[0];
-        magnitudes[(pcm->nBlocks/2)-1] = input_pcm[1];
+        //magnitudes[(pcm->nBlocks/2)-1] = input_pcm[1];
       }
     
       if (phases != NULL) {
@@ -382,13 +362,9 @@ int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_T
 #undef FUNCTION
 
 // complex must be of size pcm->nBlocks
-// magnitudes and phases must be size pcm->nBlocks/2
-#ifdef USE_SLOW_DFT
-int pcmProcess_fft_All( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, FLOAT_TYPE_FFT *ip, FLOAT_TYPE_FFT *w )
-#else
-int pcmProcess_fft_All( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, double *w )
-#endif
-#define FUNCTION "pcmProcess_fft_magphase"
+// magnitudes and phases must be at least size pcm->nBlocks/2
+int pcmProcess_fft_All( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, FLOAT_TYPE_FFT *w )
+#define FUNCTION "pcmProcess_fft_All"
 {_FUNCTION_ENTER_
   LONG_IDX i; int no_complex = 0;
   if (pcm != NULL) {
@@ -412,7 +388,7 @@ int pcmProcess_fft_All( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex, FLOAT_TYPE_FFT 
            magnitudes[i/2] = sqrt(input_pcm[i]*input_pcm[i] + input_pcm[i+1]*input_pcm[i+1]);
         }
         magnitudes[0] = input_pcm[0];
-        magnitudes[(pcm->nBlocks/2)-1] = input_pcm[1];
+        //magnitudes[(pcm->nBlocks/2)-1] = input_pcm[1];
       }
     
       if (phases != NULL) {

@@ -111,6 +111,8 @@ void featum_function_returnV(const char *module, const char *function);
 
 /************** other functions **************************/
 
+#define MINIMUM(A,B) (A<B)?A:B
+
 LONG_IDX min_l(LONG_IDX a, LONG_IDX b);
 LONG_IDX max_l(LONG_IDX a, LONG_IDX b);
 int min_i(int a, int b);
@@ -119,7 +121,9 @@ double min_d(double a, double b);
 double max_d(double a, double b);
 
 int isPowerOf2(int x);
+int isPowerOf2_long(LONG_IDX x);
 int isPosPowerOf2(int x);
+LONG_IDX ceilPosPow2_long(LONG_IDX x);
 
 /* for arrays: */
 LONG_IDX min_lv(LONG_IDX *a, int n);

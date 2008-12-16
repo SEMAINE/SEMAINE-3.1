@@ -61,7 +61,7 @@ struct LLDexPitch {
 typedef struct {
    LONG_IDX frameSize_last;
    int * ip;
-   double * w;
+   FLOAT_TYPE_FFT * w;
 } sLLDpitch;
 //typedef struct LLDpitch sLLDpitch;
 typedef sLLDpitch * pLLDpitch;

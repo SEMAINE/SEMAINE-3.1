@@ -12,7 +12,7 @@ fi
 corpusA="sal";
 corpusV="sal";
 
-P=`cat ../asr/asr.cfg | grep PAUDIO`;
+#P=`cat ../asr/asr.cfg | grep PAUDIO`;
 if test "x$P" != "x"; then
 
 rm -f /tmp/semaine.tum.pipe.raw
@@ -27,8 +27,8 @@ fi
 else
   PIPE=""
 fi
-
-./featumamq $PIPE -silthresh 0.001 -svmmodelV $models/$corpusV/valence.model -svmmodelA $models/$corpusA/arousal.model -sildet -svmscaleA $models/$corpusA/arousal.scale -svmscaleV $models/$corpusV/valence.scale -svmpredfselA $models/$corpusA/arousal.fsel -svmpredfselV $models/$corpusV/valence.fsel $*
+PIPE=""
+./featumamq $PIPE -frameSize 0.025 -silthresh 0.001 -svmmodelV $models/$corpusV/valence.model -svmmodelA $models/$corpusA/arousal.model -sildet -svmscaleA $models/$corpusA/arousal.scale -svmscaleV $models/$corpusV/valence.scale -svmpredfselA $models/$corpusA/arousal.fsel -svmpredfselV $models/$corpusV/valence.fsel -cmsInitial ./cepmean -cmsAlpha 0.995 $*
 
 rm -f /tmp/semaine.tum.pipe.raw 2>/dev/null
 

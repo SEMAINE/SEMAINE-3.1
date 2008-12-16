@@ -32,6 +32,7 @@
 #include "featum_util.h"       //( optional )
 #include "feature-memory.h"
 //#include "LLDpitch.h"
+#include "pcm-process.h"
 #include "LLDs.h"
 
 #undef FUNCTION     // use undef only if you define it below for every function
@@ -263,8 +264,11 @@ int LLDpitch_extractor( pLLDpitch obj, pLLDex lldex, int level )
       FEATUM_ERROR(9,"fft data in lldex struct is NULL, but required for pitch!");
       _FUNCTION_RETURN_(0);
     }
-
-
+    if (lldex->current[level]->pcm == NULL) {
+      FEATUM_ERROR(9,"pcm data in lldex struct is NULL, but required for pitch!");
+      _FUNCTION_RETURN_(0);
+    }
+//return 0;
 
     // algorithm:
     /* use fft data to perform acf. in frequency domain
@@ -326,14 +330,21 @@ int LLDpitch_extractor( pLLDpitch obj, pLLDex lldex, int level )
 
       tmp += 2; tmp2 += 2;
     }
-    
+
+    if (obj->frameSize_last != N) { // reinit if framesize has changed!
+        FEATUM_DEBUG(3,"framesize change detected! new size = %i",N);
+        if (obj->ip != NULL) { free(obj->ip); obj->ip = NULL; }
+        if (obj->w != NULL) { free(obj->w); obj->w = NULL; }
+        obj->frameSize_last = N;
+    }
+	    
     // check for valid ip and w arrays:
           //    #ifdef SUPPORT_FRAMESIZE_CHANGE
          // TODO: implement support for framesize change (copy from LLDfft.c)
     if (obj->ip == NULL) {
       obj->ip = (int *)calloc(1,(N+2)*sizeof(int)); 
       if (obj->w == NULL) {
-        obj->w = (double*)calloc(1,((N * 5)/4+1)*sizeof(double));
+        obj->w = (FLOAT_TYPE_FFT*)calloc(1,((N * 5)/4+1)*sizeof(FLOAT_TYPE_FFT));
       }
       if ((obj->ip == NULL)||(obj->w == NULL)) {
         free(data); free(data2);

@@ -37,6 +37,7 @@ coefficients.
 #define FT_LLD_TIME
 #define FT_LLD_LPC
 #define FT_LLD_MFCC
+#define FT_LLD_MFCCZ
 #define FT_LLD_CEPSTRUM
 #define FT_LLD_CEPSTRALF0
 #define FT_LLD_SPECTRAL
@@ -79,6 +80,10 @@ typedef sLLDexGeneric * pLLDexGeneric;
 
 #ifdef FT_LLD_MFCC
 #include "LLDmfcc.h"
+#endif
+
+#ifdef FT_LLD_MFCCZ
+#include "LLDmfccz.h"
 #endif
 
 #ifdef FT_LLD_TIME
@@ -138,6 +143,10 @@ struct LLDexElement {
 
 #ifdef FT_LLD_MFCC
   pLLDexMfcc       mfcc;
+#endif
+
+#ifdef FT_LLD_MFCCZ
+  pLLDexMfccz       mfccz;
 #endif
 
 #ifdef FT_LLD_TIME

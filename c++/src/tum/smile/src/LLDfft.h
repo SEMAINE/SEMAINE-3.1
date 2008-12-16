@@ -66,13 +66,8 @@ struct LLDexFFT {
 // private data structure:
 typedef struct {
    LONG_IDX frameSize_last;
-   #ifdef USE_SLOW_DFT
-   FLOAT_TYPE_FFT *ip;  // sintable
-   FLOAT_TYPE_FFT *w;   // costable
-   #else
    int * ip;
-   double * w;
-   #endif
+   FLOAT_TYPE_FFT * w;
 } sLLDfft;
 typedef sLLDfft * pLLDfft;
 

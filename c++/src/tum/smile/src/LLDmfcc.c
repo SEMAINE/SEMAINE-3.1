@@ -36,7 +36,7 @@
 
 #undef FUNCTION     // use undef only if you define it below for every function
 
-FLOAT_TYPE melfloor = 0.00000001;
+FLOAT_TYPE_FFT melfloor = 1.0; //0.00000001;
 
 // default constructor 
 pLLDmfcc LLDmfcc_create( pLLDmfcc obj )
@@ -51,13 +51,14 @@ pLLDmfcc LLDmfcc_create( pLLDmfcc obj )
     obj->nMFCC = DEFAULT_nMFCC;
     obj->cepLifter = DEFAULT_cepLifter;  
     obj->firstMFCC = DEFAULT_firstMFCC;
+    obj->usePower = DEFAULT_usePower;
   }
   _FUNCTION_RETURN_( obj );
 }
 #undef FUNCTION 
 
 
-int LLDmfcc_configure( pLLDmfcc obj, int nMel, int nMFCC, int cepLifter, int firstMFCC )
+int LLDmfcc_configure( pLLDmfcc obj, int nMel, int nMFCC, int cepLifter, int firstMFCC, int usePower )
 #define FUNCTION "LLDmfcc_configure"
 {_FUNCTION_ENTER_
   if (obj != NULL) {
@@ -73,39 +74,14 @@ int LLDmfcc_configure( pLLDmfcc obj, int nMel, int nMFCC, int cepLifter, int fir
       obj->cepLifter = cepLifter;  
     if (firstMFCC >= 0)
       obj->firstMFCC = firstMFCC;
+    obj->usePower = usePower;
     _FUNCTION_RETURN_( 1 );
   }
   _FUNCTION_RETURN_( 0 );
 }
 #undef FUNCTION 
 
-// custom configuration of extractor parameters
-/*  this is only a template function:
-int LLDmfcc_configure( pLLDmfcc obj )
-#define FUNCTION "LLDmfcc_create"
-{_FUNCTION_ENTER_
-  if (obj != NULL) {
-     _FUNCTION_RETURN_( 1 );
-  }
-  _FUNCTION_RETURN_( 0 );
-}
-#undef FUNCTION 
-*/
 
-
-// setup names in feature memory object
-/*
-int LLDmfcc_setupFtmem( int level, pFeatureMemory mem )
-#define FUNCTION "LLDmfcc_setupNames"
-{_FUNCTION_ENTER_
-  int ret;
-  ret = featureMemory_setupElement( mem, level, FT_LLD_MFCC, FT_LLD_MFCC_nVal, (char **)&lld_mfcc_ftMem_names );
-  _FUNCTION_RETURN_(ret);
-}
-#undef FUNCTION 
-*/  
-
-//int featureMemory_flushToFtMem( pFeatureMemory mem, int level, int el, int nVal )
 
 // flushToMem: copy final data from ftex to feature memory element array
 int LLDmfcc_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
@@ -120,21 +96,7 @@ int LLDmfcc_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
   if (lldex->current[level]->mfcc == NULL) _FUNCTION_RETURN_(0);  // extractor failed, do not flush, because there is no data
   if (lldex->current[level]->mfcc->flush_status == LLDEX_FLUSHED) _FUNCTION_RETURN_(2);
   
-/*  FLOAT_TYPE_FTMEM *values = featureMemory_getValuesForWrite_seq( mem, level, ft_lld_mfcc, lldex->current[level]->mfcc->nMFCC, 0 );
-  if (values != NULL) {
-    // flush the liftered mfcc in lldex->current[level]->mfcc->mfcc
-    int i;
-    FLOAT_TYPE *mfccarr = lldex->current[level]->mfcc->mfcc;
-    for (i=0; i< lldex->current[level]->mfcc->nMFCC; i++) {
-      values[i] = (FLOAT_TYPE_FTMEM)(mfccarr[i]);
-    }   
-   
-    lldex->current[level]->mfcc->flush_status = LLDEX_FLUSHED;
-    //(TODO: assign timestamps...??   should be done in featureMemory_getValuesWrite...)
 
-    _FUNCTION_RETURN_(1);
-  }
-  */
   FLOAT_TYPE_FTMEM *values 
     = featureMemory_getValuesForWrite_seq( mem, level, ft_lld_mfcc, 
                                            lldex->current[level]->mfcc->nMFCC, 0, 
@@ -143,10 +105,12 @@ int LLDmfcc_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
   if (values != NULL) {
     // flush the liftered mfcc in lldex->current[level]->mfcc->mfcc
     int i;
+
     FLOAT_TYPE *mfccarr = lldex->current[level]->mfcc->mfcc;
     for (i=0; i< lldex->current[level]->mfcc->nMFCC; i++) {
       values[i] = (FLOAT_TYPE_FTMEM)(mfccarr[i]);
     }   
+
    
     lldex->current[level]->mfcc->flush_status = LLDEX_FLUSHED;
     //(TODO: assign timestamps...??   should be done in featureMemory_getValuesWrite...)
@@ -212,26 +176,121 @@ void compute_melFilters(s_mel_descriptor *mel)
 
 #endif
 
-    inline double B(double fhz) {
-//      return 1125.0*log(1.0+fhz/700.0);
-      return 2595.0*log10(1.0+fhz/700.0);
-    }
-    inline double Binv(double fmel) {
-//      return 700.0*(exp(fmel/1125.0)-1.0);
-//      return 700.0*(exp10(fmel/2595.0)-1.0);
-      return 700.0*(pow(10.0,fmel/2595.0)-1.0);
+inline FLOAT_TYPE_FFT Mel(FLOAT_TYPE_FFT fhz) {
+      return 1127.0*log(1.0+fhz/700.0);
+//  return 2595.0*log10(1.0+fhz/700.0);
+}
 
+inline FLOAT_TYPE_FFT Hertz(FLOAT_TYPE_FFT fmel) {
+      return 700.0*(exp(fmel/1127.0)-1.0);
+//      return 700.0*(exp10(fmel/2595.0)-1.0);
+//  return 700.0*(pow(10.0,fmel/2595.0)-1.0);
+}
+
+// convert frequency (hz) to FFT bin number
+inline LONG_IDX FtoN(FLOAT_TYPE_FFT fhz, FLOAT_TYPE_FFT baseF)
+{
+  return (LONG_IDX)round(fhz/baseF);
+}
+
+inline FLOAT_TYPE_FFT NtoFmel(LONG_IDX N, FLOAT_TYPE_FFT baseF)
+{
+  return Mel( (FLOAT_TYPE_FFT)N*baseF );
+}
+
+
+// blocksize is size of fft block, i.e. pcmFrameLength/2
+int LLDmfcc_recomputeFilters( pLLDmfcc obj, LONG_IDX blocksize, long int sampleRate )
+#define FUNCTION "LLDmfcc_recomputeFilters"
+{_FUNCTION_ENTER_
+
+  if (obj != NULL) {
+    if (blocksize < obj->nMel) {
+      FEATUM_ERROR(0,"nMel is greater than number of FFT bins! This does not work... not computing mfcc filters! ");
+      _FUNCTION_RETURN_(0);
     }
-    inline int fofm(int m, double N, double Fs, double BfH, double BfI, double M ) {
-      return ( (int)round( (2.0*N/Fs)*Binv(BfI + (double)m*(BfH-BfI)/((double)M+1.0) )));    
+    if (obj->filterCoeffs != NULL) { free(obj->filterCoeffs);   }
+    if (obj->chanMap != NULL) { free(obj->chanMap);   }
+    if (obj->filterCfs != NULL) { free(obj->filterCfs);   }
+
+    obj->blocksize = blocksize;
+    obj->filterCoeffs = (FLOAT_TYPE_FFT*)calloc(1,sizeof(FLOAT_TYPE_FFT) * blocksize);
+    obj->chanMap = (LONG_IDX*)malloc(sizeof(LONG_IDX) * blocksize);
+    obj->filterCfs = (FLOAT_TYPE_FFT*)malloc(sizeof(FLOAT_TYPE_FFT) * (obj->nMel+2));
+
+    FLOAT_TYPE_FFT N = (FLOAT_TYPE_FFT) (blocksize*2);
+    FLOAT_TYPE_FFT Fs = (FLOAT_TYPE_FFT) (sampleRate);
+    FLOAT_TYPE_FFT baseF = Fs/N;
+    FLOAT_TYPE_FFT M = (FLOAT_TYPE_FFT) (obj->nMel);
+    
+    FLOAT_TYPE_FFT LoF_hz = 0.0;
+    FLOAT_TYPE_FFT HiF_hz = Fs/2.0; // Hertz(NtoFmel(blocksize+1,baseF));
+
+    FLOAT_TYPE_FFT LoF = Mel(LoF_hz);  // Lo Cutoff Freq (mel)
+    FLOAT_TYPE_FFT HiF = Mel(HiF_hz);  // Hi Cutoff Freq (mel)
+    LONG_IDX nLoF = FtoN(LoF_hz,baseF);  // Lo Cutoff Freq (fft bin)
+    LONG_IDX nHiF = FtoN(HiF_hz,baseF);  // Hi Cutoff Freq (fft bin)
+
+    if (nLoF > blocksize) nLoF = blocksize;
+    if (nHiF > blocksize) nHiF = blocksize;
+    if (nLoF < 1) nLoF = 1;
+    if (nHiF < 1) nHiF = 1;      
+
+    int m,n;
+    // compute mel center frequencies
+    FLOAT_TYPE_FFT mBandw = (HiF-LoF)/(M+1.0); // half bandwidth of mel bands
+    for (m=0; m<=obj->nMel+1; m++) {
+	  obj->filterCfs[m] = LoF+(FLOAT_TYPE_FFT)m*mBandw;
     }
+    
+    // compute channel mapping table:
+    m = 0;
+    for (n=0; n<blocksize; n++) {
+	  if ( (n<nLoF)||(n>nHiF) ) obj->chanMap[n] = -3;
+	  else {
+  	    while (obj->filterCfs[m] < NtoFmel(n,baseF)) { m++; }
+	    obj->chanMap[n] = m-2;
+      }
+	}
+    
+    // compute filter weights (falling slope only):
+    m = 0;
+    FLOAT_TYPE_FFT nM;
+    for (n=nLoF;n<nHiF;n++) {
+	  nM = NtoFmel(n,baseF);
+	  while (nM > obj->filterCfs[m+1] && (m<=obj->nMel)) m++;
+	  obj->filterCoeffs[n] = ( obj->filterCfs[m+1] - nM )/(obj->filterCfs[m+1] - obj->filterCfs[m]); 
+    }
+    
+    obj->nLoF = nLoF;
+    obj->nHiF = nHiF;
+    
+    _FUNCTION_RETURN_(1);
+  }
+  _FUNCTION_RETURN_(0);
+}
+#undef FUNCTION
+
+#if 0  // old mfcc filter code...
+inline FLOAT_TYPE_FFT B(FLOAT_TYPE_FFT fhz) {
+      return 1127.0*log(1.0+fhz/700.0);
+//  return 2595.0*log10(1.0+fhz/700.0);
+}
+
+inline FLOAT_TYPE_FFT Binv(FLOAT_TYPE_FFT fmel) {
+      return 700.0*(exp(fmel/1127.0)-1.0);
+//      return 700.0*(exp10(fmel/2595.0)-1.0);
+//  return 700.0*(pow(10.0,fmel/2595.0)-1.0);
+}
+
+inline int fofm(int m, FLOAT_TYPE_FFT N, FLOAT_TYPE_FFT Fs, FLOAT_TYPE_FFT BfH, FLOAT_TYPE_FFT BfI, FLOAT_TYPE_FFT M ) {
+  return ( (int)round( (2.0*N/Fs)*Binv(BfI + (FLOAT_TYPE_FFT)m*(BfH-BfI)/((FLOAT_TYPE_FFT)M+1.0) )));    
+}
  
 // blocksize is size of fft block, i.e. pcmFrameLength/2
 int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
 #define FUNCTION "LLDmfcc_recomputeFilters"
 {_FUNCTION_ENTER_
-
-
 
   if (obj != NULL) {
     if (blocksize < obj->nMel) {
@@ -243,15 +302,15 @@ int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
     if (obj->filters_end != NULL) { free(obj->filters_end);   }
 
     obj->blocksize = blocksize;
-    obj->filters = (FLOAT_TYPE_FFT*)malloc(sizeof(FLOAT_TYPE) * obj->nMel * blocksize);
+    obj->filters = (FLOAT_TYPE_FFT*)malloc(sizeof(FLOAT_TYPE_FFT) * obj->nMel * blocksize);
     obj->filters_start = (LONG_IDX*)malloc(sizeof(LONG_IDX) * obj->nMel);
     obj->filters_end = (LONG_IDX*)malloc(sizeof(LONG_IDX) * obj->nMel);
 
-    double N = (double) (blocksize);
-    double Fs = (double) (sampleRate);
-    double M = (double) (obj->nMel);
-    double BfI = B(0.0);
-    double BfH = B(Fs/2.0-1.0);
+    FLOAT_TYPE_FFT N = (FLOAT_TYPE_FFT) (blocksize);
+    FLOAT_TYPE_FFT Fs = (FLOAT_TYPE_FFT) (sampleRate);
+    FLOAT_TYPE_FFT M = (FLOAT_TYPE_FFT) (obj->nMel);
+    FLOAT_TYPE_FFT BfI = B(Fs/(2.0*N));  // Lo Cutoff Freq
+    FLOAT_TYPE_FFT BfH = B(Fs/2.0-1.0);  // Hi Cutoff Freq
  
       
     int m,n;
@@ -261,6 +320,7 @@ int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
       
 //(int m, double N, double Fs, double BfH, double BfI, double M )
       int fofm_mm1 = obj->filters_start[m-1] = fofm(m-1,N,Fs,BfH,BfI,M);
+printf("fofm_mm1 = %i\n",fofm_mm1);
       int fofm_mp1 = obj->filters_end[m-1] = fofm(m+1,N,Fs,BfH,BfI,M);
       int fofm_m = fofm(m,N,Fs,BfH,BfI,M);
       if (obj->filters_end[m-1] >= obj->blocksize) obj->filters_end[m-1] = obj->blocksize;
@@ -269,11 +329,11 @@ int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
         filter[n] = 0.0;
       }  
       for (n=fofm_mm1; (n<fofm_m)&&(n<obj->blocksize); n++) {
-        filter[n] = ( 2.0*(double)(n-fofm_mm1) )/(double)( (fofm_mp1-fofm_mm1) ); 
+        filter[n] = ( 2.0*(FLOAT_TYPE_FFT)(n-fofm_mm1) )/(FLOAT_TYPE_FFT)( (fofm_mp1-fofm_mm1) ); 
 //        filter[n] = ( 2.0*(double)(n-fofm_mm1) )/(double)( (fofm_mp1-fofm_mm1)*(fofm_m-fofm_mm1) ); 
       }
       for (n=fofm_m; (n<=fofm_mp1)&&(n<obj->blocksize); n++) {
-        filter[n] = ( (double)(fofm_mp1-n) )/(double)( (fofm_mp1-fofm_m) ); 
+        filter[n] = ( (FLOAT_TYPE_FFT)(fofm_mp1-n) )/(FLOAT_TYPE_FFT)( (fofm_mp1-fofm_m) ); 
 //        filter[n] = ( 2.0*(double)(fofm_mp1-n) )/(double)( (fofm_mp1-fofm_mm1)*(fofm_mp1-fofm_m) ); 
       }
       for (n=fofm_mp1+1; n<obj->blocksize; n++) {
@@ -286,7 +346,7 @@ int LLDmfcc_recomputeFilters( pLLDmfcc obj, int blocksize, long int sampleRate )
   _FUNCTION_RETURN_(0);
 }
 #undef FUNCTION
-
+#endif // old mfcc filter code...
 
 // extractor:  do the main extraction , this function is called once per frame
 // if data from multiple past frames is required, it is accessible via the lldex object
@@ -308,10 +368,9 @@ int LLDmfcc_extractor( pLLDmfcc obj, pLLDex lldex, int level )
     LONG_IDX N = lldex->current[level]->fft->nBins;
     
     // initialize filters
-    if ((obj->filters == NULL)||(N != obj->blocksize)) {
+    if ((obj->filterCoeffs == NULL)||(N != obj->blocksize)) {
       if (!LLDmfcc_recomputeFilters( obj, N, 
                   lldex->current[level]->fft->fStep * (FLOAT_TYPE)(lldex->current[level]->fft->nBlocks) )) {
-        //LLDmfcc_freeLLDex( lldex->current[level] ); 
         _FUNCTION_RETURN_(0);
       }
     }
@@ -349,17 +408,24 @@ int LLDmfcc_extractor( pLLDmfcc obj, pLLDex lldex, int level )
     }           
           
     // copy & square the fft magnitude
-    FLOAT_TYPE_FFT *magSrc = lldex->current[level]->fft->magnitudes;
-    if (magSrc == NULL) _FUNCTION_RETURN_(0);
-    FLOAT_TYPE_FFT *mag = (FLOAT_TYPE_FFT*)malloc(sizeof(FLOAT_TYPE_FFT)*N);
-    if (mag == NULL) {
-      FEATUM_ERROR(0,"Error allocating memory");
-      _FUNCTION_RETURN_(0);        
+//    FLOAT_TYPE_FFT *magSrc = 
+//    if (magSrc == NULL) _FUNCTION_RETURN_(0);
+
+    FLOAT_TYPE_FFT *mag;
+    if (!obj->usePower)
+      mag = lldex->current[level]->fft->magnitudes;
+    else {
+      mag = (FLOAT_TYPE_FFT*)malloc(sizeof(FLOAT_TYPE_FFT)*N);
+      if (mag == NULL) {
+        FEATUM_ERROR(0,"Error allocating memory");
+        _FUNCTION_RETURN_(0);        
+      }
+      int n;
+      FLOAT_TYPE_FFT *magSrc = lldex->current[level]->fft->magnitudes;
+      for (n=0; n<N; n++) {
+        mag[n] = magSrc[n]*magSrc[n];
+      } 
     }
-    int n;
-    for (n=0; n<N; n++) {
-      mag[n] = magSrc[n]; //*magSrc[n];
-    } 
     
     pLLDexMfcc currentMfcc = lldex->current[level]->mfcc;
     if (currentMfcc == NULL) {
@@ -376,14 +442,62 @@ int LLDmfcc_extractor( pLLDmfcc obj, pLLDex lldex, int level )
     
     // do the mel filtering by multiplying with the filters and summing up
     FLOAT_TYPE * outp =  currentMfcc->melBand;
-    //memzero(outp, lldex->current[level]->mfcc->nMel*sizeof(FLOAT_TYPE));
+    memzero(outp, lldex->current[level]->mfcc->nMel*sizeof(FLOAT_TYPE));
+
+    FLOAT_TYPE_FFT a;
+    int m,n;
+    for (n=obj->nLoF; n<obj->nHiF; n++) {
+      // TODO: implement use of power spectrum	...      m = obj->chanMap[n];
+//      if (obj->usePower) {
+//        a = mag[n] * mag[n] * obj->filterCoeffs[n];
+//      } else {  
+      a = mag[n] * obj->filterCoeffs[n]; 
+//}
+      if (m>-2) {
+        if (m>-1) outp[m] += (FLOAT_TYPE)( a );
+        if (m < obj->nMel-1) 
+//          if (obj->usePower)
+//            outp[m+1] += (FLOAT_TYPE)( mag[n]*mag[n] - a ); 
+//          else 
+            outp[m+1] += (FLOAT_TYPE)( mag[n] - a ); 
+      }
+    }
+
+    #ifdef DATASAVE_MFCC
+    if (!datasave_appendvec_d("melspec.dat",lldex->current[level]->mfcc->melBand,lldex->current[level]->mfcc->nMel)) { FEATUM_ERROR(0,"error writing to mfcc.dat"); }
+    #endif    
+
+    for (m=0; m<obj->nMel; m++) {
+      FLOAT_TYPE * outc = outp + m; //cache current output  
+      //printf("outc = %f\n",*outc); 
+        if (obj->usePower) {
+	  *outc *= 32767.0*32767.0;   
+        } else {
+          *outc *= 32767.0;
+        }
+				// this is for silly HTK compatibility....
+	                      // HTK does not scale the input sample values to -1 / +1
+	                      // thus, we must multiply by this value again..
+      if (*outc < melfloor) *outc = melfloor;
+	  *outc = log(*outc);
+    }
+
+
+#if 0 // old mfcc filter code...
     for (m=0; m<obj->nMel; m++) {
       FLOAT_TYPE * outc = outp + m; //current output  
       FLOAT_TYPE_FFT * filter = obj->filters + (m*obj->blocksize);
-      *outc = 0.0;
+      //*outc = 0.0;
       for (n=obj->filters_start[m]; n<obj->filters_end[m]; n++) {
+	  	  
         *outc += (FLOAT_TYPE)( mag[n] * filter[n] );
+//        if (m < obj->nMel-1) 
+//          *(outc+1) += (FLOAT_TYPE)( mag[n] - mag[n] * filter[n] );
       }
+      		 // @@CHANGE:
+      //printf("outc = %f\n",*outc);
+	   *outc *= 32767.0;
+      
       if (*outc < 0.0000001) *outc = 0.0000001;
       // TODO: MelSpec output at this point!
     #ifdef DATASAVE_MFCC
@@ -393,18 +507,20 @@ int LLDmfcc_extractor( pLLDmfcc obj, pLLDex lldex, int level )
     for (m=0; m<obj->nMel; m++) {
       FLOAT_TYPE * outc = outp + m; //current output  
       if (*outc < melfloor) *outc = melfloor;
-      *outc = log(*outc);
+	  *outc = log(*outc);
     }
     #else
       //if ((*outc > -0.00001)&&(*outc <= 0.0)) *outc = -0.00001;
-      *outc = log(*outc);
+        // @@CHANGE:
+	    //*outc = log(*outc);
       //*outc /= (FLOAT_TYPE)(obj->blocksize);
     }
     #endif    
-      
+
+#endif  // old mfcc filter code...
     
     // done... free used memory
-    free(mag);
+    //free(mag);
     
     // compute dct of mel data:
     outp =  currentMfcc->mfccUL;
@@ -488,11 +604,14 @@ pLLDmfcc LLDmfcc_destroy( pLLDmfcc obj )
 #define FUNCTION "LLDmfcc_destroy"
 {_FUNCTION_ENTER_
   if (obj != NULL) {
-    if (obj->ip != NULL) { free(obj->ip); }
-    if (obj->w != NULL) { free(obj->w);  }
-    if (obj->filters != NULL) { free(obj->filters);  }
-    if (obj->filters_start != NULL) { free(obj->filters_start);  }
-    if (obj->filters_end != NULL) { free(obj->filters_end);  }
+//    if (obj->ip != NULL) { free(obj->ip); }
+//    if (obj->w != NULL) { free(obj->w);  }
+//    if (obj->filters != NULL) { free(obj->filters);  }
+//    if (obj->filters_start != NULL) { free(obj->filters_start);  }
+//    if (obj->filters_end != NULL) { free(obj->filters_end);  }
+    if (obj->filterCoeffs != NULL) { free(obj->filterCoeffs);  }
+    if (obj->filterCfs != NULL) { free(obj->filterCfs);  }
+    if (obj->chanMap != NULL) { free(obj->chanMap);  }
     if (obj->sintable != NULL) { free(obj->sintable); }
     if (obj->costable != NULL) { free(obj->costable); }
     free(obj);

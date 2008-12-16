@@ -70,7 +70,10 @@ typedef struct {
   float sil_thresh;
   char *svmpredfselA;
   char *svmpredfselV;
-  
+
+  char *cmsInitial;
+  float cmsAlpha;
+    
   // audio recorder:
   int device;
   int listdevices;
@@ -92,6 +95,12 @@ typedef struct {
   LONG_IDX long1;
   float float1;
   
+  // mfcc:
+  int nMel;
+  int nMFCC;
+  int cepLifter;
+  int firstMFCC;
+  int usePower;
 } sOptions;
 typedef sOptions *pOptions;
 

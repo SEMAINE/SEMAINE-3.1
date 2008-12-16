@@ -10,13 +10,21 @@ dnl
 AC_DEFUN([CONFIGURE_TARGETS],
 [
   dnl the defaults:
+  enable_liverec='yes'
   build_featum='yes'
   build_featumamq='yes'
   build_tumrec='no'
   build_tumsync='no'
   build_audiorecorder='no'
   build_vinylsplit='no'
-  
+
+  AC_ARG_ENABLE([liverec],[  --enable-liverec  enable live input feature.  default=yes],
+          enable_liverec="$enableval", enable_liverec="$enable_liverec")
+
+  if test x$enable_liverec = xyes; then
+    AC_DEFINE([WITH_LIVEREC],[1],[Support live input from soundcard/microphone])
+  fi
+ 
   AC_ARG_ENABLE([featum],[  --enable-featum  build standalone commandline feature extractor.  default=yes],
            build_featum="$enableval", build_featum="$build_featum")
 

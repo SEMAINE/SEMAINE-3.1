@@ -42,9 +42,10 @@ extern "C" {
 #include "audio-stream.hpp"
 
 class cWaveInput: public cAudioStream {
-  sWaveInput _data; 
 
   public:
+  sWaveInput _data; 
+
     cWaveInput( const char *filename, LONG_IDX maxBuf ) : cAudioStream() {
       streamType = TYPE_WAVEINPUT;
       waveInput_create( &(_data), filename, maxBuf );

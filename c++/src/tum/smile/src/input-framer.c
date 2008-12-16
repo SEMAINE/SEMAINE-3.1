@@ -281,7 +281,6 @@ int inputFramer_addClientSecStep(pInputFramer obj, float framesize, float frames
   fstep = (LONG_IDX)( framestep * sr );
   flen = (LONG_IDX)( framesize * sr );    
   FEATUM_DEBUG(10,"original flen: %i",flen);
-  
   if (powOf2) {
     // round flng to nearest power of 2
     unsigned long int flng = (unsigned long int)flen;           
@@ -298,7 +297,6 @@ int inputFramer_addClientSecStep(pInputFramer obj, float framesize, float frames
     flen = (LONG_IDX)flng;
     FEATUM_DEBUG(10,"adjusted flen: %i",flen);  
   } 
-
   ret = inputFramer_addClient(obj, flen, fstep);
   _FUNCTION_RETURN_( ret );
 }
@@ -319,7 +317,6 @@ int inputFramer_addClient(pInputFramer obj, int framesize, int framestep)
   
   // add client at index i (=id-1)
   obj->client[i]->frameLength = framesize;
-  
   if (framesize > obj->maxFrameLength) obj->maxFrameLength = framesize;
   obj->client[i]->frameStep = framestep;
 
@@ -327,6 +324,7 @@ int inputFramer_addClient(pInputFramer obj, int framesize, int framestep)
   obj->nClients++;
           
   sortClients(obj);
+
   // (TODO:) update buffer indicies !!
   // -> dirty but ok (?) : free buffer, it will be re-initialized by next getFrame call
   //                        ( a small amount of input data will be skipped )
@@ -403,18 +401,16 @@ int inputFramer_getFrame(pInputFramer obj, int id, pPcmBuffer *frame)
     }
     #endif
     FEATUM_DEBUG(10,"filling ringbuffer with data from input ...");
-//    FEATUM_DEBUG(10,"filling RRR with data from input ...\n");
     // fill with data from input
     obj->buffer->wridx = audioStream_getData(obj->input, obj->buffer->data);
   }
-  //FEATUM_DEBUG(10,"Allocated rBuffer ...");
   
   // ... and has enough data:
   if (pcmRingBufferMR_toread(obj->buffer,id2) < obj->client[id2]->frameLength) {
     //load more data
     FEATUM_DEBUG(10,"Re-reading data into ringbuffer\n   (free %i, current fl: %i) ...",pcmRingBufferMR_freespace(obj->buffer),obj->client[id2]->frameLength);
     pPcmBuffer tmp = pcmBufferAllocate(NULL, pcmRingBufferMR_freespace(obj->buffer),
-                        obj->nChan, obj->sampleType, obj->memOrga, obj->sampleRate);
+                        obj->input->nChan, obj->input->sampleType, obj->input->memOrga, obj->input->sampleRate);
     audioStream_getData(obj->input, tmp);
     pcmRingBufferMR_write(obj->buffer, tmp);
     pcmBufferFree(tmp,0);

@@ -122,11 +122,14 @@ int LLDenergy_extractor( pLLDenergy obj, pLLDex lldex, int level )
     if (lldex->current[level]->energy == NULL) {
        LLDenergy_createLLDex( lldex->current[level] );                               
     }
-    lldex->current[level]->energy->rmsEnergy = pcmProcess_energy( lldex->current[level]->pcm );
-    if (lldex->current[level]->energy->rmsEnergy < 0.00001) {
-      lldex->current[level]->energy->logEnergy = 2.0*log(0.00001);
-    } else {
-      lldex->current[level]->energy->logEnergy = 2.0*log(lldex->current[level]->energy->rmsEnergy);
+    if (lldex->current[level]->pcm != NULL) {
+      lldex->current[level]->energy->rmsEnergy = pcmProcess_energy( lldex->current[level]->pcm );
+      if (lldex->current[level]->energy->rmsEnergy < 0.000001) {
+        lldex->current[level]->energy->logEnergy = 2.0*( log(0.000001) + log(32767.0) + 0.5*log(lldex->current[level]->pcm->nBlocks) );
+      } else {
+  //      lldex->current[level]->energy->logEnergy = 2.0*log(lldex->current[level]->energy->rmsEnergy);
+        lldex->current[level]->energy->logEnergy = 2.0*( log(lldex->current[level]->energy->rmsEnergy) + log(32767.0) + 0.5*log(lldex->current[level]->pcm->nBlocks) );
+      }
     }
     #ifdef DATASAVE_ENERGY
     // save cepstrum data for visualisation and debugging purposes:

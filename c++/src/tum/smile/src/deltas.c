@@ -286,11 +286,10 @@ int deltas_doCompute( pDeltas obj, int id, LONG_IDX oIdx )
     ilevel = obj->config[id].ilevel;
     nFramesContext = obj->config[id].nFramesContext;
 
-    FLOAT_TYPE_FTMEM weight;
+    FLOAT_TYPE_FTMEM weight = 0.0;
     if (nFramesContext == 0) {
       weight = 1.0;
     } else {
-      FLOAT_TYPE_FTMEM weight = 0.0;
       for (i=1; i<=nFramesContext; i++) {
         weight += (FLOAT_TYPE_FTMEM)(i * i);
       }

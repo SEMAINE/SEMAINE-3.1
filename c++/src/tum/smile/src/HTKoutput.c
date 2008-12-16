@@ -93,16 +93,16 @@ pHtkOutput htkOutput_create( pHtkOutput obj, pFeatureMemory mem, const char *fil
     obj->filedesc = NULL;
     obj->header = NULL;
     obj->headerLocation = 0;
+    obj->header = (pHTKheader)calloc(1,sizeof(sHTKheader));
+    if (obj->header == NULL) {
+      FEATUM_ERROR(1,"error allocating memory for HTK header");
+    }
+
     if (filename != NULL) {
       htkOutput_setOutputFile(obj, filename, 0);  // append not supported here, because dim is not known
     } 
     genOutput_setHeaderCallback( (pGenOutput)obj, NULL );
     if ( IsVAXOrder () ) { obj->userflag1 = 1; }
-    
-    obj->header = (pHTKheader)calloc(1,sizeof(sHTKheader));
-    if (obj->header == NULL) {
-      FEATUM_ERROR(1,"error allocating memory for HTK header");
-    }
   }
   _FUNCTION_RETURN_(obj);
 }

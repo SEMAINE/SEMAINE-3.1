@@ -17,23 +17,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *******************************************************************************/
 
-
+#ifndef __FEATUM_COMMON_H
+#define __FEATUM_COMMON_H
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Common defines and typedefs
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-#ifndef __FEATUM_COMMON_H
-#define __FEATUM_COMMON_H
+
 
 #ifdef HAVE_CONFIG_H
+// include configuration from autoconf, if we're compiling with autoconf/automake
 #include <config.h>
 #endif
 
 // compile on windows
 //#define __WINDOWS
 #define USE_FOPEN 1
+
+// enable printing of featum total runtime at end
 #define ENABLE_PROFILER   1
 
 //#define SHOW_WARNINGS  1
@@ -43,29 +46,35 @@ Common defines and typedefs
 //#define DEBUG_SHOW_FUNCTION_ENTRY 1
 #define FTMEM_NO_FUNCTION_ENTRY_DEBUG 1 
 
-#define ENABLE_PRINT_OPTIONS   // print values of all given commandline and config file parameters
-                              // DEBUG must be defined for this to work (at min. loglevel 0)
+// enable this for better readability of debug messages
+#define DEBUG_PRINT_NEWLINE 1     
 
-#define DEBUG_PRINT_NEWLINE 1     // for better readability of debug messages
+// print values of all given commandline and config file parameters
+// DEBUG must be defined for this to work (at min. loglevel 0)
+#define ENABLE_PRINT_OPTIONS   
+
 #define COMPILE_CHECKS 1
 //#define COMPILE_CHECKS_LOOPS 1   // compile checks in functions called often in loops
                                   // should be disabled by default for better performance
                                   // use only for debugging or if security is an issue
 #define COMPILE_BASIC_OPTIMISATIONS 1
+
 //#define OPTIMIZE_SIZE 1    // do not compile inline functions
 //#define OPTIMIZE_SIZE_MSGS  1  // enable this to not compile message printing funcitons as inline
 
 // use the portaudio library for sound recording (and possibly later playback)
-//#ifdef __WINDOWS
-#ifdef HAVE_PORTAUDIO
-#define USE_PORTAUDIO 1
+
+#ifdef WITH_LIVEREC
+  #define LIVE_REC 1
+  #ifdef HAVE_PORTAUDIO
+    #define USE_PORTAUDIO 1
+  #endif
 #endif
 
-#define LIVE_REC 1
-//#endif
+// TODO: add --with-XXX autoconf options for these:
 #define ENABLE_FUNCTIONALS
-
 //#define DEBUG_SILDET
+
 
 //************ ERROR codes ****************************
 #define NO_ERROR      0
@@ -76,17 +85,16 @@ Common defines and typedefs
 #define ERR_CONFIG  1000
 //-----------------------------------------------------
 
-// string size of fixed size filename and path variables
+// maximum string size of fixed size filename and path variables
 // (not including the trailing NULL termination character)
 #define PATH_STRING_SIZE 255
 
 // set either to float or double for single or double precision
-#define FLOAT_TYPE double
+#define FLOAT_TYPE float
 #define FLOAT_TYPE_TIME double
-#define FLOAT_TYPE_FFT  double
+#define FLOAT_TYPE_FFT  float
 #define FLOAT_TYPE_FTMEM FLOAT_TYPE
-
-// TODO: float does not work.... brings segfault!!
+// TODO: float does not work.... brings segfault!! ??
 
 // type for long indicies (file indicies, buffer indicies)
 #define LONG_IDX   long
@@ -94,19 +102,13 @@ Common defines and typedefs
 
 
 // maximal wave input internal ring-buffer size in BYTES 
-//#define WAVE_INPUT_BUFSIZE  16777216   // max 64MB for stereo wave files
 #define WAVE_INPUT_BUFSIZE  16000   // max 64MB for stereo wave files
 #define LIVE_INPUT_BUFSIZE  16000   // max 64MB for stereo wave files
 
-//#define PCM_PREBUFFER    1024
-//#define PCM_POSTBUFFER   1024
-#define PCM_PREBUFFER    30
-#define PCM_POSTBUFFER   40
 
-#define STRLEN_FILENAMES 512
-
+// save internal data vectors for debugging ....
+// TODO: make this configurable
 //#define DATASAVE_ALL 1
-
 #ifdef DATASAVE_ALL
 #define DATASAVE_MFCC 1
 #define DATASAVE_CEPSTRUM 1
@@ -116,4 +118,5 @@ Common defines and typedefs
 #define DATASAVE_LPC 1
 #endif
 
+/****************************************/
 #endif //__FEATUM_COMMON_H

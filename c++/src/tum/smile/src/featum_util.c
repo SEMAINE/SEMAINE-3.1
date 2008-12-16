@@ -331,7 +331,7 @@ inline double max_d(double a, double b)
 }
 
 // check if number is power of 2 (positive or negative)
-inline int isPowerOf2(int x)
+int isPowerOf2(int x)
 {
   if (x==1) return 1;  // 1 is a power of 2
   if (((x&1) == 0)&&(x != 0)) { // only even numbers > 1
@@ -342,8 +342,39 @@ inline int isPowerOf2(int x)
   return 0;
 }
 
+// check if number is power of 2 (positive or negative)
+int isPowerOf2_long(LONG_IDX x)
+{
+  if (x==1) return 1;  // 1 is a power of 2
+  if (((x&1) == 0)&&(x != 0)) { // only even numbers > 1
+    x=x>>1;
+    while ((x&1) == 0) { x=x>>1;  }
+    return ((x==1)||(x==-1));
+  } 
+  return 0;
+}
+
+// round up to the nearest power of 2 
+// works only for positive numbers
+long ceilPosPow2_long(long x) 
+{
+  unsigned long first = (unsigned long)(1)<<(sizeof(unsigned long)*8-1) ;
+  if (x==0) return 0;
+  if (x<0) {
+    long mask = first;
+    if (x != 0) while( (x&first) == first ) { x=x<<1; mask=mask>>1; }
+    if (x-first == 0) return mask;
+    else return mask<<1;
+  } else {
+    unsigned long mask = first;
+    if (x != 0) while( (x&first) == 0 ) { x=x<<1; mask=mask>>1; }
+    if (x-first == 0) return mask;
+    else return mask<<1;
+  }
+}
+	   
 // check if number is positive power of 2
-inline int isPosPowerOf2(int x)
+int isPosPowerOf2(int x)
 {
   if (x==1) return 1;  // 1 is a power of 2
   if (((x&1) == 0)&&(x>1)) { // only even numbers > 1

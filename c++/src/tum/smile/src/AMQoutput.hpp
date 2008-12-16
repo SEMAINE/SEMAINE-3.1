@@ -50,7 +50,7 @@ class cAmqOutput : public cGenOutput {
     
     static int writeFrame( pGenOutput obj, pOutputVector vec );
     
-    int sendCurrentFrame();
+    int sendCurrentFrame(int speakingStatus);
     int sendLastFrame();
         
     ~cAmqOutput ();
@@ -58,7 +58,7 @@ class cAmqOutput : public cGenOutput {
   private:
     MetaMessenger * meta;
     FeatureSender * featureSender;
-
+    int seqNr;
 };
 
 

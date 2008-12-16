@@ -121,16 +121,23 @@ int LLDfft_extractor( pLLDfft obj, pLLDex lldex, int level )
       _FUNCTION_RETURN_(0);        
     }
 
-    
+    if (pcm->nBlocks < 4) {
+      FEATUM_WARNING(5,"nBlocks < 4, cannot run FFT, skipping this block!");
+      _FUNCTION_RETURN_(0);        
+    }
 
-    
-    
-    #ifndef USE_SLOW_DFT
-    // WARNING: fft computation will crash if pcm->nBlocks is not a power of two!!
-    // therefore we check for this constraint here:
-    if (isPowerOf2(pcm->nBlocks) && (pcm->nBlocks >= 4) ) {
-    #endif
-       
+    // do zero padding if blocksize is not power of 2
+    int pad = 0; 
+    if (!isPowerOf2_long(pcm->nBlocks)) {
+      pPcmBuffer pcm0 = pcm; pad = 1;
+      long nBlocksPow2 = ceilPosPow2_long((long)(pcm->nBlocks));
+      pcm = pcmBuffer_duplicateResize( pcm0, nBlocksPow2 );
+      pcm->nBlocks = nBlocksPow2;
+      pcmBufferFree(lldex->current[level]->pcm,0);
+      lldex->current[level]->pcm = pcm;
+    }
+	
+    {       
       if (lldex->current[level]->fft == NULL) {
         LLDfft_createLLDex( lldex->current[level] );                               
       }
@@ -143,50 +150,32 @@ int LLDfft_extractor( pLLDfft obj, pLLDex lldex, int level )
         if (obj->w != NULL) { free(obj->w); obj->w = NULL; }
         obj->frameSize_last = pcm->nBlocks;
         FEATUM_DEBUG(3,"gggs %i %i",lldex->current[level]->fft->nBins, pcm->nBlocks / 2);
-        if (lldex->current[level]->fft->nBins != pcm->nBlocks / 2) {
-          // also reallocate magnitudes and phases arrays if new framesize is larger!
-          if (lldex->current[level]->fft->nBins < pcm->nBlocks / 2) {
-            lldex->current[level]->fft->nBins = pcm->nBlocks / 2;
-            lldex->current[level]->fft->nBlocks = pcm->nBlocks;
-            if (lldex->current[level]->fft->complex != NULL) free(lldex->current[level]->fft->complex);
-            if (lldex->current[level]->fft->magnitudes != NULL) free(lldex->current[level]->fft->magnitudes);
-            #ifdef COMPUTE_PHASE
-            if (lldex->current[level]->fft->phases != NULL) free(lldex->current[level]->fft->phases);
-            #endif
-            lldex->current[level]->fft->complex= (FLOAT_TYPE_FFT *)malloc(sizeof(FLOAT_TYPE_FFT)*lldex->current[level]->fft->nBlocks);
-            lldex->current[level]->fft->magnitudes = (FLOAT_TYPE_FFT *)malloc(sizeof(FLOAT_TYPE_FFT)*lldex->current[level]->fft->nBins);
-            #ifdef COMPUTE_PHASE
-            lldex->current[level]->fft->phases = (FLOAT_TYPE_FFT *)malloc(sizeof(FLOAT_TYPE_FFT)*lldex->current[level]->fft->nBins);
-            #endif
-          
-          } else {
-            lldex->current[level]->fft->nBins = pcm->nBlocks / 2;
-            lldex->current[level]->fft->nBlocks = pcm->nBlocks;
-          }
-        }
+        if (lldex->current[level]->fft->complex != NULL) free(lldex->current[level]->fft->complex);
+        if (lldex->current[level]->fft->magnitudes != NULL) free(lldex->current[level]->fft->magnitudes);
+        #ifdef COMPUTE_PHASE
+        if (lldex->current[level]->fft->phases != NULL) free(lldex->current[level]->fft->phases);
+        #endif
+        lldex->current[level]->fft->complex= (FLOAT_TYPE_FFT *)malloc(sizeof(FLOAT_TYPE_FFT)*lldex->current[level]->fft->nBlocks);
+        lldex->current[level]->fft->magnitudes = (FLOAT_TYPE_FFT *)malloc(sizeof(FLOAT_TYPE_FFT)*lldex->current[level]->fft->nBins);
+        #ifdef COMPUTE_PHASE
+        lldex->current[level]->fft->phases = (FLOAT_TYPE_FFT *)malloc(sizeof(FLOAT_TYPE_FFT)*lldex->current[level]->fft->nBins);
+        #endif
+      }
+      #else 
+      if (obj->frameSize_last != pcm->nBlocks) { // reinit if framesize has changed!
+        FEATUM_DEBUG(3,"framesize change detected! new size = %i",pcm->nBlocks);
+        FEATUM_WARNING(6,"framesize change not supported, not computing this frame!");
       }
       #endif
        
-      #ifdef USE_SLOW_DFT
-      if (obj->ip == NULL) {
-        obj->ip = (FLOAT_TYPE_FFT *)malloc((pcm->nBlocks+2)*sizeof(FLOAT_TYPE_FFT)); 
-        *(obj->ip) = -99.0;
-        if (obj->w == NULL) {
-          obj->w = (FLOAT_TYPE_FFT*)malloc(((pcm->nBlocks+2)*sizeof(FLOAT_TYPE_FFT));
-          if (obj->w == NULL) FEATUM_ERROR(0,"Error allocating memory"); 
-        }
-        if (obj->ip == NULL) FEATUM_ERROR(0,"Error allocating memory");
-      }
-      #else
       if (obj->ip == NULL) {
         obj->ip = (int *)calloc(1,(pcm->nBlocks+2)*sizeof(int)); 
         if (obj->w == NULL) {
-          obj->w = (double*)calloc(1,((pcm->nBlocks * 5)/4+1)*sizeof(double));
+          obj->w = (FLOAT_TYPE_FFT*)calloc(1,((pcm->nBlocks * 5)/4+1)*sizeof(FLOAT_TYPE_FFT));
           if (obj->w == NULL) FEATUM_ERROR(0,"Error allocating memory"); 
         }
         if (obj->ip == NULL) FEATUM_ERROR(0,"Error allocating memory");
       }
-      #endif
                             
       #ifdef COMPUTE_PHASE
       pcmProcess_fft_All( pcm, lldex->current[level]->fft->complex, lldex->current[level]->fft->magnitudes, lldex->current[level]->fft->phases, obj->ip, obj->w );
@@ -199,13 +188,13 @@ int LLDfft_extractor( pLLDfft obj, pLLDex lldex, int level )
       #endif
 
       FEATUM_DEBUG(10,"fft0: %f",lldex->current[level]->fft->magnitudes[0]);
+//      if (pad) pcmBufferFree(pcm,0);
       _FUNCTION_RETURN_(1);
-    #ifndef USE_SLOW_DFT
-    } else {
+
+/*    } else {
       FEATUM_WARNING(2,"pcm->nBlocks (%i) is not a power of 2 (or smaller than 4)! This is required for fast FFT with fft4g/fft8g/fftsg.c!",pcm->nBlocks);
-      _FUNCTION_RETURN_(0);
+      _FUNCTION_RETURN_(0);*/
     }
-    #endif
   }
 
   _FUNCTION_RETURN_(0);

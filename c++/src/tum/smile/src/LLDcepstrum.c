@@ -183,7 +183,7 @@ int LLDcepstrum_extractor( pLLDcepstrum obj, pLLDex lldex, int level )
     if (obj->ip == NULL) {
       obj->ip = (int *)calloc(1,(N+2)*sizeof(int)); 
       if (obj->w == NULL) {
-        obj->w = (double*)calloc(1,((N * 5)/4+1)*sizeof(double));
+        obj->w = (FLOAT_TYPE_FFT*)calloc(1,((N * 5)/4+1)*sizeof(FLOAT_TYPE_FFT));
       }
       if ((obj->ip == NULL)||(obj->w == NULL)) {
         FEATUM_ERROR(0,"Error allocating memory");

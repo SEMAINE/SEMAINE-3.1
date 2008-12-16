@@ -41,6 +41,10 @@ Functions for simple processing and analysis of pcmBuffers, for example:
 #define WIN_HAMMING 1
 #define WIN_HANNING 2
 
+// external function, defined in fftsg.c or fft4g.c
+void rdft(int n, int isgn, FLOAT_TYPE_FFT *a, int *ip, FLOAT_TYPE_FFT *w);
+
+
 // set up hamming window coefficients for pcmBuffer b
 // set recomp = 1 to force recomputing coefficients, even if they have been allocated already
 //  (e.g. when chaning the type of the windowing function
@@ -60,22 +64,12 @@ FLOAT_TYPE pcmProcess_energy( pPcmBuffer p );
 double pcmProcess_logEnergy( pPcmBuffer p );
 
 
-//#define USE_SLOW_DFT   1     // for datasizes != power of 2
-
-#ifdef USE_SLOW_DFT
+// fft4g code...  datasize must be a power of 2
 // returns only complex data:
-int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, FLOAT_TYPE_FFT *ip, FLOAT_TYPE_FFT *w );
+int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, int *ip, FLOAT_TYPE_FFT *w );
 // returns only magnitudes and phase:
-int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, FLOAT_TYPE_FFT *ip, FLOAT_TYPE_FFT *w );
+int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, FLOAT_TYPE_FFT *w );
 // returns magnitude, phase and complex number data:
-int pcmProcess_fft_All( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, FLOAT_TYPE_FFT *ip, FLOAT_TYPE_FFT *w );
-#else // fft4g code...  datasize must be a power of 2
-// returns only complex data:
-int pcmProcess_fft( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex_interleaved, int *ip, double *w );
-// returns only magnitudes and phase:
-int pcmProcess_fft_magphase( pPcmBuffer pcm, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, double *w );
-// returns magnitude, phase and complex number data:
-int pcmProcess_fft_All( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, double *w );
-#endif
+int pcmProcess_fft_All( pPcmBuffer pcm, FLOAT_TYPE_FFT *complex, FLOAT_TYPE_FFT *magnitudes, FLOAT_TYPE_FFT * phases, int *ip, FLOAT_TYPE_FFT *w );
 
 #endif // #ifndef __PCM_PROCESS_H

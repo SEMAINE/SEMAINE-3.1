@@ -56,17 +56,25 @@ struct LLDexMfcc {
 #define DEFAULT_firstMFCC  0
 #define DEFAULT_nMFCC      13
 #define DEFAULT_cepLifter  22
+#define DEFAULT_usePower   0
 extern FLOAT_TYPE_FFT melfloor; // = 0.00000001;
 
 // private data structure:
 typedef struct {
   int nMel,nMFCC,cepLifter,firstMFCC;
+  int usePower;
   LONG_IDX blocksize;
   FLOAT_TYPE_FFT * filters;   // array containing mel filters
   LONG_IDX *filters_start;
   LONG_IDX *filters_end;
-  int *ip;
-  double *w;
+
+  FLOAT_TYPE_FFT * filterCoeffs;   // array containing mel filters
+  FLOAT_TYPE_FFT * filterCfs;   // center frequencies in mel
+  LONG_IDX *chanMap;
+  LONG_IDX nLoF, nHiF;
+  
+//  int *ip;
+//  FLOAT_TYPE_FFT *w;
   FLOAT_TYPE *sintable;
   FLOAT_TYPE *costable;
 } sLLDmfcc;
@@ -81,7 +89,7 @@ pLLDmfcc LLDmfcc_create( pLLDmfcc obj );
 // int LLDmfcc_configure( pLLDmfcc obj );
 // use this line if this extractor does not have a configure function:
 //#define LLDmfcc_configure(obj)
-int LLDmfcc_configure( pLLDmfcc obj, int nMel, int nMFCC, int cepLifter, int firstMFCC );
+int LLDmfcc_configure( pLLDmfcc obj, int nMel, int nMFCC, int cepLifter, int firstMFCC, int usePower );
 
 //int LLDmfcc_setupNames( int level, pFeatureMemory mem );
 

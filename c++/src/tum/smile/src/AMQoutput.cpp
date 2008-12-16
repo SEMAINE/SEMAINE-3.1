@@ -41,7 +41,8 @@ Merging data from asynchronus level might be supported in the future
 cAmqOutput::cAmqOutput( cFeatureMemory &mem, FeatureSender *_featureSender, MetaMessenger * _meta ) : 
 	cGenOutput(mem),
         featureSender(_featureSender),
-        meta(_meta)
+        meta(_meta),
+	seqNr(0)
 {
   //featureSender = _featureSender; 
   //MetaMessenger = _meta;
@@ -54,12 +55,12 @@ cAmqOutput::~cAmqOutput()
 int cAmqOutput::sendLastFrame() {
   LONG_IDX oldIdx = _data.vIdxSaved;
   setIdxToLastFrame();
-  sendCurrentFrame();
+  sendCurrentFrame(0);
   _data.vIdxSaved = oldIdx; 
 }
 
 
-int cAmqOutput::sendCurrentFrame() {
+int cAmqOutput::sendCurrentFrame(int speakingStatus) {
 
     pOutputVector vec = getFrame();
 
@@ -72,17 +73,22 @@ int cAmqOutput::sendCurrentFrame() {
     int n,i;
     n = vec->n;
     if (!featureSender->areFeatureNamesSet()) {
-      std::vector<std::string> tumFeatureNames(n);
+      std::vector<std::string> tumFeatureNames(n+1);
       for (i=0; i<n; i++) {
         std::string name(_data.outputDef.names[i]); 
         tumFeatureNames[i] = name;
       }
+      tumFeatureNames[i]="speaking";
+//      tumFeatureNames[i+1]="seqNr";
       featureSender->setFeatureNames(tumFeatureNames);
     }
 
-    std::vector<float> features(n);
+    std::vector<float> features(n+1);
     for (i=0; i<n; i++) 
       features[i] = (float)(vec->data[i]);
+    features[i] = speakingStatus;
+//    features[i+1] = seqNr;
+//    seqNr++;
 
     if (meta != NULL) {
       featureSender->sendFeatureVector(features, meta->getTime());

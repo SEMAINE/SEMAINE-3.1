@@ -54,11 +54,11 @@ class cLLDs {
 
          // enable LLD "name", and register extractor obj. if obj = NULL it will be created by calling default constructor!
          // if level == -1 the default defined by the constants will be used
-         inline void setupLLD(const char * name, int enabled, int level) {
-           LLDs_setupLLD( &_data, name, enabled, NULL, level );
+         inline void * setupLLD(const char * name, int enabled, int level) {
+           return LLDs_setupLLD( &_data, name, enabled, NULL, level );
          }
-         inline void setupLLD(const char * name, int enabled, void *exObj, int level) {
-           LLDs_setupLLD( &_data, name, enabled, exObj, level );
+         inline void * setupLLD(const char * name, int enabled, void *exObj, int level) {
+           return LLDs_setupLLD( &_data, name, enabled, exObj, level );
          }
          
          inline void countEnabled() {

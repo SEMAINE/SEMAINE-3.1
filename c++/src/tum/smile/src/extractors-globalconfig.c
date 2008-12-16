@@ -89,6 +89,12 @@ char * lld_mfcc_ftMem_names[] = { "mfcc" };
 int ft_lld_mfcc = 0;
 #endif
 
+#ifdef FT_LLD_MFCCZ
+#define FT_LLD_MFCCZ_nVal     0      // number of values/names in ft. mem  (0=dynamic size)
+char * lld_mfccz_ftMem_names[] = { "mfccz" };
+int ft_lld_mfccz = 0;
+#endif
+
 #ifdef FT_LLD_LPC
 char * lld_lpc_ftMem_names[] = { "lpcA" };
 int ft_lld_lpc = 0;
@@ -230,6 +236,17 @@ sLLDs_const LLD = {
          &LLDmfcc_createLLDex, &LLDmfcc_freeLLDex, 
          &LLDmfcc_create, &LLDmfcc_destroy, NULL,
          1,{"fft","","","",""}},
+        #else
+        {0,0,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,{"","","","",""}},
+        #endif
+
+        #ifdef FT_LLD_MFCCZ
+        {LLD_DFLT_ENABLE,1,LLD_LEVEL0,"mfccz", 
+         lld_mfccz_ftMem_names, FT_LLD_MFCCZ_nVal, 1, &ft_lld_mfccz,    // nVal == 0: dynamic number of values, only on name configured as basename
+         &LLDmfccz_flushToFtMem, &LLDmfccz_extractor,
+         &LLDmfccz_createLLDex, &LLDmfccz_freeLLDex, 
+         &LLDmfccz_create, &LLDmfccz_destroy, NULL,
+         2,{"fft","mfcc","","",""}},
         #else
         {0,0,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,{"","","","",""}},
         #endif

@@ -822,7 +822,8 @@ int pcmBuffer_copy_ext(pPcmBuffer src, pPcmBuffer dst, int start, int len, int s
             psrc0 = src->data+(start*src->blockSize) + i*src->chanSize;
 
             if (( i >= src->nChan)||(silence)) {  // no source channel available, zero the output channel
-              chanZero(pdst0,len,dst->blockSize,0); 
+              //printf("i: %i, srcCh: %i, dstCh: %i\n",i,src->nChan, dst->nChan);
+              chanZero(pdst0,len,dst->blockSize,dst->chanSize); // TODO: ... this only works for memorga_interlv!!
               
             } else {
                    
@@ -1853,8 +1854,8 @@ pPcmBuffer pcmBuffer_duplicate( pPcmBuffer src )
       // copy pcm data
       if (src->data != NULL) 
         memcpy(dst->data, src->data, dst->nBytesAlloc);
-      else 
-        memzero(dst->data, dst->nBytesAlloc);
+/*      else 
+        memzero(dst->data, dst->nBytesAlloc);*/
       
       //clone uData struct, if allocated
       if (src->uData) {
@@ -1877,11 +1878,7 @@ pPcmBuffer pcmBuffer_duplicate( pPcmBuffer src )
 void pcmBuffer_duplicateData( pPcmBuffer src, pPcmBuffer dst ) 
 #define FUNCTION "pcmBuffer_duplicateData"
 {_FUNCTION_ENTER_
-//  pPcmBuffer dst = NULL;
   if ((src != NULL)&&(dst != NULL)) {
-   // dst = pcmBufferAllocate(dst, src->nBlocksAlloc, src->nChan, src->sampleType, src->memOrga, src->sampleRate);   
-
-//    if (dst != NULL) {
       // copy parameters
       dst->nBlocks = src->nBlocks; 
       dst->timestampSamples = src->timestampSamples;
@@ -1902,15 +1899,51 @@ void pcmBuffer_duplicateData( pPcmBuffer src, pPcmBuffer dst )
             pcmBuffer_uDataAllocf(dst, i, src->uData->entrySize[i]);
         }
       } 
-    
-    
-
   } 
   _FUNCTION_RETURNV_
 }
 #undef FUNCTION 
 
 
+// creates a copy of the buffer <src>, allocate a new object for the new buffer with different size, pad with zeros if new size is larger
+pPcmBuffer pcmBuffer_duplicateResize( pPcmBuffer src, LONG_IDX nBlocksDst ) 
+#define FUNCTION "pcmBuffer_duplicateResize"
+{_FUNCTION_ENTER_
+  pPcmBuffer dst = NULL;
+  if (src != NULL) {
+    dst = pcmBufferAllocate(dst, nBlocksDst, src->nChan, src->sampleType, src->memOrga, src->sampleRate);   
+
+    if (dst != NULL) {
+      // copy parameters
+      dst->nBlocks = src->nBlocks; 
+      dst->timestampSamples = src->timestampSamples;
+      dst->timestamp = src->timestamp;
+      
+      // copy pcm data
+      if (src->data != NULL) 
+        if (src->memOrga == MEMORGA_INTERLV)
+          memcpy(dst->data, src->data, MINIMUM(dst->nBytesAlloc,src->nBytesAlloc));
+        else if (src->memOrga == MEMORGA_SEPCH)
+          // TODO.... this is broken for more than the first cahnnel... add for(ch=...) memcpy...
+          memcpy(dst->data, src->data, MINIMUM(dst->nBytesAlloc,src->nBlocks*src->nBPS));
+
+      
+      //clone uData struct, if allocated
+      if (src->uData) {
+        int i;
+        for (i=0; i < nPCMUSERDATAENTRIES; i++) {
+          if ((src->uData->entry[i] != NULL)&&(src->uData->entrySize[i] > 0)) 
+            pcmBuffer_uDataAllocf(dst, i, src->uData->entrySize[i]);
+        }
+      } 
+    }
+  } 
+  _FUNCTION_RETURN_(dst);         
+}
+#undef FUNCTION 
+
+
+// free a pcmBuffer object an all associated data
 pPcmBuffer pcmBufferFree( pPcmBuffer b, int noObjFree ) 
 #define FUNCTION "pcmBufferFree"
 {_FUNCTION_ENTER_

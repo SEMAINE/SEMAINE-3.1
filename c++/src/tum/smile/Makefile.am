@@ -19,6 +19,7 @@ if BUILD_featum
 	src/deltas.c \
 	src/LLDfft.c \
 	src/LLDmfcc.c \
+	src/LLDmfccz.c \
 	src/LLDspectral.c \
 	src/LLDpitch.c \
 	src/LLDcepstrum.c \
@@ -62,6 +63,7 @@ if BUILD_featumamq
         src/deltas.c \
         src/LLDfft.c \
         src/LLDmfcc.c \
+        src/LLDmfccz.c \
         src/LLDspectral.c \
         src/LLDpitch.c \
         src/LLDcepstrum.c \

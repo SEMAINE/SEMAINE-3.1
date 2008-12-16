@@ -146,6 +146,16 @@ pOptions setupOptions( cOptionParser &parser )
   parser.addBoolean( "displayenergy", 'E', &(parser.opt.displayenergy), 0, "print log frame energy for debugging audio problems" );  
 
 
+  parser.addFloat( "cmsAlpha", 0, &(parser.opt.cmsAlpha), 0.01, "time constant alpha for running average CMS (mfccz)", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addPchar( "cmsInitial", 0, &(parser.opt.cmsInitial), NULL, "initial mean vector for mfcc CMS (mfccz)", MANDATORY_ARG, OPTIONAL_PARAM );  
+
+  // mfcc config:
+  parser.addInt( "nMel", 0, &(parser.opt.nMel), 26, "number of mel frequency bands in filter bank", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addInt( "firstMFCC", 0, &(parser.opt.firstMFCC), 0, "first mel-frequency coefficient to compute", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addInt( "nMFCC", 0, &(parser.opt.nMFCC), 13, "number of mel-frequency coefficients to compute (starting from firstMFCC)", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addInt( "cepLifter", 0, &(parser.opt.cepLifter), 22, "cepLifter parameter", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addBoolean( "usePower", 0, &(parser.opt.usePower), 1, "use power spectrum when computing MFCC");  
+
 /*
   parser.addInt( "int1", 0, &(parser.opt.int1), 1, "int1", MANDATORY_ARG, OPTIONAL_PARAM );  
   parser.addLONG_IDX( "long1", 0, &(parser.opt.long1), 1, "long1", MANDATORY_ARG, OPTIONAL_PARAM );  
@@ -229,7 +239,6 @@ int main(int argc, char *argv[])
 #define FUNCTION "main"
 {_FUNCTION_ENTER_
 
-
   #ifdef ENABLE_PROFILER
   timeval profiler;
   profiler_init(&profiler);
@@ -291,7 +300,7 @@ opts->sildet = 1;
 
 //  pWaveInput waveIn=NULL;
 //  pLiveInput liveIn=NULL;
-
+printf("0\n"); fflush(stdout);
   #ifdef LIVE_REC
   cLiveInput *liveIn=NULL;
   if (opts->infile == NULL) { // setup live audio input
@@ -318,7 +327,7 @@ opts->sildet = 1;
   }
   #endif
   /*------------------------------------end--------------------------------------*/
-
+printf("1\n");fflush(stdout);
 
   /***************************** create input framer *****************************/    
   cInputFramer * framedInput = NULL;
@@ -336,10 +345,11 @@ opts->sildet = 1;
   //int nExtraLevels = 3;  // levels for functionals, deltas, etc.
 
   // add framer clients:
-  int id1 = framedInput->addClientSecStep(opts->frameSize, opts->frameStep, 1); n_ll_levels++;
+  int id1 = framedInput->addClientSecStep(opts->frameSize, opts->frameStep, 0); n_ll_levels++;
+//  printf("frame size id1(=%i) = %i\n",id1,framedInput->_data.client[id1]->frameLength);
   framedInput->setPreEmphasis(id1, opts->preEmphasis);
 //printf("h1 %i %i %i\n",(long)framedInput, framedInput->_data.client, framedInput->_data.client[id1]); fflush(stdout);  
-  FEATUM_DEBUG(3,"frame size id0 = %i",framedInput->_data.client[id1]->frameLength);
+  FEATUM_DEBUG(3,"frame size id1(=%i) = %i",id1,framedInput->_data.client[id1-1]->frameLength);
 //  int id2 = inputFramer_addClient(framedInput, 64, 2000);
 
   #ifdef DEBUG_SILDET
@@ -374,11 +384,16 @@ opts->sildet = 1;
   cLLDs llds(lldex, 1);
 
   // setup LLDs : enable, NULL obj (to auto create)
-
   llds.setupLLD("energy",1,NULL,LLD_LEVEL0);
   llds.setupLLD("fft",1,NULL,LLD_LEVEL0);
   llds.setupLLD("pitch",1,NULL,LLD_LEVEL0);
-  llds.setupLLD("mfcc",1,NULL,LLD_LEVEL0);
+  //llds.setupLLD("mfcc",1,NULL,LLD_LEVEL0);
+  pLLDmfcc mf = (pLLDmfcc)llds.setupLLD("mfcc",1,NULL,LLD_LEVEL0);
+  LLDmfcc_configure( mf, opts->nMel, opts->nMFCC, opts->cepLifter, opts->firstMFCC, opts->usePower );
+
+  pLLDmfccz mZ = (pLLDmfccz)llds.setupLLD("mfccz",1,NULL,LLD_LEVEL0);
+  LLDmfccz_configure( mZ, opts->cmsAlpha, opts->cmsInitial ); 
+  
   llds.setupLLD("time",1,NULL,LLD_LEVEL0);
 //  llds.setupLLD("vq",1,NULL,LLD_LEVEL0);  // voice quality
   llds.setupLLD("spectral",1,NULL,LLD_LEVEL0); // spectral features
@@ -444,16 +459,15 @@ opts->sildet = 1;
    
   /*------------------------------------end--------------------------------------*/    
 
-
   /************************ create differentiator object for LLD *****************/
   cDeltas deltas( 2 ); // two ids for delta and delta delta
 //  ( pDeltas obj, pFeatureMemory mem, int id, int olevel, int ilevel, int nFramesContext );
 
-  if (!deltas.setupID( ftMem, 0, LLD0_DE, LLD_LEVEL0, 3)) {
+  if (!deltas.setupID( ftMem, 0, LLD0_DE, LLD_LEVEL0, 2)) {
     FEATUM_ERR_FATAL(0,"Failed setting up Delta extractor!");
     return exitApp(ERR_MEMORY);                      
   } 
-  if (!deltas.setupID( ftMem, 1, LLD0_DEDE, LLD0_DE, 3)) {
+  if (!deltas.setupID( ftMem, 1, LLD0_DEDE, LLD0_DE, 2)) {
     FEATUM_ERR_FATAL(0,"Failed setting up DeltaDelta extractor!");
     return exitApp(ERR_MEMORY);                      
   } 
@@ -592,11 +606,12 @@ opts->sildet = 1;
     sElID htkEls[nHTKels];
     // mfccs:
     htkEls[0] = outputObject(LLD_LEVEL0, ft_lld_mfcc, 1, -1, 0, EL_ENABLED);
-    htkEls[1] = outputObject(LLD_LEVEL0, ft_lld_energy, 1, 1, 0, EL_ENABLED);
+    htkEls[1] = outputObject(LLD_LEVEL0, ft_lld_mfcc, 0, 0, 0, EL_ENABLED);
     htkEls[2] = outputObject(LLD0_DE, ft_lld_mfcc, 1, -1, 0, EL_ENABLED);
-    htkEls[3] = outputObject(LLD0_DE, ft_lld_energy, 1, 1, 0, EL_ENABLED);
+    htkEls[3] = outputObject(LLD0_DE, ft_lld_mfcc, 0, 0, 0, EL_ENABLED);
     htkEls[4] = outputObject(LLD0_DEDE, ft_lld_mfcc, 1, -1, 0, EL_ENABLED);
-    htkEls[5] = outputObject(LLD0_DEDE, ft_lld_energy, 1, 1, 0, EL_ENABLED);
+    htkEls[5] = outputObject(LLD0_DEDE, ft_lld_mfcc, 0, 0, 0, EL_ENABLED);
+
 
 /*
     htkEls[0] = outputObject(LLD_LEVEL0, ft_lld_mfcc, 1, -1, 0, EL_ENABLED);

@@ -35,7 +35,7 @@ This class does ....  (give a short function summary)
 #include "LLDex.h"
 
 #define MAX_DEPENDS            5
-#define TOTAL_NUM_LLDS         11
+#define TOTAL_NUM_LLDS         12  // 11
 
 
 typedef struct {

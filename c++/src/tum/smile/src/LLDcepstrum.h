@@ -59,7 +59,7 @@ typedef struct {
    int complexCepstrum;
    LONG_IDX frameSize_last;
    int * ip;
-   double * w;
+   FLOAT_TYPE_FFT * w;
 } sLLDcepstrum;
 //typedef struct LLDcepstrum sLLDcepstrum;
 typedef sLLDcepstrum * pLLDcepstrum;

@@ -53,43 +53,32 @@ pLLDs LLDs_create( pLLDs obj, pLLDex l, int freeLLDex, int freeLLDobjs )
     _FUNCTION_RETURN_(NULL);        
   }
 
+  // copy default configuration:
+  memcpy(obj,&LLD,sizeof(sLLDs));
 
-    // copy default configuration:
-    memcpy(obj,&LLD,sizeof(sLLDs));
 //  printf("keytag1  %i  %i\n",(long)(LLD.config[0].LLDdestroy),(long)&LLDenergy_destroy); 
 //  (long)(obj->config[i].LLDcreate)
 /*    obj->nExtractors = LLD.nExtractors;
     obj->nExtractorLevels = LLD.nExtractorLevels;
     obj->nExtractors_enabled = NULL;
     obj->nExtractors_flushable = NULL;*/
-    
 //    obj->config = (pLLDconfig *)calloc(1,sizeof(pLLDconfig *)*LLD.nExtractors);
-
-    // TODO: sort extractors according to priority here:  ?? does this break any enumerations by the FT_LLD_ constants ??
+// TODO: sort extractors according to priority here:  ?? does this break any enumerations by the FT_LLD_ constants ??
 //    for (i=0; i< obj->nExtractors; i++) {
 //FEATUM_DEBUG(11,"5 %i %i - %i %i",i,obj->nExtractors);//,(int)(obj->config[i]),(int)(LLD.config[i]));
 //      obj->config[i] = LLD.config[i]; 
 //      obj->config[i] = &(LLD.config[i]); 
 // FEATUM_DEBUG(11,"5b %i %i",i,obj->nExtractors);   
 //    }
-    // obj->config = (sLLDconfig *)&(LLD.config);
-     
-FEATUM_DEBUG(12,"6");
+// obj->config = (sLLDconfig *)&(LLD.config);
 //    obj->nExtractors = (sizeof(LLD) - 3*sizeof(int) - sizeof(pLLDex)) / sizeof(pLLDconfig);
 //    FEATUM_DEBUG(8,"sizeof(LLD) = %i",sizeof(LLD.config));
-    FEATUM_DEBUG(8,"preset obj->nExtractors = %i",obj->nExtractors);
-    obj->LLDex = l; 
-FEATUM_DEBUG(12,"7");
+  FEATUM_DEBUG(8,"preset obj->nExtractors = %i",obj->nExtractors);
+  obj->LLDex = l; 
 
-    obj->freeLLDex = freeLLDex;
-FEATUM_DEBUG(12,"8");
+  obj->freeLLDex = freeLLDex;
 
-    obj->freeLLDobjs = freeLLDobjs;
-FEATUM_DEBUG(12,"9");
-
-  
-  FEATUM_DEBUG(12,"10");
-
+  obj->freeLLDobjs = freeLLDobjs;
   _FUNCTION_RETURN_(obj);
 }
 #undef FUNCTION 
@@ -109,20 +98,14 @@ void * LLDs_setupLLD( pLLDs obj, const char * name, int enabled, void *exObj, in
            // free??                          
            (obj->config[i].LLDdestroy)(obj->config[i].LLDobj);
         }
-//        printf("here1\n");
         if (exObj == NULL) {
           exObj = (obj->config[i].LLDcreate)(obj->config[i].LLDobj);
         }
         
 //printf("%i <-> %i :: %i %i\n",sizeof(sLLDs), sizeof(LLD),(long)LLD.config, (long)&(LLD.config));
 // TODO: remove const from LLD struct!
-//        printf("here2 i=%i\n",i); fflush(stdout);
-
         obj->config[i].LLDobj = exObj;
-//                printf("here2b\n"); fflush(stdout);
         obj->config[i].enabled = enabled;
-//                printf("here3\n"); fflush(stdout);
-/*        */
         
 //      featureMemory_setupNames(  mem, ftmem_level, obj->config[i].ftmem_element, obj->config[i].ftmem_nVal, , enabled )
         _FUNCTION_RETURN_(exObj);

@@ -88,7 +88,7 @@ class cInputFramer: public cAudioStream {
       return inputFramer_addClientSecOvl(&_data, framesize, overlap, powOf2);
     }
     inline int addClientSecOvl(float framesize, float overlap) {
-      return inputFramer_addClientSecOvl(&_data, framesize, overlap, 1);
+      return inputFramer_addClientSecOvl(&_data, framesize, overlap, 0);
     }
     
     // add a framer client with parameters framesize (in seconds) and framestep (in seconds)
@@ -98,7 +98,7 @@ class cInputFramer: public cAudioStream {
       return inputFramer_addClientSecStep(&_data, framesize, framestep, powOf2);
     }
     inline int addClientSecStep(float framesize, float framestep) {
-      return inputFramer_addClientSecStep(&_data, framesize, framestep, 1);
+      return inputFramer_addClientSecStep(&_data, framesize, framestep, 0);
     }
     
     // set windowing function for client <id>
