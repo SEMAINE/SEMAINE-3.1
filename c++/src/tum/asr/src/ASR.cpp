@@ -21,7 +21,6 @@
 //#include <ASource.h>
 #include <ACode.h>
 #include <ARec.h>
-#include "APipeSource.h"
 
 using namespace semaine::util;
 using namespace semaine::datatypes::xml;
