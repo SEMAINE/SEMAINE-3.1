@@ -76,13 +76,13 @@ function func_build_atk {
           tar -C $BUILD_PREFIX -zxvf $DOWNLOAD_PREFIX/$ATK_PATCHES
         fi
       fi
-      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/HWave*.patch $BUILD_PREFIX/$ATK_BASE/HTKLib
-      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/ABuffer.patch $BUILD_PREFIX/$ATK_BASE/ATKLib
-      cd $BUILD_PREFIX/$ATK_BASE/HTKLib
-      echo -n "Patching HWave to add PAUDIO input type... "
-      patch -N -p0 < HWave.c.patch
-      patch -N -p0 < HWave.h.patch
-      echo "done."
+#      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/HWave*.patch $BUILD_PREFIX/$ATK_BASE/HTKLib
+#      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/ABuffer.patch $BUILD_PREFIX/$ATK_BASE/ATKLib
+#      cd $BUILD_PREFIX/$ATK_BASE/HTKLib
+#      echo -n "Patching HWave to add PAUDIO input type... "
+#      patch -N -p0 < HWave.c.patch
+#      patch -N -p0 < HWave.h.patch
+#      echo "done."
       cd $BUILD_PREFIX/$ATK_BASE/ATKLib
       echo -n "Patching ABuffer to add DataAvailable() method for non-blocking operation... "
       patch -N -p0 < ABuffer.patch

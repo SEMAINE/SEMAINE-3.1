@@ -16,27 +16,33 @@ function func_build_asr {
     fi
 
     # apply pipe input patches, if present
-    if test "x$ATKPATCHES" != "x" ; then
-      MYPWD=$PWD;
-      cp $ATKPATH/ATKLib/ASource.cpp ./src/
-      cp $ATKPATH/ATKLib/ASource.h ./src/
-      cp $ATKPATCHES/pipesource*.patch ./src/
-      cd src/
-      echo "Applying patches to ASource.cpp to add pipe input support"
-      patch -N -p0 < pipesource.cpp.patch
-      patch -N -p0 < pipesource.h.patch
-      mv ASource.cpp APipeSource.cpp
-      mv ASource.h APipeSource.h
-      cd $MYPWD
-    else
-      echo "WARNING: pipe input patches not found!! tum.asr module might not compile!"
-    fi
+#    if test "x$ATKPATCHES" != "x" ; then
+#      MYPWD=$PWD;
+#      cp $ATKPATH/ATKLib/ASource.cpp ./src/
+#      cp $ATKPATH/ATKLib/ASource.h ./src/
+#      cp $ATKPATCHES/pipesource*.patch ./src/
+#      cd src/
+#      echo "Applying patches to ASource.cpp to add pipe input support"
+#      patch -N -p0 < pipesource.cpp.patch
+#      patch -N -p0 < pipesource.h.patch
+#      mv ASource.cpp APipeSource.cpp
+#      mv ASource.h APipeSource.h
+#      cd $MYPWD
+#    else
+#      echo "WARNING: pipe input patches not found!! tum.asr module might not compile!"
+#    fi
 
     if test "x$1" = "xrebuild" ; then
       if test -f Makefile ; then
         doconf='no'
       fi
     fi
+
+    # prepare model directory
+    mkdir models 2>/dev/null
+    mkdir models/AM 2>/dev/null
+    mkdir models/LM 2>/dev/null
+    cp $ATKPATH/Resources/UK_SI_ZMFCC/* models/AM/
 
     if test "x$doconf" = "xyes" ; then
     ./autogen.sh &&

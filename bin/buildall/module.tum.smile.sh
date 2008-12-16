@@ -28,6 +28,10 @@ echo "PA: $PORTAUDIOPATH"
     fi
     fi
 
+    if test "x$ATKPATH" != "x" ; then
+      cp $ATKPATH/Resources/UK_SI_ZMFCC/cepmean .
+    fi
+
     if test "x$1" = "xclean" ; then
       make clean 
       if test "x$?" != "x0" ; then
