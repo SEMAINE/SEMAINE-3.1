@@ -112,23 +112,25 @@ typedef struct {
   SAMPLE32i prev;
   SAMPLE32i thresh;
   SAMPLE32i max;
-  long lastPeak;
-  long lastSeenTrigger;
-  long lastWantedTrigger;
+  long long lastPeak;
+  long long lastSeenTrigger;
+  long long lastWantedTrigger;
   double triggerPeriodMean;
   long sampleRate;
-  long nTriggers;
+  long long nTriggers;
   double startTime;
   double lastTime;  // these times are audio times...
   double nTime;   // audio time of numtriggers
   LONG_IDX firstTrigger;
-  int firstTriggerLocal;
-  int nForced;
+  long firstTriggerLocal;
+  long long nForced;
+  long long nForcedGrN;
+  long long lastPeakMean;
 } sMemory;
         
 
 
-LONG_IDX printTriggerRiseTimes(FILE *triggertimes, LONG_IDX numtriggers, SAMPLE32i *data, LONG_IDX nBlocks, LONG_IDX sampleIndex, sMemory *wisdom)
+LONG_IDX printTriggerRiseTimes(FILE *triggertimes, long long numtriggers, SAMPLE32i *data, LONG_IDX nBlocks, long long sampleIndex, sMemory *wisdom)
 #define FUNCTION "printTriggerRiseTimes"
 {
   LONG_IDX i;
@@ -161,6 +163,7 @@ LONG_IDX printTriggerRiseTimes(FILE *triggertimes, LONG_IDX numtriggers, SAMPLE3
            if (wisdom->firstTriggerLocal == 0) wisdom->firstTriggerLocal = i;
          }
          // TODO: tigger period mean....
+         wisdom->lastPeakMean += wisdom->lastPeak;
          wisdom->lastPeak = 0;
          wisdom->lastSeenTrigger = sampleIndex;
       }
@@ -171,6 +174,7 @@ LONG_IDX printTriggerRiseTimes(FILE *triggertimes, LONG_IDX numtriggers, SAMPLE3
          fprintf(triggertimes,"%i,%f\n",sampleIndex,(double)sampleIndex / (double)wisdom->sampleRate);
        } else {
          fprintf(stderr," skipping (>numtriggers)\n");
+         wisdom->nForcedGrN++;
        }
        wisdom->lastPeak = 0;
        wisdom->nForced++;
@@ -183,7 +187,7 @@ LONG_IDX printTriggerRiseTimes(FILE *triggertimes, LONG_IDX numtriggers, SAMPLE3
 #undef FUNCTION
 
 
-LONG_IDX getTriggerRiseLevel(SAMPLE32i *data, LONG_IDX nBlocks, LONG_IDX sampleIndex, sMemory *wisdom)
+LONG_IDX getTriggerRiseLevel(SAMPLE32i *data, LONG_IDX nBlocks, long long sampleIndex, sMemory *wisdom)
 #define FUNCTION "getTriggerRiseLevel"
 {
   LONG_IDX i;
@@ -326,13 +330,15 @@ int main(int argc, char *argv[])
   triggerMem.prev = 0;
   triggerMem.thresh = -1;
   triggerMem.nForced = 0;
+  triggerMem.nForcedGrN = 0;
   triggerMem.nTriggers = 0;
   triggerMem.startTime = 0.0;
+  triggerMem.lastPeakMean = 0;
   
   int running = 1;
-  LONG_IDX sampleIndex = 0;
-  LONG_IDX samplesWritten = 0;
-  LONG_IDX samplesToWrite = (LONG_IDX)round((double)(opts->rectime)*(double)waveInput_getSampleRate(waveIn));
+  long long sampleIndex = 0;
+  long long samplesWritten = 0;
+  long long samplesToWrite = (long long)round((double)(opts->rectime)*(double)waveInput_getSampleRate(waveIn));
   FEATUM_MESSAGE(1,"samplesToWrite: %i, samplesWritten: %i (rectime:%f)",samplesToWrite,samplesWritten, opts->rectime);
   while( running < 3 ) {
     int flag = 0;
@@ -416,6 +422,7 @@ int main(int argc, char *argv[])
   FEATUM_MESSAGE(1,"number of detected triggers: %i  (numtriggers requested = %i)",triggerMem.nTriggers,opts->numtriggers);
   FEATUM_MESSAGE(1,"audio time of %i requested triggers is: %f seconds",opts->numtriggers,triggerMem.nTime);
   FEATUM_MESSAGE(1,"DRIFT: audio time - video time = %f seconds",triggerMem.nTime-opts->rectime);
+  FEATUM_MESSAGE(1,"Mean trigger frequency = %f",triggerMem.sampleRate/(((double)triggerMem.lastPeakMean/(double)triggerMem.nTriggers)));
   
   if (samplesWritten < samplesToWrite) {
      LONG_IDX lng = samplesToWrite - samplesWritten;
