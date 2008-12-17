@@ -258,6 +258,8 @@ APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
  	}
 	if (countdown > 0) {
 		countdown=countdown-1;
+		if ((countdown == 0)&&(features[speakingIndex]!=1.0))
+		  printf(" stopping decoder. recognition result will appear soon.\n");
  	}
 	if ((countdown > 0) || (features[speakingIndex]==1.0)) {
 		o->data.vq[0] = 1.0;
