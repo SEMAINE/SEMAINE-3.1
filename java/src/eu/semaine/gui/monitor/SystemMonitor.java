@@ -119,8 +119,9 @@ public class SystemMonitor extends Thread
 		
 		frame = new JFrame("SEMAINE System Monitor");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		//frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		frame.setSize(new Dimension(800,600));
+		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
 		// Menu
 		//Create the menu bar.
@@ -195,7 +196,16 @@ public class SystemMonitor extends Thread
 		                           graph, rightSide);
 		splitPane.setOneTouchExpandable(true);
 		frame.getContentPane().add(splitPane);
-		splitPane.setDividerLocation(Toolkit.getDefaultToolkit().getScreenSize().width*3/4);
+		// On some systems, maximise frame will have worked, on others not, so let's try to get a 
+		// reasonable estimate of our frame width:
+		int dividerLocation;
+		Dimension frameSize = frame.getSize();
+		if (frameSize.width > 0) {
+			dividerLocation = frameSize.width * 3/4;
+		} else {
+			dividerLocation = Toolkit.getDefaultToolkit().getScreenSize().width*3/4;
+		}	
+		splitPane.setDividerLocation(dividerLocation);
 
 		// Set up log reader:
 		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.Log4JLogger");
