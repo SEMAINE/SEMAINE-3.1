@@ -17,8 +17,6 @@
 #include <semaine/cms/receiver/FeatureReceiver.h>
 
 #include <AMonitor.h>
-//#include <ASource.h>
-#include <ACode.h>
 #include <ARec.h>
 
 using namespace cms;
@@ -49,12 +47,9 @@ private:
 	FeatureReceiver * featureReceiver;
 	EmmaSender * emmaSender;
 	APacket * p;
-//	ABuffer * auChan;
 	ABuffer * feChan;
 	ABuffer * ansChan;
 	ARMan * rman;
-//	APipeSource * ain;
-//	ACode * acode;
 	ARec * arec;
 	AHmms * hset;
 	ADict * dict;
@@ -69,7 +64,7 @@ private:
 	float sentend;
 	float sentconf;
 	int wordcounter;
-      	Boolean terminated;
+	Boolean terminated;
 
 	int speakingIndex,seqIdx;
 	int nFeaturesSelected;
@@ -80,6 +75,9 @@ private:
 	float prevSpeakingIndex;
 	float thisSpeakingIndex;
 	int countdown;
+	
+	APacket lag[10];
+	int nLag;
 };
 
 } // namespace asr

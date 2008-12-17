@@ -18,8 +18,6 @@
 #include <string>
 
 #include <AMonitor.h>
-//#include <ASource.h>
-#include <ACode.h>
 #include <ARec.h>
 
 using namespace semaine::util;
@@ -35,19 +33,17 @@ namespace asr {
 ASR::ASR(char * configfile) throw(CMSException) :
 	Component("ASR"),
 	p(NULL),
-//	auChan(NULL),
 	feChan(NULL),
 	ansChan(NULL),
 	rman(NULL),
-//	ain(NULL),
-//	acode(NULL),
 	arec(NULL),
 	hset(NULL),
 	dict(NULL),
 	gram(NULL),
 	ngram(NULL),
 	amon(NULL),
-	wasSpeaking(0)
+	wasSpeaking(0),
+	nLag(10)
 {
 	featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
 	receivers.push_back(featureReceiver);
@@ -87,13 +83,9 @@ ASR::ASR(char * configfile) throw(CMSException) :
 ASR::~ASR()
 {
 	delete emmaSender;
- 	//if(p!=NULL) delete p;
- 	//if(auChan!=NULL) delete auChan;
  	if(feChan!=NULL) delete feChan;
  	if(ansChan!=NULL) delete ansChan;
  	if(rman!=NULL) delete rman;
- 	//if(ain!=NULL) delete ain;
- 	//if(acode!=NULL) delete acode;
  	if(arec!=NULL) delete arec;
  	if(hset!=NULL) delete hset;
  	if(dict!=NULL) delete dict;
@@ -106,31 +98,24 @@ ASR::~ASR()
 
 void ASR::customStartIO() throw(CMSException)
 {
-	//p = new APacket();
 
   	ConfParam *cParm[MAXGLOBS];       /* config parameters */
-      	int numParm,i;
-      	char ngramFN[100],buf[100];
-      	ngramFN[0] = '\0';
-      	// Read configuration parms for ANGRAM to see if NGram used
-      	numParm = GetConfig("ANGRAM", TRUE, cParm, MAXGLOBS);
-      	if (numParm>0){
+   	int numParm,i;
+   	char ngramFN[100],buf[100];
+   	ngramFN[0] = '\0';
+   	// Read configuration parms for ANGRAM to see if NGram used
+   	numParm = GetConfig("ANGRAM", TRUE, cParm, MAXGLOBS);
+   	if (numParm>0){
          	if (GetConfStr(cParm,numParm,"NGRAMFILE",buf)) strcpy(ngramFN,buf);
-      	}
+   	}
 
       	// Create Buffers
-//      	auChan = new ABuffer("auChan");
       	feChan = new ABuffer("feChan");
       	ansChan = new ABuffer("ansChan");
 
       	// create a resource manager
       	rman = new ARMan();
 
-      	// Create Audio Source and Coder
-//	const string pipelistfile="pipelist.txt";
-//      	ain = new APipeSource("AIn",auChan,pipelistfile);
-//      	ain = new ASource("AIn",auChan);
-//      	acode = new ACode("ACode",auChan,feChan);
       	arec = new ARec("ARec",feChan,ansChan,rman,0);
 
       	// create global resources
@@ -161,9 +146,6 @@ void ASR::customStartIO() throw(CMSException)
       	amon->Start();
 	#endif
 
-      	// Start components executing
-//      	ain->Start();
-//      	acode->Start();
       	arec->Start();
       	arec->SendMessage("usegrp(main)");
       	arec->SendMessage("start()");
@@ -238,57 +220,10 @@ void ASR::setupFeatureNameLookup(SEMAINEFeatureMessage *fm)
 
 
 	speakingIndex = findFeature("speaking",featureNames);
-	//seqIdx = findFeature("seqNr",featureNames);
 }
 
 
-#if 0
-// Create and fill an obs data packet
-APacket ACode::CodePacket()
-{
-   AObsData *o = new AObsData(&info,numStreams);
-   if(!ReadBuffer(pbuf,&(o->data))){
-      HRError(10290,"Read buffer failed");
-      throw HTK_Error(10290);
-   }
-   APacket pkt(o);
-   pkt.SetStartTime(timeNow);
-   timeNow += info.tgtSampRate;
-   pkt.SetEndTime(timeNow);
-   return pkt;
-}
-
-typedef struct {
-   Boolean eSep;         /* Energy is in separate stream */
-   short swidth[SMAX];   /* [0]=num streams,[i]=width of stream i */
-   ParmKind bk;          /* parm kind of the parm buffer */
-   ParmKind pk;          /* parm kind of this obs (bk or DISCRETE) */
-   short vq[SMAX];       /* array[1..swidth[0]] of VQ index */
-   Vector fv[SMAX];      /* array[1..swidth[0]] of Vector */
-} Observation;
-
-typedef struct {
-   ParmKind srcPK;            /* Source ParmKind */
-   FileFormat srcFF;          /* Source File format */
-   HTime srcSampRate;         /* Source Sample Rate */
-   int frSize;                /* Number of source samples in each frame */
-   int frRate;                /* Number of source samples forward each frame */
-   ParmKind tgtPK;            /* Target ParmKind */
-   FileFormat tgtFF;          /* Target File format */
-   HTime tgtSampRate;         /* Target Sample Rate */
-   int tgtVecSize;            /* Size of target vector */
-   float spDetSil;            /* Silence level for channel */
-   float chPeak;              /* Peak-to-peak input level for channel */
-   float spDetSp;             /* Speech level for channel */
-   float spDetSNR;            /* Speech/noise ratio for channel */
-   float spDetThresh;         /* Silence/speech level threshold */
-   float curVol;              /* Volume level of last frame (0.0-100.0dB) */
-   char *matTranFN;           /* Matrix transformation name */
-}BufferInfo;
-
-#endif
-
-// get features...  do cepstral mean substratcion ... and put into packet
+// get features and put into packet
 APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
 {
 	std::vector<float> features = fm->getFeatureVector();
@@ -312,14 +247,6 @@ APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
 	info.matTranFN = NULL;
 
 	AObsData * o = new AObsData(&info, 1);
-//	o->data.eSep=FALSE; // energy is not in separate stream
-//	o->data.swidth[0]=1; // 1 stream;
-//	o->data.swidth[1]=nFeaturesSelected; // number of features
-//o->data.bk=MFCC + HASZEROC + HASDELTA + HASACCS + HASZEROM ;   // MFCC_0_D_A_Z 
-//	o->data.pk=o->data.bk;
-//printf("sI: %i - %f\n",speakingIndex, features[speakingIndex]);fflush(stdout);
-//
-
 
 //	o->data.vq[0] = (features[speakingIndex]==0.0)?0:1;
 
@@ -346,17 +273,14 @@ APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
 //	o->data.fv[1][0] = (float)nFeaturesSelected;
 
 	for (i=0; i<nFeaturesSelected; i++) {
-	//TODO: CMS!! _Z
-		// append to packet: featureIndex[i]
 		if (featureIndex[i] >= 0) {
-//printf("appending [%i] %f ...\n",i,features[featureIndex[i]]);fflush(stdout);
 			o->data.fv[1][i+1] = features[featureIndex[i]];
 		} else
 			o->data.fv[1][i+1] = 0.0;
 
 	}
 	APacket pkt(o);
-//printf("seq: %i\n",(int)features[seqIdx]);
+
 	// TODO: USE SEMAINE TIMES HERE::: 
 	pkt.SetStartTime(curTime);
 	curTime += HARDC_SAMPR * 10000; //info.tgtSampRate;
@@ -371,14 +295,7 @@ void ASR::react(SEMAINEMessage * m) throw(CMSException)
 	if (fm != NULL) {
 		setupFeatureNameLookup(fm);
 		APacket p = makeFeaturePacket(fm);
-//printf("putting packet...\n");fflush(stdout);
 		feChan->PutPacket(p);
-
-//		std::vector<float> features = fm->getFeatureVector();
-//		std::stringstream buf;
-//		buf << fm->getUsertime();
-//		std::string usertimeString = buf.str();
-		//if (features[0] < 0.002 && userIsSpeaking) { // some arbitrary condition
 	}
 
 }

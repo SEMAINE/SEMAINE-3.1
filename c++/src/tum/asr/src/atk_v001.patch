@@ -1,0 +1,109 @@
+--- HTKLib/Makefile	2008-12-17 14:10:55.000000000 +0100
++++ HTKLib/Makefile	2008-12-17 14:11:55.000000000 +0100
+@@ -49,7 +49,7 @@
+         -DUNIX -D_XOPEN_SOURCE=500 -D_REENTRANT
+ endif
+ 
+-modules = HShell.o HMath.o  HSigP.o  HWave.o HAudio.o HParm.o HVQ.o  HGraf.o\
++modules = HShell.o HMath.o  HSigP.o  HWave.o HParm.o HVQ.o  HGraf.o\
+           HLabel.o HModel.o HUtil.o HTrain.o HDict.o  HLM.o   \
+           HLat.o   HNBest.o HRec.o HNet.o \
+           HAdapt.o HFB.o HMem.o HThreads.o 
+@@ -74,9 +74,8 @@
+ 
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+-HAdapt.o: HShell.h HMem.h HMath.h HSigP.h HWave.h HAudio.h HParm.h HLabel.h
++HAdapt.o: HShell.h HMem.h HMath.h HSigP.h HWave.h HParm.h HLabel.h
+ HAdapt.o: HModel.h HTrain.h HUtil.h HAdapt.h
+-HAudio.o: HShell.h HMem.h HMath.h HWave.h HAudio.h
+ HDict.o: HShell.h HMem.h HMath.h HWave.h HLabel.h HDict.h
+ HFB.o: HShell.h HMem.h HMath.h HSigP.h HAudio.h HWave.h HVQ.h HParm.h
+ HFB.o: HLabel.h HModel.h HTrain.h HUtil.h HAdapt.h HFB.h
+--- ATKLib/AHTK.cpp	2008-12-17 14:42:39.000000000 +0100
++++ ATKLib/AHTK.cpp	2008-12-17 14:44:19.000000000 +0100
+@@ -50,14 +50,13 @@
+ ReturnStatus CommonInit(Boolean noGraphics) {
+    InitMem();   InitLabel();
+    InitMath();  InitSigP(); InitUtil();
+-   InitWave();  InitAudio(); InitModel();
++   InitWave();  InitModel();
+    if(InitParm()<SUCCESS) return FAIL;
+    InitGraf(noGraphics);
+    InitDict();  InitNet();   InitLM();
+    InitRec();  InitLat();  /*InitAdapt();*/
+    EnableBTrees();   /* allows unseen triphones to be synthesised */
+    Register(abuffer_version);
+-   Register(acode_version);
+    Register(acomponent_version);
+    Register(adict_version);
+    Register(agram_version);
+@@ -69,7 +68,6 @@
+    Register(arec_version);
+    Register(aresource_version);
+    Register(arman_version);
+-   Register(asource_version);
+    InfoPrinted();
+    return SUCCESS;
+ }
+--- ATKLib/Makefile	2008-12-17 14:45:03.000000000 +0100
++++ ATKLib/Makefile	2008-12-17 14:33:27.000000000 +0100
+@@ -29,9 +29,9 @@
+ CXXFLAGS = $(HTKCF) -D'ARCH="$(CPU)"' -DXGRAFIX -I. -I$(hlib)  -I$(synlib) -I$(cmu_us_kal16) -DUNIX -DATK -D_cplusplus -D_XOPEN_SOURCE=500 -D_REENTRANT
+ endif
+ 
+-modules = ABuffer.o ACode.o AComponent.o ADict.o AGram.o AHTK.o \
++modules = ABuffer.o AComponent.o ADict.o AGram.o AHTK.o \
+ 	  AHmms.o AMonitor.o ANGram.o APacket.o ARMan.o ARec.o \
+-	  AResource.o ASource.o AIO.o ASyn.o ATee.o ALog.o ASplash.o
++	  AResource.o AIO.o ASyn.o ATee.o ALog.o ASplash.o
+ 
+ all:    ATKLib.$(CPU).a
+ 
+@@ -56,7 +56,6 @@
+ # DO NOT DELETE THIS LINE -- make depend depends on it.
+ 
+ ABuffer.o: APacket.h
+-ACode.o: AComponent.h
+ AComponent.o: ABuffer.h
+ ADict.o: AHTK.h AResource.h 
+ AGram.o: AHTK.h AResource.h ADict.h
+@@ -68,7 +67,6 @@
+ ARMan.o: AHTK.h AHmms.h ADict.h AGram.h ANGram.h
+ ARec.o: ARMan.h AComponent.h
+ AResource.o: AHTK.h
+-ASource.o: AComponent.h
+ AIO.o: AIO.h
+ ASyn.o: ASyn.h
+ ATee.o: AComponent.h
+--- ATKLib/ABuffer.cpp	2007-05-19 17:55:52.000000000 +0200
++++ ATKLib/ABuffer.cpp	2008-12-10 17:37:38.000000000 +0100
+@@ -67,6 +67,16 @@
+   SendBufferEvents();
+ }
+ 
++
++bool ABuffer::DataAvailable()
++{
++  bool ret=true;
++  HEnterSection(lock);
++  if (pktList.size()==0) { ret = false; }
++  HLeaveSection(lock);
++  return ret;
++}
++
+ // Get packet p from the front of the pktList.  Wait for nonEmpty
+ // if the buffer is empty.
+ APacket ABuffer::GetPacket()
+--- ATKLib/ABuffer.h	2007-05-19 17:55:52.000000000 +0200
++++ ATKLib/ABuffer.h	2008-12-10 17:37:44.000000000 +0100
+@@ -45,6 +45,9 @@
+   void PutPacket(APacket p);
+   // Store given packet in the buffer.
+ 
++  bool DataAvailable();
++  // check if data is available and readable by GetPacket
++
+   APacket GetPacket();
+   // Get next packet from buffer
+ 
