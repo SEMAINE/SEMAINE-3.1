@@ -119,8 +119,8 @@ public class SystemMonitor extends Thread
 		
 		frame = new JFrame("SEMAINE System Monitor");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-		frame.setSize(new Dimension(800,600));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setSize(new Dimension(screenSize.width*9/10,screenSize.height*9/10));
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
 		// Menu
