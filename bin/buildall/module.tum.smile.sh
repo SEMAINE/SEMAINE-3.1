@@ -24,7 +24,7 @@ function func_build_smile {
 
     # install models if present in download directory
     if test -f $DOWNLOAD_PREFIX/$SMILEMODELS ; then
-      if test ! -f models/sal/arousal.model || test -f models/avic2/interest.model || test "x$1" = "xclean" ; then
+      if test ! -f models/sal/arousal.model || test ! -f models/avic2/interest.model || test "x$1" = "xclean" ; then
         echo "unzipping SMILE models to $PWD/models"
         unzip -o $DOWNLOAD_PREFIX/$SMILEMODELS -d .
         if test "x$?" != "x0" ; then
