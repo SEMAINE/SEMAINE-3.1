@@ -25,6 +25,7 @@ using namespace semaine::datatypes::xml;
 using namespace XERCES_CPP_NAMESPACE;
 
 #define HARDC_SAMPR 10
+#define nLAG 10    // frames to buffer (lag of silence detector)
 
 namespace semaine {
 namespace components {
@@ -43,7 +44,7 @@ ASR::ASR(char * configfile) throw(CMSException) :
 	ngram(NULL),
 	amon(NULL),
 	wasSpeaking(0),
-	nLag(10)
+	queue(NULL)
 {
 	featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
 	receivers.push_back(featureReceiver);
@@ -57,7 +58,7 @@ ASR::ASR(char * configfile) throw(CMSException) :
 	sentend=0.0;
 	sentconf=0.0;
 	wordcounter=0;
-      	terminated = FALSE;
+	terminated = FALSE;
 	featureIndex=NULL;
 	nFeaturesSelected = 0;
 	curTime = 0;
@@ -67,6 +68,8 @@ ASR::ASR(char * configfile) throw(CMSException) :
 	thisSpeakingIndex = 0.0;
 	countdown = 0;
 
+    queue = new ObsDataQueue(nLAG);
+    
 	static const char * version="[ASR 11/11/08]";
 	int argc=3;
 	char* argv[3] = {"ASR","-C",NULL};
@@ -94,6 +97,7 @@ ASR::~ASR()
  	if(amon!=NULL) delete amon;
 
 	if(featureIndex!=NULL) delete [] featureIndex;  // free(..) ??
+	if (queue != NULL) delete queue;
 }
 
 void ASR::customStartIO() throw(CMSException)
@@ -223,8 +227,53 @@ void ASR::setupFeatureNameLookup(SEMAINEFeatureMessage *fm)
 }
 
 
+
+ObsDataQueue::ObsDataQueue(int _nEl) : 
+  nEl(_nEl),
+  ptr(0),
+  n(0)
+{
+  int i;
+  buf = (AObsData**)malloc(sizeof(AObsData*)*nEl);
+  for (i=0; i<nEl; i++) buf[i] = NULL;
+}
+
+// return value:
+// 0: space left in fifo
+// 1: fifo full after adding x
+// 2: fifo full, x cannot be added
+int ObsDataQueue::PushObs(AObsData *x)
+{
+  if (n==nEl) return 2;
+  if (buf[ptr] != NULL) delete buf[ptr];
+  buf[ptr] = x;
+  ptr = (ptr+1)%nEl;
+  n++;
+  if (n==nEl) return 1;
+  else return 0;
+}
+
+// returns NULL if no more data is in FIFO
+AObsData * ObsDataQueue::GetObs()
+{ 
+  AObsData *tmp=NULL;
+  if (n>0) {
+    tmp=buf[ptr];
+    buf[ptr] = NULL;
+    n--;
+  }
+  return tmp;
+}
+
+ObsDataQueue::~ObsDataQueue() 
+{
+  int i;							  
+  for (i=0; i<nEl; i++) if (buf[i] != NULL) delete buf[i];
+  free(buf);
+}
+
 // get features and put into packet
-APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
+bool ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm, APacket **p)
 {
 	std::vector<float> features = fm->getFeatureVector();
 	int i;
@@ -262,9 +311,9 @@ APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
 		  printf(" stopping decoder. recognition result will appear soon.\n");
  	}
 	if ((countdown > 0) || (features[speakingIndex]==1.0)) {
-		o->data.vq[0] = 1.0;
+		o->data.vq[0] = 1;
 	} else {
-		o->data.vq[0] = 0.0;
+		o->data.vq[0] = 0;
 	}
 	if (prevSpeakingIndex==0.0 && thisSpeakingIndex==1.0) {
 		printf("turn start detected.\n");		
@@ -281,14 +330,22 @@ APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
 			o->data.fv[1][i+1] = 0.0;
 
 	}
-	APacket pkt(o);
+	
+	short speakStatus = o->data.vq[0];
+	if (queue->PushObs(o) == 1) { // only generate packet if FIFO is full
+	
+	  AObsData *tmp = queue->GetObs();
+	  tmp->data.vq[0] = speakStatus;  // use delayed packet, but current speaking status
+	  *p = new APacket(tmp);
 
-	// TODO: USE SEMAINE TIMES HERE::: 
-	pkt.SetStartTime(curTime);
-	curTime += HARDC_SAMPR * 10000; //info.tgtSampRate;
-	pkt.SetEndTime(curTime);
-	// 
-	return pkt;
+	  // TODO: USE SEMAINE TIMES HERE::: 
+	  (*p)->SetStartTime(curTime);
+	  curTime += HARDC_SAMPR * 10000; //info.tgtSampRate;
+	  (*p)->SetEndTime(curTime);
+	  // 
+	  return true;
+    }
+	return false;
 }
 
 void ASR::react(SEMAINEMessage * m) throw(CMSException)
@@ -296,8 +353,11 @@ void ASR::react(SEMAINEMessage * m) throw(CMSException)
 	SEMAINEFeatureMessage * fm = dynamic_cast<SEMAINEFeatureMessage *>(m);
 	if (fm != NULL) {
 		setupFeatureNameLookup(fm);
-		APacket p = makeFeaturePacket(fm);
-		feChan->PutPacket(p);
+		APacket * p;
+		if (makeFeaturePacket(fm,&p)) {
+		  feChan->PutPacket(*p);
+		  delete p;
+        }
 	}
 
 }

@@ -28,6 +28,21 @@ namespace semaine {
 namespace components {
 namespace asr {
 
+// implements FIFO buffer for Observation Data 
+class ObsDataQueue {
+public:
+  ObsDataQueue(int _nEl);
+  ~ObsDataQueue();
+
+  int PushObs(AObsData *x); // return false, if FIFO is full and packet cannot be added
+  AObsData * GetObs();  // returns NULL if no more data is in FIFO
+  
+private:
+  AObsData ** buf;
+  int nEl,n;
+  int ptr;
+};
+
 class ASR : public Component
 {
 public:
@@ -42,7 +57,7 @@ protected:
 private:
 	int findFeature(std::string name, std::vector<std::string> names);
 	void setupFeatureNameLookup(SEMAINEFeatureMessage *m);
-	APacket makeFeaturePacket(SEMAINEFeatureMessage *m);
+	bool makeFeaturePacket(SEMAINEFeatureMessage *m, APacket **p);
 
 	FeatureReceiver * featureReceiver;
 	EmmaSender * emmaSender;
@@ -76,8 +91,7 @@ private:
 	float thisSpeakingIndex;
 	int countdown;
 	
-	APacket lag[10];
-	int nLag;
+	ObsDataQueue *queue;
 };
 
 } // namespace asr
