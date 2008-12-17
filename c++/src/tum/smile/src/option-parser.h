@@ -61,8 +61,10 @@ typedef struct {
   char *pipeaudio;
   char *svmmodelA;
   char *svmmodelV;
+  char *svmmodelI;
   char *svmscaleA;
   char *svmscaleV;
+  char *svmscaleI;
   char *svmoutA;
   char *svmoutV;
   char *labelA;
@@ -70,6 +72,7 @@ typedef struct {
   float sil_thresh;
   char *svmpredfselA;
   char *svmpredfselV;
+  char *svmpredfselI;
 
   char *cmsInitial;
   float cmsAlpha;
@@ -90,6 +93,7 @@ typedef struct {
   char *triggerfile;
   LONG_IDX numtriggers;
   float rectime;
+  float triggerfreq;
   
   int int1;
   LONG_IDX long1;
@@ -101,6 +105,9 @@ typedef struct {
   int cepLifter;
   int firstMFCC;
   int usePower;
+  
+  // logging:
+  int loglevel_debug;
 } sOptions;
 typedef sOptions *pOptions;
 

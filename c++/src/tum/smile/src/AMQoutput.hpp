@@ -52,13 +52,14 @@ class cAmqOutput : public cGenOutput {
     
     int sendCurrentFrame(int speakingStatus);
     int sendLastFrame();
+	int sendLastFrame(int speakingStatus);
         
     ~cAmqOutput ();
 
   private:
     MetaMessenger * meta;
     FeatureSender * featureSender;
-    int seqNr;
+//    int seqNr;
 };
 
 

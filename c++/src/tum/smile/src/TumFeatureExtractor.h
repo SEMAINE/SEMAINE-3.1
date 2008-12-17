@@ -124,7 +124,8 @@ private:
 
 	cSvmPredict * svmPredA;
 	cSvmPredict * svmPredV;
-
+	cSvmPredict * svmPredI;
+	
 	#ifdef DEBUG_SILDET
 	cWaveOutput *waveOut;
 	cPcmBuffer * frame2;

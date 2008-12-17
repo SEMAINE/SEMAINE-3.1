@@ -17,10 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *******************************************************************************/
 
-
+/*
 #define TRIGGER_FREQ_MIN  45
 #define TRIGGER_FREQ      50
 #define TRIGGER_FREQ_MAX  55
+*/
+
+float TRIGGER_FREQ_MIN =  45.0;
+float TRIGGER_FREQ     =  50.0;
+float TRIGGER_FREQ_MAX =  55.0;
 
 #define BUFFERSIZE 48000
 
@@ -67,6 +72,8 @@ pOptions setupOptions( pOptionParser obj )
   optionParser_addLONG_IDX( obj, "numtriggers", 'n', &(obj->opt.numtriggers), 0, "number of trigger signals during recording time", MANDATORY_ARG, OPTIONAL_PARAM);
   optionParser_addFloat( obj, "rectime", 't', &(obj->opt.rectime), 0.0, "recording time in seconds", MANDATORY_ARG, MANDATORY_PARAM);
   optionParser_addPchar( obj, "triggerfile", 'f', &(obj->opt.triggerfile), 0, "output .csv file with trigger times", MANDATORY_ARG, MANDATORY_PARAM);
+  optionParser_addFloat( obj, "triggerfreq", 'r', &(obj->opt.triggerfreq), 49.98, "excpected trigger frequency", MANDATORY_ARG, OPTIONAL_PARAM);
+  optionParser_addInt( obj, "loglevel_debug", 0, &(obj->opt.loglevel_debug), 0, "loglevel for debug messages", MANDATORY_ARG, OPTIONAL_PARAM);
 
   //-----------------------
 
@@ -112,6 +119,7 @@ typedef struct {
   SAMPLE32i prev;
   SAMPLE32i thresh;
   SAMPLE32i max;
+  int wasMin;
   long long lastPeak;
   long long lastSeenTrigger;
   long long lastWantedTrigger;
@@ -126,6 +134,8 @@ typedef struct {
   long long nForced;
   long long nForcedGrN;
   long long lastPeakMean;
+  long minT;
+  long maxT;
 } sMemory;
         
 
@@ -142,7 +152,7 @@ LONG_IDX printTriggerRiseTimes(FILE *triggertimes, long long numtriggers, SAMPLE
   for (i=0; i<nBlocks; i++)
   {
     if (wisdom->firstTrigger) wisdom->lastPeak--;
-    if ((wisdom->lastPeak < (wisdom->sampleRate / TRIGGER_FREQ_MAX)*(-1)) || (!wisdom->firstTrigger)) {
+    if ((wisdom->wasMin)&&((wisdom->lastPeak < (wisdom->sampleRate / TRIGGER_FREQ_MAX)*(-1)) || (!wisdom->firstTrigger))) {
       //if (i) dataI1 = data[i-1];
       //else dataI1 = wisdom->prev;
       if (data[i] > thresh) {
@@ -163,17 +173,21 @@ LONG_IDX printTriggerRiseTimes(FILE *triggertimes, long long numtriggers, SAMPLE
            if (wisdom->firstTriggerLocal == 0) wisdom->firstTriggerLocal = i;
          }
          // TODO: tigger period mean....
+         if (-1*wisdom->lastPeak < wisdom->minT) wisdom->minT = -1*wisdom->lastPeak;
+         if (-1*wisdom->lastPeak > wisdom->maxT) wisdom->maxT = -1*wisdom->lastPeak;
          wisdom->lastPeakMean += wisdom->lastPeak;
          wisdom->lastPeak = 0;
          wisdom->lastSeenTrigger = sampleIndex;
-      }
+         wisdom->wasMin = 0;
+      } 
     }
+    if (data[i] < thresh) { wisdom->wasMin = 1; }
     if ((wisdom->lastPeak < (wisdom->sampleRate / TRIGGER_FREQ_MIN)*(-1)) && (wisdom->firstTrigger)) {
-       fprintf(stderr,"trigger: %i  [%f sec.]   [missed -> FORCED!!] \n",sampleIndex, (double)sampleIndex / (double)wisdom->sampleRate);
+       FEATUM_DEBUG(2,"trigger: %i  [%f sec.]   [missed -> FORCED!! wasMin=%i] \n",sampleIndex, (double)sampleIndex / (double)wisdom->sampleRate, wisdom->wasMin);
        if (wisdom->nTriggers < numtriggers) {
          fprintf(triggertimes,"%i,%f\n",sampleIndex,(double)sampleIndex / (double)wisdom->sampleRate);
        } else {
-         fprintf(stderr," skipping (>numtriggers)\n");
+         FEATUM_DEBUG(2," skipping (>numtriggers)\n");
          wisdom->nForcedGrN++;
        }
        wisdom->lastPeak = 0;
@@ -229,7 +243,12 @@ int main(int argc, char *argv[])
   debug_printOptions( opts );
   #endif
   
-  loglevel_print_debug = 0;
+  loglevel_print_debug = opts->loglevel_debug;
+  if (opts->triggerfreq > 0.0) {
+    TRIGGER_FREQ = opts->triggerfreq;
+    TRIGGER_FREQ_MAX = opts->triggerfreq*1.1;
+    TRIGGER_FREQ_MIN = opts->triggerfreq*0.9;
+  }
   
   /***************************** create wave input *****************************/    
   pWaveInput waveIn=NULL;
@@ -258,16 +277,13 @@ int main(int argc, char *argv[])
     FEATUM_WARNING(1,"number of input channels is != 5 !!\n Please modify the source in main_sync.c to support your custom number of channels (%i)\n",waveIn->parameters.nChan);
   }
 
-////*** manually added 4 channel mono output to separate files:
-
+  // 4channel output to separate files:
+      // TODO: make the number of channels dynamic!
   pWaveOutput waveOut0 = NULL;
   pWaveOutput waveOut1 = NULL;
   pWaveOutput waveOut2 = NULL;
   pWaveOutput waveOut3 = NULL;
 
-//    waveOut = waveOutput_create(waveOut, opts->waveout, waveIn->parameters.sampleRate, waveIn->parameters.sampleType, waveIn->parameters.nChan-1);
-
-//    waveOut = waveOutput_create(waveOut, opts->waveout, waveIn->parameters.sampleRate, SAMPLETYPE_I24, waveIn->parameters.nChan-1);
 
   if ((opts->waveout0)&&(opts->waveout1)&&(opts->waveout2)&&(opts->waveout3)) {
     waveOut0 = waveOutput_create(waveOut0, opts->waveout0, waveIn->parameters.sampleRate, waveIn->parameters.sampleType, 1);
@@ -302,10 +318,9 @@ int main(int argc, char *argv[])
   // A: input buffer (with input parameters)
   pPcmBuffer bufA = pcmBufferAllocate(NULL, BUFFERSIZE, waveIn->parameters.nChan, waveIn->parameters.sampleType, MEMORGA_INTERLV, waveIn->parameters.sampleRate);
   // B: output buffer (with output parameters)
-//  pPcmBuffer bufB = pcmBufferAllocate(NULL, BUFFERSIZE, waveIn->parameters.nChan-1, waveIn->parameters.sampleType, MEMORGA_INTERLV, waveIn->parameters.sampleRate);
   pPcmBuffer bufT = pcmBufferAllocate(NULL, BUFFERSIZE, 1, SAMPLETYPE_I32/*waveIn->parameters.sampleType*/, MEMORGA_INTERLV, waveIn->parameters.sampleRate);
 
-//***** for mono channel output support:
+  //***** for mono channel output support:
   pPcmBuffer bufB = pcmBufferAllocate(NULL, BUFFERSIZE, 1, waveIn->parameters.sampleType, MEMORGA_INTERLV, waveIn->parameters.sampleRate);
 
   pPcmConversion chConv = pcmConversion_create(NULL, waveIn->parameters.nChan, 1, 0);
@@ -334,6 +349,9 @@ int main(int argc, char *argv[])
   triggerMem.nTriggers = 0;
   triggerMem.startTime = 0.0;
   triggerMem.lastPeakMean = 0;
+  triggerMem.minT = triggerMem.sampleRate/TRIGGER_FREQ_MIN+1;
+  triggerMem.maxT = triggerMem.sampleRate/TRIGGER_FREQ_MAX-1;
+  triggerMem.wasMin = 0;
   
   int running = 1;
   long long sampleIndex = 0;
@@ -356,7 +374,6 @@ int main(int argc, char *argv[])
           // analyze trigger channel:
           sampleIndex = getTriggerRiseLevel(bufT->data, copied, sampleIndex, &triggerMem);
           sampleIndex += copied;
-//          waveOutput_writeDataSequential(waveOut, bufT);
           break;
           
         case 2:
@@ -364,17 +381,15 @@ int main(int argc, char *argv[])
           // find triggers:
           sampleIndex = printTriggerRiseTimes(triggertimes, opts->numtriggers, bufT->data, copied, sampleIndex, &triggerMem);
      
-          if ((triggerMem.firstTrigger)) { //&&(triggerMem.nTriggers < opts->numtriggers)) {
+          if ((triggerMem.firstTrigger)) { 
             LONG_IDX s1=0, s2=0;
             LONG_IDX lng = -1;
             LONG_IDX skip = triggerMem.firstTriggerLocal;
-//                                                    printf("-- %i\n",bufA->nBlocks);
             if (samplesToWrite > samplesWritten) {
             if (samplesToWrite - samplesWritten < bufA->nBlocks) { lng = samplesToWrite-samplesWritten; }
             else {lng = -1; }
-//                                                        printf("-->%i\n",lng);
+
             pcmBuffer_clear(bufB); s1=pcmBuffer_copy_ext(bufA, bufB, skip, lng, 0, chConv0);  
-            //printf("c0: %i  %i  \n",((int32_t*)(bufA->data))[0],((int32_t*)(bufB->data))[0]);
             waveOutput_writeDataSequential(waveOut0, bufB);
             pcmBuffer_clear(bufB); s2=pcmBuffer_copy_ext(bufA, bufB, skip, lng, 0, chConv1);  
             if (s2 != s1) { FEATUM_WARNING(1,"number of samples copied for ch1 and ch0 differ!"); }
@@ -404,7 +419,6 @@ int main(int argc, char *argv[])
       FEATUM_DEBUG(5,"levels: max=%i  thresh=%i",triggerMem.max,triggerMem.thresh);
       sampleIndex = 0;
     }
-    // TODO: maybe use getch() to watch for "q" input to quit without Ctrl+C ??
     
     if (featum_quit) {
       printf("CTRL+C pressed (SIGINT).\n"); 
@@ -422,7 +436,9 @@ int main(int argc, char *argv[])
   FEATUM_MESSAGE(1,"number of detected triggers: %i  (numtriggers requested = %i)",triggerMem.nTriggers,opts->numtriggers);
   FEATUM_MESSAGE(1,"audio time of %i requested triggers is: %f seconds",opts->numtriggers,triggerMem.nTime);
   FEATUM_MESSAGE(1,"DRIFT: audio time - video time = %f seconds",triggerMem.nTime-opts->rectime);
-  FEATUM_MESSAGE(1,"Mean trigger frequency = %f",triggerMem.sampleRate/(((double)triggerMem.lastPeakMean/(double)triggerMem.nTriggers)));
+  FEATUM_MESSAGE(1,"Mean trigger frequency = %f",(-1.0)*(double)triggerMem.sampleRate/(((double)triggerMem.lastPeakMean/(double)triggerMem.nTriggers)));
+  FEATUM_MESSAGE(1,"Max trigger frequency = %f",(double)triggerMem.sampleRate/((double)triggerMem.minT));
+  FEATUM_MESSAGE(1,"Min trigger frequency = %f",(double)triggerMem.sampleRate/((double)triggerMem.maxT));
   
   if (samplesWritten < samplesToWrite) {
      LONG_IDX lng = samplesToWrite - samplesWritten;

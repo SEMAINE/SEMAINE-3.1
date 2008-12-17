@@ -40,9 +40,8 @@ Merging data from asynchronus level might be supported in the future
 
 cAmqOutput::cAmqOutput( cFeatureMemory &mem, FeatureSender *_featureSender, MetaMessenger * _meta ) : 
 	cGenOutput(mem),
-        featureSender(_featureSender),
-        meta(_meta),
-	seqNr(0)
+	featureSender(_featureSender),
+ 	meta(_meta)
 {
   //featureSender = _featureSender; 
   //MetaMessenger = _meta;
@@ -52,11 +51,17 @@ cAmqOutput::~cAmqOutput()
 {
 }
 
-int cAmqOutput::sendLastFrame() {
+int cAmqOutput::sendLastFrame(int speakingStatus) {
   LONG_IDX oldIdx = _data.vIdxSaved;
   setIdxToLastFrame();
-  sendCurrentFrame(0);
+  int ret = sendCurrentFrame(speakingStatus);
   _data.vIdxSaved = oldIdx; 
+  return ret;
+}
+
+int cAmqOutput::sendLastFrame() {
+  int ret = sendLastFrame(0);
+  return ret;
 }
 
 

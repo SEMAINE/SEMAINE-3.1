@@ -48,6 +48,7 @@ TumFeatureExtractor::TumFeatureExtractor(pOptions _opts) throw(CMSException) :
 	sildet(NULL),
 	svmPredA(NULL),
 	svmPredV(NULL),
+	svmPredI(NULL),
 	frame1(NULL)
 
 {
@@ -384,6 +385,12 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 		svmPredV->loadSelection(opts->svmpredfselV);
 		svmPredV->configure(funcEls0, nFUNCels0);
 	}
+	if (opts->svmmodelI != NULL) {
+		FEATUM_MESSAGE(1,"loading svm model for interest ...");
+		svmPredI = new cSvmPredict( *ftMem, opts->svmmodelI, opts->svmscaleI );
+		svmPredI->loadSelection(opts->svmpredfselI);
+		svmPredI->configure(funcEls0, nFUNCels0);
+	}
 	#endif
 
 	if (opts->sildet) {
@@ -582,32 +589,42 @@ void TumFeatureExtractor::act() throw(CMSException)
 						printf(">>>> valence: "); fflush(stdout);
 						svmPredV->processNextFrame(); fflush(stdout);
 					}
+					if (svmPredI != NULL) {
+						svmPredI->setIdxToLastFrame();
+						printf(">>>> interest (0-2): "); fflush(stdout);
+						svmPredI->processNextFrame(); fflush(stdout);
+					}
 					printf("\n");
 
-					float a,v;
+					float a,v,i;
 					a = svmPredA->getLastResult();
 					v = svmPredV->getLastResult();
+					i = svmPredV->getLastResult();
 
-					// ++AMQ++  send (arousal, valence) as EMMA
-
+					// ++AMQ++  send (arousal, valence, interest) as EMMA
 
 					char strtmp[50];
 					sprintf(strtmp,"%.2f",a);
 					std::string aroStr(strtmp);
 					sprintf(strtmp,"%.2f",v);
 					std::string valStr(strtmp);
+					sprintf(strtmp,"%1.0f",i);
+					std::string interestStr(strtmp);
 
 					// Create and fill a simple EMMA EmotionML document
 					DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
 					DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
+					XMLTool::setAttribute(interpretation, EMMA::A_START, "time not implemented");
 					DOMElement * emotion = XMLTool::appendChildElement(interpretation, EmotionML::E_EMOTION, EmotionML::namespaceURI);
 					DOMElement * dimensions = XMLTool::appendChildElement(emotion, EmotionML::E_DIMENSIONS, EmotionML::namespaceURI);
 					XMLTool::setAttribute(dimensions, EmotionML::A_SET, "valenceArousalPotency");
 					DOMElement * arousal = XMLTool::appendChildElement(dimensions, EmotionML::E_AROUSAL, EmotionML::namespaceURI);
 					DOMElement * valence = XMLTool::appendChildElement(dimensions, EmotionML::E_VALENCE, EmotionML::namespaceURI);
-					XMLTool::setAttribute(interpretation, EMMA::A_START, "time not implemented");
 					XMLTool::setAttribute(arousal, EmotionML::A_VALUE, aroStr);
 					XMLTool::setAttribute(valence, EmotionML::A_VALUE, valStr);
+					DOMElement * category = XMLTool::appendChildElement(emotion, EmotionML::E_CATEGORY, EmotionML::namespaceURI);
+					XMLTool::setAttribute(category, EmotionML::A_NAME, "interest");
+					XMLTool::setAttribute(category, EmotionML::A_VALUE, interestStr);
 
 					// Now send it
 					emmaSender->sendXML(document, meta.getTime());

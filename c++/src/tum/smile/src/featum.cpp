@@ -79,12 +79,15 @@ pOptions setupOptions( cOptionParser &parser )
   parser.addPchar( "svmoutV", 'V', &(parser.opt.svmoutV), NULL, "LibSVM output file (append mode)", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addPchar( "svmmodelA", 0, &(parser.opt.svmmodelA), NULL, "model for svm regression/classification (arousal)", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addPchar( "svmmodelV", 0, &(parser.opt.svmmodelV), NULL, "model for svm regression/classification (valence)", MANDATORY_ARG, OPTIONAL_PARAM);
+  parser.addPchar( "svmmodelI", 0, &(parser.opt.svmmodelI), NULL, "model for svm regression/classification (interest)", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addPchar( "svmscaleA", 0, &(parser.opt.svmscaleA), NULL, "scale for svm regression/classification (arousal)", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addPchar( "svmscaleV", 0, &(parser.opt.svmscaleV), NULL, "scale for svm regression/classification (valence)", MANDATORY_ARG, OPTIONAL_PARAM);
+  parser.addPchar( "svmscaleI", 0, &(parser.opt.svmscaleI), NULL, "scale for svm regression/classification (interest)", MANDATORY_ARG, OPTIONAL_PARAM);
   parser.addBoolean( "sildet", 0, &(parser.opt.sildet), 0, "Enable silence detector for turn segmentation" );  
   parser.addBoolean( "HRF", 0, &(parser.opt.HRF), 0, "Use Hierarchical instead of full-turn functionals" );
   parser.addPchar( "svmpredfselA", 0, &(parser.opt.svmpredfselA), NULL, "Feature selection file for live svm prediction (arousal)", MANDATORY_ARG, OPTIONAL_PARAM );  
   parser.addPchar( "svmpredfselV", 0, &(parser.opt.svmpredfselV), NULL, "Feature selection file for live svm prediction (valence)", MANDATORY_ARG, OPTIONAL_PARAM );  
+  parser.addPchar( "svmpredfselI", 0, &(parser.opt.svmpredfselI), NULL, "Feature selection file for live svm classification (interest)", MANDATORY_ARG, OPTIONAL_PARAM );  
   parser.addBoolean( "displayenergy", 'E', &(parser.opt.displayenergy), 0, "print log frame energy for debugging audio problems" );  
   #endif
   parser.addPchar( "waveout", 'w', &(parser.opt.waveout), NULL, "wave file output of pcm stream", MANDATORY_ARG, OPTIONAL_PARAM);

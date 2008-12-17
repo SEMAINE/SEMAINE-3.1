@@ -1,5 +1,26 @@
-Installation Instructions
-*************************
+Quick install and compilation notes for openSMILE:
+=================================================
+
+For building the SEMAINE component, use the SEMAINE C++ build script. 
+It will correctly configure the openSMILE component.
+
+For building the standalone version, use default
+./configure
+make
+
+To enable certain tools/functions and/or library support, have a look
+at the available configure options:
+./configure --help
+
+
+
+******
+Below are generic GNU installation instructions:
+
+
+
+GENERIC Installation Instructions
+*********************************
 
 Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004, 2005,
 2006, 2007 Free Software Foundation, Inc.
