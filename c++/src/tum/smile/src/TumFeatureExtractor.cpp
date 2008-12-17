@@ -375,21 +375,42 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 
 	if (opts->svmmodelA != NULL) {
 		FEATUM_MESSAGE(1,"loading svm model for arousal ...");
-		svmPredA = new cSvmPredict( *ftMem, opts->svmmodelA, opts->svmscaleA );
-		svmPredA->loadSelection(opts->svmpredfselA);
-		svmPredA->configure(funcEls0, nFUNCels0);
+		try {
+		  svmPredA = new cSvmPredict( *ftMem, opts->svmmodelA, opts->svmscaleA );
+		  svmPredA->loadSelection(opts->svmpredfselA);
+		  svmPredA->configure(funcEls0, nFUNCels0);
+		} catch (int e) {
+		  if (e==1) { 
+		  		FEATUM_ERROR(1,"AROUSAL recognition is DISABLED!"); 
+ 				delete svmPredA; svmPredA = NULL; 
+	      }
+		}
 	}
 	if (opts->svmmodelV != NULL) {
 		FEATUM_MESSAGE(1,"loading svm model for valence ...");
-		svmPredV = new cSvmPredict( *ftMem, opts->svmmodelV, opts->svmscaleV );
-		svmPredV->loadSelection(opts->svmpredfselV);
-		svmPredV->configure(funcEls0, nFUNCels0);
+		try {
+		  svmPredV = new cSvmPredict( *ftMem, opts->svmmodelV, opts->svmscaleV );
+		  svmPredV->loadSelection(opts->svmpredfselV);
+		  svmPredV->configure(funcEls0, nFUNCels0);
+		} catch (int e) {
+		  if (e==1) { 
+		  		FEATUM_ERROR(1,"VALENCE recognition is DISABLED!"); 
+	  	 		delete svmPredV; svmPredV = NULL; 
+	      }
+		}
 	}
 	if (opts->svmmodelI != NULL) {
 		FEATUM_MESSAGE(1,"loading svm model for interest ...");
-		svmPredI = new cSvmPredict( *ftMem, opts->svmmodelI, opts->svmscaleI );
-		svmPredI->loadSelection(opts->svmpredfselI);
-		svmPredI->configure(funcEls0, nFUNCels0);
+		try {
+		  svmPredI = new cSvmPredict( *ftMem, opts->svmmodelI, opts->svmscaleI );
+		  svmPredI->loadSelection(opts->svmpredfselI);
+		  svmPredI->configure(funcEls0, nFUNCels0);
+		} catch (int e) {
+		  if (e==1) { 
+		  		FEATUM_ERROR(1,"INTEREST recognition is DISABLED!"); 
+		   		delete svmPredI; svmPredI = NULL; 
+	      }
+		}
 	}
 	#endif
 
@@ -597,9 +618,15 @@ void TumFeatureExtractor::act() throw(CMSException)
 					printf("\n");
 
 					float a,v,i;
-					a = svmPredA->getLastResult();
-					v = svmPredV->getLastResult();
-					i = svmPredV->getLastResult();
+					if (svmPredA != NULL) {
+					  a = svmPredA->getLastResult();
+					}
+					if (svmPredV != NULL) {
+					  v = svmPredV->getLastResult();
+					}
+					if (svmPredI != NULL) {
+					  i = svmPredI->getLastResult();
+					}
 
 					// ++AMQ++  send (arousal, valence, interest) as EMMA
 
@@ -616,15 +643,23 @@ void TumFeatureExtractor::act() throw(CMSException)
 					DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
 					XMLTool::setAttribute(interpretation, EMMA::A_START, "time not implemented");
 					DOMElement * emotion = XMLTool::appendChildElement(interpretation, EmotionML::E_EMOTION, EmotionML::namespaceURI);
-					DOMElement * dimensions = XMLTool::appendChildElement(emotion, EmotionML::E_DIMENSIONS, EmotionML::namespaceURI);
-					XMLTool::setAttribute(dimensions, EmotionML::A_SET, "valenceArousalPotency");
-					DOMElement * arousal = XMLTool::appendChildElement(dimensions, EmotionML::E_AROUSAL, EmotionML::namespaceURI);
-					DOMElement * valence = XMLTool::appendChildElement(dimensions, EmotionML::E_VALENCE, EmotionML::namespaceURI);
-					XMLTool::setAttribute(arousal, EmotionML::A_VALUE, aroStr);
-					XMLTool::setAttribute(valence, EmotionML::A_VALUE, valStr);
-					DOMElement * category = XMLTool::appendChildElement(emotion, EmotionML::E_CATEGORY, EmotionML::namespaceURI);
-					XMLTool::setAttribute(category, EmotionML::A_NAME, "interest");
-					XMLTool::setAttribute(category, EmotionML::A_VALUE, interestStr);
+					if ((svmPredA != NULL)||(svmPredV != NULL)) {
+					  DOMElement * dimensions = XMLTool::appendChildElement(emotion, EmotionML::E_DIMENSIONS, EmotionML::namespaceURI);
+					  XMLTool::setAttribute(dimensions, EmotionML::A_SET, "valenceArousalPotency");
+					  if (svmPredA != NULL) {
+					    DOMElement * arousal = XMLTool::appendChildElement(dimensions, EmotionML::E_AROUSAL, EmotionML::namespaceURI);
+					    XMLTool::setAttribute(arousal, EmotionML::A_VALUE, aroStr);
+					  }
+					  if (svmPredV != NULL) {
+					    DOMElement * valence = XMLTool::appendChildElement(dimensions, EmotionML::E_VALENCE, EmotionML::namespaceURI);
+					    XMLTool::setAttribute(valence, EmotionML::A_VALUE, valStr);
+					  }
+					}
+					if (svmPredI != NULL) {
+					  DOMElement * category = XMLTool::appendChildElement(emotion, EmotionML::E_CATEGORY, EmotionML::namespaceURI);
+					  XMLTool::setAttribute(category, EmotionML::A_NAME, "interest");
+					  XMLTool::setAttribute(category, EmotionML::A_VALUE, interestStr);
+					}
 
 					// Now send it
 					emmaSender->sendXML(document, meta.getTime());
