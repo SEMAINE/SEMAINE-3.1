@@ -326,6 +326,7 @@ APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
 	prevSpeakingIndex = thisSpeakingIndex;
 	thisSpeakingIndex = features[speakingIndex];
 	if (prevSpeakingIndex==1.0 && thisSpeakingIndex==0.0) {
+		printf("turn end detected, now waiting 20 frames to compute best word hypothesis\n");
 		countdown=20;
  	}
 	if (countdown > 0) {
@@ -336,7 +337,9 @@ APacket ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm)
 	} else {
 		o->data.vq[0] = 0.0;
 	}
-	
+	if (prevSpeakingIndex==0.0 && thisSpeakingIndex==1.0) {
+		printf("turn start detected.\n");		
+	}
 
 //if ((features[speakingIndex]==0.0)&&(wasSpeaking==1)) { o->data.vq[0] = 1; wasSpeaking=0; }
 //if ((features[speakingIndex]==1.0)) { wasSpeaking=1; }
