@@ -51,7 +51,7 @@ extern float
 // unpack 3-byte signed 24-bit little endian samples into a int32_t
 inline int32_t unpack24i_le(sample24_t * x) 
 {
-  uint32_t i=(uint32_t)(x->x[2]) + (uint32_t)(x->x[1])*(1<<8) + (uint32_t)(x->x[0])*(1<<16);
+  uint32_t i=(uint32_t)(x->x[0]) + (uint32_t)(x->x[1])*(1<<8) + (uint32_t)(x->x[2])*(1<<16);
   if (i&0x00800000) i+=0xFF000000; // negative number...
   return ( (int32_t)i );
 }
@@ -60,9 +60,9 @@ inline int32_t unpack24i_le(sample24_t * x)
 inline sample24_t pack24i_le(int32_t x) 
 {
   sample24_t p;
-  p.x[2] = (uint8_t)( (uint32_t)x & 0xFF);
+  p.x[0] = (uint8_t)( (uint32_t)x & 0xFF);
   p.x[1] = (uint8_t)( ((uint32_t)x & 0xFF00) >> 8 );
-  p.x[0] = (uint8_t)( ((uint32_t)x & 0xFF0000 ) >> 16 );
+  p.x[2] = (uint8_t)( ((uint32_t)x & 0xFF0000 ) >> 16 );
   return p;
 }
 

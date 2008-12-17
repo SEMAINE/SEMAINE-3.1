@@ -35,7 +35,7 @@ Any function or class that reads in data from a file or stream should
 #include "featum_common.h"
 
 typedef struct {
-  int8_t x[3];
+  uint8_t x[3];
 } sample24_t;
         
 #define SAMPLE8i  int8_t
