@@ -1,5 +1,7 @@
 
 #################### Package Configuration    #########################
+ASRMODELS="models.asr_v0.1b.zip"
+ASRMODELS_URL="http://dummy.server/path/$ASRMODELS"
 
 register_semaine_build "tum.asr" "c++/src/tum/asr" "func_build_asr" $1
 
@@ -15,23 +17,6 @@ function func_build_asr {
       builderror
     fi
 
-    # apply pipe input patches, if present
-#    if test "x$ATKPATCHES" != "x" ; then
-#      MYPWD=$PWD;
-#      cp $ATKPATH/ATKLib/ASource.cpp ./src/
-#      cp $ATKPATH/ATKLib/ASource.h ./src/
-#      cp $ATKPATCHES/pipesource*.patch ./src/
-#      cd src/
-#      echo "Applying patches to ASource.cpp to add pipe input support"
-#      patch -N -p0 < pipesource.cpp.patch
-#      patch -N -p0 < pipesource.h.patch
-#      mv ASource.cpp APipeSource.cpp
-#      mv ASource.h APipeSource.h
-#      cd $MYPWD
-#    else
-#      echo "WARNING: pipe input patches not found!! tum.asr module might not compile!"
-#    fi
-
     if test "x$1" = "xrebuild" ; then
       if test -f Makefile ; then
         doconf='no'
@@ -39,10 +24,24 @@ function func_build_asr {
     fi
 
     # prepare model directory
-    mkdir models 2>/dev/null
-    mkdir models/AM 2>/dev/null
-    mkdir models/LM 2>/dev/null
-    cp $ATKPATH/Resources/UK_SI_ZMFCC/* models/AM/
+    if test ! -d models ; then mkdir models ; fi
+    if test ! -d models/AM ; then mkdir models/AM ; fi
+    cp -u $ATKPATH/Resources/UK_SI_ZMFCC/* models/AM/
+
+    # download the ASR models
+    aux_download "$ASRMODELS_URL" "$ASRMODELS"
+
+    # install LM if present in download directory
+    if test -f $DOWNLOAD_PREFIX/$ASRMODELS ; then
+      if test ! -d models/LM || test "x$1" = "xclean" ; then
+        echo "unzipping ASR LM in $PWD/models"
+        unzip -o $DOWNLOAD_PREFIX/$ASRMODELS -d .
+        if test "x$?" != "x0" ; then
+          echo "Error extracting models.... !!!"
+          return 1;
+        fi
+     fi
+    fi
 
     if test "x$doconf" = "xyes" ; then
     ./autogen.sh &&
@@ -63,8 +62,8 @@ function func_build_asr {
       fi
     fi
     
-    # do not install components.. at least for now...
-    make # && make install
+    # compile, but do not install components.. at least for now...
+    make
     if test "x$?" != "x0" ; then
       return 1;
     fi

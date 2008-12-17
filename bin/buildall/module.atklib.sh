@@ -3,23 +3,13 @@
 ATK_BASE="atk160"
 ATK_URL="atk160.tgz"  # you must download this .tgz manually and put it into
                       # the download/ folder in BASEDIR
-ATK_PATCHES_BASE="atkpatches"
-ATK_PATCHES="atkpatches.tgz"  # download this file manually from the wiki and put it
-                              # into the download/ folder in BASEDIR (thirdparty/)
+ATK_PATCHES="c++/src/tum/asr/src/atk_v001.patch"
 
 register_build "atk" "$ATK_URL" "$ATK_BASE" "func_build_atk" $1
 
 #######################################################################
 
 if test ! "x$1" = "xdisabled" ; then
-
-
-if test ! -f $DOWNLOAD_PREFIX/$ATK_PATCHES ; then
-  echo ""
-  echo "ERROR: ATKpatches ($ATK_URL) were not found in $DOWNLOAD_PREFIX. Please download the file from the wiki and place it in the download directory!"
-  echo ""
-  builderror
-fi
 
 # check if atk download exists, if not display instructions on how to download:
 if test ! -f $DOWNLOAD_PREFIX/$ATK_URL ; then
@@ -66,37 +56,24 @@ function func_build_atk {
       fi
     fi
 
-    # apply HTKLib patches
+    # apply ATK patches
     MYPWD=$PWD
-    if test -f $DOWNLOAD_PREFIX/$ATK_PATCHES ; then
-      if test ! -d $BUILD_PREFIX/$ATK_PATCHES_BASE ; then
-        tar -C $BUILD_PREFIX -zxvf $DOWNLOAD_PREFIX/$ATK_PATCHES
-      else
-        if test "x$1" = "xclean" ; then
-          tar -C $BUILD_PREFIX -zxvf $DOWNLOAD_PREFIX/$ATK_PATCHES
-        fi
-      fi
-#      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/HWave*.patch $BUILD_PREFIX/$ATK_BASE/HTKLib
-#      cp $BUILD_PREFIX/$ATK_PATCHES_BASE/ABuffer.patch $BUILD_PREFIX/$ATK_BASE/ATKLib
-#      cd $BUILD_PREFIX/$ATK_BASE/HTKLib
-#      echo -n "Patching HWave to add PAUDIO input type... "
-#      patch -N -p0 < HWave.c.patch
-#      patch -N -p0 < HWave.h.patch
-#      echo "done."
-      cd $BUILD_PREFIX/$ATK_BASE/ATKLib
-      echo -n "Patching ABuffer to add DataAvailable() method for non-blocking operation... "
-      patch -N -p0 < ABuffer.patch
+    if test -f $SEMAINE_ROOT/$ATK_PATCHES ; then
+      cp $SEMAINE_ROOT/$ATK_PATCHES $BUILD_PREFIX/$ATK_BASE
+      cd $BUILD_PREFIX/$ATK_BASE
+      echo "Patching ATK ... "
+      patch -N -p0 < atk_v001.patch
       echo "done."
     fi
     cd $MYPWD
 
-    # do not install portaudio, since it may conflict with locally installed portaudio
-    make HTKLib && make ATKLib   #&& make install
+    # do not install ATK systemwide
+    make HTKLib && make ATKLib   
     if test "x$?" != "x0" ; then
       return 1;
     fi
     
-    addConf "ATKPATCHES" "$BUILD_PREFIX/$ATK_PATCHES_BASE"
+    addConf "ATKPATCHES" "$BUILD_PREFIX/$ATK_PATCHES"
     addConf "ATKPATH" "${builds_dirs[$build_nr]}"
     addConf "ATKCPPFLAGS" "-I${builds_dirs[$build_nr]}/ATKLib -I${builds_dirs[$build_nr]}/HTKLib"
     addConf "ATKLDFLAGS" "-L${builds_dirs[$build_nr]}/ATKLib -L${builds_dirs[$build_nr]}/HTKLib"

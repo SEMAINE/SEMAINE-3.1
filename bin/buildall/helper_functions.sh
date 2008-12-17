@@ -80,6 +80,76 @@ function builderror {
   exit;
 }
 
+# download an arbitrary file into the download directory
+# check if file has already been downloaded before
+# this function will raise a build_error when download fails!
+# use aux_download_nc to not stop on download failure
+function aux_download {
+
+  DN_FILE="$1"  # URL to download
+  DN_BASE=`basename $DN_FILE`
+  mMYPWD=$PWD
+  cd $DOWNLOAD_PREFIX
+
+  if test ! -f "$DN_BASE" ; then 
+    echo "Downloading missing file $DN_BASE from:"
+    echo "  $DN_FILE"
+    if test -n "`which wget`"; then
+      wget "$DN_FILE"
+    elif test -n "`which curl`"; then
+      curl -o `$DN_BASE` "$DN_FILE"
+    else
+      builderror "could not find any download tool"
+    fi
+    if test "x$?" != "x0" ; then
+      builderror "Download failed!"
+      if test -f "$DN_BASE" ; then
+        echo "Removing partially downloaded file..."
+        rm -f "$DN_BASE"
+      fi
+    fi
+  else
+    echo "note: file $DN_BASE already in download path."
+  fi
+  cd $mMYPWD
+}
+
+# download an arbitrary file into the download directory
+# check if file has already been downloaded before
+# nc: "non critical" version: will not fail on download error
+function aux_download_nc {
+
+  DN_FILE="$1"  # URL to download
+  DN_BASE=`basename $DN_FILE`
+  mMYPWD=$PWD
+  cd $DOWNLOAD_PREFIX
+
+  if test "x$1" = "x" ; then
+    return 0;
+  fi
+  if test ! -f "$DN_BASE" ; then 
+    echo "Downloading missing file $DN_BASE from:"
+    echo "  $DN_FILE"
+    if test -n "`which wget`"; then
+      wget "$DN_FILE"
+    elif test -n "`which curl`"; then
+      curl -o `$DN_BASE` "$DN_FILE"
+    else
+      builderror "could not find any download tool"
+    fi
+    if test "x$?" != "x0" ; then
+      echo "Ignoring download error..."
+      if test -f "$DN_BASE" ; then
+        echo "Removing partially downloaded file..."
+        rm -f "$DN_BASE"
+      fi
+    fi
+  else
+    echo "note: file $DN_BASE already in download path."
+  fi
+  cd $mMYPWD
+}
+
 function download_missing {
   cd $DOWNLOAD_PREFIX
 
@@ -101,6 +171,10 @@ function download_missing {
         fi
         if test "x$?" != "x0" ; then
           builderror "Download failed!"
+          if test -f "$DN_BASE" ; then
+            echo "Removing partially downloaded file..."
+            rm -f "$DN_BASE"
+          fi
         fi
       fi 
       fi

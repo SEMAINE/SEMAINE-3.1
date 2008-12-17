@@ -1,5 +1,7 @@
 
 #################### Package Configuration    #########################
+SMILEMODELS="models.smile_v0.2.zip"
+SMILEMODELS_URL="http://server/$SMILEMODELS"
 
 register_semaine_build "tum.smile" "c++/src/tum/smile" "func_build_smile" $1
 
@@ -15,8 +17,25 @@ function func_build_smile {
       fi
     fi
 
+    # download the SMILE models
+    # the nc version of the download function is used here, 
+    # since smile runs without models (feature extractor only)
+    aux_download_nc "$SMILEMODELS_URL" "$SMILEMODELS"
+
+    # install models if present in download directory
+    if test -f $DOWNLOAD_PREFIX/$SMILEMODELS ; then
+      if test ! -f models/sal/arousal.model || test "x$1" = "xclean" ; then
+        echo "unzipping SMILE models to $PWD/models"
+        unzip -o $DOWNLOAD_PREFIX/$SMILEMODELS -d .
+        if test "x$?" != "x0" ; then
+          echo "Error extracting models.... !!!"
+          return 1;
+        fi
+     fi
+    fi
+
     if test "x$doconf" = "xyes" ; then
-echo "PA: $PORTAUDIOPATH"
+    #echo "Using PortAudio (?) $PORTAUDIOPATH"
     ./autogen.sh &&
     if test "x$PORTAUDIOPATH" != "x" ; then
       ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX
@@ -40,7 +59,7 @@ echo "PA: $PORTAUDIOPATH"
     fi
     
     # do not install components.. at least for now...
-    make # && make install
+    make
     if test "x$?" != "x0" ; then
       return 1;
     fi
