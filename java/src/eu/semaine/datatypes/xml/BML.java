@@ -27,6 +27,7 @@ public class BML
 	public static final String E_LOCOMOTION = "locomotion";
 	public static final String E_FACE = "face";
 	public static final String E_LIPS = "lips";
+	public static final String E_BACKCHANNEL = "backchannel";
 	
 	// Attributes
 	public static final String A_ID = "id";

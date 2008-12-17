@@ -61,6 +61,7 @@ import org.xml.sax.InputSource;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.BML;
+import eu.semaine.datatypes.xml.FML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -92,6 +93,9 @@ public class SemaineMary extends Component
 	private static Templates fml2ssmlStylesheet = null;
 	private static Templates bml2ssmlStylesheet = null;
     private Transformer transformer;
+    private int backchannelNumber = 0;
+    private int MaxNoOfBackchannels = 5;
+    
     
 	/**
 	 * @param componentName
@@ -196,10 +200,20 @@ public class SemaineMary extends Component
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SemaineMary.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
 			//System.out.println("PreProcessor: "+finalData);
 			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
-		} else {
-			log.debug("Received fml document without bml content -- ignoring.");
+		} 
+		else {
+			Element backchannel = null;
+			Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
+			if(fml != null){
+				backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
+			}
+			if(backchannel != null){
+				fmlbmlSender.sendXML(inputDoc, xm.getUsertime(), xm.getEventType());
+			}
+			else{
+				log.debug("Received fml document without bml or backchannel content -- ignoring.");
+			}
 		}
-		
 	}
 	
 	/**
@@ -207,15 +221,59 @@ public class SemaineMary extends Component
 	 * @param m
 	 * @throws JMSException
 	 */
-	private void speechBMLRealiser(SEMAINEMessage m) throws JMSException{
+	private void speechBMLRealiser(SEMAINEMessage m) throws Exception{
 		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 		Document input = xm.getDocument();
 		String inputText = xm.getText();
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
 
-		try {
+		if(XMLTool.getChildElementByTagNameNS(input.getDocumentElement(), BML.E_BACKCHANNEL, BML.namespaceURI) != null){
+			// Back-channel synthesis
 			
+			
+			backchannelNumber++;
+			if(backchannelNumber >= MaxNoOfBackchannels){
+				backchannelNumber = 0;
+			}
+			// Backchannel input to MARY is hard-coded
+			String words = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
+			 + "<maryxml xmlns=\"http://mary.dfki.de/2002/MaryXML\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"0.4\" xml:lang=\"en-US\">"
+			 + "<p>"
+			 + "<voice name=\"cmu-slt-arctic\">"
+			 + "<nvv variant=\""+backchannelNumber+"\"/>"
+			 + "</voice>"
+			 + "</p>"
+			 + "</maryxml>";
+			
+			
+			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
+			
+			AudioFormat af = voice.dbAudioFormat();
+	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
+	            af, AudioSystem.NOT_SPECIFIED);
+	        Request request = new Request(MaryDataType.WORDS, MaryDataType.AUDIO, Locale.US, 
+		            voice, "", "", 1, aff);
+	        Reader reader = new StringReader(words);
+			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
+			request.readInputData(reader);
+			request.process();
+			request.writeOutputData(audioos);
+			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
+			
+			request = new Request(MaryDataType.get("WORDS"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.US,voice,"","",1,aff);
+			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
+			reader = new StringReader(words);
+			request.readInputData(reader);
+			request.process();
+			request.writeOutputData(realisedOS);
+			
+			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SemaineMary.class.getResourceAsStream("Backchannel-Realised-Merge.xsl"), "semaine.mary.realised.acoustics");
+			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
+		}
+		else{
+			
+			// Utterance synthesis
 			transformer = bml2ssmlStylesheet.newTransformer();
 			transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
 			
@@ -247,17 +305,7 @@ public class SemaineMary extends Component
 			request.process();
 			request.writeOutputData(audioos);
 			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
-			
-			
-		} catch (TransformerConfigurationException e2) {
-			e2.printStackTrace();
-		} catch (TransformerException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-	
 	}
-	
 	
 }

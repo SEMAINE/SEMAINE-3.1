@@ -11,6 +11,7 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.BML;
+import eu.semaine.datatypes.xml.FML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
@@ -57,12 +58,32 @@ public class DummyVisualFML2BML extends Component
 		boolean isFML = "FML".equals(xm.getDatatype());
 		if (isFML) {
 			// extract the BML and send that along
-			Element bml = XMLTool.needChildElementByTagNameNS(
-					xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
-			Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
-			doc.adoptNode(bml);
-			doc.replaceChild(bml, doc.getDocumentElement());
-			bmlSender.sendXML(doc, xm.getUsertime(), xm.getEventType());
+			if(XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI) != null){
+				Element bml = XMLTool.needChildElementByTagNameNS(
+						xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
+				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
+				doc.adoptNode(bml);
+				doc.replaceChild(bml, doc.getDocumentElement());
+				bmlSender.sendXML(doc, xm.getUsertime(), xm.getEventType());
+			}
+			else{
+				Element backchannel = null;
+				Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
+				if(fml != null){
+					backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
+				}
+				if(backchannel != null){
+					Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
+					Element root = doc.getDocumentElement();
+					XMLTool.appendChildElement(root, BML.E_BACKCHANNEL, BML.namespaceURI);
+					bmlSender.sendXML(doc, xm.getUsertime(), xm.getEventType());
+				}
+				else{
+					log.debug("Received fml document without bml or backchannel content -- ignoring.");
+				}
+			}
+			
 		} 
 	}
+	
 }
