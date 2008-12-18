@@ -451,7 +451,12 @@ public class UtteranceProposer extends Component
 				return false;
 			}
 		} else if( convState == 3 ) {
-			response = "I'm sorry, I didn't understand that.";
+			if( !pastResponses.get(pastResponses.size()-1).equals("I'm sorry, I didn't understand that.") ) {
+				response = "I'm sorry, I didn't understand that.";
+			} else {
+				convState = 0;
+				return false;
+			}
 		}else if( convState == 4 && act.isDisagree() ) {
 			response = "Would you like to talk to someone else?";
 			nextPersonality = null;
@@ -463,7 +468,12 @@ public class UtteranceProposer extends Component
 			convState = 1;
 			return false;
 		} else if( convState == 4 ) {
-			response = "I'm sorry, I didn't understand that.";
+			if( !pastResponses.get(pastResponses.size()-1).equals("I'm sorry, I didn't understand that.") ) {
+				response = "I'm sorry, I didn't understand that.";
+			} else {
+				convState = 0;
+				return false;
+			}
 		} else if( convState == 5 ) {
 			if( act.getTargetCharacter() != null ) {
 				response = null;
@@ -492,7 +502,12 @@ public class UtteranceProposer extends Component
 				convState = 1;
 				return false;
 			} else {
-				response = "I'm sorry, I didn't understand that.";
+				if( !pastResponses.get(pastResponses.size()-1).equals("I'm sorry, I didn't understand that.") ) {
+					response = "I'm sorry, I didn't understand that.";
+				} else {
+					convState = 0;
+					return false;
+				}
 			}
 		}
 		if( response != null ) {
