@@ -21,7 +21,7 @@ select="document('semaine.mary.realised.acoustics')"/>
   </xsl:template>
 
 
-  <xsl:template match="bml/speech">
+  <xsl:template match="bml:bml/bml:speech">
     <speech> 
 	<xsl:copy-of select="@id"/>  
 	<xsl:copy-of select="@type"/> 
@@ -30,16 +30,12 @@ select="document('semaine.mary.realised.acoustics')"/>
         <xsl:copy-of select="@text"/> 
 	<xsl:copy-of select="@speed_sym"/> 
 
-	<xsl:for-each select="ssml:mark">
-             <xsl:variable name="id"><xsl:value-of select="@name"/></xsl:variable>  
-             <xsl:copy-of select="."/>
-             <xsl:apply-templates select="$emps/child::*">
-                    <xsl:with-param name="markName" select="$id"/>
-             </xsl:apply-templates>
-        </xsl:for-each>
+	<!-- Converting MARY realised acoustic params into SEMAINE dataformat-->
+        <xsl:apply-templates select="$emps/descendant::*"/>
 
-	<xsl:for-each select="pitchaccent">
-             <xsl:variable name="accentid"><xsl:value-of select="@name"/></xsl:variable>  
+	<!-- Calculating pitchaccent and timing of center of pitch accented syllable-->	
+	<xsl:for-each select="bml:pitchaccent">
+             <xsl:variable name="accentid"><xsl:value-of select="@id"/></xsl:variable>  
 	     <xsl:variable name="stimeMark"><xsl:value-of select="@start"/></xsl:variable>
 	     <xsl:variable name="etimeMark"><xsl:value-of select="@end"/></xsl:variable>
 		<xsl:for-each select="$emps/descendant::mary:mark">
@@ -57,19 +53,7 @@ select="document('semaine.mary.realised.acoustics')"/>
     </speech>
   </xsl:template> 
 
-
-  <xsl:template name="getToken" match="mary:*">
-     <xsl:param name="markName"/>
-     <xsl:for-each select="descendant::mary:mark">
-          <xsl:if test="$markName=@name">
-            <xsl:copy-of select="following::mary:t[1]/text()"/>
-	    <xsl:variable name="tokenContent" select="following::mary:t[1]/child::*"/>
-            <xsl:apply-templates select="$tokenContent">
-            </xsl:apply-templates>
-          </xsl:if>
-     </xsl:for-each> 
-   </xsl:template>
-
+  <!-- Calculating pitchaccent and timing of center of pitch accented syllable-->	
   <xsl:template name="printPitchAccent">
         <xsl:param name="accentId"/>
         <xsl:param name="stimeMark"/>
@@ -96,8 +80,8 @@ select="document('semaine.mary.realised.acoustics')"/>
         </xsl:for-each> 
   </xsl:template>
 
-
-   <xsl:template name="getSyllableData" match="mary:syllable">
+  <!-- Extract syllable elements with phone timings in seconds -->
+  <xsl:template name="getSyllableData" match="mary:syllable">
          <xsl:choose>
             <xsl:when test="@accent">
                 <mary:syllable accent="1">
@@ -124,6 +108,25 @@ select="document('semaine.mary.realised.acoustics')"/>
          </xsl:choose> 
    </xsl:template>
 
- 
+   <!-- Extract mark elements with thier names --> 	
+   <xsl:template name="getMarkData" match="mary:mark">
+	<mary:mark>
+		<xsl:copy-of select="@name"/>		
+	</mary:mark>
+   </xsl:template>
+
+   <!-- Extract boundary elements with thier durations in Milliseconds(?)  --> 	
+   <xsl:template name="getBoundaryData" match="mary:boundary">
+	<mary:boundary><xsl:copy-of select="@duration"/></mary:boundary>
+   </xsl:template>
+
+   <!-- Extract text only from token elements --> 	
+   <xsl:template match="mary:t"> 
+	<xsl:copy-of select="text()"/>
+   </xsl:template>
+   
+   <!-- Discard some MARYXML elements--> 	 
+   <xsl:template match="mary:mtu|mary:p|mary:voice|mary:phrase|mary:s|mary:maryxml|mary:ph"/> 
+   
 </xsl:stylesheet>
 
