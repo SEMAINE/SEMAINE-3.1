@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import javax.jms.JMSException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
 import marytts.util.data.audio.AudioPlayer;
 import eu.semaine.components.Component;
@@ -80,28 +81,14 @@ public class SemaineAudioPlayer extends Component
 					continue;
 				}
 				ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
-		        boolean signed = true; //true,false
-		        int bitsPerSample = 16;
-		        int samplingRate = 16000;
-		        int channels = 1;
-		        boolean bigEndian = false; 
-		        long lengthInSamples = audioData.length / (bitsPerSample/8);
-		        
-		        AudioFormat af = new AudioFormat(
-		        samplingRate,
-		        bitsPerSample,
-		        channels,
-		        signed,
-		        bigEndian);
-		        
-				AudioInputStream ais = new AudioInputStream(bais, af, lengthInSamples);
 				
 				try {
+					AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
 	            	AudioPlayer player = new AudioPlayer(ais);
 					player.start();
 					player.join();
 					//sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				} 
 			}
