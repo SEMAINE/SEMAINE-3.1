@@ -38,7 +38,7 @@ public class SemaineAudioPlayer extends Component
 	public SemaineAudioPlayer() throws JMSException 
 	{
 		super("SemaineAudioPlayer", false, true);
-		audioReceiver = new BytesReceiver("semaine.data.lowlevel.audio");
+		audioReceiver = new BytesReceiver("semaine.data.synthesis.lowlevel.audio");
 		receivers.add(audioReceiver); // to set up properly
 		inputWaiting = new LinkedBlockingQueue<byte[]>();
 		player =  new Playloop(inputWaiting);

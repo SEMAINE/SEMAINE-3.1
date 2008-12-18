@@ -69,7 +69,7 @@ public class SpeechBMLRealiser extends Component
 		receivers.add(bmlPlanReceiver);
 		bmlSender = new BMLSender("semaine.data.synthesis.plan.speechtimings", getName());
 		senders.add(bmlSender);
-		audioSender = new BytesSender("semaine.data.lowlevel.audio","AUDIO",getName());
+		audioSender = new BytesSender("semaine.data.synthesis.lowlevel.audio","AUDIO",getName());
 		senders.add(audioSender); // so it can be started etc
 	}
 	
