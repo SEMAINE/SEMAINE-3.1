@@ -110,9 +110,9 @@ select="document('semaine.mary.realised.acoustics')"/>
 
    <!-- Extract mark elements with thier names --> 	
    <xsl:template name="getMarkData" match="mary:mark">
-	<mary:mark>
+	<ssml:mark>
 		<xsl:copy-of select="@name"/>		
-	</mary:mark>
+	</ssml:mark>
    </xsl:template>
 
    <!-- Extract boundary elements with thier durations in Milliseconds(?)  --> 	
