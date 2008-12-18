@@ -67,6 +67,7 @@ ASR::ASR(char * configfile) throw(CMSException) :
 	prevSpeakingIndex = 0.0;
 	thisSpeakingIndex = 0.0;
 	countdown = 0;
+	outputtrigger = 0;
 
     queue = new ObsDataQueue(nLAG);
     
@@ -302,22 +303,23 @@ bool ASR::makeFeaturePacket(SEMAINEFeatureMessage *fm, APacket **p)
 	prevSpeakingIndex = thisSpeakingIndex;
 	thisSpeakingIndex = features[speakingIndex];
 	if (prevSpeakingIndex==1.0 && thisSpeakingIndex==0.0) {
-		printf("turn end detected, now waiting 20 frames to compute best word hypothesis\n");
+//		printf("turn end detected, now waiting 20 frames to compute best word hypothesis\n");
 		countdown=20;
  	}
 	if (countdown > 0) {
 		countdown=countdown-1;
 		if ((countdown == 0)&&(features[speakingIndex]!=1.0))
-		  printf(" stopping decoder. recognition result will appear soon.\n");
+//		  	printf(" stopping decoder. recognition result will appear soon.\n");
+			outputtrigger=1;
  	}
 	if ((countdown > 0) || (features[speakingIndex]==1.0)) {
 		o->data.vq[0] = 1;
 	} else {
 		o->data.vq[0] = 0;
 	}
-	if (prevSpeakingIndex==0.0 && thisSpeakingIndex==1.0) {
-		printf("turn start detected.\n");		
-	}
+//	if (prevSpeakingIndex==0.0 && thisSpeakingIndex==1.0) {
+//		printf("turn start detected.\n");		
+//	}
 
 //if ((features[speakingIndex]==0.0)&&(wasSpeaking==1)) { o->data.vq[0] = 1; wasSpeaking=0; }
 //if ((features[speakingIndex]==1.0)) { wasSpeaking=1; }
@@ -401,7 +403,9 @@ void ASR::act() throw(CMSException)
 				sentconf=sentconf+pd->confidence;
 				wordcounter=wordcounter+1;
 			}
-			else if(strcmp(pd->word.c_str(),EXCL)==0){
+//			else if(strcmp(pd->word.c_str(),EXCL)==0){
+			else if(outputtrigger==1){
+				outputtrigger=0;
 				sentend=p.GetEndTime()/10000;
 				terminated = TRUE;
 

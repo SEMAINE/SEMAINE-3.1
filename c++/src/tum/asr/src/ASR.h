@@ -90,6 +90,7 @@ private:
 	float prevSpeakingIndex;
 	float thisSpeakingIndex;
 	int countdown;
+	bool outputtrigger;
 	
 	ObsDataQueue *queue;
 };
