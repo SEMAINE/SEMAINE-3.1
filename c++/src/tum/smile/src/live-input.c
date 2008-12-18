@@ -134,10 +134,10 @@ _FUNCTION_ENTER_
   // check for space in buffer and if necessary, limit "tocopy" length
   LONG_IDX free = obj->bufferSizeBlocks - (obj->idxWr-obj->idxRd);
   if (tocopy > free) {
-    //#ifndef USE_PORTAUDIO
+    #ifndef USE_PORTAUDIO
     FEATUM_WARNING(4,"DROPPED %i blocks while writing to ringbuffer",tocopy-free);
-    printf("DROPPED %i blocks while writing to ringbuffer",tocopy-free);
-    //#endif           
+    //printf("DROPPED %i blocks while writing to ringbuffer",tocopy-free);
+    #endif           
     obj->nSkipped += tocopy-free;
     tocopy = free;
   }

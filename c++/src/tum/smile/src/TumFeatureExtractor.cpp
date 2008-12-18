@@ -142,7 +142,7 @@ void TumFeatureExtractor::customStartIO() throw(CMSException)
 	FEATUM_DEBUG(2,"opening live input audio: %i Hz, %i bit, %i channel(s)",opts->samplerate, opts->bits, opts->channels);
 
 	liveIn = new cLiveInput(NULL, opts->device, opts->buffersize, opts->samplerate, opts->bits, opts->channels, LI_STREAM_STOPPED);
-	liveIn->setNoWait(1);
+	//liveIn->setNoWait(1);
   	/*------------------------------------end--------------------------------------*/
 
 
