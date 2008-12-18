@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +82,6 @@ int arffOutput_setOutputFile( pArffOutput obj, const char *filename, int append 
 
     if (!append) {
       obj->filedesc = fopen(filename,"w");
-//printf("Not append\n");      
       if (obj->filedesc == NULL) {
         FEATUM_ERROR(0,"Error opening output feature file %s for writing (append=%i)",filename,append);
         _FUNCTION_RETURN_(0);
@@ -83,7 +91,7 @@ int arffOutput_setOutputFile( pArffOutput obj, const char *filename, int append 
       _FUNCTION_RETURN_(1);
     } else {  // check if vectorsize is the same AND determine current file position
            /* append not yet fully supported: sanity checks (vector dimensionality ...) are missing */
-//printf("appending!\n");
+		   //printf("appending!\n");
       int ret = arffOutput_reopenOutputFile(obj);
       _FUNCTION_RETURN_(ret);
     }

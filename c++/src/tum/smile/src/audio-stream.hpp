@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,28 +97,5 @@ class cAudioStream {
     
 };
 
-
-/*
-class cAudioStream {
-  sAudioStream _data;
-  
-  public:
-
-    cAudioStream(cAudioSource input, int type) {
-      audioStream_create2(input, int type);
-    }
-    
-pAudioStream audioStream_createGeneric(void *input, int type, 
-                 int (*getframe_method)(void *, pPcmBuffer), int nChan, int sampleType, int memOrga, int sampleRate, int nBPS);
-
-int audioStream_getData( pAudioStream obj, pPcmBuffer data );
-
-LONG_IDX audioStream_secondsToSamples( pAudioStream obj, FLOAT_TYPE se );
-FLOAT_TYPE audioStream_samplesToSeconds( pAudioStream obj, LONG_IDX sa );
-
-pAudioStream audioStream_destroy(pAudioStream obj);
-         
-}
-*/
 
 #endif // __AUDIO_STREAM_HPP

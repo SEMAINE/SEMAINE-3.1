@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +40,6 @@
 
 #include "featum_util.h"       //( optional )
 #include "feature-memory.h"
-//#include "LLDpitch.h"
 #include "pcm-process.h"
 #include "LLDs.h"
 
@@ -52,34 +60,6 @@ pLLDpitch LLDpitch_create( pLLDpitch obj )
 }
 #undef FUNCTION 
 
-
-// custom configuration of extractor parameters
-/*  this is only a template function:
-int LLDpitch_configure( pLLDpitch obj )
-#define FUNCTION "LLDpitch_create"
-{_FUNCTION_ENTER_
-  if (obj != NULL) {
-     _FUNCTION_RETURN_( 1 );
-  }
-  _FUNCTION_RETURN_( 0 );
-}
-#undef FUNCTION 
-*/
-
-
-// setup names in feature memory object
-/*
-int LLDpitch_setupFtmem( int level, pFeatureMemory mem )
-#define FUNCTION "LLDpitch_setupNames"
-{_FUNCTION_ENTER_
-  int ret;
-  ret = featureMemory_setupElement( mem, level, FT_LLD_PITCH, FT_LLD_PITCH_nVal, (char **)&lld_pitch_ftMem_names );
-  _FUNCTION_RETURN_(ret);
-}
-#undef FUNCTION 
-*/  
-
-//int featureMemory_flushToFtMem( pFeatureMemory mem, int level, int el, int nVal )
 
 
 // flushToMem: copy final data from ftex to feature memory element array

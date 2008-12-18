@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +29,15 @@
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-This class handles the reading of PCM WAVE files (RIFF format).
-Other file types, such as compressed audio (MP3 or OGG) are not yet supported!
+Live Input Module (Recording from soundcard) 
+============================================
+
+Supported: 
+		   PortAudio library   (working)
+		   Simple Linux OSS    (still with bugs...)
+
+The choice of input type is configured at compile time with #define 
+(or --with-XXX when using autoconf: not yet supported)
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -29,7 +45,6 @@ Other file types, such as compressed audio (MP3 or OGG) are not yet supported!
 #define __LIVE_INPUT_H
 
 #ifdef __WINDOWS
-//#error  live-input.c module currently has only LINUX support (/dev/dsp interface) 
 #ifdef LIVE_REC
 #ifndef USE_PORTAUDIO
 #define USE_PORTAUDIO
@@ -51,23 +66,6 @@ Other file types, such as compressed audio (MP3 or OGG) are not yet supported!
 
 #include "wave-common.h"
 
-/*
-#define BYTEORDER_LE 0
-#define BYTEORDER_BE 1
-
-
-typedef struct {
-  long sampleRate;
-  long sampleType;
-  long nChan;
-  long blockSize;
-  long nBPS;      // bytes per sample 
-  long byteOrder;  // BYTEORDER_LE or BYTEORDER_BE
-  LONG_IDX nBlocks;
-} sLiveParameters;
-typedef sLiveParameters* pLiveParameters;
-*/
-
 /* The class data structure */
 typedef struct {
   char devicename[PATH_STRING_SIZE+1];
@@ -75,6 +73,7 @@ typedef struct {
   sWaveParameters  parameters;
   int              streamStatus;
   int              abort;
+  int              optNoWait;
   
   #ifdef USE_PORTAUDIO
   int              deviceId;
@@ -83,7 +82,7 @@ typedef struct {
   pPcmBuffer       bufWrapper;
   int              rbLock;
   int              paFrames;
-  #else   // /dev/dsp interface:
+  #else   // OSS /dev/dsp interface:
   int fd;
   int blkSize;
   #endif
@@ -147,6 +146,10 @@ pLiveInput liveInput_create( pLiveInput obj, const char *devicename, int deviceI
 
 // status: 0: stopped, 1:started
 int liveInput_setStatus( pLiveInput obj, int status );
+
+// set noWait flag
+// if this flag is set, reloadBuffer will not wait for audio data
+void liveInput_setNoWait( pLiveInput obj, int optNoWait );
 
 long liveInput_getSampleRate( pLiveInput obj );
 LONG_IDX liveInput_secondsToSamples( pLiveInput obj, FLOAT_TYPE se );

@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -184,7 +193,6 @@ int deltas_computeNext( pDeltas obj, int id )
     olevel = obj->config[id].olevel;
     ilevel = obj->config[id].ilevel;
     nFramesContext = obj->config[id].nFramesContext;
-//FEATUM_WARNING(0,"here1");
     FEATUM_DEBUG(10,"allFilled: %i - curIdx_frames: %i", mem->level[ilevel].allFilledIdx, obj->config[id].curIdx_frames);
     // check if current output frame can be computed...
 
@@ -194,9 +202,7 @@ int deltas_computeNext( pDeltas obj, int id )
     LONG_IDX il0 = oIdxToIidx0( olComp, nFramesContext );
     LONG_IDX ilL = oIdxToIidxL( olComp, nFramesContext );
     // both il0 and ilL must be in range 
-//FEATUM_WARNING(0,"here1b: ilL %i, ilFill %i, il0 %i, olComp %i",ilL,ilFill,il0,olComp);    
     if ((ilL <= ilFill)&&(il0 <= ilFill)&&(olComp <= ilL)&&(olComp>il0)) {
-//FEATUM_WARNING(0,"here2");
       // we now compute the differential:
       mem->level[olevel].curIdx++;
       int ret = deltas_doCompute( obj, id, olComp );        
@@ -242,9 +248,7 @@ int deltas_computeLast( pDeltas obj, int id )
     LONG_IDX olComp = mem->level[olevel].curIdx + 1;  // compute the next frame
     int flag = 0;
     while (ilFill >= olComp) {
-//FEATUM_WARNING(0,"here1b: ilL %i, ilFill %i, il0 %i, olComp %i",ilL,ilFill,il0,olComp);    
 //    if ((ilL <= ilFill)&&(il0 <= ilFill)&&(olComp <= ilL)&&(olComp>il0)) {
-//FEATUM_WARNING(0,"here2");
       // we now compute the differential:
       mem->level[olevel].curIdx++;
       int ret = deltas_doCompute( obj, id, olComp );        
@@ -405,18 +409,6 @@ pDeltas deltas_destroy( pDeltas obj )
   int i,id;
   deltas_destroyData(obj);
   if (obj != NULL) {
-/*    // TODO: destroy temporary data.. ??
-    if (obj->config != NULL) {
-      for (id=0; id<obj->nIDs; id++) {
-      if (obj->config[id].names != NULL) { // free if already allocated ????
-        for (i=0;i<nDeltas; i++) { 
-            if (obj->config[id].names[i] != NULL) free(obj->config[id].names[i]);
-        }
-        free( obj->config[id].names );
-      }
-      }
-      free(obj->config);
-    }*/
     free(obj);
   }
   _FUNCTION_RETURN_(NULL);

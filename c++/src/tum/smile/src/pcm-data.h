@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,36 +73,56 @@ typedef struct {
 #define WORK_SAMPLE_SIZE  sizeof(WORK_SAMPLE)
 #define WORK_SAMPLE_RANGE 1.0
 
+
+/************** PcmParameters struct *************/
 #define MEMORGA_INTERLV 0  // channels interleaved (like in wave file)
 #define MEMORGA_SEPCH   1  // channels seperated as sequential arrays
+
+#define BYTEORDER_LE    0  // little endian (default for pcm riff wave..?)
+#define BYTEORDER_BE    1  // big endian
+
+typedef struct {
+  long sampleRate; // sample rate in Hz
+  unsigned long sampleType;  // sample type constant...(affects, nBPS, byteOrder)
+  int nChan;       // number of channels
+  int blockSize;   // size of one sample block
+  short nBPS;        // bytes per sample 
+  short nBits;       // significant bits per sample
+  short byteOrder;   // BYTEORDER_LE or BYTEORDER_BE
+  short memOrga;     // MEMORGA_INTERLV  or MEMORGA_SEPCH
+  LONG_IDX nBlocks;  // nBlocks in buffer.. ?
+} sPcmParameters;
+typedef sPcmParameters* pPcmParameters;
+/************** ********************* *************/
+
+
+
+/************** PcmConversion struct *************/
+// for fast and flexible channel routing
 
 // struct to pass advanced options for channels conversions
 // => channel routing and mixing matrix nSrc x nDst entries
 typedef struct {
-  unsigned direct;   // direct copy, do not consider matrix
+  unsigned direct;    // direct copy, do not consider matrix
   unsigned intmatrix; // use integer matrix instead of float matrix
   int intmatrix_scale;  // for future use..
   unsigned nSrc, nDst;
-  float *routing; // matrix with nSrc rows and nDst columns
+  float *routing;    // matrix with nSrc rows and nDst columns
   int *routing_int;  // same as above, however only 1 and 0 integers
 } sPcmConversion;
 typedef sPcmConversion * pPcmConversion;
 
 pPcmConversion pcmConversion_create(pPcmConversion obj, unsigned nSrc, unsigned nDst, unsigned intmatrix);
 void pcmConversion_setRoute(pPcmConversion obj, unsigned from, unsigned to, float weight);
-//#ifdef OPTIMIZE_SIZE
 int pcmConversion_getRoute_int(pPcmConversion obj, unsigned from, unsigned to);
 float pcmConversion_getRoute(pPcmConversion obj, unsigned from, unsigned to);
-/*
-#else
-inline int pcmConversion_getRoute_int(pPcmConversion obj, unsigned from, unsigned to);
-inline float pcmConversion_getRoute(pPcmConversion obj, unsigned from, unsigned to);
-#endif
-*/
 void pcmConversion_clearMatrix(pPcmConversion obj);
 pPcmConversion pcmConversion_destroy(pPcmConversion obj);
 pPcmConversion pcmConversion_destroyData(pPcmConversion obj);
+/**************************************************************/
 
+
+/******************* PcmBuffer ********************************/
 typedef void* pPcmSample;
 
 #define nPCMUSERDATAENTRIES 5
@@ -101,6 +130,7 @@ typedef void* pPcmSample;
 #define uDataUNASSIGNED1 1
 // ... more to come ...
 
+// pcm user data
 typedef struct {
   int entrySize[nPCMUSERDATAENTRIES];
   void *entry[nPCMUSERDATAENTRIES];
@@ -251,4 +281,4 @@ LONG_IDX pcmRingBufferMR_freespace( pPcmRingBufferMR obj );
 pPcmRingBufferMR pcmRingBufferMR_destroy( pPcmRingBufferMR obj );
 pPcmRingBufferMR pcmRingBufferMR_destroyData( pPcmRingBufferMR obj );
 
-#endif // #ifndef __MY_FILE_NAME_H
+#endif // #ifndef __PCM_DATA_H

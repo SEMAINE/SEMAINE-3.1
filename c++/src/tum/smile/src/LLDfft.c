@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +36,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "featum_util.h"       //( optional )
+#include "featum_util.h"       
 #include "feature-memory.h"
-//#include "LLDfft.h"
 #include "LLDs.h"
 
 #undef FUNCTION     // use undef only if you define it below for every function
@@ -76,14 +84,9 @@ int LLDfft_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
     = featureMemory_getValuesForWrite_seq( mem, level, ft_lld_fft, 
                                            lldex->current[level]->fft->nBins, 0, 
                                            lldex->current[level]->timestamp );
-   //(TODO: assign timestamps...??   should be done in featureMemory_getValuesWrite...)
-   // -> ok (at least here...)
-
 
   if (values != NULL) {
-   
     LONG_IDX n;  
-    //FEATUM_DEBUG(10,"values okay... filled = %i  (el=%i) (curIdx = %i)",mem->level[level].ft[ft_lld_fft][mem->level[level].curIdx].filled,ft_lld_fft,mem->level[level].curIdx);
    
     // flush linear magnitudes only
     int i;
@@ -149,7 +152,6 @@ int LLDfft_extractor( pLLDfft obj, pLLDex lldex, int level )
         if (obj->ip != NULL) { free(obj->ip); obj->ip = NULL; }
         if (obj->w != NULL) { free(obj->w); obj->w = NULL; }
         obj->frameSize_last = pcm->nBlocks;
-        FEATUM_DEBUG(3,"gggs %i %i",lldex->current[level]->fft->nBins, pcm->nBlocks / 2);
         if (lldex->current[level]->fft->complex != NULL) free(lldex->current[level]->fft->complex);
         if (lldex->current[level]->fft->magnitudes != NULL) free(lldex->current[level]->fft->magnitudes);
         #ifdef COMPUTE_PHASE
@@ -188,12 +190,9 @@ int LLDfft_extractor( pLLDfft obj, pLLDex lldex, int level )
       #endif
 
       FEATUM_DEBUG(10,"fft0: %f",lldex->current[level]->fft->magnitudes[0]);
-//      if (pad) pcmBufferFree(pcm,0);
+	  //NOT needed:      if (pad) pcmBufferFree(pcm,0);
       _FUNCTION_RETURN_(1);
 
-/*    } else {
-      FEATUM_WARNING(2,"pcm->nBlocks (%i) is not a power of 2 (or smaller than 4)! This is required for fast FFT with fft4g/fft8g/fftsg.c!",pcm->nBlocks);
-      _FUNCTION_RETURN_(0);*/
     }
   }
 

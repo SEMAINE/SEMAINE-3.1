@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,17 +73,12 @@ typedef struct {
   int nMel,nMFCC,cepLifter,firstMFCC;
   int usePower;
   LONG_IDX blocksize;
-  FLOAT_TYPE_FFT * filters;   // array containing mel filters
-  LONG_IDX *filters_start;
-  LONG_IDX *filters_end;
 
   FLOAT_TYPE_FFT * filterCoeffs;   // array containing mel filters
   FLOAT_TYPE_FFT * filterCfs;   // center frequencies in mel
   LONG_IDX *chanMap;
   LONG_IDX nLoF, nHiF;
   
-//  int *ip;
-//  FLOAT_TYPE_FFT *w;
   FLOAT_TYPE *sintable;
   FLOAT_TYPE *costable;
 } sLLDmfcc;
@@ -86,12 +90,7 @@ typedef sLLDmfcc * pLLDmfcc;
 pLLDmfcc LLDmfcc_create( pLLDmfcc obj );
 
 // custom configuration of extractor parameters  (optional)
-// int LLDmfcc_configure( pLLDmfcc obj );
-// use this line if this extractor does not have a configure function:
-//#define LLDmfcc_configure(obj)
 int LLDmfcc_configure( pLLDmfcc obj, int nMel, int nMFCC, int cepLifter, int firstMFCC, int usePower );
-
-//int LLDmfcc_setupNames( int level, pFeatureMemory mem );
 
 // flushToMem: copy final data from ftex to feature memory element array
 int LLDmfcc_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex );

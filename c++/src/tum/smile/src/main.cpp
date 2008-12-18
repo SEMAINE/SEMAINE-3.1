@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +27,8 @@
  *******************************************************************************/
 
 
+/* Standalone feature extractor SMILExtractor */
+
 #define MODULE "main"
 #include "featum_common.h"
 
@@ -28,7 +39,7 @@
 #include <inttypes.h>
 #include <math.h>
 
-#include "featum_util.h"       //( optional )
+#include "featum_util.h"       
 #ifdef LIVE_REC
 #include "live-input.hpp"
 #endif
@@ -90,13 +101,6 @@
 #define ftMEM_nLevels 30
 
 
-/************* put this in GENoutput.c ::: !!! ********************/
-/*
-
-*/
-/*********************************/
-
-
 /***************** options setup ***********************/
 pOptions setupOptions( cOptionParser &parser ) 
 #define FUNCTION "setupOptions"
@@ -156,12 +160,6 @@ pOptions setupOptions( cOptionParser &parser )
   parser.addInt( "cepLifter", 0, &(parser.opt.cepLifter), 22, "cepLifter parameter", MANDATORY_ARG, OPTIONAL_PARAM );  
   parser.addBoolean( "usePower", 0, &(parser.opt.usePower), 1, "use power spectrum when computing MFCC");  
 
-/*
-  parser.addInt( "int1", 0, &(parser.opt.int1), 1, "int1", MANDATORY_ARG, OPTIONAL_PARAM );  
-  parser.addLONG_IDX( "long1", 0, &(parser.opt.long1), 1, "long1", MANDATORY_ARG, OPTIONAL_PARAM );  
-  parser.addFloat( "float1", 0, &(parser.opt.float1), 1, "float1", MANDATORY_ARG, OPTIONAL_PARAM );  
-*/
-
   #endif
   parser.addPchar( "waveout", 'w', &(parser.opt.waveout), NULL, "wave file output of pcm stream", MANDATORY_ARG, OPTIONAL_PARAM);
 
@@ -173,7 +171,6 @@ pOptions setupOptions( cOptionParser &parser )
   parser.addInt( "channels", 'C', &(parser.opt.channels), 1, "set no. of channels", MANDATORY_ARG, OPTIONAL_PARAM);
   #endif
   
-//void optionParser_addString( pOptionParser obj, char *name, char abbr, char *val, char *dflt, char *info, int len,  int optional_arg, int mandatory );  
   //-----------------------
 
   pOptions opts = parser.doParse();
@@ -223,18 +220,6 @@ void  INThandler(int sig)
 }
 /*******************************************/
 
-/*     
-     printf("OUCH, did you hit Ctrl-C?\n"
-            "Do you really want to quit? [y/n] ");
-     c = getchar();
-     if (c == 'y' || c == 'Y')
-          exit(0);
-     else
-          signal(SIGINT, INThandler);
-     */
-
-//#define REDUCE
-
 int main(int argc, char *argv[])
 #define FUNCTION "main"
 {_FUNCTION_ENTER_
@@ -249,28 +234,11 @@ int main(int argc, char *argv[])
   cOptionParser parser(argc, argv); //options = optionParser_create( NULL, argc, argv, NULL );
   pOptions opts = setupOptions( parser );
   if (!opts) return exitApp(ERR_CMDLINE);
-//  optionParser_globaliseOptions( options );
 
   #ifdef ENABLE_PRINT_OPTIONS
   debug_printOptions( opts );
   #endif
 
-  
-
-/*
-sOptions oppp;
-pOptions opts = &oppp;
-memzero(opts,sizeof(sOptions));
-*/
-/*
-opts->infile  = "edA01.wav";
-opts->svmmodelA = "models/sal2/arousal.model";
-opts->svmscaleA = "models/sal2/arousal.scale";  
-opts->svmpredfselA = "models/sal2/arousal.fsel";  
-opts->sildet = 1;
-*/
-  //char *inputfile = "great.wav";
-  //char *htkOutputFile = "great.htk";
   char *inputfile = opts->infile;
   #ifndef LIVE_REC
   if (inputfile == NULL) {
@@ -298,36 +266,23 @@ opts->sildet = 1;
   /***************************** wave file input *****************************/    
   cWaveInput *waveIn=NULL;
 
-//  pWaveInput waveIn=NULL;
-//  pLiveInput liveIn=NULL;
-printf("0\n"); fflush(stdout);
   #ifdef LIVE_REC
   cLiveInput *liveIn=NULL;
   if (opts->infile == NULL) { // setup live audio input
     FEATUM_DEBUG(4,"opening live input audio: %i Hz, %i bit, %i channel(s)",opts->samplerate, opts->bits, opts->channels);
 //    cWaveParameters recParam(opts->samplerate, opts->channels, opts->bits) ;
 //    liveIn = new cLiveInput(NULL, opts->device, opts->buffersize, recParam, LI_STREAM_STARTED);
-    liveIn = new cLiveInput(NULL, opts->device, opts->buffersize, opts->samplerate, opts->bits, opts->channels, LI_STREAM_STARTED);
-
-//    if (!(liveIn = liveInput_create( liveIn, NULL, opts->device, opts->buffersize, opts->samplerate, pcmBitsToSampleType(opts->bits,BYTEORDER_LE,opts->useFloat32), opts->channels, 1))) {
-//      return exitApp(ERR_INPUT);
-//    }
+    liveIn = new cLiveInput(NULL, opts->device, opts->buffersize, opts->samplerate, opts->bits, opts->channels, LI_STREAM_STOPPED);
   } else {
   #endif
     FEATUM_DEBUG(4,"opening wave file %s as input",opts->infile);  //PCM_PREBUFFER, PCM_POSTBUFFER
     waveIn = new cWaveInput(opts->infile, opts->buffersize);
-//    waveIn = new cWaveInput("great.wav", 0 );
-//    if (!(waveIn = waveInput_create( waveIn, opts->infile,  opts->buffersize  ))) {
-//      return exitApp(ERR_INPUT);
-//    }
-
     FEATUM_DEBUG(4,"wave file %s was sucessfully opened",opts->infile);
     FEATUM_DEBUG(5,"sample rate of wave file: %i\n",waveIn->getSampleRate());
   #ifdef LIVE_REC
   }
   #endif
   /*------------------------------------end--------------------------------------*/
-printf("1\n");fflush(stdout);
 
   /***************************** create input framer *****************************/    
   cInputFramer * framedInput = NULL;
@@ -337,20 +292,18 @@ printf("1\n");fflush(stdout);
   } 
   #ifdef LIVE_REC
   else {
-    framedInput = new cInputFramer(*liveIn); //inputFramer_create(audioStream_create(liveIn,TYPE_LIVEINPUT));
+    framedInput = new cInputFramer(*liveIn); 
   }
   #endif
   framedInput->setAudioParameters(1, WORK_SAMPLETYPE, MEMORGA_INTERLV);
   int n_ll_levels = 0;   // low level levels (see below)
-  //int nExtraLevels = 3;  // levels for functionals, deltas, etc.
 
   // add framer clients:
   int id1 = framedInput->addClientSecStep(opts->frameSize, opts->frameStep, 0); n_ll_levels++;
-//  printf("frame size id1(=%i) = %i\n",id1,framedInput->_data.client[id1]->frameLength);
+  //  printf("frame size id1(=%i) = %i\n",id1,framedInput->_data.client[id1]->frameLength);
   framedInput->setPreEmphasis(id1, opts->preEmphasis);
-//printf("h1 %i %i %i\n",(long)framedInput, framedInput->_data.client, framedInput->_data.client[id1]); fflush(stdout);  
   FEATUM_DEBUG(3,"frame size id1(=%i) = %i",id1,framedInput->_data.client[id1-1]->frameLength);
-//  int id2 = inputFramer_addClient(framedInput, 64, 2000);
+  //  int id2 = inputFramer_addClient(framedInput, 64, 2000);
 
   #ifdef DEBUG_SILDET
   int id2 = framedInput->addClientSecStep(opts->frameStep, opts->frameStep, 0); //n_ll_levels++;
@@ -358,7 +311,7 @@ printf("1\n");fflush(stdout);
   #endif
 
   /*------------------------------------end--------------------------------------*/
-//printf("h2\n"); fflush(stdout);  
+
   /***************************** create LLDex ************************************/
   // -> temporary extractor data struct
   int *nHist = (int*)calloc(1,sizeof(int)*n_ll_levels);
@@ -379,7 +332,6 @@ printf("1\n");fflush(stdout);
   
   /***************************** create LLDs (main lld config) *******************/
      // -> main lld config for automated processing of enabled llds
-  // init LLDs (pass LLDex)
     
   cLLDs llds(lldex, 1);
 
@@ -387,7 +339,7 @@ printf("1\n");fflush(stdout);
   llds.setupLLD("energy",1,NULL,LLD_LEVEL0);
   llds.setupLLD("fft",1,NULL,LLD_LEVEL0);
   llds.setupLLD("pitch",1,NULL,LLD_LEVEL0);
-  //llds.setupLLD("mfcc",1,NULL,LLD_LEVEL0);
+
   pLLDmfcc mf = (pLLDmfcc)llds.setupLLD("mfcc",1,NULL,LLD_LEVEL0);
   LLDmfcc_configure( mf, opts->nMel, opts->nMFCC, opts->cepLifter, opts->firstMFCC, opts->usePower );
 
@@ -395,20 +347,9 @@ printf("1\n");fflush(stdout);
   LLDmfccz_configure( mZ, opts->cmsAlpha, opts->cmsInitial ); 
   
   llds.setupLLD("time",1,NULL,LLD_LEVEL0);
-//  llds.setupLLD("vq",1,NULL,LLD_LEVEL0);  // voice quality
+  //  llds.setupLLD("vq",1,NULL,LLD_LEVEL0);  // voice quality
   llds.setupLLD("spectral",1,NULL,LLD_LEVEL0); // spectral features
   
-//  llds.setupLLD("cepstrum",1,NULL,LLD_LEVEL0);
-//  pLLDcepstralF0 lld_cepstralF0 = (pLLDcepstralF0)LLDs_setupLLD(llds,"cepstralF0",1,NULL,LLD_LEVEL0);
-//  pLLDlpc lld_lpc = (pLLDlpc)LLDs_setupLLD(llds,"lpc",1,NULL,LLD_LEVEL0);
-//    #ifndef REDUCE
-
-//  #endif
-  
-//  pLLDlpc lld_lpc = (pLLDlpc)LLDs_setupLLD(llds,"lpc",1,NULL,LLD_LEVEL0);
-  
-   // ... more ...
-
   // check dependencies of extractors
   if (llds.checkDependencies() == 0) {
     FEATUM_ERR_FATAL(0,"LLD extractor dependency check failed");
@@ -425,43 +366,19 @@ printf("1\n");fflush(stdout);
   /*------------------------------------end--------------------------------------*/   
 
   /***************************** create featureMemory ****************************/
-  // TODO: segfault if capacity >= 19988 !!! ????
   LONG_IDX cap[] = {100000,100000}; // TODO: function to automatically compute capacity based on: a) time (sec.),  b) whole file
   int ids[] = {id1,0};    // -> todo ?  auto assign from framer object
   
-//  pFeatureMemory ftMem = (pFeatureMemory)featureMemory_create(NULL, framedInput, ids, (n_ll_levels+nExtraLevels), cap);
-//  cFeatureMemory ftMem(FTMEM_FIXED_BUFFER, ftMEM_nLevels);//(n_ll_levels+nExtraLevels));
   cFeatureMemory ftMem(FTMEM_RING_BUFFER, ftMEM_nLevels);//(n_ll_levels+nExtraLevels));
   
-/*  if (ftMem == NULL) {
-    FEATUM_ERR_FATAL(0,"Cannot create feature memory!");
-    return exitApp(ERR_MEMORY);          
-  }
-*/
   // setup the levels and allocate memory for each level  
   llds.setupFeatureMemLevels( ftMem, *framedInput, ids, cap );
   llds.configureFeatureMemoryNames( ftMem, LLD_LEVEL0 );
-
-
-//  LLDs_configureFeatureMemoryNames( llds, ftMem, LLD_LEVEL1 );
-    
-  // llds->nExtractors_enabled;
-/*
-  LONG_IDX *nelems;
-  nelems = (LONG_IDX *)calloc(1,sizeof(LONG_IDX)*(n_ll_levels+nExtraLevels));
-  for (i=0; i<n_ll_levels; i++) { //auto create for n ll_levels
-    nelems[i] = llds->nExtractors_flushable;  //TODO: true number of flushable extractors for this level  
-    FEATUM_DEBUG(3,"nelems[%i]=%i",i,nelems[i]);
-  }
-  if (featureMemory_memAlloc( ftMem, nelems ) == 0) return;
-  free(nelems);
-*/
-   
   /*------------------------------------end--------------------------------------*/    
+
 
   /************************ create differentiator object for LLD *****************/
   cDeltas deltas( 2 ); // two ids for delta and delta delta
-//  ( pDeltas obj, pFeatureMemory mem, int id, int olevel, int ilevel, int nFramesContext );
 
   if (!deltas.setupID( ftMem, 0, LLD0_DE, LLD_LEVEL0, 2)) {
     FEATUM_ERR_FATAL(0,"Failed setting up Delta extractor!");
@@ -476,7 +393,6 @@ printf("1\n");fflush(stdout);
   /***************************** create functionals object ***********************/
   #ifdef ENABLE_FUNCTIONALS
   cFunctionals functs( 9 );
-  
 
   if (!opts->HRF) 
   {
@@ -580,25 +496,7 @@ printf("1\n");fflush(stdout);
   
   
   
-  
-  // TODO: for outputs: for higher level outputs the number of features increases
-     // e.g. pitch max, min, etc. 
-     // implement a way of configuring higher levels with respect to features in the lower levels (LLD levels are enough)
-     
-     // requires more info in feature Memory....
-     // TODO: redesign of feature Memory:
-     /*
-        add links between levels, information about data organisation in each level
-        timing support
-        generalised interface  (no direct access to the memory data!)
-          -> two versions: online stream (ringbuffer) and offline (full buffer)
-          both version share data structures, only ringbuffer management variables are added for stream version
-          
-     
-     
-     */
   /*************************** create output objects *****************************/
-
   cHtkOutput * htkOutp= NULL;
   if (opts->htkout != NULL) {
     htkOutp = new cHtkOutput(ftMem, htkOutputFile);
@@ -641,7 +539,6 @@ printf("1\n");fflush(stdout);
   if (opts->csvout != NULL) {
     csvOutp = new cCsvOutput(ftMem, csvOutputFile);
     #define nCSVels 15
-//    #define nCSVels 15
     sElID csvEls[nCSVels];
     // energy:
     csvEls[0] = outputObject(LLD_LEVEL0, ft_lld_energy, 0, -1, 0, EL_ENABLED);
@@ -678,7 +575,6 @@ printf("1\n");fflush(stdout);
 
 
   #ifdef ENABLE_FUNCTIONALS
-// TODO:: bug here... buildNames does not properly build the functional's names, or the level linking is broken!
   cArffOutput * arffOutp = NULL;
   if (opts->arffout != NULL) {
     arffOutp = new cArffOutput(ftMem, arffOutputFile);
@@ -701,7 +597,6 @@ printf("1\n");fflush(stdout);
     arffEls[11] = outputObjectFull(LLD0_DEDE_FUNC_L0, ft_lld_time);
         
     arffOutp->configure(arffEls, nARFFelsA);
-    
   }
   
   // hierarchical functionals:
@@ -824,19 +719,13 @@ printf("1\n");fflush(stdout);
   #endif
 
 
-/*  
-  pWaveOutput waveOut = NULL;
-  if (opts->waveout) {
-//   pWaveOutput waveOutput_create( pWaveOutput obj, char *filename, long sampleRate, int bits, int channels )
-    waveOut = waveOutput_create(waveOut, opts->waveout, framedInput->sampleRate, framedInput->sampleType, framedInput->nChan);
-  }
-  */                   
-
   /*------------------------------------end--------------------------------------*/
 
   FEATUM_DEBUG(4,"entering processing loop");
   FEATUM_MESSAGE(2,"entering processing loop\n");
   signal(SIGINT, INThandler);
+  
+  if (liveIn != NULL) { liveIn->setStatus(LI_STREAM_STARTED); }
   
   cPcmBuffer * frame1 = NULL;
   cPcmBuffer * frame2 = NULL;
@@ -868,7 +757,7 @@ printf("1\n");fflush(stdout);
     #endif
     
     if (frame1 == NULL) FEATUM_DEBUG(9,"FRAME ==  NULL\n");
-
+	//printf("nBlocks: %i\n",frame1->getNBlocks());
       
    
     // add frame to short term ringbuffer
@@ -902,12 +791,9 @@ printf("1\n");fflush(stdout);
       }
       
       // live energy thresholding...
-      //#ifdef LIVE_REC
-//        printf("here9\n"); fflush(stdout);
       int sres = silDet.process(LLD_LEVEL0);
       if ((opts->sildet)&&(sres == 2)) { // begin of turn (10 frames before current position)
         printf("** detected turn start [t=%f]--\n",(*frame1)._data.timestamp); fflush(stdout);
-          // ++AMQ++ send turn start
         if (opts->HRF) {
           functs.setFrameStart( 3, -10 );
           functs.setFrameStart( 4, -10 );
@@ -959,7 +845,6 @@ printf("1\n");fflush(stdout);
         if (!meanF0.found()) { ftMem.findFeature( "F0freq-nzmean", meanF0 ); }
         if (!meanF0n.found()) { ftMem.findFeature( "F0freq-nzN", meanF0n ); }
         if (!meanF0s.found()) { ftMem.findFeature( "F0strength-percentile95", meanF0s ); }
-//        printf("h4\n"); fflush(stdout);
         FLOAT_TYPE_FTMEM *en = ftMem.getFeaturesByID( meanE, 0 );
         FLOAT_TYPE_FTMEM *f0 = ftMem.getFeaturesByID( meanF0, 0 );
         FLOAT_TYPE_FTMEM *f0n = ftMem.getFeaturesByID( meanF0n, 0 );
@@ -972,11 +857,9 @@ printf("1\n");fflush(stdout);
        
         if ( (f0 != NULL)&&(f0n != NULL)&&(en!= NULL)&&(f0s!=NULL)
              &&(turntime > 100)
-           //&& (*f0* MAX_PITCH > 40.0) 
            && (*f0* MAX_PITCH < 495.0) 
             && 
             ( 
-               //(*f0n > 0.001) && 
                (*f0s > 0.40) && (*en > -11.0)  )
             || ( (*en > -9.0) && (*f0s > 0.5) ) 
             ) {
@@ -999,29 +882,6 @@ printf("1\n");fflush(stdout);
           a = svmPredA->getLastResult();
           v = svmPredV->getLastResult();
 
-          printf("<emotion>\n");
-          printf("  <dimensions set=\"valenceArousalPotency\">\n");
-          printf("    <arousal value=\"%f\">\n",a);
-          printf("    <valence value=\"%f\">\n",v);
-          printf("    <potency value=\"%f\">\n",0.0);
-          printf("  </dimensions>\n");
-          printf("</emotion>\n\n");
-          fflush(stdout);
-/*
-          <emotion>
-
-    <dimensions set="valenceArousalPotency">
-
-        <arousal value="0.3"/>
-
-        <valence value="0.9"/>
-
-        <potency value="0.8"/>
-
-    </dimensions>
-
-</emotion>
-*/
         }    else {
           // TODO: skip frame...
         }                 
@@ -1046,12 +906,10 @@ printf("1\n");fflush(stdout);
 
       }
       #endif
-      //#endif
       
     }
     
-    //functionals_computeCurrentOnly( functs, 0 );
-    
+   
     #ifdef LIVE_REC
     if (featum_quit && (liveIn != NULL)) {
       if (!fl) printf("Stopped recording from device ... waiting for data in buffer to be written to disk.\n"); 
@@ -1067,7 +925,6 @@ printf("1\n");fflush(stdout);
     okay = flag;
     FEATUM_DEBUG(8,"LOOP featum_quit = %i",featum_quit);
   }
-  //waveOutput_destroy(waveOut);
   #ifdef LIVE_REC
   delete liveIn;
   #endif
@@ -1094,9 +951,6 @@ printf("1\n");fflush(stdout);
   functs.computeNow(  7, 1 );
   functs.computeNow(  8, 1 );
   
-  //functionals_computeNow( functs, 1, 1 );
-  //  FEATUM_DEBUG(1,"0: %i, 1: %i",(long)ftMem->level[2].ft[0][0], (long)ftMem->level[2].ft[0][1]);
-
   if (arffOutpHR != NULL) arffOutpHR->saveFrameExt(opts->arfflabel,opts->infile);
   if (!opts->sildet) if (arffOutpFull != NULL) arffOutpFull->saveFrameExt(opts->arfflabel,opts->infile);
   if (!opts->sildet) if (arffOutpFullA != NULL) arffOutpFullA->saveFrameExt(opts->labelA,opts->infile);
@@ -1129,113 +983,27 @@ printf("1\n");fflush(stdout);
   if (arffOutpFullV != NULL) delete arffOutpFullV;
   #endif  
   
-//  frame2 = pcmBufferFree(frame2,0);
-  
   if (htkOutp != NULL) delete htkOutp;
   if (csvOutp != NULL) delete csvOutp;
 
-//  if (frame1 != NULL) delete frame1;
-  
-// free LLDex, LLDs
-
-
-  
-//FOR TESTING: read out featureMem and print to screen
-
-/*
-  int n;
-  for (n=0; n< ftMem->level[LLD_LEVEL0].curIdx; n++) {
-    pFtMemFrame el = NULL;
-    el = featureMemory_getFrame(ftMem, LLD_LEVEL0, (LONG_IDX)n  ); //FT_LLD_ENERGY
-    if (el != NULL) {
-      if (el->frame[ft_lld_pitch]->values[1] >= 0.1) 
-        printf("F0(%i, %i, %f): %f\n",n,el->timestamp,el->timestampSec,el->frame[ft_lld_pitch]->values[0]);
-    } else
-      printf("NULL\n");  
-    //for (i=0; i<el->nValues; i++) {
-  }
- */ 
-  
-/*
-  printf(" IDX level 1: %i \n",ftMem->level[1].curIdx);
-  for (n=0; n< ftMem->level[1].curIdx; n++) {
-    pFtMemFrame el = NULL;
-    el = featureMemory_getFrame(ftMem, 1, (LONG_IDX)n  ); //FT_LLD_ENERGY
-    if (el != NULL) 
-      printf("MAX(%i, %i, %f): %f  MIN: %f\n",n,el->timestamp,el->timestampSec,el->frame[ft_lld_energy]->values[functs->en_max-1],el->frame[ft_lld_energy]->values[functs->en_min-1]);
-    else
-      printf("NULL\n");  
-    //for (i=0; i<el->nValues; i++) {
-  }*/
-  
   
   #ifdef ENABLE_FUNCTIONALS
   #endif
 
-// TESTING: print featureMem names:
+  // TESTING: print featureMem names:
   //printf("Feature0: %s\n",featureMemory_getFeatureName(ftMem,0,ft_lld_energy,0));
   //printf("Feature1: %s\n",featureMemory_getFeatureName(ftMem,0,ft_lld_energy,1));
 
-               // + featurenames...
-               // STEP2: implement output module
 
   #ifdef ENABLE_PROFILER
   profiler_printTime(&profiler);
   #endif
   
-// free featureMem
-
   FEATUM_DEBUG(5,"destroying inputFramer");  
   delete framedInput;
   FEATUM_DEBUG(5,"destroying wave file input (%s)",inputfile);  
   delete waveIn;
-  
 
-/* ---end of test code---- */
-
-
-  // parse options (commandline + config file)
-  
-  
-  // read and process feature selection file
-  
-  // set up data input (frames, wavefile, streams etc.)
-  
-  // register feature extractors
-  
-  // loop while data is available
-//  while (isDataAvail)
-//  {
-        // REQD:  ftex struct history
-        //        2d  ftex struct -> history and LLD framesize
-        
-          // read frame & clear ftext struct
-          
-          // process frame, level 1 (FFT, zero x-ing, energy, etc.)
-          
-          // proces frame, level 2 (pitch, mfcc, spectral)
-          
-          // process frame, level 3 (formant, lp, plp, etc.)
-          
-          // (process, level 4  [generation of new features, e.g. log/sin/exp, etc.])
-
-          // add to global feature memory (LARGE!!)
-          // -> global feature memory is responsible for differentials
-          //   -> so update them every time the add method is called
-          
-          // check for complete frames in glob. ft. mem and save raw features
-          // **** -> out LLD  [interface to real time post processors & data saving to file]
-          
-          // check output framing & compute functionals from LLD at frame end
-          // (functionals class that uses global featuremem as input)
-          
-          // save output functionals frame
-          
-          // *** -> out functionals.. functional frame rate should not be fixed!
-          //                           -> an input stream (or file) should be able to control the frame borders on-the-fly
-//  }
-
-  // cleanup        
   return exitApp(NO_ERROR);
 }
 #undef FUNCTION

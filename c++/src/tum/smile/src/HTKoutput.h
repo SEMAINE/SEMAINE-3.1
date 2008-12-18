@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,21 +57,6 @@ typedef sHTKheader * pHTKheader;
 
 
 /* The class data structure */
-/*
-typedef struct {
-  char *filename;
-  FILE * filedesc;         // contains descriptor of open file, or -1 if no file is open
-  pFeatureMemory mem;
-  int is_vax;
-  sHTKheader header;
-  float samplePeriod;
-  LONG_IDX idx_save;   // max. index in featureMemory that has been saved  (used to determine if we have new data to save)
-  LONG_IDX fileIdx_frames;  // current write position in file (in frames or vectors)
-  int outputVectorDimensionality;
-  int nEls;     // number of elements to save
-  pElID els;    // indicies of elements to save
-} sHtkOutput;
-*/
 typedef sGenOutput sHtkOutput;
 typedef sHtkOutput* pHtkOutput;
 

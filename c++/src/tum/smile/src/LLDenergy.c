@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +39,6 @@
 
 #include "featum_util.h"       //( optional )
 #include "feature-memory.h"
-//#include "LLDenergy.h"
 #include "LLDs.h"
 
 #undef FUNCTION     // use undef only if you define it below for every function
@@ -44,34 +52,6 @@ pLLDenergy LLDenergy_create( pLLDenergy obj )
 }
 #undef FUNCTION 
 
-
-// custom configuration of extractor parameters
-/*  this is only a template function:
-int LLDenergy_configure( pLLDenergy obj )
-#define FUNCTION "LLDenergy_create"
-{_FUNCTION_ENTER_
-  if (obj != NULL) {
-     _FUNCTION_RETURN_( 1 );
-  }
-  _FUNCTION_RETURN_( 0 );
-}
-#undef FUNCTION 
-*/
-
-
-// setup names in feature memory object
-/*
-int LLDenergy_setupFtmem( int level, pFeatureMemory mem )
-#define FUNCTION "LLDenergy_setupNames"
-{_FUNCTION_ENTER_
-  int ret;
-  ret = featureMemory_setupElement( mem, level, FT_LLD_ENERGY, FT_LLD_ENERGY_nVal, (char **)&lld_energy_ftMem_names );
-  _FUNCTION_RETURN_(ret);
-}
-#undef FUNCTION 
-*/  
-
-//int featureMemory_flushToFtMem( pFeatureMemory mem, int level, int el, int nVal )
 
 // flushToMem: copy final data from ftex to feature memory element array
 int LLDenergy_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
@@ -90,9 +70,6 @@ int LLDenergy_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
     = featureMemory_getValuesForWrite_seq( mem, level, ft_lld_energy, 
                                            FT_LLD_ENERGY_nVal, 0, 
                                            lldex->current[level]->timestamp );
-   //(TODO: assign timestamps...??   should be done in featureMemory_getValuesWrite...)
-   // -> ok (at least here...)
-
   if (values != NULL) {
    values[0] 
       = (FLOAT_TYPE_FTMEM)lldex->current[level]->energy->rmsEnergy; 

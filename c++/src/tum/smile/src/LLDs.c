@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +56,6 @@ pLLDs LLDs_create( pLLDs obj, pLLDex l, int freeLLDex, int freeLLDobjs )
     memzero(obj, sizeof(sLLDs));       
   }
   
-  //printf("acdef %i - b %i\n",sizeof(LLD),sizeof(sLLDs));
   if (obj == NULL) {
     FEATUM_ERR_FATAL(0,"Error allocating memory!");
     _FUNCTION_RETURN_(NULL);        
@@ -56,23 +64,6 @@ pLLDs LLDs_create( pLLDs obj, pLLDex l, int freeLLDex, int freeLLDobjs )
   // copy default configuration:
   memcpy(obj,&LLD,sizeof(sLLDs));
 
-//  printf("keytag1  %i  %i\n",(long)(LLD.config[0].LLDdestroy),(long)&LLDenergy_destroy); 
-//  (long)(obj->config[i].LLDcreate)
-/*    obj->nExtractors = LLD.nExtractors;
-    obj->nExtractorLevels = LLD.nExtractorLevels;
-    obj->nExtractors_enabled = NULL;
-    obj->nExtractors_flushable = NULL;*/
-//    obj->config = (pLLDconfig *)calloc(1,sizeof(pLLDconfig *)*LLD.nExtractors);
-// TODO: sort extractors according to priority here:  ?? does this break any enumerations by the FT_LLD_ constants ??
-//    for (i=0; i< obj->nExtractors; i++) {
-//FEATUM_DEBUG(11,"5 %i %i - %i %i",i,obj->nExtractors);//,(int)(obj->config[i]),(int)(LLD.config[i]));
-//      obj->config[i] = LLD.config[i]; 
-//      obj->config[i] = &(LLD.config[i]); 
-// FEATUM_DEBUG(11,"5b %i %i",i,obj->nExtractors);   
-//    }
-// obj->config = (sLLDconfig *)&(LLD.config);
-//    obj->nExtractors = (sizeof(LLD) - 3*sizeof(int) - sizeof(pLLDex)) / sizeof(pLLDconfig);
-//    FEATUM_DEBUG(8,"sizeof(LLD) = %i",sizeof(LLD.config));
   FEATUM_DEBUG(8,"preset obj->nExtractors = %i",obj->nExtractors);
   obj->LLDex = l; 
 
@@ -102,12 +93,9 @@ void * LLDs_setupLLD( pLLDs obj, const char * name, int enabled, void *exObj, in
           exObj = (obj->config[i].LLDcreate)(obj->config[i].LLDobj);
         }
         
-//printf("%i <-> %i :: %i %i\n",sizeof(sLLDs), sizeof(LLD),(long)LLD.config, (long)&(LLD.config));
-// TODO: remove const from LLD struct!
         obj->config[i].LLDobj = exObj;
         obj->config[i].enabled = enabled;
         
-//      featureMemory_setupNames(  mem, ftmem_level, obj->config[i].ftmem_element, obj->config[i].ftmem_nVal, , enabled )
         _FUNCTION_RETURN_(exObj);
       }
     }

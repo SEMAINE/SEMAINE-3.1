@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,31 +47,6 @@ pInputFramer inputFramer_create(pAudioStream input)
 {_FUNCTION_ENTER_
   pInputFramer obj = inputFramer_create2(NULL, input);
   _FUNCTION_RETURN_( obj );
-/*
-  int i;
-  pInputFramer obj = NULL;
-  if (input == NULL) _FUNCTION_RETURN_( NULL );
-
-  obj = (pInputFramer)calloc(1,sizeof(sInputFramer));
-  if (obj==NULL) _FUNCTION_RETURN_( obj );
-  
-  obj->input = input;
-
-  obj->nChan = obj->input->nChan;
-  obj->sampleType = obj->input->sampleType;
-  obj->memOrga = obj->input->memOrga;  
-  obj->sampleRate = obj->input->sampleRate;
-  obj->nBPS = obj->input->nBPS;
-  
-  for (i=0; i<MAX_CLIENTS; i++) {
-    obj->client[i] = (pInputFramerClient)calloc(1,sizeof(sInputFramerClient));
-    obj->client[i]->id = i+1;
-    obj->client[i]->windowFunc = WIN_HAMMING;       // default = Hamming Window
-    obj->client[i]->preEmphasis = 0.0;              // default = no pre emphasis
-    obj->clientLUT[i+1] = i;
-  }
-  FEATUM_DEBUG(9,"nChan=%i, sampleType=%i, memOrga=%i, MAX_CLIENTS=%i",obj->input->nChan,obj->input->sampleType,obj->input->memOrga,MAX_CLIENTS);
-  */
 }
 #undef FUNCTION
 
@@ -416,6 +400,10 @@ int inputFramer_getFrame(pInputFramer obj, int id, pPcmBuffer *frame)
     pcmBufferFree(tmp,0);
   }
 
+  // still not enough data ... do not return incomplete frames...
+  if (pcmRingBufferMR_toread(obj->buffer,id2) < obj->client[id2]->frameLength) {
+	 _FUNCTION_RETURN_(0);
+  }
   
   // copy if...  (synchronisation constraints are fulfilled)
   int copy = 0;  
@@ -558,11 +546,9 @@ pInputFramer inputFramer_destroyWithInput(pInputFramer obj)
   if (obj != NULL) {
     obj->input = audioStream_destroy(obj->input);
 
-    //return inputFramer_destroy(obj);
     obj = inputFramer_destroy(obj);
     _FUNCTION_RETURN_( obj );
   }
   _FUNCTION_RETURN_( NULL );
-  //return NULL;
 }
 #undef FUNCTION

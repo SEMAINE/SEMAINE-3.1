@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +26,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *******************************************************************************/
  
- 
- /* NOTE::   live input is currently only supported for LINUX !!! */
  
  /*  IMPLEMENTATION of the class <liveInput>
      See the corresponding header file (.h) for documentation!  */
@@ -127,9 +134,10 @@ _FUNCTION_ENTER_
   // check for space in buffer and if necessary, limit "tocopy" length
   LONG_IDX free = obj->bufferSizeBlocks - (obj->idxWr-obj->idxRd);
   if (tocopy > free) {
-    #ifndef USE_PORTAUDIO
+    //#ifndef USE_PORTAUDIO
     FEATUM_WARNING(4,"DROPPED %i blocks while writing to ringbuffer",tocopy-free);
-    #endif           
+    printf("DROPPED %i blocks while writing to ringbuffer",tocopy-free);
+    //#endif           
     obj->nSkipped += tocopy-free;
     tocopy = free;
   }
@@ -512,6 +520,11 @@ int liveInput_listDevices(void)
 }
 #undef FUNCTION
 
+void liveInput_setNoWait( pLiveInput obj, int optNoWait )
+{
+  if (obj!=NULL) obj->optNoWait = optNoWait; 	 
+}
+	 
 pLiveInput liveInput_create( pLiveInput obj, const char *devicename, int deviceId, LONG_IDX maxBuf, int samplerate, int sampleType, int channels, int status)
 #define FUNCTION "liveInput_create"
 {_FUNCTION_ENTER_
@@ -598,6 +611,8 @@ pLiveInput liveInput_create( pLiveInput obj, const char *devicename, int deviceI
      obj->paFrames = maxBuf/4 ; //* obj->parameters.blockSize; // this value is in bytes
      printf("paFrames: %i  (maxBufblocks: %i)\n",obj->paFrames,maxBuf);
      #endif
+     
+     obj->optNoWait = 0;
      
      // allocate wave buffer
      if (maxBuf <= 0) { 
@@ -812,6 +827,7 @@ int liveInput_reloadBuffer( pLiveInput obj )
     //if (status != 1) Pa_Sleep(1);
     int cnt = 0;
     while ((obj->bufUpdate == 0)&&(status==1) &&(cnt<200) ) { //&&( status == 1 )
+      if (obj->optNoWait) { cnt=-1; break; } // do not wait for data
       Pa_Sleep(1);
       FEATUM_DEBUG(9,"wait for data loop...%i\n",cnt);
 #ifdef HAVE_PORTAUDIO_V19
@@ -820,6 +836,10 @@ int liveInput_reloadBuffer( pLiveInput obj )
       status = Pa_StreamActive( obj->stream );
 #endif
       cnt++;
+    }
+    if (cnt==-1) {
+      FEATUM_WARNING(10,"not waiting for data from portaudio device...");  
+      _FUNCTION_RETURN_(0);             
     }
     if (cnt>=200) {
       FEATUM_ERROR(2,"timeout (cnt=200) while waiting for data from portaudio device...");  
@@ -885,6 +905,7 @@ int liveInput_getDataSequential( pLiveInput obj, pPcmBuffer data )
       #endif
     } else {
       
+      LONG_IDX nBlocks0 = data->nBlocks;
       LONG_IDX tocopy = data->nBlocksAlloc-data->nBlocks;
       LONG_IDX copied = 0;
      
@@ -900,7 +921,7 @@ int liveInput_getDataSequential( pLiveInput obj, pPcmBuffer data )
       do {
         // copy part of data that is available in the buffer, try to copy as much as possible
         copied += liveInput_rb_copy(obj,data,tocopy-copied);
-        if (data->nBlocks < tocopy) {  // reload
+        if (data->nBlocks < tocopy+nBlocks0) {  // reload
           FEATUM_DEBUG(10,"reload during copy (missing=%i)",tocopy-data->nBlocks);
           if (liveInput_reloadBuffer(obj) == 0) _FUNCTION_RETURN_(0);
         }
@@ -928,24 +949,6 @@ inline int liveInput_getDataSequential_gen( void *obj, pPcmBuffer data )
 pLiveInput liveInput_destroy( pLiveInput obj )
 #define FUNCTION "liveInput_destroy"
 {_FUNCTION_ENTER_
-/*     if (obj != NULL) {
-       // close devicehandle (if open...)
-       liveInput_stopRecording(obj);
-       
-       #ifdef USE_PORTAUDIO
-       // maybe wait for buffers to be flushed here...?
-       
-       PaError err = Pa_Terminate();
-       if( err != paNoError ) {
-         FEATUM_ERROR(2,"PortAudio error: %s\n", Pa_GetErrorText( err ) );
-       }
-       pcmBufferFree(obj->bufWrapper,0);
-       #endif
-       // free internal buffer:
-       pcmBufferFree(&(obj->buffer),1);
-       printf("  liveInput: dropped %i blocks\n",obj->nSkipped);
-       free(obj);
-     }*/
      liveInput_destroyData(obj);
      if (obj != NULL) free(obj);
      _FUNCTION_RETURN_(NULL);
@@ -973,7 +976,6 @@ pLiveInput liveInput_destroyData( pLiveInput obj )
        // free internal buffer:
        pcmBufferFree(&(obj->buffer),1);
        printf("  liveInput: dropped %i blocks\n",obj->nSkipped);
-//       free(obj);
      }
      _FUNCTION_RETURN_(NULL);
 }
@@ -1000,6 +1002,12 @@ int liveInput_rb_copy( pLiveInput obj, pPcmBuffer data, LONG_IDX lng )
   if (skip >= data->nBlocksAlloc) _FUNCTION_RETURN_(0);
   if (lng > data->nBlocksAlloc) _FUNCTION_RETURN_(0);
   #endif
+  /*
+  if ((obj->optNoWait)&&(data->nBlocksAlloc - data->nBlocks > tocopy)) {
+    // do not copy incomplete frames, when less data is available when noWait is set!
+    _FUNCTION_RETURN_(0);
+  }
+  */
   
   obj->buffer.nBlocks = obj->buffer.nBlocksAlloc;
   FEATUM_DEBUG(9,"avail=%i, lng_requested=%i,  tocopy=%i, skip = %i\n",avail, lng, tocopy,skip);

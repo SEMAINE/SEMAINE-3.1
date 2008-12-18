@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +38,7 @@ Supported:
 		   Simple Linux OSS    (still with bugs...)
 
 The choice of input type is configured at compile time with #define 
-(or --with-XXX when using autoconf)
+(or --with-XXX when using autoconf: not yet supported)
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
  
@@ -89,6 +98,10 @@ class cLiveInput: public cAudioStream {
            return liveInput_setStatus( &_data, status );
          }
 
+		 void setNoWait( int _optNoWait ) {
+		   liveInput_setNoWait( &_data, _optNoWait );
+         }
+         
          /* 
 		    gets data from current position, data must be allocated by calling function
             data->nSamp must be initialized with the number of samples to read

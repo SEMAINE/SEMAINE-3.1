@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +40,6 @@
 
 #include "featum_util.h"       //( optional )
 #include "feature-memory.h"
-//#include "LLDcepstrum.h"
 #include "LLDs.h"
 
 #undef FUNCTION     // use undef only if you define it below for every function
@@ -68,22 +76,6 @@ int LLDcepstrum_configure(pLLDcepstrum obj, int numCeps, int complex )
 }
 #undef FUNCTION 
 
-
-
-// setup names in feature memory object
-/*
-int LLDcepstrum_setupFtmem( int level, pFeatureMemory mem )
-#define FUNCTION "LLDcepstrum_setupNames"
-{_FUNCTION_ENTER_
-  int ret;
-  ret = featureMemory_setupElement( mem, level, FT_LLD_CEPSTRUM, FT_LLD_CEPSTRUM_nVal, (char **)&lld_cepstrum_ftMem_names );
-  _FUNCTION_RETURN_(ret);
-}
-#undef FUNCTION 
-*/  
-
-//int featureMemory_flushToFtMem( pFeatureMemory mem, int level, int el, int nVal )
-
 // flushToMem: copy final data from ftex to feature memory element array
 int LLDcepstrum_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
 #define FUNCTION "LLDcepstrum_flushToFtMem"
@@ -110,7 +102,6 @@ int LLDcepstrum_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
    }
 
    lldex->current[level]->cepstrum->flush_status = LLDEX_FLUSHED;
-   //(TODO: assign timestamps...??   should be done in featureMemory_getValuesWrite...)
 
     _FUNCTION_RETURN_(1);
   }

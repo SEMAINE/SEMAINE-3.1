@@ -1,8 +1,7 @@
 /*
 Fast Fourier/Cosine/Sine Transform
 
-@@@@  FLOAT (32bit) PRECISION VERSION modified by Florian @@@@@@@
-@@@@  all functions have an "f" appended @@@@@@@@@
+@@@@  FLOAT_TYPE_FFT floating porint PRECISION VERSION modified by Florian @@@@@@@
  
     dimension   :one
     data length :power of 2

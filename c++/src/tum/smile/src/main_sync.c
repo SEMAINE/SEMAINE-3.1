@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +26,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *******************************************************************************/
 
-/*
-#define TRIGGER_FREQ_MIN  45
-#define TRIGGER_FREQ      50
-#define TRIGGER_FREQ_MAX  55
-*/
+/* SYNC tool for audiovisual synchronisation using trigger signal on extra 
+   audio channel */
+
+
+#define BUFFERSIZE 48000
 
 float TRIGGER_FREQ_MIN =  45.0;
 float TRIGGER_FREQ     =  50.0;
 float TRIGGER_FREQ_MAX =  55.0;
-
-#define BUFFERSIZE 48000
-
 
 /*
 
@@ -61,7 +67,6 @@ pOptions setupOptions( pOptionParser obj )
 {_FUNCTION_ENTER_
   if (obj == NULL) return;
 
-  // add your parameters:::  (don't forget to define variables in the struct in option-parser.h !!)
   optionParser_addBoolean( obj, "help", 'h', &(obj->opt.help), 0, "Display this usage message" );
   optionParser_addPchar( obj, "infile", 'i', &(obj->opt.infile), NULL, "input file or device", MANDATORY_ARG, MANDATORY_PARAM);
   optionParser_addPchar( obj, "waveout0", '0', &(obj->opt.waveout0), NULL, "wave file output of pcm stream (ch1)", MANDATORY_ARG, MANDATORY_PARAM);

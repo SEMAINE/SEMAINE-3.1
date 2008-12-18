@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +25,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *******************************************************************************/
+
  
  /*  IMPLEMENTATION of the class <featureMemory>
      See the corresponding header file (.h) for documentation!  */
@@ -23,8 +33,6 @@
 #define MODULE "feature-memory"
 #include "featum_common.h"
 
- // TODOOOO: implement a compatible featureMemoryRB  with ringbuffer capabilities & absolute indicies (possibly warping)
- 
  // this file contains the function definitions and the private class data
 
 #include <stdio.h>
@@ -59,11 +67,7 @@
     */
 
 
-// (ok) TODO: somewhere add number of features for each element and compute true frameSize!
 // TODO: check if the filled and allFilled flags and indicies are set correctly!!
-// (ok) TODO: check timestamp handling!
-
-
 
 // virtual index: absolute index counting from beginning (could be either fixed buffer or ring buffer)
 
@@ -73,8 +77,7 @@
 pFeatureMemory featureMemory_create( pFeatureMemory obj, int defaultBufferType, int nLevels )
 #define FUNCTION "featureMemory_create"
 {_FUNCTION_ENTER_
-  int i;
-//  if ((obj == NULL)){
+    int i;
     FEATUM_DEBUG(10,"checks 1 passed");
     #ifdef COMPILE_CHECKS
     if (nLevels <= 0) {
@@ -113,102 +116,9 @@ pFeatureMemory featureMemory_create( pFeatureMemory obj, int defaultBufferType, 
           }
       }
     }
-//  } else {
-//    FEATUM_DEBUG(10,"ERR: obj = %i, ",(long)obj);
-//  }  
-  _FUNCTION_RETURN_(obj);
+    _FUNCTION_RETURN_(obj);
 }
 #undef FUNCTION 
-
-/*
-// *capacity array must be at least nLevels*sizeof(LONG_IDX) in size or NULL!
-pFeatureMemory featureMemory_create( pFeatureMemory obj, int defaultBufferType, pInputFramer framer, int *framerIDs, int nLevels, LONG_IDX *capacity )
-#define FUNCTION "featureMemory_create"
-{_FUNCTION_ENTER_
-  int i;
-// TODO: check if number of framer IDs < nLevels... if so, then add extra levels without frameStep, etc.
-  if ((obj == NULL)){
-  //&&(framerIDs != NULL)&&(framer != NULL)) {
-//                 &&(capacity != NULL)
-    FEATUM_DEBUG(10,"checks 1 passed");
-    #ifdef COMPILE_CHECKS
-    if (nLevels <= 0) {
-      FEATUM_ERROR(1,"cannot create featureMemory with 0 levels");
-      _FUNCTION_RETURN_(NULL);
-    }
-    #endif
-    obj = (pFeatureMemory)calloc(1,sizeof(sFeatureMemory));
-    if (obj != NULL) {
-      obj->level = (pFeatureMemoryLevel)calloc(1,sizeof(sFeatureMemoryLevel)*nLevels);
-      obj->nLevels = nLevels;
-      if ((defaultBufferType != FTMEM_FIXED_BUFFER)||(defaultBufferType != FTMEM_RING_BUFFER)) defaultBufferType = FTMEM_FIXED_BUFFER;
-      obj->defaultBufferType = defaultBufferType;
-      if (obj->level != NULL) {
-        if ((framerIDs != NULL)&&(framer != NULL)&&(capacity != NULL)) {
-          int minlevels;
-          // if featureMemory has more levels than low-level input levels (from the framer) than assume the extra levels are for functionals, etc. 
-          if (nLevels > framer->nClients) {
-            minlevels =  framer->nClients;
-          } else {
-            minlevels = nLevels;       
-          }
-          for (i=0; i<minlevels; i++) {
-            obj->level[i].capacity = capacity[i];
-            if (framer->client != NULL) {
-              obj->level[i].T = (float)audioStream_samplesToSeconds( framer->input, framer->client[framer->clientLUT[framerIDs[i]]]->frameStep );
-              //obj->level[i].frameStep = framer->client[framer->clientLUT[framerIDs[i]]]->frameStep;
-              obj->level[i].frameSize = 0; //framer->client[framer->clientLUT[framerIDs[i]]]->frameLength;  //????
-              FEATUM_DEBUG(10,"obj->level[%i / %i].frameStep == %i",i,framerIDs[i],obj->level[i].frameStep);
-            }
-            obj->level[i].nFtEls = 0;  // call featureMemory_memAlloc to allocate actual data memory
-            obj->level[i].ft = NULL;   // [index][ftelement]
-            obj->level[i].t = NULL;            
-            obj->level[i].config = NULL;
-            obj->level[i].curIdx = -1;  // no frame has been initialised
-            obj->level[i].allFilledIdx = -1;
-            obj->level[i].readIdx = -1;            
-            obj->level[i].prevLevel = -1;
-            obj->level[i].nextLevel = -1;
-          }               
-          for (i=minlevels; i<nLevels; i++) {
-            //obj->level[i].capacity = capacity[i]; // could also be zero
-            obj->level[i].nFtEls = 0;  // call featureMemory_memAlloc to allocate actual data memory
-            obj->level[i].ft = NULL;   // [index][ftelement]
-            obj->level[i].t = NULL;            
-            obj->level[i].config = NULL;
-            obj->level[i].curIdx = -1;  // no frame has been initialised
-            obj->level[i].allFilledIdx = -1;
-            obj->level[i].readIdx = -1;
-            obj->level[i].prevLevel = -1;
-            obj->level[i].nextLevel = -1;
-          }
-          obj->ll_levels = minlevels;
-        } else {
-          obj->ll_levels = 0;
-          if (capacity != NULL) {
-            for (i=0; i<nLevels; i++) {
-              //obj->level[i].capacity = capacity[i]; // could also be zero
-              obj->level[i].nFtEls = 0;  // call featureMemory_memAlloc to allocate actual data memory
-              obj->level[i].ft = NULL;   // [index][ftelement]
-              obj->level[i].t = NULL;            
-              obj->level[i].config = NULL;
-              obj->level[i].curIdx = -1;  // no frame has been initialised
-              obj->level[i].allFilledIdx = -1;
-              obj->level[i].readIdx = -1;              
-              obj->level[i].prevLevel = -1;
-              obj->level[i].nextLevel = -1;
-            }
-          } // end: if (capacity == 0) ...
-        }
-      }
-    }
-  } else {
-    FEATUM_DEBUG(10,"ERR: obj = %i, capacity = %i, framerIDs = %i",(unsigned int)obj, (unsigned int)capacity,(unsigned int)framerIDs);
-  }  
-  _FUNCTION_RETURN_(obj);
-}
-#undef FUNCTION 
-*/
 
 
 // T can be zero, if the frames are not periodic
@@ -255,26 +165,6 @@ int featureMemory_setNFtEls( pFeatureMemory obj, int level, int nFtEls )
 }
 #undef FUNCTION 
 
-
-// call this before memAlloc to set up the additional levels, e.g. those for functionals
-/*
-int featureMemory_configureExtraLevel( pFeatureMemory obj, int level, float T, int capacity)
-#define FUNCTION "featureMemory_configureExtraLevel"
-{_FUNCTION_ENTER_
-  if (obj != NULL) {
-    #ifdef COMPILE_CHECKS
-    if (level < 0) _FUNCTION_RETURN_(0);
-    #endif
-    if ((obj->level != NULL)&&(level < obj->nLevels)) {
-      obj->level[level].capacity = capacity;
-      obj->level[level].T = T;
-      _FUNCTION_RETURN_(1);
-    }
-  }
-  _FUNCTION_RETURN_(0);
-}
-#undef FUNCTION 
-*/
 
 int featureMemory_dataMemAllocLevel( pFeatureMemory obj, int level )
 #define FUNCTION "featureMemory_dataMemAllocLevel"
@@ -341,55 +231,7 @@ int featureMemory_dataMemAlloc( pFeatureMemory obj )
 }
 #undef FUNCTION 
 
-/*
-// nFtElems: number of feature elements for each level
-//int featureMemory_memAlloc( pFeatureMemory obj, LONG_IDX *nFtElems )
-int featureMemory_dataMemAlloc( pFeatureMemory obj )
-#define FUNCTION "featureMemory_dataMemAlloc"
-{_FUNCTION_ENTER_
-  LONG_IDX i,n;
-  if ((obj != NULL)&&(nFtElems != NULL)) {
-    for (i=0; i<obj->nLevels; i++) {
-      if ((obj->level != NULL)&&(obj->level[i].ft == NULL)) {
-        if (obj->level[i].nFtEls == 0) { FEATUM_ERROR(2,"nFtEls == 0 on level %i : probably not configured!",i);
-        else {
-        FEATUM_DEBUG(11,"allocating capacity = %i",obj->level[i].capacity);
-        obj->level[i].ft = (pFtMemElement **)calloc(1,(LONG_IDX)sizeof(pFtMemElement *) * obj->level[i].capacity);
 
-        if (obj->level[i].ft != NULL) {
-          for (n=0; n<obj->level[i].capacity; n++ ) {
-            FEATUM_DEBUG(12,"allocating frame %i of %i (x %i)",n,obj->level[i].capacity,obj->level[i].nFtEls);            
-//            if (n<29988)
-              obj->level[i].ft[n] = (pFtMemElement *)calloc(1,sizeof(pFtMemElement) * obj->level[i].nFtEls);
-            FEATUM_DEBUG(12," ptr=%i",(int)(obj->level[i].ft[n]));
-            if (obj->level[i].ft[n] == NULL) {
-              FEATUM_ERR_FATAL(0,"Error allocating memory!");
-              //_FUNCTION_RETURN_(0);
-            }
-            // the memory of the elements will be allocated at a later point in time...?
-            // during addElement or getElement ?
-          }
-        } else {
-          FEATUM_ERR_FATAL(0,"Error allocating memory!");
-          _FUNCTION_RETURN_(0);
-        }
-        
-        if (obj->level[i].config == NULL)
-          obj->level[i].config = (pFtMemElementConfig)calloc(1,sizeof(sFtMemElementConfig) * obj->level[i].nFtEls);
-        if (obj->level[i].t == NULL)
-          obj->level[level].t = (FLOAT_TYPE_TIME *)calloc(sizeof(FLOAT_TYPE_TIME)*obj->level[i].capacity);        
-          
-        }
-      } else {
-        FEATUM_WARNING(2,"Memory for obj->level[i]->ft already allocated or obj->level[i] == NULL");
-      }  
-    }
-    _FUNCTION_RETURN_(1);
-  }
-  _FUNCTION_RETURN_(0);
-}
-#undef FUNCTION 
-*/
 
 // this function will free the complete data memory and all feature memory elements
 int featureMemory_dataMemFree( pFeatureMemory obj )
@@ -527,85 +369,7 @@ inline int vIdxInRange(pFeatureMemoryLevel objl, LONG_IDX vIdx)
 }
 #undef FUNCTION 
 
-/*
-pFtMemElement featureMemory_getCurrentWriteElement( pFeatureMemory obj, int level, int el )
-#define FUNCTION "featureMemory_getCurrentWriteElement"
-{_FUNCTION_ENTER_
-  int i;
-  if ((obj != NULL)&&(level>=0)&&(el>=0)) {
-    if (level >= obj->nLevels) {
-      FEATUM_ERROR(1,"level %i > obj->nLevels %i",level,obj->nLevels);
-      _FUNCTION_RETURN_(0);
-    }
-    if ((obj->level != NULL)&&(obj->level[level].ft != NULL) 
-         && (obj->level[level].ft[vIdxToRealIdx(&(obj->level[level]),obj->level[level].curIdx)] != NULL)) {
-      if (el < obj->level[level].nFtEls) {
-        _FUNCTION_RETURN_( obj->level[level].ft[vIdxToRealIdx(&(obj->level[level]),obj->level[level].curIdx)][el] );
-      }  else {
-        FEATUM_ERROR(1,"Element Nr. %i does not exist (out of bounds: nFts = %i", el , obj->level[level].nFts);
-        _FUNCTION_RETURN_(NULL);
-      }
-    } else if (obj->level[level].ft == NULL) {
-       FEATUM_ERROR(1," obj->level[level].ft == NULL, check if you have called featureMemory_memAlloc!");    
-    }
-  }
-  _FUNCTION_RETURN_(NULL);
-}
-#undef FUNCTION 
 
-
-pFtMemElement featureMemory_getCurrentAllFilledElement( pFeatureMemory obj, int level, int el )
-#define FUNCTION "featureMemory_getCurrentAllFilledElement"
-{_FUNCTION_ENTER_
-  int i;
-  if ((obj != NULL)&&(level>=0)&&(el>=0)) {
-    if (level >= obj->nLevels) {
-      FEATUM_ERROR(1,"level %i > obj->nLevels %i",level,obj->nLevels);
-      _FUNCTION_RETURN_(NULL);
-    }
-    if ((obj->level != NULL)&&(obj->level[level].ft != NULL) 
-         && (obj->level[level].allFilledIdx >= 0) && (obj->level[level].ft[vIdxToRealIdx(obj->level[level],obj->level[level].allFilledIdx)] != NULL)) {
-      if (el < obj->level[level].nFtEls) {
-        _FUNCTION_RETURN_( obj->level[level].ft[vIdxToRealIdx(obj->level[level],obj->level[level].allFilledIdx)][el] );
-      }  else {
-        FEATUM_ERROR(1,"Element Nr. %i does not exist (out of bounds: nFts = %i", el , obj->level[level].nFts);
-        _FUNCTION_RETURN_(NULL);
-      }
-    } else if (obj->level[level].ft == NULL) {
-       FEATUM_WARNING(1,"probably allFilledIdx == -1, no frames filled yet, returning NULL");
-//       FEATUM_ERROR(1," obj->level == NULL or obj->level[level].ft == NULL, check if you have called featureMemory_dataMemAlloc!");    
-    }
-  }
-  _FUNCTION_RETURN_(NULL);
-}
-#undef FUNCTION 
-
-pFtMemElement featureMemory_getCurrentReadElement( pFeatureMemory obj, int level, int el )
-#define FUNCTION "featureMemory_getCurrentAllFilledElement"
-{_FUNCTION_ENTER_
-  int i;
-  if ((obj != NULL)&&(level>=0)&&(el>=0)) {
-    if (level >= obj->nLevels) {
-      FEATUM_ERROR(1,"level %i > obj->nLevels %i",level,obj->nLevels);
-      _FUNCTION_RETURN_(NULL);
-    }
-    if ((obj->level != NULL)&&(obj->level[level].ft != NULL) 
-         && (obj->level[level].readIdx >= 0) && (obj->level[level].ft[vIdxToRealIdx(obj->level[level],obj->level[level].readIdx)] != NULL)) {
-      if (el < obj->level[level].nFtEls) {
-        _FUNCTION_RETURN_( obj->level[level].ft[vIdxToRealIdx(obj->level[level],obj->level[level].readIdx)][el] );
-      }  else {
-        FEATUM_ERROR(1,"Element Nr. %i does not exist (out of bounds: nFts = %i", el , obj->level[level].nFts);
-        _FUNCTION_RETURN_(NULL);
-      }
-    } else if (obj->level[level].ft == NULL) {
-       FEATUM_WARNING(1,"probably readIdx == -1, no frames filled yet, returning NULL");
-//       FEATUM_ERROR(1," obj->level == NULL or obj->level[level].ft == NULL, check if you have called featureMemory_dataMemAlloc!");    
-    }
-  }
-  _FUNCTION_RETURN_(NULL);
-}
-#undef FUNCTION 
-*/
 
 // if the element is not filled it is returned, the calling code must check whether ret->filled is set or not
 // special constants are defined for vIdx to access the current write, read and allFilled elements
@@ -677,17 +441,13 @@ pFtMemElement featureMemory_getElementFRep( pFeatureMemory obj, int level, LONG_
       }
       if (vIdx < 0) { vIdx = 0; }
       if (vIdx > obj->level[level].allFilledIdx) { vIdx = obj->level[level].allFilledIdx; }
-//printf("A VIDX:.:::: %i\n",vIdx); fflush(stdout);        
       // todo: test this code::: for ringbuffers... return last possible element in ringbuffer?
       if (!vIdxInRange(&(obj->level[level]),vIdx) && (obj->level[level].bufferType == FTMEM_RING_BUFFER) ) {
         // search for next element in range!
-//        printf("OOR\n"); fflush(stdout);
         vIdx = obj->level[level].curIdx + obj->level[level].capacity + 1;
       }
-//printf("VIDX:.:::: %i  [level %i] [afi=%i] [ci=%i]\n",vIdx,level,obj->level[level].allFilledIdx,obj->level[level].curIdx); fflush(stdout);      
       if ((obj->level[level].ft != NULL) && (vIdxInRange(&(obj->level[level]),vIdx))) {
         int rIdx = vIdxToRealIdx(&(obj->level[level]),vIdx);
-//printf(" -> ridx : %i\n ",rIdx); fflush(stdout);
         if (el < obj->level[level].nFtEls) {
           if (obj->level[level].ft[el] != NULL) {
             _FUNCTION_RETURN_( &(obj->level[level].ft[el][rIdx]) );
@@ -980,7 +740,6 @@ int buildNames( pFeatureMemory mem, int level, int el )
           
           strncat(st, "-", 1);
           strncat(st, config->names[j], len1);
-//#warning feature name handling is currently broken due to BUGGY BLOODY M*CROSFT WINDOWS!!!!
           config->final_names[i*(config->nValues)+j] = st;
           FEATUM_DEBUG(14,"MULTI_LEVEL name: i=%i j=%i \"%s\" sfx: \"%s\" (l1:%i, l0:%i)",i,j,config->final_names[i*(config->nValues)+j], config->names[j],len1,len0);
 
@@ -1186,37 +945,6 @@ int featureMemory_findFeature(pFeatureMemory obj, const char* name, pFtIdentifie
 }
 #undef FUNCTION
 
-/*
-// vIdx can be -1 to -3 for special indicies
-// slow get feature functions...  level0: direct (raw) indexing (always works)
-FLOAT_TYPE_FTMEM featureMemory_getFeature( pFeatureMemory obj, int level, LONG_IDX vIdx, int el, int n )
-#define FUNCTION "featureMemory_getFeature"
-{_FUNCTION_ENTER_
-  if ((obj != NULL)&&(obj->level != NULL)) {
-    #ifdef COMPILE_CHECKS_LOOPS
-    if ( (level>=0) && (level<obj->nLevels) ) {
-    if ((el >= 0) && (el<obj->level[level].nFtEls) && (n>=0)) {
-    #endif
-    if (vIdxInRange(&(obj->level[level]),vIdx)) {
-      int rIdx = vIdxToRealIdx(&(obj->level[level]),vIdx);
-      if ( (obj->level[level].ft[el] != NULL) ) {
-        FLOAT_TYPE_FTMEM *values = obj->level[level].ft[el][rIdx].values;
-        if (values != NULL) {
-          int nValues = obj->level[level].ft[el][rIdx].nValues;
-          if (n<nValues) {
-             _FUNCTION_RETURN_(values[n]);
-          }
-        } // END  if (values != NULL)
-      }
-    }
-    #ifdef COMPILE_CHECKS_LOOPS
-    }}
-    #endif
-  }
-  _FUNCTION_RETURN_((FLOAT_TYPE_FTMEM)0);
-}
-#undef FUNCTION 
-*/
 
 // returns pointer to 1 or more (ftID.nVals) features 
 // relIdx is relative to the current Index (allFilledIdx)
@@ -1387,80 +1115,6 @@ char * featureMemory_getFeatureNameL2( pFeatureMemory obj, int level, int el, in
 // feature names can be assigned only after the first frame was completely filled!
 // the first call to any getFeatureName function checks whether the name cache has been set up, if not it will set it up
 
-/*
-#ifdef OPTIMIZE_SIZE
-char *featureMemory_getFeatureName( pFeatureMemory mem, int level, int el, int n )
-#else
-inline char *featureMemory_getFeatureName( pFeatureMemory mem, int level, int el, int n )
-#endif
-#define FUNCTION "featureMemory_getFeatureName"
-{_FUNCTION_ENTER_
-  if (mem != NULL) {
-    #ifdef COMPILE_CHECKS
-    if (level < 0) _FUNCTION_RETURN_(NULL);
-    if (level >= mem->nLevels) _FUNCTION_RETURN_(NULL);
-    if (mem->level == NULL) _FUNCTION_RETURN_(NULL);
-    if (el < 0) _FUNCTION_RETURN_(NULL);
-    if (el >= mem->level[level].nFts) _FUNCTION_RETURN_(NULL);
-    if (mem->level[level].config == NULL) _FUNCTION_RETURN_(NULL);
-    if (n < 0) _FUNCTION_RETURN_(NULL);
-    if ((mem->level[level].config[el].n > 0)&&(n >= mem->level[level].config[el].n)) _FUNCTION_RETURN_(NULL);
-    #endif
-    if (mem->level[level].config[el].n == 0) { // dynamic feature memory elements
-      if (mem->level[level].config[el].names != NULL) {
-        // append number to basename string:
-                  //mem->level[level].config[el].names[0]
-        int curbase = n % mem->level[level].config[el].nDyn;
-        char *base;
-        if (mem->level[level].config[el].dynname != NULL) {
-          base = mem->level[level].config[el].dynname;
-          free(base);
-          base = (char *) malloc(sizeof(char)*(strlen(mem->level[level].config[el].names[curbase])+8)); 
-        } else {
-          base = (char *) malloc(sizeof(char)*(strlen(mem->level[level].config[el].names[curbase])+8)); 
-        }
-        strncpy(base,mem->level[level].config[el].names[curbase],sizeof(char)*(strlen(mem->level[level].config[el].names[curbase])+8));
-        char *append = base + strlen(mem->level[level].config[el].names[curbase]);
-        snprintf(append,6,"%i",n/mem->level[level].config[el].nDyn);
-        mem->level[level].config[el].dynname = base;
-        return base;
-      } else _FUNCTION_RETURN_(NULL);
-    } else {
-      _FUNCTION_RETURN_( mem->level[level].config[el].names[n] );
-    }
-  }
-  _FUNCTION_RETURN_(NULL);   
-}
-#undef FUNCTION 
-
-*/
-
-/*
-pFtMemElement featureMemory_getCurrentElement( pFeatureMemory obj, int level, int el )
-#define FUNCTION "featureMemory_getCurrentElement"
-{_FUNCTION_ENTER_
-  int i;
-  if ((obj != NULL)&&(level>=0)&&(el>=0)) {
-    if (level >= obj->nLevels) {
-      FEATUM_ERR_FATAL(0,"level %i > obj->nLevels %i",level,obj->nLevels);
-      _FUNCTION_RETURN_(0);
-    }
-    if ((obj->level != NULL)&&(obj->level[level].ft != NULL) 
-         && (obj->level[level].ft[obj->level[level].curIdx] != NULL)) {
-      if (el < obj->level[level].nFts) {
-        _FUNCTION_RETURN_( obj->level[level].ft[obj->level[level].curIdx][el] );
-      }  else {
-        FEATUM_ERROR(1,"Element Nr. %i does not exist (out of bounds: nFts = %i", el , obj->level[level].nFts);
-        _FUNCTION_RETURN_(NULL);
-      }
-    } else if (obj->level[level].ft == NULL) {
-       FEATUM_ERROR(1," obj->level[level].ft == NULL, check if you have called featureMemory_memAlloc!");    
-    }
-  }
-  _FUNCTION_RETURN_(NULL);
-}
-#undef FUNCTION 
-*/
 
 
 // OBSOLETE
@@ -1561,136 +1215,7 @@ int featureMemory_addFrame( pFeatureMemory obj, int level)
 #undef FUNCTION 
 
 
-/*
-inline pFtMemFrame featureMemory_freeFrame( pFtMemFrame obj )
-#define FUNCTION "featureMemory_freeFrame"
-{_FUNCTION_ENTER_
-  if (obj != NULL) free(obj);          
-}
-#undef FUNCTION           
 
-
-// the frame must be freed by the calling code using simple free(...);
-pFtMemFrame featureMemory_getFrame( pFeatureMemory obj, int level, LONG_IDX absIdx )
-#define FUNCTION "featureMemory_getElement"
-{_FUNCTION_ENTER_
-  pFtMemFrame ret;
-  
-  #ifdef COMPILE_CHECKS
-  if ((obj != NULL)&&(level>=0)&&(absIdx > 0)) {
-  #else
-  if (obj != NULL) {
-  #endif
-    if (level >= obj->nLevels) {
-      FEATUM_ERR_FATAL(0,"level %i > obj->nLevels %i",level,obj->nLevels);
-      _FUNCTION_RETURN_(NULL);
-    }
-    #ifdef COMPILE_CHECKS
-    if ((obj->level != NULL)&&(obj->level[level].ft != NULL) && (absIdx < obj->level[level].capacity)
-         && (obj->level[level].ft[absIdx] != NULL)) {
-    #else
-    if ((obj->level != NULL)&&(obj->level[level].ft != NULL) 
-         && obj->level[level].ft[absIdx] != NULL)) {
-    #endif
-      ret = (pFtMemFrame)calloc(1,sizeof(sFtMemFrame));
-      if (ret != NULL) {
-        ret->nFts = obj->level[level].nFts;
-        // TODO: compute timestamp(samples) and timestampSec
-        ret->timestampSec = (float)absIdx * obj->level[level].T;
-        ret->timestamp = obj->level[level].frameStep * absIdx;
-        ret->frame = obj->level[level].ft[absIdx];
-        if (absIdx < obj->level[level].allFilledIdx) ret->allFilled = 1;
-        _FUNCTION_RETURN_( ret );
-      } else {
-        FEATUM_ERR_FATAL(0,"Error allocating memory!");
-        _FUNCTION_RETURN_(NULL);
-      }
-    }
-  }
-  _FUNCTION_RETURN_(NULL);
-}
-#undef FUNCTION 
-*/
-
-/*
-// setup names in feature memory object
-// nDyn is the number of basnames if the number of values is dynamic
-#ifdef OPTIMIZE_SIZE
-int featureMemory_setupElement( pFeatureMemory mem, int level, int el, int nVal, int nDyn, char **names, int enabled )
-#else
-inline int featureMemory_setupElement( pFeatureMemory mem, int level, int el, int nVal, int nDyn, char **names, int enabled )
-#endif
-#define FUNCTION "featureMemory_setupElement"
-{_FUNCTION_ENTER_
-  if ((mem != NULL)&&(level >= 0)) {
-    FEATUM_DEBUG(3,"el=%i, level=%i, nVal=%i, enabled=%i",el,level,nVal,enabled);
-    #ifdef COMPILE_CHECKS
-    if ((level < mem->nLevels) && (mem->level != NULL)) {
-    #endif
-        FEATUM_DEBUG(3,"mem->level[level].config = %i",(int)(mem->level[level].config));
-        mem->level[level].config[el].n = nVal;
-        mem->level[level].config[el].nDyn = nDyn;
-        mem->level[level].config[el].names = names;  // TODO: ??? correct ???
-        mem->level[level].config[el].enabled = enabled;
-        _FUNCTION_RETURN_(1);   
-    #ifdef COMPILE_CHECKS
-    }
-    #endif
-  }
-  _FUNCTION_RETURN_(0);   
-}
-#undef FUNCTION 
-*/
-
-// TODO: function to return numbered feature names for dynamic features:
-// calling application must free the returned pointer -> SOLVED? do not free pointer!
-// char *featureMemory_getFeatureName(
-/*
-#ifdef OPTIMIZE_SIZE
-char *featureMemory_getFeatureName( pFeatureMemory mem, int level, int el, int n )
-#else
-inline char *featureMemory_getFeatureName( pFeatureMemory mem, int level, int el, int n )
-#endif
-#define FUNCTION "featureMemory_getFeatureName"
-{_FUNCTION_ENTER_
-  if (mem != NULL) {
-    #ifdef COMPILE_CHECKS
-    if (level < 0) _FUNCTION_RETURN_(NULL);
-    if (level >= mem->nLevels) _FUNCTION_RETURN_(NULL);
-    if (mem->level == NULL) _FUNCTION_RETURN_(NULL);
-    if (el < 0) _FUNCTION_RETURN_(NULL);
-    if (el >= mem->level[level].nFts) _FUNCTION_RETURN_(NULL);
-    if (mem->level[level].config == NULL) _FUNCTION_RETURN_(NULL);
-    if (n < 0) _FUNCTION_RETURN_(NULL);
-    if ((mem->level[level].config[el].n > 0)&&(n >= mem->level[level].config[el].n)) _FUNCTION_RETURN_(NULL);
-    #endif
-    if (mem->level[level].config[el].n == 0) { // dynamic feature memory elements
-      if (mem->level[level].config[el].names != NULL) {
-        // append number to basename string:
-                  //mem->level[level].config[el].names[0]
-        int curbase = n % mem->level[level].config[el].nDyn;
-        char *base;
-        if (mem->level[level].config[el].dynname != NULL) {
-          base = mem->level[level].config[el].dynname;
-          free(base);
-          base = (char *) malloc(sizeof(char)*(strlen(mem->level[level].config[el].names[curbase])+8)); 
-        } else {
-          base = (char *) malloc(sizeof(char)*(strlen(mem->level[level].config[el].names[curbase])+8)); 
-        }
-        strncpy(base,mem->level[level].config[el].names[curbase],sizeof(char)*(strlen(mem->level[level].config[el].names[curbase])+8));
-        char *append = base + strlen(mem->level[level].config[el].names[curbase]);
-        snprintf(append,6,"%i",n/mem->level[level].config[el].nDyn);
-        mem->level[level].config[el].dynname = base;
-        return base;
-      } else _FUNCTION_RETURN_(NULL);
-    } else {
-      _FUNCTION_RETURN_( mem->level[level].config[el].names[n] );
-    }
-  }
-  _FUNCTION_RETURN_(NULL);   
-}
-#undef FUNCTION 
-*/
 
 #ifdef OPTIMIZE_SIZE
 int featureMemory_getNLevels( pFeatureMemory mem ) 
@@ -1759,27 +1284,11 @@ inline int featureMemory_getNFeatures_idx( pFeatureMemory mem, int level, int el
 #endif
 #define FUNCTION "feattureMemory_getNFeatures_idx"
 {_FUNCTION_ENTER_
-    /*
-    #ifdef COMPILE_CHECKS
-    if (level < 0) _FUNCTION_RETURN_(0);
-    if (level >= mem->nLevels) _FUNCTION_RETURN_(0);
-    if (mem->level == NULL) _FUNCTION_RETURN_(0);
-    if (el < 0) _FUNCTION_RETURN_(0);
-    if (el >= mem->level[level].nFtEls) _FUNCTION_RETURN_(0);
-    if (mem->level[level].config == NULL) _FUNCTION_RETURN_(0);
-    #endif*/
     pFtMemElement elem = featureMemory_getElement(mem,level,vIdx,el);
     if (elem != NULL) {
       _FUNCTION_RETURN_( elem->nValues );
     } 
-    /*
-    if (vIdxInRange(&(mem->level[level]), vIdx)) {
-      LONG_IDX rIdx = vIdxToRealIdx(&(mem->level[level]), vIdx);
-      _FUNCTION_RETURN_( mem->level[level].ft[rIdx][el]->nValues );
-    } else { _FUNCTION_RETURN_(0); }
-    */
-  //}
-  _FUNCTION_RETURN_(0);   
+    _FUNCTION_RETURN_(0);   
 }
 #undef FUNCTION 
 
@@ -2064,14 +1573,6 @@ pFeatureMemory featureMemory_destroy( pFeatureMemory obj )
   int i;
   featureMemory_destroyData(obj);
   if (obj != NULL) {
-/*      featureMemory_dataMemFree(obj);
-      if (obj->level != NULL) {
-//        for (i=0; i<obj->nLevels; i++) {
-//          if (obj->level[i]->config != NULL) free(obj->level[i]->config);
-//          // TODO:...
-//        }               // ^done by featureMemory_memFree
-        free(obj->level);
-      }*/
       free(obj);
   }
   

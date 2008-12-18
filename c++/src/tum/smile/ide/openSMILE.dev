@@ -760,26 +760,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit74]
-FileName=..\src\mathfunctions.c
-CompileCpp=0
-Folder=openSMILE
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit75]
-FileName=..\src\mathfunctions.h
-CompileCpp=0
-Folder=openSMILE
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit76]
 FileName=..\src\option-parser.c
 CompileCpp=0
 Folder=openSMILE
@@ -789,7 +769,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit77]
+[Unit75]
 FileName=..\src\option-parser.h
 CompileCpp=0
 Folder=openSMILE
@@ -799,7 +779,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit78]
+[Unit76]
 FileName=..\src\option-parser.hpp
 CompileCpp=0
 Folder=openSMILE
@@ -809,7 +789,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit79]
+[Unit77]
 FileName=..\src\pcm-data.c
 CompileCpp=0
 Folder=openSMILE
@@ -819,7 +799,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit80]
+[Unit78]
 FileName=..\src\pcm-data.h
 CompileCpp=0
 Folder=openSMILE
@@ -829,7 +809,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit81]
+[Unit79]
 FileName=..\src\pcm-data.hpp
 CompileCpp=0
 Folder=openSMILE
@@ -839,7 +819,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit82]
+[Unit80]
 FileName=..\src\pcm-process.c
 CompileCpp=0
 Folder=openSMILE
@@ -849,7 +829,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit83]
+[Unit81]
 FileName=..\src\pcm-process.h
 CompileCpp=0
 Folder=openSMILE
@@ -859,7 +839,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit84]
+[Unit82]
 FileName=..\src\silence-detector.cpp
 CompileCpp=0
 Folder=openSMILE
@@ -869,7 +849,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit85]
+[Unit83]
 FileName=..\src\silence-detector.hpp
 CompileCpp=0
 Folder=openSMILE
@@ -879,7 +859,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit86]
+[Unit84]
 FileName=..\src\SVMpredict.cpp
 CompileCpp=1
 Folder=openSMILE
@@ -889,7 +869,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=$(CPP) -c SVMpredict.cpp -o SVMpredict.o $(CXXFLAGS)
 
-[Unit87]
+[Unit85]
 FileName=..\src\SVMpredict.hpp
 CompileCpp=0
 Folder=openSMILE
@@ -899,7 +879,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit88]
+[Unit86]
 FileName=..\src\TumFeatureExtractor.cpp
 CompileCpp=1
 Folder=openSMILE
@@ -909,7 +889,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=$(CPP) -c TumFeatureExtractor.cpp -o TumFeatureExtractor.o $(CXXFLAGS)
 
-[Unit89]
+[Unit87]
 FileName=..\src\TumFeatureExtractor.h
 CompileCpp=0
 Folder=openSMILE
@@ -919,7 +899,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit90]
+[Unit88]
 FileName=..\src\wave-common.h
 CompileCpp=0
 Folder=openSMILE
@@ -929,7 +909,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit91]
+[Unit89]
 FileName=..\src\wave-common.hpp
 CompileCpp=0
 Folder=openSMILE
@@ -939,7 +919,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit92]
+[Unit90]
 FileName=..\src\wave-input.c
 CompileCpp=0
 Folder=openSMILE
@@ -949,7 +929,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit93]
+[Unit91]
 FileName=..\src\wave-input.h
 CompileCpp=0
 Folder=openSMILE
@@ -959,7 +939,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit94]
+[Unit92]
 FileName=..\src\wave-input.hpp
 CompileCpp=0
 Folder=openSMILE
@@ -969,7 +949,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit95]
+[Unit93]
 FileName=..\src\wave-output.c
 CompileCpp=0
 Folder=openSMILE
@@ -979,7 +959,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit96]
+[Unit94]
 FileName=..\src\wave-output.h
 CompileCpp=0
 Folder=openSMILE
@@ -989,8 +969,28 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit97]
+[Unit95]
 FileName=..\src\wave-output.hpp
+CompileCpp=0
+Folder=openSMILE
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit96]
+FileName=..\src\fftsgf.c
+CompileCpp=0
+Folder=openSMILE
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit97]
+FileName=..\src\LLDmfccz.c
 CompileCpp=0
 Folder=openSMILE
 Compile=1
@@ -1018,7 +1018,7 @@ ProductVersion=
 AutoIncBuildNr=0
 
 [Unit98]
-FileName=..\src\fftsgf.c
+FileName=..\src\LLDmfccz.h
 CompileCpp=0
 Folder=openSMILE
 Compile=1

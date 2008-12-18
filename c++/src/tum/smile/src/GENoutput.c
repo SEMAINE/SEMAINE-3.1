@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +32,6 @@
 #define MODULE "GENoutput"
 #include "featum_common.h"
 
-/*
-*/
-
- 
  // this file contains the function definitions and the private class data
 
 #include <stdlib.h>
@@ -78,51 +83,6 @@ int genOutput_setHeaderCallback( pGenOutput obj, int (*_writeHeader)( pGenOutput
 #undef FUNCTION 
 
 
-/*
-// configure or change the current output file  (append=1 : append to file instead of overwriting)
-int csvOutput_changeOutputFile( pCsvOutput obj, char *filename, int append )
-#define FUNCTION "csvOutput_changeOutputFile"
-{_FUNCTION_ENTER_
-  if (obj != NULL) {
-    obj->filename = filename;
-    if (obj->filedesc != NULL) {
-      fclose(obj->filedesc); obj->filedesc = NULL;
-    }
-
-//    memzero(&(obj->header),sizeof(sCSVheader));
-    if (!append) {
-      obj->filedesc = fopen(filename,"w");
-      if (obj->filedesc == NULL) {
-        FEATUM_ERROR(0,"Error opening output feature file %s (append=%i)",filename,append);
-        _FUNCTION_RETURN_(0);
-      }   
-      obj->fileIdx_frames = 0;
-      // write header:
-      //fwrite(&header, sizeof(sCSVheader), 1, obj->filedesc);
-      // -> note here....  need more info
-      
-      _FUNCTION_RETURN_(1);
-    } else {  // check if vectorsize is the same AND determine current file position
-      int ret = csvOutput_reopenOutputFile(obj);
-      _FUNCTION_RETURN_(ret);
-    }
-  }
-  _FUNCTION_RETURN_(0);
-}
-#undef FUNCTION 
-*/
-
-
-/*
-selection file format: (ascii)
-
-type       (str | idx)
-[numStrs   if type=str]
-idx OR string
-idx OR string
-...
-
-*/
 #define mAx(x,y) (((x)>(y))?(x):(y))
 #define mIn(x,y) (((x)<(y))?(x):(y))
 
@@ -707,7 +667,7 @@ pGenOutput genOutput_destroy( pGenOutput obj )
 
 
 
-/**************** helper functions ************************/
+/**************** helper functions for configuring output ************************/
 
 inline sElID outputObject( int level, int el, int nStart, int nEnd, int n, int enabled )
 {

@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +25,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *******************************************************************************/
- 
+
  /*  IMPLEMENTATION of the feature extractor module LLDspectral
      See the corresponding header file (.h) for documentation!  */
 
@@ -49,43 +58,6 @@ pLLDspectral LLDspectral_create( pLLDspectral obj )
   _FUNCTION_RETURN_( obj );
 }
 #undef FUNCTION 
-
-/*
-int LLDspectral_configure( pLLDspectral obj, int nMel, int nMFCC, int cepLifter, int firstMFCC )
-#define FUNCTION "LLDspectral_configure"
-{_FUNCTION_ENTER_
-  if (obj != NULL) {
-    if (nMel >= 1) {
-      obj->nMel = nMel;
-    }
-    if (nMFCC >= 1) {
-      obj->nMFCC = nMFCC;  
-      if (obj->sintable != NULL) { free(obj->sintable); obj->sintable = NULL; }
-      if (obj->costable != NULL) { free(obj->costable); obj->costable = NULL; }
-    }
-    if (cepLifter >= 1)
-      obj->cepLifter = cepLifter;  
-    if (firstMFCC >= 0)
-      obj->firstMFCC = firstMFCC;
-    _FUNCTION_RETURN_( 1 );
-  }
-  _FUNCTION_RETURN_( 0 );
-}
-#undef FUNCTION 
-*/
-
-// custom configuration of extractor parameters
-/*  this is only a template function:
-int LLDspectral_configure( pLLDspectral obj )
-#define FUNCTION "LLDspectral_create"
-{_FUNCTION_ENTER_
-  if (obj != NULL) {
-     _FUNCTION_RETURN_( 1 );
-  }
-  _FUNCTION_RETURN_( 0 );
-}
-#undef FUNCTION 
-*/
 
 // flushToMem: copy final data from ftex to feature memory element array
 int LLDspectral_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
@@ -129,9 +101,6 @@ int LLDspectral_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex )
   _FUNCTION_RETURN_(0);
 }
 #undef FUNCTION
-
-
-
 
 
 // extractor:  do the main extraction , this function is called once per frame
@@ -198,7 +167,6 @@ int LLDspectral_extractor( pLLDspectral obj, pLLDex lldex, int level )
     }
     if (nA==0.0) { nA=1.0; }
     if (nB==0.0) { nB=1.0; }
-//printf("sumA. %f,  normE: %f, nA: %f\n",sumA,normE,nA);
     currentSpectral->en0_250 = (FLOAT_TYPE)(sumA)/(normE*nA);
     currentSpectral->en0_650 = (FLOAT_TYPE)(sumA+sumB)/(normE*(nA+nB));
     currentSpectral->en250_650 = (FLOAT_TYPE)sumB/(normE*nB);

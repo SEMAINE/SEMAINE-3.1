@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +30,7 @@
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 LLD feature extractor : Linear-Predictive Coding a_j and k_j coefficients
+This code is incomplete and untested... (TODO.....)
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
  
@@ -69,12 +79,9 @@ typedef sLLDlpc * pLLDlpc;
 pLLDlpc LLDlpc_create( pLLDlpc obj );
 
 // custom configuration of extractor parameters  (optional)
-// int LLDlpc_configure( pLLDlpc obj );
 // use this line if this extractor does not have a configure function:
 //#define LLDlpc_configure(obj)
 int LLDlpc_configure( pLLDlpc obj, int lpcOrder );
-
-//int LLDlpc_setupNames( int level, pFeatureMemory mem );
 
 // flushToMem: copy final data from ftex to feature memory element array
 int LLDlpc_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex );

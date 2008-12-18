@@ -1,6 +1,15 @@
 /*******************************************************************************
- * feaTUM, fast, efficient audio feature extractor by TUM
- * Copyright (C) 2008  Florian Eyben, Martin Woellmer
+ * openSMILE
+ *  - open Speech and Music Interpretation by Large-space Extraction -
+ * Copyright (C) 2008  Florian Eyben, Martin Woellmer, Bjoern Schuller
+ * 
+ * Institute for Human-Machine Communication
+ * Technische Universitaet Muenchen (TUM)
+ * D-80333 Munich, Germany
+ *
+ * If you use openSMILE or any code from openSMILE in your research work,
+ * you are kindly asked to acknowledge the use of openSMILE in your publications.
+ * See the file CITING.txt for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,8 +84,6 @@ pLLDpitch LLDpitch_create( pLLDpitch obj );
 // int LLDpitch_configure( pLLDpitch obj );
 // use this line if this extractor does not have a configure function:
 #define LLDpitch_configure(obj)
-
-//int LLDpitch_setupNames( int level, pFeatureMemory mem );
 
 // flushToMem: copy final data from ftex to feature memory element array
 int LLDpitch_flushToFtMem( int level, pFeatureMemory mem, pLLDex lldex );
