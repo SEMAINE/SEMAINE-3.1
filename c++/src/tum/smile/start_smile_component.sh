@@ -28,8 +28,8 @@ corpusI="avic2";
 #  PIPE=""
 #fi
 
-# change featumamq to featum to run the standalone version
-./featum -frameSize 0.025 -silthresh 0.001 -svmmodelI $models/$corpusI/interest.model -svmmodelV $models/$corpusV/valence.model -svmmodelA $models/$corpusA/arousal.model -sildet -svmscaleA $models/$corpusA/arousal.scale -svmscaleV $models/$corpusV/valence.scale -svmscaleI $models/$corpusI/interest.scale -svmpredfselA $models/$corpusA/arousal.fsel -svmpredfselV $models/$corpusV/valence.fsel -svmpredfselI $models/$corpusI/interest.fsel -cmsInitial ./cepmean -cmsAlpha 0.995 $*
+# change SEMAINExtract to SMILExtract to run the standalone version
+./SEMAINExtract -frameSize 0.025 -silthresh 0.001 -svmmodelI $models/$corpusI/interest.model -svmmodelV $models/$corpusV/valence.model -svmmodelA $models/$corpusA/arousal.model -sildet -svmscaleA $models/$corpusA/arousal.scale -svmscaleV $models/$corpusV/valence.scale -svmscaleI $models/$corpusI/interest.scale -svmpredfselA $models/$corpusA/arousal.fsel -svmpredfselV $models/$corpusV/valence.fsel -svmpredfselI $models/$corpusI/interest.fsel -cmsInitial ./cepmean -cmsAlpha 0.995 $*
 
 #rm -f /tmp/semaine.tum.pipe.raw 2>/dev/null
 
