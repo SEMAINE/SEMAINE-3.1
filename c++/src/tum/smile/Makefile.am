@@ -2,11 +2,11 @@
 AUTOMAKE_OPTIONS = subdir-objects
 bin_PROGRAMS = 
   
-if BUILD_featum
-  bin_PROGRAMS += featum
+if BUILD_SMILExtract
+  bin_PROGRAMS += SMILExtract
 
-  featum_SOURCES=\
-	src/main.cpp \
+  SMILExtract_SOURCES=\
+	src/SMILExtract.cpp \
 	src/audio-stream.c \
 	src/wave-input.c \
 	src/wave-output.c \
@@ -42,15 +42,15 @@ if BUILD_featum
 	src/option-parser.c \
 	src/fftsg.c \
 	svm/svm.cpp
-  featum_CPPFLAGS = $(PORTAUDIO_CPPFLAGS)
-  featum_LDADD = $(PORTAUDIO_LDFLAGS) -lm
+  SMILExtract_CPPFLAGS = $(PORTAUDIO_CPPFLAGS)
+  SMILExtract_LDADD = $(PORTAUDIO_LDFLAGS) -lm
 endif 
 
-if BUILD_featumamq
-  bin_PROGRAMS += featumamq
+if BUILD_SEMAINExtract
+  bin_PROGRAMS += SEMAINExtract
 
-  featumamq_SOURCES = \
-	src/featum.cpp \
+  SEMAINExtract_SOURCES = \
+	src/SEMAINExtract.cpp \
         src/audio-stream.c \
         src/wave-input.c \
         src/wave-output.c \
@@ -84,15 +84,15 @@ if BUILD_featumamq
 	src/AMQoutput.cpp \
 	src/TumFeatureExtractor.cpp \
 	svm/svm.cpp
-  featumamq_CPPFLAGS =  $(PORTAUDIO_CPPFLAGS) $(SEMAINEAPI_CPPFLAGS)
-  featumamq_LDADD = $(PORTAUDIO_LDFLAGS) $(SEMAINEAPI_LDFLAGS) -lm
+  SEMAINExtract_CPPFLAGS =  $(PORTAUDIO_CPPFLAGS) $(SEMAINEAPI_CPPFLAGS)
+  SEMAINExtract_LDADD = $(PORTAUDIO_LDFLAGS) $(SEMAINEAPI_LDFLAGS) -lm
 endif 
 
-if BUILD_tumrec
-  bin_PROGRAMS += tumrec
+if BUILD_SMILErec
+  bin_PROGRAMS += SMILErec
 
-  tumrec_SOURCES = \
-	src/main_recorder.c \
+  SMILErec_SOURCES = \
+	src/SMILErec.c \
 	src/wave-output.c \
 	src/featum_util.c \
 	src/wave-input.c \
@@ -102,16 +102,16 @@ if BUILD_tumrec
 	src/audio-stream.c \
 	src/option-parser.c \
 	src/live-input.c
-  tumrec_CPPFLAGS = $(PORTAUDIO_CPPFLAGS)
-  tumrec_LDADD = $(PORTAUDIO_LDFLAGS) -lm
+  SMILErec_CPPFLAGS = $(PORTAUDIO_CPPFLAGS)
+  SMILErec_LDADD = $(PORTAUDIO_LDFLAGS) -lm
 
 endif
 
-if BUILD_tumsync
-  bin_PROGRAMS += tumsync
+if BUILD_SMILEsync
+  bin_PROGRAMS += SMILEsync
 
-  tumsync_SOURCES = \
-	src/main_sync.c \
+  SMILEsync_SOURCES = \
+	src/SMILEsync.c \
 	src/featum_util.c \
 	src/wave-input.c \
 	src/wave-output.c \
@@ -119,8 +119,8 @@ if BUILD_tumsync
 	src/option-parser.c \
 	src/fftsg.c \
 	src/pcm-process.c
-  tumsync_CPPFLAGS = $(PORTAUDIO_CPPFLAGS)
-  tumsync_LDADD = $(PORTAUDIO_LDFLAGS) -lm
+  SMILEsync_CPPFLAGS = $(PORTAUDIO_CPPFLAGS)
+  SMILEsync_LDADD = $(PORTAUDIO_LDFLAGS) -lm
 endif
 
 if BUILD_audiorecorder
