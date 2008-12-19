@@ -29,6 +29,7 @@ import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.exceptions.MessageFormatException;
+import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
@@ -84,6 +85,14 @@ public class SpeechPreprocessor extends Component
 		if(Mary.currentState() == Mary.STATE_OFF){
 			Mary.startup();
 		}
+    	while (Mary.currentState() == Mary.STATE_STARTING) {
+    		try {
+    			Thread.sleep(10);
+    		} catch (InterruptedException ie) {}
+    	}
+    	if (Mary.currentState() != Mary.STATE_RUNNING) {
+    		throw new SystemConfigurationException("Could not start MARY system");
+    	}
 		
     	Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
