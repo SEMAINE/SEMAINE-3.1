@@ -29,6 +29,7 @@ select="document('semaine.mary.realised.acoustics')"/>
         <xsl:apply-templates select="$emps/descendant::mary:nvv/*"/>
 	</mary:syllable>
     	<ssml:mark name="tm2"/>
+    	<mary:boundary duration="1"/>
     </speech>	
   </xsl:template> 
 
