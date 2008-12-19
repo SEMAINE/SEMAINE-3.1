@@ -22,9 +22,14 @@ select="document('semaine.mary.realised.acoustics')"/>
 
 
   <xsl:template match="bml:backchannel">
-    <backchannel> 
+
+    <speech xmlns:ssml="http://www.w3.org/2001/10/synthesis" id="s1" language="en_US" text="">
+	<ssml:mark name="tm1"/>
+	<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
         <xsl:apply-templates select="$emps/descendant::mary:nvv/*"/>
-    </backchannel>
+	</mary:syllable>
+    	<ssml:mark name="tm2"/>
+    </speech>	
   </xsl:template> 
 
 

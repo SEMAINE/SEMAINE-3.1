@@ -126,7 +126,7 @@ select="document('semaine.mary.realised.acoustics')"/>
    </xsl:template>
    
    <!-- Discard some MARYXML elements--> 	 
-   <xsl:template match="mary:mtu|mary:p|mary:voice|mary:phrase|mary:s|mary:maryxml|mary:ph"/> 
+   <xsl:template match="mary:mtu|mary:p|mary:voice|mary:phrase|mary:s|mary:maryxml|mary:ph|mary:prosody"/> 
    
 </xsl:stylesheet>
 
