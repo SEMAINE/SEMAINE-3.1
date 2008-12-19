@@ -84,7 +84,7 @@ private:
 	int speakingIndex,seqIdx;
 	int nFeaturesSelected;
 	int *featureIndex;
-	long curTime;
+	long long curTime;
 	int wasSpeaking;
 
 	float prevSpeakingIndex;
