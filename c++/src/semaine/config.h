@@ -26,9 +26,18 @@
 
 #include <cassert>
 
-const std::string DEFAULT_CMS_URL = "tcp://localhost:61616";
+inline std::string _determine_CMS_URL()
+{
+	char * url = getenv("CMS_URL");
+	if (url == NULL) url = "tcp://localhost:61616";
+	return std::string(url);
+}
+
+const std::string DEFAULT_CMS_URL = _determine_CMS_URL();
 const std::string DEFAULT_CMS_USER = "";
 const std::string DEFAULT_CMS_PASSWORD = "";
+
+
 
 
 
