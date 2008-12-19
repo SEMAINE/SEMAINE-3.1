@@ -421,8 +421,12 @@ void ASR::act() throw(CMSException)
 				char strtmp3[50];
 				sprintf(strtmp3,"%.2f",sentconf/wordcounter);
 				std::string confstring(strtmp3);
-				cerr << sentence << "\n";
 				if(wordcounter!=0) {
+					cerr << sentence << "\n";
+//					cerr << "starttime=" << startstring << "\n";
+//					cerr << "endtime=" << endstring << "\n";
+//					cerr << "confidence=" << confstring << "\n";
+//					cerr << "wordcounter=" << wordcounter << "\n\n";
 					// Create and fill a simple EMMA document
 					DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
 					DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
@@ -438,6 +442,8 @@ void ASR::act() throw(CMSException)
 				}
 				sentence="";
 				newsentence=1;
+				wordcounter=0;
+				sentconf=0;
 			}
 	 	}
       	}
