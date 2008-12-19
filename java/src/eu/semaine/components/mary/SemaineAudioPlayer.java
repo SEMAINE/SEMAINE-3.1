@@ -47,7 +47,7 @@ public class SemaineAudioPlayer extends Component
 	@Override
 	public void react(SEMAINEMessage m) throws JMSException
 	{
-		if(m.isBytesMessage() && m.getTopicName().equals("semaine.data.lowlevel.audio")){
+		if(m.isBytesMessage()){
 			SEMAINEBytesMessage bm = (SEMAINEBytesMessage)m;
 			byte[] audioData =  bm.getBytes();
 			try {
