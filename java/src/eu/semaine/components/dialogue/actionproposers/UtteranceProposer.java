@@ -695,7 +695,7 @@ public class UtteranceProposer extends Component
 			speech.appendChild(text);
 			counter++;
 		}
-		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK);
+		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
 		mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
 		
 		
