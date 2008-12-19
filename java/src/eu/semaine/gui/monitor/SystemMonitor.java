@@ -745,7 +745,8 @@ public class SystemMonitor extends Thread
 	
 	public void setSystemStatus(String text)
 	{
-		systemStatus.setText(text);
+		if (systemStatus != null)
+			systemStatus.setText(text);
 	}
 	
 	
