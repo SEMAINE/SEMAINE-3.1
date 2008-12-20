@@ -28,10 +28,12 @@ if [ -z "$MARY_BASE" ] ; then
   exit 1;
 fi
 
+SERVER=134.96.187.56
+
 echo "Starting SEMAINE ComponentRunner :" # as: 'java -jar $JARDIR/semaine.jar $CONFIG'"
 
 
-java -Xmx1024m -classpath $JARDIR/semaine.jar:$JARDIR/semaine-mary.jar:$JARDIR/semaine-dialogue.jar -Dmary.base="$MARY_BASE" eu.semaine.system.ComponentRunner $CONFIG 
+java -Xmx1024m -Djms.url=tcp://$SERVER:61616 -classpath $JARDIR/semaine.jar:$JARDIR/semaine-mary.jar:$JARDIR/semaine-dialogue.jar -Dmary.base="$MARY_BASE" eu.semaine.system.ComponentRunner $CONFIG 
 
 
 

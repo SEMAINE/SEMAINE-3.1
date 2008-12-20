@@ -16,8 +16,13 @@ if [ -z "$CONFIG" ] ; then
   CONFIG=$CONFDIR/message-logger-only.config
 fi
 
-echo "Starting SEMAINE ComponentRunner as: 'java -jar $JARDIR/semaine.jar $CONFIG'"
+JMS_URL_SETTING=""
+if [ -n "$CMS_URL" ] ; then
+  echo "Connecting to JMS server at $CMS_URL"
+  JMS_URL_SETTING="-Djms.url=$CMS_URL"
+fi
 
-java -jar $JARDIR/semaine.jar $CONFIG
+echo "Starting SEMAINE ComponentRunner as: 'java $JMS_URL_SETTING -jar $JARDIR/semaine.jar $CONFIG'"
 
+java $JMS_URL_SETTING -jar $JARDIR/semaine.jar $CONFIG
 

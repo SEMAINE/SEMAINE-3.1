@@ -28,7 +28,7 @@ if test ! -f $DOWNLOAD_PREFIX/$ATK_URL ; then
   builderror
 fi
 
-if test "x`find /usr/include -name *.h | grep /Xlib.h`" = "x" ; then
+if test "x`find -L /usr/include -name *.h | grep /Xlib.h`" = "x" ; then
    echo "X11 headers not found in /usr/include !"
    echo "Install the libx11-dev package first. "
    echo "on Debian/Ubuntu: sudo apt-get install libx11-dev"
@@ -36,12 +36,12 @@ if test "x`find /usr/include -name *.h | grep /Xlib.h`" = "x" ; then
 fi
 
 #"find /usr/include -name *.h | grep /asound.h"
-if test "x`find /usr/include -name *.h | grep /asoundlib.h`" = "x" ; then
-    echo "Alsasound headers not found in /usr/include ! "
-    echo "Install the libasound2-dev package !"
-    echo "on Debian/Ubuntu: sudo apt-get install libasound2-dev"
-    builderror
-fi
+#if test "x`find /usr/include -name *.h | grep /asoundlib.h`" = "x" ; then
+#    echo "Alsasound headers not found in /usr/include ! "
+#    echo "Install the libasound2-dev package !"
+#    echo "on Debian/Ubuntu: sudo apt-get install libasound2-dev"
+#    builderror
+#fi
 
 fi
 

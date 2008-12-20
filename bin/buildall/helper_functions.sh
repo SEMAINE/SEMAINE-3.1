@@ -274,6 +274,9 @@ function createRunScript {
   echo "export LD_LIBRARY_PATH=\"$INSTALL_PREFIX/lib:$SEMAINE_ROOT/c++/src/.libs\"" >> $scriptname
   echo "cd $rundir" >> $scriptname
   echo "echo \"COMPONENT START SCRIPT: starting semaine c++ component \"${builds_names[$build_nr]}\"\"" >> $scriptname
+  echo "if [ -n \"\$CMS_URL\" ] ; then echo \"Connecting to ActiveMQ server at \$CMS_URL\"" >> $scriptname
+  echo "else echo \"Connecting to ActiveMQ server at tcp://localhost:61616\"" >> $scriptname
+  echo "fi" >> $scriptname
   echo "./$runcmd $runpath \$*" >> $scriptname
   echo "echo \"COMPONENT START SCRIPT: component \"${builds_names[$build_nr]}\" exited with status \$?\"" >> $scriptname
   chmod +x $scriptname
