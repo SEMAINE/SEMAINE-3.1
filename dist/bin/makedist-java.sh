@@ -16,7 +16,26 @@ if [ -x "$TMPDIR/$INST_ROOTDIR" ] ; then
   rm "$TMPDIR/$INST_ROOTDIR"
 fi
 ln -s "$ROOTDIR" "$TMPDIR/$INST_ROOTDIR"
+DISTFILELIST="$TMPDIR/distfiles-java.txt"
+if [ -x "$DISTFILELIST" ] ; then
+  rm "$DISTFILELIST"
+fi
 
-# Now, prepend $INST_ROOTDIR in front of each file in $FILELIST, and ask zip to include it:
-(cd "$TMPDIR" ; cat "$FILELIST" | awk "{ print \"$INST_ROOTDIR/\"\$1; }" | zip -r "$DISTFILE" -@)
+# Prepare the actual list of files from $FILELIST:
+# prepend $INST_ROOTDIR in front of each file, 
+# and expand directories.
+(cd "$TMPDIR" 
+for f in `cat "$FILELIST"` ; do
+  if [ -d "$INST_ROOTDIR/$f" ] ; then
+    find "$INST_ROOTDIR/$f" -print | egrep -v "^.svn|/.svn|~$" >> "$DISTFILELIST"
+  elif [ -f "$INST_ROOTDIR/$f" ] ; then
+    echo "$INST_ROOTDIR/$f" >> "$DISTFILELIST"
+  else
+    echo "Warning: $ROOTDIR/$f does not exist."
+  fi
+done
+
+ cat "$DISTFILELIST" | zip -q "$DISTFILE" -@
+ )
+ echo "Created $DISTFILE"
 
