@@ -26,7 +26,7 @@ if test ! -f $DOWNLOAD_PREFIX/$ATK_URL ; then
   echo "   the password e-mail you will get after registration! **"
   echo ""
   echo "Alternatively, you can disable compilation of the ASR component by"
-  echo "commenting out the following two lines in 
+  echo "commenting out the following two lines in"
   echo "$INCDIR/modules.config:"
   echo ""
   echo "#. $INCDIR/module.atklib.sh clean"
