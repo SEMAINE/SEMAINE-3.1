@@ -8,17 +8,16 @@ if not exist %JARDIR%\semaine.jar (
   goto end
 )
 
-set CONFIG=%1%
-if %CONFIG%a==a (
-  set CONFDIR=%BINDIR%..\java\config
-  set CONFIG=%CONFDIR%\dummy-system.config
+if %1%a==a (
+  set CONFIG=%BINDIR%..\java\config\dummy-system.config
+) else (
+  set CONFIG=%1%
 )
 
-set JMS_URL_SETTING=""
-if %CMS_URL%a==a (
+if not %CMS_URL%a==a (
   echo.Connecting to JMS server at %CMS_URL%
   set JMS_URL_SETTING="-Djms.url=%CMS_URL%"
-fi
+)
 
 
 echo.Starting SEMAINE system as: 'java %JMS_URL_SETTING% -jar %JARDIR%\semaine.jar %CONFIG%'
@@ -28,3 +27,4 @@ java %JMS_URL_SETTING% -jar %JARDIR%\semaine.jar %CONFIG%
 :: goto target:
 
 :end
+set /P DUMMY=Press return to continue...

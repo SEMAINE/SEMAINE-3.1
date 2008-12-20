@@ -1,10 +1,10 @@
 @echo off
 set BINDIR=%~dp0%
 
-set MARYDIR="$BINDIR\..\MARY399alpha"
+set MARYDIR="%BINDIR%\..\MARY399alpha"
 
 if not exist %MARYDIR% (
-  echo.MARY directory not found in $MARYDIR. Cannot start.
+  echo.MARY directory not found in %MARYDIR%. Cannot start.
   goto end
 )
 
@@ -15,17 +15,16 @@ if not exist %JARDIR%\semaine.jar (
   goto end
 )
 
-set CONFIG=%1%
-if %CONFIG%a==a (
-  set CONFDIR=%BINDIR%..\java\config
-  set CONFIG=%CONFDIR%\speech2face.config
+if %1%a==a (
+  set CONFIG=%BINDIR%..\java\config\speech2face.config
+) else (
+  set CONFIG=%1%
 )
 
-set JMS_URL_SETTING=""
-if %CMS_URL%a==a (
+if not %CMS_URL%a==a (
   echo.Connecting to JMS server at %CMS_URL%
   set JMS_URL_SETTING="-Djms.url=%CMS_URL%"
-fi
+)
 
 
 echo.Starting SEMAINE system as: 'java -Xmx400m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base="%MARYDIR%" eu.semaine.system.ComponentRunner %CONFIG%'
@@ -35,3 +34,4 @@ java -Xmx400m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine
 :: goto target:
 
 :end
+set /P DUMMY=Press return to continue...
