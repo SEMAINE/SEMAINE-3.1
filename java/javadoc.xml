@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="javadoc">
+<target name="javadoc">
+<javadoc access="protected" author="true" classpath="lib/xml-apis.jar:lib/xercesImpl.jar:lib/mary-common.jar:lib/opennlp-tools-1.4.1/trove.jar:lib/opennlp-tools-1.4.1/opennlp-tools-1.4.1.jar:lib/log4j-1.2.15.jar:lib/activemq-all-5.1.0.jar:lib/opennlp-tools-1.4.1/maxent-2.5.1.jar:lib/commons-logging-1.1.1.jar:lib/serializer.jar:lib/opennlp-tools-1.4.1/jwnl-1.3.3.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="eu.semaine.components.dialogue.interpreters,eu.semaine.datatypes.xml,eu.semaine.jms.message,eu.semaine.jms.sender,eu.semaine.components,eu.semaine.components.dummy,eu.semaine.system,eu.semaine.components.meta,eu.semaine.components.dialogue.actionproposers,eu.semaine.components.dialogue.util,eu.semaine.util,eu.semaine.jms.receiver,eu.semaine.datatypes.stateinfo,eu.semaine.components.dialogue.analysers,eu.semaine.exceptions,eu.semaine.jms,eu.semaine.components.dialogue.test,eu.semaine.components.mary" source="1.6" sourcepath="src" splitindex="true" use="true" version="true">
+<link href="http://activemq.apache.org/maven/activemq-core/apidocs/"/>
+</javadoc>
+</target>
+</project>
