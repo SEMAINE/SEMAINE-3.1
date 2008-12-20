@@ -25,6 +25,13 @@ if test ! -f $DOWNLOAD_PREFIX/$ATK_URL ; then
   echo "** Be sure to remember the UserID you choose! It will not be included in"
   echo "   the password e-mail you will get after registration! **"
   echo ""
+  echo "Alternatively, you can disable compilation of the ASR component by"
+  echo "commenting out the following two lines in 
+  echo "$INCDIR/modules.config:"
+  echo ""
+  echo "#. $INCDIR/module.atklib.sh clean"
+  echo "#. $INCDIR/module.tum.asr.sh clean"
+
   builderror
 fi
 

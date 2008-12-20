@@ -6,9 +6,9 @@ VERSION=`cat VERSION.txt | sed 's/^ *//;s/ *$//'` # make sure to trim whitespace
 
 INST_ROOTDIR="SEMAINE-$VERSION"
 
-FILELIST="$ROOTDIR/dist/releasefiles-java.txt"
+FILELIST="$ROOTDIR/dist/releasefiles-linux.txt"
 mkdir -p "$ROOTDIR/dist/$INST_ROOTDIR"
-DISTFILE="$ROOTDIR/dist/$INST_ROOTDIR/$INST_ROOTDIR-java.zip"
+DISTFILE="$ROOTDIR/dist/$INST_ROOTDIR/$INST_ROOTDIR-linux.tar.gz"
 
 TMPDIR="$ROOTDIR/dist/tmp"
 mkdir -p "$TMPDIR"
@@ -16,7 +16,7 @@ if [ -x "$TMPDIR/$INST_ROOTDIR" ] ; then
   rm "$TMPDIR/$INST_ROOTDIR"
 fi
 ln -s "$ROOTDIR" "$TMPDIR/$INST_ROOTDIR"
-DISTFILELIST="$TMPDIR/distfiles-java.txt"
+DISTFILELIST="$TMPDIR/distfiles-linux.txt"
 if [ -e "$DISTFILELIST" ] ; then
   rm "$DISTFILELIST"
 fi
@@ -27,7 +27,7 @@ fi
 (cd "$TMPDIR" 
 for f in `cat "$FILELIST"` ; do
   if [ -d "$INST_ROOTDIR/$f" ] ; then
-    find "$INST_ROOTDIR/$f" -print | egrep -v "^.svn|/.svn|~$" >> "$DISTFILELIST"
+    find "$INST_ROOTDIR/$f" -print | egrep -v "^\.svn|/\.svn|~$|/\.libs|\.o$|\.lo$|\.loT$|.DS_Store|/\.deps|\.a$|/\.dirstamp$" >> "$DISTFILELIST"
   elif [ -f "$INST_ROOTDIR/$f" ] ; then
     echo "$INST_ROOTDIR/$f" >> "$DISTFILELIST"
   else
@@ -35,7 +35,10 @@ for f in `cat "$FILELIST"` ; do
   fi
 done
 
- cat "$DISTFILELIST" | zip -q "$DISTFILE" -@
+# The following would create a zip file:
+#cat "$DISTFILELIST" | zip -q "$DISTFILE" -@
+ tar czf "$DISTFILE" --files-from "$DISTFILELIST"
+ 
  )
  echo "Created $DISTFILE"
 
