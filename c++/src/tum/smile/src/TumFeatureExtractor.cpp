@@ -81,7 +81,9 @@ TumFeatureExtractor::TumFeatureExtractor(pOptions _opts) throw(CMSException) :
 	featureSender = new FeatureSender("semaine.data.analysis.features.voice", "", getName(), period);
 	waitingTime = period;
 	senders.push_back(featureSender);
-	featureSender->setTimeToLive(100); // discard messages after 100 ms
+	// Marc, 21 Dec 08: Deactivated, because it leads to dropped messages when the ASR
+	// is on a different machine where the clock time is not the same.
+	//featureSender->setTimeToLive(100); // discard messages after 100 ms
 
 	emmaSender = new EmmaSender("semaine.data.state.user.emma", getName());
 	senders.push_back(emmaSender);
