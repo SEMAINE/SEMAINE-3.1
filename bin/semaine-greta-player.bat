@@ -3,19 +3,19 @@ set BINDIR=%~dp0%
 
 set GRETADIR=%BINDIR%..\GretaActive
 
-if not exist %GRETADIR% (
+if not exist "%GRETADIR%" (
   echo.No Greta directory in %GRETADIR%! Cannot start.
   goto end
 )
 
 
-if %1%a==a (
+if "%1%a"=="a" (
   set EXEFILE=%GRETADIR%\bin\RealtimePlayerDebug.exe
 ) else (
   set EXEFILE=%GRETADIR%\bin\%1%
 )
 
-if not exist %EXEFILE% (
+if not exist "%EXEFILE%" (
   echo.No such file: %EXEFILE%. Cannot start.
   goto end
 )
@@ -28,7 +28,7 @@ if not %CMS_URL%a==a (
 )
 
 
-%EXEFILE%
+"%EXEFILE%"
 
 :: goto target:
 
