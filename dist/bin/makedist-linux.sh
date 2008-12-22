@@ -27,7 +27,7 @@ fi
 (cd "$TMPDIR" 
 for f in `cat "$FILELIST"` ; do
   if [ -d "$INST_ROOTDIR/$f" ] ; then
-    find "$INST_ROOTDIR/$f" -print | egrep -v "^\.svn|/\.svn|~$|/\.libs|\.o$|\.lo$|\.loT$|.DS_Store|/\.deps|\.a$|/\.dirstamp$" >> "$DISTFILELIST"
+    find "$INST_ROOTDIR/$f" -type f -print | egrep -v "^[.]svn|/[.]svn|~$|/[.]libs|[.]o$|[.]lo$|[.]loT$|[.]DS_Store|/[.]deps|[.]a$|/[.]dirstamp$|/[.][_]" >> "$DISTFILELIST"
   elif [ -f "$INST_ROOTDIR/$f" ] ; then
     echo "$INST_ROOTDIR/$f" >> "$DISTFILELIST"
   else
@@ -37,7 +37,10 @@ done
 
 # The following would create a zip file:
 #cat "$DISTFILELIST" | zip -q "$DISTFILE" -@
- tar czf "$DISTFILE" --files-from "$DISTFILELIST"
+
+# Avoid creation of ._files in Mac OS X tar:
+export COPYFILE_DISABLE=true 
+tar czf "$DISTFILE" --files-from "$DISTFILELIST"
  
  )
  echo "Created $DISTFILE"
