@@ -1,3 +1,5 @@
+README.txt
+doc
 MARY399alpha
 bin/semaine-speech2face.sh
 bin/semaine-speech2speech.sh

@@ -1,3 +1,4 @@
+README-linux.txt
 bin/buildall.sh
 bin/buildall
 thirdparty/download/activemq-cpp-2.2.1-src.tar.gz

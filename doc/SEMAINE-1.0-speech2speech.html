@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+
+  
+
+  <head>
+    <title>
+      SEMAINE-1.0-speech2speech – semaine
+    </title>
+        <link rel="search" href="http://semaine.opendfki.de/search" />
+        <link rel="help" href="http://semaine.opendfki.de/wiki/TracGuide" />
+        <link rel="alternate" href="http://semaine.opendfki.de/wiki/SEMAINE-1.0-speech2speech?format=txt" type="text/x-trac-wiki" title="Plain Text" />
+        <link rel="start" href="http://semaine.opendfki.de/wiki" />
+        <link rel="stylesheet" href="http://semaine.opendfki.de/chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="http://semaine.opendfki.de/chrome/common/css/wiki.css" type="text/css" />
+        <link rel="shortcut icon" href="http://semaine.opendfki.de/chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="http://semaine.opendfki.de/chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="http://semaine.opendfki.de/search/opensearch" title="Search semaine" />
+    <script type="text/javascript" src="http://semaine.opendfki.de/chrome/common/js/jquery.js"></script><script type="text/javascript" src="http://semaine.opendfki.de/chrome/common/js/trac.js"></script><script type="text/javascript" src="http://semaine.opendfki.de/chrome/common/js/search.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#content").find("h1,h2,h3,h4,h5,h6").addAnchor("Link to this section");
+      });
+    </script>
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://semaine.opendfki.de/"><img src="http://semaine.opendfki.de/chrome/common/trac_banner.png" alt="" /></a>
+      </div>
+      <form id="search" action="http://semaine.opendfki.de/search" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="http://semaine.opendfki.de/login">Login</a></li><li><a href="http://semaine.opendfki.de/wiki/TracGuide">Help/Guide</a></li><li><a href="http://semaine.opendfki.de/about">Impressum/Imprint</a></li><li class="last"><a href="http://semaine.opendfki.de/prefs">Preferences</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first active"><a href="http://semaine.opendfki.de/wiki">Wiki</a></li><li><a href="http://semaine.opendfki.de/timeline">Timeline</a></li><li><a href="http://semaine.opendfki.de/roadmap">Roadmap</a></li><li><a href="http://semaine.opendfki.de/browser">Browse Source</a></li><li><a href="http://semaine.opendfki.de/report">View Tickets</a></li><li><a href="http://semaine.opendfki.de/newticket">New Ticket</a></li><li class="last"><a href="http://semaine.opendfki.de/search">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+            <li class="first "><a href="http://semaine.opendfki.de/wiki/WikiStart">Start Page</a></li><li><a href="http://semaine.opendfki.de/wiki/TitleIndex">Index</a></li><li><a href="http://semaine.opendfki.de/wiki/SEMAINE-1.0-speech2speech?action=history">History</a></li><li class="last"><a href="http://semaine.opendfki.de/wiki/SEMAINE-1.0-speech2speech?action=diff&amp;version=9">Last Change</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="wiki">
+      <div class="wikipage searchable">
+        
+          <h1 id="SEMAINE-1.0speechtospeechdialogsystem">SEMAINE-1.0 speech to speech dialog system</h1>
+<h2 id="Pre-conditionforalldemonstratorconfigurations">Pre-condition for all demonstrator configurations</h2>
+<p>
+Start an <a class="wiki" href="SEMAINE-1.0-Dependencies.html#ActiveMQ">ActiveMQ server</a>.
+</p>
+<p>
+If you intend to run the demonstrator distributed across several machines, read <a class="wiki" href="SEMAINE-1.0-DistributedSystem.html">Running a distributed system</a>.
+</p>
+<h2 id="Textinputspeechoutput">Text input, speech output</h2>
+<p>
+The simplest configuration of the system is a pure java system in which the user types his/her input via a GUI window, and hears the system response via speech output.
+</p>
+<p>
+This system configuration pre-supposes installation of <a class="wiki" href="SEMAINE-1.0-java.html">SEMAINE-1.0-java</a>.
+</p>
+<p>
+The system can be started as follows.
+</p>
+<ul><li>on Linux/Mac/Unix:
+<pre class="wiki">SEMAINE-1.0/bin/semaine-speech2speech.sh
+</pre></li></ul><ul><li>on Windows:
+<pre class="wiki">SEMAINE-1.0\bin\semaine-speech2speech.bat 
+</pre></li></ul><p>
+If the system monitor GUI looks weird, please note this <a class="wiki" href="SEMAINE-1.0-java.html#SystemmonitorGUIpainterrors">known bug</a>.
+</p>
+<h2 id="Speechinputspeechoutput">Speech input, speech output</h2>
+<p>
+In this configuration, the user speaks to the system through a microphone, and the system response is produced via speech output.
+</p>
+<p>
+This system configuration pre-supposes installation of <a class="wiki" href="SEMAINE-1.0-java.html">SEMAINE-1.0-java</a> and <a class="wiki" href="SEMAINE-1.0-linux.html">SEMAINE-1.0-linux</a>.
+</p>
+<p>
+The system can be started as follows.
+</p>
+<p>
+<strong>1. Start the Java component</strong>
+</p>
+<ul><li>on Linux/Mac/Unix:
+<pre class="wiki">SEMAINE-1.0/bin/semaine-speech2speech.sh
+</pre></li></ul><ul><li>on Windows: (see <a class="wiki" href="SEMAINE-1.0-DistributedSystem.html">Running a distributed system</a>)
+<pre class="wiki">SEMAINE-1.0\bin\semaine-speech2speech.bat 
+</pre></li></ul><p>
+If the system monitor GUI looks weird, please note this <a class="wiki" href="SEMAINE-1.0-java.html#SystemmonitorGUIpainterrors">known bug</a>.
+</p>
+<p>
+<strong>2. Start the Linux components</strong>
+</p>
+<p>
+Make sure you have <a class="wiki" href="SEMAINE-1.0-linux.html#Downloadandinstallation">compiled the linux code</a>.
+</p>
+<p>
+The minimal Linux component to start is the SMILE component, doing feature extraction, voice activity detection, and emotion/interest recognition. Start it as:
+</p>
+<pre class="wiki">SEMAINE-1.0/bin/run_components/start_component_tum.smile
+</pre><p>
+In addition, it is advisable to start the Automatic Speech Recognition (ASR) component, so that the system has a chance to understand what the user is saying. (Note that the quality of ASR output at this stage is extremely limited due to very preliminary training data.)
+</p>
+<pre class="wiki">SEMAINE-1.0/bin/run_components/start_component_tum.asr
+</pre><h3 id="Testingmicrophonelevel">Testing microphone level</h3>
+<p>
+It is essential for the proper functioning of the SMILE component that the microphone recording level is set to a reasonable value. To test that, watch the shell from which you started the SMILE component. When you start talking, the SMILE component should output a message saying "detected turn start", and when you stop talking, it should output a message saying "detected turn end". If there are no "turn start" messages, increase the recording volume; if there are no "turn end" messages, decrease the recording volume.
+</p>
+
+        
+        
+      </div>
+          <div class="buttons">
+              <form method="get" action="SEMAINE-1.0-speech2speech.html" id="modifypage">
+                <div>
+                  <input type="hidden" name="action" value="edit" />
+                      <input type="submit" value="Edit this page" />
+                </div>
+              </form>
+    <form method="get" action="http://semaine.opendfki.de/attachment/wiki/SEMAINE-1.0-speech2speech/" id="attachfile">
+      <div>
+        <input type="hidden" name="action" value="new" />
+        <input type="submit" name="attachfilebutton" value="Attach file" />
+      </div>
+    </form>
+          </div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="last first">
+          <a rel="nofollow" href="http://semaine.opendfki.de/wiki/SEMAINE-1.0-speech2speech?format=txt">Plain Text</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="http://semaine.opendfki.de/chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">
+        Powered by <a href="http://semaine.opendfki.de/about"><strong>Trac 0.11.2.1</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.
+      </p>
+      <p class="right">Visit SEMAINE at <a href="http://www.semaine-project.eu/">http://www.semaine-project.eu/</a></p>
+    </div>
+  </body>
+</html>

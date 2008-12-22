@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>SEMAINE-1.0-Dependencies &ndash; semaine </title>
+  <link rel="search" href="http://semaine.opendfki.de/search" />
+  <link rel="help" href="http://semaine.opendfki.de/wiki/TracGuide" />
+  <link rel="alternate"
+  href="http://semaine.opendfki.de/wiki/SEMAINE-1.0-Dependencies?format=txt"
+  type="text/x-trac-wiki" title="Plain Text" />
+  <link rel="start" href="http://semaine.opendfki.de/wiki" />
+  <link rel="stylesheet"
+  href="http://semaine.opendfki.de/chrome/common/css/trac.css"
+  type="text/css" />
+  <link rel="stylesheet"
+  href="http://semaine.opendfki.de/chrome/common/css/wiki.css"
+  type="text/css" />
+  <link rel="shortcut icon"
+  href="http://semaine.opendfki.de/chrome/common/trac.ico"
+  type="image/x-icon" />
+  <link rel="icon" href="http://semaine.opendfki.de/chrome/common/trac.ico"
+  type="image/x-icon" />
+  <link type="application/opensearchdescription+xml" rel="search"
+  href="http://semaine.opendfki.de/search/opensearch" title="Search semaine"
+  />
+  <script type="text/javascript"
+  src="http://semaine.opendfki.de/chrome/common/js/jquery.js">
+  </script>
+  <script type="text/javascript"
+  src="http://semaine.opendfki.de/chrome/common/js/trac.js">
+  </script>
+  <script type="text/javascript"
+  src="http://semaine.opendfki.de/chrome/common/js/search.js">
+  </script>
+  <!--[if lt IE 7]>
+      <script type="text/javascript" src="/chrome/common/js/ie_pre7_hacks.js"></script>
+      <![endif]-->
+  <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#content").find("h1,h2,h3,h4,h5,h6").addAnchor("Link to this section");
+      });
+    </script>
+</head>
+
+<body>
+
+<div id="banner">
+
+<div id="header">
+ </div>
+</div>
+
+<div id="main">
+
+<div id="content" class="wiki">
+
+<div class="wikipage searchable">
+<h1 id="SEMAINE-1.0Dependencies:Requiredsoftware">SEMAINE-1.0 Dependencies:
+Required software</h1>
+
+<p>The following software is required to run the SEMAINE-1.0 system. </p>
+
+<h2 id="Java1.6">Java 1.6</h2>
+
+<p>The <a class="wiki" href="SEMAINE-1.0-java.html">SEMAINE-1.0-java</a>
+components require Java 1.6. For just running the system, the Java Runtime
+Environment (JRE) is sufficient; you can optain it from <a class="ext-link"
+href="http://www.java.com/getjava"><span
+class="icon">http://www.java.com/getjava</span></a> </p>
+
+<p>To recompile Java code, get the Java Software Development Kit (JDK) from
+<a class="ext-link"
+href="http://java.sun.com/javase/downloads/index.jsp"><span
+class="icon">http://java.sun.com/javase/downloads/index.jsp</span></a>, as
+well as the ant build tool, available from <a class="ext-link"
+href="http://ant.apache.org/"><span
+class="icon">http://ant.apache.org/</span></a> </p>
+
+<h2 id="ActiveMQ">ActiveMQ</h2>
+
+<p>Communication among all SEMAINE-1.0 components passes via the Java
+Messaging Service (JMS) server ActiveMQ. Binary distributions can be found at
+<a class="ext-link" href="http://activemq.apache.org/download.html"><span
+class="icon">http://activemq.apache.org/download.html</span></a> . We have
+tested versions 5.1.0 and 5.2.0; other versions of ActiveMQ may or may not
+work (let us know!). </p>
+
+<p>After installation, ActiveMQ can be started by running </p>
+<ul>
+  <li>on Linux: </li>
+</ul>
+<pre class="wiki">apache-activemq-x.y.z/bin/activemq</pre>
+<ul>
+  <li>on Windows: </li>
+</ul>
+<pre class="wiki">apache-activemq-x.y.z\bin\activemq.bat</pre>
+
+<h2 id="Linux">Linux</h2>
+
+<p>The <a class="wiki" href="SEMAINE-1.0-linux.html">SEMAINE-1.0 linux
+components</a> are distributed as source code. Most third-party software
+required to run the system is open source software, and is already included
+in the install package. </p>
+
+<p>To build the system, a number of standard build tools need to be
+installed: gcc, automake, etc. To install them on an Ubuntu Linux system,
+type: </p>
+<pre class="wiki">sudo apt-get install automake autoconf gcc g++ libasound2-dev make libtool patch</pre>
+
+<p>In order to build the ASR component, you must download the ATK toolkit.
+You can get it from: <a class="ext-link"
+href="http://htk.eng.cam.ac.uk/develop/atk.shtml"><span
+class="icon">http://htk.eng.cam.ac.uk/develop/atk.shtml</span></a> . Place
+the tarball in SEMAINE-1.0/thirdparty/download before starting the build
+script. Prior to the download you must register and apply for a UserID: <a
+class="ext-link" href="http://htk.eng.cam.ac.uk/register.shtml"><span
+class="icon">http://htk.eng.cam.ac.uk/register.shtml</span></a> . ** Be sure
+to remember the UserID you choose! It will not be included in the password
+e-mail you will get after registration! ** </p>
+
+<p>Alternatively, you can disable compilation of the ASR component by
+commenting out the following two lines in
+SEMAINE-1.0/bin/buildall/modules.config: </p>
+<pre class="wiki">#. /Users/marc/SEMAINE/trunk/bin/buildall/module.atklib.sh clean
+#. /Users/marc/SEMAINE/trunk/bin/buildall/module.tum.asr.sh clean</pre>
+
+<h2 id="Windows">Windows</h2>
+
+<p>The <a class="wiki" href="SEMAINE-1.0-windows.html">SEMAINE-1.0 windows
+components</a> are distributed as binaries plus source code. All third-party
+code needed to run the system is included in the release file. </p>
+
+<p><strong>IMPORTANT: the binaries are debug binaries for the moment, and the
+Microsoft EULA does not allow for the re-distribution of debug versions of
+their system libraries. Therefore, to run the binaries in the release, it is
+currently necessary to install the full development tools as described below.
+We will try to simplify the process in the near future.</strong> </p>
+
+<p>To re-compile the code, the following software is needed. </p>
+<ul>
+  <li>Microsoft Visual C++ 2005 Express Service Pack 1. You can get Visual
+    C++ 2005 Express Edition for free from <a class="ext-link"
+    href="http://www.microsoft.com/express/2005/"><span
+    class="icon">http://www.microsoft.com/express/2005/</span></a>. In
+    detail, you need the following files: 
+    <ul>
+      <li>Visual C++ 2005 Express <a class="ext-link"
+        href="http://go.microsoft.com/fwlink/?LinkId=51410&amp;amp;clcid=0x409"><span
+        class="icon">Installer</span></a>; </li>
+      <li>Visual C++ 2005 Express <a class="ext-link"
+        href="http://download.microsoft.com/download/7/7/3/7737290f-98e8-45bf-9075-85cc6ae34bf1/vs80sp1-kb926748-x86-intl.exe"><span
+        class="icon">Service Pack 1</span></a>; </li>
+      <li>(if you are running Vista) <a class="ext-link"
+        href="http://www.microsoft.com/downloads/info.aspx?na=90&amp;p=&amp;SrcDisplayLang=en&amp;SrcCategoryId=&amp;SrcFamilyId=90e2942d-3ad1-4873-a2ee-4acc0aace5b6&amp;u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fc%2f7%2fd%2fc7d9b927-f4e6-4ab2-8399-79a2d5cdfac9%2fVS80sp1-KB932232-X86-ENU.exe"><span
+        class="icon">Vista update for SP1</span></a>. </li>
+    </ul>
+  </li>
+</ul>
+<ul>
+  <li>Microsoft Platform SDK. Get it from <a class="ext-link"
+    href="http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&amp;displaylang=en"><span
+    class="icon">http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&amp;displaylang=en</span></a>
+    . </li>
+</ul>
+
+<p>Remember where the Platform SDK gets installed -- e.g., C:\Program
+Files\Microsoft SDKs\Windows\v6.1. To make sure that Visual C++ uses this
+version of the Platform SDK in compiling the code, proceed as follows. </p>
+<ul>
+  <li>In Visual C++, go to "Tools"-&gt;"Options..."-&gt;"Projects and
+    Solutions"-&gt;"VC++ Directories". </li>
+  <li>From "Show directories for", select "Include files". Click the "new
+    line" button and add the "Include" subdirectory of the Platform SDK, e.g.
+    "C:\Program Files\Microsoft SDKs\Windows\v6.1\Include". </li>
+  <li>From "Show directories for", select "Library files". Click the "new
+    line" button and add the "Lib" subdirectory of the Platform SDK, e.g.
+    "C:\Program Files\Microsoft SDKs\Windows\v6.1\Lib". </li>
+</ul>
+
+<p>The build files are located in
+SEMAINE-1.0\GretaActive\GretaApplications\GretaRealTime\RealtimeBML\MSVC and
+SEMAINE-1.0\GretaActive\GretaApplications\GretaRealTime\RealtimePlayer\MSVC.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>
