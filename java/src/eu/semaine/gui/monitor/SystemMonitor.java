@@ -43,6 +43,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
@@ -293,7 +294,7 @@ public class SystemMonitor extends Thread
 	private synchronized void redraw()
 	{
 		assert cells != null;
-		Map<DefaultGraphCell, Map<Object,Object>> allChanges = new HashMap<DefaultGraphCell, Map<Object,Object>>();
+		final Map<DefaultGraphCell, Map<Object,Object>> allChanges = new HashMap<DefaultGraphCell, Map<Object,Object>>();
 		boolean mustLayoutCells = false;
 		Dimension newFrameSize = graph.getSize();
 		if (!newFrameSize.equals(frameSize)) {
@@ -360,7 +361,11 @@ public class SystemMonitor extends Thread
 			}
 		}
 		if (!allChanges.isEmpty()) {
-			graph.getGraphLayoutCache().edit(allChanges);
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					graph.getGraphLayoutCache().edit(allChanges);
+				}
+			});
 			
 			if (mustLayoutCells) {
 				//createAllArrows();
