@@ -115,10 +115,10 @@ select="document('semaine.mary.realised.acoustics')"/>
 
    <!-- Extract boundary elements with thier durations in Milliseconds(?)  --> 	
    <xsl:template name="getBoundaryData" match="mary:boundary">
-	<xsl:variable name="endTime" select="@duration div 1000"/>
+	<xsl:variable name="duration" select="@duration"/>
 	<xsl:variable name="countData" select="position()"/>
 	<xsl:variable name="boundaryMark" select="following::mary:mark[1]/@name"/>
-	<mary:boundary id="b{$countData}" type="HH" start="{$boundaryMark}" end="{$endTime}"/>
+	<mary:boundary id="b{$countData}" type="HH" start="{$boundaryMark}" duration="{$duration}"/>
    </xsl:template>
 
    <!-- Extract text only from token elements --> 	
