@@ -14,9 +14,9 @@ import eu.semaine.util.XMLTool;
 
 public class Commentator extends Component {
 	private BMLSender bmlSender = new BMLSender("semaine.data.synthesis.plan", getName());
-	boolean started = false;
-	boolean inDanger = false;
-	boolean nearlyWon = false;
+	private boolean started = false;
+	private boolean inDanger = false;
+	private boolean nearlyWon = false;
 	
 	public Commentator() throws JMSException {
 		super("Commentator");
@@ -43,7 +43,7 @@ public class Commentator extends Component {
 	@Override protected void act() throws JMSException {
 		if (!started) {
 			started = true;
-			say("Welcome to the swimmers game! The swimmer needs your support to reach the shore. Cheer him up!");
+			say("Welcome to the swimmers game! The swimmer needs your support to reach the river bank. Cheer him up!");
 		}
 	}
 	

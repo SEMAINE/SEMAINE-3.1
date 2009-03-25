@@ -24,7 +24,8 @@
                     eu/semaine/components/dummy/example2.fap
       	            eu/semaine/components/dummy/example3.fap"
         	excludes="eu/semaine/components/dialogue/**/*.*
-        	          eu/semaine/components/mary/**/*.*">
+        	          eu/semaine/components/mary/**/*.*
+                          eu/semaine/examples/**/*.*">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Main-Class"
@@ -53,6 +54,16 @@
 				<attribute name="Class-Path" value="semaine.jar mary-common.jar"/>
 			</manifest>
 		</jar>
+		<jar destfile="lib/semaine-examples.jar" basedir="bin"
+			includes="eu/semaine/examples/**/*.class
+				eu/semaine/examples/**/*.png">
+                        <manifest>
+                                <attribute name="Built-By" value="${user.name}"/>
+                                <attribute name="Main-Class" value="eu.semaine.system.ComponentRunner"/>
+                                <attribute name="Class-Path" value="semaine.jar semaine-mary.jar"/>
+                        </manifest>
+                </jar>
+
     </target>
 	
 	

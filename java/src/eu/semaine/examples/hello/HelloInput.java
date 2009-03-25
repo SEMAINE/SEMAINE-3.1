@@ -19,8 +19,7 @@ public class HelloInput extends Component {
 		senders.add(textSender);
 	}
 	
-	@Override
-	protected void act() throws IOException, JMSException {
+	@Override protected void act() throws IOException, JMSException {
 		if (inputReader.ready()) {
 			String line = inputReader.readLine();
 			textSender.sendTextMessage(line, meta.getTime());

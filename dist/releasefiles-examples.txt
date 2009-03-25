@@ -1,0 +1,9 @@
+README-examples.txt
+java/lib/semaine-examples.jar
+java/src/eu/semaine/examples
+java/config/example-hello.config
+java/config/example-mirror.config
+java/config/example-swimmer.config
+bin/example-swimmer.sh
+bin/example-swimmer.bat
+

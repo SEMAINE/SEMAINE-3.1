@@ -19,8 +19,7 @@ public class EmoticonOutput extends Component {
 		receivers.add(new XMLReceiver("semaine.data.hello.emotion"));
 	}
 	
-	@Override
-	protected void react(SEMAINEMessage m) throws MessageFormatException {
+	@Override protected void react(SEMAINEMessage m) throws MessageFormatException {
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
 		Element dimensions = (Element) xm.getDocument().getElementsByTagNameNS(EmotionML.namespaceURI, EmotionML.E_DIMENSIONS).item(0);
 		Element arousal = XMLTool.needChildElementByTagNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);

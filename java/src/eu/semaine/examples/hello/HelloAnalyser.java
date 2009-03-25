@@ -15,14 +15,14 @@ import eu.semaine.util.XMLTool;
 public class HelloAnalyser extends Component {
 
 	private XMLSender emotionSender = new XMLSender("semaine.data.hello.emotion", "EmotionML", getName());
+
 	public HelloAnalyser() throws JMSException {
 		super("HelloAnalyser");
 		receivers.add(new Receiver("semaine.data.hello.text"));
 		senders.add(emotionSender);
 	}
 	
-	@Override
-	protected void react(SEMAINEMessage m) throws JMSException {
+	@Override protected void react(SEMAINEMessage m) throws JMSException {
 		int arousalValue = 0, valenceValue = 0;
 		String input = m.getText();
 		if (input.contains("very")) arousalValue = 1;
@@ -44,5 +44,4 @@ public class HelloAnalyser extends Component {
 		valence.setAttribute(EmotionML.A_VALUE, String.valueOf(valenceValue));
 		return emotionML;
 	}
-	 
 }
