@@ -26,7 +26,7 @@ function func_build_asr {
     # prepare model directory
     if test ! -d models ; then mkdir models ; fi
     if test ! -d models/AM ; then mkdir models/AM ; fi
-    cp -u $ATKPATH/Resources/UK_SI_ZMFCC/* models/AM/
+    cp $ATKPATH/Resources/UK_SI_ZMFCC/* models/AM/
 
     # download the ASR models
     aux_download "$ASRMODELS_URL" "$ASRMODELS"
