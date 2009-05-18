@@ -11,15 +11,15 @@
 		4931F7C50ECB4C3A00872418 /* SEMAINEBytesMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4931F7C30ECB4C3A00872418 /* SEMAINEBytesMessage.cpp */; };
 		495C9E680EC615EC00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
 		495C9E690EC615EC00B20CD3 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
-		495C9E6A0EC615EC00B20CD3 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		495C9E6A0EC615EC00B20CD3 /* libxerces-c.28.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */; };
 		495C9E6D0EC6166800B20CD3 /* basictests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 495C9E6C0EC6166800B20CD3 /* basictests.cpp */; };
 		495C9E8F0EC61B2A00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
 		495C9E900EC61B2A00B20CD3 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
-		495C9E910EC61B2A00B20CD3 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		495C9E910EC61B2A00B20CD3 /* libxerces-c.28.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */; };
 		495C9E920EC61B3200B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
 		495C9E930EC61B3200B20CD3 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
-		495C9E940EC61B3200B20CD3 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
-		49764C8D0EC46E1000270253 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		495C9E940EC61B3200B20CD3 /* libxerces-c.28.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */; };
+		49764C8D0EC46E1000270253 /* libxerces-c.28.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */; };
 		49764C8E0EC46E1600270253 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
 		49764C8F0EC46EFB00270253 /* BML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 491237BE0EC2FDEE00ABC267 /* BML.cpp */; };
 		49764C900EC46EFB00270253 /* CMSLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4973EF1C0E76B60F00D97DFA /* CMSLogger.cpp */; };
@@ -43,12 +43,12 @@
 		49764CA60EC46EFB00270253 /* XMLTool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49AF4EE20EBF8BEC008011D8 /* XMLTool.cpp */; };
 		49764CCA0EC470B200270253 /* dummyfeatextr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49764CC90EC470B200270253 /* dummyfeatextr.cpp */; };
 		49764CCE0EC4716F00270253 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
-		49764CCF0EC4716F00270253 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		49764CCF0EC4716F00270253 /* libxerces-c.28.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */; };
 		49764CD80EC472C200270253 /* DummyFeatureExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 492B35F00E839C5300DBE7E1 /* DummyFeatureExtractor.cpp */; };
 		49764CF20EC476EA00270253 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
 		49764D0A0EC4784000270253 /* libactivemq-cpp.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */; };
 		49764D0B0EC4784000270253 /* libsemaine-api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49764C890EC46D4600270253 /* libsemaine-api.dylib */; };
-		49764D0C0EC4784000270253 /* libxerces-c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.dylib */; };
+		49764D0C0EC4784000270253 /* libxerces-c.28.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */; };
 		49764D0F0EC4786F00270253 /* jimandjohn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49764D0E0EC4786F00270253 /* jimandjohn.cpp */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +87,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 49764C880EC46D4600270253;
 			remoteInfo = "semaine-api";
+		};
+		A45546090ECAFA8300B0A89F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 495C9E610EC615CC00B20CD3;
+			remoteInfo = basictests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -148,7 +155,7 @@
 		49764C5D0EC3617200270253 /* DummyAnalyser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyAnalyser.cpp; path = components/dummy/DummyAnalyser.cpp; sourceTree = "<group>"; };
 		49764C5E0EC3617200270253 /* DummyAnalyser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DummyAnalyser.h; path = components/dummy/DummyAnalyser.h; sourceTree = "<group>"; };
 		49764C890EC46D4600270253 /* libsemaine-api.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libsemaine-api.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
-		49764CBC0EC46FEB00270253 /* dummyfeatextr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dummyfeatextr; sourceTree = BUILT_PRODUCTS_DIR; };
+		49764CBC0EC46FEB00270253 /* dummyfeatureprocessor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dummyfeatureprocessor; sourceTree = BUILT_PRODUCTS_DIR; };
 		49764CC90EC470B200270253 /* dummyfeatextr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dummyfeatextr.cpp; path = executables/dummyfeatextr.cpp; sourceTree = "<group>"; };
 		49764D040EC4782500270253 /* jimandjohn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jimandjohn; sourceTree = BUILT_PRODUCTS_DIR; };
 		49764D0E0EC4786F00270253 /* jimandjohn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jimandjohn.cpp; path = executables/jimandjohn.cpp; sourceTree = "<group>"; };
@@ -157,8 +164,8 @@
 		4980108A0E81762300C80323 /* SEMAINEFeatureMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEMAINEFeatureMessage.h; path = message/SEMAINEFeatureMessage.h; sourceTree = "<group>"; };
 		4980108B0E81762300C80323 /* SEMAINEFeatureMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SEMAINEFeatureMessage.cpp; path = message/SEMAINEFeatureMessage.cpp; sourceTree = "<group>"; };
 		498010D60E82215B00C80323 /* FeatureReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeatureReceiver.h; path = receiver/FeatureReceiver.h; sourceTree = "<group>"; };
-		49A541C00E83D3F200D45016 /* libxerces-c.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libxerces-c.dylib"; path = "../../../../../../opt/local/lib/libxerces-c.dylib"; sourceTree = SOURCE_ROOT; };
-		49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libactivemq-cpp.4.dylib"; path = "../../../../src/activemq-cpp-install/lib/libactivemq-cpp.4.dylib"; sourceTree = SOURCE_ROOT; };
+		49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libxerces-c.28.0.dylib"; path = "../../thirdparty/inst/lib/libxerces-c.28.0.dylib"; sourceTree = SOURCE_ROOT; };
+		49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libactivemq-cpp.4.dylib"; path = "../../thirdparty/inst/lib/libactivemq-cpp.4.dylib"; sourceTree = SOURCE_ROOT; };
 		49A542040E83E57F00D45016 /* XMLReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLReceiver.h; path = semaine/cms/receiver/XMLReceiver.h; sourceTree = SOURCE_ROOT; };
 		49A542080E83E64E00D45016 /* XMLSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XMLSender.cpp; path = semaine/cms/sender/XMLSender.cpp; sourceTree = SOURCE_ROOT; };
 		49A542090E83E64E00D45016 /* XMLSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLSender.h; path = semaine/cms/sender/XMLSender.h; sourceTree = SOURCE_ROOT; };
@@ -178,7 +185,7 @@
 			files = (
 				495C9E680EC615EC00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */,
 				495C9E690EC615EC00B20CD3 /* libsemaine-api.dylib in Frameworks */,
-				495C9E6A0EC615EC00B20CD3 /* libxerces-c.dylib in Frameworks */,
+				495C9E6A0EC615EC00B20CD3 /* libxerces-c.28.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,7 +195,7 @@
 			files = (
 				495C9E8F0EC61B2A00B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */,
 				495C9E900EC61B2A00B20CD3 /* libsemaine-api.dylib in Frameworks */,
-				495C9E910EC61B2A00B20CD3 /* libxerces-c.dylib in Frameworks */,
+				495C9E910EC61B2A00B20CD3 /* libxerces-c.28.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,7 +205,7 @@
 			files = (
 				495C9E920EC61B3200B20CD3 /* libactivemq-cpp.4.dylib in Frameworks */,
 				495C9E930EC61B3200B20CD3 /* libsemaine-api.dylib in Frameworks */,
-				495C9E940EC61B3200B20CD3 /* libxerces-c.dylib in Frameworks */,
+				495C9E940EC61B3200B20CD3 /* libxerces-c.28.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49764C8E0EC46E1600270253 /* libactivemq-cpp.4.dylib in Frameworks */,
-				49764C8D0EC46E1000270253 /* libxerces-c.dylib in Frameworks */,
+				49764C8D0EC46E1000270253 /* libxerces-c.28.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +224,7 @@
 			files = (
 				49764CF20EC476EA00270253 /* libsemaine-api.dylib in Frameworks */,
 				49764CCE0EC4716F00270253 /* libactivemq-cpp.4.dylib in Frameworks */,
-				49764CCF0EC4716F00270253 /* libxerces-c.dylib in Frameworks */,
+				49764CCF0EC4716F00270253 /* libxerces-c.28.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,7 +234,7 @@
 			files = (
 				49764D0A0EC4784000270253 /* libactivemq-cpp.4.dylib in Frameworks */,
 				49764D0B0EC4784000270253 /* libsemaine-api.dylib in Frameworks */,
-				49764D0C0EC4784000270253 /* libxerces-c.dylib in Frameworks */,
+				49764D0C0EC4784000270253 /* libxerces-c.28.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,7 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				49A541C30E83D42500D45016 /* libactivemq-cpp.4.dylib */,
-				49A541C00E83D3F200D45016 /* libxerces-c.dylib */,
+				49A541C00E83D3F200D45016 /* libxerces-c.28.0.dylib */,
 				497C3BE50E767FBC00B3B7A5 /* event.h */,
 				49377D310E684D6600C4F871 /* semaine */,
 				08FB7795FE84155DC02AAC07 /* Source */,
@@ -260,7 +267,7 @@
 			isa = PBXGroup;
 			children = (
 				49764C890EC46D4600270253 /* libsemaine-api.dylib */,
-				49764CBC0EC46FEB00270253 /* dummyfeatextr */,
+				49764CBC0EC46FEB00270253 /* dummyfeatureprocessor */,
 				49764D040EC4782500270253 /* jimandjohn */,
 				495C9E620EC615CC00B20CD3 /* test */,
 				495C9E800EC61AF200B20CD3 /* dummyanalyser */,
@@ -485,6 +492,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A455460A0ECAFA8300B0A89F /* PBXTargetDependency */,
 				495C9E850EC61AF900B20CD3 /* PBXTargetDependency */,
 			);
 			name = dummyanalyser;
@@ -539,7 +547,7 @@
 			);
 			name = dummyfeatextr;
 			productName = dummyfeatureprocessor;
-			productReference = 49764CBC0EC46FEB00270253 /* dummyfeatextr */;
+			productReference = 49764CBC0EC46FEB00270253 /* dummyfeatureprocessor */;
 			productType = "com.apple.product-type.tool";
 		};
 		49764D030EC4782500270253 /* jimandjohn */ = {
@@ -677,6 +685,11 @@
 			isa = PBXTargetDependency;
 			target = 49764C880EC46D4600270253 /* semaine-api */;
 			targetProxy = 49764D080EC4782F00270253 /* PBXContainerItemProxy */;
+		};
+		A455460A0ECAFA8300B0A89F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 495C9E610EC615CC00B20CD3 /* basictests */;
+			targetProxy = A45546090ECAFA8300B0A89F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
