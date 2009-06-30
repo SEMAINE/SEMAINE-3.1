@@ -148,6 +148,7 @@ public class UserStateInfo extends StateInfo
 				if (intensity != null) {
 					info.put("behaviour intensity", intensity);
 				}
+				return true;
 			}
 		}
 		return false;
