@@ -10,6 +10,9 @@ import java.io.StringReader;
 import java.util.Locale;
 
 import javax.jms.JMSException;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -107,14 +110,14 @@ public class SpeechPreprocessor extends Component
 	@Override
 	public void react(SEMAINEMessage m) throws Exception
 	{
-		if (!(m instanceof SEMAINEXMLMessage)) {
+		if ( !(m instanceof SEMAINEXMLMessage) ) {
 			throw new MessageFormatException("expected XML message, got "+m.getClass().getSimpleName());
 		}
 		
-		if(m.getTopicName().equals("semaine.data.action.selected.function")){
+		if (m.getTopicName().equals("semaine.data.action.selected.function")) {
 			speechPreProcessor(m);
 		}
-		if(m.getTopicName().equals("semaine.data.action.selected.behaviour")){
+		if (m.getTopicName().equals("semaine.data.action.selected.behaviour")) {
 			//SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			//fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
 		}
@@ -131,16 +134,18 @@ public class SpeechPreprocessor extends Component
 		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
-		Request request = new Request(MaryDataType.SSML,MaryDataType.INTONATION,Locale.US,Voice.getDefaultVoice(Locale.ENGLISH),null,null,1,null);
-		Document inputDoc = xm.getDocument();
+		Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
+		AudioFormat af = voice.dbAudioFormat();
+        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
+            af, AudioSystem.NOT_SPECIFIED);
+    	
+        //Request request = new Request(MaryDataType.SSML,MaryDataType.INTONATION,Locale.US,Voice.getDefaultVoice(Locale.ENGLISH),null,null,1,null);
+    	Request request = new Request(MaryDataType.SSML,MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.US,voice,"","",1,aff);
+		
+    	Document inputDoc = xm.getDocument();
 		String inputText = xm.getText();
 		
 		if (XMLTool.getChildElementByTagNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
-			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			//factory.setNamespaceAware(true);
-			//DocumentBuilder builder = factory.newDocumentBuilder();
-			//inputDoc = builder.parse(new InputSource(new FileReader("dataformat1.xml")));
-			//inputText = XMLTool.document2String(inputDoc);
 			
 			transformer = fml2ssmlStylesheet.newTransformer();
 			transformer.transform(new DOMSource(inputDoc), new StreamResult(ssmlos));
@@ -154,17 +159,19 @@ public class SpeechPreprocessor extends Component
 			} catch (Exception e) {
 				throw new Exception("MARY cannot process input -- SSML input was:\n"+ssml, e);
 			}
-			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
-			//System.out.println("PreProcessor: "+finalData);
+			
+			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
+			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			
 			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
 		} 
 		else {
 			Element backchannel = null;
 			Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
-			if(fml != null){
+			if (fml != null) {
 				backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
 			}
-			if(backchannel != null){
+			if (backchannel != null) {
 				fmlbmlSender.sendXML(inputDoc, xm.getUsertime(), xm.getEventType());
 			}
 			else{
