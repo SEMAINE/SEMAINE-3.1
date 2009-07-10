@@ -29,8 +29,7 @@ import eu.semaine.util.XMLTool;
  */
 public class ParticipantControl extends Component 
 {
-    public static final String USER = "user";
-    
+
     private ParticipantControlGUI gui;
 	private XMLSender contextSender;
         private boolean isUserPresent = false;
@@ -62,17 +61,14 @@ public class ParticipantControl extends Component
             if (!root.getNamespaceURI().equals(SemaineML.namespaceURI)) {
                 throw new MessageFormatException("Unexpected document element namespace: expected '"+SemaineML.namespaceURI+"', found '"+root.getNamespaceURI()+"'");
             }
-            List<Element> persons = XMLTool.getChildrenByTagNameNS(root, SemaineML.E_PERSON, SemaineML.namespaceURI);
-            boolean userTagPresent = false;
-            for (Element person : persons) {
-                String name = person.getAttribute(SemaineML.A_NAME);
-                if (name.equals(USER)) {
-                    userTagPresent = true;
-                } else {
-                    currentCharacter = name;
-                }
+            Element user = XMLTool.getChildElementByTagNameNS(root, SemaineML.E_USER, SemaineML.namespaceURI);
+            if (user != null) {
+            	isUserPresent = user.getAttribute(SemaineML.A_STATUS).equals(SemaineML.V_PRESENT);
             }
-            isUserPresent = userTagPresent;
+            Element character = XMLTool.getChildElementByTagNameNS(root, SemaineML.E_CHARACTER, SemaineML.namespaceURI);
+            if (character != null) {
+            	currentCharacter = character.getAttribute(SemaineML.A_NAME);
+            }
             gui.updateWhoIsPresent();
         }
 
@@ -81,12 +77,11 @@ public class ParticipantControl extends Component
 	{
 		Document semaineML = XMLTool.newDocument(SemaineML.E_CONTEXT, SemaineML.namespaceURI, SemaineML.version);
 		Element rootNode = semaineML.getDocumentElement();
-		if (isUserPresent) {
-			Element user = XMLTool.appendChildElement(rootNode, SemaineML.E_PERSON);
-			user.setAttribute(SemaineML.A_NAME, USER);
-		}
+		Element user = XMLTool.appendChildElement(rootNode, SemaineML.E_USER);
+		String status = (isUserPresent ? SemaineML.V_PRESENT : SemaineML.V_ABSENT);
+		user.setAttribute(SemaineML.A_STATUS, status);
 		if (currentCharacter != null) {
-			Element character = XMLTool.appendChildElement(rootNode, SemaineML.E_PERSON);
+			Element character = XMLTool.appendChildElement(rootNode, SemaineML.E_CHARACTER);
 			character.setAttribute(SemaineML.A_NAME, currentCharacter);
 		}
 		contextSender.sendXML(semaineML, meta.getTime());

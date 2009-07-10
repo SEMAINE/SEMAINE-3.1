@@ -10,7 +10,7 @@ package eu.semaine.datatypes.xml;
  */
 public class SemaineML
 {
-    public static final String version = "0.0.2";
+    public static final String version = "0.0.3";
     public static final String namespaceURI = "http://www.semaine-project.eu/semaineml";
 
     // Elements
@@ -28,7 +28,8 @@ public class SemaineML
     public static final String E_SPEAKER = "speaker";
     public static final String E_LISTENER = "listener";
     public static final String E_TOPIC = "topic";
-    public static final String E_PERSON = "person";
+    public static final String E_USER = "user";
+    public static final String E_CHARACTER = "character";
     
     // Attributes
     public static final String A_WHO = "who";
@@ -38,7 +39,11 @@ public class SemaineML
     public static final String A_VALUE = "value";
     public static final String A_TIME = "time";
     public static final String A_INTENSITY = "intensity";
+    public static final String A_STATUS = "status";
     
-
+    // Attribute values
+    // For A_STATUS:
+    public static final String V_PRESENT = "present";
+    public static final String V_ABSENT = "absent";
     
 }
