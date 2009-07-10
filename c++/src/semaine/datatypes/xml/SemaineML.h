@@ -21,8 +21,9 @@ class SemaineML
 public:
 	static const std::string version;
 	static const std::string namespaceURI;
-	
+
 	// Elements
+	static const std::string E_CONTEXT;
 	static const std::string E_USERSTATE;
 	static const std::string E_AGENTSTATE;
 	static const std::string E_DIALOGSTATE;
@@ -36,6 +37,8 @@ public:
 	static const std::string E_SPEAKER;
 	static const std::string E_LISTENER;
 	static const std::string E_TOPIC;
+	static const std::string E_USER;
+	static const std::string E_CHARACTER;
 
 	// Attributes
 	static const std::string A_WHO;
@@ -45,6 +48,12 @@ public:
 	static const std::string A_VALUE;
 	static const std::string A_TIME;
 	static const std::string A_INTENSITY;
+	static const std::string A_STATUS;
+
+	// Attribute values
+	// For A_STATUS:
+	static const std::string V_PRESENT;
+	static const std::string V_ABSENT;
 };
 
 } // namespace xml

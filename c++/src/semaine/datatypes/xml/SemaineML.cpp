@@ -13,10 +13,11 @@ namespace semaine {
 namespace datatypes {
 namespace xml {
 
-const std::string SemaineML::version = "0.0.1";
+const std::string SemaineML::version = "0.0.3";
 const std::string SemaineML::namespaceURI = "http://www.semaine-project.eu/semaineml";
-	
+
 	// Elements
+const std::string SemaineML::E_CONTEXT = "situational-context";
 const std::string SemaineML::E_USERSTATE = "user-state";
 const std::string SemaineML::E_AGENTSTATE = "agent-state";
 const std::string SemaineML::E_DIALOGSTATE = "dialog-state";
@@ -30,6 +31,8 @@ const std::string SemaineML::E_DIALOG_HISTORY = "dialog-history";
 const std::string SemaineML::E_SPEAKER = "speaker";
 const std::string SemaineML::E_LISTENER = "listener";
 const std::string SemaineML::E_TOPIC = "topic";
+const std::string SemaineML::E_USER = "user";
+const std::string SemaineML::E_CHARACTER = "character";
 
 	// Attributes
 const std::string SemaineML::A_WHO = "who";
@@ -39,6 +42,13 @@ const std::string SemaineML::A_TOPIC = "topic";
 const std::string SemaineML::A_VALUE = "value";
 const std::string SemaineML::A_TIME = "time";
 const std::string SemaineML::A_INTENSITY = "intensity";
+const std::string SemaineML::A_STATUS = "status";
+
+// Attribute values
+// For A_STATUS:
+const std::string SemaineML::V_PRESENT = "present";
+const std::string SemaineML::V_ABSENT = "absent";
+
 
 } // namespace xml
 } // namespace datatypes
