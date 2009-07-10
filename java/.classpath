@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="lib/opennlp-tools-1.4.1/opennlp-tools-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/opennlp-tools-1.4.1/trove.jar"/>
 	<classpathentry kind="lib" path="lib/jgraph.jar" sourcepath="/Users/marc/src/jgraph/src"/>
+	<classpathentry kind="lib" path="lib/swing-layout-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
