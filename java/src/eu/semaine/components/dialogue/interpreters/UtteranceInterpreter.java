@@ -89,7 +89,7 @@ public class UtteranceInterpreter extends Component
 
 		/* Initializing PoS Tagger */
 		try {
-			String modelFile = "/eu/semaine/components/dialog/data/tag.bin.gz";
+			String modelFile = "/eu/semaine/components/dialogue/data/tag.bin.gz";
 			DataInputStream s = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(this.getClass().getResourceAsStream(modelFile)))));
 			//String tagdict = "java/lib/opennlp-tools-1.4.1/models/tagdict";
 			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/eu/semaine/components/dialogue/data/tagdict")));
