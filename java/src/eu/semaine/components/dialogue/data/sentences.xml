@@ -1,0 +1,324 @@
+<semaine_sentences>
+
+	<character name="poppy">
+		<category name="high_arousal">
+		</category>
+		
+		<category name="low_arousal">
+		</category>
+		
+		<category name="tell_me_more">
+			<utterance value="Go on" />
+			<utterance value="Go on – give me one happy thought" />
+			<utterance value="How?" />
+			<utterance value="Tell me more" />
+		</category>
+		
+		<category name="change_subject">
+			<utterance value="I think you should feel really happy today." />
+			<utterance value="Do you have any good news to tell me?" />
+			<utterance value="How did we get on to this subject?" />
+			<utterance value="Is there anything else you want to say?	" />
+			<utterance value="So what makes you happy?" />
+			<utterance value="So what would you like to do?" />
+			<utterance value="So, what’s happening at the moment?" />
+			<utterance value="Tell me what makes you feel really happy?" />
+			<utterance value="Tell me what you’re really looking forward to." />
+			<utterance value="There must be good things that you remember?" />
+			<utterance value="There must be something that you’re really looking forward to" />
+			<utterance value="What have you been doing?" />
+			<utterance value="What’s good in your life at the moment?" />
+		</category>
+		
+		<category name="random">
+			<utterance value="How will you do that?" />
+			<utterance value="I think you’ve done really well" />
+			<utterance value="really?" />
+			<utterance value="What do you think about it?" />
+			<utterance value="When do you think it will happen?" />
+			<utterance value="When?" />
+			<utterance value="Why do you say that?" />
+			<utterance value="Why?" />
+		</category>
+		
+		<category name="ask_next_character">
+			<utterance value="Who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_ask_next_character">
+			<utterance value="I'm sorry, but who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_suggest_next_character">
+			<utterance value="Is that a yes or a no?" />
+		</category>
+		
+		<category name="intro_new">
+			<utterance value="Hi, I'm Poppy, the eternal optimist. What's your name?" />
+		</category>
+		
+		<category name="intro_old">
+			<utterance value="Hi! I'm Poppy. How are you?" />
+		</category>
+		
+		<category name="intro_how_are_you">
+			<utterance value="Ok, and how are you today?" />
+		</category>
+		
+		<category name="intro_tell_me_more">
+			<utterance value="Is that so ' tell me about it" />
+		</category>
+		
+		<category name="goodbye">
+			<utterance value="Goodbye." />
+		</category>
+	</character>
+	
+	<character name="prudence">
+		<category name="high_arousal">
+			<utterance value="Do you think that you are wise?" />
+			<utterance value="Don’t get too excited" />
+			<utterance value="get a grip" />
+			<utterance value="It’s always good to be rational" />
+			<utterance value="pull yourself together" />
+			<utterance value="Would you say that you’re a little of touch with reality?" />
+			<utterance value="You should remain calm" />
+		</category>
+		
+		<category name="low_arousal">
+			<utterance value="you seem a bit flat" />
+		</category>
+		
+		<category name="tell_me_more">
+			<utterance value="Can you enlarge on that?" />
+			<utterance value="Go on" />
+			<utterance value="How?" />
+			<utterance value="Keep going" />
+			<utterance value="So tell me the details" />
+			<utterance value="Tell me more" />
+			<utterance value="What exactly happened ?" />
+			<utterance value="When?" />
+		</category>
+		
+		<category name="change_subject">
+			<utterance value="How do you view other people?" />
+			<utterance value="How do you view people?" />
+			<utterance value="Is there anything else you want to say?" />
+			<utterance value="So what are you doing at the moment?" />
+			<utterance value="Tell me about a time when you felt a bit better" />
+			<utterance value="Tell me what is going on at the moment" />
+			<utterance value="Tell me what you would like to do?" />
+			<utterance value="What are you doing this week?" />
+			<utterance value="What are you planning to do?" />
+			<utterance value="What have you been doing?" />
+		</category>
+		
+		<category name="random">
+			<utterance value="Do you feel a little unsure?" />
+			<utterance value="Do you think that you are wise?" />
+			<utterance value="So where do you think your attitude to life comes from?" />
+			<utterance value="So?" />
+			<utterance value="That’s interesting" />
+			<utterance value="That’s the way it goes" />
+			<utterance value="Where do you think it will lead?" />
+			<utterance value="Where do you think your attitude to life comes from?" />
+			<utterance value="Why do you say that?" />
+			<utterance value="Why?" />
+			<utterance value="Would you say you have everything under control." />
+		</category>
+		
+		<category name="ask_next_character">
+			<utterance value="Who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_ask_next_character">
+			<utterance value="I'm sorry, but who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_suggest_next_character">
+			<utterance value="Is that a yes or a no?" />
+		</category>
+		
+		<category name="intro_new">
+			<utterance value="Hello there, I'm Prudence and I'm very matter of fact. So tell me, what is your name?" />
+		</category>
+		
+		<category name="intro_old">
+			<utterance value="Hello, it's Prudence. What would you like to talk about?" />
+		</category>
+		
+		<category name="intro_how_are_you">
+			<utterance value="I see. And how are you today?" />
+		</category>
+		
+		<category name="intro_tell_me_more">
+			<utterance value="Is that so - Tell me more about it" />
+		</category>
+		
+		<category name="goodbye">
+			<utterance value="Goodbye." />
+		</category>
+	</character>
+	
+	<character name="spike">
+		<category name="high_arousal">
+		</category>
+		
+		<category name="low_arousal">
+		</category>
+		
+		<category name="insult">
+			<utterance value="Are you some kind of doormat?" />
+			<utterance value="I suppose you really think you’re something." />
+			<utterance value="That’s feeble" />
+			<utterance value="That’s pathetic" />
+			<utterance value="That’s so superficial it’s incredible" />
+			<utterance value="Yeah, yeah, always an answer for everything" />
+			<utterance value="You just don’t get it, do you?" />
+			<utterance value="You make me laugh" />
+			<utterance value="You should be more assertive" />
+			<utterance value="You’re a loser, no get up and go the way you go on" />
+		</category>
+		
+		<category name="tell_me_more">
+			<utterance value="Go on" />
+			<utterance value="How do you know?" />
+			<utterance value="How?" />
+			<utterance value="Tell me more" />
+			<utterance value="Well, what happened" />
+			<utterance value="What makes you say that?" />
+		</category>
+		
+		<category name="change_subject">
+			<utterance value="Is there anything else you want to say?" />
+			<utterance value="What’s been going on?" />
+			<utterance value="When was the last time you got angry at something" />
+			<utterance value="When was the last time you really said what you meant?" />
+			<utterance value="You’re boring, don’t you do anything exciting?" />
+		</category>
+		
+		<category name="random">
+			<utterance value="Do you think that you are wise?" />
+			<utterance value="Everything can be just crap!" />
+			<utterance value="Life’s a war, you’re either a winner or a loser" />
+			<utterance value="Why?" />
+		</category>
+		
+		<category name="ask_next_character">
+			<utterance value="Who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_ask_next_character">
+			<utterance value="I'm sorry, but who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_suggest_next_character">
+			<utterance value="Is that a yes or a no?" />
+		</category>
+		
+		<category name="intro_new">
+			<utterance value="I'm Spike and I've a bit of a temper. Who are you?" />
+		</category>
+		
+		<category name="intro_old">
+			<utterance value="Well I'm Spike, what's your problem?" />
+		</category>
+		
+		<category name="intro_how_are_you">
+			<utterance value="And what state are you in today?" />
+		</category>
+		
+		<category name="intro_tell_me_more">
+			<utterance value="Is that so - Tell me more about it" />
+		</category>
+		
+		<category name="goodbye">
+			<utterance value="Goodbye." />
+		</category>
+	</character>
+	
+	<character name="obadiah">
+		<category name="high_arousal">
+			<utterance value="Don’t get too carried away" />
+			<utterance value="Don’t get too excited" />
+			<utterance value="What’s the matter?" />
+		</category>
+		
+		<category name="low_arousal">
+			<utterance value="I’m not so sure you should be so neutral about it all" />
+			<utterance value="You’re a bit of a cold fish, aren’t you?" />
+		</category>
+		
+		<category name="tell_me_more">
+			<utterance value="Go on" />
+			<utterance value="How?" />
+			<utterance value="Tell me all the awful details" />
+			<utterance value="Tell me all the awful details again" />
+			<utterance value="Tell me more" />
+		</category>
+		
+		<category name="change_subject">
+			<utterance value="Is there anything else you want to say?" />
+			<utterance value="Remind me about the last time you got carried away and then everything went wrong" />
+			<utterance value="Tell me about the things you don’t want to think about" />
+			<utterance value="Tell me about all the people who have let you down" />
+			<utterance value="Tell me about the last time you were really hurt" />
+			<utterance value="Tell me just how bad you feel" />
+			<utterance value="Tell me what you dread most" />
+			<utterance value="What about all the people who let you down" />
+			<utterance value="What about all the people who let you down" />
+		</category>
+		
+		<category name="random">
+			<utterance value="As one door closes another one slams in your face, I always say" />
+			<utterance value="Don’t you sometimes wish that you could just run away?" />
+			<utterance value="Don’t you think life wears you down?" />
+			<utterance value="How did we get on to this subject" />
+			<utterance value="I can’t help thinking about the black side of things" />
+			<utterance value="I don’t suppose it really matters, though" />
+			<utterance value="I sometimes despair" />
+			<utterance value="It could all go terribly wrong" />
+			<utterance value="It never rains but it pours" />
+			<utterance value="Life can be just unbearable" />
+			<utterance value="Life’s a bitch and then you die" />
+			<utterance value="Life's not fair" />
+			<utterance value="The light at the end of the tunnel? It’s an oncoming train" />
+			<utterance value="Where do you think it will lead?" />
+			<utterance value="Why do you think so?" />
+			<utterance value="Why?" />
+		</category>
+		
+		<category name="ask_next_character">
+			<utterance value="Who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_ask_next_character">
+			<utterance value="I'm sorry, but who would you like to talk to?" />
+		</category>
+		
+		<category name="repair_suggest_next_character">
+			<utterance value="Is that a yes or a no?" />
+		</category>
+		
+		<category name="intro_new">
+			<utterance value="Hello, my name is Obadiah, and I'm feeling very depressed right now. And who are you?" />
+		</category>
+		
+		<category name="intro_old">
+			<utterance value="Hello, I'm Obadiah. What's the matter?" />
+		</category>
+		
+		<category name="intro_how_are_you">
+			<utterance value="Ah. So how are you feeling today? Not great I suppose." />
+		</category>
+		
+		<category name="intro_tell_me_more">
+			<utterance value="Is that so - Tell me more about it" />
+		</category>
+		
+		<category name="goodbye">
+			<utterance value="Goodbye." />
+		</category>
+	</character>
+	
+</semaine_sentences>

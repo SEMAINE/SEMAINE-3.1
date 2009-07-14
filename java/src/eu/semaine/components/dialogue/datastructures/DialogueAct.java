@@ -1,0 +1,360 @@
+/**
+ * Copyright (C) 2008 University of Twente, HMI. All rights reserved.
+ * Use is subject to license terms -- see license.txt.
+ */
+package eu.semaine.components.dialogue.datastructures;
+
+/**
+ * This class is a container for an utterance plus all its features
+ * 
+ * @author Mark tM
+ * @version 0.1 - dummy class
+ *
+ */
+
+public class DialogueAct 
+{
+	private String utterance;
+	private String taggedUtterance;
+	private String[] tags;
+	
+	private boolean positive = false;
+	private boolean negative = false;
+	private boolean agree = false;
+	private boolean disagree = false;
+	private boolean about_other_people = false;
+	private boolean about_other_character = false;
+	private boolean about_current_character = false;
+	private boolean about_own_feelings = false;
+	private boolean pragmatic = false;
+	private boolean talk_about_self = false;
+	private boolean future = false;
+	private boolean past = false;
+	private boolean event = false;
+	private boolean action = false;
+	private boolean laugh = false;
+	private boolean change_speaker = false;
+	private String target_character;
+	
+	private double valence = 0d;
+	private double arousal = 0d;
+	private int utterance_length;
+	
+	
+	/**
+	 * Creates a new DialogueAct with the given utterance
+	 * @param utterance
+	 */
+	public DialogueAct( String utterance )
+	{
+		this.utterance = utterance;
+	}
+
+	/**
+	 * @return the utterance
+	 */
+	public String getUtterance() {
+		return utterance;
+	}
+
+	/**
+	 * @param utterance the utterance to set
+	 */
+	public void setUtterance(String utterance) {
+		this.utterance = utterance;
+	}
+
+	/**
+	 * @return the taggedUtterance
+	 */
+	public String getTaggedUtterance() {
+		return taggedUtterance;
+	}
+
+	/**
+	 * @param taggedUtterance the taggedUtterance to set
+	 */
+	public void setTaggedUtterance(String taggedUtterance) {
+		this.taggedUtterance = taggedUtterance;
+	}
+
+	/**
+	 * @return the tags
+	 */
+	public String[] getTags() {
+		return tags;
+	}
+
+	/**
+	 * @param tags the tags to set
+	 */
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
+	/**
+	 * @return the positive
+	 */
+	public boolean isPositive() {
+		return positive;
+	}
+
+	/**
+	 * @param positive the positive to set
+	 */
+	public void setPositive(boolean positive) {
+		this.positive = positive;
+	}
+
+	/**
+	 * @return the negative
+	 */
+	public boolean isNegative() {
+		return negative;
+	}
+
+	/**
+	 * @param negative the negative to set
+	 */
+	public void setNegative(boolean negative) {
+		this.negative = negative;
+	}
+
+	/**
+	 * @return the agree
+	 */
+	public boolean isAgree() {
+		return agree;
+	}
+
+	/**
+	 * @param agree the agree to set
+	 */
+	public void setAgree(boolean agree) {
+		this.agree = agree;
+	}
+
+	/**
+	 * @return the disagree
+	 */
+	public boolean isDisagree() {
+		return disagree;
+	}
+
+	/**
+	 * @param disagree the disagree to set
+	 */
+	public void setDisagree(boolean disagree) {
+		this.disagree = disagree;
+	}
+
+	/**
+	 * @return the about_other_people
+	 */
+	public boolean isAboutOtherPeople() {
+		return about_other_people;
+	}
+
+	/**
+	 * @param about_other_people the about_other_people to set
+	 */
+	public void setAboutOtherPeople(boolean about_other_people) {
+		this.about_other_people = about_other_people;
+	}
+
+	/**
+	 * @return the about_other_character
+	 */
+	public boolean isAboutOtherCharacter() {
+		return about_other_character;
+	}
+
+	/**
+	 * @param about_other_character the about_other_character to set
+	 */
+	public void setAboutOtherCharacter(boolean about_other_character) {
+		this.about_other_character = about_other_character;
+	}
+
+	/**
+	 * @return the about_current_character
+	 */
+	public boolean isAboutCurrentCharacter() {
+		return about_current_character;
+	}
+
+	/**
+	 * @param about_current_character the about_current_character to set
+	 */
+	public void setAboutCurrentCharacter(boolean about_current_character) {
+		this.about_current_character = about_current_character;
+	}
+
+	/**
+	 * @return the about_own_feelings
+	 */
+	public boolean isAboutOwnFeelings() {
+		return about_own_feelings;
+	}
+
+	/**
+	 * @param about_own_feelings the about_own_feelings to set
+	 */
+	public void setAboutOwnFeelings(boolean about_own_feelings) {
+		this.about_own_feelings = about_own_feelings;
+	}
+
+	/**
+	 * @return the pragmatic
+	 */
+	public boolean isPragmatic() {
+		return pragmatic;
+	}
+
+	/**
+	 * @param pragmatic the pragmatic to set
+	 */
+	public void setPragmatic(boolean pragmatic) {
+		this.pragmatic = pragmatic;
+	}
+
+	/**
+	 * @return the talk_about_self
+	 */
+	public boolean isTalkAboutSelf() {
+		return talk_about_self;
+	}
+
+	/**
+	 * @param talk_about_self the talk_about_self to set
+	 */
+	public void setTalkAboutSelf(boolean talk_about_self) {
+		this.talk_about_self = talk_about_self;
+	}
+
+	/**
+	 * @return the future
+	 */
+	public boolean isFuture() {
+		return future;
+	}
+
+	/**
+	 * @param future the future to set
+	 */
+	public void setFuture(boolean future) {
+		this.future = future;
+	}
+
+	/**
+	 * @return the past
+	 */
+	public boolean isPast() {
+		return past;
+	}
+
+	/**
+	 * @param past the past to set
+	 */
+	public void setPast(boolean past) {
+		this.past = past;
+	}
+
+	/**
+	 * @return the event
+	 */
+	public boolean isEvent() {
+		return event;
+	}
+
+	/**
+	 * @param event the event to set
+	 */
+	public void setEvent(boolean event) {
+		this.event = event;
+	}
+
+	/**
+	 * @return the action
+	 */
+	public boolean isAction() {
+		return action;
+	}
+
+	/**
+	 * @param action the action to set
+	 */
+	public void setAction(boolean action) {
+		this.action = action;
+	}
+
+	/**
+	 * @return the laugh
+	 */
+	public boolean isLaugh() {
+		return laugh;
+	}
+
+	/**
+	 * @param laugh the laugh to set
+	 */
+	public void setLaugh(boolean laugh) {
+		this.laugh = laugh;
+	}
+	
+	/**
+	 * @return change_speaker
+	 */
+	public boolean isChangeSpeaker() {
+		return change_speaker;
+	}
+
+	/**
+	 * @param change_speaker
+	 */
+	public void setChangeSpeaker(boolean change_speaker) {
+		this.change_speaker = change_speaker;
+	}
+	
+	/**
+	 * @return change_speaker
+	 */
+	public String getTargetCharacter() {
+		return target_character;
+	}
+
+	/**
+	 * @param change_speaker
+	 */
+	public void setTargetCharacter(String target_character) {
+		this.target_character = target_character;
+	}
+	
+	/**
+	 * Returns a string representation of this act
+	 */
+	public String toString()
+	{
+		String str = "+++ ";
+		str += utterance + "\r\n";
+		str += taggedUtterance + "\r\n";
+		str += "positive:		" + positive + "\r\n";
+		str += "negative:		" + negative + "\r\n";
+		str += "agree:			" + agree + "\r\n";
+		str += "disagree:		" + disagree + "\r\n";
+		str += "about other people:	" + about_other_people + "\r\n";
+		str += "about other character:	" + about_other_character + "\r\n";
+		str += "about current character:" + about_current_character + "\r\n";
+		str += "about own feelings:	" + about_own_feelings + "\r\n";
+		str += "talk about self:	" + talk_about_self + "\r\n";
+		str += "pragmatic:		" + pragmatic + "\r\n";
+		str += "future:			" + future + "\r\n";
+		str += "past:			" + past + "\r\n";
+		str += "action:			" + action + "\r\n";
+		str += "event:			" + event + "\r\n";
+		str += "laugh:			" + laugh + "\r\n";
+		str += "change speaker:	" + change_speaker + "\r\n";
+		str += "target speaker:	" + target_character + "\r\n";
+		return str;
+	}
+}
