@@ -66,6 +66,12 @@ public class AgentStateInfo extends StateInfo
 			category.setAttribute(EmotionML.A_SET, "interest");
 			category.setAttribute(EmotionML.A_NAME, item);
 		}
+		item = info.get("intention");
+		if( item != null ) {
+			Element category = XMLTool.appendChildElement(root, EmotionML.E_CATEGORY, EmotionML.namespaceURI);
+			category.setAttribute(EmotionML.A_SET, "intention");
+			category.setAttribute(EmotionML.A_NAME, item);
+		}
 		item = info.get("stance to user");
 		if (item != null) {
 			Element emotion = XMLTool.appendChildElement(root, EmotionML.E_EMOTION, EmotionML.namespaceURI);
@@ -105,6 +111,7 @@ public class AgentStateInfo extends StateInfo
 		info.put("interest", null);
 		info.put("stance to user", null);
 		info.put("stance to topic", null);
+		info.put("intention", null);
 		info.put("emotionally-concordant-with-user", null);
 	}
 
