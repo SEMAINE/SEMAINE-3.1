@@ -100,7 +100,7 @@ public class UtteranceActionProposer extends Component
 	public final static int UTTERANCE_LOOKBACK = 4;
 	
 	/* Data locations */
-	public final static String sentenceDataPath = "/eu/semaine/components/dialog/data/sentences.xml";
+	public final static String sentenceDataPath = "/eu/semaine/components/dialogue/data/sentences.xml";
 	
 	/* Senders and Receivers */
 	private AgentStateReceiver agentStateReceiver;
