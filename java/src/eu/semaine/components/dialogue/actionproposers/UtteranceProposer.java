@@ -683,7 +683,7 @@ public class UtteranceProposer extends Component
 		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
 		speech.setAttribute(BML.A_ID, id);
 		speech.setAttribute(BML.E_TEXT, response);
-		speech.setAttribute(BML.E_LANGUAGE, "en_US");
+		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
 
 		//speech.setTextContent(response);
 		

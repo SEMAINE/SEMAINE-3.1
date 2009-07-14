@@ -26,14 +26,18 @@ import marytts.server.Mary;
 import marytts.server.Request;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
+import eu.semaine.components.control.ParticipantControlGUI;
 import eu.semaine.datatypes.xml.BML;
+import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
+import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.BMLSender;
 import eu.semaine.jms.sender.BytesSender;
 import eu.semaine.util.XMLTool;
@@ -55,8 +59,8 @@ public class SpeechBMLRealiser extends Component
 	private static Templates bml2ssmlStylesheet = null;
     private Transformer transformer;
     private int backchannelNumber = 0;
-    private int MaxNoOfBackchannels = 5;
-    
+    private int MaxNoOfBackchannels = 4;
+    private String currentCharacter = ParticipantControlGUI.SPIKE;
     
 	/**
 	 * @param componentName
@@ -68,6 +72,7 @@ public class SpeechBMLRealiser extends Component
 		
 		bmlPlanReceiver = new BMLReceiver("semaine.data.synthesis.plan");
 		receivers.add(bmlPlanReceiver);
+		receivers.add(new XMLReceiver("semaine.data.state.context"));
 		bmlSender = new BMLSender("semaine.data.synthesis.plan.speechtimings", getName());
 		senders.add(bmlSender);
 		audioSender = new BytesSender("semaine.data.synthesis.lowlevel.audio","AUDIO",getName());
@@ -115,7 +120,9 @@ public class SpeechBMLRealiser extends Component
 		if (!(m instanceof SEMAINEXMLMessage)) {
 			throw new MessageFormatException("expected XML message, got "+m.getClass().getSimpleName());
 		}
-	
+		if (m.getTopicName().equals("semaine.data.state.context")) {
+			updateCharacter(m);
+		}
 		if(m.getTopicName().equals("semaine.data.synthesis.plan")){
 			speechBMLRealiser(m);
 		}
@@ -144,9 +151,10 @@ public class SpeechBMLRealiser extends Component
 			}
 			// Backchannel input to MARY is hard-coded
 			String words = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
-			 + "<maryxml xmlns=\"http://mary.dfki.de/2002/MaryXML\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"0.4\" xml:lang=\"en-US\">"
+			 + "<maryxml xmlns=\"http://mary.dfki.de/2002/MaryXML\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"0.4\" xml:lang=\"en-GB\">"
 			 + "<p>"
-			 + "<voice name=\"cmu-slt-arctic\">"
+			 //+ "<voice name=\"cmu-slt-arctic\">"
+			 + "<voice name=\""+getCurrentCharacter().toLowerCase()+"\">"
 			 + "<nvv variant=\""+backchannelNumber+"\"/>"
 			 + "</voice>"
 			 + "</p>"
@@ -158,7 +166,7 @@ public class SpeechBMLRealiser extends Component
 			AudioFormat af = voice.dbAudioFormat();
 	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
 	            af, AudioSystem.NOT_SPECIFIED);
-	        Request request = new Request(MaryDataType.WORDS, MaryDataType.AUDIO, Locale.US, 
+	        Request request = new Request(MaryDataType.WORDS, MaryDataType.AUDIO, Locale.ENGLISH, 
 		            voice, "", "", 1, aff);
 	        Reader reader = new StringReader(words);
 			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
@@ -167,7 +175,7 @@ public class SpeechBMLRealiser extends Component
 			request.writeOutputData(audioos);
 			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
 			
-			request = new Request(MaryDataType.get("WORDS"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.US,voice,"","",1,aff);
+			request = new Request(MaryDataType.get("WORDS"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.ENGLISH,voice,"","",1,aff);
 			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
 			reader = new StringReader(words);
 			request.readInputData(reader);
@@ -181,6 +189,7 @@ public class SpeechBMLRealiser extends Component
 			
 			// Utterance synthesis
 			transformer = bml2ssmlStylesheet.newTransformer();
+			transformer.setParameter("character.voice", getCurrentCharacter().toLowerCase());
 			transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
 			
 			// SSML to Realised Acoustics using MARY 
@@ -188,7 +197,7 @@ public class SpeechBMLRealiser extends Component
 			AudioFormat af = voice.dbAudioFormat();
 	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
 	            af, AudioSystem.NOT_SPECIFIED);
-			Request request = new Request(MaryDataType.get("SSML"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.US,voice,"","",1,aff);
+			Request request = new Request(MaryDataType.get("SSML"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.ENGLISH,voice,"","",1,aff);
 			
 			Reader reader = new StringReader(ssmlos.toString());
 			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
@@ -203,7 +212,7 @@ public class SpeechBMLRealiser extends Component
 			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
 			
 			// SSML to AUDIO using MARY 
-	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.US, 
+	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.ENGLISH, 
 	            voice, "", "", 1, aff);
 			reader = new StringReader(ssmlos.toString());
 			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
@@ -213,5 +222,30 @@ public class SpeechBMLRealiser extends Component
 			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
 		}
 	}
+	
+	
+	private void updateCharacter(SEMAINEMessage m) throws MessageFormatException 
+	{
+        SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
+        Document doc = xm.getDocument();
+        Element root = doc.getDocumentElement();
+        if (!root.getTagName().equals(SemaineML.E_CONTEXT)) {
+            throw new MessageFormatException("Unexpected document element: expected tag name '"+SemaineML.E_CONTEXT+"', found '"+root.getTagName()+"'");
+        }
+        if (!root.getNamespaceURI().equals(SemaineML.namespaceURI)) {
+            throw new MessageFormatException("Unexpected document element namespace: expected '"+SemaineML.namespaceURI+"', found '"+root.getNamespaceURI()+"'");
+        }
+        
+        Element character = XMLTool.getChildElementByTagNameNS(root, SemaineML.E_CHARACTER, SemaineML.namespaceURI);
+        if (character != null) {
+        	currentCharacter = character.getAttribute(SemaineML.A_NAME);
+        }
+		
+	}
+	
+    public String getCurrentCharacter()
+    {
+        return currentCharacter;
+    }
 	
 }

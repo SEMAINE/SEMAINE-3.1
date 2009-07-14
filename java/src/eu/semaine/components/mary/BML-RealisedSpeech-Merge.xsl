@@ -64,7 +64,7 @@ select="document('semaine.mary.realised.acoustics')"/>
                 <xsl:variable name="startTT">
 		     <xsl:for-each select="child::*">
 			<xsl:if test="position()=1">
- 		  	        <xsl:value-of select="@end - @d"/> 
+ 		  	        <xsl:value-of select="@end - (@d div 1000)"/> 
 			</xsl:if> 
 	 	     </xsl:for-each>
                 </xsl:variable>
@@ -74,7 +74,7 @@ select="document('semaine.mary.realised.acoustics')"/>
  				<xsl:value-of select="@end"/> 
 			</xsl:if> 
 		</xsl:for-each></xsl:variable>	
-		<xsl:variable name="centerAccent" select="($startTT + (($endTT - $startTT) div 2)) div 1000"/>
+		<xsl:variable name="centerAccent" select="($startTT + (($endTT - $startTT) div 2))"/>
                 <pitchaccent id="{$accentId}" start="{$stimeMark}" end="{$etimeMark}" time="{$centerAccent}"/> 
 	    </xsl:if>
         </xsl:for-each> 
@@ -88,7 +88,7 @@ select="document('semaine.mary.realised.acoustics')"/>
 		<xsl:copy-of select="@stress"/>
         	<xsl:for-each select="*">
          	     <xsl:variable name="duration" select="@d div 1000"/>
-     		     <xsl:variable name="endTime" select="@end div 1000"/>
+     		     <xsl:variable name="endTime" select="@end"/>
          	     <xsl:variable name="phone"  select="@p"/>
 	             <mary:ph d="{$duration}" end="{$endTime}" p="{$phone}"> </mary:ph>
       		</xsl:for-each>
@@ -99,7 +99,7 @@ select="document('semaine.mary.realised.acoustics')"/>
 		<xsl:copy-of select="@stress"/>
         	<xsl:for-each select="*">
          	     <xsl:variable name="duration" select="@d div 1000"/>
-     		     <xsl:variable name="endTime" select="@end div 1000"/>
+     		     <xsl:variable name="endTime" select="@end"/>
          	     <xsl:variable name="phone"  select="@p"/>
 	             <mary:ph d="{$duration}" end="{$endTime}" p="{$phone}"> </mary:ph>
       		</xsl:for-each>
