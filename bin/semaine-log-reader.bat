@@ -1,7 +1,7 @@
 @echo off
 set BINDIR=%~dp0%
 
-set JARDIR=%BINDIR%..\java\lib
+set JARDIR="%BINDIR%..\java\lib"
 
 if not exist %JARDIR%\semaine.jar (
   echo.No semaine.jar -- you need to do 'ant jars' in the java folder first!

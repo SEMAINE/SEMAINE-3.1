@@ -8,7 +8,7 @@ if not exist %MARYDIR% (
   goto end
 )
 
-set JARDIR=%BINDIR%..\java\lib
+set JARDIR="%BINDIR%..\java\lib"
 
 if not exist %JARDIR%\semaine.jar (
   echo.No semaine.jar -- you need to do 'ant jars' in the java folder first!
@@ -16,7 +16,7 @@ if not exist %JARDIR%\semaine.jar (
 )
 
 if %1%a==a (
-  set CONFIG=%BINDIR%..\java\config\speech2speech.config
+  set CONFIG="%BINDIR%..\java\config\speech2speech.config"
 ) else (
   set CONFIG=%1%
 )
@@ -30,7 +30,7 @@ if not %CMS_URL%a==a (
 
 echo.Starting SEMAINE system as: 'java -Xmx400m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base="%MARYDIR%" eu.semaine.system.ComponentRunner %CONFIG%'
 
-java -Xmx400m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base="%MARYDIR%" eu.semaine.system.ComponentRunner %CONFIG%
+java -Xmx400m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base=%MARYDIR% eu.semaine.system.ComponentRunner %CONFIG%
 
 :: goto target:
 
