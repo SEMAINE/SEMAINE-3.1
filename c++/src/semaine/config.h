@@ -25,10 +25,11 @@
 #include <string>
 
 #include <cassert>
+#include <stdlib.h>
 
 inline std::string _determine_CMS_URL()
 {
-	char * url = getenv("CMS_URL");
+	const char * url = getenv("CMS_URL");
 	if (url == NULL) url = "tcp://localhost:61616";
 	return std::string(url);
 }
