@@ -3,7 +3,7 @@
 JU_BASE="julius-4.1.2"
 #SP_URL="http://www.portaudio.com/archives/pa_stable_v19_20071207.tar.gz"
 #SP_URL="http://www.portaudio.com/archives/pa_snapshot.tgz"
-JU_URL="julius-4.1.2.tar.gz"
+JU_URL="http://osdn.dl.sourceforge.jp/julius/37582/julius-4.1.2.tar.gz"
 
 register_build "julius" "$JU_URL" "$JU_BASE" "func_build_julius" $1
 
@@ -28,16 +28,17 @@ function func_build_julius {
 
 #    cp $DOWNLOAD_PREFIX/julius.semaine.patch .
 #    patch -p0 < julius.semaine.patch
-    cp $DOWNLOAD_PREFIX/julius.mod/vocabulary.h libsent/include/sent
-    cp $DOWNLOAD_PREFIX/julius.mod/adin.h libsent/include/sent
-    cp $DOWNLOAD_PREFIX/julius.mod/recog.h libjulius/include/julius
-    cp $DOWNLOAD_PREFIX/julius.mod/jconf.h libjulius/include/julius
-    cp $DOWNLOAD_PREFIX/julius.mod/plugin.h libjulius/include/julius
-    cp $DOWNLOAD_PREFIX/julius.mod/realtime-1stpass.c libjulius/src
-    cp $DOWNLOAD_PREFIX/julius.mod/recogmain.c libjulius/src
-    cp $DOWNLOAD_PREFIX/julius.mod/plugin.c libjulius/src
+    JROOT="$SEMAINE_ROOT/c++/src/tum";
+    cp $JROOT/julius4.mod/vocabulary.h libsent/include/sent
+    cp $JROOT/julius4.mod/adin.h libsent/include/sent
+    cp $JROOT/julius4.mod/recog.h libjulius/include/julius
+    cp $JROOT/julius4.mod/jconf.h libjulius/include/julius
+    cp $JROOT/julius4.mod/plugin.h libjulius/include/julius
+    cp $JROOT/julius4.mod/realtime-1stpass.c libjulius/src
+    cp $JROOT/julius4.mod/recogmain.c libjulius/src
+    cp $JROOT/julius4.mod/plugin.c libjulius/src
 
-    export CFLAGS="-DEXTERNAL_FV -g -ggdb"
+    export CFLAGS="-DEXTERNAL_FV -g -ggdb -fPIC"
     ./configure --prefix=$INSTALL_PREFIX  
 
     cat libsent/include/sent/config.h | sed 's/.define HAVE_ESD_H 1$//' > libsent/include/sent/config.h2

@@ -3,7 +3,7 @@
 SP_BASE="speex-1.2rc1"
 #SP_URL="http://www.portaudio.com/archives/pa_stable_v19_20071207.tar.gz"
 #SP_URL="http://www.portaudio.com/archives/pa_snapshot.tgz"
-SP_URL="speex-1.2rc1.tar.gz"
+SP_URL="http://downloads.xiph.org/releases/speex/speex-1.2rc1.tar.gz"
 
 register_build "speex" "$SP_URL" "$SP_BASE" "func_build_speex" $1
 

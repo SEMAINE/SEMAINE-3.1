@@ -2,6 +2,13 @@
 #################### Package Configuration    #########################
 OPENSMILEMODELS="models.opensmile_v1.zip"
 OPENSMILEMODELS_URL="http://server/$SMILEMODELS"
+OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
+
+if test -d "$SEMAINE_ROOT/c++/src/tum/opensmile"; then
+  true
+else
+  mkdir "$SEMAINE_ROOT/c++/src/tum/opensmile"
+fi
 
 register_semaine_build "tum.opensmile" "c++/src/tum/opensmile" "func_build_opensmile" $1
 
@@ -33,6 +40,14 @@ function func_build_opensmile {
         fi
      fi
     fi
+
+    # check for source code
+    if test -f autogen.sh ; then
+      svn update
+    else
+      svn co $OPENSMILE_SVN .
+    fi
+
 
     if test "x$doconf" = "xyes" ; then
       #echo "Using PortAudio (?) $PORTAUDIOPATH"

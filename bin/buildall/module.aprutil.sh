@@ -1,6 +1,6 @@
 
 #################### Package Configuration    #########################
-APRUTIL_BASE="apr-util-1.3.4"
+APRUTIL_BASE="apr-util-1.3.8"
 
 APRUTIL_URL="http://apache.linux-mirror.org/apr/$APRUTIL_BASE.tar.gz"
 
