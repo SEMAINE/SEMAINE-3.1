@@ -33,7 +33,7 @@ public class AgentStateInfo extends StateInfo
 	public AgentStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "AgentStateInfo", APIVersion, SemaineML.E_AGENTSTATE, SemaineML.namespaceURI);
+		super(doc, "AgentStateInfo", APIVersion, SemaineML.E_AGENTSTATE, SemaineML.namespaceURI, Type.AgentState);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class AgentStateInfo extends StateInfo
 	public AgentStateInfo(Map<String, String> infoItems)
 	throws JMSException
 	{
-		super(infoItems, "AgentStateInfo", APIVersion);
+		super(infoItems, "AgentStateInfo", APIVersion, Type.AgentState);
 	}
 
 	/**

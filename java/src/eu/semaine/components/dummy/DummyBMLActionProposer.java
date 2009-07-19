@@ -12,16 +12,17 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.IOBase.Event;
-import eu.semaine.jms.message.SEMAINEDialogStateMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.receiver.DialogStateReceiver;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.FeatureReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.BMLSender;
 import eu.semaine.util.XMLTool;
 
@@ -35,7 +36,7 @@ public class DummyBMLActionProposer extends Component
 {
 	private FeatureReceiver featureReceiver;
 	private EmmaReceiver emmaReceiver;
-	private DialogStateReceiver dialogStateReceiver;
+	private StateReceiver dialogStateReceiver;
 	private BMLSender bmlSender;
 	
 	
@@ -55,7 +56,7 @@ public class DummyBMLActionProposer extends Component
 		receivers.add(featureReceiver); // to set up properly
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
-		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
+		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add(dialogStateReceiver);
 		
 		bmlSender = new BMLSender("semaine.data.action.candidate.behaviour", getName());
@@ -105,8 +106,8 @@ public class DummyBMLActionProposer extends Component
 		} else if (m instanceof SEMAINEEmmaMessage) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			// do nothing for now
-		} else if (m instanceof SEMAINEDialogStateMessage) {
-			DialogStateInfo dsi = ((SEMAINEDialogStateMessage)m).getState();
+		} else if (m instanceof SEMAINEStateMessage) {
+			StateInfo dsi = ((SEMAINEStateMessage)m).getState();
 			// do nothing for now
 		} else {
 			throw new MessageFormatException("unexpected message type: "+m.getClass().getSimpleName());

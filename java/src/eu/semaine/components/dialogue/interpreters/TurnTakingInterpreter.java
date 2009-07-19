@@ -20,18 +20,14 @@ import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.message.SEMAINEAgentStateMessage;
-import eu.semaine.jms.message.SEMAINEDialogStateMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.message.SEMAINEUserStateMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
-import eu.semaine.jms.receiver.AgentStateReceiver;
-import eu.semaine.jms.receiver.DialogStateReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
-import eu.semaine.jms.receiver.UserStateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
@@ -69,9 +65,9 @@ public class TurnTakingInterpreter extends Component
 	private int curr_TT_Threshold = 100;
 
 	/* Senders and Receivers */
-	private UserStateReceiver userStateReceiver;
-	private AgentStateReceiver agentStateReceiver;
-	private DialogStateReceiver dialogStateReceiver;
+	private StateReceiver userStateReceiver;
+	private StateReceiver agentStateReceiver;
+	private StateReceiver dialogStateReceiver;
 	private XMLReceiver contextReceiver;
 	private StateSender agentStateSender;
 
@@ -113,11 +109,11 @@ public class TurnTakingInterpreter extends Component
 		
 		waitingTime = 50;
 
-		userStateReceiver = new UserStateReceiver( "semaine.data.state.user" );
+		userStateReceiver = new StateReceiver( "semaine.data.state.user", StateInfo.Type.UserState);
 		receivers.add( userStateReceiver );
-		agentStateReceiver = new AgentStateReceiver( "semaine.data.state.agent" );
+		agentStateReceiver = new StateReceiver( "semaine.data.state.agent", StateInfo.Type.AgentState);
 		receivers.add( agentStateReceiver );
-		dialogStateReceiver = new DialogStateReceiver( "semaine.data.state.dialog" );
+		dialogStateReceiver = new StateReceiver( "semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add( dialogStateReceiver );
 		contextReceiver = new XMLReceiver("semaine.data.state.context");
 		receivers.add( contextReceiver );
@@ -133,34 +129,39 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void react( SEMAINEMessage m ) throws JMSException
 	{
-		/* Processes User state updates */
-		if( m instanceof SEMAINEUserStateMessage ) {
-			SEMAINEUserStateMessage um = ((SEMAINEUserStateMessage)m);
-			
-			/* Updates user speaking state (speaking or silent) */
-			setUserSpeakingState( um );
-			
-			/* Updates detected emotions (valence, arousal, interest) */
-			addDetectedEmotions( um );
-			
-			/* called to determine the turn state of the agent */
-			determineAgentTurn();
-		}
-		
-		/* Processes Dialog state updates */
-		if( m instanceof SEMAINEDialogStateMessage ) {
-			SEMAINEDialogStateMessage dm = ((SEMAINEDialogStateMessage)m);
-			
-			/* updates agent speaking state */
-			setAgentSpeakingState(dm);
-		}
-		
-		/* Processes Agent state changes */
-		if( m instanceof SEMAINEAgentStateMessage ) {
-			SEMAINEAgentStateMessage am = ((SEMAINEAgentStateMessage)m);
-			
-			/* processes an agent backchannel */
-			processBackchannel(am);
+		if (m instanceof SEMAINEStateMessage) {
+			SEMAINEStateMessage sm = (SEMAINEStateMessage) m;
+			StateInfo stateInfo = sm.getState();
+			StateInfo.Type stateInfoType = stateInfo.getType();
+			switch (stateInfoType) {
+			case UserState:
+				/* Processes User state updates */
+
+				/* Updates user speaking state (speaking or silent) */
+				setUserSpeakingState(stateInfo);
+				
+				/* Updates detected emotions (valence, arousal, interest) */
+				addDetectedEmotions(stateInfo);
+				
+				/* called to determine the turn state of the agent */
+				determineAgentTurn();
+				break;
+
+			case DialogState:
+				/* Processes Dialog state updates */
+				/* updates agent speaking state */
+				setAgentSpeakingState(stateInfo);
+				break;
+				
+			case AgentState:
+				/* Processes Agent state changes */
+				/* processes an agent backchannel */
+				processBackchannel(stateInfo);
+				break;
+		    default:
+		    	// We could complain here if we were certain we don't expect other state infos, as in:
+		    	// throw new MessageFormatException("Unexpected state info type: "+stateInfo.getType().toString());
+			}
 		}
 		
 		/* Processes XML updates */
@@ -209,10 +210,9 @@ public class TurnTakingInterpreter extends Component
 	 * Reads the received Message and tries to filter out the detected user speaking state.
 	 * @param m - the received message
 	 */
-	public void setAgentSpeakingState( SEMAINEDialogStateMessage m )
+	public void setAgentSpeakingState(StateInfo dialogInfo)
 	{
-		DialogStateInfo userInfo = m.getState();
-		Map<String,String> userInfoMap = userInfo.getInfo();
+		Map<String,String> userInfoMap = dialogInfo.getInfo();
 
 		if( userInfoMap.get("speaker").equals("agent") ) {
 			backchannel_given = false;
@@ -233,9 +233,8 @@ public class TurnTakingInterpreter extends Component
 	 * Reads the received Message and tries to filter out the detected user speaking state.
 	 * @param m - the received message
 	 */
-	public void setUserSpeakingState( SEMAINEUserStateMessage m )
+	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		UserStateInfo userInfo = m.getState();
 		Map<String,String> userInfoMap = userInfo.getInfo();
 
 		if( userInfoMap.get("behaviour").equals("speaking") ) {
@@ -257,9 +256,8 @@ public class TurnTakingInterpreter extends Component
 	 * Reads the received Message and tries to filter out a change of character
 	 * @param am - the received message
 	 */
-	public void setCharacter( SEMAINEAgentStateMessage am )
+	public void setCharacter(StateInfo agentInfo)
 	{
-		AgentStateInfo agentInfo = am.getState();
 		Map<String,String> agentInfoMap = agentInfo.getInfo();
 		
 		String newChar = agentInfoMap.get( "character" );
@@ -280,9 +278,8 @@ public class TurnTakingInterpreter extends Component
 		}
 	}
 	
-	public void processBackchannel( SEMAINEAgentStateMessage am )
+	public void processBackchannel(StateInfo agentInfo)
 	{
-		AgentStateInfo agentInfo = am.getState();
 		Map<String,String> agentInfoMap = agentInfo.getInfo();
 		
 		String intention = agentInfoMap.get( "intention" );
@@ -295,9 +292,8 @@ public class TurnTakingInterpreter extends Component
 	 * Reads the received Message and tries to filter out the detected Emotion Events.
 	 * @param m - the received message
 	 */
-	public void addDetectedEmotions( SEMAINEUserStateMessage m )
+	public void addDetectedEmotions(StateInfo userInfo)
 	{
-		UserStateInfo userInfo = m.getState();
 		Map<String,String> dialogInfoMap = userInfo.getInfo();
 		
 		if( dialogInfoMap.get("behaviour").equals("valence") ) {

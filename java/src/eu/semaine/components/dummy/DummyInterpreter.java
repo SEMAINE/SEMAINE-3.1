@@ -15,20 +15,17 @@ import org.w3c.dom.Element;
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.message.SEMAINEAgentStateMessage;
-import eu.semaine.jms.message.SEMAINEDialogStateMessage;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.message.SEMAINEUserStateMessage;
-import eu.semaine.jms.receiver.AgentStateReceiver;
-import eu.semaine.jms.receiver.DialogStateReceiver;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.FeatureReceiver;
-import eu.semaine.jms.receiver.UserStateReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
 
@@ -64,9 +61,9 @@ public class DummyInterpreter extends Component
 {
 	private FeatureReceiver featureReceiver;
 	private EmmaReceiver emmaReceiver;
-	private UserStateReceiver userStateReceiver;
-	private AgentStateReceiver agentStateReceiver;
-	private DialogStateReceiver dialogStateReceiver;
+	private StateReceiver userStateReceiver;
+	private StateReceiver agentStateReceiver;
+	private StateReceiver dialogStateReceiver;
 	private StateSender userStateSender;
 	private StateSender agentStateSender;
 	private StateSender dialogStateSender;
@@ -92,11 +89,11 @@ public class DummyInterpreter extends Component
 		receivers.add(featureReceiver); // to set up properly
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
-		userStateReceiver = new UserStateReceiver("semaine.data.state.user", "datatype = 'UserState'");
+		userStateReceiver = new StateReceiver("semaine.data.state.user", "datatype = 'UserState'", StateInfo.Type.UserState);
 		receivers.add(userStateReceiver);
-		agentStateReceiver = new AgentStateReceiver("semaine.data.state.agent");
+		agentStateReceiver = new StateReceiver("semaine.data.state.agent", StateInfo.Type.AgentState);
 		receivers.add(agentStateReceiver);
-		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
+		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add(dialogStateReceiver);
 		
 		userStateSender = new StateSender("semaine.data.state.user", "UserState", getName());
@@ -188,15 +185,17 @@ public class DummyInterpreter extends Component
 					}
 				}
 			}
-		} else if (m instanceof SEMAINEUserStateMessage) {
-			UserStateInfo usi = ((SEMAINEUserStateMessage)m).getState();
-			// do nothing for now
-		} else if (m instanceof SEMAINEAgentStateMessage) {
-			AgentStateInfo asi = ((SEMAINEAgentStateMessage)m).getState();
-			// do nothing for now
-		} else if (m instanceof SEMAINEDialogStateMessage) {
-			DialogStateInfo dsi = ((SEMAINEDialogStateMessage)m).getState();
-			// do nothing for now
+		} else if (m instanceof SEMAINEStateMessage) {
+			StateInfo si = ((SEMAINEStateMessage)m).getState();
+			switch (si.getType()) {
+			case AgentState:
+			case DialogState:
+			case UserState:
+				// do nothing for now
+				break;
+		    default:
+		    	throw new MessageFormatException("Unexpected state info type: "+si.getType().toString());
+			}
 		} else {
 			throw new MessageFormatException("unexpected message type: "+m.getClass().getSimpleName());
 		}

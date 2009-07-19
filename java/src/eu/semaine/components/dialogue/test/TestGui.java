@@ -41,7 +41,6 @@ import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
-import eu.semaine.jms.receiver.UserStateReceiver;
 import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.jms.sender.FeatureSender;
 import eu.semaine.jms.sender.StateSender;

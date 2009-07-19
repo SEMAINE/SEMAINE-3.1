@@ -11,21 +11,24 @@ import java.util.Map.Entry;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 
 public class StateReceiver extends XMLReceiver
 {
+	private StateInfo.Type stateInfoType;
 	private Map<String, String> currentBestGuess = new HashMap<String, String>();
 
 	/**
 	 * Create a receiver that will listen for all messages in the given Topic.
 	 * @param topic the name of the JMS Topic to listen to.
 	 */
-	public StateReceiver(String topicName) throws JMSException
+	public StateReceiver(String topicName, StateInfo.Type stateInfoType) throws JMSException
 	{
 		super(topicName);
+		this.stateInfoType = stateInfoType;
 	}
 	
 	/**
@@ -35,10 +38,11 @@ public class StateReceiver extends XMLReceiver
 	 * @param messageSelector a message selector expression, see e.g. http://java.sun.com/javaee/5/docs/api/javax/jms/Message.html
 	 * for the detailed description.
 	 */
-	public StateReceiver(String topicName, String messageSelector)
+	public StateReceiver(String topicName, String messageSelector, StateInfo.Type stateInfoType)
 	throws JMSException
 	{
 		super(topicName, messageSelector);
+		this.stateInfoType = stateInfoType;
 	}
 	
 	public void onMessage(Message m)
@@ -66,6 +70,15 @@ public class StateReceiver extends XMLReceiver
 		}
 	}
 
+	@Override
+	protected SEMAINEMessage createSEMAINEMessage(Message m)
+	throws MessageFormatException
+	{
+		return new SEMAINEStateMessage(m, stateInfoType);
+	}
+
+	
+	
 	/**
 	 * Provide the current best guess for the given info item.
 	 * @param infoItem

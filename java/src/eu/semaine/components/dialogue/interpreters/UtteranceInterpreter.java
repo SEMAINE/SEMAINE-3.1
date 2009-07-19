@@ -26,11 +26,12 @@ import org.w3c.dom.Node;
 import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.SemaineML;
-import eu.semaine.jms.message.SEMAINEDialogStateMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.receiver.DialogStateReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.util.XMLTool;
@@ -53,7 +54,7 @@ public class UtteranceInterpreter extends Component
 	/* Receivers */
 	private EmmaReceiver emmaReceiver;
 	//private AgentStateReceiver agentStateReceiver;
-	private DialogStateReceiver dialogStateReceiver;
+	private StateReceiver dialogStateReceiver;
 
 	/* Senders */
 	private XMLSender userStateSender;
@@ -80,7 +81,7 @@ public class UtteranceInterpreter extends Component
 
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
-		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
+		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add(dialogStateReceiver);
 
 		/* Define Senders */
@@ -189,14 +190,16 @@ public class UtteranceInterpreter extends Component
 	 */
 	public boolean checkUserFinished( SEMAINEMessage m ) throws JMSException
 	{
-		if( m instanceof SEMAINEDialogStateMessage ) {
-			DialogStateInfo dialogInfo = ((SEMAINEDialogStateMessage)m).getState();
-			Map<String,String> dialogInfoMap = dialogInfo.getInfo();
-			
-			if( dialogInfoMap.get("speaker").equals("agent") ) {
-				processUtterance();
-				utterance = "";
-				return true;
+		if( m instanceof SEMAINEStateMessage ) {
+			StateInfo dialogInfo = ((SEMAINEStateMessage)m).getState();
+			if (dialogInfo.getType() == StateInfo.Type.DialogState) {
+				Map<String,String> dialogInfoMap = dialogInfo.getInfo();
+				
+				if( dialogInfoMap.get("speaker").equals("agent") ) {
+					processUtterance();
+					utterance = "";
+					return true;
+				}
 			}
 		}
 		return false;

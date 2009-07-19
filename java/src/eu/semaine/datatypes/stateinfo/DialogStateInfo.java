@@ -40,7 +40,7 @@ public class DialogStateInfo extends StateInfo
 	public DialogStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "DialogStateInfo", APIVersion, SemaineML.E_DIALOGSTATE, SemaineML.namespaceURI);
+		super(doc, "DialogStateInfo", APIVersion, SemaineML.E_DIALOGSTATE, SemaineML.namespaceURI, Type.DialogState);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class DialogStateInfo extends StateInfo
 	public DialogStateInfo(Map<String, String> infoItems, Collection<DialogAct> dialogActs)
 	throws JMSException
 	{
-		super(infoItems, "DialogStateInfo", APIVersion);
+		super(infoItems, "DialogStateInfo", APIVersion, Type.DialogState);
 		if (dialogActs != null) {
 			dialogHistory.addAll(dialogActs);
 		}

@@ -10,7 +10,11 @@ import javax.jms.Message;
 import org.w3c.dom.Document;
 
 
+import eu.semaine.datatypes.stateinfo.AgentStateInfo;
+import eu.semaine.datatypes.stateinfo.ContextStateInfo;
+import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
+import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.JMSLogger;
 
@@ -18,20 +22,22 @@ import eu.semaine.jms.JMSLogger;
  * @author marc
  *
  */
-public abstract class SEMAINEStateMessage extends SEMAINEXMLMessage
+public class SEMAINEStateMessage extends SEMAINEXMLMessage
 {
 	
 	protected JMSLogger log;
 	protected StateInfo state;
+	protected StateInfo.Type stateInfoType;
 	
 	/**
 	 * @param message
 	 * @throws MessageFormatException
 	 */
-	public SEMAINEStateMessage(Message message)
+	public SEMAINEStateMessage(Message message, StateInfo.Type stateInfoType)
 	throws MessageFormatException
 	{
 		super(message);
+		this.stateInfoType = stateInfoType;
 		try {
 			state = createState(doc);
 			log = JMSLogger.getLog(state.toString());
@@ -46,8 +52,17 @@ public abstract class SEMAINEStateMessage extends SEMAINEXMLMessage
 		}
 	}
 	
-	protected abstract StateInfo createState(Document doc)
-	throws MessageFormatException;
+	protected StateInfo createState(Document doc)
+	throws MessageFormatException
+	{
+		switch (stateInfoType) {
+		case AgentState: return new AgentStateInfo(doc);
+		case DialogState: return new DialogStateInfo(doc);
+		case UserState: return new UserStateInfo(doc);
+		case ContextState: return new ContextStateInfo(doc);
+		}
+		throw new IllegalStateException("Unknown state info type: "+stateInfoType);
+	}
 	
 	public StateInfo getState()
 	{

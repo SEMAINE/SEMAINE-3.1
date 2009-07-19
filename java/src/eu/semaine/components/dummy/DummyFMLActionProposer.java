@@ -17,11 +17,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
-import eu.semaine.jms.receiver.AgentStateReceiver;
-import eu.semaine.jms.receiver.DialogStateReceiver;
-import eu.semaine.jms.receiver.UserStateReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.util.XMLTool;
 
@@ -33,9 +32,9 @@ import eu.semaine.util.XMLTool;
  */
 public class DummyFMLActionProposer extends Component 
 {
-	private UserStateReceiver userStateReceiver;
-	private AgentStateReceiver agentStateReceiver;
-	private DialogStateReceiver dialogStateReceiver;
+	private StateReceiver userStateReceiver;
+	private StateReceiver agentStateReceiver;
+	private StateReceiver dialogStateReceiver;
 	private FMLSender fmlSender;
 	
 	
@@ -49,11 +48,11 @@ public class DummyFMLActionProposer extends Component
 	public DummyFMLActionProposer() throws JMSException 
 	{
 		super("DummyFMLActionProposer");
-		userStateReceiver = new UserStateReceiver("semaine.data.state.user", "datatype = 'UserState'");
+		userStateReceiver = new StateReceiver("semaine.data.state.user", "datatype = 'UserState'", StateInfo.Type.UserState);
 		receivers.add(userStateReceiver);
-		agentStateReceiver = new AgentStateReceiver("semaine.data.state.agent");
+		agentStateReceiver = new StateReceiver("semaine.data.state.agent", StateInfo.Type.AgentState);
 		receivers.add(agentStateReceiver);
-		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
+		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add(dialogStateReceiver);
 		
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());

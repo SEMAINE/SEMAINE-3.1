@@ -33,7 +33,7 @@ public class UserStateInfo extends StateInfo
 	public UserStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "UserStateInfo", APIVersion, SemaineML.E_USERSTATE, SemaineML.namespaceURI);
+		super(doc, "UserStateInfo", APIVersion, SemaineML.E_USERSTATE, SemaineML.namespaceURI, Type.UserState);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class UserStateInfo extends StateInfo
 	public UserStateInfo(Map<String, String> infoItems)
 	throws JMSException
 	{
-		super(infoItems, "UserStateInfo", APIVersion);
+		super(infoItems, "UserStateInfo", APIVersion, Type.UserState);
 	}
 
 	/**

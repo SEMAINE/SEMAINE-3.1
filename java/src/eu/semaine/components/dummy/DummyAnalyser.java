@@ -10,15 +10,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.IOBase.Event;
-import eu.semaine.jms.message.SEMAINEDialogStateMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.receiver.DialogStateReceiver;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.receiver.FeatureReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.util.XMLTool;
 
@@ -32,7 +33,7 @@ import eu.semaine.util.XMLTool;
 public class DummyAnalyser extends Component 
 {
 	private EmmaSender userStateSender;
-	private DialogStateReceiver dialogStateReceiver;
+	private StateReceiver dialogStateReceiver;
 	private FeatureReceiver featureReceiver;
 	
 	private boolean userIsSpeaking = false;
@@ -46,7 +47,7 @@ public class DummyAnalyser extends Component
 		super("DummyAnalyser");
 		featureReceiver = new FeatureReceiver("semaine.data.analysis.>");
 		receivers.add(featureReceiver); // to set up properly
-		dialogStateReceiver = new DialogStateReceiver("semaine.data.state.dialog");
+		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add(dialogStateReceiver);
 		userStateSender = new EmmaSender("semaine.data.state.user", getName());
 		senders.add(userStateSender); // so it can be started etc
@@ -83,8 +84,11 @@ public class DummyAnalyser extends Component
 				// Now send it
 				userStateSender.sendXML(document, fm.getUsertime(), Event.single);
 			}
-		} else if (m instanceof SEMAINEDialogStateMessage) {
-			SEMAINEDialogStateMessage sm = (SEMAINEDialogStateMessage) m;
+		} else if (m instanceof SEMAINEStateMessage) {
+			SEMAINEStateMessage sm = (SEMAINEStateMessage) m;
+			if (sm.getState().getType() != StateInfo.Type.DialogState) {
+				throw new MessageFormatException("expected state info of type DialogState, but got "+sm.getState().getType().toString());
+			}
 			String speaker = sm.getState().getInfo().get("speaker");
 			if (speaker != null) {
 				if (speaker.equals("user")) 

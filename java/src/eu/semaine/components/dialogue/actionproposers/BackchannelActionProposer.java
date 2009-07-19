@@ -11,15 +11,13 @@ import org.w3c.dom.Element;
 
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.FML;
-import eu.semaine.jms.message.SEMAINEAgentStateMessage;
-import eu.semaine.jms.message.SEMAINEDialogStateMessage;
+import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.message.SEMAINEUserStateMessage;
-import eu.semaine.jms.receiver.AgentStateReceiver;
-import eu.semaine.jms.receiver.DialogStateReceiver;
-import eu.semaine.jms.receiver.UserStateReceiver;
+import eu.semaine.jms.message.SEMAINEStateMessage;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
@@ -43,9 +41,9 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	private long agentSpeakingStateTime = 0;
 	
 	/* Senders and Receivers */
-	private UserStateReceiver userStateReceiver;
-	private AgentStateReceiver agentStateReceiver;
-	private DialogStateReceiver dialogStateReceiver;
+	private StateReceiver userStateReceiver;
+	private StateReceiver agentStateReceiver;
+	private StateReceiver dialogStateReceiver;
 	private FMLSender fmlSender;
 	private StateSender agentStateSender;
 	
@@ -64,11 +62,11 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 		
 		waitingTime = 20;
 		
-		agentStateReceiver = new AgentStateReceiver( "semaine.data.state.agent" );
+		agentStateReceiver = new StateReceiver("semaine.data.state.agent", StateInfo.Type.AgentState);
 		receivers.add( agentStateReceiver );
-		dialogStateReceiver = new DialogStateReceiver( "semaine.data.state.dialog" );
+		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add( dialogStateReceiver );
-		userStateReceiver = new UserStateReceiver( "semaine.data.state.user" );
+		userStateReceiver = new StateReceiver("semaine.data.state.user", StateInfo.Type.UserState);
 		receivers.add( userStateReceiver );
 		
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
@@ -93,19 +91,24 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	
 	public void react( SEMAINEMessage m ) throws JMSException
 	{
-		if( m instanceof SEMAINEUserStateMessage ) {
-			SEMAINEUserStateMessage um = ((SEMAINEUserStateMessage)m);
-			setUserSpeakingState( um );
+		if (!(m instanceof SEMAINEStateMessage)) {
+			throw new MessageFormatException("expected only state messages, got "+m.getClass().toString());
 		}
-		
-		if( m instanceof SEMAINEDialogStateMessage ) {
-			SEMAINEDialogStateMessage dm = ((SEMAINEDialogStateMessage)m);
-			setAgentSpeakingState(dm);
-		}
-		
-		if( m instanceof SEMAINEAgentStateMessage ) {
-			SEMAINEAgentStateMessage am = ((SEMAINEAgentStateMessage)m);
-			setCharacter(am);
+		SEMAINEStateMessage sm = (SEMAINEStateMessage) m;
+		StateInfo stateInfo = sm.getState();
+		StateInfo.Type stateInfoType = stateInfo.getType();
+		switch (stateInfoType) {
+		case UserState: 
+			setUserSpeakingState(stateInfo);
+			break;
+		case DialogState:
+			setAgentSpeakingState(stateInfo);
+			break;
+		case AgentState:
+			setCharacter(stateInfo);
+			break;
+		default:
+			throw new MessageFormatException("unexpected state info type: "+stateInfoType.toString());
 		}
 	}
 	
@@ -113,9 +116,8 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	 * Reads the received Message and tries to filter out the detected user speaking state.
 	 * @param m - the received message
 	 */
-	public void setAgentSpeakingState( SEMAINEDialogStateMessage m )
+	public void setAgentSpeakingState(StateInfo userInfo)
 	{
-		DialogStateInfo userInfo = m.getState();
 		Map<String,String> userInfoMap = userInfo.getInfo();
 
 		if( userInfoMap.get("speaker").equals("agent") ) {
@@ -134,9 +136,8 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	 * Reads the received Message and tries to filter out the detected user speaking state.
 	 * @param m - the received message
 	 */
-	public void setUserSpeakingState( SEMAINEUserStateMessage m )
+	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		UserStateInfo userInfo = m.getState();
 		Map<String,String> userInfoMap = userInfo.getInfo();
 
 		if( userInfoMap.get("behaviour").equals("speaking") ) {
@@ -157,9 +158,8 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	 * Reads the received Message and tries to filter out a change of character
 	 * @param am - the received message
 	 */
-	public void setCharacter( SEMAINEAgentStateMessage am )
+	public void setCharacter(StateInfo agentInfo)
 	{
-		AgentStateInfo agentInfo = am.getState();
 		Map<String,String> agentInfoMap = agentInfo.getInfo();
 		
 		String newChar = agentInfoMap.get( "character" );

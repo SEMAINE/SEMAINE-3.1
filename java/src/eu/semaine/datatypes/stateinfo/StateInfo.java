@@ -28,32 +28,46 @@ import eu.semaine.util.XMLTool;
  */
 public abstract class StateInfo
 {
+	public enum Type {AgentState, DialogState, UserState, ContextState};
+	
 	protected Map<String,String> info;
 	protected Document doc;
 	protected JMSLogger log;
 	protected String stateName;
 	protected String apiVersion;
+	protected Type type;
 
-	protected StateInfo(Document doc, String whatState, String apiVersion, String rootName, String rootNamespace)
+	protected StateInfo(Document doc, String whatState, String apiVersion, String rootName, String rootNamespace, Type type)
 	throws MessageFormatException
 	{
 		this.doc = doc;
 		this.stateName = whatState;
 		this.apiVersion = apiVersion;
+		this.type = type;
 		log = JMSLogger.getLog(whatState);
 		info = new HashMap<String, String>();
 		setupInfoKeys();
 		analyseDocument(rootName, rootNamespace);
 	}
 
-	public StateInfo(Map<String,String> infoItems, String whatState, String apiVersion)
+	public StateInfo(Map<String,String> infoItems, String whatState, String apiVersion, Type type)
 	{
 		this.stateName = whatState;
 		this.apiVersion = apiVersion;
+		this.type = type;
 		log = JMSLogger.getLog(whatState);
 		info = new HashMap<String, String>(infoItems);
 		// we will only create a Document from this if needed, i.e.
 		// in getDocument().
+	}
+	
+	/**
+	 * Get the type of state info of this object: AgentState, DialogState, UserState or ContextState.
+	 * @return
+	 */
+	public Type getType()
+	{
+		return type;
 	}
 	
 	/**

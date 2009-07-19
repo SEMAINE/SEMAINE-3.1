@@ -23,18 +23,17 @@ import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.jms.message.SEMAINEAgentStateMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.message.SEMAINEUserStateMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
-import eu.semaine.jms.receiver.AgentStateReceiver;
-import eu.semaine.jms.receiver.UserStateReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.StateSender;
@@ -103,7 +102,7 @@ public class UtteranceActionProposer extends Component
 	public final static String sentenceDataPath = "/eu/semaine/components/dialogue/data/sentences.xml";
 	
 	/* Senders and Receivers */
-	private AgentStateReceiver agentStateReceiver;
+	private StateReceiver agentStateReceiver;
 	private XMLReceiver userStateReceiver;
 	private XMLReceiver contextReceiver;
 	private FMLSender fmlSender;
@@ -152,7 +151,7 @@ public class UtteranceActionProposer extends Component
 		super( "UtteranceActionProposer" );
 		
 		/* Initialize receivers */
-		agentStateReceiver = new AgentStateReceiver( "semaine.data.state.agent" );
+		agentStateReceiver = new StateReceiver( "semaine.data.state.agent", StateInfo.Type.AgentState );
 		receivers.add( agentStateReceiver );
 		userStateReceiver = new XMLReceiver("semaine.data.state.user.behaviour");
 		receivers.add(userStateReceiver);
@@ -237,14 +236,16 @@ public class UtteranceActionProposer extends Component
 	public void react( SEMAINEMessage m ) throws JMSException
 	{
 		/* Processes User state updates */
-		if( m instanceof SEMAINEUserStateMessage ) {
-			SEMAINEUserStateMessage um = ((SEMAINEUserStateMessage)m);
-			
-			/* Updates user speaking state (speaking or silent) */
-			setUserSpeakingState( um );
-			
-			/* Updates detected emotions (valence, arousal, interest) */
-			addDetectedEmotions( um );
+		if( m instanceof SEMAINEStateMessage ) {
+			SEMAINEStateMessage sm = ((SEMAINEStateMessage)m);
+			StateInfo stateInfo = sm.getState();
+			if (stateInfo.getType() == StateInfo.Type.UserState) {
+				/* Updates user speaking state (speaking or silent) */
+				setUserSpeakingState(stateInfo);
+				
+				/* Updates detected emotions (valence, arousal, interest) */
+				addDetectedEmotions(stateInfo);
+			}			
 		}
 		
 		/* Processes XML updates */
@@ -539,21 +540,23 @@ public class UtteranceActionProposer extends Component
 			return false;
 		}
 		
-		if( m instanceof SEMAINEAgentStateMessage ) {
-			SEMAINEAgentStateMessage am = (SEMAINEAgentStateMessage)m;
+		if( m instanceof SEMAINEStateMessage ) {
+			SEMAINEStateMessage am = (SEMAINEStateMessage)m;
 			
-			AgentStateInfo agentInfo = am.getState();
-			Map<String,String> agentInfoMap = agentInfo.getInfo();
-			
-			String intention = agentInfoMap.get("intention");
-			if( intention != null && intention.equals("speaking") ) {
-				if( agentSpeakingState == SPEAKING ) {
-					return false;
+			StateInfo agentInfo = am.getState();
+			if (agentInfo.getType() == StateInfo.Type.AgentState) {
+				Map<String,String> agentInfoMap = agentInfo.getInfo();
+				
+				String intention = agentInfoMap.get("intention");
+				if( intention != null && intention.equals("speaking") ) {
+					if( agentSpeakingState == SPEAKING ) {
+						return false;
+					} else {
+						return true;
+					}
 				} else {
-					return true;
+					return false;
 				}
-			} else {
-				return false;
 			}
 		}
 		return false;
@@ -796,9 +799,8 @@ public class UtteranceActionProposer extends Component
 	 * Reads the received Message and tries to filter out the detected user speaking state.
 	 * @param m - the received message
 	 */
-	public void setUserSpeakingState( SEMAINEUserStateMessage m )
+	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		UserStateInfo userInfo = m.getState();
 		Map<String,String> userInfoMap = userInfo.getInfo();
 
 		if( userInfoMap.get("behaviour").equals("speaking") ) {
@@ -818,9 +820,8 @@ public class UtteranceActionProposer extends Component
 	 * Reads the received Message and tries to filter out the detected Emotion Events.
 	 * @param m
 	 */
-	public void addDetectedEmotions( SEMAINEUserStateMessage m )
+	public void addDetectedEmotions(StateInfo userInfo)
 	{
-		UserStateInfo userInfo = m.getState();
 		Map<String,String> dialogInfoMap = userInfo.getInfo();
 		
 		if( dialogInfoMap.get("behaviour").equals("valence") ) {
