@@ -53,4 +53,15 @@ public class ContextStateInfo extends StateInfo
 		throw new UnsupportedOperationException("not yet implemented");
 	}
 
+		/**
+	 * Set up the possible values that we can know about.
+	 * Things that are not previewed here will not be read from the document.
+	 * When this changes, the APIVersion must change with it.
+	 */
+	@Override
+	protected void setupInfoKeys()
+	{
+		throw new UnsupportedOperationException("not yet implemented");
+	}
+
 }
