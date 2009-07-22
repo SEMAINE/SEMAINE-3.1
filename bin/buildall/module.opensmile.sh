@@ -54,9 +54,9 @@ function func_build_opensmile {
     ./autogen.sh &&
     if test "x$PORTAUDIOPATH" != "x" ; then
       echo ""
-      echo "./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$SEMAINE_ROOT/thirdparty/inst/include" LDFLAGS="-L$SEMAINE_ROOT/thirdparty/inst/lib -lspeex -lspeexdsp -ljulius -lsent" --without-atklib"
+      echo "./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$SEMAINE_ROOT/thirdparty/inst/include" LDFLAGS="-L$SEMAINE_ROOT/thirdparty/inst/lib -lspeex -lspeexdsp -ljulius -lsent" --with-rtnnllib="$INSTALL_PREFIX" --without-atklib"
       echo ""
-      ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$SEMAINE_ROOT/thirdparty/inst/include" LDFLAGS="-L$SEMAINE_ROOT/thirdparty/inst/lib -lspeex -lspeexdsp -ljulius -lsent" --without-atklib
+      ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$SEMAINE_ROOT/thirdparty/inst/include" LDFLAGS="-L$SEMAINE_ROOT/thirdparty/inst/lib -lspeex -lspeexdsp -ljulius -lsent" --with-rtnnllib="$INSTALL_PREFIX" --without-atklib
     else
       #./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src
       ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$SEMAINE_ROOT/thirdparty/inst/include" LDFLAGS="-L$SEMAINE_ROOT/thirdparty/inst/lib -lspeex -lspeexdsp -ljulius -lsent" --without-atklib
@@ -83,13 +83,18 @@ function func_build_opensmile {
       return 1;
     fi
     
+    make install
+    if test "x$?" != "x0" ; then
+      return 1;
+    fi
+
     addConf "SMILEPATH" "${builds_dirs[$build_nr]}"
     
     # this will create a script that sets the library paths,
     # changes to the build directory of the component
     # and runs the command specified as first parameter
     # the script will be in located in bin/run_components
-    createRunScript "start_smile_component.sh" passpath
+    createRunScript "SEMAINExtract -C conf/liveemofull.conf"
 
     return 0;
 }
