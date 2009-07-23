@@ -37,6 +37,7 @@ function func_build_julius {
     cp $JROOT/julius4.mod/realtime-1stpass.c libjulius/src
     cp $JROOT/julius4.mod/recogmain.c libjulius/src
     cp $JROOT/julius4.mod/plugin.c libjulius/src
+    cp $JROOT/julius4.mod/m_info.c libjulius/src
 
     export CFLAGS="-DEXTERNAL_FV -g -ggdb -fPIC"
     ./configure --prefix=$INSTALL_PREFIX  
