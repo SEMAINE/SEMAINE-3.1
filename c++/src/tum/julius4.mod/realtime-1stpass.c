@@ -392,6 +392,7 @@ RealTimePipeLinePrepare(Recog *recog)
     /* parameter initialization */
     if (recog->jconf->input.speech_input == SP_MFCMODULE) {
       if (mfc_module_set_header(mfcc, recog) == FALSE) return FALSE;
+#ifdef EXTERNAL_FV
     } else if (recog->jconf->input.speech_input == SP_EXTERN) {
 
       /* vector length in unit */
@@ -400,15 +401,15 @@ RealTimePipeLinePrepare(Recog *recog)
       /* frame shift in msec */
       mfcc->param->header.wshift = (recog->jconf->ext.period*1000.0) * 10000.0;
       recog->jconf->input.paramtype_check_flag=FALSE;
-      // allocate mfcc->para
+      // copy  mfcc->para ?? actually this does not get valid config data
+      // NOTE: julius gets external features with SP_EXTERN and we assume it does not check anything and passes the vector as is to the decoder!!
       mfcc->para = &(recog->jconf->amnow->analysis.para_hmm);
-printf("cmn . %i\n",mfcc->para->cmn);
-printf("de . %i\n",mfcc->para->delta);
-printf("de . %i\n",mfcc->para->energy);
+//printf("cmn . %i\n",mfcc->para->cmn);
 
-      // TODO: make this configurable....
+      // TODO: make this configurable...  UPDATE::: CMN has to be performed externally!!
       //CMN_realtime_prepare(mfcc->cmn.wrk);
 
+#endif
     } else {
       init_param(mfcc);
     }
