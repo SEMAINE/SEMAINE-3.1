@@ -4,7 +4,9 @@
  */
 package eu.semaine.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -34,6 +36,8 @@ import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
@@ -47,6 +51,7 @@ import eu.semaine.exceptions.SystemConfigurationException;
 public class XMLTool 
 {
     private static DOMImplementation dom = null;
+    private static DocumentBuilder docBuilder = null;
     private static Log log = LogFactory.getLog(XMLTool.class);
 
 
@@ -56,7 +61,7 @@ public class XMLTool
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setExpandEntityReferences(true);
             factory.setNamespaceAware(true);
-            DocumentBuilder docBuilder = factory.newDocumentBuilder();
+            docBuilder = factory.newDocumentBuilder();
             dom = docBuilder.getDOMImplementation();
         } catch (ParserConfigurationException e) {
             log.error("Cannot start up XML parser", e);
@@ -64,6 +69,25 @@ public class XMLTool
     }
     
 
+    public static Document string2Document(String stringRepresentationOfDocument)
+    throws SAXException, IOException
+    {
+    	return docBuilder.parse(new InputSource(new StringReader(stringRepresentationOfDocument)));
+    }
+    
+    public static Document parse(File file)
+    throws SAXException, IOException
+    {
+    	return docBuilder.parse(file);
+    }
+    
+    public static Document parse(InputStream in)
+    throws SAXException, IOException
+    {
+    	return docBuilder.parse(in);
+    }
+    
+    
     /**
      * Create a new document with the given name and namespace for the root element.
      * @param rootTagname
@@ -180,7 +204,29 @@ public class XMLTool
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Get the direct child of node that is an element with the given
+	 * local name and namespace.
+	 * @param node
+	 * @param childName the child's local name, without a namespace prefix.
+	 * @param childNamespace
+	 * @return the child element, or null if there is no such child.
+	 */
+	public static Element getChildElementByLocalNameNS(Node node, String childName, String childNamespace)
+	{
+		NodeList nl = node.getChildNodes();
+		for (int i=0, max=nl.getLength(); i<max; i++) {
+			Node n = nl.item(i);
+			if (n instanceof Element
+					&& n.getLocalName().equals(childName)
+					&& n.getNamespaceURI().equals(childNamespace)) {
+				return (Element) n;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Same as {@link #getChildElementByTagNameNS(Node, String, String)}, but
 	 * throw a MessageFormatException if there is no such child element.
@@ -269,6 +315,34 @@ public class XMLTool
 		return list;
 	}
 	
+	/**
+	 * Get a list of all direct children with the given local name and namespace.
+	 * Whereas getChildElementByTagNameNS() returns the single first child,
+	 * this method returns all the children that match.
+	 * @param node
+	 * @param childName the child's local name
+	 * @param childNamespace
+	 * @return a list containing the children that match, or an empty list if none match.
+	 * @throws MessageFormatException
+	 */
+	public static List<Element> getChildrenByLocalNameNS(Node node, String childName, String childNamespace)
+	{
+		List<Element> list = new ArrayList<Element>();
+		Element e = getChildElementByLocalNameNS(node, childName, childNamespace);
+		if (e != null) {
+			list.add(e);
+			Node n = e;
+			while ((n = n.getNextSibling()) != null) {
+				if (n.getNodeType() == Node.ELEMENT_NODE &&
+						isSameNamespace(n.getNamespaceURI(), childNamespace) &&
+						n.getLocalName().equals(childName)) {
+					list.add((Element)n);
+				}
+			}
+		}
+		return list;
+	}
+
 	/**
 	 * Determine whether the two namespaces are the same.
 	 * @param namespaceA a string representing a namespace, or null

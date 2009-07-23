@@ -19,6 +19,7 @@ import org.w3c.dom.NodeList;
 
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
+import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -27,7 +28,7 @@ import eu.semaine.util.XMLTool;
  */
 public class DialogStateInfo extends StateInfo
 {
-	public static final String APIVersion = "0.1";
+	public static final String APIVersion = "0.2";
 
 	private SortedSet<DialogAct> dialogHistory = new TreeSet<DialogAct>();
 
@@ -63,26 +64,12 @@ public class DialogStateInfo extends StateInfo
 	 */
 	@Override
 	protected void createDocumentFromInfo()
+	throws SystemConfigurationException
 	{
 		assert dialogHistory != null : "method seems to be called before constructor is finished";
-		doc = XMLTool.newDocument(SemaineML.E_DIALOGSTATE, SemaineML.namespaceURI, SemaineML.version);
-		Element root = doc.getDocumentElement();
-		String item = info.get("speaker");
-		if (item != null) {
-			Element speaker = XMLTool.appendChildElement(root, SemaineML.E_SPEAKER, SemaineML.namespaceURI);
-			speaker.setAttribute(SemaineML.A_WHO, item);
-		}
-		item = info.get("listener");
-		if (item != null) {
-			Element listener = XMLTool.appendChildElement(root, SemaineML.E_LISTENER, SemaineML.namespaceURI);
-			listener.setAttribute(SemaineML.A_WHO, item);
-		}
-		item = info.get("topic");
-		if (item != null) {
-			Element topic = XMLTool.appendChildElement(root, SemaineML.E_TOPIC, SemaineML.namespaceURI);
-			topic.setAttribute(SemaineML.A_NAME, item);
-		}
+		super.createDocumentFromInfo();
 		if (dialogHistory.size() > 0) {
+			Element root = doc.getDocumentElement();
 			Element dh = XMLTool.appendChildElement(root, SemaineML.E_DIALOG_HISTORY, SemaineML.namespaceURI);
 			for (DialogAct dialogAct : dialogHistory) {
 				Element da = XMLTool.appendChildElement(dh, SemaineML.E_DIALOG_ACT, SemaineML.namespaceURI);
@@ -94,74 +81,45 @@ public class DialogStateInfo extends StateInfo
 		}
 	}
 
-	/**
-	 * Set up the possible values that we can know about.
-	 * Things that are not previewed here will not be read from the document.
-	 * When this changes, the APIVersion must change with it.
-	 */
-	@Override
-	protected void setupInfoKeys()
-	{
-		info.put("speaker", null);
-		info.put("listener", null);
-		info.put("topic", null);
-	}
 
 	@Override
-	protected boolean analyseElement(Element el)
+	protected void analyseDocument(String rootName, String rootNamespace)
 	throws MessageFormatException
 	{
-		// We do not user super implementation here, because
-		// dialog state does not use emotionml:category.
+		super.analyseDocument(rootName, rootNamespace);
 		
-		String namespace = el.getNamespaceURI();
-		String tagname = el.getTagName();
-		if (namespace.equals(SemaineML.namespaceURI)) {
-			if (tagname.equals(SemaineML.E_SPEAKER)) {
-				String value = XMLTool.needAttribute(el, SemaineML.A_WHO);
-				info.put("speaker", value);
-				return true;
-			} else if (tagname.equals(SemaineML.E_LISTENER)) {
-				String value = XMLTool.needAttribute(el, SemaineML.A_WHO);
-				info.put("listener", value);
-				return true;
-			} else if (tagname.equals(SemaineML.E_TOPIC)) {
-				String value = XMLTool.needAttribute(el, SemaineML.A_NAME);
-				info.put("topic", value);
-				return true;
-			} else if (tagname.equals(SemaineML.E_DIALOG_HISTORY)) {
-				NodeList nodes = el.getChildNodes();
-				for (int i=0, max=nodes.getLength(); i<max; i++) {
-					Node n = nodes.item(i);
-					if (!(n.getNodeType() == Node.ELEMENT_NODE)) {
-						continue;
-					}
-					assert n instanceof Element : "Should only see elements here";
-					Element child = (Element) n;
-					if (!(child.getNamespaceURI().equals(SemaineML.namespaceURI)
-						  && child.getTagName().equals(SemaineML.E_DIALOG_ACT))) {
-						throw new MessageFormatException("Element '"+SemaineML.E_DIALOG_HISTORY+
-								"' in namespace '"+el.getNamespaceURI()+
-								"' should only contain child elements named '"+SemaineML.E_DIALOG_ACT+
-								"' in the same namespace");
-					}
-					String text = child.getTextContent();
-					String speaker = XMLTool.needAttribute(child, SemaineML.A_SPEAKER);
-					String topic = XMLTool.needAttribute(child, SemaineML.A_TOPIC);
-					String timeString = XMLTool.needAttribute(child, SemaineML.A_TIME);
-					long time = 0;
-					try {
-						time = Long.valueOf(timeString);
-					} catch (NumberFormatException nfe) {
-						throw new MessageFormatException("Cannot parse time '"+timeString+"' as long", nfe);
-					}
-					DialogAct da = new DialogAct(text, speaker, topic, time);
-					dialogHistory.add(da);
+		NodeList nl = doc.getElementsByTagNameNS(SemaineML.namespaceURI, SemaineML.E_DIALOG_HISTORY);
+		if (nl.getLength() > 0) {
+			Element el = (Element) nl.item(0);
+			NodeList nodes = el.getChildNodes();
+			for (int i=0, max=nodes.getLength(); i<max; i++) {
+				Node n = nodes.item(i);
+				if (!(n.getNodeType() == Node.ELEMENT_NODE)) {
+					continue;
 				}
-				return true;
+				assert n instanceof Element : "Should only see elements here";
+				Element child = (Element) n;
+				if (!(child.getNamespaceURI().equals(SemaineML.namespaceURI)
+					  && child.getTagName().equals(SemaineML.E_DIALOG_ACT))) {
+					throw new MessageFormatException("Element '"+SemaineML.E_DIALOG_HISTORY+
+							"' in namespace '"+el.getNamespaceURI()+
+							"' should only contain child elements named '"+SemaineML.E_DIALOG_ACT+
+							"' in the same namespace");
+				}
+				String text = child.getTextContent();
+				String speaker = XMLTool.needAttribute(child, SemaineML.A_SPEAKER);
+				String topic = XMLTool.needAttribute(child, SemaineML.A_TOPIC);
+				String timeString = XMLTool.needAttribute(child, SemaineML.A_TIME);
+				long time = 0;
+				try {
+					time = Long.valueOf(timeString);
+				} catch (NumberFormatException nfe) {
+					throw new MessageFormatException("Cannot parse time '"+timeString+"' as long", nfe);
+				}
+				DialogAct da = new DialogAct(text, speaker, topic, time);
+				dialogHistory.add(da);
 			}
 		}
-		return false;
 	}
 	
 	

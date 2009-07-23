@@ -4,17 +4,33 @@
  */
 package eu.semaine.datatypes.stateinfo;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.exceptions.MessageFormatException;
+import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.JMSLogger;
 import eu.semaine.util.XMLTool;
 
@@ -28,7 +44,110 @@ import eu.semaine.util.XMLTool;
  */
 public abstract class StateInfo
 {
-	public enum Type {AgentState, DialogState, UserState, ContextState};
+	public enum Type {AgentState, DialogState, UserState, ContextState, SystemState};
+	
+	
+	/////////////////////////////// Static stuff /////////////////////////////////
+	
+	public static final Map<Type, XPathInfoMapper> infosByType = getInfosByType();
+	
+	private static Map<Type, XPathInfoMapper> getInfosByType()
+	{
+		Map<Type, List<String>> configSections = new HashMap<Type, List<String>>();
+		String path = System.getProperty("config.stateinfo");
+		URL config = null;
+		try {
+			if (path != null) config = new URL("file:"+path);
+			else config = StateInfo.class.getResource("stateinfo.config");
+			InputStream is = config.openStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			String line = null;
+			Type currentType = null;
+			List<String> currentSection = new ArrayList<String>();
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				if (line.equals("") || line.startsWith("#")) {
+					continue;
+				}
+				if (line.startsWith("[")) {
+					for (Type t : Type.values()) {
+						if (line.equals("["+t.toString()+"]")) {
+							if (currentType != null) {
+								configSections.put(currentType, currentSection);
+							}
+							currentType = t;
+							currentSection = new ArrayList<String>();
+							break;
+						}
+					}
+				}
+				currentSection.add(line);
+			}
+			if (currentType != null) {
+				configSections.put(currentType, currentSection);
+			}
+		} catch (IOException ioe) {
+			throw new Error("Cannot load stateinfo config file from "+config.toString(), ioe);
+		}
+
+		Map<Type, XPathInfoMapper> t2m = new HashMap<Type, XPathInfoMapper>();
+		try {
+			for (Type t : Type.values()) {
+				List<String> configSection = configSections.get(t);
+				if (configSection == null)
+					throw new SystemConfigurationException("No config section for "+t);
+				t2m.put(t, getXPathExpressions(t, configSection));
+			}
+		} catch (SystemConfigurationException e) {
+			throw new Error("Problem setting up stateinfo config", e);
+		}
+		return Collections.unmodifiableMap(t2m);
+	}
+	
+	protected static XPathInfoMapper getXPathExpressions(Type typeForTable, List<String> configSection)
+	throws SystemConfigurationException
+	{
+		// list of namespace prefixes matched with namespace URIs
+		final Map<String, String> namespacePrefixes = new HashMap<String, String>();
+		// To be read from same or different config file: shortcut names for info mapped to XPath expression for getting it 
+		Map<String, String> shortNames = new LinkedHashMap<String, String>();
+		boolean readNamespacePrefixes = false;
+		boolean readShortNames = false;
+
+		for (String line : configSection) {
+			if (line.equals("[namespace prefixes]")) {
+				readNamespacePrefixes = true;
+			} else if (line.equals("[short names]")) {
+				readShortNames = true;
+				readNamespacePrefixes = false;
+				if (namespacePrefixes.isEmpty()) {
+					throw new SystemConfigurationException("Namespace prefixes must be defined before short names");
+				}
+			} else if (readNamespacePrefixes) {
+				String[] parts = line.split("[ =:]+", 2);
+				if (parts.length < 2) {
+					throw new SystemConfigurationException("Expected namespace prefix definition, got '"+line+"'");
+				}
+				String prefix = parts[0];
+				String namespaceURI = parts[1];
+				namespacePrefixes.put(prefix, namespaceURI);
+			} else if (readShortNames) {
+				String[] parts = line.split("[ =:]+", 2);
+				if (parts.length < 2) {
+					throw new SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
+				}
+				String shortName = parts[0];
+				String xpathExpr = parts[1];
+				shortNames.put(shortName, xpathExpr);
+			}
+		}
+		
+		return new XPathInfoMapper(namespacePrefixes, shortNames);
+	}
+	
+	
+	/////////////////// Actual class stuff (non-static) /////////////////
+	
 	
 	protected Map<String,String> info;
 	protected Document doc;
@@ -46,7 +165,6 @@ public abstract class StateInfo
 		this.type = type;
 		log = JMSLogger.getLog(whatState);
 		info = new HashMap<String, String>();
-		setupInfoKeys();
 		analyseDocument(rootName, rootNamespace);
 	}
 
@@ -70,45 +188,128 @@ public abstract class StateInfo
 		return type;
 	}
 	
-	/**
-	 * Set up the possible values that we can know about.
-	 * Things that are not previewed here will not be read from the document.
-	 * When this changes, the APIVersion must change with it.
-	 */
-	protected abstract void setupInfoKeys();
 	
-	protected abstract void createDocumentFromInfo();
-
-	/**
-	 * Make sense of elements in the markup that come directly below the
-	 * document element.
-	 * 
-	 * This base version can interpret <emotion:category> markup for which
-	 * the 'set' attribute is a key in the info map.
-	 * 
-	 * Subclasses will need to override this method to get additional 
-	 * analysis functionality. They can call <code>super.analyseElement(el)</code>
-	 * to access this implementation.
-	 * @param el an element whose parent is the document element.
-	 * @return true if the element could be analysed, false otherwise.
-	 */
-	protected boolean analyseElement(Element el)
-	throws MessageFormatException
+	protected void createDocumentFromInfo()
+	throws SystemConfigurationException
 	{
-		String namespace = el.getNamespaceURI();
-		String tagname = el.getTagName();
-		if (namespace.equals(EmotionML.namespaceURI)) {
-			if (tagname.equals(EmotionML.E_CATEGORY)) {
-				String set = el.getAttribute(EmotionML.A_SET);
-				if (info.containsKey(set)) {
-					String name = XMLTool.needAttribute(el, EmotionML.A_NAME);
-					info.put(set, name);
-					return true;
+		doc = null;
+		XPathInfoMapper xpathInfos = infosByType.get(type);
+		NamespaceContext namespaceContext = xpathInfos.getNamespaceContext();
+		Map<String, String> infoNames = xpathInfos.getExpressionMap();
+		for (String shortName : info.keySet()) {
+			String value = info.get(shortName);
+			if (value == null) continue;
+			Element currentElt = null;
+			String expr = infoNames.get(shortName);
+			if (expr == null) {
+				throw new SystemConfigurationException("No info entry for '"+shortName+"' -- something seems to be out of sync");
+			}
+			//System.out.println("shortname: "+shortName+", expr: "+expr);
+			String[] parts = expr.split("/"); 
+			// Now go through all parts except the last one:
+			for (int i=0; i<parts.length-1; i++) {
+				String part = parts[i];
+				// if there is more than one slash, indicating arbitrary substructures, we treat it like a single slash (direct child)
+				if (part.equals("")) continue;
+				String[] prefixAndName = part.split(Pattern.quote(":"));
+				if (prefixAndName.length > 2)
+					throw new SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
+				String prefix = prefixAndName.length == 2 ? prefixAndName[0] : null;
+				String namespaceURI = prefix != null ? namespaceContext.getNamespaceURI(prefix) : null;
+				String localNameExpr = prefixAndName[prefixAndName.length - 1];
+				String localName;
+				String attName = null;
+				String attValue = null;
+				if (localNameExpr.contains("[")) { // attribute-based selection of nodes
+					int openB = localNameExpr.indexOf('[');
+					int closeB = localNameExpr.indexOf(']');
+					if (closeB < openB)
+						throw new SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
+					localName = localNameExpr.substring(0, openB);
+					String attValPair = localNameExpr.substring(openB+1, closeB);
+					if (!attValPair.startsWith("@")) {
+						throw new SystemConfigurationException("Cannot generate document from XPath expression for info '"+shortName+"': part '"+part+"'");
+					}
+					int iEqualSign = attValPair.indexOf('=');
+					if (iEqualSign != -1) {
+						attName = attValPair.substring(1, iEqualSign);
+						attValue = attValPair.substring(iEqualSign+1);
+						if (!(attValue.startsWith("'") && attValue.endsWith("'")
+								|| attValue.startsWith("\"") && attValue.endsWith("\""))) {
+							throw new SystemConfigurationException("For info '"+shortName+"', unexpected attribute value "+attValue+" found in part '"+part+"' -- not quoted?");
+						}
+						attValue = attValue.substring(1, attValue.length()-1);
+					} else {
+						attName = attValPair.substring(1);
+						attValue = null;
+					}
+				} else {
+					localName = localNameExpr;
 				}
+				// Now traverse to or create element defined by prefix, localName and namespaceURI
+				if (currentElt == null) { // at top level
+					if (doc == null) { // create a new document
+						doc = XMLTool.newDocument(localName, namespaceURI);
+						currentElt = doc.getDocumentElement();
+						currentElt.setPrefix(prefix);
+					} else {
+						currentElt = doc.getDocumentElement();
+						if (!currentElt.getLocalName().equals(localName)) {
+							throw new SystemConfigurationException("Incompatible root node specification: expression for '"+shortName+"' requests '"+
+									localName+"', but previous expressions have requested '"+currentElt.getLocalName()+"'!");
+						}
+						String currentNamespaceURI = currentElt.getNamespaceURI();
+						if (!(currentNamespaceURI == null && namespaceURI == null
+							 || currentNamespaceURI != null && currentNamespaceURI.equals(namespaceURI))) {
+							throw new SystemConfigurationException("Incompatible root namespace specification: expression for '"+shortName+"' requests '"+
+									namespaceURI+"', but previous expressions have requested '"+currentNamespaceURI+"'!");
+						}
+					}
+				} else { // somewhere in the tree
+					// First check if the requested child already exists
+					List<Element> sameNameChildren = XMLTool.getChildrenByLocalNameNS(currentElt, localName, namespaceURI);
+					boolean found = false;
+					if (attName == null) {
+						if (sameNameChildren.size() > 0) {
+							currentElt = sameNameChildren.get(0);
+							found = true;
+						}
+					} else {
+						for (Element c : sameNameChildren) {
+							if (c.hasAttribute(attName)) {
+								if (attValue == null || attValue.equals(c.getAttribute(attName))) {
+									currentElt = c;
+									found = true;
+									break;
+								}
+							}
+						}
+					}
+					if (!found) { // need to create it
+						currentElt = XMLTool.appendChildElement(currentElt, localName, namespaceURI);
+						if (prefix != null) currentElt.setPrefix(prefix);
+						if (attName != null) {
+							currentElt.setAttribute(attName, attValue != null ? attValue : "");
+						}
+					}
+				}
+			} // for all parts except the last one
+			if (currentElt == null)
+				throw new SystemConfigurationException("No elements or no final part created for info '"
+						+shortName+"' from XPath expression '"+expr+"'");
+			String lastPart = parts[parts.length-1].trim();
+			if (lastPart.equals("text()")) { // textual content of currentElt
+				currentElt.setTextContent(value);
+			} else if (lastPart.startsWith("@")) {
+				String attName = lastPart.substring(1);
+				currentElt.setAttribute(attName, value);
+			} else {
+				throw new SystemConfigurationException("Do not know how to assign value for info '"+shortName+"' from last part of xpath expression '"
+						+lastPart+"' -- expected either 'text()' or '@attributeName'");
 			}
 		}
-		return false;
 	}
+
 	
 
 	
@@ -124,27 +325,28 @@ public abstract class StateInfo
 	throws MessageFormatException
 	{
 		Element root = doc.getDocumentElement();
-		if (!root.getTagName().equals(rootName)) {
+		if (!root.getLocalName().equals(rootName)) {
 			throw new MessageFormatException("XML document should have root node '"+
-					rootName+"', but has '"+root.getTagName()+"'!");
+					rootName+"', but has '"+root.getLocalName()+"'!");
 		}
 		if (!XMLTool.isSameNamespace(root.getNamespaceURI(), rootNamespace)) {
 			throw new MessageFormatException("root node should have namespace '"+
 					rootNamespace+"' but has '"+root.getNamespaceURI()+"'!");
 		}
-		NodeList nodes = root.getChildNodes();
-		for (int i=0, max=nodes.getLength(); i<max; i++) {
-			Node n = nodes.item(i);
-			if (!(n.getNodeType() == Node.ELEMENT_NODE)) {
-				continue;
-			}
-			assert n instanceof Element : "Should only see elements here";
-			Element el = (Element) n;
-			// Now see what element it is and make sense of it
-			boolean ok = analyseElement(el);
-			if (!ok) {
-				log.warn("do not know how to analyse element "+el.getTagName()+
-						" in namespace "+el.getNamespaceURI());
+		
+		// Now extract the information from the document using the XPath expressions given in a config file
+		Map<String, XPathExpression> infoNames = infosByType.get(type).getCompiledExpressionMap();
+		for (String shortName : infoNames.keySet()) {
+			XPathExpression xpathExpr = infoNames.get(shortName);
+			try {
+				Object result = xpathExpr.evaluate(doc, XPathConstants.STRING);
+				String resultString = (String) result;
+				if (resultString != null && !resultString.equals("")) {
+					info.put(shortName, resultString);
+					log.debug("Read info: "+shortName+" = "+resultString);
+				}
+			} catch (XPathExpressionException xee) {
+				throw new MessageFormatException("Problem analysing value of '"+shortName+"'", xee);
 			}
 		}
 	}
@@ -165,7 +367,11 @@ public abstract class StateInfo
 	{
 		if (doc == null) {
 			assert info != null : "Both doc and info are null - this shouldn't happen!";
-			createDocumentFromInfo();
+			try {
+				createDocumentFromInfo();
+			} catch (SystemConfigurationException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		assert doc != null : "Couldn't create document";
 		return doc;
@@ -183,5 +389,80 @@ public abstract class StateInfo
 	}
 
 
+	/**
+	 * A helper class that supports us in mapping short names to XPath expressions.
+	 * @author marc
+	 *
+	 */
+	public static class XPathInfoMapper
+	{
+		private NamespaceContext namespaceContext;
+		private Map<String, String> name2exprString;
+		private Map<String, XPathExpression> name2compiledExpression;
+		
+		public XPathInfoMapper(final Map<String, String> prefixes2NamespaceURIs,
+				final Map<String, String> names2XpathExpressions)
+		{
+			this.namespaceContext = new NamespaceContext() {
+			    public String getNamespaceURI(String prefix) {
+			        if (prefix == null) throw new NullPointerException("Null prefix");
+			        else if (prefixes2NamespaceURIs.containsKey(prefix)) return prefixes2NamespaceURIs.get(prefix);
+			        else if ("xml".equals(prefix)) return XMLConstants.XML_NS_URI;
+			        return XMLConstants.NULL_NS_URI;
+			    }
+			    // This method isn't necessary for XPath processing.
+			    public String getPrefix(String uri) {
+			        throw new UnsupportedOperationException();
+			    }
+			    // This method isn't necessary for XPath processing either.
+			    public Iterator<Object> getPrefixes(String uri) {
+			        throw new UnsupportedOperationException();
+			    }
+			};
+			this.name2exprString = Collections.unmodifiableMap(names2XpathExpressions);
+			Map<String, XPathExpression> s2x = new LinkedHashMap<String, XPathExpression>();
+			
+			// Now compile the xpath expressions
+			XPathFactory xpathFact = XPathFactory.newInstance();
+			XPath xpath = xpathFact.newXPath();
+			xpath.setNamespaceContext(namespaceContext);
+			
+			for (String shortName : name2exprString.keySet()) {
+				String xpathExprString = name2exprString.get(shortName);
+				try {
+					XPathExpression xpathExpr = xpath.compile(xpathExprString);
+					s2x.put(shortName, xpathExpr);
+				} catch (XPathExpressionException e) {
+					throw new Error("Cannot compile XPath expression for shortname "+shortName+": '"+xpathExprString+"'", e);
+				}
+			}
+			this.name2compiledExpression = Collections.unmodifiableMap(s2x);
+		}
+		
+		public NamespaceContext getNamespaceContext()
+		{
+			return namespaceContext;
+		}
+		
+		public String getExpression(String shortName)
+		{
+			return name2exprString.get(shortName);
+		}
+		
+		public Map<String, String> getExpressionMap()
+		{
+			return name2exprString;
+		}
+		
+		public XPathExpression getCompiledExpression(String shortName)
+		{
+			return name2compiledExpression.get(shortName);
+		}
+		
+		public Map<String, XPathExpression> getCompiledExpressionMap()
+		{
+			return name2compiledExpression;
+		}
+	}
 
 }

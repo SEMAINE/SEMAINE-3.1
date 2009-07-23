@@ -23,7 +23,8 @@
         	 includes="eu/**/*.class
                     eu/semaine/components/control/*.jpg
                     eu/semaine/components/dummy/example2.fap
-      	            eu/semaine/components/dummy/example3.fap"
+      	            eu/semaine/components/dummy/example3.fap
+                    eu/semaine/datatypes/stateinfo/stateinfo.config"
         	excludes="eu/semaine/components/dialogue/**/*.*
         	          eu/semaine/components/mary/**/*.*
                           eu/semaine/examples/**/*.*">

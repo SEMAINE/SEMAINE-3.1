@@ -13,12 +13,11 @@ import org.w3c.dom.Document;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 
-
 /**
  * @author marc
  *
  */
-public class ContextStateInfo extends StateInfo
+public class SystemStateInfo extends StateInfo
 {
 	public static final String APIVersion = "0.2";
 
@@ -28,23 +27,21 @@ public class ContextStateInfo extends StateInfo
 	 * @throws MessageFormatException
 	 * @throws JMSException
 	 */
-	public ContextStateInfo(Document doc)
+	public SystemStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "ContextStateInfo", APIVersion, SemaineML.E_CONTEXT, SemaineML.namespaceURI, Type.ContextState);
+		super(doc, "SystemStateInfo", APIVersion, SemaineML.E_SETUP, SemaineML.namespaceURI, Type.SystemState);
 	}
 
 	/**
 	 * @param infoItems
 	 * @throws JMSException
 	 */
-	public ContextStateInfo(Map<String, String> infoItems)
+	public SystemStateInfo(Map<String, String> infoItems)
 	throws JMSException
 	{
-		super(infoItems, "ContextStateInfo", APIVersion, Type.ContextState);
+		super(infoItems, "SystemStateInfo", APIVersion, Type.SystemState);
 	}
-
-
 
 
 }

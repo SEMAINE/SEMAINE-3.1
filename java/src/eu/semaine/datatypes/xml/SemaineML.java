@@ -18,6 +18,7 @@ public class SemaineML
     public static final String E_USERSTATE = "user-state";
     public static final String E_AGENTSTATE = "agent-state";
     public static final String E_DIALOGSTATE = "dialog-state";
+    public static final String E_SETUP = "setup";
     public static final String E_FEATURE = "feature";
     public static final String E_EVENT = "event";
     public static final String E_BEHAVIOUR = "behaviour";
