@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -128,16 +129,16 @@ public abstract class StateInfo
 				if (parts.length < 2) {
 					throw new SystemConfigurationException("Expected namespace prefix definition, got '"+line+"'");
 				}
-				String prefix = parts[0];
-				String namespaceURI = parts[1];
+				String prefix = parts[0].trim();
+				String namespaceURI = parts[1].trim();
 				namespacePrefixes.put(prefix, namespaceURI);
 			} else if (readShortNames) {
 				String[] parts = line.split("[ =:]+", 2);
 				if (parts.length < 2) {
 					throw new SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
 				}
-				String shortName = parts[0];
-				String xpathExpr = parts[1];
+				String shortName = parts[0].trim();
+				String xpathExpr = parts[1].trim();
 				shortNames.put(shortName, xpathExpr);
 			}
 		}
@@ -169,12 +170,23 @@ public abstract class StateInfo
 	}
 
 	public StateInfo(Map<String,String> infoItems, String whatState, String apiVersion, Type type)
+	throws IllegalArgumentException
 	{
 		this.stateName = whatState;
 		this.apiVersion = apiVersion;
 		this.type = type;
 		log = JMSLogger.getLog(whatState);
+		// Verify that we can handle these info items:
+		Map<String, String> info2expr = infosByType.get(type).getExpressionMap();
+		for (String key : infoItems.keySet()) {
+			if (!info2expr.containsKey(key)) {
+				throw new IllegalArgumentException("Don't know how to handle info item '"+key+"' -- something seems to be out of sync");
+			}
+			
+		}
 		info = new HashMap<String, String>(infoItems);
+		
+		
 		// we will only create a Document from this if needed, i.e.
 		// in getDocument().
 	}
@@ -249,7 +261,11 @@ public abstract class StateInfo
 				// Now traverse to or create element defined by prefix, localName and namespaceURI
 				if (currentElt == null) { // at top level
 					if (doc == null) { // create a new document
-						doc = XMLTool.newDocument(localName, namespaceURI);
+						try {
+							doc = XMLTool.newDocument(localName, namespaceURI);
+						} catch (DOMException de) {
+							throw new SystemConfigurationException("For info '"+shortName+"', cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'", de);
+						}
 						currentElt = doc.getDocumentElement();
 						currentElt.setPrefix(prefix);
 					} else {
@@ -362,7 +378,38 @@ public abstract class StateInfo
 	{
 		return Collections.unmodifiableMap(info);
 	}
+	
+	/**
+	 * Indicate whether the current info set contains an entry for the named information.
+	 * @param name
+	 * @return
+	 */
+	public boolean hasInfo(String name)
+	{
+		return info.containsKey(name);
+	}
+	
+	/**
+	 * Get the named information, or null if there is no such information.
+	 * @param name
+	 * @return
+	 */
+	public String getInfo(String name)
+	{
+		return info.get(name);
+	}
 
+	public void setInfo(String name, String value)
+	{
+		// Verify that we can handle these info items:
+		Map<String, String> info2expr = infosByType.get(type).getExpressionMap();
+		if (!info2expr.containsKey(name)) {
+			throw new IllegalArgumentException("Don't know how to handle info item '"+name+"' -- something seems to be out of sync");
+		}
+		info.put(name, value);
+		doc = null; // if it was there, it's now out of date
+	}
+	
 	public Document getDocument()
 	{
 		if (doc == null) {

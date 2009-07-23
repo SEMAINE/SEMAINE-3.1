@@ -13,6 +13,7 @@ import javax.jms.JMSException;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
@@ -60,7 +61,7 @@ public class EmotionInterpreter extends Component
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
 		
-		userStateSender = new StateSender("semaine.data.state.user", "UserState", getName());
+		userStateSender = new StateSender("semaine.data.state.user", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
 	}
 	

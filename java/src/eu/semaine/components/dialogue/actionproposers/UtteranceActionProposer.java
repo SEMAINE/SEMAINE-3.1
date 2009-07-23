@@ -161,7 +161,7 @@ public class UtteranceActionProposer extends Component
 		/* Initialize senders */
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
 		senders.add(fmlSender);
-		dialogStateSender = new StateSender("semaine.data.state.dialog", "DialogState", getName());
+		dialogStateSender = new StateSender("semaine.data.state.dialog", StateInfo.Type.DialogState, getName());
 		senders.add(dialogStateSender);
 		contextSender = new XMLSender("semaine.data.state.context", "SemaineML", getName());
 		senders.add(contextSender);

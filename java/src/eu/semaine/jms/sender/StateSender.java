@@ -4,14 +4,12 @@
  */
 package eu.semaine.jms.sender;
 
-import java.io.StringWriter;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.ls.LSOutput;
 
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -39,10 +37,10 @@ public class StateSender extends XMLSender
 	 * @param source the name of the component sending the data.
 	 * @throws NullPointerException if any of the parameters topicName, datatype, or source are null. 
 	 */
-	public StateSender(String topicName, String datatype, String source)
+	public StateSender(String topicName, StateInfo.Type datatype, String source)
 	throws JMSException
 	{
-		super(topicName, datatype, source);
+		super(topicName, datatype.toString(), source);
 	}
 
 	/**

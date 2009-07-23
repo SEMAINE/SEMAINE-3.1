@@ -118,7 +118,7 @@ public class TurnTakingInterpreter extends Component
 		contextReceiver = new XMLReceiver("semaine.data.state.context");
 		receivers.add( contextReceiver );
 		
-		agentStateSender = new StateSender( "semaine.data.state.agent", "AgentState", getName() );
+		agentStateSender = new StateSender( "semaine.data.state.agent", StateInfo.Type.AgentState, getName() );
 		senders.add( agentStateSender );
 	}
 

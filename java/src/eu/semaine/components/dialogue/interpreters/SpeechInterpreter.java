@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.jms.JMSException;
 
 import eu.semaine.components.Component;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -53,7 +54,7 @@ public class SpeechInterpreter extends Component
 		featureReceiver = new FeatureReceiver("semaine.data.analysis.features.voice");
 		receivers.add(featureReceiver);
 		
-		userStateSender = new StateSender("semaine.data.state.user", "UserState", getName());
+		userStateSender = new StateSender("semaine.data.state.user", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
 	}
 	

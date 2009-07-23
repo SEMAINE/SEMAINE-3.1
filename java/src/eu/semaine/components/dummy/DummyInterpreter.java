@@ -96,11 +96,11 @@ public class DummyInterpreter extends Component
 		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add(dialogStateReceiver);
 		
-		userStateSender = new StateSender("semaine.data.state.user", "UserState", getName());
+		userStateSender = new StateSender("semaine.data.state.user", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender); // so it can be started etc
-		agentStateSender = new StateSender("semaine.data.state.agent", "AgentState", getName());
+		agentStateSender = new StateSender("semaine.data.state.agent", StateInfo.Type.AgentState, getName());
 		senders.add(agentStateSender); // so it can be started etc
-		dialogStateSender = new StateSender("semaine.data.state.dialog", "DialogState", getName());
+		dialogStateSender = new StateSender("semaine.data.state.dialog", StateInfo.Type.DialogState, getName());
 		senders.add(dialogStateSender); // so it can be started etc
 
 	}

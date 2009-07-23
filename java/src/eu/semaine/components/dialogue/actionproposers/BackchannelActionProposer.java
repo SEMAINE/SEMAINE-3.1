@@ -71,7 +71,7 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 		
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
 		senders.add(fmlSender);
-		agentStateSender = new StateSender( "semaine.data.state.agent", "AgentState", getName() );
+		agentStateSender = new StateSender( "semaine.data.state.agent", StateInfo.Type.AgentState, getName() );
 		senders.add( agentStateSender );
 	}
 	

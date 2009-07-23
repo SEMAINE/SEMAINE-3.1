@@ -31,6 +31,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.datatypes.xml.FML;
@@ -99,7 +100,7 @@ public class TestGui extends Component
 	public TestGui() throws JMSException
 	{
 		super("GUI");
-		userStateSender = new StateSender("semaine.data.state.user", "UserState", getName());
+		userStateSender = new StateSender("semaine.data.state.user", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
 		emmaSender = new EmmaSender("semaine.data.state.user.emma", "GUI");
 		senders.add(emmaSender); // so it can be started etc
