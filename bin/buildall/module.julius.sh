@@ -43,11 +43,13 @@ function func_build_julius {
 
     cat libsent/include/sent/config.h | sed 's/.define HAVE_ESD_H 1$//' > libsent/include/sent/config.h2
     cat libsent/include/sent/config.h2 | sed 's/.define HAVE_ZLIB 1$//' > libsent/include/sent/config.h3
-    echo "#define ZCAT \"gzip -d -c\"" >> libsent/include/sent/config.h3
+    cat libsent/include/sent/config.h3 | sed 's/.define HAVE_LIBSNDFILE 1$//' > libsent/include/sent/config.h4
+    echo "#define ZCAT \"gzip -d -c\"" >> libsent/include/sent/config.h4
 
     mv libsent/include/sent/config.h libsent/include/sent/config.h.bak
     rm libsent/include/sent/config.h2
-    mv libsent/include/sent/config.h3 libsent/include/sent/config.h
+    rm libsent/include/sent/config.h3
+    mv libsent/include/sent/config.h4 libsent/include/sent/config.h
 
     if test "x$?" != "x0" ; then
       return 1;
