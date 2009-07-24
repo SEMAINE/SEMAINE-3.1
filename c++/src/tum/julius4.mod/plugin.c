@@ -305,6 +305,7 @@ plugin_find_optname(char *optfuncname, char *str)
   PLUGIN_ENTRY *p;
   FUNC_VOID func;
 
+  if (global_plugin_list == NULL) return -1;
   if ((id = plugin_get_id(optfuncname)) < 0) return -1;
 
   for(p=global_plugin_list[id];p;p=p->next) {
