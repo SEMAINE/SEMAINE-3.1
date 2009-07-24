@@ -888,7 +888,8 @@ print_engine_info(Recog *recog)
 
   jlog("----------------------- System Information end -----------------------\n");
 
-#ifdef USE_MIC
+//#ifdef USE_MIC
+#ifdef SHOWCMNINFO
   if (jconf->decodeopt.realtime_flag) {
     boolean flag;
     flag = FALSE;
