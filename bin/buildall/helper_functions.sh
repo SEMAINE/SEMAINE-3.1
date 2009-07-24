@@ -265,7 +265,17 @@ function createRunScript {
     shift 1
     runpath=$rundir
   fi
-  local scriptname="start_component_${builds_names[$build_nr]}"
+  prefix="./";
+  if test "x$1" = "xprefix" ; then
+    shift 1
+    prefix=$1;
+    shift 1
+  fi
+  scriptname="start_component_${builds_names[$build_nr]}"
+  if test "x$1" = "xdebug" ; then
+    shift 1
+    scriptname="start_component_${builds_names[$build_nr]}.debug";
+  fi
   if test ! -d "$SEMAINE_ROOT/bin/run_components" ; then
     mkdir $SEMAINE_ROOT/bin/run_components
   fi 
@@ -277,7 +287,7 @@ function createRunScript {
   echo "if [ -n \"\$CMS_URL\" ] ; then echo \"Connecting to ActiveMQ server at \$CMS_URL\"" >> $scriptname
   echo "else echo \"Connecting to ActiveMQ server at tcp://localhost:61616\"" >> $scriptname
   echo "fi" >> $scriptname
-  echo "./$runcmd $runpath \$*" >> $scriptname
+  echo "$prefix$runcmd $runpath \$*" >> $scriptname
   echo "echo \"COMPONENT START SCRIPT: component \"${builds_names[$build_nr]}\" exited with status \$?\"" >> $scriptname
   chmod +x $scriptname
 }
