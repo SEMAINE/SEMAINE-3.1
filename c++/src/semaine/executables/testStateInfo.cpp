@@ -4,6 +4,10 @@
 #include <map>
 
 #include <semaine/datatypes/stateinfo/AgentStateInfo.h>
+#include <semaine/datatypes/stateinfo/UserStateInfo.h>
+#include <semaine/datatypes/stateinfo/DialogStateInfo.h>
+#include <semaine/datatypes/stateinfo/ContextStateInfo.h>
+#include <semaine/datatypes/stateinfo/SystemStateInfo.h>
 
 int main () {
 	try {

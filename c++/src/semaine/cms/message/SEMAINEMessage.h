@@ -35,14 +35,14 @@ namespace message {
  * A representation of a message as used in SEMAINE code.
  * It is a higher-level access method for JMS messages,
  * providing interpretations of information accessible in the message headers.
- * 
+ *
  * This base class provides access to the Message body only as plain text
  * (for text messages). Subclasses should:
  * <ul>
  * <li>add any specific message format verification code in their constructor;</li>
  * <li>provide their own API for accessing the message content.</li>
  * </ul>
- * 
+ *
  * @author marc
  *
  */
@@ -69,17 +69,17 @@ public:
 	 * The name of the property used for the period length, in milliseconds (for periodic messages).
 	 */
 	static const std::string PERIOD;
-	
+
 		/**
 	 * Create a SEMAINE specific abstraction from the given message.
 	 * @param message a message containing SEMAINE-specific properties.
 	 * @throws NullPointerException if message is null.
-	 * @throws MessageFormatException if the message does not have the proper format 
+	 * @throws MessageFormatException if the message does not have the proper format
 	 */
 	SEMAINEMessage(const Message * message) throw(MessageFormatException);
-	
+
 	virtual ~SEMAINEMessage();
-	
+
 	/**
 	 * Get the user time that the message refers to, in milliseconds since 1970.
 	 * @return the user time
@@ -89,7 +89,7 @@ public:
 	{
 		return message->getLongProperty(USERTIME);
 	}
-	
+
 	/**
 	 * Get the name of the data type received.
 	 * @return a string containing the name of the data type
@@ -109,7 +109,7 @@ public:
 	{
 		return message->getStringProperty(SOURCE);
 	}
-	
+
 	/**
 	 * Determine whether the message is periodic. This is determined
 	 * by the presence of the <code>period</code> property.
@@ -121,7 +121,7 @@ public:
 	{
 		return message->propertyExists(PERIOD);
 	}
-	
+
 	/**
 	 * Determine whether the message is event-based. This is determined
 	 * by the presence of the <code>event</code> property.
@@ -133,7 +133,7 @@ public:
 	{
 		return message->propertyExists(EVENT);
 	}
-	
+
 	/**
 	 * For event-based messages, determine the event type.
 	 * @return an Event object representing the event type.
@@ -143,7 +143,7 @@ public:
 	 */
 	std::string getEventType() throw (CMSException, MessageFormatException)
 	{
-		if (!message->propertyExists(EVENT)) 
+		if (!message->propertyExists(EVENT))
 			throw MessageFormatException("Message is not event-based, cannot provide event type");
 		std::string eventString = message->getStringProperty(EVENT);
 		return eventString;
@@ -179,7 +179,7 @@ public:
 	{
 		return dynamic_cast<const BytesMessage*>(message) != NULL;
 	}
-	
+
 	/**
 	 * For text messages, provide access to the text sent.
 	 * @return the text sent in the body of the message.
@@ -194,7 +194,7 @@ public:
 		}
 		return tm->getText();
 	}
-	
+
 	std::string getTopicName() throw(CMSException)
 	{
 		const Destination * dest = message->getCMSDestination();
@@ -203,7 +203,7 @@ public:
 		if (topic == NULL) return std::string("unknown");
 		return topic->getTopicName();
 	}
-	
+
 	/**
 	 * Provide access to the low-level message encapsulated in this object.
 	 * @return the low-level message object.
@@ -213,9 +213,9 @@ public:
 		return message;
 	}
 
-	
-	
-			
+
+
+
 protected:
 	const Message * message;
 

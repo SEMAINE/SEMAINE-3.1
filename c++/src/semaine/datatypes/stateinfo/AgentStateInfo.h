@@ -3,10 +3,11 @@
  *
  *  Created on: 27.07.2009
  *      Author: marc
+ *  Copyright 2009 DFKI GmbH. All rights reserved.
  */
 
-#ifndef AGENTSTATEINFO_H_
-#define AGENTSTATEINFO_H_
+#ifndef SEMAINE_DATATYPES_STATEINFO_AGENTSTATEINFO_H
+#define SEMAINE_DATATYPES_STATEINFO_AGENTSTATEINFO_H
 
 #include <semaine/datatypes/stateinfo/StateInfo.h>
 #include <semaine/datatypes/xml/SemaineML.h>
@@ -19,7 +20,6 @@ namespace stateinfo {
 
 class AgentStateInfo: public semaine::datatypes::stateinfo::StateInfo {
 public:
-	static const std::string APIVersion;
 	AgentStateInfo(XERCES_CPP_NAMESPACE::DOMDocument * doc)
 	throw(semaine::cms::exceptions::MessageFormatException)
 	: semaine::datatypes::stateinfo::StateInfo(doc, "AgentStateInfo",
@@ -43,4 +43,4 @@ public:
 
 }
 
-#endif /* AGENTSTATEINFO_H_ */
+#endif /* SEMAINE_DATATYPES_STATEINFO_AGENTSTATEINFO_H */

@@ -17,6 +17,7 @@ const std::string SemaineML::version = "0.0.3";
 const std::string SemaineML::namespaceURI = "http://www.semaine-project.eu/semaineml";
 
 	// Elements
+const std::string SemaineML::E_SETUP = "setup";
 const std::string SemaineML::E_CONTEXT = "situational-context";
 const std::string SemaineML::E_USERSTATE = "user-state";
 const std::string SemaineML::E_AGENTSTATE = "agent-state";

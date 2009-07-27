@@ -12,7 +12,7 @@
 
 using namespace semaine::cms::receiver;
 
-Receiver::Receiver(const std::string & topicName) 
+Receiver::Receiver(const std::string & topicName)
 throw (CMSException) :
 	IOBase(topicName),
 	listener(NULL),
@@ -37,7 +37,7 @@ Receiver::~Receiver()
 {
 	delete consumer;
 	if (message != NULL) delete message;
-	
+
 }
 
 

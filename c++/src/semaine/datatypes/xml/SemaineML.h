@@ -23,6 +23,7 @@ public:
 	static const std::string namespaceURI;
 
 	// Elements
+	static const std::string E_SETUP;
 	static const std::string E_CONTEXT;
 	static const std::string E_USERSTATE;
 	static const std::string E_AGENTSTATE;

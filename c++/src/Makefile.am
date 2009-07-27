@@ -7,6 +7,7 @@ semaine_api_sources_cpp = \
 	semaine/cms/message/SEMAINEMessage.cpp \
 	semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/message/SEMAINEXMLMessage.cpp \
+	semaine/cms/message/SEMAINEStateMessage.cpp \
 	semaine/cms/message/SEMAINEBytesMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
 	semaine/cms/sender/Sender.cpp \
@@ -15,6 +16,7 @@ semaine_api_sources_cpp = \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp \
 	semaine/cms/sender/XMLSender.cpp \
+	semaine/cms/sender/StateSender.cpp \
 	semaine/cms/sender/BytesSender.cpp \
 	semaine/datatypes/xml/EMMA.cpp \
 	semaine/datatypes/xml/EmotionML.cpp \
@@ -58,7 +60,9 @@ semaine_api_sources_h = \
 	semaine/cms/receiver/FMLReceiver.h \
 	semaine/cms/receiver/BMLReceiver.h \
 	semaine/cms/message/SEMAINEXMLMessage.h \
+	semaine/cms/message/SEMAINEStateMessage.h \
 	semaine/cms/sender/XMLSender.h \
+	semaine/cms/sender/StateSender.h \
 	semaine/cms/sender/FMLSender.h \
 	semaine/cms/sender/BMLSender.h \
 	semaine/cms/sender/EmmaSender.h \
@@ -71,6 +75,10 @@ semaine_api_sources_h = \
 	semaine/datatypes/stateinfo/NamespaceContext.h \
 	semaine/datatypes/stateinfo/XPathInfoMapper.h \
 	semaine/datatypes/stateinfo/StateInfo.h \
+	semaine/datatypes/stateinfo/UserStateInfo.h \
+	semaine/datatypes/stateinfo/DialogStateInfo.h \
+	semaine/datatypes/stateinfo/ContextStateInfo.h \
+	semaine/datatypes/stateinfo/SystemStateInfo.h \
 	semaine/datatypes/stateinfo/AgentStateInfo.h
 
 
@@ -106,6 +114,6 @@ dummyfml2bml_SOURCES = semaine/executables/dummyfml2bml.cpp \
 dummyfml2bml_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 dummyfml2bml_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
 
-teststateinfo_SOURCES = semaine/executables/testStateInfo.cpp
+teststateinfo_SOURCES = semaine/executables/testStateInfo.cpp semaine/cms/sender/StateSender.cpp semaine/cms/receiver/StateReceiver.cpp
 teststateinfo_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 teststateinfo_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
