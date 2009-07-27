@@ -50,6 +50,8 @@ public abstract class StateInfo
 	
 	/////////////////////////////// Static stuff /////////////////////////////////
 	
+	public static final String APIVersion = "0.2";
+	
 	public static final Map<Type, XPathInfoMapper> infosByType = getInfosByType();
 	
 	private static Map<Type, XPathInfoMapper> getInfosByType()
@@ -154,26 +156,23 @@ public abstract class StateInfo
 	protected Document doc;
 	protected JMSLogger log;
 	protected String stateName;
-	protected String apiVersion;
 	protected Type type;
 
-	protected StateInfo(Document doc, String whatState, String apiVersion, String rootName, String rootNamespace, Type type)
+	protected StateInfo(Document doc, String whatState, String rootName, String rootNamespace, Type type)
 	throws MessageFormatException
 	{
 		this.doc = doc;
 		this.stateName = whatState;
-		this.apiVersion = apiVersion;
 		this.type = type;
 		log = JMSLogger.getLog(whatState);
 		info = new HashMap<String, String>();
 		analyseDocument(rootName, rootNamespace);
 	}
 
-	public StateInfo(Map<String,String> infoItems, String whatState, String apiVersion, Type type)
+	public StateInfo(Map<String,String> infoItems, String whatState, Type type)
 	throws IllegalArgumentException
 	{
 		this.stateName = whatState;
-		this.apiVersion = apiVersion;
 		this.type = type;
 		log = JMSLogger.getLog(whatState);
 		// Verify that we can handle these info items:
@@ -192,7 +191,7 @@ public abstract class StateInfo
 	}
 	
 	/**
-	 * Get the type of state info of this object: AgentState, DialogState, UserState or ContextState.
+	 * Get the type of state info of this object: AgentState, DialogState, UserState, ContextState, or SystemState.
 	 * @return
 	 */
 	public Type getType()
@@ -374,7 +373,7 @@ public abstract class StateInfo
 	 * Values for information items not contained in the message will be null. 
 	 * @return a map with string keys and string values.
 	 */
-	public Map<String, String> getInfo()
+	public Map<String, String> getInfos()
 	{
 		return Collections.unmodifiableMap(info);
 	}
@@ -432,7 +431,7 @@ public abstract class StateInfo
 
 	public String getAPIVersion()
 	{
-		return apiVersion;
+		return APIVersion;
 	}
 
 
@@ -491,6 +490,12 @@ public abstract class StateInfo
 			return namespaceContext;
 		}
 		
+		/**
+		 * Get the XPath expression for the given name,
+		 * or null if there is no such entry. 
+		 * @param shortName
+		 * @return
+		 */
 		public String getExpression(String shortName)
 		{
 			return name2exprString.get(shortName);

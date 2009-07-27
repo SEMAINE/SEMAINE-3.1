@@ -93,7 +93,7 @@ public class StateReceiver extends XMLReceiver
 	{
 		assert m instanceof SEMAINEStateMessage;
 		SEMAINEStateMessage as = (SEMAINEStateMessage) m;
-		Map<String, String> info = as.getState().getInfo();
+		Map<String, String> info = as.getState().getInfos();
 		// Two conditions for adding the entry to our currentBestGuess:
 		// 1. we don't have this key yet (i.e., first message)
 		// 2. the value is not null

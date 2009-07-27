@@ -9,12 +9,8 @@ import java.util.Map;
 import javax.jms.JMSException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
-import eu.semaine.util.XMLTool;
 
 /**
  * @author marc
@@ -22,8 +18,6 @@ import eu.semaine.util.XMLTool;
  */
 public class AgentStateInfo extends StateInfo
 {
-	public static final String APIVersion = "0.2";
-
 
 	/**
 	 * @param doc
@@ -33,7 +27,7 @@ public class AgentStateInfo extends StateInfo
 	public AgentStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "AgentStateInfo", APIVersion, SemaineML.E_AGENTSTATE, SemaineML.namespaceURI, Type.AgentState);
+		super(doc, "AgentStateInfo", SemaineML.E_AGENTSTATE, SemaineML.namespaceURI, Type.AgentState);
 	}
 
 	/**
@@ -43,7 +37,7 @@ public class AgentStateInfo extends StateInfo
 	public AgentStateInfo(Map<String, String> infoItems)
 	throws JMSException
 	{
-		super(infoItems, "AgentStateInfo", APIVersion, Type.AgentState);
+		super(infoItems, "AgentStateInfo", Type.AgentState);
 	}
 
 

@@ -89,7 +89,7 @@ public class DummyAnalyser extends Component
 			if (sm.getState().getType() != StateInfo.Type.DialogState) {
 				throw new MessageFormatException("expected state info of type DialogState, but got "+sm.getState().getType().toString());
 			}
-			String speaker = sm.getState().getInfo().get("speaker");
+			String speaker = sm.getState().getInfos().get("speaker");
 			if (speaker != null) {
 				if (speaker.equals("user")) 
 					userIsSpeaking = true;

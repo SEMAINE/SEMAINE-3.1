@@ -28,7 +28,6 @@ import eu.semaine.util.XMLTool;
  */
 public class DialogStateInfo extends StateInfo
 {
-	public static final String APIVersion = "0.2";
 
 	private SortedSet<DialogAct> dialogHistory = new TreeSet<DialogAct>();
 
@@ -41,7 +40,7 @@ public class DialogStateInfo extends StateInfo
 	public DialogStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "DialogStateInfo", APIVersion, SemaineML.E_DIALOGSTATE, SemaineML.namespaceURI, Type.DialogState);
+		super(doc, "DialogStateInfo", SemaineML.E_DIALOGSTATE, SemaineML.namespaceURI, Type.DialogState);
 	}
 
 	/**
@@ -53,7 +52,7 @@ public class DialogStateInfo extends StateInfo
 	public DialogStateInfo(Map<String, String> infoItems, Collection<DialogAct> dialogActs)
 	throws JMSException
 	{
-		super(infoItems, "DialogStateInfo", APIVersion, Type.DialogState);
+		super(infoItems, "DialogStateInfo", Type.DialogState);
 		if (dialogActs != null) {
 			dialogHistory.addAll(dialogActs);
 		}

@@ -20,8 +20,6 @@ import eu.semaine.exceptions.MessageFormatException;
  */
 public class ContextStateInfo extends StateInfo
 {
-	public static final String APIVersion = "0.2";
-
 
 	/**
 	 * @param doc
@@ -31,7 +29,7 @@ public class ContextStateInfo extends StateInfo
 	public ContextStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "ContextStateInfo", APIVersion, SemaineML.E_CONTEXT, SemaineML.namespaceURI, Type.ContextState);
+		super(doc, "ContextStateInfo", SemaineML.E_CONTEXT, SemaineML.namespaceURI, Type.ContextState);
 	}
 
 	/**
@@ -41,7 +39,7 @@ public class ContextStateInfo extends StateInfo
 	public ContextStateInfo(Map<String, String> infoItems)
 	throws JMSException
 	{
-		super(infoItems, "ContextStateInfo", APIVersion, Type.ContextState);
+		super(infoItems, "ContextStateInfo", Type.ContextState);
 	}
 
 

@@ -545,7 +545,7 @@ public class UtteranceActionProposer extends Component
 			
 			StateInfo agentInfo = am.getState();
 			if (agentInfo.getType() == StateInfo.Type.AgentState) {
-				Map<String,String> agentInfoMap = agentInfo.getInfo();
+				Map<String,String> agentInfoMap = agentInfo.getInfos();
 				
 				String intention = agentInfoMap.get("intention");
 				if( intention != null && intention.equals("speaking") ) {
@@ -801,7 +801,7 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		Map<String,String> userInfoMap = userInfo.getInfo();
+		Map<String,String> userInfoMap = userInfo.getInfos();
 
 		if( userInfoMap.get("behaviour").equals("speaking") ) {
 			if( userSpeakingState != SPEAKING ) {
@@ -822,7 +822,7 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void addDetectedEmotions(StateInfo userInfo)
 	{
-		Map<String,String> dialogInfoMap = userInfo.getInfo();
+		Map<String,String> dialogInfoMap = userInfo.getInfos();
 		
 		if( dialogInfoMap.get("behaviour").equals("valence") ) {
 			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );

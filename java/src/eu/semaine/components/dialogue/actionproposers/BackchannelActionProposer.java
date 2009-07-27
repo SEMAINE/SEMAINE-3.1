@@ -118,7 +118,7 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	 */
 	public void setAgentSpeakingState(StateInfo userInfo)
 	{
-		Map<String,String> userInfoMap = userInfo.getInfo();
+		Map<String,String> userInfoMap = userInfo.getInfos();
 
 		if( userInfoMap.get("speaker").equals("agent") ) {
 			agentSpeakingState = SPEAKING;
@@ -138,7 +138,7 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	 */
 	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		Map<String,String> userInfoMap = userInfo.getInfo();
+		Map<String,String> userInfoMap = userInfo.getInfos();
 
 		if( userInfoMap.get("behaviour").equals("speaking") ) {
 			if( userSpeakingState != SPEAKING ) {
@@ -160,7 +160,7 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	 */
 	public void setCharacter(StateInfo agentInfo)
 	{
-		Map<String,String> agentInfoMap = agentInfo.getInfo();
+		Map<String,String> agentInfoMap = agentInfo.getInfos();
 		
 		String newChar = agentInfoMap.get( "character" );
 		if( newChar != null ) {

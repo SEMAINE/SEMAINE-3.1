@@ -212,7 +212,7 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void setAgentSpeakingState(StateInfo dialogInfo)
 	{
-		Map<String,String> userInfoMap = dialogInfo.getInfo();
+		Map<String,String> userInfoMap = dialogInfo.getInfos();
 
 		if( userInfoMap.get("speaker").equals("agent") ) {
 			backchannel_given = false;
@@ -235,7 +235,7 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		Map<String,String> userInfoMap = userInfo.getInfo();
+		Map<String,String> userInfoMap = userInfo.getInfos();
 
 		if( userInfoMap.get("behaviour").equals("speaking") ) {
 			if( userSpeakingState != SPEAKING ) {
@@ -258,7 +258,7 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void setCharacter(StateInfo agentInfo)
 	{
-		Map<String,String> agentInfoMap = agentInfo.getInfo();
+		Map<String,String> agentInfoMap = agentInfo.getInfos();
 		
 		String newChar = agentInfoMap.get( "character" );
 		if( newChar != null ) {
@@ -280,7 +280,7 @@ public class TurnTakingInterpreter extends Component
 	
 	public void processBackchannel(StateInfo agentInfo)
 	{
-		Map<String,String> agentInfoMap = agentInfo.getInfo();
+		Map<String,String> agentInfoMap = agentInfo.getInfos();
 		
 		String intention = agentInfoMap.get( "intention" );
 		if( intention != null && intention.equals("backchannel") ) {
@@ -294,7 +294,7 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void addDetectedEmotions(StateInfo userInfo)
 	{
-		Map<String,String> dialogInfoMap = userInfo.getInfo();
+		Map<String,String> dialogInfoMap = userInfo.getInfos();
 		
 		if( dialogInfoMap.get("behaviour").equals("valence") ) {
 			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );

@@ -193,7 +193,7 @@ public class UtteranceInterpreter extends Component
 		if( m instanceof SEMAINEStateMessage ) {
 			StateInfo dialogInfo = ((SEMAINEStateMessage)m).getState();
 			if (dialogInfo.getType() == StateInfo.Type.DialogState) {
-				Map<String,String> dialogInfoMap = dialogInfo.getInfo();
+				Map<String,String> dialogInfoMap = dialogInfo.getInfos();
 				
 				if( dialogInfoMap.get("speaker").equals("agent") ) {
 					processUtterance();

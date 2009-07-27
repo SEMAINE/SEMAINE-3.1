@@ -19,8 +19,6 @@ import eu.semaine.exceptions.MessageFormatException;
  */
 public class SystemStateInfo extends StateInfo
 {
-	public static final String APIVersion = "0.2";
-
 
 	/**
 	 * @param doc
@@ -30,7 +28,7 @@ public class SystemStateInfo extends StateInfo
 	public SystemStateInfo(Document doc)
 	throws MessageFormatException
 	{
-		super(doc, "SystemStateInfo", APIVersion, SemaineML.E_SETUP, SemaineML.namespaceURI, Type.SystemState);
+		super(doc, "SystemStateInfo", SemaineML.E_SETUP, SemaineML.namespaceURI, Type.SystemState);
 	}
 
 	/**
@@ -40,7 +38,7 @@ public class SystemStateInfo extends StateInfo
 	public SystemStateInfo(Map<String, String> infoItems)
 	throws JMSException
 	{
-		super(infoItems, "SystemStateInfo", APIVersion, Type.SystemState);
+		super(infoItems, "SystemStateInfo", Type.SystemState);
 	}
 
 
