@@ -21,7 +21,11 @@ semaine_api_sources_cpp = \
 	semaine/datatypes/xml/SemaineML.cpp \
 	semaine/datatypes/xml/FML.cpp \
 	semaine/datatypes/xml/BML.cpp \
-	semaine/datatypes/xml/SSML.cpp
+	semaine/datatypes/xml/SSML.cpp \
+	semaine/datatypes/stateinfo/NamespaceContext.cpp \
+	semaine/datatypes/stateinfo/XPathInfoMapper.cpp \
+	semaine/datatypes/stateinfo/StateInfo.cpp
+
 
 
 
@@ -48,6 +52,7 @@ semaine_api_sources_h = \
 	semaine/components/meta/MetaMessenger.h \
 	semaine/config.h \
 	semaine/util/XMLTool.h \
+	semaine/util/ParseErrorHandler.h \
 	semaine/system/ComponentRunner.h \
 	semaine/cms/receiver/XMLReceiver.h \
 	semaine/cms/receiver/FMLReceiver.h \
@@ -62,7 +67,11 @@ semaine_api_sources_h = \
 	semaine/datatypes/xml/SemaineML.h \
 	semaine/datatypes/xml/FML.h \
 	semaine/datatypes/xml/BML.h \
-	semaine/datatypes/xml/SSML.h
+	semaine/datatypes/xml/SSML.h \
+	semaine/datatypes/stateinfo/NamespaceContext.h \
+	semaine/datatypes/stateinfo/XPathInfoMapper.h \
+	semaine/datatypes/stateinfo/StateInfo.h \
+	semaine/datatypes/stateinfo/AgentStateInfo.h
 
 
 
@@ -71,7 +80,7 @@ libsemaineapi_la_SOURCES = $(semaine_api_sources_cpp) $(semaine_api_sources_h)
 libsemaineapi_la_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 include_HEADERS = $(semaine_api_sources_h)
 
-bin_PROGRAMS = basictests jimandjohn dummyfeatextr dummyanalyser dummyfml2bml
+bin_PROGRAMS = basictests jimandjohn dummyfeatextr dummyanalyser dummyfml2bml teststateinfo
 
 basictests_SOURCES = semaine/executables/basictests.cpp
 basictests_CXXFLAGS = $(SEMAINE_CXXFLAGS)
@@ -96,3 +105,7 @@ dummyfml2bml_SOURCES = semaine/executables/dummyfml2bml.cpp \
 	semaine/components/dummy/DummyFML2BML.cpp
 dummyfml2bml_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 dummyfml2bml_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
+
+teststateinfo_SOURCES = semaine/executables/testStateInfo.cpp
+teststateinfo_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+teststateinfo_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)

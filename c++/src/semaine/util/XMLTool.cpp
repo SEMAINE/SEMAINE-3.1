@@ -9,6 +9,7 @@
 
 #include "XMLTool.h"
 #include <typeinfo>
+#include <xercesc/framework/LocalFileInputSource.hpp>
 
 using namespace XERCES_CPP_NAMESPACE;
 
@@ -17,6 +18,7 @@ namespace semaine {
 namespace util {
 
 XercesDOMParser * XMLTool::parser;
+ParseErrorHandler * errorHandler;
 DOMImplementationLS * XMLTool::impl;
 
 void XMLTool::startupXMLTools()
@@ -30,13 +32,16 @@ throw (SystemConfigurationException)
 	DOMImplementation * anImpl = DOMImplementationRegistry::getDOMImplementation(tempStr);
 	impl = dynamic_cast<DOMImplementationLS *>(anImpl);
 	if (impl == NULL) {
-		throw new SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*anImpl).name());
+		throw SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*anImpl).name());
 	}
+	errorHandler = new ParseErrorHandler();
+	parser->setErrorHandler(errorHandler);
 }
 
 void XMLTool::shutdownXMLTools()
 {
 	delete parser;
+	delete errorHandler;
 	XMLPlatformUtils::Terminate();
 }
 
@@ -52,13 +57,24 @@ DOMDocument * XMLTool::parse(const std::string & xmlAsText)
 {
 		//std::cerr << "Message text: " << std::endl << xmlAsText << std::endl;
 		const char * msgTextC = xmlAsText.c_str();
-		MemBufInputSource* memIS = new MemBufInputSource((const XMLByte *)msgTextC, strlen(msgTextC), "test", false);
-        parser->parse(*memIS);
+		MemBufInputSource memIS((const XMLByte *)msgTextC, strlen(msgTextC), "test", false);
+        parser->parse(memIS);
 		DOMDocument * document = parser->getDocument();
 		return document;
-
-
 }
+
+
+DOMDocument * XMLTool::parseFile(const std::string & filename)
+{
+	XMLCh * xmlFilename = XMLString::transcode(filename.c_str());
+	LocalFileInputSource lfis(xmlFilename);
+	XMLString::release(&xmlFilename);
+	parser->parse(lfis);
+	DOMDocument * document = parser->getDocument();
+	return document;
+}
+
+
 
 DOMDocument * XMLTool::newDocument(const std::string & rootTagname, const std::string & aNamespace)
 {
@@ -139,6 +155,13 @@ const std::string XMLTool::getTextContent(DOMNode * node)
 	return transcode(node->getTextContent());
 }
 
+void XMLTool::setTextContent(DOMNode * node, const std::string & text)
+{
+	XMLCh * xmlText = XMLString::transcode(text.c_str());
+	node->setTextContent(xmlText);
+	XMLString::release(&xmlText);
+}
+
 
 DOMElement * XMLTool::getChildElementByTagNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
 {
@@ -160,6 +183,26 @@ DOMElement * XMLTool::getChildElementByTagNameNS(DOMNode * node, const std::stri
 	return e;
 }
 
+DOMElement * XMLTool::getChildElementByLocalNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
+{
+	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
+	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
+	DOMNodeList * nl = node->getChildNodes();
+	DOMElement * e = NULL;
+	for (int i=0, max=nl->getLength(); i<max; i++) {
+		DOMNode * n = nl->item(i);
+		if (n->getNodeType() == DOMNode::ELEMENT_NODE
+		  && XMLString::equals(n->getLocalName(), xmlChildName)
+		  && XMLString::equals(n->getNamespaceURI(), xmlNamespaceURI)) {
+			e = (DOMElement *) n;
+			break;
+		}
+	}
+	XMLString::release(&xmlChildName);
+	XMLString::release(&xmlNamespaceURI);
+	return e;
+}
+
 DOMElement * XMLTool::needChildElementByTagNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
 throw(MessageFormatException)
 {
@@ -168,6 +211,20 @@ throw(MessageFormatException)
 		const std::string nodeNamespace = getNamespaceURI(node);
 		bool sameNamespace = nodeNamespace == childNamespace;
 		throw MessageFormatException("Node '"+getNodeName(node)+"' in namespace '"+
+					nodeNamespace+" needs to have a child '"+childName+"' in "+
+					(sameNamespace ? "the same namespace" : "namespace '"+childNamespace+"'"));
+	}
+	return e;
+}
+
+DOMElement * XMLTool::needChildElementByLocalNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
+throw(MessageFormatException)
+{
+	DOMElement * e = getChildElementByLocalNameNS(node, childName, childNamespace);
+	if (e == NULL) {
+		const std::string nodeNamespace = getNamespaceURI(node);
+		bool sameNamespace = nodeNamespace == childNamespace;
+		throw MessageFormatException("Node '"+getLocalName(e)+"' in namespace '"+
 					nodeNamespace+" needs to have a child '"+childName+"' in "+
 					(sameNamespace ? "the same namespace" : "namespace '"+childNamespace+"'"));
 	}
@@ -194,6 +251,25 @@ throw(MessageFormatException)
 	return children;
 }
 
+std::list<DOMElement *> * XMLTool::getChildrenByLocalNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
+throw(MessageFormatException)
+{
+	std::list<DOMElement *> * children = new std::list<DOMElement *>();
+	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
+	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
+	DOMNodeList * nl = node->getChildNodes();
+	for (int i=0, max=nl->getLength(); i<max; i++) {
+		DOMNode * n = nl->item(i);
+		if (n->getNodeType() == DOMNode::ELEMENT_NODE
+		  && XMLString::equals(n->getLocalName(), xmlChildName)
+		  && XMLString::equals(n->getNamespaceURI(), xmlNamespaceURI)) {
+			children->push_back((DOMElement *)n);
+		}
+	}
+	XMLString::release(&xmlChildName);
+	XMLString::release(&xmlNamespaceURI);
+	return children;
+}
 
 const std::string XMLTool::getNamespaceURI(DOMNode * node)
 {
@@ -210,6 +286,30 @@ const std::string XMLTool::getTagName(DOMElement * e)
 	return transcode(e->getTagName());
 }
 
+const std::string XMLTool::getLocalName(DOMElement * e)
+{
+	return transcode(e->getLocalName());
+}
+
+const std::string XMLTool::getPrefix(DOMElement * e)
+{
+	return transcode(e->getPrefix());
+}
+
+void XMLTool::setPrefix(DOMElement * e, const std::string & prefix)
+{
+	XMLCh * pref = XMLString::transcode(prefix.c_str());
+	e->setPrefix(pref);
+	XMLString::release(&pref);
+}
+
+bool XMLTool::hasAttribute(DOMElement * e, const std::string & attributeName)
+{
+	XMLCh * xmlAttributeName = XMLString::transcode(attributeName.c_str());
+	bool result = e->hasAttribute(xmlAttributeName);
+	XMLString::release(&xmlAttributeName);
+	return result;
+}
 
 const std::string XMLTool::getAttribute(DOMElement * e, const std::string & attributeName)
 {

@@ -23,7 +23,7 @@
 
 
 #include <string>
-
+#include <stdlib.h>
 #include <cassert>
 #include <stdlib.h>
 
@@ -34,11 +34,18 @@ inline std::string _determine_CMS_URL()
 	return std::string(url);
 }
 
+inline std::string _determine_CONFIG_STATEINFO()
+{
+	const char * conf = getenv("CONFIG_STATEINFO");
+	if (conf == NULL) conf = "stateinfo.config";
+	return std::string(conf);
+}
+
 const std::string DEFAULT_CMS_URL = _determine_CMS_URL();
 const std::string DEFAULT_CMS_USER = "";
 const std::string DEFAULT_CMS_PASSWORD = "";
 
-
+const std::string CONFIG_STATEINFO = _determine_CONFIG_STATEINFO();
 
 
 

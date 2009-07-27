@@ -31,11 +31,21 @@
   #include <iostream.h>
 #endif
 
+#include <semaine/util/ParseErrorHandler.h>
 
 using namespace semaine::cms::exceptions;
 
 namespace semaine {
 namespace util {
+
+/**
+ * Useful for building e.g. a map with XMLCh* keys.
+ */
+struct XMLStringCmp {
+  bool operator()( const XMLCh* s1, const XMLCh* s2 ) const {
+    return XERCES_CPP_NAMESPACE::XMLString::compareString( s1, s2 ) < 0;
+  }
+};
 
 class XMLTool
 {
@@ -63,6 +73,8 @@ public:
 	static const std::string transcode(const XMLCh * xmlString);
 
 	static XERCES_CPP_NAMESPACE::DOMDocument * parse(const std::string & xmlAsText);
+
+	static XERCES_CPP_NAMESPACE::DOMDocument * parseFile(const std::string & filename);
 
     /**
      * Create a new document with the given name and namespace for the root element.
@@ -97,7 +109,7 @@ public:
     /**
      * In the given document, create a new element with the given name and
      * the given namespace.
-     * @param doc 
+     * @param doc
      * @param elementName
      * @param namespace the namespace URI, e.g. <code>http://www.w3.org/2003/04/emma</code>,
      * or null if no namespace is to be associated with the new element.
@@ -124,7 +136,7 @@ public:
      * @return the child element
      */
 	 static XERCES_CPP_NAMESPACE::DOMElement * appendChildElement(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName);
-	 
+
 	/**
      * Create a child element with the given name and namespace, and append it below node.
      * @param node
@@ -141,6 +153,12 @@ public:
      * @return the text node
      */
 	static XERCES_CPP_NAMESPACE::DOMText * appendChildTextNode(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & textContent);
+
+
+	/**
+	 * Determine whether the given element has the named attribute.
+	 */
+	 static bool hasAttribute(XERCES_CPP_NAMESPACE::DOMElement * e, const std::string & attributeName);
 
 
 	/**
@@ -167,21 +185,37 @@ public:
 	 * For the given element, set the attribute to the value.
 	 */
 	static void setAttribute(XERCES_CPP_NAMESPACE::DOMElement * e, const std::string & attribute, const std::string & value);
-	 
+
 	/**
 	 * Get the namespace of the given node, or the empty string if the node has no namespace.
-	 */ 
+	 */
 	static const std::string getNamespaceURI(XERCES_CPP_NAMESPACE::DOMNode * node);
-	
+
 	/**
 	 * Get the node name of the given node.
-	 */ 
+	 */
 	static const std::string getNodeName(XERCES_CPP_NAMESPACE::DOMNode * node);
-	
+
 	/**
 	 * Get the tag name of the given element.
-	 */ 
+	 */
 	static const std::string getTagName(XERCES_CPP_NAMESPACE::DOMElement * e);
+
+	/**
+	 * Get the local name of the given element.
+	 */
+	static const std::string getLocalName(XERCES_CPP_NAMESPACE::DOMElement * e);
+
+	/**
+	 * Get the namespace prefix of the given element.
+	 */
+	static const std::string getPrefix(XERCES_CPP_NAMESPACE::DOMElement * e);
+
+	/**
+	 * Set the namespace prefix of the given element.
+	 */
+	static void setPrefix(XERCES_CPP_NAMESPACE::DOMElement * e, const std::string & prefix);
+
 
 	/**
 	 * Get the text content below this node.
@@ -189,14 +223,29 @@ public:
 	 static const std::string getTextContent(XERCES_CPP_NAMESPACE::DOMNode * node);
 
 	/**
+	 * Get the text content below this node.
+	 */
+	 static void setTextContent(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & text);
+
+	/**
 	 * Get the direct child of node that is an element with the given
 	 * tag name and namespace.
 	 * @param node
 	 * @param childName
 	 * @param childNamespace
-	 * @return the child element, or null if there is no such child.
+	 * @return the child element, or NULL if there is no such child.
 	 */
 	static XERCES_CPP_NAMESPACE::DOMElement * getChildElementByTagNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace);
+
+	/**
+	 * Get the direct child of node that is an element with the given
+	 * local name and namespace.
+	 * @param node
+	 * @param childName
+	 * @param childNamespace
+	 * @return the child element, or NULL if there is no such child.
+	 */
+	static XERCES_CPP_NAMESPACE::DOMElement * getChildElementByLocalNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace);
 
 	/**
 	 * Same as {@link #getChildElementByTagNameNS(Node, String, String)}, but
@@ -204,11 +253,24 @@ public:
 	 * @param node
 	 * @param childName
 	 * @param childNamespace
-	 * @return a non-null child element
-	 * @throws MessageFormatException if there is no such child, 
-	 * i.e. when getChildElementByTagNameNS() would return null.
+	 * @return a non-NULL child element
+	 * @throws MessageFormatException if there is no such child,
+	 * i.e. when getChildElementByTagNameNS() would return NULL.
 	 */
 	static XERCES_CPP_NAMESPACE::DOMElement * needChildElementByTagNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
+	throw(MessageFormatException);
+
+	/**
+	 * Same as {@link #getChildElementByLocalNameNS(Node, String, String)}, but
+	 * throw a MessageFormatException if there is no such child element.
+	 * @param node
+	 * @param childName
+	 * @param childNamespace
+	 * @return a non-NULL child element
+	 * @throws MessageFormatException if there is no such child,
+	 * i.e. when getChildElementByTagNameNS() would return NULL.
+	 */
+	static XERCES_CPP_NAMESPACE::DOMElement * needChildElementByLocalNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
 	throw(MessageFormatException);
 
 	/**
@@ -224,7 +286,22 @@ public:
 	 */
 	static std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getChildrenByTagNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
 	 throw(MessageFormatException);
-	 
+
+	/**
+	 * Get a list of all direct children with the given local name and namespace.
+	 * Whereas getChildElementByLocalNameNS() returns the single first child,
+	 * this method returns all the children that match.
+	 * The calling code must delete the list when it is no longer needed.
+	 * @param node
+	 * @param childName
+	 * @param childNamespace
+	 * @return a list containing the children that match, or an empty list if none match.
+	 * @throws MessageFormatException
+	 */
+	static std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getChildrenByLocalNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
+	 throw(MessageFormatException);
+
+
 	 /**
 	  * Serialise the given DOM document to a std::string.
 	  */
@@ -233,7 +310,7 @@ public:
 private:
 	static XERCES_CPP_NAMESPACE::XercesDOMParser * parser;
 	static XERCES_CPP_NAMESPACE::DOMImplementationLS * impl;
-	
+
 };
 
 } // namespace util

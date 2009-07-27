@@ -24,10 +24,9 @@ public:
 		{
 			message = text;
 		}
-		
-		inline ~SEMAINEException() throw() {}
 
-		const char * what() { return message.c_str(); }
+		inline ~SEMAINEException() throw() {}
+		const char * what() const throw() { return message.c_str(); }
 
 protected:
 	std::string message;
