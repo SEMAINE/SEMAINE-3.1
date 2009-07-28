@@ -79,6 +79,9 @@ function func_build_opensmile {
   #    fi
   #  fi
     
+    # copy stateinfo.config from java directory
+    cp $SEMAINE_ROOT/java/src/eu/semaine/datatypes/stateinfo/stateinfo.config .
+
     # do not install components.. at least for now...
     make -j4 ; make
     if test "x$?" != "x0" ; then
