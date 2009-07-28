@@ -40,6 +40,7 @@ public:
 	static const std::string E_TOPIC;
 	static const std::string E_USER;
 	static const std::string E_CHARACTER;
+	static const std::string E_SPEAKING;
 
 	// Attributes
 	static const std::string A_WHO;
@@ -50,6 +51,7 @@ public:
 	static const std::string A_TIME;
 	static const std::string A_INTENSITY;
 	static const std::string A_STATUS;
+	static const std::string A_STATUS_CHANGE;
 
 	// Attribute values
 	// For A_STATUS:
