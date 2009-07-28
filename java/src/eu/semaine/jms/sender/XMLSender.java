@@ -4,17 +4,10 @@
  */
 package eu.semaine.jms.sender;
 
-import java.io.StringWriter;
-
 import javax.jms.JMSException;
 import javax.jms.Message;
 
-import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
-import org.w3c.dom.bootstrap.DOMImplementationRegistry;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSOutput;
-import org.w3c.dom.ls.LSSerializer;
 
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEXMLMessage;

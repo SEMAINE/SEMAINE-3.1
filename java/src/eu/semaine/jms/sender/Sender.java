@@ -5,7 +5,6 @@
 
 package eu.semaine.jms.sender;
 
-import javax.jms.BytesMessage;
 import javax.jms.ConnectionMetaData;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;

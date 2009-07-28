@@ -14,6 +14,7 @@ import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
+import eu.semaine.datatypes.stateinfo.SystemStateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.JMSLogger;
@@ -60,6 +61,7 @@ public class SEMAINEStateMessage extends SEMAINEXMLMessage
 		case DialogState: return new DialogStateInfo(doc);
 		case UserState: return new UserStateInfo(doc);
 		case ContextState: return new ContextStateInfo(doc);
+		case SystemState: return new SystemStateInfo(doc);
 		}
 		throw new IllegalStateException("Unknown state info type: "+stateInfoType);
 	}

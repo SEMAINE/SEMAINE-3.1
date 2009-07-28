@@ -6,14 +6,12 @@ package eu.semaine.jms.sender;
 
 
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.TextMessage;
 
 import org.w3c.dom.Document;
 
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -80,14 +78,5 @@ public class StateSender extends XMLSender
 		message.setStringProperty(s.toString()+"APIVersion", s.getAPIVersion());
 		message.setStringProperty(SEMAINEMessage.EVENT, Event.single.toString());
 		producer.send(message);
-
-	}
-	
-	@Override
-	protected void fillMessageProperties(Message message, long usertime)
-	throws JMSException
-	{
-		super.fillMessageProperties(message, usertime);
-		message.setBooleanProperty(SEMAINEXMLMessage.IS_XML, true);
 	}
 }

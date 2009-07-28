@@ -5,31 +5,19 @@
 package eu.semaine.components.control;
 
 import eu.semaine.components.control.ParticipantControlGUI;
-import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
-import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.StateReceiver;
-import eu.semaine.jms.receiver.XMLReceiver;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import javax.jms.JMSException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
-import eu.semaine.datatypes.xml.SemaineML;
-import eu.semaine.jms.sender.FeatureSender;
 import eu.semaine.jms.sender.StateSender;
-import eu.semaine.jms.sender.XMLSender;
-import eu.semaine.util.XMLTool;
 
 /**
  * @author marc

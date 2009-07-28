@@ -45,6 +45,7 @@ public class StateReceiver extends XMLReceiver
 		this.stateInfoType = stateInfoType;
 	}
 	
+	@Override
 	public void onMessage(Message m)
 	{
 		// here we do not enforce a listener, because we provide an API for accessing the content

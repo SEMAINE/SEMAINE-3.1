@@ -7,7 +7,6 @@ package eu.semaine.jms.sender;
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 
-import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEMessage;
 
 /**
