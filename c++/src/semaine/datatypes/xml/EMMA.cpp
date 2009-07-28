@@ -24,6 +24,7 @@ const std::string EMMA::E_ONEOF = "one-of";
 
 	// Attributes
 const std::string EMMA::A_START = "start";
+const std::string EMMA::A_OFFSET_TO_START = "offset-to-start";
 const std::string EMMA::A_END = "end";
 const std::string EMMA::A_DURATION = "duration";
 const std::string EMMA::A_VERBAL = "verbal";

@@ -30,6 +30,7 @@ public:
 
 	// Attributes
 	static const std::string A_START;
+	static const std::string A_OFFSET_TO_START;
 	static const std::string A_END;
 	static const std::string A_DURATION;
 	static const std::string A_VERBAL;

@@ -48,7 +48,8 @@ namespace meta {
 		componentName(aComponentName),
 		systemReady(false),
 		lastSeenAlive(0),
-		lastSeenState("")
+		lastSeenState(""),
+                timeDelta(0)
 	{
 		consumer = session->createConsumer(topic, semaine::cms::message::SEMAINEMessage::SOURCE + " = 'SystemManager'");
 		producer = session->createProducer(topic);
