@@ -21,6 +21,9 @@
 
 #include <semaine/datatypes/stateinfo/XPathInfoMapper.h>
 
+#include <xqilla/xqilla-dom3.hpp>
+
+
 namespace semaine {
 
 namespace datatypes {

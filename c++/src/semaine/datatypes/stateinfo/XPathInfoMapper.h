@@ -20,6 +20,7 @@
 #include <semaine/cms/exceptions/MessageFormatException.h>
 
 #include <semaine/datatypes/stateinfo/NamespaceContext.h>
+#include <xqilla/xqilla-dom3.hpp>
 
 namespace semaine {
 

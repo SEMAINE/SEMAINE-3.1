@@ -31,6 +31,10 @@
   #include <iostream.h>
 #endif
 
+#include <xqilla/utils/XQillaPlatformUtils.hpp>
+#include <xqilla/xqilla-dom3.hpp>
+
+
 #include <semaine/util/ParseErrorHandler.h>
 
 using namespace semaine::cms::exceptions;
@@ -72,9 +76,11 @@ public:
 	 */
 	static const std::string transcode(const XMLCh * xmlString);
 
-	static XERCES_CPP_NAMESPACE::DOMDocument * parse(const std::string & xmlAsText);
+	static XERCES_CPP_NAMESPACE::DOMDocument * parse(const std::string & xmlAsText)
+	throw (MessageFormatException);
 
-	static XERCES_CPP_NAMESPACE::DOMDocument * parseFile(const std::string & filename);
+	static XERCES_CPP_NAMESPACE::DOMDocument * parseFile(const std::string & filename)
+	throw (MessageFormatException);
 
     /**
      * Create a new document with the given name and namespace for the root element.
@@ -308,7 +314,7 @@ public:
 	 static const std::string dom2string(const XERCES_CPP_NAMESPACE::DOMDocument * doc);
 
 private:
-	static XERCES_CPP_NAMESPACE::XercesDOMParser * parser;
+	static XERCES_CPP_NAMESPACE::DOMLSParser * parser;
 	static XERCES_CPP_NAMESPACE::DOMImplementationLS * impl;
 
 };

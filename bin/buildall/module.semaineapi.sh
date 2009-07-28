@@ -24,7 +24,7 @@ function func_build_semaineapi {
     fi
 
     echo "#!/bin/sh" > doconfig.sh
-    echo "./configure --prefix=$INSTALL_PREFIX --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --with-xerces=$INSTALL_PREFIX --with-activemqcpp=$INSTALL_PREFIX" > doconfig.sh
+    echo "./configure --prefix=$INSTALL_PREFIX --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --with-xerces=$INSTALL_PREFIX --with-activemqcpp=$INSTALL_PREFIX --with-xqilla=$INSTALL_PREFIX" >> doconfig.sh
 
     sh doconfig.sh
     if test "x$?" != "x0" ; then

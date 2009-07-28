@@ -10,6 +10,8 @@
 #include "XMLTool.h"
 #include <typeinfo>
 #include <xercesc/framework/LocalFileInputSource.hpp>
+#include <xercesc/framework/Wrapper4InputSource.hpp>
+#include <decaf/util/concurrent/Mutex.h>
 
 using namespace XERCES_CPP_NAMESPACE;
 
@@ -17,32 +19,47 @@ using namespace XERCES_CPP_NAMESPACE;
 namespace semaine {
 namespace util {
 
-XercesDOMParser * XMLTool::parser;
-ParseErrorHandler * errorHandler;
+// Mutex isn't a member of XMLTool so that we needn't add this as a dependency in XMLTool.h.
+static decaf::util::concurrent::Mutex parserMutex;
+
+DOMLSParser * XMLTool::parser;
 DOMImplementationLS * XMLTool::impl;
+
 
 void XMLTool::startupXMLTools()
 throw (SystemConfigurationException)
 {
-    XMLPlatformUtils::Initialize();
-	parser = new XercesDOMParser();
+    XQillaPlatformUtils::initialize(); // this also initialises Xerces.
+
+    DOMImplementation* xqillaImplementation = DOMImplementationRegistry::getDOMImplementation(X("XPath2 3.0"));
+	impl = dynamic_cast<DOMImplementationLS *>(xqillaImplementation);
+	if (impl == NULL) {
+		throw SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*xqillaImplementation).name());
+	}
+
+
+    parser = xqillaImplementation->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
+    parser->getDomConfig()->setParameter(XMLUni::fgDOMNamespaces, true);
+    parser->getDomConfig()->setParameter(XMLUni::fgXercesSchema, true);
+    parser->getDomConfig()->setParameter(XMLUni::fgDOMValidateIfSchema, true);
+
+
+
+
+    /*parser = new XercesDOMParser();
     //parser->setValidationScheme(XercesDOMParser::Val_Always);
-	parser->setDoNamespaces(true);	XMLCh tempStr[100];
+	parser->setDoNamespaces(true);
+	//parser->setErrorHandler(errorHandler);
+	XMLCh tempStr[100];
 	XMLString::transcode("LS", tempStr, 99);
 	DOMImplementation * anImpl = DOMImplementationRegistry::getDOMImplementation(tempStr);
-	impl = dynamic_cast<DOMImplementationLS *>(anImpl);
-	if (impl == NULL) {
-		throw SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*anImpl).name());
-	}
-	errorHandler = new ParseErrorHandler();
-	parser->setErrorHandler(errorHandler);
+	*/
 }
 
 void XMLTool::shutdownXMLTools()
 {
 	delete parser;
-	delete errorHandler;
-	XMLPlatformUtils::Terminate();
+	XQillaPlatformUtils::terminate();
 }
 
 
@@ -54,24 +71,42 @@ DOMImplementation * XMLTool::getDOMImplementation()
 
 
 DOMDocument * XMLTool::parse(const std::string & xmlAsText)
+throw (MessageFormatException)
 {
+	synchronized (&parserMutex) {
+		ParseErrorHandler errorHandler;
+	    parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler, &errorHandler);
 		//std::cerr << "Message text: " << std::endl << xmlAsText << std::endl;
 		const char * msgTextC = xmlAsText.c_str();
 		MemBufInputSource memIS((const XMLByte *)msgTextC, strlen(msgTextC), "test", false);
-        parser->parse(memIS);
-		DOMDocument * document = parser->getDocument();
+		DOMLSInput * in = new Wrapper4InputSource(&memIS);
+		DOMDocument * document = parser->parse(in);
+		parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler, (const void *)NULL);
+		if (errorHandler.hasErrors()) {
+			throw MessageFormatException(errorHandler.getErrors());
+		}
 		return document;
+	}
 }
 
 
 DOMDocument * XMLTool::parseFile(const std::string & filename)
+throw (MessageFormatException)
 {
-	XMLCh * xmlFilename = XMLString::transcode(filename.c_str());
-	LocalFileInputSource lfis(xmlFilename);
-	XMLString::release(&xmlFilename);
-	parser->parse(lfis);
-	DOMDocument * document = parser->getDocument();
-	return document;
+	synchronized (&parserMutex) {
+		ParseErrorHandler errorHandler;
+	    parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler, &errorHandler);
+		XMLCh * xmlFilename = XMLString::transcode(filename.c_str());
+		LocalFileInputSource lfis(xmlFilename);
+		XMLString::release(&xmlFilename);
+		DOMLSInput * in = new Wrapper4InputSource(&lfis);
+		DOMDocument * document = parser->parse(in);
+		parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler, (const void *)NULL);
+		if (errorHandler.hasErrors()) {
+			throw MessageFormatException(errorHandler.getErrors());
+		}
+		return document;
+	}
 }
 
 

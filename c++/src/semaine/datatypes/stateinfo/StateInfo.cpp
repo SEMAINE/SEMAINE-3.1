@@ -24,8 +24,6 @@ namespace stateinfo {
 
 //////////////////// Static stuff ///////////////////////
 
-// XERCES does not fully support XPath, so we need to simplify some of the expressions:
-#define XERCES_XPATH_SIMPLIFICATION 1
 
 const std::string StateInfo::APIVersion = "0.2";
 
@@ -378,31 +376,15 @@ throw(MessageFormatException, SystemConfigurationException)
 	for (std::map<std::string, std::string>::const_iterator it = infoNames.begin(); it != infoNames.end(); ++it) {
 		std::string shortName = it->first;
 		std::string xpathExpr = it->second;
-#ifdef XERCES_XPATH_SIMPLIFICATION
-		if (xpathExpr.find("[@") != std::string::npos) { // attribute-based selection of nodes not supported in Xerces
-			std::string simplified = xpathExpr;
-			while (simplified.find("[@") != std::string::npos) {
-				int start = simplified.find("[@");
-				int end = simplified.find("]", start);
-				if (end == std::string::npos) {
-					throw SystemConfigurationException("Failed to simplify XPath expression for Xerces' limited XPath support: no closing square bracket found in "+simplified);
-				}
-				simplified.erase(start, end-start+1);
-			}
-			std::cerr << "Simplifying XPath expression for Xerces' limited XPath support." << std::endl
-				<< "Original:   " << xpathExpr << std::endl
-				<< "Simplified: " << simplified << std::endl;
-			xpathExpr = simplified;
-		}
-#endif
 		try {
 			XMLCh * xmlXpathExpr = XMLString::transcode(xpathExpr.c_str());
-			// TODO: the following throws an exception because String-based lookup is not implemented in Xerces:
-			DOMXPathResult * result = (DOMXPathResult *) doc->evaluate(xmlXpathExpr, doc, namespaceContext, DOMXPathResult::STRING_TYPE, NULL);
-			std::string resultString = XMLTool::transcode(result->getStringValue());
-			if (resultString != "") {
-				info[shortName] = resultString;
-				log->debug("Read info: "+shortName+" = "+resultString);
+			DOMXPathResult * result = (DOMXPathResult *) doc->evaluate(xmlXpathExpr, doc, namespaceContext, DOMXPathResult::FIRST_RESULT_TYPE, NULL);
+			if (result->isNode()) {
+				std::string resultString = XMLTool::transcode(result->getStringValue());
+				if (resultString != "") {
+					info[shortName] = resultString;
+					log->debug("Read info: "+shortName+" = "+resultString);
+				}
 			}
 		} catch (DOMXPathException & xee) {
 			char * err = XMLString::transcode(xee.msg);
