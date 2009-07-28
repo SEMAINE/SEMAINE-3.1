@@ -1,14 +1,15 @@
 // exceptions
 #include <iostream>
 #include <list>
+#include <exception>
 
 #include <semaine/config.h>
 
 #include <semaine/util/XMLTool.h>
 #include <semaine/components/Component.h>
 #include <semaine/system/ComponentRunner.h>
-
-#include <semaine/components/dummy/DummyFML2BML.h>
+#include <cms/CMSException.h>
+#include <semaine/components/control/ParticipantControl.h>
 
 int main () {
 	try {
@@ -16,7 +17,7 @@ int main () {
 
 		std::list<semaine::components::Component *> comps;
 
-		comps.push_back(new semaine::components::dummy::DummyFML2BML());
+		comps.push_back(new semaine::components::control::ParticipantControl());
 
 		semaine::system::ComponentRunner cr(comps);
 		cr.go();

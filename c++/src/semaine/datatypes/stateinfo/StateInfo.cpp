@@ -230,7 +230,6 @@ throw(SystemConfigurationException)
 	for(std::map<std::string, std::string>::iterator it = info.begin(); it != info.end(); ++it) {
 		std::string shortName = it->first;
 		std::string value = it->second;
-		std::cout << "Now creating doc representation for " << shortName << " = " << value << std::endl;
 		if (value == "") continue;
 		DOMElement * currentElt = NULL;
 		std::map<std::string, std::string>::const_iterator xpathLookupIt = infoNames.find(shortName);

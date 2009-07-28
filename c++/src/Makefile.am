@@ -10,13 +10,14 @@ semaine_api_sources_cpp = \
 	semaine/cms/message/SEMAINEStateMessage.cpp \
 	semaine/cms/message/SEMAINEBytesMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
+	semaine/cms/receiver/StateReceiver.cpp \
 	semaine/cms/sender/Sender.cpp \
 	semaine/cms/sender/FeatureSender.cpp \
+	semaine/cms/sender/StateSender.cpp \
 	semaine/components/Component.cpp \
 	semaine/components/meta/MetaMessenger.cpp \
 	semaine/system/ComponentRunner.cpp \
 	semaine/cms/sender/XMLSender.cpp \
-	semaine/cms/sender/StateSender.cpp \
 	semaine/cms/sender/BytesSender.cpp \
 	semaine/datatypes/xml/EMMA.cpp \
 	semaine/datatypes/xml/EmotionML.cpp \
@@ -88,7 +89,7 @@ libsemaineapi_la_SOURCES = $(semaine_api_sources_cpp) $(semaine_api_sources_h)
 libsemaineapi_la_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 include_HEADERS = $(semaine_api_sources_h)
 
-bin_PROGRAMS = basictests jimandjohn dummyfeatextr dummyanalyser dummyfml2bml teststateinfo
+bin_PROGRAMS = basictests jimandjohn dummyfeatextr dummyanalyser dummyfml2bml teststateinfo participantcontrol
 
 basictests_SOURCES = semaine/executables/basictests.cpp
 basictests_CXXFLAGS = $(SEMAINE_CXXFLAGS)
@@ -114,6 +115,11 @@ dummyfml2bml_SOURCES = semaine/executables/dummyfml2bml.cpp \
 dummyfml2bml_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 dummyfml2bml_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
 
-teststateinfo_SOURCES = semaine/executables/testStateInfo.cpp semaine/cms/sender/StateSender.cpp semaine/cms/receiver/StateReceiver.cpp
+teststateinfo_SOURCES = semaine/executables/testStateInfo.cpp
 teststateinfo_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 teststateinfo_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
+
+participantcontrol_SOURCES = semaine/executables/participantcontrol.cpp semaine/components/control/ParticipantControl.cpp
+participantcontrol_CXXFLAGS = $(SEMAINE_CXXFLAGS)
+participantcontrol_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
+

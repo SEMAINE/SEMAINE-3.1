@@ -55,7 +55,7 @@ public:
 	{}
 
 
-	virtual ~StateSender();
+	virtual ~StateSender() {}
 
 	void sendStateInfo(semaine::datatypes::stateinfo::StateInfo * state, long long usertime)
 	throw(CMSException, SystemConfigurationException);
