@@ -61,5 +61,10 @@ public class SEMAINEEmmaMessage extends SEMAINEXMLMessage {
 	{
 		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_TEXT, SemaineML.namespaceURI);
 	}
+	
+	public List<Element> getSpeakingElements(Element interpretation)
+	{
+		return XMLTool.getChildrenByTagNameNS(interpretation, SemaineML.E_SPEAKING, SemaineML.namespaceURI);
+	}
 
 }

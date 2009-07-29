@@ -31,6 +31,7 @@ public class SemaineML
     public static final String E_TOPIC = "topic";
     public static final String E_USER = "user";
     public static final String E_CHARACTER = "character";
+    public static final String E_SPEAKING = "speaking";
     
     // Attributes
     public static final String A_WHO = "who";
