@@ -85,14 +85,9 @@ public class SpeechInterpreter extends Component
 			float[] featureValues = fm.getFeatureVector();
 			
 			/* Find the values for 'rmsEnergy' and 'speaking' */
-			float rmsEnergy = -999f;
-			boolean speakingParam = false;
 			for( int i=0; i<featureNames.length; i++ ) {
-				if( featureNames[i].equals("RMSenergy ") ) {
+				if( featureNames[i].equals("RMSenergy") ) {
 					rmsEnergy = featureValues[i];
-				}
-				if( featureNames[i].equals("speaking") ) {
-					speakingParam = ( featureValues[i] == 1 );
 				}
 			}
 		} else if( m instanceof SEMAINEEmmaMessage ) {
@@ -136,10 +131,8 @@ public class SpeechInterpreter extends Component
 	{
 		Map<String,String> userStateInfo = new HashMap<String,String>();
 		if( speaking ) {
-			//System.out.println("User Speaking");
 			userStateInfo.put("speaking", "true");
 		} else {
-			//System.out.println("User Speaking");
 			userStateInfo.put("speaking", "false");
 		}
 		

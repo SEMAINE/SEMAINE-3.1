@@ -22,6 +22,7 @@ import eu.semaine.components.dialogue.datastructures.AgentUtterance;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
+import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
@@ -103,11 +104,11 @@ public class UtteranceActionProposer extends Component
 	
 	/* Senders and Receivers */
 	private StateReceiver agentStateReceiver;
-	private XMLReceiver userStateReceiver;
-	private XMLReceiver contextReceiver;
+	private StateReceiver userStateReceiver;
+	private StateReceiver contextReceiver;
 	private FMLSender fmlSender;
 	private StateSender dialogStateSender;
-	private XMLSender contextSender;
+	private StateSender contextSender;
 	
 	/* The current state of the agent */
 	public int agentSpeakingState = 1;		// 0, 1, or 2
@@ -153,9 +154,9 @@ public class UtteranceActionProposer extends Component
 		/* Initialize receivers */
 		agentStateReceiver = new StateReceiver( "semaine.data.state.agent", StateInfo.Type.AgentState );
 		receivers.add( agentStateReceiver );
-		userStateReceiver = new XMLReceiver("semaine.data.state.user.behaviour");
+		userStateReceiver = new StateReceiver("semaine.data.state.user.behaviour", StateInfo.Type.UserState);
 		receivers.add(userStateReceiver);
-		contextReceiver = new XMLReceiver("semaine.data.state.context");
+		contextReceiver = new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState);
 		receivers.add( contextReceiver );
 		
 		/* Initialize senders */
@@ -163,7 +164,7 @@ public class UtteranceActionProposer extends Component
 		senders.add(fmlSender);
 		dialogStateSender = new StateSender("semaine.data.state.dialog", StateInfo.Type.DialogState, getName());
 		senders.add(dialogStateSender);
-		contextSender = new XMLSender("semaine.data.state.context", "SemaineML", getName());
+		contextSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(contextSender);
 		
 		/* Determine the first character */
@@ -192,10 +193,10 @@ public class UtteranceActionProposer extends Component
 		charNames.put( SPIKE, "Spike" );
 		charNames.put( OBADIAH, "Obadiah" );
 		
-		charNumbers.put("poppy", POPPY);
-		charNumbers.put("prudence", PRUDENCE);
-		charNumbers.put("spike", SPIKE);
-		charNumbers.put("obadiah", OBADIAH);
+		charNumbers.put("Poppy", POPPY);
+		charNumbers.put("Prudence", PRUDENCE);
+		charNumbers.put("Spike", SPIKE);
+		charNumbers.put("Obadiah", OBADIAH);
 		
 		/* resets the chat history of the characters (this determines if the characters have spoken
 		 * with these characters before in this conversation */
@@ -245,7 +246,11 @@ public class UtteranceActionProposer extends Component
 				
 				/* Updates detected emotions (valence, arousal, interest) */
 				addDetectedEmotions(stateInfo);
-			}			
+			}
+			if( stateInfo.getType() == StateInfo.Type.ContextState ) {
+				/* Updates the current character and the user */
+				updateCharacterAndUser( stateInfo );
+			}
 		}
 		
 		/* Processes XML updates */
@@ -254,9 +259,6 @@ public class UtteranceActionProposer extends Component
 			
 			/* Updated analyzed Dialogue Acts history */
 			addDetectedDActs( xm );
-			
-			/* Updates the current character and the user */
-			updateCharacterAndUser( xm );
 		}
 		
 		/* If the TurnTakingInterpreter decides that the agent should speak, determine what to say */
@@ -287,40 +289,29 @@ public class UtteranceActionProposer extends Component
 	}
 	
 	/* TODO: Omzetten naar ContextState */
-	public void updateCharacterAndUser( SEMAINEXMLMessage xm ) throws JMSException
+	public void updateCharacterAndUser( StateInfo stateInfo ) throws JMSException
 	{
-		Document doc = xm.getDocument();
-		Element root = doc.getDocumentElement();
-		if (!root.getTagName().equals(SemaineML.E_CONTEXT)) {
-			return;
-		}
-		if (!root.getNamespaceURI().equals(SemaineML.namespaceURI)) {
-			throw new MessageFormatException("Unexpected document element namespace: expected '"+SemaineML.namespaceURI+"', found '"+root.getNamespaceURI()+"'");
-		}
-		
+		System.out.println("ContextState data");
+		Map<String,String> contextInfo = stateInfo.getInfos();
 		boolean newUser = false;
-		List<Element> users = XMLTool.getChildrenByTagNameNS(root, SemaineML.E_USER, SemaineML.namespaceURI);
-		for( Element user : users ) {
-			String status = user.getAttribute( SemaineML.A_STATUS );
-			if( status.equals(PRESENT) && !isUserPresent ) {
+		
+		if( contextInfo.containsKey("userPresent") ) {
+			System.out.println("UserPresent data");
+			if( contextInfo.get("userPresent").equals("present") && !isUserPresent ) {
 				newUser = true;
 				userAppeared();
-			} else if( status.equals(ABSENT) && isUserPresent ) {
+			} else if( contextInfo.get("userPresent").equals("absent") && isUserPresent ) {
 				userDisappeared();
 			}
 		}
 		
-		List<Element> characters = XMLTool.getChildrenByTagNameNS(root, SemaineML.E_CHARACTER, SemaineML.namespaceURI);
-		for( Element characterElem : characters ) {
+		if( contextInfo.containsKey("character") ) {
+			currChar = charNumbers.get( contextInfo.get("character") );
 			if( systemStarted ) {
-				String charName = characterElem.getAttribute(SemaineML.A_NAME);
-				
 				charStartupState = INTRODUCED;
 				
 				/* Update agent speaking state */
 				agentSpeakingState = SPEAKING;
-				
-				currChar = charNumbers.get( charName.toLowerCase() );
 				
 				if( charHistory.get(currChar) ) {
 					sendUtterance( pickUtterances("intro_old") );
@@ -359,6 +350,7 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void userAppeared() throws JMSException
 	{
+		System.out.println("User appeared");
 		isUserPresent = true;
 		
 		systemStarted = true;
@@ -419,7 +411,7 @@ public class UtteranceActionProposer extends Component
 			if( wantChange ) {
 				if( targetCharacter != null ) {
 					/* If the user already mentioned a new character then take this */
-					currChar = charNumbers.get(targetCharacter.toLowerCase());
+					currChar = charNumbers.get(targetCharacter);
 					charStartupState = INTRODUCED;
 					sendNewCharacter( currChar );
 					charChangeState = NEUTRAL;
@@ -457,7 +449,7 @@ public class UtteranceActionProposer extends Component
 			
 			if( targetCharacter != null ) {
 				/* If the user chose a character then take this one */
-				currChar = charNumbers.get(targetCharacter.toLowerCase());
+				currChar = charNumbers.get(targetCharacter);
 				sendNewCharacter( currChar );
 				charStartupState = INTRODUCED;
 				charChangeState = NEUTRAL;
@@ -759,8 +751,7 @@ public class UtteranceActionProposer extends Component
 	public void sendSpeaking() throws JMSException
 	{
 		Map<String,String> dialogInfo = new HashMap<String,String>();		
-		dialogInfo.put("speaker", "agent");
-		dialogInfo.put("listener", "user");
+		dialogInfo.put("agentTurnState", "true");
 
 		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
 		dialogStateSender.sendStateInfo(dsi, meta.getTime());
@@ -773,8 +764,7 @@ public class UtteranceActionProposer extends Component
 	public void sendListening() throws JMSException
 	{
 		Map<String,String> dialogInfo = new HashMap<String,String>();		
-		dialogInfo.put("speaker", "user");
-		dialogInfo.put("listener", "agent");
+		dialogInfo.put("agentTurnState", "false");
 
 		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
 		dialogStateSender.sendStateInfo(dsi, meta.getTime());
@@ -787,13 +777,11 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void sendNewCharacter( int character ) throws JMSException
 	{
-		Document semaineML = XMLTool.newDocument(SemaineML.E_CONTEXT, SemaineML.namespaceURI, SemaineML.version);
-		Element rootNode = semaineML.getDocumentElement();
-
-		Element characterElem = XMLTool.appendChildElement(rootNode, SemaineML.E_CHARACTER);
-		characterElem.setAttribute(SemaineML.A_NAME, charNames.get(character));
-
-		contextSender.sendXML(semaineML, meta.getTime());
+		Map<String,String> contextInfo = new HashMap<String,String>();
+		contextInfo.put("character", charNames.get(character));
+		
+		ContextStateInfo csi = new ContextStateInfo(contextInfo);
+		contextSender.sendStateInfo( csi, meta.getTime() );
 	}
 	
 	/**

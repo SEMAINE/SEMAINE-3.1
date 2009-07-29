@@ -158,42 +158,22 @@ public class TurnTakingInterpreter extends Component
 				/* processes an agent backchannel */
 				processBackchannel(stateInfo);
 				break;
+			case ContextState:
+				updateCharacter( stateInfo );
+				break;
 		    default:
 		    	// We could complain here if we were certain we don't expect other state infos, as in:
 		    	// throw new MessageFormatException("Unexpected state info type: "+stateInfo.getType().toString());
 			}
 		}
-		
-		/* Processes XML updates */
-		if( m instanceof SEMAINEXMLMessage ) {
-			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
-			
-			/* Updates the current character and the user */
-			updateCharacterAndUser( xm );
-		}
 	}
 	
-	public void updateCharacterAndUser( SEMAINEXMLMessage xm ) throws JMSException
+	public void updateCharacter( StateInfo stateInfo ) throws JMSException
 	{
-		Document doc = xm.getDocument();
-		Element root = doc.getDocumentElement();
-		if (!root.getTagName().equals(SemaineML.E_CONTEXT)) {
-			return;
-		}
-		if (!root.getNamespaceURI().equals(SemaineML.namespaceURI)) {
-			throw new MessageFormatException("Unexpected document element namespace: expected '"+SemaineML.namespaceURI+"', found '"+root.getNamespaceURI()+"'");
-		}
+		Map<String,String> contextInfo = stateInfo.getInfos();
 		
-		List<Element> characters = XMLTool.getChildrenByTagNameNS(root, SemaineML.E_USER, SemaineML.namespaceURI);
-		for( Element characterElem : characters ) {
-			
-			String charName = characterElem.getAttribute(SemaineML.A_NAME);
-			if (!charName.equals(USER)) {
-				Integer charInt = charNumbers.get(charName.toLowerCase());
-				if( charInt != null ) {
-					character = charInt;
-				}
-			}
+		if( contextInfo.containsKey("character") ) {
+			character = charNumbers.get( contextInfo.get("character") );
 		}
 	}
 	
@@ -393,10 +373,8 @@ public class TurnTakingInterpreter extends Component
 		Map<String,String> agentStateInfo = new HashMap<String,String>();
 		if( agentSpeakingIntention == SPEAKING ) {
 			agentStateInfo.put("turnTakingIntention", "startSpeaking");
-			System.out.println("Starting to speak");
 		} else if( agentSpeakingIntention == SILENT ) {
 			agentStateInfo.put("turnTakingIntention", "stopSpeaking");
-			System.out.println("Stopping to speak");
 		} else {
 			return;
 		}
