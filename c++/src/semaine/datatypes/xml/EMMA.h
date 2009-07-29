@@ -27,6 +27,7 @@ public:
 	static const std::string E_ROOT_TAGNAME;
 	static const std::string E_INTERPRETATION;
 	static const std::string E_ONEOF;
+	static const std::string E_SEQUENCE;
 
 	// Attributes
 	static const std::string A_START;
@@ -36,6 +37,7 @@ public:
 	static const std::string A_VERBAL;
 	static const std::string A_MODE;
 	static const std::string A_CONFIDENCE;
+	static const std::string A_TOKENS;
 };
 
 } // namespace xml

@@ -21,6 +21,7 @@ const std::string EMMA::E_EMMA = "emma";
 const std::string EMMA::E_ROOT_TAGNAME = "emma";
 const std::string EMMA::E_INTERPRETATION = "interpretation";
 const std::string EMMA::E_ONEOF = "one-of";
+const std::string EMMA::E_SEQUENCE = "sequence";
 
 	// Attributes
 const std::string EMMA::A_START = "start";
@@ -30,6 +31,9 @@ const std::string EMMA::A_DURATION = "duration";
 const std::string EMMA::A_VERBAL = "verbal";
 const std::string EMMA::A_MODE = "mode";
 const std::string EMMA::A_CONFIDENCE = "confidence";
+const std::string EMMA::A_TOKENS = "tokens";
+
+
 
 } // namespace xml
 } // namespace datatypes
