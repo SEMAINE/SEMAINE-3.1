@@ -214,11 +214,11 @@ public class TurnTakingInterpreter extends Component
 	{
 		Map<String,String> userInfoMap = dialogInfo.getInfos();
 
-		if( userInfoMap.get("speaker").equals("agent") ) {
+		if( userInfoMap.get("agentTurnState").equals("true") ) {
 			backchannel_given = false;
 			agentSpeakingState = SPEAKING;
 			agentSpeakingStateTime = meta.getTime();
-		} else if( userInfoMap.get("listener").equals("agent") ) {
+		} else if( userInfoMap.get("agentTurnState").equals("false") ) {
 			backchannel_given = false;
 			agentSpeakingState = SILENT;
 			agentSpeakingStateTime = meta.getTime();
@@ -237,17 +237,19 @@ public class TurnTakingInterpreter extends Component
 	{
 		Map<String,String> userInfoMap = userInfo.getInfos();
 
-		if( userInfoMap.get("behaviour").equals("speaking") ) {
-			if( userSpeakingState != SPEAKING ) {
-				backchannel_given = false;
-				userSpeakingState = SPEAKING;
-				userSpeakingStateTime = meta.getTime();
-			}
-		} else if( userInfoMap.get("behaviour").equals("silence") ) {
-			if( userSpeakingState != SILENT ) {
-				latestUtteranceLength = meta.getTime() - userSpeakingStateTime;
-				userSpeakingState = SILENT;
-				userSpeakingStateTime = meta.getTime();
+		if( userInfoMap.get("speaking") != null ) {
+			if( userInfoMap.get("speaking").equals("true") ) {
+				if( userSpeakingState != SPEAKING ) {
+					backchannel_given = false;
+					userSpeakingState = SPEAKING;
+					userSpeakingStateTime = meta.getTime();
+				}
+			} else if( userInfoMap.get("speaking").equals("false") ) {
+				if( userSpeakingState != SILENT ) {
+					latestUtteranceLength = meta.getTime() - userSpeakingStateTime;
+					userSpeakingState = SILENT;
+					userSpeakingStateTime = meta.getTime();
+				}
 			}
 		}
 	}
@@ -280,9 +282,10 @@ public class TurnTakingInterpreter extends Component
 	
 	public void processBackchannel(StateInfo agentInfo)
 	{
+		// TODO: Andere manier
 		Map<String,String> agentInfoMap = agentInfo.getInfos();
 		
-		String intention = agentInfoMap.get( "intention" );
+		String intention = agentInfoMap.get( "turnTakingIntention" );
 		if( intention != null && intention.equals("backchannel") ) {
 			backchannel_given = true;
 		}
@@ -296,17 +299,17 @@ public class TurnTakingInterpreter extends Component
 	{
 		Map<String,String> dialogInfoMap = userInfo.getInfos();
 		
-		if( dialogInfoMap.get("behaviour").equals("valence") ) {
-			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, intensity );
+		if( dialogInfoMap.get("valence") != null ) {
+			float valence = Float.parseFloat( dialogInfoMap.get("valence") );
+			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, valence );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("behaviour").equals("arousal") ) {
-			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, intensity );
+		} else if( dialogInfoMap.get("arousal") != null ) {
+			float arousal = Float.parseFloat( dialogInfoMap.get("arousal") );
+			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, arousal );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("behaviour").equals("interest") ) {
-			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, intensity );
+		} else if( dialogInfoMap.get("interest") != null ) {
+			float interest = Float.parseFloat( dialogInfoMap.get("interest") );
+			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, interest );
 			detectedEmotions.add( ee );
 		}
 	}
@@ -389,9 +392,11 @@ public class TurnTakingInterpreter extends Component
 	{
 		Map<String,String> agentStateInfo = new HashMap<String,String>();
 		if( agentSpeakingIntention == SPEAKING ) {
-			agentStateInfo.put("intention", "speaking");
+			agentStateInfo.put("turnTakingIntention", "startSpeaking");
+			System.out.println("Starting to speak");
 		} else if( agentSpeakingIntention == SILENT ) {
-			agentStateInfo.put("intention", "silence");
+			agentStateInfo.put("turnTakingIntention", "stopSpeaking");
+			System.out.println("Stopping to speak");
 		} else {
 			return;
 		}

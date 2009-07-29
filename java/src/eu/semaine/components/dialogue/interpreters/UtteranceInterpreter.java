@@ -86,7 +86,7 @@ public class UtteranceInterpreter extends Component
 
 		/* Define Senders */
 		userStateSender = new XMLSender("semaine.data.state.user.behaviour", "datatype = 'UserState'", "");
-		senders.add(userStateSender); // so it can be started etc
+		senders.add(userStateSender);
 
 		/* Initializing PoS Tagger */
 		try {

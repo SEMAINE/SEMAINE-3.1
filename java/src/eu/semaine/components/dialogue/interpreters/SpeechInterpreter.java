@@ -6,15 +6,20 @@
 package eu.semaine.components.dialogue.interpreters;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jms.JMSException;
 
+import org.w3c.dom.Element;
+
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
+import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.FeatureReceiver;
 import eu.semaine.jms.sender.StateSender;
  	
@@ -35,11 +40,15 @@ import eu.semaine.jms.sender.StateSender;
 
 public class SpeechInterpreter extends Component
 {
+	private float rmsEnergy = -999f;
+	private boolean speakingParam = false;
+	
 	/* The current speaking state of the user */
 	private boolean speaking = false;
 	
 	/* Senders and Receivers */
 	private FeatureReceiver featureReceiver;
+	private EmmaReceiver emmaReceiver;
 	private StateSender userStateSender;
 	
 	/**
@@ -53,6 +62,8 @@ public class SpeechInterpreter extends Component
 		
 		featureReceiver = new FeatureReceiver("semaine.data.analysis.features.voice");
 		receivers.add(featureReceiver);
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma ");
+		receivers.add(emmaReceiver);
 		
 		userStateSender = new StateSender("semaine.data.state.user", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
@@ -77,27 +88,42 @@ public class SpeechInterpreter extends Component
 			float rmsEnergy = -999f;
 			boolean speakingParam = false;
 			for( int i=0; i<featureNames.length; i++ ) {
-				if( featureNames[i].equals("rmsEnergy") ) {
+				if( featureNames[i].equals("RMSenergy ") ) {
 					rmsEnergy = featureValues[i];
 				}
 				if( featureNames[i].equals("speaking") ) {
 					speakingParam = ( featureValues[i] == 1 );
 				}
 			}
+		} else if( m instanceof SEMAINEEmmaMessage ) {
+			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			
-			/* Determines the new user speaking state */
-			if( speakingParam && rmsEnergy >= 0.003 ) {
-				if( !speaking ) {
-					/* Change the user speaking state to 'true' and send this change around */
-					speaking = true;
-					sendSpeechState(  );
+			Element interpretation = em.getTopLevelInterpretation();
+			if (interpretation != null) {
+				List<Element> speakingList = em.getSpeakingElements(interpretation);
+				for (Element speaking : speakingList) {
+					if( speaking.hasAttribute("statusChange") ) {
+						if( speaking.getAttribute("statusChange").equals("start") ) {
+							speakingParam = true;
+						} else if( speaking.getAttribute("statusChange").equals("stop") ) {
+							speakingParam = false;
+						}
+					}
 				}
-			} else {
-				if( speaking ) {
-					/* Change the user speaking state to 'false' and send this change around */
-					speaking = false;
-					sendSpeechState(  );
-				}
+			}
+		}
+		/* Determines the new user speaking state */
+		if( speakingParam && rmsEnergy >= 0.003 ) {
+			if( !speaking ) {
+				/* Change the user speaking state to 'true' and send this change around */
+				speaking = true;
+				sendSpeechState(  );
+			}
+		} else {
+			if( speaking ) {
+				/* Change the user speaking state to 'false' and send this change around */
+				speaking = false;
+				sendSpeechState(  );
 			}
 		}
 	}
@@ -110,9 +136,11 @@ public class SpeechInterpreter extends Component
 	{
 		Map<String,String> userStateInfo = new HashMap<String,String>();
 		if( speaking ) {
-			userStateInfo.put("behaviour", "speaking");
+			//System.out.println("User Speaking");
+			userStateInfo.put("speaking", "true");
 		} else {
-			userStateInfo.put("behaviour", "silence");
+			//System.out.println("User Speaking");
+			userStateInfo.put("speaking", "false");
 		}
 		
 		UserStateInfo usi = new UserStateInfo(userStateInfo	);

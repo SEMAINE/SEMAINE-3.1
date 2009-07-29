@@ -286,6 +286,7 @@ public class UtteranceActionProposer extends Component
 		}
 	}
 	
+	/* TODO: Omzetten naar ContextState */
 	public void updateCharacterAndUser( SEMAINEXMLMessage xm ) throws JMSException
 	{
 		Document doc = xm.getDocument();
@@ -547,8 +548,8 @@ public class UtteranceActionProposer extends Component
 			if (agentInfo.getType() == StateInfo.Type.AgentState) {
 				Map<String,String> agentInfoMap = agentInfo.getInfos();
 				
-				String intention = agentInfoMap.get("intention");
-				if( intention != null && intention.equals("speaking") ) {
+				String intention = agentInfoMap.get("turnTakingIntention");
+				if( intention != null && intention.equals("startSpeaking") ) {
 					if( agentSpeakingState == SPEAKING ) {
 						return false;
 					} else {
@@ -803,12 +804,12 @@ public class UtteranceActionProposer extends Component
 	{
 		Map<String,String> userInfoMap = userInfo.getInfos();
 
-		if( userInfoMap.get("behaviour").equals("speaking") ) {
+		if( userInfoMap.get("speaking").equals("true") ) {
 			if( userSpeakingState != SPEAKING ) {
 				userSpeakingState = SPEAKING;
 				userSpeakingStateTime = meta.getTime();
 			}
-		} else if( userInfoMap.get("behaviour").equals("silence") ) {
+		} else if( userInfoMap.get("speaking").equals("false") ) {
 			if( userSpeakingState != LISTENING ) {
 				userSpeakingState = LISTENING;
 				userSpeakingStateTime = meta.getTime();
@@ -824,17 +825,17 @@ public class UtteranceActionProposer extends Component
 	{
 		Map<String,String> dialogInfoMap = userInfo.getInfos();
 		
-		if( dialogInfoMap.get("behaviour").equals("valence") ) {
-			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, intensity );
+		if( dialogInfoMap.get("valence") != null ) {
+			float valence = Float.parseFloat( dialogInfoMap.get("valence") );
+			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, valence );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("behaviour").equals("arousal") ) {
-			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, intensity );
+		} else if( dialogInfoMap.get("arousal") != null ) {
+			float arousal = Float.parseFloat( dialogInfoMap.get("arousal") );
+			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, arousal );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("behaviour").equals("interest") ) {
-			float intensity = Float.parseFloat( dialogInfoMap.get("behaviour intensity") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, intensity );
+		} else if( dialogInfoMap.get("interest") != null ) {
+			float interest = Float.parseFloat( dialogInfoMap.get("interest") );
+			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, interest );
 			detectedEmotions.add( ee );
 		}
 	}
