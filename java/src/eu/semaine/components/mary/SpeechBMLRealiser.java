@@ -30,13 +30,16 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.control.ParticipantControlGUI;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.BMLSender;
 import eu.semaine.jms.sender.BytesSender;
@@ -70,13 +73,15 @@ public class SpeechBMLRealiser extends Component
 	{
 		super("SpeechBMLRealiser");
 		
+		bmlSender = new BMLSender("semaine.data.synthesis.plan.speechtimings", getName());
+		audioSender = new BytesSender("semaine.data.synthesis.lowlevel.audio","AUDIO",getName());
+		senders.add(bmlSender);
+		senders.add(audioSender); // so it can be started etc
+		
 		bmlPlanReceiver = new BMLReceiver("semaine.data.synthesis.plan");
 		receivers.add(bmlPlanReceiver);
-		receivers.add(new XMLReceiver("semaine.data.state.context"));
-		bmlSender = new BMLSender("semaine.data.synthesis.plan.speechtimings", getName());
-		senders.add(bmlSender);
-		audioSender = new BytesSender("semaine.data.synthesis.lowlevel.audio","AUDIO",getName());
-		senders.add(audioSender); // so it can be started etc
+		receivers.add(new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState));
+		
 	}
 	
 	protected void customStartIO() throws Exception
@@ -120,9 +125,17 @@ public class SpeechBMLRealiser extends Component
 		if (!(m instanceof SEMAINEXMLMessage)) {
 			throw new MessageFormatException("expected XML message, got "+m.getClass().getSimpleName());
 		}
-		if (m.getTopicName().equals("semaine.data.state.context")) {
-			updateCharacter(m);
+		
+		// if you receive a state message  
+		if ( m instanceof SEMAINEStateMessage) {
+			SEMAINEStateMessage ssm = (SEMAINEStateMessage) m;
+			StateInfo state = ssm.getState();
+			if (state.hasInfo("character")) {
+                currentCharacter = state.getInfo("character");
+                System.out.println(currentCharacter);
+            } 
 		}
+		
 		if(m.getTopicName().equals("semaine.data.synthesis.plan")){
 			speechBMLRealiser(m);
 		}
@@ -221,26 +234,6 @@ public class SpeechBMLRealiser extends Component
 			request.writeOutputData(audioos);
 			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
 		}
-	}
-	
-	
-	private void updateCharacter(SEMAINEMessage m) throws MessageFormatException 
-	{
-        SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
-        Document doc = xm.getDocument();
-        Element root = doc.getDocumentElement();
-        if (!root.getTagName().equals(SemaineML.E_CONTEXT)) {
-            throw new MessageFormatException("Unexpected document element: expected tag name '"+SemaineML.E_CONTEXT+"', found '"+root.getTagName()+"'");
-        }
-        if (!root.getNamespaceURI().equals(SemaineML.namespaceURI)) {
-            throw new MessageFormatException("Unexpected document element namespace: expected '"+SemaineML.namespaceURI+"', found '"+root.getNamespaceURI()+"'");
-        }
-        
-        Element character = XMLTool.getChildElementByTagNameNS(root, SemaineML.E_CHARACTER, SemaineML.namespaceURI);
-        if (character != null) {
-        	currentCharacter = character.getAttribute(SemaineML.A_NAME);
-        }
-		
 	}
 	
     public String getCurrentCharacter()

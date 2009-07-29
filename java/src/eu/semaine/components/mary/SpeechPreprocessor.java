@@ -30,15 +30,18 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.control.ParticipantControlGUI;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.util.XMLTool;
@@ -68,11 +71,13 @@ public class SpeechPreprocessor extends Component
 	public SpeechPreprocessor() throws JMSException 
 	{
 		super("SpeechPreprocessor");
+		
 		fmlReceiver = new FMLReceiver("semaine.data.action.selected.function");
-		receivers.add(fmlReceiver); // to set up properly
 		bmlReceiver = new BMLReceiver("semaine.data.action.selected.behaviour");
+		receivers.add(fmlReceiver); // to set up properly
 		receivers.add(bmlReceiver);
-		receivers.add(new XMLReceiver("semaine.data.state.context"));
+		receivers.add(new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState));
+		
 		fmlbmlSender = new FMLSender("semaine.data.action.selected.speechpreprocessed", getName());
 		senders.add(fmlbmlSender); // so it can be started etc
 	}
@@ -118,12 +123,19 @@ public class SpeechPreprocessor extends Component
 			throw new MessageFormatException("expected XML message, got "+m.getClass().getSimpleName());
 		}
 		
-		if (m.getTopicName().equals("semaine.data.state.context")) {
-			updateCharacter(m);
+		// if you receive a state message 
+		if ( m instanceof SEMAINEStateMessage) {
+			SEMAINEStateMessage ssm = (SEMAINEStateMessage) m;
+			StateInfo state = ssm.getState();
+			if (state.hasInfo("character")) {
+                currentCharacter = state.getInfo("character");
+            } 
 		}
+		
 		if (m.getTopicName().equals("semaine.data.action.selected.function")) {
 			speechPreProcessor(m);
 		}
+		
 		if (m.getTopicName().equals("semaine.data.action.selected.behaviour")) {
 			//SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			//fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
@@ -131,27 +143,6 @@ public class SpeechPreprocessor extends Component
 		
 	}
 	
-	
-	
-	private void updateCharacter(SEMAINEMessage m) throws MessageFormatException 
-	{
-        SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
-        Document doc = xm.getDocument();
-        Element root = doc.getDocumentElement();
-        if (!root.getTagName().equals(SemaineML.E_CONTEXT)) {
-            throw new MessageFormatException("Unexpected document element: expected tag name '"+SemaineML.E_CONTEXT+"', found '"+root.getTagName()+"'");
-        }
-        if (!root.getNamespaceURI().equals(SemaineML.namespaceURI)) {
-            throw new MessageFormatException("Unexpected document element namespace: expected '"+SemaineML.namespaceURI+"', found '"+root.getNamespaceURI()+"'");
-        }
-        
-        Element character = XMLTool.getChildElementByTagNameNS(root, SemaineML.E_CHARACTER, SemaineML.namespaceURI);
-        if (character != null) {
-        	currentCharacter = character.getAttribute(SemaineML.A_NAME);
-        }
-		
-	}
-
 	/**
 	 * Speech Preprocessor
 	 */
