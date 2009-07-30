@@ -87,7 +87,7 @@ select="document('semaine.mary.realised.acoustics')"/>
                 <mary:syllable accent="1">
 		<xsl:copy-of select="@stress"/>
         	<xsl:for-each select="*">
-         	     <xsl:variable name="duration" select="@d div 1000"/>
+         	     <xsl:variable name="duration" select="@d"/>
      		     <xsl:variable name="endTime" select="@end"/>
          	     <xsl:variable name="phone"  select="@p"/>
 	             <mary:ph d="{$duration}" end="{$endTime}" p="{$phone}"> </mary:ph>
@@ -98,7 +98,7 @@ select="document('semaine.mary.realised.acoustics')"/>
                 <mary:syllable>
 		<xsl:copy-of select="@stress"/>
         	<xsl:for-each select="*">
-         	     <xsl:variable name="duration" select="@d div 1000"/>
+         	     <xsl:variable name="duration" select="@d"/>
      		     <xsl:variable name="endTime" select="@end"/>
          	     <xsl:variable name="phone"  select="@p"/>
 	             <mary:ph d="{$duration}" end="{$endTime}" p="{$phone}"> </mary:ph>
@@ -111,6 +111,7 @@ select="document('semaine.mary.realised.acoustics')"/>
    <!-- Extract mark elements with thier names --> 	
    <xsl:template name="getMarkData" match="mary:mark">
 	<ssml:mark name="{substring-after(@name,':')}"/>
+	<!--ssml:mark name="{@name}"/-->
    </xsl:template>
 
    <!-- Extract boundary elements with thier durations in Milliseconds(?)  --> 	
