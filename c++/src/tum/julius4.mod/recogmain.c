@@ -1332,7 +1332,7 @@ end_recog:
     /**********************/
 
     /* update CMN info for next input (in case of realtime wave input) */
-    if ((jconf->input.type == INPUT_WAVEFORM || (jconf->input.type == INPUT_VECTOR && jconf->input.speech_input == SP_EXTERN)) && jconf->decodeopt.realtime_flag) {
+    if ((jconf->input.type == INPUT_WAVEFORM) && jconf->decodeopt.realtime_flag) {
       for(mfcc=recog->mfcclist;mfcc;mfcc=mfcc->next) {
         if (mfcc->param->samplenum > 0) {
           RealTimeCMNUpdate(mfcc, recog);
@@ -1380,11 +1380,11 @@ end_recog:
         if (verbose_flag) jlog("STAT: <<<restart the rest>>>\n\n");
       } else {
         /* input has reached end of stream, terminate program */
-        if (ret <= 0 && ret != -2) break;
+        if (ret <= 0 && ret != -1) break; /* <-- patched by Florian: ret != -2 => ret != -1, now julius terminates! ;-) */
       }
     } else {			/* not sp-segment mode */
       /* input has reached end of stream, terminate program */
-      if (ret <= 0 && ret != -2) break;
+      if (ret <= 0 && ret != -1) break; /* <-- patched by Florian: ret != -2 => ret != -1, now julius terminates! ;-) */
     }
 
     /* recognition continues for next (silence-aparted) segment */
