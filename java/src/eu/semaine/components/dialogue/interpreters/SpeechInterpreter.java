@@ -16,12 +16,14 @@ import org.w3c.dom.Element;
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
+import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.FeatureReceiver;
 import eu.semaine.jms.sender.StateSender;
+import eu.semaine.util.XMLTool;
  	
 /**
  * The SpeechInterpreter determines exactly if the user is speaking or if he's silent.
@@ -92,6 +94,7 @@ public class SpeechInterpreter extends Component
 			}
 		} else if( m instanceof SEMAINEEmmaMessage ) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
+			//System.out.println("\n\n" + em.getText() );
 			
 			Element interpretation = em.getTopLevelInterpretation();
 			if (interpretation != null) {
@@ -106,9 +109,36 @@ public class SpeechInterpreter extends Component
 					}
 				}
 			}
+			
+			/* Reading words */
+			System.out.println(em.getText());
+			Element wordSequence = em.getSequence();
+			if( wordSequence != null ) {
+				System.out.println("WordSequence found");
+				List<Element> wordElements = XMLTool.getChildrenByLocalNameNS(wordSequence, EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+				if( wordElements.size() > 0 ) {
+					System.out.println("WordElements found");
+					String detectedKeywords = "";
+					String starttime = null;
+					for( Element wordElem : wordElements ) {
+						if( wordElem.hasAttribute("tokens") ) {
+							detectedKeywords = detectedKeywords + wordElem.getAttribute("tokens") + " ";
+						}
+						if( starttime == null && wordElem.hasAttribute("offset-to-start") ) {
+							starttime = wordElem.getAttribute("offset-to-start");
+						}
+					}
+					detectedKeywords = detectedKeywords.trim();
+					if(starttime != null) {
+						sendDetectedKeywords(detectedKeywords, starttime);
+					}
+				}
+			}
+			
 		}
 		/* Determines the new user speaking state */
-		if( speakingParam && rmsEnergy >= 0.003 ) {
+		//if( speakingParam && rmsEnergy >= 0.003 ) {
+		if( speakingParam ) {
 			if( !speaking ) {
 				/* Change the user speaking state to 'true' and send this change around */
 				speaking = true;
@@ -135,6 +165,17 @@ public class SpeechInterpreter extends Component
 		} else {
 			userStateInfo.put("speaking", "false");
 		}
+		
+		UserStateInfo usi = new UserStateInfo(userStateInfo	);
+		userStateSender.sendStateInfo(usi, meta.getTime());	
+	}
+	
+	public void sendDetectedKeywords( String detectedKeywords, String starttime ) throws JMSException
+	{
+		Map<String,String> userStateInfo = new HashMap<String,String>();
+		userStateInfo.put("userUtterance", detectedKeywords);
+		userStateInfo.put("userUtteranceStartTime", starttime);
+		System.out.println("Detected the following utterance (t:" + starttime + "): " + detectedKeywords + ".");
 		
 		UserStateInfo usi = new UserStateInfo(userStateInfo	);
 		userStateSender.sendStateInfo(usi, meta.getTime());	

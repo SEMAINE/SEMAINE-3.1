@@ -19,6 +19,7 @@ public class EMMA
 	public static final String ROOT_TAGNAME = E_EMMA;
 	public static final String E_INTERPRETATION = "interpretation";
 	public static final String E_ONEOF = "one-of";
+	public static final String E_SEQUENCE = "sequence";
 	
 	// Attributes
 	public static final String A_START = "start";

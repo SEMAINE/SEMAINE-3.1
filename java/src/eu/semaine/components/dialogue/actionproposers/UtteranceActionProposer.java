@@ -240,16 +240,20 @@ public class UtteranceActionProposer extends Component
 		if( m instanceof SEMAINEStateMessage ) {
 			SEMAINEStateMessage sm = ((SEMAINEStateMessage)m);
 			StateInfo stateInfo = sm.getState();
-			if (stateInfo.getType() == StateInfo.Type.UserState) {
+			StateInfo.Type stateInfoType = stateInfo.getType();
+			
+			switch (stateInfoType) {
+			case UserState:
 				/* Updates user speaking state (speaking or silent) */
 				setUserSpeakingState(stateInfo);
 				
 				/* Updates detected emotions (valence, arousal, interest) */
 				addDetectedEmotions(stateInfo);
-			}
-			if( stateInfo.getType() == StateInfo.Type.ContextState ) {
+				break;
+			case ContextState:
 				/* Updates the current character and the user */
 				updateCharacterAndUser( stateInfo );
+				break;
 			}
 		}
 		
@@ -291,22 +295,20 @@ public class UtteranceActionProposer extends Component
 	/* TODO: Omzetten naar ContextState */
 	public void updateCharacterAndUser( StateInfo stateInfo ) throws JMSException
 	{
-		System.out.println("ContextState data");
-		Map<String,String> contextInfo = stateInfo.getInfos();
+		//Map<String,String> contextInfo = stateInfo.getInfos();
 		boolean newUser = false;
 		
-		if( contextInfo.containsKey("userPresent") ) {
-			System.out.println("UserPresent data");
-			if( contextInfo.get("userPresent").equals("present") && !isUserPresent ) {
+		if( stateInfo.hasInfo("userPresent") ) {
+			if( stateInfo.getInfo("userPresent").equals("present") && !isUserPresent ) {
 				newUser = true;
 				userAppeared();
-			} else if( contextInfo.get("userPresent").equals("absent") && isUserPresent ) {
+			} else if( stateInfo.getInfo("userPresent").equals("absent") && isUserPresent ) {
 				userDisappeared();
 			}
 		}
 		
-		if( contextInfo.containsKey("character") ) {
-			currChar = charNumbers.get( contextInfo.get("character") );
+		if( stateInfo.hasInfo("character") ) {
+			currChar = charNumbers.get( stateInfo.getInfo("character") );
 			if( systemStarted ) {
 				charStartupState = INTRODUCED;
 				
@@ -656,7 +658,7 @@ public class UtteranceActionProposer extends Component
 		HashMap<String,ArrayList<String>> utterancesChar = allUtterances.get(currChar);
 		ArrayList<String> utterancesType = utteranceCopy( utterancesChar.get(type) );
 		
-		for( int i=utteranceHistory.size()-1; i>=0; i-- ) {
+		for( int i=utteranceHistory.size()-1; i>=(Math.max(0, utteranceHistory.size()-3)); i-- ) {
 			AgentUtterance uttr = utteranceHistory.get(i);
 			if( utterancesType.contains( uttr.getUtterance() ) ) {
 				utterancesType.remove(uttr.getUtterance());
@@ -790,17 +792,17 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		Map<String,String> userInfoMap = userInfo.getInfos();
-
-		if( userInfoMap.get("speaking").equals("true") ) {
-			if( userSpeakingState != SPEAKING ) {
-				userSpeakingState = SPEAKING;
-				userSpeakingStateTime = meta.getTime();
-			}
-		} else if( userInfoMap.get("speaking").equals("false") ) {
-			if( userSpeakingState != LISTENING ) {
-				userSpeakingState = LISTENING;
-				userSpeakingStateTime = meta.getTime();
+		if( userInfo.hasInfo("speaking") ) {
+			if( userInfo.getInfo("speaking").equals("true") ) {
+				if( userSpeakingState != SPEAKING ) {
+					userSpeakingState = SPEAKING;
+					userSpeakingStateTime = meta.getTime();
+				}
+			} else if( userInfo.getInfo("speaking").equals("false") ) {
+				if( userSpeakingState != LISTENING ) {
+					userSpeakingState = LISTENING;
+					userSpeakingStateTime = meta.getTime();
+				}
 			}
 		}
 	}
@@ -811,18 +813,18 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void addDetectedEmotions(StateInfo userInfo)
 	{
-		Map<String,String> dialogInfoMap = userInfo.getInfos();
+		//Map<String,String> dialogInfoMap = userInfo.getInfos();
 		
-		if( dialogInfoMap.get("valence") != null ) {
-			float valence = Float.parseFloat( dialogInfoMap.get("valence") );
+		if( userInfo.hasInfo("valence") ) {
+			float valence = Float.parseFloat( userInfo.getInfo("valence") );
 			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, valence );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("arousal") != null ) {
-			float arousal = Float.parseFloat( dialogInfoMap.get("arousal") );
+		} else if( userInfo.hasInfo("arousal") ) {
+			float arousal = Float.parseFloat( userInfo.getInfo("arousal") );
 			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, arousal );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("interest") != null ) {
-			float interest = Float.parseFloat( dialogInfoMap.get("interest") );
+		} else if( userInfo.hasInfo("interest") ) {
+			float interest = Float.parseFloat( userInfo.getInfo("interest") );
 			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, interest );
 			detectedEmotions.add( ee );
 		}
@@ -835,13 +837,13 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void addDetectedDActs( SEMAINEXMLMessage m ) throws JMSException
 	{
-		Element text = XMLTool.getChildElementByTagNameNS(m.getDocument().getDocumentElement(), SemaineML.E_TEXT, SemaineML.namespaceURI);
+		Element text = XMLTool.getChildElementByLocalNameNS(m.getDocument().getDocumentElement(), SemaineML.E_TEXT, SemaineML.namespaceURI);
 		if( text != null ) {
 			String utterance = text.getTextContent();
 			DialogueAct act = new DialogueAct(utterance);
 
 			if( act != null ) {
-				List<Element> features = XMLTool.getChildrenByTagNameNS(text, SemaineML.E_FEATURE, SemaineML.namespaceURI);
+				List<Element> features = XMLTool.getChildrenByLocalNameNS(text, SemaineML.E_FEATURE, SemaineML.namespaceURI);
 				for( Element feature : features ) {
 					String f = feature.getAttribute( "name" );
 					if( f.equals("positive") ) act.setPositive(true);

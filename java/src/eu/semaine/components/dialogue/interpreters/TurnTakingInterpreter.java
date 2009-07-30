@@ -170,10 +170,8 @@ public class TurnTakingInterpreter extends Component
 	
 	public void updateCharacter( StateInfo stateInfo ) throws JMSException
 	{
-		Map<String,String> contextInfo = stateInfo.getInfos();
-		
-		if( contextInfo.containsKey("character") ) {
-			character = charNumbers.get( contextInfo.get("character") );
+		if( stateInfo.hasInfo("character") ) {
+			character = charNumbers.get( stateInfo.getInfo("character") );
 		}
 	}
 	
@@ -192,19 +190,19 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void setAgentSpeakingState(StateInfo dialogInfo)
 	{
-		Map<String,String> userInfoMap = dialogInfo.getInfos();
-
-		if( userInfoMap.get("agentTurnState").equals("true") ) {
-			backchannel_given = false;
-			agentSpeakingState = SPEAKING;
-			agentSpeakingStateTime = meta.getTime();
-		} else if( userInfoMap.get("agentTurnState").equals("false") ) {
-			backchannel_given = false;
-			agentSpeakingState = SILENT;
-			agentSpeakingStateTime = meta.getTime();
-			if( userSpeakingState == SILENT ) {
-				userSpeakingState = WAITING;
-				userSpeakingStateTime = meta.getTime();
+		if( dialogInfo.hasInfo("agentTurnState") ) {
+			if( dialogInfo.getInfo("agentTurnState").equals("true") ) {
+				backchannel_given = false;
+				agentSpeakingState = SPEAKING;
+				agentSpeakingStateTime = meta.getTime();
+			} else if( dialogInfo.getInfo("agentTurnState").equals("false") ) {
+				backchannel_given = false;
+				agentSpeakingState = SILENT;
+				agentSpeakingStateTime = meta.getTime();
+				if( userSpeakingState == SILENT ) {
+					userSpeakingState = WAITING;
+					userSpeakingStateTime = meta.getTime();
+				}
 			}
 		}
 	}
@@ -215,16 +213,14 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void setUserSpeakingState(StateInfo userInfo)
 	{
-		Map<String,String> userInfoMap = userInfo.getInfos();
-
-		if( userInfoMap.get("speaking") != null ) {
-			if( userInfoMap.get("speaking").equals("true") ) {
+		if( userInfo.hasInfo("speaking") ) {
+			if( userInfo.getInfo("speaking").equals("true") ) {
 				if( userSpeakingState != SPEAKING ) {
 					backchannel_given = false;
 					userSpeakingState = SPEAKING;
 					userSpeakingStateTime = meta.getTime();
 				}
-			} else if( userInfoMap.get("speaking").equals("false") ) {
+			} else if( userInfo.getInfo("speaking").equals("false") ) {
 				if( userSpeakingState != SILENT ) {
 					latestUtteranceLength = meta.getTime() - userSpeakingStateTime;
 					userSpeakingState = SILENT;
@@ -262,7 +258,7 @@ public class TurnTakingInterpreter extends Component
 	
 	public void processBackchannel(StateInfo agentInfo)
 	{
-		// TODO: Andere manier
+		// TODO: To Fix
 		Map<String,String> agentInfoMap = agentInfo.getInfos();
 		
 		String intention = agentInfoMap.get( "turnTakingIntention" );
@@ -277,18 +273,16 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public void addDetectedEmotions(StateInfo userInfo)
 	{
-		Map<String,String> dialogInfoMap = userInfo.getInfos();
-		
-		if( dialogInfoMap.get("valence") != null ) {
-			float valence = Float.parseFloat( dialogInfoMap.get("valence") );
+		if( userInfo.hasInfo("valence") ) {
+			float valence = Float.parseFloat( userInfo.getInfo("valence") );
 			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, valence );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("arousal") != null ) {
-			float arousal = Float.parseFloat( dialogInfoMap.get("arousal") );
+		} else if( userInfo.hasInfo("arousal") ) {
+			float arousal = Float.parseFloat( userInfo.getInfo("arousal") );
 			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, arousal );
 			detectedEmotions.add( ee );
-		} else if( dialogInfoMap.get("interest") != null ) {
-			float interest = Float.parseFloat( dialogInfoMap.get("interest") );
+		} else if( userInfo.hasInfo("interest") ) {
+			float interest = Float.parseFloat( userInfo.getInfo("interest") );
 			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, interest );
 			detectedEmotions.add( ee );
 		}

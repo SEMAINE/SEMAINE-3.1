@@ -36,6 +36,11 @@ public class SEMAINEEmmaMessage extends SEMAINEXMLMessage {
 		return XMLTool.getChildElementByTagNameNS(doc.getDocumentElement(), EMMA.E_ONEOF, EMMA.namespaceURI);
 	}
 	
+	public Element getSequence()
+	{
+		return XMLTool.getChildElementByLocalNameNS(doc.getDocumentElement(), EMMA.E_SEQUENCE, EMMA.namespaceURI);
+	}
+	
 	public Element getTopLevelInterpretation()
 	{
 		return XMLTool.getChildElementByTagNameNS(doc.getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);

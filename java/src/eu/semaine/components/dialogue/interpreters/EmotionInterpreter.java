@@ -6,6 +6,7 @@
 package eu.semaine.components.dialogue.interpreters;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jms.JMSException;
@@ -15,6 +16,7 @@ import org.w3c.dom.Element;
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
+import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -74,15 +76,8 @@ public class EmotionInterpreter extends Component
 		/* Read the emotions from the message */
 		float[] emotions = getEmotions(m);
 		
-		/* Determine if the values exceed the thresholds */
-		if( emotions[0] >= VALENCE_THRESHOLD ) {
-			sendEmotion( "valence", emotions[0] );
-		} 
-		if( emotions[1] >= AROUSAL_THRESHOLD ) {
-			sendEmotion( "arousal", emotions[1] );
-		}
-		if( emotions[2] >= INTEREST_THRESHOLD ) {
-			sendEmotion( "interest", emotions[2] );
+		if( emotions != null ) {
+			sendEmotions(emotions);
 		}
 	}
 	
@@ -93,39 +88,73 @@ public class EmotionInterpreter extends Component
 	 */
 	public float[] getEmotions( SEMAINEMessage m ) throws JMSException
 	{
-		/* Initializing the emotion array */
+		// valence, arousal, interest (in this order)
 		float[] emotions = new float[3];
-		emotions[0] = 0f;
-		emotions[1] = 0f;
-		emotions[2] = 0f;
+		emotions[0] = -2;
+		emotions[1] = -2;
+		emotions[2] = -2;
+		boolean emotionsChanged = false;
 		
 		/* Reading SemaineMessage */
 		if( m instanceof SEMAINEEmmaMessage ) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 
-			/* Reading dimension-Element */
-			Element dimensions = (Element) em.getDocument().getElementsByTagNameNS( EmotionML.namespaceURI, EmotionML.E_DIMENSIONS).item(0);
-			if( dimensions != null ) {
-				Element valenceElem = XMLTool.needChildElementByTagNameNS(dimensions, EmotionML.E_VALENCE, EmotionML.namespaceURI);
-				Element arousalElem = XMLTool.needChildElementByTagNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
-
-				float valence = Float.parseFloat(valenceElem.getAttribute(EmotionML.A_VALUE));
-				float arousal = Float.parseFloat(arousalElem.getAttribute(EmotionML.A_VALUE));
-				
-				emotions[0] = valence;
-				emotions[1] = arousal;
+			/* Reading valence and arousal */
+			Element interpretation = XMLTool.getChildElementByLocalNameNS(em.getDocument().getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+			if( interpretation != null ) {
+				List<Element> emotionElements = em.getEmotionElements(interpretation);
+				for( Element emotion : emotionElements ) {
+					List<Element> dimensionElements = XMLTool.getChildrenByLocalNameNS(emotion, EmotionML.E_DIMENSIONS, EmotionML.namespaceURI);
+					for( Element dimension : dimensionElements ) {
+						Element valenceElement = XMLTool.getChildElementByLocalNameNS(dimension, EmotionML.E_VALENCE, EmotionML.namespaceURI);
+						if( valenceElement != null && valenceElement.hasAttribute(EmotionML.A_VALUE) ) {
+							emotions[0] = Float.parseFloat( valenceElement.getAttribute(EmotionML.A_VALUE) );
+							emotionsChanged = true;
+						}
+						Element arousalElement = XMLTool.getChildElementByLocalNameNS(dimension, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
+						if( arousalElement != null && arousalElement.hasAttribute(EmotionML.A_VALUE) ) {
+							emotions[1] = Float.parseFloat( arousalElement.getAttribute(EmotionML.A_VALUE) );
+							emotionsChanged = true;
+						}
+					}
+				}
 			}
 			
-			/* Reading category-Element */
-			Element category = (Element) em.getDocument().getElementsByTagNameNS(EmotionML.namespaceURI, EmotionML.E_CATEGORY).item(0);
-			if( category != null ) {
-				if( category.getAttribute("name").equals("interest") ){
-					float interest = Float.parseFloat(category.getAttribute("value"));
-					emotions[2] = interest;
+			/* Reading interest */
+			Element oneOf = em.getOneOf();
+			if(oneOf != null) {
+				List<Element> interpretations = XMLTool.getChildrenByLocalNameNS(oneOf, EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+				if( interpretations.size() > 0 ) {
+					float bored = 0;
+					float neutral = 0;
+					float interested = 0;
+					for( Element interpretationElem : interpretations ) {
+						List<Element> emotionElements = em.getEmotionElements(interpretationElem);
+						for( Element emotion : emotionElements ) {
+							Element category = XMLTool.getChildElementByLocalNameNS(emotion, EmotionML.E_CATEGORY, EmotionML.namespaceURI);
+							if( category != null && category.hasAttribute(EmotionML.A_NAME) ) {
+								String cat = category.getAttribute(EmotionML.A_NAME);
+								if( cat.equals("bored") ) {
+									bored = Float.parseFloat( interpretationElem.getAttribute(EMMA.A_CONFIDENCE) );
+								} else if( cat.equals("neutral") ) {
+									neutral = Float.parseFloat( interpretationElem.getAttribute(EMMA.A_CONFIDENCE) );
+								} else if( cat.equals("interested") ) {
+									interested = Float.parseFloat( interpretationElem.getAttribute(EMMA.A_CONFIDENCE) );
+								}
+							}
+						}
+					}
+					/* Calculate combined interest-value */
+					emotions[2] = -1*bored + interested;
+					emotionsChanged = true;
 				}
 			}
 		}
-		return emotions;
+		if( emotionsChanged ) {
+			return emotions;
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -134,11 +163,18 @@ public class EmotionInterpreter extends Component
 	 * @param value		- the value of the emotion to send
 	 * @throws JMSException
 	 */
-	public void sendEmotion( String emotion, float value ) throws JMSException
+	public void sendEmotions( float[] emotions ) throws JMSException
 	{
 		Map<String,String> userStateInfo = new HashMap<String,String>();
-		userStateInfo.put("behaviour", emotion);
-		userStateInfo.put("behaviour intensity", ""+value );
+		if( emotions[0] != -2 ) {
+			userStateInfo.put("valence",""+emotions[0]);
+		}
+		if( emotions[1] != -2 ) {
+			userStateInfo.put("arousal",""+emotions[1]);
+		}
+		if( emotions[2] != -2 ) {
+			userStateInfo.put("interest",""+emotions[2]);
+		}
 		
 		UserStateInfo usi = new UserStateInfo(userStateInfo	);
 		userStateSender.sendStateInfo(usi, meta.getTime());	
