@@ -21,6 +21,10 @@ xmlns:ssml="http://www.w3.org/2001/10/synthesis">
       </speak>
     </xsl:template>
 
-   <xsl:template match="text()"></xsl:template>
+
+	
+
+   <xsl:template match="text()"/>
+   
 
 </xsl:stylesheet>

@@ -60,6 +60,7 @@ public class SpeechBMLRealiser extends Component
 	
 	private static TransformerFactory tFactory = null;
 	private static Templates bml2ssmlStylesheet = null;
+	private static Templates bmlSpeechTimingRemoverStylesheet = null;
     private Transformer transformer;
     private int backchannelNumber = 0;
     private int MaxNoOfBackchannels = 4;
@@ -89,6 +90,14 @@ public class SpeechBMLRealiser extends Component
 		if (tFactory == null) {
             tFactory = TransformerFactory.newInstance();
 		 }
+		
+		//BML timing info removal
+		StreamSource bmlstylesheetStream =
+	        new StreamSource( SpeechBMLRealiser.class.getResourceAsStream(          
+	                 "BMLSpeechTimingInfoRemover.xsl"));
+		bmlSpeechTimingRemoverStylesheet = tFactory.newTemplates(bmlstylesheetStream);
+		
+		// BML2SSML conversion
     	StreamSource stylesheetStream =
 	        new StreamSource( SpeechBMLRealiser.class.getResourceAsStream(          
 	                 "BML2SSML.xsl"));
@@ -153,7 +162,8 @@ public class SpeechBMLRealiser extends Component
 		Document input = xm.getDocument();
 		String inputText = xm.getText();
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
-
+		ByteArrayOutputStream bmlos = new ByteArrayOutputStream();
+		
 		if(XMLTool.getChildElementByTagNameNS(input.getDocumentElement(), BML.E_BACKCHANNEL, BML.namespaceURI) != null){
 			// Back-channel synthesis
 			
@@ -200,10 +210,19 @@ public class SpeechBMLRealiser extends Component
 		}
 		else{
 			
+			// BML speech timing info removal
+			transformer = bmlSpeechTimingRemoverStylesheet.newTransformer();
+			//transformer.setParameter("character.voice", "spike");
+			transformer.transform(new DOMSource(input), new StreamResult(bmlos));
+			String bml = bmlos.toString();
+			System.out.println("BML OUTPUT: "+ bml);
+			
+			
 			// Utterance synthesis
 			transformer = bml2ssmlStylesheet.newTransformer();
 			transformer.setParameter("character.voice", getCurrentCharacter().toLowerCase());
-			transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
+			//transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
+			transformer.transform(new DOMSource(XMLTool.string2Document(bml)), new StreamResult(ssmlos));
 			
 			// SSML to Realised Acoustics using MARY 
 			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
