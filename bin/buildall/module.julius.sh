@@ -13,18 +13,6 @@ register_build "julius" "$JU_URL" "$JU_BASE" "func_build_julius" $1
 function func_build_julius {
 
 
-    cat Makefile.in | sed 's/^CONFIG_SUBDIRS.\+$/CONFIG_SUBDIRS=julius libjulius libsent/' > Makefile.in2
-    cat Makefile.in2 | sed 's/^SUBDIRS.\+$/SUBDIRS=julius libjulius libsent/' > Makefile.in3
-    rm Makefile.in2
-    mv Makefile.in Makefile.in.bak
-    mv Makefile.in3 Makefile.in
-    cat configure | sed 's/^subdirs=.\+$/subdirs="libsent libjulius julius"/' > configure2
-    cat configure2 | sed 's/^  for ac_config_dir in .\+$/  for ac_config_dir in julius libjulius libsent; do/' > configure3
-    rm configure2
-    mv configure configure.bak
-    mv configure3 configure
-    chmod +x configure
-
 
 #    cp $DOWNLOAD_PREFIX/julius.semaine.patch .
 #    patch -p0 < julius.semaine.patch
@@ -40,6 +28,23 @@ function func_build_julius {
     cp $JROOT/julius4.mod/m_info.c libjulius/src
 
     export CFLAGS="-DEXTERNAL_FV -g -ggdb -fPIC"
+
+
+    if test "x$1" = "xclean" ; then
+
+    cat Makefile.in | sed 's/^CONFIG_SUBDIRS.\+$/CONFIG_SUBDIRS=julius libjulius libsent/' > Makefile.in2
+    cat Makefile.in2 | sed 's/^SUBDIRS.\+$/SUBDIRS=julius libjulius libsent/' > Makefile.in3
+    rm Makefile.in2
+    mv Makefile.in Makefile.in.bak
+    mv Makefile.in3 Makefile.in
+    cat configure | sed 's/^subdirs=.\+$/subdirs="libsent libjulius julius"/' > configure2
+    cat configure2 | sed 's/^  for ac_config_dir in .\+$/  for ac_config_dir in julius libjulius libsent; do/' > configure3
+    rm configure2
+    mv configure configure.bak
+    mv configure3 configure
+    chmod +x configure
+
+
     ./configure --prefix=$INSTALL_PREFIX  
 
     cat libsent/include/sent/config.h | sed 's/.define HAVE_ESD_H 1$//' > libsent/include/sent/config.h2
@@ -56,6 +61,8 @@ function func_build_julius {
 
     if test "x$?" != "x0" ; then
       return 1;
+    fi
+
     fi
 
     if test "x$1" = "xclean" ; then
