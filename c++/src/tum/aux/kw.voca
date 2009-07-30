@@ -1,12 +1,12 @@
 <s>		[<s>]		sil
 </s>		[</s>]		sil
-breathe		[<breathe>]	nvb
-cough		[<cough>]	nvc
-garbage		[<garbage>]	nvg
-hesitation	[<hesitation>]	nvh
-laugh		[<laugh>]	nvl
-sigh		[<sigh>]	nvs
-mmh		[<mmh>]		nvmh
+breathe		[*breathe*]	nvb
+cough		[*cough*]	nvc
+garbage		[garbage]	nvg
+hesitation	[*hesitation*]	nvh
+laugh		[*laugh*]	nvl
+sigh		[*sigh*]	nvs
+mmh		[*mmh*]		nvmh
 AFRAID		[AFRAID]	ah f r ey d
 AFRAID		[AFRAID]	ae f r ey d
 AFRAID		[AFRAID]	ah f r ey t
@@ -31,8 +31,6 @@ APPEARING	[APPEARING]	ah p iy r ih ng
 APPEARING	[APPEARING]	ah p iy y uh r ih ng
 BACK		[BACK]		b ae k
 BAD		[BAD]		b ae d
-BAD		[BAD]		p eh d
-BAD		[BAD]		b eh d
 BALANCE		[BALANCE]	b ae l ah n s
 BEEN		[BEEN]		b ih n
 BEEN		[BEEN]		b iy n
@@ -339,7 +337,6 @@ WONDERFUL	[WONDERFUL]	w ah n d ah f ah l
 WONDERFUL	[WONDERFUL]	w ah n d ah f uw l
 WRONG		[WRONG]		r ao ng
 YEAH		[YEAH]		y ae
-YEAH		[YEAH]		y eh
 YEAH		[YEAH]		y eh ah
 YES		[YES]		y eh s
 YOU		[YOU]		y uw
