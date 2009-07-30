@@ -124,11 +124,25 @@ select="document('semaine.mary.realised.acoustics')"/>
 
    <!-- Extract text only from token elements --> 	
    <xsl:template match="mary:t"> 
-	<xsl:copy-of select="text()"/>
+   	<xsl:choose>
+		<xsl:when test="not(parent::mary:mtu)">
+			<xsl:copy-of select="text()"/>
+		</xsl:when>
+	</xsl:choose>
    </xsl:template>
    
+   <!-- Extract text only from token elements --> 	
+   <xsl:template match="mary:mtu"> 
+	<xsl:variable name="mtuText">
+  		<xsl:value-of select="@orig"/>
+	</xsl:variable>
+
+	<xsl:copy-of select="$mtuText"/>
+   </xsl:template>
+
+   
    <!-- Discard some MARYXML elements--> 	 
-   <xsl:template match="mary:mtu|mary:p|mary:voice|mary:phrase|mary:s|mary:maryxml|mary:ph|mary:prosody"/> 
+   <xsl:template match="mary:p|mary:voice|mary:phrase|mary:s|mary:maryxml|mary:ph|mary:prosody"/> 
    
 </xsl:stylesheet>
 
