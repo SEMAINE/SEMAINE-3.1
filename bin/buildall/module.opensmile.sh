@@ -102,7 +102,7 @@ function func_build_opensmile {
     createRunScript "SEMAINExtract -C ../aux/opensmileSemaine.conf" prefix "$INSTALL_PREFIX/bin/"
 
     # create a second version, for debugging the component with gdb
-    createRunScript "SEMAINExtract -C ../aux/opensmileSemaine.conf" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
+    createRunScript "SEMAINExtract -C ../aux/opensmileSemaine.conf -l 3 -d" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
 
     return 0;
 }
