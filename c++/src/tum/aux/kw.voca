@@ -1,0 +1,385 @@
+<s>		[<s>]		sil
+</s>		[</s>]		sil
+breathe		[<breathe>]	nvb
+cough		[<cough>]	nvc
+garbage		[<garbage>]	nvg
+hesitation	[<hesitation>]	nvh
+laugh		[<laugh>]	nvl
+sigh		[<sigh>]	nvs
+mmh		[<mmh>]		nvmh
+AFRAID		[AFRAID]	ah f r ey d
+AFRAID		[AFRAID]	ae f r ey d
+AFRAID		[AFRAID]	ah f r ey t
+AFRAID		[AFRAID]	ae f r ey t
+AFRAID		[AFRAID]	ae f er ey t
+AGGRESSIVE	[AGGRESSIVE]	ah g r eh s ih v
+AGGRESSIVE	[AGGRESSIVE]	ah g r eh s ah v
+AM		[AM]		ae m
+AMAZING		[AMAZING]	ah m ey z ih n g
+AMAZING		[AMAZING]	ae m ey z ih n g
+AMAZING		[AMAZING]	ah m ey z ih ng
+AMAZING		[AMAZING]	ae m ey z ih ng
+ANGRY		[ANGRY]		ae ng g r iy
+ANGRY		[ANGRY]		ae ng r iy
+ANGRY		[ANGRY]		ae ng r ay
+ANOTHER		[ANOTHER]	ah n ah dh er
+ANOTHER		[ANOTHER]	ah n ah dh ah
+ANOTHER		[ANOTHER]	ae n ah dh er
+ANOTHER		[ANOTHER]	ah n ah dh eh r
+APPEARING	[APPEARING]	ah p ih r ih ng
+APPEARING	[APPEARING]	ah p iy r ih ng
+APPEARING	[APPEARING]	ah p iy y uh r ih ng
+BACK		[BACK]		b ae k
+BAD		[BAD]		b ae d
+BAD		[BAD]		p eh d
+BAD		[BAD]		b eh d
+BALANCE		[BALANCE]	b ae l ah n s
+BEEN		[BEEN]		b ih n
+BEEN		[BEEN]		b iy n
+BEEN		[BEEN]		b eh n
+BEST		[BEST]		b eh s t
+BETTER		[BETTER]	b eh t er
+BETTER		[BETTER]	b eh t ah
+BETTER		[BETTER]	b ae t ah
+BLAH		[BLAH]		b l aa
+BLOODY		[BLOODY]	b l ah d iy
+BLOODY		[BLOODY]	b l eh d iy
+BRIGHT		[BRIGHT]	b r ay t
+CHARACTER	[CHARACTER]	k ae r ah k t er
+CHARACTER	[CHARACTER]	k ah r ah k t er
+CHARACTER	[CHARACTER]	k eh r ih k t er
+CHARACTER	[CHARACTER]	k ae r ih k t er
+CHARACTER	[CHARACTER]	k ae r ah k t ah
+CHEERFUL	[CHEERFUL]	ch ih r f ah l
+CHEERFUL	[CHEERFUL]	ch ih f ah l
+CHEERFUL	[CHEERFUL]	ch iy f w l
+CHEERFUL	[CHEERFUL]	ch iy ah f w l
+COMFORTABLE	[COMFORTABLE]	k ah m f t er b ah l
+COMFORTABLE	[COMFORTABLE]	k ah m f er t ah b ah l
+COMFORTABLE	[COMFORTABLE]	k ah f ah t ow b l
+COMFORTABLE	[COMFORTABLE]	k ah m f ah t ow b l
+COMING		[COMING]	k ah m ih ng
+CROSS		[CROSS]		k r ao s
+DID		[DID]		d ih d
+DID		[DID]		d ih t
+DIDN_T		[DIDN_T]	d ih d n t
+DIDN_T		[DIDN_T]	d ih d ah n t
+ELSE		[ELSE]		eh l s
+ELSE		[ELSE]		ae l s
+ENERGETIC	[ENERGETIC]	eh n er jh eh t ih k
+ENERGETIC	[ENERGETIC]	eh n ah jh eh t ih k
+ENERGETIC	[ENERGETIC]	eh n er jh eh t iy k
+FED_UP		[FED_UP]	f eh d ah p
+FEEL		[FEEL]		f iy l
+FEELING		[FEELING]	f iy l ih ng
+FELT		[FELT]		f eh l t
+FINE		[FINE]		f ay n
+FOOL		[FOOL]		f uw l
+FRUSTRATED	[FRUSTRATED]	f r ah s t r ey t ah d
+FRUSTRATED	[FRUSTRATED]	f r ah s t r ey t eh d
+FRUSTRATED	[FRUSTRATED]	f r ah s t r ey d ah d
+FRUSTRATED	[FRUSTRATED]	f r ah s t r ey d eh d
+FURIOUS		[FURIOUS]	f jh uh r ih ah s
+FURIOUS		[FURIOUS]	f jh uh r ih s
+GET		[GET]		g eh t
+GET		[GET]		g ae t
+GIT		[GIT]		g ih t
+GLOOMY		[GLOOMY]	g l uw m iy
+GLOOMY		[GLOOMY]	g l uw m ih
+GO		[GO]		g ow
+GOING		[GOING]		g ow ih ng
+GOING		[GOING]		g ow iy ng
+GOING_MAD	[GOING_MAD]	g ow ih ng m ae d
+GOING_MAD	[GOING_MAD]	g ow iy ng m ae d
+GONNA		[GONNA]		g aa n ah
+GONNA		[GONNA]		g ah n ah
+GOOD		[GOOD]		g uh d
+GOOD_FRAME_OF_MIND	[GOOD_FRAME_OF_MIND]	g uh d f r ey m ah v m ay n d
+GOOD_FRAME_OF_MIND	[GOOD_FRAME_OF_MIND]	g uh t f r ey m ah v m ay n d
+GOOD_FRAME_OF_MIND	[GOOD_FRAME_OF_MIND]	g uh d f r ey m ao v m ay n d
+GOOD_FRAME_OF_MIND	[GOOD_FRAME_OF_MIND]	g uh d f r ey m ah f m ay n d
+GOOD_FRAME_OF_MIND	[GOOD_FRAME_OF_MIND]	g uh t f r ey m ah f m ay n d
+GOOD_FRAME_OF_MIND	[GOOD_FRAME_OF_MIND]	g uh d f r ey m ao f m ay n d
+GOOD_MOOD	[GOOD_MOOD]	g uh d m uw d
+GOOD_MOOD	[GOOD_MOOD]	g uh d m uw
+GOT		[GOT]		g aa t
+GOT		[GOT]		g ao t
+GOT		[GOT]		g aa d
+GREAT		[GREAT]		g r ey t
+GREAT		[GREAT]		g r ey d
+GRIM		[GRIM]		g r ih m
+HAD		[HAD]		hh ae d
+HADN_T		[HADN_T]	hh ae d n t
+HADN_T		[HADN_T]	hh ae d ah n t
+HAPPY		[HAPPY]		hh ae p iy
+HAPPY		[HAPPY]		hh ae b iy
+HAVE		[HAVE]		hh ae v
+HAVE		[HAVE]		hh ae f
+HE		[HE]		hh iy
+HELL		[HELL]		hh eh l
+HORRIBLE	[HORRIBLE]	hh ao r ah b ah l
+HORRIBLE	[HORRIBLE]	hh ao r ah b l
+HORRIBLE	[HORRIBLE]	hh ah r ah b ah l
+HORRIBLE	[HORRIBLE]	hh ah r ah b l
+I		[I]		ay
+I_LL		[I_LL]		ay l
+I_M		[I_M]		ay m
+INSULTED	[INSULTED]	ih n s ah l t ih d
+INSULTED	[INSULTED]	ih n s ah l t eh d
+INSULTED	[INSULTED]	iy n s ah l t ih d
+INSULTED	[INSULTED]	iy n s ah l t eh d
+I_VE		[I_VE]		ay v
+KNOW		[KNOW]		n ow
+LOSER		[LOSER]		l uw z er
+LOSER		[LOSER]		l uw z ah
+LOSER		[LOSER]		l uw s er
+LOSER		[LOSER]		l uw s ah
+LOVELY		[LOVELY]	l ah v l iy
+LOVELY		[LOVELY]	l ao v l iy
+LOVELY		[LOVELY]	l ah f l iy
+LOVELY		[LOVELY]	l ao f l iy
+MANIC		[MANIC]		m ae n ih k
+ME		[ME]		m iy
+MISERABLE	[MISERABLE]	m ih z er ah b ah l
+MISERABLE	[MISERABLE]	m ih z r b l
+MISERABLE	[MISERABLE]	m ih z r ah b l
+MISERABLE	[MISERABLE]	m ih s er ah b ah l
+MISERABLE	[MISERABLE]	m ih s r b l
+MISERABLE	[MISERABLE]	m ih s r ah b l
+MISUNDERSTOOD	[MISUNDERSTOOD]	m ih s ah n d er s t uh d
+MISUNDERSTOOD	[MISUNDERSTOOD]	m ih s ah n d er s d uh d
+MISUNDERSTOOD	[MISUNDERSTOOD]	m ih s ah n d ah s t uh d
+MISUNDERSTOOD	[MISUNDERSTOOD]	m ih s ah n d ah s d uh d
+MOOD		[MOOD]		m uw d
+MOOD		[MOOD]		m uw t
+MY		[MY]		m ay
+NASTY		[NASTY]		n ae s t iy
+NASTY		[NASTY]		n ae s d iy
+NEED		[NEED]		n iy d
+NERVES		[NERVES]	n er v z
+NERVES		[NERVES]	n er f z
+NEXT		[NEXT]		n eh k s t
+NEXT		[NEXT]		n eh k s d
+NICE		[NICE]		n ay s
+NO		[NO]		n ow
+NOT		[NOT]		n aa t
+NOT		[NOT]		n ao t
+OBADIAH		[OBADIAH]	ow b ah d ay ah
+OBADIAH		[OBADIAH]	ao b ah d ay ah
+OBADIAH		[OBADIAH]	uh b ah d ay ah
+OBADIAH		[OBADIAH]	uh b ae d ay ah
+OBADIAH		[OBADIAH]	uh b ah d ay y eh
+OBADIAH		[OBADIAH]	uh b ae d ay y eh
+OBJECTIVELY	[OBJECTIVELY]	aa b jh eh k t ih v l iy
+OBJECTIVELY	[OBJECTIVELY]	ao b jh eh k t ih v l iy
+OBJECTIVELY	[OBJECTIVELY]	aa b jh eh g t ih v l iy
+OBJECTIVELY	[OBJECTIVELY]	ao b jh eh g t ih v l iy
+OBJECTIVELY	[OBJECTIVELY]	aa b jh eh k t ih f l iy
+OBJECTIVELY	[OBJECTIVELY]	ao b jh eh k t ih f l iy
+OBJECTIVELY	[OBJECTIVELY]	aa b jh eh g t ih f l iy
+OBJECTIVELY	[OBJECTIVELY]	ao b jh eh g t ih f l iy
+OKAY		[OKAY]		ow k ey
+PEOPLE		[PEOPLE]	p iy p ah l
+PEOPLE		[PEOPLE]	p iy p l
+PEOPLE		[PEOPLE]	p iy b l
+PLANNING	[PLANNING]	p l ae n ih ng
+PLANNING	[PLANNING]	p l ae n iy ng
+PLANNING	[PLANNING]	p l ah n ih ng
+PLANNING	[PLANNING]	p l ah n iy ng
+PLEASED		[PLEASED]	p l iy z d
+PLEASED		[PLEASED]	p l iy z t
+PLEASED		[PLEASED]	p l iy s d
+PLEASED		[PLEASED]	p l iy s t
+POINTLESS	[POINTLESS]	p oy n t l ah s
+POINTLESS	[POINTLESS]	p oy n t l eh s
+POINTLESS	[POINTLESS]	p oy n d l ah s
+POINTLESS	[POINTLESS]	p oy n d l eh s
+POPPY		[POPPY]		p aa p iy
+POPPY		[POPPY]		p ao p iy
+POPPY		[POPPY]		p ah p iy
+POPPY		[POPPY]		p aa p ih
+POPPY		[POPPY]		p ao p ih
+POPPY		[POPPY]		p ah p ih
+PRACTICAL	[PRACTICAL]	p r ae k t ih k ah l
+PRACTICAL	[PRACTICAL]	p r ae k t ah k ah l
+PRACTICAL	[PRACTICAL]	p r ae k t ih k l
+PRACTICAL	[PRACTICAL]	p r ae k t ah k l
+PRAGMATIC	[PRAGMATIC]	p r ae g m ae t ih k
+PRAGMATIC	[PRAGMATIC]	p r ah g m ae t ih k
+PRAGMATIC	[PRAGMATIC]	p r ae g m ae t ih g
+PRAGMATIC	[PRAGMATIC]	p r ah g m ae t ih g
+PRUDENCE	[PRUDENCE]	p r uw d ah n s
+PRUDENCE	[PRUDENCE]	p r uw d n s
+PRUDENCE	[PRUDENCE]	p r uw d ah n z
+PRUDENCE	[PRUDENCE]	p r uw d n z
+PRUDENCE	[PRUDENCE]	p r uw d uw n z
+RATIONAL	[RATIONAL]	r ae sh ah n ah l
+RATIONAL	[RATIONAL]	r ae sh n ah l
+RATIONALE	[RATIONALE]	r ae sh ah n ae l
+REALISTICALLY	[REALISTICALLY]	r iy ah l ih s t ih k l iy
+REALISTICALLY	[REALISTICALLY]	r eh ah l ih s t ih k l iy
+REALISTICALLY	[REALISTICALLY]	r iy ah l ih s t ih k ah l iy
+REALISTICALLY	[REALISTICALLY]	r eh ah l ih s t ih k ah l iy
+REALISTICALLY	[REALISTICALLY]	r iy ah l ih s d ih k l iy
+REALISTICALLY	[REALISTICALLY]	r eh ah l ih s d ih k l iy
+REALISTICALLY	[REALISTICALLY]	r iy ah l ih s d ih k ah l iy
+REALISTICALLY	[REALISTICALLY]	r eh ah l ih s d ih k ah l iy
+REASONABLE	[REASONABLE]	r iy z ah n ah b ah l
+REASONABLE	[REASONABLE]	r iy z n ah b ah l
+REASONABLE	[REASONABLE]	r iy z ah n ah b l
+REASONABLE	[REASONABLE]	r iy z n ah b l
+REASONABLE	[REASONABLE]	r ih z ah n ah b ah l
+REASONABLE	[REASONABLE]	r ih z n ah b ah l
+REASONABLE	[REASONABLE]	r ih z ah n ah b l
+REASONABLE	[REASONABLE]	r ih z n ah b l
+RIDICULOUS	[RIDICULOUS]	r ih d ih k y ah l ah s
+RIDICULOUS	[RIDICULOUS]	r iy d ih k y ah l ah s
+RIDICULOUS	[RIDICULOUS]	r ih d ih k y ah l eh s
+RIDICULOUS	[RIDICULOUS]	r iy d ih k y ah l eh s
+RIGHT		[RIGHT]		r ay t
+RUBBISH		[RUBBISH]	r ah b ih sh
+RUBBISH		[RUBBISH]	r ah b iy sh
+RUDE		[RUDE]		r uw d
+SAD		[SAD]		s ae d
+SENSIBLE	[SENSIBLE]	s eh n s ah b ah l
+SENSIBLE	[SENSIBLE]	s eh n s ah b l
+SENSIBLE	[SENSIBLE]	s eh n s eh b ah l
+SENSIBLE	[SENSIBLE]	s eh n s eh b l
+SHE		[SHE]		sh iy
+SHIT		[SHIT]		sh ih t
+SHIT		[SHIT]		sh iy t
+SHIT		[SHIT]		sh ih d
+SHIT		[SHIT]		sh iy d
+SHOULDN_T	[SHOULDN_T]	sh uh d ah n t
+SHOULDN_T	[SHOULDN_T]	sh uh n t
+SHOULDN_T	[SHOULDN_T]	sh uh d n t
+SHOULDN_T	[SHOULDN_T]	sh uh d ah n d
+SHOULDN_T	[SHOULDN_T]	sh uh n d
+SHOULDN_T	[SHOULDN_T]	sh uh d n d
+SICK		[SICK]		s ih k
+SMILING		[SMILING]	s m ay l ih ng
+SMILING		[SMILING]	s m ay l ih n
+SMILING		[SMILING]	s m ay l iy ng
+SMILING		[SMILING]	s m ay l iy n
+SOMEBODY	[SOMEBODY]	s ah m b aa d iy
+SOMEBODY	[SOMEBODY]	s ah m b ah d iy
+SOMEBODY	[SOMEBODY]	s ah m b aa d ih
+SOMEBODY	[SOMEBODY]	s ah m b ah d ih
+SOMEONE		[SOMEONE]	s ah m w ah n
+SOMEONE		[SOMEONE]	s ah m w ao n
+SPEAK		[SPEAK]		s p iy k
+SPIKE		[SPIKE]		s p ay k
+SPIKE		[SPIKE]		s b ay k
+STRESS		[STRESS]	s t r eh s
+STRESSFUL	[STRESSFUL]	s t r eh s f ah l
+STRESSFUL	[STRESSFUL]	s t r eh s f uw l
+STRESSFUL	[STRESSFUL]	s t r eh s w l
+STRESSFUL	[STRESSFUL]	s t r eh s w l
+STUPID		[STUPID]	s t uw p ih d
+STUPID		[STUPID]	s t y uw p ih d
+SWITCH		[SWITCH]	s w ih ch
+TALK		[TALK]		t ao k
+TERRIBLE	[TERRIBLE]	t eh r ah b ah l
+TERRIBLE	[TERRIBLE]	t eh r ih b ah l
+TERRIBLE	[TERRIBLE]	t eh r ah b l
+TERRIBLE	[TERRIBLE]	t eh r ih b l
+TERRIBLY	[TERRIBLY]	t eh r ah b ah l iy
+TERRIBLY	[TERRIBLY]	t eh r ih b ah l iy
+TERRIBLY	[TERRIBLY]	t eh r ah b l iy
+TERRIBLY	[TERRIBLY]	t eh r ih b l iy
+THANK		[THANK]		th ae ng k
+THANK		[THANK]		th ae ng g
+THEIR		[THEIR]		dh eh r
+THEM		[THEM]		dh eh m
+THEY		[THEY]		dh ey
+TIRED		[TIRED]		t ay er d
+TIRED		[TIRED]		t ay ah d
+TIRED		[TIRED]		t ay ah t
+TIREDER		[TIREDER]	t ey eh d er
+TIREDER		[TIREDER]	t ay eh d er
+TIREDER		[TIREDER]	t ay ah d er
+TO		[TO]		t uw
+TOMORROW	[TOMORROW]	t ah m aa r ow
+TOMORROW	[TOMORROW]	t ah m ao r ow
+TOMORROW	[TOMORROW]	t uw m aa r ow
+TOMORROW	[TOMORROW]	t uw m ao r ow
+TRUE		[TRUE]		t r uw
+UNHAPPY		[UNHAPPY]	ah n hh ae p iy
+UNHAPPY		[UNHAPPY]	ah n hh ae p ih
+UP		[UP]		ah p
+UPBEAT		[UPBEAT]	ah p b iy t
+USELESS		[USELESS]	y uw s l ah s
+USELESS		[USELESS]	y uw s l eh s
+USELESS		[USELESS]	y uw z l ah s
+USELESS		[USELESS]	y uw z l eh s
+VERY_WELL	[VERY_WELL]	v eh r iy w eh l
+VERY_WELL	[VERY_WELL]	w eh r iy w eh l
+VERY_WELL	[VERY_WELL]	v eh r ih w eh l
+VERY_WELL	[VERY_WELL]	w eh r ih w eh l
+WAS		[WAS]		w ah z
+WAS		[WAS]		w aa z
+WASN_T		[WASN_T]	w aa z ah n t
+WASN_T		[WASN_T]	w ah z ah n t
+WASN_T		[WASN_T]	w aa z n t
+WASN_T		[WASN_T]	w ah z n t
+WEEK		[WEEK]		w iy k
+WEEK		[WEEK]		w ih k
+WENT		[WENT]		w eh n t
+WERE		[WERE]		w er
+WEREN_T		[WEREN_T]	w er n t
+WEREN_T		[WEREN_T]	w er r n t
+WILL		[WILL]		w ih l
+WIND_ME_UP	[WIND_ME_UP]	w ay n d m iy ah p
+WIND_ME_UP	[WIND_ME_UP]	w ay n d m iy ah b
+WIND_ME_UP	[WIND_ME_UP]	w ay n d m ih ah p
+WIND_ME_UP	[WIND_ME_UP]	w ay n d m ih ah b
+WONDERFUL	[WONDERFUL]	w ah n d er f ah l
+WONDERFUL	[WONDERFUL]	w ah n d er f uw l
+WONDERFUL	[WONDERFUL]	w ah n d ah f ah l
+WONDERFUL	[WONDERFUL]	w ah n d ah f uw l
+WRONG		[WRONG]		r ao ng
+YEAH		[YEAH]		y ae
+YEAH		[YEAH]		y eh
+YEAH		[YEAH]		y eh ah
+YES		[YES]		y eh s
+YOU		[YOU]		y uw
+YOU_RE		[YOU_RE]	y uh r
+PHON_AA		[garbage]	aa
+PHON_AE		[garbage]	ae
+PHON_AH		[garbage]	ah
+PHON_AO		[garbage]	ao
+PHON_AW		[garbage]	aw
+PHON_AY		[garbage]	ay
+PHON_B		[garbage]	b
+PHON_CH		[garbage]	ch
+PHON_D		[garbage]	d
+PHON_DH		[garbage]	dh
+PHON_ER		[garbage]	er
+PHON_EY		[garbage]	ey
+PHON_EH		[garbage]	eh
+PHON_F		[garbage]	f
+PHON_G		[garbage]	g
+PHON_HH		[garbage]	hh
+PHON_IH		[garbage]	ih
+PHON_IY		[garbage]	iy
+PHON_JH		[garbage]	jh
+PHON_K		[garbage]	k
+PHON_L		[garbage]	l
+PHON_M		[garbage]	m
+PHON_N		[garbage]	n
+PHON_NG		[garbage]	ng
+PHON_OW		[garbage]	ow
+PHON_OY		[garbage]	oy
+PHON_P		[garbage]	p
+PHON_R		[garbage]	r
+PHON_S		[garbage]	s
+PHON_SH		[garbage]	sh
+PHON_T		[garbage]	t
+PHON_TH		[garbage]	th
+PHON_UH		[garbage]	uh
+PHON_UW		[garbage]	uw
+PHON_V		[garbage]	v
+PHON_W		[garbage]	w
+PHON_Y		[garbage]	y
+PHON_Z		[garbage]	z
+PHON_ZH		[garbage]	zh
