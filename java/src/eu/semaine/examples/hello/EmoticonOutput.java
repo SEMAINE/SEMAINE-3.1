@@ -22,8 +22,8 @@ public class EmoticonOutput extends Component {
 	@Override protected void react(SEMAINEMessage m) throws MessageFormatException {
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
 		Element dimensions = (Element) xm.getDocument().getElementsByTagNameNS(EmotionML.namespaceURI, EmotionML.E_DIMENSIONS).item(0);
-		Element arousal = XMLTool.needChildElementByTagNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
-		Element valence = XMLTool.needChildElementByTagNameNS(dimensions, EmotionML.E_VALENCE, EmotionML.namespaceURI);
+		Element arousal = XMLTool.needChildElementByLocalNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
+		Element valence = XMLTool.needChildElementByLocalNameNS(dimensions, EmotionML.E_VALENCE, EmotionML.namespaceURI);
 
 		float a = Float.parseFloat(arousal.getAttribute(EmotionML.A_VALUE));
 		float v = Float.parseFloat(valence.getAttribute(EmotionML.A_VALUE));

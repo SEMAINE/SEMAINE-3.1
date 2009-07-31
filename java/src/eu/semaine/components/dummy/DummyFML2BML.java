@@ -60,7 +60,7 @@ public class DummyFML2BML extends Component
 		boolean isFML = "FML".equals(xm.getDatatype());
 		if (isFML) {
 			// extract the BML and send that along
-			Element bml = XMLTool.needChildElementByTagNameNS(
+			Element bml = XMLTool.needChildElementByLocalNameNS(
 					xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
 			Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
 			doc.adoptNode(bml);

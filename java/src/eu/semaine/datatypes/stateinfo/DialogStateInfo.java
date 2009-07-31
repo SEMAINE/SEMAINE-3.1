@@ -99,7 +99,7 @@ public class DialogStateInfo extends StateInfo
 				assert n instanceof Element : "Should only see elements here";
 				Element child = (Element) n;
 				if (!(child.getNamespaceURI().equals(SemaineML.namespaceURI)
-					  && child.getTagName().equals(SemaineML.E_DIALOG_ACT))) {
+					  && child.getLocalName().equals(SemaineML.E_DIALOG_ACT))) {
 					throw new MessageFormatException("Element '"+SemaineML.E_DIALOG_HISTORY+
 							"' in namespace '"+el.getNamespaceURI()+
 							"' should only contain child elements named '"+SemaineML.E_DIALOG_ACT+

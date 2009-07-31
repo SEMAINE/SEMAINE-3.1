@@ -163,7 +163,7 @@ public class SpeechPreprocessor extends Component
     	Document inputDoc = xm.getDocument();
 		String inputText = xm.getText();
 		System.out.println(inputText);
-		if (XMLTool.getChildElementByTagNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
+		if (XMLTool.getChildElementByLocalNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
 			
 			transformer = fml2ssmlStylesheet.newTransformer();
 			transformer.setParameter("character.voice", getCurrentCharacter().toLowerCase());
@@ -186,9 +186,9 @@ public class SpeechPreprocessor extends Component
 		} 
 		else {
 			Element backchannel = null;
-			Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
+			Element fml = XMLTool.getChildElementByLocalNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
 			if (fml != null) {
-				backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
+				backchannel = XMLTool.getChildElementByLocalNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
 			}
 			if (backchannel != null) {
 				fmlbmlSender.sendXML(inputDoc, xm.getUsertime(), xm.getEventType());

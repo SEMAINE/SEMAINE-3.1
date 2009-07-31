@@ -253,6 +253,31 @@ public class XMLTool
 	}
 	
 	/**
+	 * Same as {@link #getChildElementByLocalNameNS(Node, String, String)}, but
+	 * throw a MessageFormatException if there is no such child element.
+	 * @param node
+	 * @param childName
+	 * @param childNamespace
+	 * @return a non-null child element
+	 * @throws MessageFormatException if there is no such child, 
+	 * i.e. when getChildElementByTagNameNS() would return null.
+	 */
+	public static Element needChildElementByLocalNameNS(Node node, String childName, String childNamespace)
+	throws MessageFormatException
+	{
+		Element e = getChildElementByLocalNameNS(node, childName, childNamespace);
+		if (e == null) {
+			String nodeNamespace = node.getNamespaceURI();
+			boolean sameNamespace = childNamespace != null && childNamespace.equals(nodeNamespace)
+								|| childNamespace == null && nodeNamespace == null;
+			throw new MessageFormatException("Node '"+node.getNodeName()+"' in namespace '"+
+					nodeNamespace+" needs to have a child '"+childName+"' in "+
+					(sameNamespace ? "the same namespace" : "namespace '"+childNamespace+"'"));
+		}
+		return e;
+	}
+
+	/**
 	 * For the given element, return the value of the given attribute if it exists,
 	 * or complain with a MessageFormatException if it doesn't exist.
 	 * @param e the element whose attribute to return

@@ -164,7 +164,7 @@ public class SpeechBMLRealiser extends Component
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
 		ByteArrayOutputStream bmlos = new ByteArrayOutputStream();
 		
-		if(XMLTool.getChildElementByTagNameNS(input.getDocumentElement(), BML.E_BACKCHANNEL, BML.namespaceURI) != null){
+		if(XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_BACKCHANNEL, BML.namespaceURI) != null){
 			// Back-channel synthesis
 			
 			

@@ -31,9 +31,9 @@ public class PositionComputer extends Component {
 		List<Element> emotionElements = emmaMessage.getEmotionElements(interpretation);
 
 		for (Element emotion : emotionElements) {
-			Element dimensions = XMLTool.getChildElementByTagNameNS(emotion, EmotionML.E_DIMENSIONS, EmotionML.namespaceURI);
+			Element dimensions = XMLTool.getChildElementByLocalNameNS(emotion, EmotionML.E_DIMENSIONS, EmotionML.namespaceURI);
 			if (dimensions != null) {
-				Element arousal = XMLTool.needChildElementByTagNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
+				Element arousal = XMLTool.needChildElementByLocalNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
 				float arousalValue = Float.parseFloat(arousal.getAttribute(EmotionML.A_VALUE));
 				// Arousal influences the swimmer's position:
 				position += 10*arousalValue;

@@ -58,8 +58,8 @@ public class DummyVisualFML2BML extends Component
 		boolean isFML = "FML".equals(xm.getDatatype());
 		if (isFML) {
 			// extract the BML and send that along
-			if(XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI) != null){
-				Element bml = XMLTool.needChildElementByTagNameNS(
+			if(XMLTool.getChildElementByLocalNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI) != null){
+				Element bml = XMLTool.needChildElementByLocalNameNS(
 						xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
 				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
 				doc.adoptNode(bml);
@@ -68,9 +68,9 @@ public class DummyVisualFML2BML extends Component
 			}
 			else{
 				Element backchannel = null;
-				Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
+				Element fml = XMLTool.getChildElementByLocalNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
 				if(fml != null){
-					backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
+					backchannel = XMLTool.getChildElementByLocalNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
 				}
 				if(backchannel != null){
 					Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
