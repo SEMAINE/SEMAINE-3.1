@@ -119,7 +119,7 @@ teststateinfo_SOURCES = semaine/executables/testStateInfo.cpp
 teststateinfo_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 teststateinfo_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
 
-participantcontrol_SOURCES = semaine/executables/participantcontrol.cpp semaine/components/control/ParticipantControl.cpp
+participantcontrol_SOURCES = semaine/executables/participantctrl.cpp semaine/components/control/ParticipantControl.cpp
 participantcontrol_CXXFLAGS = $(SEMAINE_CXXFLAGS)
 participantcontrol_LDADD = libsemaineapi.la $(SEMAINE_LDFLAGS)
 

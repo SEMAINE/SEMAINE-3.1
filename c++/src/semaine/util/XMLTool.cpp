@@ -87,6 +87,7 @@ throw (MessageFormatException)
 		}
 		return document;
 	}
+	return NULL;
 }
 
 
@@ -107,6 +108,7 @@ throw (MessageFormatException)
 		}
 		return document;
 	}
+	return NULL;
 }
 
 
@@ -204,7 +206,7 @@ DOMElement * XMLTool::getChildElementByTagNameNS(DOMNode * node, const std::stri
 	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
 	DOMNodeList * nl = node->getChildNodes();
 	DOMElement * e = NULL;
-	for (int i=0, max=nl->getLength(); i<max; i++) {
+	for (XMLSize_t i=0, max=nl->getLength(); i<max; i++) {
 		DOMNode * n = nl->item(i);
 		if (n->getNodeType() == DOMNode::ELEMENT_NODE
 		  && XMLString::equals(n->getNodeName(), xmlChildName)
@@ -224,7 +226,7 @@ DOMElement * XMLTool::getChildElementByLocalNameNS(DOMNode * node, const std::st
 	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
 	DOMNodeList * nl = node->getChildNodes();
 	DOMElement * e = NULL;
-	for (int i=0, max=nl->getLength(); i<max; i++) {
+	for (XMLSize_t i=0, max=nl->getLength(); i<max; i++) {
 		DOMNode * n = nl->item(i);
 		if (n->getNodeType() == DOMNode::ELEMENT_NODE
 		  && XMLString::equals(n->getLocalName(), xmlChildName)
@@ -273,7 +275,7 @@ throw(MessageFormatException)
 	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
 	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
 	DOMNodeList * nl = node->getChildNodes();
-	for (int i=0, max=nl->getLength(); i<max; i++) {
+	for (XMLSize_t i=0, max=nl->getLength(); i<max; i++) {
 		DOMNode * n = nl->item(i);
 		if (n->getNodeType() == DOMNode::ELEMENT_NODE
 		  && XMLString::equals(n->getNodeName(), xmlChildName)
@@ -293,7 +295,7 @@ throw(MessageFormatException)
 	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
 	XMLCh * xmlNamespaceURI = XMLString::transcode(childNamespace.c_str());
 	DOMNodeList * nl = node->getChildNodes();
-	for (int i=0, max=nl->getLength(); i<max; i++) {
+	for (XMLSize_t i=0, max=nl->getLength(); i<max; i++) {
 		DOMNode * n = nl->item(i);
 		if (n->getNodeType() == DOMNode::ELEMENT_NODE
 		  && XMLString::equals(n->getLocalName(), xmlChildName)

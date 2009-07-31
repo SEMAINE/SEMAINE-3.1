@@ -32,12 +32,18 @@ const int StateInfo::numTypes = 5;
 const std::string StateInfo::TypeNames[] = {"AgentState", "DialogState", "UserState", "ContextState", "SystemState" };
 
 void trim(std::string& str, const std::locale& loc = std::locale()) {
+#ifdef _MSC_VER
+#define MY_ISSPACE(a,b) isspace(a)
+#else
+#define MY_ISSPACE(a,b) isspace(a,b)
+#endif
 	std::string::size_type pos = 0;
-	while (pos < str.size() && isspace(str[pos], loc)) pos++;
+	while (pos < str.size() && MY_ISSPACE(str[pos], loc)) pos++;
 	str.erase(0, pos);
 	pos = str.size();
-	while (pos > 0 && isspace(str[pos - 1], loc)) pos--;
+	while (pos > 0 && MY_ISSPACE(str[pos - 1], loc)) pos--;
 	str.erase(pos);
+#undef MY_ISSPACE
 }
 
 std::vector<std::string> tokenize(const std::string& str,
@@ -83,8 +89,8 @@ throw(SystemConfigurationException)
 				throw SystemConfigurationException("Namespace prefixes must be defined before short names");
 			}
 		} else if (readNamespacePrefixes) {
-			int sepStart = line.find_first_of(delims);
-			int secondStart = line.find_first_not_of(delims, sepStart);
+			std::string::size_type sepStart = line.find_first_of(delims);
+			std::string::size_type secondStart = line.find_first_not_of(delims, sepStart);
 			if (sepStart == std::string::npos || secondStart == std::string::npos) {
 				throw SystemConfigurationException("Expected namespace prefix definition, got '"+line+"'");
 			}
@@ -92,8 +98,8 @@ throw(SystemConfigurationException)
 			const std::string namespaceURI = line.substr(secondStart);
 			namespacePrefixes[prefix] = namespaceURI;
 		} else if (readShortNames) {
-			int sepStart = line.find_first_of(delims);
-			int secondStart = line.find_first_not_of(delims, sepStart);
+			std::string::size_type sepStart = line.find_first_of(delims);
+			std::string::size_type secondStart = line.find_first_not_of(delims, sepStart);
 			if (sepStart == std::string::npos || secondStart == std::string::npos) {
 				throw new SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
 			}
@@ -239,7 +245,7 @@ throw(SystemConfigurationException)
 		std::string expr = xpathLookupIt->second;
 		std::vector<std::string> parts = tokenize(expr, "/");
 		// Now go through all parts except the last one:
-		for (int i=0, max=parts.size()-1; i<max; i++) {
+		for (std::string::size_type i=0, max=parts.size()-1; i<max; i++) {
 			std::string part = parts[i];
 			// if there is more than one slash, indicating arbitrary substructures, we treat it like a single slash (direct child)
 			if (part == "") continue;
@@ -255,8 +261,8 @@ throw(SystemConfigurationException)
 			std::string attValue;
 			bool haveAttValue = false;
 			if (localNameExpr.find("[") != std::string::npos) { // attribute-based selection of nodes
-				int openB = localNameExpr.find("[");
-				int closeB = localNameExpr.find("]");
+				std::string::size_type openB = localNameExpr.find("[");
+				std::string::size_type closeB = localNameExpr.find("]");
 				if (closeB < openB)
 					throw SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
 				localName = localNameExpr.substr(0, openB);
@@ -264,7 +270,7 @@ throw(SystemConfigurationException)
 				if (attValPair[0] != '@') {
 					throw SystemConfigurationException("Cannot generate document from XPath expression for info '"+shortName+"': part '"+part+"'");
 				}
-				int iEqualSign = attValPair.find("=");
+				std::string::size_type iEqualSign = attValPair.find("=");
 				if (iEqualSign != std::string::npos) {
 					attName = attValPair.substr(1, iEqualSign-1);
 					haveAttName = true;

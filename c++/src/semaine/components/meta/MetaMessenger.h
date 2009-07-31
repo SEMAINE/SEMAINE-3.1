@@ -133,7 +133,7 @@ public:
 	long avgTransmitTime() { return average(transmitTimes); }
 
 private:
-	int memory;
+	size_t memory;
 	std::list<long> actTimes;
 	std::list<long> reactTimes;
 	std::list<long> transmitTimes;

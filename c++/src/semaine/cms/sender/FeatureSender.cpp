@@ -66,7 +66,7 @@ void FeatureSender::sendTextFeatureVector(const std::vector<float> & features, l
 throw(CMSException)
 {
 	std::stringstream buf;
-	for (int i=0; i<features.size(); i++) {
+	for (size_t i=0; i<features.size(); i++) {
 		buf << features[i] << " " << featureNames[i] << std::endl;
 	}
 	sendTextMessage(buf.str(), usertime);
@@ -78,8 +78,8 @@ throw(CMSException)
 	if (!isConnectionStarted)
 		throw SystemConfigurationException("Connection is not started!");
 	BytesMessage * message = session->createBytesMessage();
-	message->writeInt(features.size());
-	for (int i=0, len=features.size(); i<len; i++) {
+	message->writeInt((int)features.size());
+	for (size_t i=0, len=features.size(); i<len; i++) {
 		message->writeFloat(features[i]);
 	}
 	fillMessageProperties(message, usertime);

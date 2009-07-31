@@ -216,13 +216,13 @@ namespace meta {
 	long Statistics::average(std::list<long> & values)
 	{
 		long total = 0;
-		int size = values.size();
+		size_t size = values.size();
 		if (size == 0) return -1;
 		std::list<long>::iterator it;
 		for (it = values.begin(); it != values.end(); it++) {
 			total += (*it);
 		}
-		return total/size;
+		return (long) (total/size);
 	}
 
 } // namespace meta

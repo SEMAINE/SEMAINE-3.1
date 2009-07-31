@@ -28,6 +28,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dummyfml2bml", "dummyfml2bm
 		{9B43E26F-03F9-4A57-8A9C-7FC32B3D342D} = {9B43E26F-03F9-4A57-8A9C-7FC32B3D342D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "participantcontrol", "participantcontrol.vcproj", "{F2DAC81E-4741-4F04-A04C-906EC32CDE6A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B43E26F-03F9-4A57-8A9C-7FC32B3D342D} = {9B43E26F-03F9-4A57-8A9C-7FC32B3D342D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -58,6 +63,10 @@ Global
 		{843C869A-D1A3-41AA-8853-63D8A7CFA384}.Debug|Win32.Build.0 = Debug|Win32
 		{843C869A-D1A3-41AA-8853-63D8A7CFA384}.Release|Win32.ActiveCfg = Release|Win32
 		{843C869A-D1A3-41AA-8853-63D8A7CFA384}.Release|Win32.Build.0 = Release|Win32
+		{F2DAC81E-4741-4F04-A04C-906EC32CDE6A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F2DAC81E-4741-4F04-A04C-906EC32CDE6A}.Debug|Win32.Build.0 = Debug|Win32
+		{F2DAC81E-4741-4F04-A04C-906EC32CDE6A}.Release|Win32.ActiveCfg = Release|Win32
+		{F2DAC81E-4741-4F04-A04C-906EC32CDE6A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

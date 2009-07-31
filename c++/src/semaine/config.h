@@ -13,7 +13,7 @@
 #ifdef _MSC_VER
 // On Visual C++, avoid warnings of the type:
 // warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-#pragma warning( disable : 4290 )
+#pragma warning( disable : 4290 4996 )
 #endif
 
 #ifdef HAVE_CONFIG_H

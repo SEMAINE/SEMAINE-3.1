@@ -47,9 +47,9 @@ void DummyFeatureExtractor::customStartIO() throw(CMSException)
 
 void DummyFeatureExtractor::act() throw(CMSException)
 {
-	int n = featureSender->getFeatureNames().size();
+	size_t n = featureSender->getFeatureNames().size();
 	std::vector<float> features(n);
-	for (int i=0; i<n; i++) {
+	for (size_t i=0; i<n; i++) {
 		features[i] = float(rand()) / RAND_MAX; // a random number between 0 and 1
 	}
 	//std::ostringstream msg;

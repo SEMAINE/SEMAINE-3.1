@@ -100,7 +100,9 @@ SEMAINEMessage * Receiver::receive() throw(CMSException, SystemConfigurationExce
 					while (notPickedUp()) {
 						try {
 							mutex.wait();
-						} catch (lang::Exception & ie) {}
+						} catch (lang::Exception & ie) {
+							ie.printStackTrace();
+						}
 					}
 				}
 			} catch (MessageFormatException & mfe) {

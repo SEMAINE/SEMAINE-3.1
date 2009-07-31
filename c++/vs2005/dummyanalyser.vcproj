@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\..\xerces-c_2_8_0-x86-windows-vc_8_0\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\..\activemq-cpp-2.2.1\src\main&quot;"
+				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\..\XQilla-2.2.0\include&quot;;&quot;..\..\..\xerces-c-src\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\..\activemq-cpp-2.2.1\src\main&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,9 +63,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="semaineapi.lib xerces-c_2D.lib libactivemq-cppd.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
+				AdditionalDependencies="semaineapi.lib xerces-c_3D.lib xqilla22d.lib libactivemq-cppd.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="Debug;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Lib&quot;;&quot;..\..\..\xerces-c_2_8_0-x86-windows-vc_8_0\lib&quot;;&quot;..\..\..\activemq-cpp-2.2.1\vs2005-build\Debug&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\lib&quot;"
+				AdditionalLibraryDirectories="Debug;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Lib&quot;;&quot;..\..\..\XQilla-2.2.0\build\windows\VC8\Win32\Debug&quot;;&quot;..\..\..\xerces-c-src\lib&quot;;&quot;..\..\..\activemq-cpp-2.2.1\vs2005-build\Debug&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -180,6 +180,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\src\semaine\components\dummy\DummyAnalyser.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\semaine\executables\dummyanalyser.cpp"
 				>
 				<FileConfiguration
@@ -200,10 +204,6 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\semaine\components\dummy\DummyAnalyser.cpp"
-				>
 			</File>
 		</Filter>
 		<Filter

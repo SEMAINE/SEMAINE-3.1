@@ -55,7 +55,7 @@ const std::string SEMAINEMessage::PERIOD = "period";
 			if (!isPeriodic() && !isEventBased())
 				throw MessageFormatException("Message contains neither periodic nor event-based header properties.");
 		} catch (CMSException & e) {
-			throw MessageFormatException("Problem determining whether properties '"+PERIOD+"' or '"+EVENT+"' exist.");
+			throw MessageFormatException("Problem determining whether properties '"+PERIOD+"' or '"+EVENT+"' exist: "+e.getMessage());
 		}
 	}
 

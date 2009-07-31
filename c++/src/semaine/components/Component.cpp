@@ -116,6 +116,7 @@ const std::string Component::STATE_STALLED = "stalled";
 					try {
 						meta.wait();
 					} catch (decaf::lang::Exception & ie) {
+						ie.printStackTrace();
 					}
 					if (meta.isSystemReady()) {
 						log->info("system ready - let's go");
@@ -127,7 +128,7 @@ const std::string Component::STATE_STALLED = "stalled";
 				long long before = System::currentTimeMillis();
 				act();
 				long long timeSpentInAct = System::currentTimeMillis() - before;
-				meta.statistics()->actTime(timeSpentInAct);
+				meta.statistics()->actTime((long)timeSpentInAct);
 			} catch (std::exception & e) {
 				log->error("error when trying to act", & e);
 				try {
@@ -161,14 +162,14 @@ const std::string Component::STATE_STALLED = "stalled";
 			try {
 				// time travelled, ignoring clock differences between sender and receiver:
 				long long timeMessageTravelled = System::currentTimeMillis() - message->getMessage()->getCMSTimestamp();
-				meta.statistics()->transmitTime(timeMessageTravelled);
+				meta.statistics()->transmitTime((long)timeMessageTravelled);
 				// Now, do something meaningful with the message,
 				// and possibly send output via the Senders.
 				long long before = System::currentTimeMillis();
 				react(message);
 				delete message;
 				long long timeSpentInReact = System::currentTimeMillis() - before;
-				meta.statistics()->reactTime(timeSpentInReact);
+				meta.statistics()->reactTime((long)timeSpentInReact);
 			} catch (std::exception & e) {
 				log->error("error when trying to react", &e);
 				try {
