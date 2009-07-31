@@ -145,7 +145,18 @@ public class EmotionInterpreter extends Component
 						}
 					}
 					/* Calculate combined interest-value */
-					emotions[2] = -1*bored + interested;
+					/*     ------- OLD CODE removed by Florian: emotions[2] = -1*bored + interested; */
+					if (  (( bored == 0.0 ) && (neutral == 0.0) && (interested >= 0.99))  
+					     ||(( bored == 0.0 ) && (neutral >= 0.99) && (interested == 0.00))
+					     ||(( bored >= 0.99 ) && (neutral >= 0.00) && (interested == 0.00)) ) {
+						// the above cases indicate an invalid classifier output, in this case we assume neutral interest...
+						emotions[2] = 0;
+					} else {
+					  // a continuous emotion value is computed from the class probabilities:
+					  emotions[2] = ( 1 * bored + 2 * neutral + 3 * interested ) - 2;
+					}
+					/*     ------------ */
+
 					emotionsChanged = true;
 				}
 			}
