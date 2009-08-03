@@ -12,7 +12,7 @@ register_build "speex" "$SP_URL" "$SP_BASE" "func_build_speex" $1
 # build_nr var must be set before this function is called
 function func_build_speex {
 
-    ./configure --prefix=$INSTALL_PREFIX 
+    ./configure --prefix=$INSTALL_PREFIX CFLAGS="$OFLAGS $DBGFLAGS" 
     if test "x$?" != "x0" ; then
       return 1;
     fi

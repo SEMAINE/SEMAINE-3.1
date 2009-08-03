@@ -27,7 +27,7 @@ function func_build_julius {
     cp $JROOT/julius4.mod/plugin.c libjulius/src
     cp $JROOT/julius4.mod/m_info.c libjulius/src
 
-    export CFLAGS="-DEXTERNAL_FV -g -ggdb -fPIC"
+    export CFLAGS="-DEXTERNAL_FV $DBGFLAGS -fPIC $OFLAGS"
 
 
     if test "x$1" = "xclean" ; then

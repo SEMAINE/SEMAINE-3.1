@@ -28,6 +28,16 @@
 
 cd `dirname $0`
 
+## 32-bit intel architecture:
+#OFLAGS="-O2 -mfpmath=sse,387 -march=pentiumpro";
+## 64 bit architecture:
+#OFLAGS="-O2 -mfpmath=sse,387 -march=athlon64";
+
+DBGFLAGS="-g -ggdb"
+OFLAGS="-O2 -mfpmath=sse,387 -march=native";
+
+
+
 # directory where all the builds will be performed
 # everything will be installed in $BASE/inst by default
 # this path can be absolute or relative
