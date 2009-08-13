@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +27,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.StateInfo;
@@ -100,7 +104,7 @@ public class TestGui extends Component
 	public TestGui() throws JMSException
 	{
 		super("GUI");
-		userStateSender = new StateSender("semaine.data.state.user", StateInfo.Type.UserState, getName());
+		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
 		emmaSender = new EmmaSender("semaine.data.state.user.emma", "GUI");
 		senders.add(emmaSender); // so it can be started etc
@@ -333,11 +337,15 @@ public class TestGui extends Component
 		}
 		
 		System.out.println("Sending line");
+		String[] words = line.split(" ");
 		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
-		Element interpretation = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_INTERPRETATION);
-		Element text = XMLTool.appendChildElement(interpretation, SemaineML.E_TEXT, SemaineML.namespaceURI);
-		text.setTextContent( line );
-		interpretation.setAttribute(EMMA.A_START, String.valueOf(meta.getTime()));
+		Element sequence = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_SEQUENCE );
+		for( String word : words ) {
+			Element interpretation = XMLTool.appendChildElement(sequence, EMMA.E_INTERPRETATION);
+			interpretation.setAttribute("offset-to-start", String.valueOf(meta.getTime()));
+			interpretation.setAttribute("tokens", word);
+			interpretation.setAttribute(EMMA.A_CONFIDENCE, "1");
+		}
 		try {
 			emmaSender.sendXML(document, meta.getTime(), Event.single);
 		}catch( JMSException e ){}
@@ -352,7 +360,7 @@ public class TestGui extends Component
 	{
 		try {
 			Map<String,String> userStateInfo = new HashMap<String,String>();
-			userStateInfo.put("behaviour", "speaking");
+			userStateInfo.put("speaking", "true");
 			UserStateInfo usi = new UserStateInfo(userStateInfo	);
 			userStateSender.sendStateInfo(usi, meta.getTime());	
 		} catch( JMSException e){ e.printStackTrace(); }
@@ -362,7 +370,7 @@ public class TestGui extends Component
 	{
 		try {
 			Map<String,String> userStateInfo = new HashMap<String,String>();
-			userStateInfo.put("behaviour", "silence");
+			userStateInfo.put("speaking", "false");
 			UserStateInfo usi = new UserStateInfo(userStateInfo	);
 			userStateSender.sendStateInfo(usi, meta.getTime());	
 		} catch( JMSException e){ e.printStackTrace(); }

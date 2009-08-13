@@ -140,6 +140,8 @@ public class UtteranceActionProposer extends Component
 	/* Random generator */
 	private Random rand = new Random();
 	
+	private long utteranceEndTime = 0;
+	
 	
 	/**
 	 * Constructor of UtteranceActionProposer
@@ -212,6 +214,7 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void act() throws JMSException
 	{
+		processUtteranceEnd();
 //		if( !systemStarted && isUserPresent ) {
 //			/* Update agent speaking state */
 //			agentSpeakingState = SPEAKING;
@@ -249,20 +252,15 @@ public class UtteranceActionProposer extends Component
 				
 				/* Updates detected emotions (valence, arousal, interest) */
 				addDetectedEmotions(stateInfo);
+				
+				/* Updates the detected and analysed user utterances */
+				addDetectedDActs(stateInfo);
 				break;
 			case ContextState:
 				/* Updates the current character and the user */
 				updateCharacterAndUser( stateInfo );
 				break;
 			}
-		}
-		
-		/* Processes XML updates */
-		if( m instanceof SEMAINEXMLMessage ) {
-			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
-			
-			/* Updated analyzed Dialogue Acts history */
-			addDetectedDActs( xm );
 		}
 		
 		/* If the TurnTakingInterpreter decides that the agent should speak, determine what to say */
@@ -286,13 +284,9 @@ public class UtteranceActionProposer extends Component
 			
 			/* Distribute the chosen utterance */
 			sendUtterance( utterance );
-			
-			/* TEMPORARILY called until the end of the agent utterance is received from the output module */
-			processUtteranceEnd();
 		}
 	}
 	
-	/* TODO: Omzetten naar ContextState */
 	public void updateCharacterAndUser( StateInfo stateInfo ) throws JMSException
 	{
 		//Map<String,String> contextInfo = stateInfo.getInfos();
@@ -321,9 +315,6 @@ public class UtteranceActionProposer extends Component
 					charHistory.put(currChar, true);
 					sendUtterance( pickUtterances("intro_new") );
 				}
-				
-				/* TEMPORARILY called until the end of the agent utterance is received from the output module */
-				processUtteranceEnd();
 			}
 		}
 		
@@ -332,6 +323,7 @@ public class UtteranceActionProposer extends Component
 			
 			/* Update agent speaking state */
 			agentSpeakingState = SPEAKING;
+			AgentUtterance utterance;
 			
 			if( charHistory.get(currChar) ) {
 				sendUtterance( pickUtterances("intro_old") );
@@ -339,15 +331,11 @@ public class UtteranceActionProposer extends Component
 				charHistory.put(currChar, true);
 				sendUtterance( pickUtterances("intro_new") );
 			}
-			
-			/* TEMPORARILY called until the end of the agent utterance is received from the output module */
-			processUtteranceEnd();
 		}
 	}
 	
 	/**
 	 * Called when a user is detected in the screen.
-	 * TODO: Not yet called, if it is called I should also remove this section from act()
 	 * @throws JMSException
 	 */
 	public void userAppeared() throws JMSException
@@ -360,7 +348,6 @@ public class UtteranceActionProposer extends Component
 	
 	/**
 	 * Called when the user disappears from the screen
-	 * TODO: Not yet called, goodbye-sentences should also be added to sentences.xml
 	 * @throws JMSException
 	 */
 	public void userDisappeared() throws JMSException
@@ -689,9 +676,12 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void processUtteranceEnd() throws JMSException
 	{	
-		agentSpeakingState = LISTENING;
-		agentSpeakingStateTime = meta.getTime();
-		sendListening();
+		if( agentSpeakingState == SPEAKING && meta.getTime() > utteranceEndTime ) {
+			System.out.println("Agent silent");
+			agentSpeakingState = LISTENING;
+			agentSpeakingStateTime = meta.getTime();
+			sendListening();
+		}
 	}
 	
 	/**
@@ -744,6 +734,11 @@ public class UtteranceActionProposer extends Component
 		/* Add the utterance to the history */
 		utterance.setTime( meta.getTime() );
 		utteranceHistory.add( utterance );
+		
+		
+		System.out.println("Agent speaking");
+		/* Set end time (temporary) */
+		utteranceEndTime = meta.getTime() + ( utterance.getUtterance().split(" ").length * 250 );
 	}
 	
 	/**
@@ -835,37 +830,31 @@ public class UtteranceActionProposer extends Component
 	 * @param m
 	 * @throws JMSException
 	 */
-	public void addDetectedDActs( SEMAINEXMLMessage m ) throws JMSException
+	public void addDetectedDActs( StateInfo stateInfo ) throws JMSException
 	{
-		Element text = XMLTool.getChildElementByLocalNameNS(m.getDocument().getDocumentElement(), SemaineML.E_TEXT, SemaineML.namespaceURI);
-		if( text != null ) {
-			String utterance = text.getTextContent();
-			DialogueAct act = new DialogueAct(utterance);
-
-			if( act != null ) {
-				List<Element> features = XMLTool.getChildrenByLocalNameNS(text, SemaineML.E_FEATURE, SemaineML.namespaceURI);
-				for( Element feature : features ) {
-					String f = feature.getAttribute( "name" );
-					if( f.equals("positive") ) act.setPositive(true);
-					if( f.equals("negative") ) act.setNegative(true);
-					if( f.equals("agree") ) act.setAgree(true);
-					if( f.equals("disagree") ) act.setDisagree(true);
-					if( f.equals("about other people") ) act.setAboutOtherPeople(true);
-					if( f.equals("about other character") ) act.setAboutOtherCharacter(true);
-					if( f.equals("about current character") ) act.setAboutCurrentCharacter(true);
-					if( f.equals("about own feelings") ) act.setAboutOwnFeelings(true);
-					if( f.equals("pragmatic") ) act.setPragmatic(true);
-					if( f.equals("about self") ) act.setTalkAboutSelf(true);
-					if( f.equals("future") ) act.setFuture(true);
-					if( f.equals("past") ) act.setPast(true);
-					if( f.equals("event") ) act.setEvent(true);
-					if( f.equals("action") ) act.setAction(true);
-					if( f.equals("laugh") ) act.setLaugh(true);
-					if( f.equals("change speaker") ) act.setChangeSpeaker(true);
-					if( f.equals("target character") ) act.setTargetCharacter( feature.getAttribute("target") );
-				}
-				detectedDActs.add(act);
-			}
+		if( stateInfo.hasInfo("userUtterance") && stateInfo.hasInfo("userUtteranceStartTime") && stateInfo.hasInfo("userUtteranceFeatures") ) {
+			String utterance = stateInfo.getInfo("userUtterance");
+			long time = Long.parseLong(stateInfo.getInfo("userUtteranceStartTime"));
+			String f = stateInfo.getInfo("userUtteranceFeatures");
+			DialogueAct act = new DialogueAct( utterance, time );
+			if( f.contains("positive") ) act.setPositive(true);
+			if( f.contains("negative") ) act.setNegative(true);
+			if( f.contains("agree") ) act.setAgree(true);
+			if( f.contains("disagree") ) act.setDisagree(true);
+			if( f.contains("about_other_people") ) act.setAboutOtherPeople(true);
+			if( f.contains("about_other_character") ) act.setAboutOtherCharacter(true);
+			if( f.contains("about_current_character") ) act.setAboutCurrentCharacter(true);
+			if( f.contains("about_own_feelings") ) act.setAboutOwnFeelings(true);
+			if( f.contains("pragmatic") ) act.setPragmatic(true);
+			if( f.contains("abou_self") ) act.setTalkAboutSelf(true);
+			if( f.contains("future") ) act.setFuture(true);
+			if( f.contains("past") ) act.setPast(true);
+			if( f.contains("event") ) act.setEvent(true);
+			if( f.contains("action") ) act.setAction(true);
+			if( f.contains("laugh") ) act.setLaugh(true);
+			if( f.contains("change_speaker") ) act.setChangeSpeaker(true);
+			if( f.contains("target:") ) act.setTargetCharacter( f.substring(f.indexOf("target:")+7, Math.max(f.length(),f.indexOf(" ", f.indexOf("target:")+7))) );
+			detectedDActs.add(act);
 		}
 	}
 	

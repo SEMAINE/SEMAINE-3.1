@@ -67,7 +67,7 @@ public class SpeechInterpreter extends Component
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma ");
 		receivers.add(emmaReceiver);
 		
-		userStateSender = new StateSender("semaine.data.state.user", StateInfo.Type.UserState, getName());
+		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
 	}
 	
@@ -111,7 +111,8 @@ public class SpeechInterpreter extends Component
 			}
 			
 			/* Reading words */
-			System.out.println(em.getText());
+			//System.out.println(em.getText());
+			/*
 			Element wordSequence = em.getSequence();
 			if( wordSequence != null ) {
 				System.out.println("WordSequence found");
@@ -134,7 +135,7 @@ public class SpeechInterpreter extends Component
 					}
 				}
 			}
-			
+			*/
 		}
 		/* Determines the new user speaking state */
 		//if( speakingParam && rmsEnergy >= 0.003 ) {

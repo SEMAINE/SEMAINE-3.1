@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -27,12 +28,15 @@ import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
+import eu.semaine.datatypes.stateinfo.UserStateInfo;
+import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.EmmaReceiver;
+import eu.semaine.jms.sender.StateSender;
 import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.util.XMLTool;
 
@@ -53,12 +57,13 @@ public class UtteranceInterpreter extends Component
 {	
 	/* Receivers */
 	private EmmaReceiver emmaReceiver;
+	private StateReceiver userStateReceiver;
 	//private AgentStateReceiver agentStateReceiver;
 	private StateReceiver dialogStateReceiver;
 
 	/* Senders */
-	private XMLSender userStateSender;
-	
+	private StateSender userStateSender;
+
 	/* PoS Tagger */
 	private POSTaggerME tagger;
 
@@ -79,13 +84,16 @@ public class UtteranceInterpreter extends Component
 	{
 		super("UtteranceInterpreter");
 
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma ");
 		receivers.add(emmaReceiver);
+		userStateReceiver = new StateReceiver( "semaine.data.state.user.behaviour", StateInfo.Type.UserState );
+		receivers.add(userStateReceiver);
+
 		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add(dialogStateReceiver);
 
 		/* Define Senders */
-		userStateSender = new XMLSender("semaine.data.state.user.behaviour", "datatype = 'UserState'", "");
+		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
 
 		/* Initializing PoS Tagger */
@@ -94,7 +102,7 @@ public class UtteranceInterpreter extends Component
 			DataInputStream s = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(this.getClass().getResourceAsStream(modelFile)))));
 			//String tagdict = "java/lib/opennlp-tools-1.4.1/models/tagdict";
 			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/eu/semaine/components/dialogue/data/tagdict")));
-			
+
 
 			if( modelFile != null&& reader != null ) {
 				tagger = new POSTaggerME( new BinaryGISModelReader(s).getModel(), new DefaultPOSContextGenerator(null),new POSDictionary(reader,true) );
@@ -115,12 +123,38 @@ public class UtteranceInterpreter extends Component
 
 	/** * Called when a new message is received * Checks if the message contains 
 	an input-sentence. * Also checks if the user is finished speaking */ 
-	@Override public void react( SEMAINEMessage m ) throws JMSException { 
-		if( isSentence(m) ) {
-			utterance = utterance + " " + getSentence(m);
+	@Override public void react( SEMAINEMessage m ) throws JMSException
+	{
+
+		if( m instanceof SEMAINEEmmaMessage ) {
+			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			
-			DialogueAct act = analyseData( getSentence(m) );
-			addDialogueActToUserState( act );
+			/* Reading words */
+			//System.out.println(em.getText());
+			Element wordSequence = em.getSequence();
+			if( wordSequence != null ) {
+				//System.out.println("WordSequence found");
+				List<Element> wordElements = XMLTool.getChildrenByLocalNameNS(wordSequence, EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+				if( wordElements.size() > 0 ) {
+					//System.out.println("WordElements found");
+					String detectedKeywords = "";
+					String starttime = null;
+					for( Element wordElem : wordElements ) {
+						if( wordElem.hasAttribute("tokens") ) {
+							detectedKeywords = detectedKeywords + wordElem.getAttribute("tokens") + " ";
+						}
+						if( starttime == null && wordElem.hasAttribute("offset-to-start") ) {
+							starttime = wordElem.getAttribute("offset-to-start");
+						}
+					}
+					detectedKeywords = detectedKeywords.trim();
+					System.out.println("Detected: " + detectedKeywords);
+					if(starttime != null) {
+						DialogueAct act = analyseData( detectedKeywords, Long.parseLong( starttime ) );
+						sendDialogueAct( act );
+					}
+				}
+			}
 		}
 	}
 
@@ -137,7 +171,7 @@ public class UtteranceInterpreter extends Component
 			if (interpretation != null) {
 				List<Element> texts = em.getTextElements(interpretation);
 				for (Element text : texts) {
-					
+
 					String utterance = text.getTextContent();
 					if( utterance != null ) {
 						return true;
@@ -146,7 +180,7 @@ public class UtteranceInterpreter extends Component
 					if( text.getAttribute("name") != null ) {
 						return true;
 					}
-					*/
+					 */
 				}
 			}
 		}
@@ -166,7 +200,7 @@ public class UtteranceInterpreter extends Component
 			if (interpretation != null) {
 				List<Element> texts = em.getTextElements(interpretation);
 				for (Element text : texts) {
-					
+
 					String utterance = text.getTextContent();
 					if( utterance != null ) {
 						return utterance;
@@ -175,51 +209,31 @@ public class UtteranceInterpreter extends Component
 					if( text.getAttribute("name") != null ) {
 						return text.getAttribute("name");
 					}
-					*/
+					 */
 				}
 			}
 		}
 		return null;
 	}
-
-	/**
-	 * Checks if the user is finished talking and the agent has the turn now
-	 * If so, it sends the utterance further to be analysed
-	 * @param m the latest message
-	 * @return true if the user is finished speaking
-	 */
-	public boolean checkUserFinished( SEMAINEMessage m ) throws JMSException
-	{
-		if( m instanceof SEMAINEStateMessage ) {
-			StateInfo dialogInfo = ((SEMAINEStateMessage)m).getState();
-			if (dialogInfo.getType() == StateInfo.Type.DialogState) {
-				Map<String,String> dialogInfoMap = dialogInfo.getInfos();
-				
-				if( dialogInfoMap.get("speaker").equals("agent") ) {
-					processUtterance();
-					utterance = "";
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Processes the complete utterance of the user for features and User goals
-	 */
-	public void processUtterance() throws JMSException
-	{
-		DialogueAct act = analyseData( utterance );
-		addDialogueActToUserState( act );
-	}
 	
+	public void sendDialogueAct( DialogueAct act ) throws JMSException
+	{
+		Map<String,String> userStateInfo = new HashMap<String,String>();
+		userStateInfo.put("userUtterance", act.getUtterance());
+		userStateInfo.put("userUtteranceStartTime", ""+act.getStarttime());
+		userStateInfo.put("userUtteranceFeatures", act.getFeatures());
+		System.out.println("Detected the following utterance (t:" + act.getStarttime() + "): " + act.getUtterance() + ".");
+		
+		UserStateInfo usi = new UserStateInfo(userStateInfo	);
+		userStateSender.sendStateInfo(usi, meta.getTime());	
+	}
+
 	/**
 	 * Creates an EmmaMessage with the utterance and all detected features
 	 * @param act
 	 * @throws JMSException
 	 */
-	public void addDialogueActToUserState( DialogueAct act ) throws JMSException
+	public void sendDialogueActOld( DialogueAct act ) throws JMSException
 	{
 		//System.out.println("Analysis: " + act.toString());
 //		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
@@ -228,13 +242,13 @@ public class UtteranceInterpreter extends Component
 //		interpretation.setAttribute( "processed", "true" );
 //		Element text = XMLTool.appendChildElement(interpretation, SemaineML.E_TEXT, SemaineML.namespaceURI);
 //		text.setTextContent( act.getUtterance() );
-		
+
 		Document document = XMLTool.newDocument(SemaineML.E_USERSTATE, SemaineML.namespaceURI, SemaineML.version);
 		Element text = XMLTool.appendChildElement(document.getDocumentElement(), SemaineML.E_TEXT);
-		text.setAttribute(SemaineML.A_TIME, String.valueOf(meta.getTime()));
+		text.setAttribute(SemaineML.A_TIME, String.valueOf(act.getStarttime()));
 		Node textNode = document.createTextNode(act.getUtterance());
 		text.appendChild(textNode);
-		
+
 		if( act.isPositive() ) {
 			Element feature = XMLTool.appendChildElement(text, "feature", SemaineML.namespaceURI);
 			feature.setAttribute("name", "positive");
@@ -304,7 +318,7 @@ public class UtteranceInterpreter extends Component
 			feature.setAttribute("name", "target character");
 			feature.setAttribute("target", act.getTargetCharacter());
 		}
-		
+
 		try {
 			userStateSender.sendXML(document, meta.getTime());
 		}catch( JMSException e ){}
@@ -315,12 +329,12 @@ public class UtteranceInterpreter extends Component
 	 * @param data
 	 * @return
 	 */
-	public DialogueAct analyseData( String data )
+	public DialogueAct analyseData( String data, long starttime )
 	{
 		if( data == null ) {
 			data = "";
 		}
-		DialogueAct act = new DialogueAct( data );
+		DialogueAct act = new DialogueAct( data, starttime );
 		String taggedUtterance = getTaggedUtterance( data );
 		String[] tags = getTags( taggedUtterance );
 
@@ -349,7 +363,7 @@ public class UtteranceInterpreter extends Component
 		act.setAction( detectAction( act ) );
 		act.setChangeSpeaker( detectChangeSpeaker( act ) );
 		act.setTargetCharacter( detectTargetCharacter( act ) );
-		
+
 		return act;
 	}
 
@@ -392,13 +406,13 @@ public class UtteranceInterpreter extends Component
 			count+=1;
 			utterance = utterance.replaceFirst(replacePattern0, " ");
 		}
-		
+
 		if( utterance.length() >= 3 && utterance.substring(0, 3).toLowerCase().equals("yes") ) {
 			count++;
 		}
 		if( utterance.length() >= 4 && (utterance.substring(0, 4).toLowerCase().equals("yeah") ||
-			utterance.substring(0, 4).toLowerCase().equals("true") ||
-			utterance.substring(0, 4).toLowerCase().equals("okay")) ) {
+				utterance.substring(0, 4).toLowerCase().equals("true") ||
+				utterance.substring(0, 4).toLowerCase().equals("okay")) ) {
 			count++;
 		}
 		if( utterance.length() >= 5 && utterance.substring(0, 5).toLowerCase().equals("right") ) {
@@ -420,7 +434,6 @@ public class UtteranceInterpreter extends Component
 	public boolean detectDisagree( DialogueAct act )
 	{	
 		String utterance = act.getUtterance();
-		System.out.print("Utterance: " + utterance);
 		String pattern0 = ".*(^| )no( |,|\\.|!).*";
 		String replacePattern0 = "(^| )no( |,|\\.|!)";
 
@@ -974,10 +987,10 @@ public class UtteranceInterpreter extends Component
 		try {
 			result =  MaxentTagger.tagString(str);
 		} catch( Exception e ) {}
-		*/
-		
+		 */
+
 		result = tagger.tag(str);
-		
+
 		result = result.replaceAll("you/PRP +know/VBP", " " );
 		result = result.replaceAll("'cause/VB", "'cause/IN");
 		//result = result.replaceAll("I/PRP mean/VBP", "I/PRP mean/FW");

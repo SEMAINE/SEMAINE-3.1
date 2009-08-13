@@ -17,6 +17,7 @@ public class DialogueAct
 	private String utterance;
 	private String taggedUtterance;
 	private String[] tags;
+	private long starttime;
 	
 	private boolean positive = false;
 	private boolean negative = false;
@@ -45,9 +46,10 @@ public class DialogueAct
 	 * Creates a new DialogueAct with the given utterance
 	 * @param utterance
 	 */
-	public DialogueAct( String utterance )
+	public DialogueAct( String utterance, long starttime )
 	{
 		this.utterance = utterance;
+		this.starttime = starttime;
 	}
 
 	/**
@@ -330,13 +332,42 @@ public class DialogueAct
 		this.target_character = target_character;
 	}
 	
+	public long getStarttime()
+	{
+		return starttime;
+	}
+	
+	public String getFeatures()
+	{
+		String features = "";
+		if( positive ) features += " is_positive";
+		if( negative ) features += " is_negative";
+		if( agree ) features += " is_agree";
+		if( disagree ) features += " is_disagree";
+		if( about_other_people ) features += " about_other_people";
+		if( about_other_character ) features += " about_other_character";
+		if( about_current_character ) features += " about_current_character";
+		if( about_own_feelings ) features += " about_own_feelings";
+		if( talk_about_self ) features += " talk_about_self";
+		if( pragmatic ) features += " pragmatic";
+		if( future ) features += " future";
+		if( past ) features += " past";
+		if( action ) features += " action";
+		if( event ) features += " event";
+		if( laugh ) features += " laugh";
+		if( change_speaker ) features += " change_speaker";
+		if( target_character != null && target_character.length() != 0 ) features += " target:" + target_character;
+		
+		return features;
+	}
+	
 	/**
 	 * Returns a string representation of this act
 	 */
 	public String toString()
 	{
 		String str = "+++ ";
-		str += utterance + "\r\n";
+		str += utterance + " ("+starttime+")\r\n";
 		str += taggedUtterance + "\r\n";
 		str += "positive:		" + positive + "\r\n";
 		str += "negative:		" + negative + "\r\n";

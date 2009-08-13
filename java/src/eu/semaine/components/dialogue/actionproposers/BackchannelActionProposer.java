@@ -66,7 +66,7 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 		receivers.add( agentStateReceiver );
 		dialogStateReceiver = new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add( dialogStateReceiver );
-		userStateReceiver = new StateReceiver("semaine.data.state.user", StateInfo.Type.UserState);
+		userStateReceiver = new StateReceiver("semaine.data.state.user.behaviour", StateInfo.Type.UserState);
 		receivers.add( userStateReceiver );
 		
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());

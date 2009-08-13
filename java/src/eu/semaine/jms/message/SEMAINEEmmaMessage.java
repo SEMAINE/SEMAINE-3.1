@@ -51,6 +51,16 @@ public class SEMAINEEmmaMessage extends SEMAINEXMLMessage {
 	{
 		return XMLTool.getChildrenByLocalNameNS(interpretation, EmotionML.E_EMOTION, EmotionML.namespaceURI);
 	}
+	
+	public List<Element> getCategoryElements(Element interpretation)
+	{
+		return XMLTool.getChildrenByLocalNameNS(interpretation, EmotionML.E_CATEGORY, EmotionML.namespaceURI);
+	}
+	
+	public List<Element> getGenderElements(Element interpretation)
+	{
+		return XMLTool.getChildrenByLocalNameNS(interpretation, "gender", SemaineML.namespaceURI);
+	}
 
 	public List<Element> getFeatureElements(Element interpretation)
 	{
