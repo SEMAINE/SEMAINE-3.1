@@ -87,5 +87,25 @@
 			<classpath refid="Subversion dummy.classpath"/>
 		</java>
 	</target>
+	
+	<property name="dialog" value="config/dialog.config"/>
+	<target name="dialog">
+		<java classname="eu.semaine.system.ComponentRunner" failonerror="true" fork="yes">
+			<sysproperty key="mary.base" value="C:\local\Mary_TTS\MARY400alpha"/>
+			<jvmarg line="-Xmx1024m"/>
+			<arg line="${dialog}"/>
+			<classpath refid="SEMAINE-Java.classpath"/>
+		</java>
+	</target>
+	
+	<property name="loebner" value="config/loebner.config"/>
+	<target name="loebner">
+		<java classname="eu.semaine.system.ComponentRunner" failonerror="true" fork="yes">
+			<sysproperty key="mary.base" value="C:\local\Mary_TTS\MARY400alpha"/>
+			<jvmarg line="-Xmx1024m"/>
+			<arg line="${loebner}"/>
+			<classpath refid="SEMAINE-Java.classpath"/>
+		</java>
+	</target>
     
 </project>

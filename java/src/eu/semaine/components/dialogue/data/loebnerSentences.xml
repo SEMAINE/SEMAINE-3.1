@@ -1,0 +1,107 @@
+<semaine_sentences>
+
+	<character name="spike">
+		<category name="startup">
+			<utterance value="Hello, can anybody hear me?" />
+		</category>
+		
+		<category name="startup2">
+			<utterance value="This is captain Thomas Walker of the spaceship Atlantis calling GSC Goldacre, do you hear me?" />
+		</category>
+		
+		<category name="startup3">
+			<utterance value="Ah, thank goodness." />
+		</category>
+	
+		<category name="explain_what_happened">
+			<utterance value="We were attacked by Unimats while bringing supplies to a refugee camp. They killed almost all of our crew, I could barely escape. Please help me and let me dock." />
+		</category>
+		
+		<category name="explain_when_it_happened">
+			<utterance value="Several hours ago." />
+		</category>
+		
+		<category name="explain_what_kind_of_supplies">
+			<utterance value="Mostly food and medicines." />
+		</category>
+		
+		<category name="introduction">
+			<utterance value="I'm captain Thomas Walker of the spaceship Atlantis." />
+			<utterance value="My name is Thomas Walker." />
+		</category>
+		
+		<category name="yes_i_am_human">
+			<utterance value="Of course I'm human, I told you we were just attacked by Unimats." />
+			<utterance value="Why would you even ask me that, of course I'm human. I told you, we were just attacked by Unimats." />
+		</category>
+		
+		<category name="i_am_no_unimat">
+			<utterance value="Of course not, I told you we were just attacked by Unimats." />
+			<utterance value="Why would you even ask me that. I told you, we were just attacked by Unimats." />
+		</category>
+		
+		<category name="no_more_of_us">
+			<utterance value="No, I'm the only one." />
+		</category>
+		
+		<category name="reasons_to_let_me_in">
+			<utterance value="If you don't I will die." />
+			<utterance value="If you don't help me, I will die!" />
+			<utterance value="Look, I'll give you anything you want, but please let me in!" />
+		</category>
+		
+		<category name="reasons_to_not_shoot_me">
+			<utterance value="Look, I'll give you anything you want, but please let me in!" />
+		</category>
+		
+		<category name="present_gifts">
+			<utterance value="Yes, I can get you that, now let me in." />
+			<utterance value="Yes, I can get you what you want." />
+		</category>
+		
+		<category name="explain_why_dying">
+			<utterance value="Because if you don't let me in my tiny spaceship will collide with yours." />
+		</category>
+		
+		<category name="ship_broken">
+			<utterance value="No, I can't steer anymore." />
+			<utterance value="My navigation system is broken." />
+		</category>
+		
+		<category name="ship_cannot_be_repaired">
+			<utterance value="It can't be fixed anymore." />
+			<utterance value="I don't have the parts to fix it." />
+		</category>
+		
+		<category name="proof_i_am_human">
+			<utterance value="You can ask me anything you like, but please let me dock first, we're running out of time!" />
+			<utterance value="Look at my spaceship, I pose no threat to you." />
+			<utterance value="If I was a robot I would have already destroyed you." />
+			<utterance value="Look, lock me up when I've docked or something, but let me in." />
+		</category>
+		
+		<category name="unknown_question">
+			<utterance value="Look, we don't have time for that!" />
+			<utterance value="We're running out of time!" />
+			<utterance value="That's not important now!" />
+			<utterance value="I'm on a collision course with your ship and it will hit you in a few minutes. Please let me in." />
+		</category>
+		
+		<category name="after_a_silence">
+			<utterance value="Hello? Can you still hear me?" />
+			<utterance value="Come ON, let me IN!" />
+		</category>
+		
+		<category name="after_a_statement">
+			<utterance value="Can you please let me in?" />
+			<utterance value="Please open the docking bay so I can land." />
+			<utterance value="Will you help me?" />
+		</category>
+		
+		<category name="can_get_in">
+			<utterance value="Thank you." />
+			<utterance value="Thank you so much." />
+		</category>
+	</character>
+
+</semaine_sentences>

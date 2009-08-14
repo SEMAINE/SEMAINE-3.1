@@ -64,7 +64,7 @@ public class SpeechInterpreter extends Component
 		
 		featureReceiver = new FeatureReceiver("semaine.data.analysis.features.voice");
 		receivers.add(featureReceiver);
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma ");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma");
 		receivers.add(emmaReceiver);
 		
 		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
