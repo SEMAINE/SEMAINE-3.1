@@ -7,6 +7,11 @@ hesitation	[*hesitation*]	nvh
 laugh		[*laugh*]	nvl
 sigh		[*sigh*]	nvs
 mmh		[*mmh*]		nvmh
+mmh		[*mmh*]		ah hh ah
+mmh		[*mmh*]		aa hh ah
+mmh		[*mmh*]		m hh m
+mmh		[*mmh*]		ah hh aa
+mmh		[*mmh*]		m hh
 AGO		[AGO]		ah g ow
 ANYTHING	[ANYTHING]	eh n iy th ih ng
 ARE		[ARE]		aa r
@@ -45,6 +50,7 @@ NAME		[NAME]		n ey m
 OFFER		[OFFER]		ao f er
 OTHER		[OTHER]		ah dh er
 OTHERS		[OTHERS]	ah dh er z
+OTHERS		[OTHERS]	ah dh er s
 PROVE		[PROVE]		p r uw v
 RANK		[RANK]		r ae ng k
 REPAIR		[REPAIR]	r ih p eh r
@@ -397,11 +403,20 @@ WONDERFUL	[WONDERFUL]	w ah n d er f uw l
 WONDERFUL	[WONDERFUL]	w ah n d ah f ah l
 WONDERFUL	[WONDERFUL]	w ah n d ah f uw l
 WRONG		[WRONG]		r ao ng
+YEAH		[YEAH]		iy ae
 YEAH		[YEAH]		y ae
+YEAH		[YEAH]		y eh
+YEAH		[YEAH]		iy eh
 YEAH		[YEAH]		y eh ah
+YEAH		[YEAH]		y ah
 YES		[YES]		y eh s
+YES		[YES]		iy eh s
 YOU		[YOU]		y uw
+YOU		[YOU]		iy uw
 YOU_RE		[YOU_RE]	y uh r
+YOU_RE		[YOU_RE]	iy uh r
+YOU_RE		[YOU_RE]	iy uh ao r
+YOU_RE		[YOU_RE]	y uh ao r
 PHON_AA		[garbage]	aa
 PHON_AE		[garbage]	ae
 PHON_AH		[garbage]	ah
