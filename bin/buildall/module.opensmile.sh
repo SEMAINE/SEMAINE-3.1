@@ -24,6 +24,7 @@ function func_build_opensmile {
       fi
     fi
 
+
     # download the SMILE models
     # the nc version of the download function is used here, 
     # since smile runs without models (feature extractor only)
@@ -68,9 +69,9 @@ function func_build_opensmile {
     fi
     fi
 
-    if test "x$ATKPATH" != "x" ; then
-      cp $ATKPATH/Resources/UK_SI_ZMFCC/cepmean .
-    fi
+#    if test "x$ATKPATH" != "x" ; then
+#      cp $ATKPATH/Resources/UK_SI_ZMFCC/cepmean .
+#    fi
 
   #  if test "x$1" = "xclean" ; then
   #    make clean 
@@ -81,6 +82,13 @@ function func_build_opensmile {
     
     # copy stateinfo.config from java directory
     cp $SEMAINE_ROOT/java/src/eu/semaine/datatypes/stateinfo/stateinfo.config .
+
+    if test "x$1" = "xclean" ; then
+      if test -f Makefile ; then
+        make clean
+      fi
+    fi
+
 
     # do not install components.. at least for now...
     make -j4 ; make
@@ -99,10 +107,10 @@ function func_build_opensmile {
     # changes to the build directory of the component
     # and runs the command specified as first parameter
     # the script will be in located in bin/run_components
-    createRunScript "SEMAINExtract -C ../aux/opensmileSemaine.conf" prefix "$INSTALL_PREFIX/bin/"
+    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine.conf" prefix "$INSTALL_PREFIX/bin/"
 
     # create a second version, for debugging the component with gdb
-    createRunScript "SEMAINExtract -C ../aux/opensmileSemaine.conf -l 3 -d" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
+    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine.conf -l 3 -d" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
 
     return 0;
 }
