@@ -177,7 +177,7 @@ public class LoebnerUtteranceActionProposer extends Component
 
 	public AgentUtterance manageAgentStart()
 	{
-		long user_utterance_length = meta.getTime() - userSpeakingStateTime;
+		long user_utterance_length = meta.getTime() - userTurnStart;
 		/* TODO: To implement */
 		if( convState == STARTUP_1 ) {
 			// TODO: Global var van maken
@@ -197,7 +197,7 @@ public class LoebnerUtteranceActionProposer extends Component
 	{
 		resetCategoryChances();
 		for( int i=detectedWordsIndex; i<detectedWords.size(); i++ ) {
-			String str = detectedWords.get(i);
+			String str = detectedWords.get(i).toLowerCase();
 			Double chance;
 
 			/* Category 'explain_what_happened' */
@@ -273,7 +273,7 @@ public class LoebnerUtteranceActionProposer extends Component
 				chance += 0.3;
 			}
 
-			if( str.matches("((\\S)+ +)*what ((\\S)+ +){0,2}(name|role|rank|spaceship|you)( *(\\S)+)*") ) {
+			if( str.matches("((\\S)+ +)*what ((\\S)+ +){0,2}(name|role|rank|spaceship)( *(\\S)+)*") ) {
 				chance += 0.5;
 			}
 			if( str.matches("((\\S)+ +)*where ((\\S)+ +){0,2}from( *(\\S)+)*") ) {
@@ -290,14 +290,14 @@ public class LoebnerUtteranceActionProposer extends Component
 
 			/* Category 'i_am_no_unimat' */
 			chance = categoryChances.get("i_am_no_unimat");
-			if( str.matches("((\\S)+ +)*you ((\\S)+ +){0,2}(unimat|spy|infiltrator)( *(\\S)+)*") ) {
+			if( str.matches("((\\S)+ +)*you ((\\S)+ +){0,3}(unimat|spy|infiltrator)( *(\\S)+)*") ) {
 				chance += 0.4;
 			}
 			categoryChances.put("i_am_no_unimat", chance);
 
 			/* Category 'no_more_of_us' */
 			chance = categoryChances.get("no_more_of_us");
-			if( str.matches("((\\S)+ +)*more ((\\S)+ +){0,2}(you|survivors)( *(\\S)+)*") ) {
+			if( str.matches("((\\S)+ +)*(more|many) ((\\S)+ +){0,2}(you|survivors)( *(\\S)+)*") ) {
 				chance += 0.5;
 			} else if( str.matches("((\\S)+ +)*other ((\\S)+ +){0,2}survivors( *(\\S)+)*") ) {
 				chance += 0.5;
@@ -328,7 +328,7 @@ public class LoebnerUtteranceActionProposer extends Component
 				chance += 0.5;
 			}
 			if( str.matches("((\\S)+ +)*i ((\\S)+ +){0,2}want( *(\\S)+)*") ) {
-				chance += 0.4;
+				chance += 0.2;
 			}
 			if( str.matches("((\\S)+ +)*you ((\\S)+ +){0,2}(have|get|give)( *(\\S)+)*") ) {
 				chance += 0.4;
@@ -388,10 +388,14 @@ public class LoebnerUtteranceActionProposer extends Component
 			if( str.matches("((\\S)+ +)*can ((\\S)+ +){0,2}trust( *(\\S)+)*") ) {
 				chance += 0.4;
 			}
-			if( str.matches("((\\S)+ +)*sure ((\\S)+ +){0,2}cheating( *(\\S)+)*") ) {
+			if( str.matches("((\\S)+ +)*sure ((\\S)+ +){0,4}cheating( *(\\S)+)*") ) {
 				chance += 0.4;
 			}
 			categoryChances.put("proof_i_am_human", chance);
+		}
+		
+		for( String str : categoryChances.keySet() ) {
+			System.out.println(categoryChances.get(str) + "	- " + str);
 		}
 		
 		double maxChance = -1d;
@@ -404,7 +408,16 @@ public class LoebnerUtteranceActionProposer extends Component
 		}
 
 		if( maxChance < 0.1 ) {
-			maxCategory = "unknown_question";
+			if( convState == STARTUP_2 ) {
+				maxCategory = "explain_what_happened";
+				convState = SITUATION_EXPLAINED;
+			} else {
+				maxCategory = "unknown_question";
+			}
+		}
+		
+		if( convState == STARTUP_2 ) {
+			convState = SITUATION_EXPLAINED;
 		}
 
 		return pickUtterances(maxCategory);
@@ -643,7 +656,7 @@ public class LoebnerUtteranceActionProposer extends Component
 
 		System.out.println("Agent speaking");
 		/* Set end time (temporary) */
-		utteranceEndTime = meta.getTime() + ( utterance.getUtterance().split(" ").length * 250 );
+		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().split(" ").length * 250)+1000 );
 	}
 
 	/**

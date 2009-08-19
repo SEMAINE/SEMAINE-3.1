@@ -37,10 +37,6 @@ public class DialogueAct
 	private boolean change_speaker = false;
 	private String target_character;
 	
-	private double valence = 0d;
-	private double arousal = 0d;
-	private int utterance_length;
-	
 	
 	/**
 	 * Creates a new DialogueAct with the given utterance
@@ -50,6 +46,35 @@ public class DialogueAct
 	{
 		this.utterance = utterance;
 		this.starttime = starttime;
+	}
+	
+	/**
+	 * Creates a new DialogueAct which combines the two given acts.
+	 * @param act1
+	 * @param act2
+	 */
+	public DialogueAct( DialogueAct act1, DialogueAct act2 )
+	{
+		utterance = act1.getUtterance() + " " + act2.getUtterance();
+		starttime = Math.min(act1.getStarttime(), act2.getStarttime());
+		positive = (act1.isPositive() || act2.isPositive());
+		negative = (act1.isNegative() || act2.isNegative());
+		agree = (act1.isAgree() || act2.isAgree());
+		disagree = (act1.isDisagree() || act2.isDisagree());
+		about_other_people = (act1.isAboutOtherPeople() || act2.isAboutOtherPeople());
+		about_other_character = (act1.isAboutOtherCharacter() || act2.isAboutOtherCharacter());
+		about_current_character = (act1.isAboutCurrentCharacter() || act2.isAboutCurrentCharacter());
+		about_own_feelings = (act1.isAboutOwnFeelings() || act2.isAboutOwnFeelings());
+		pragmatic = (act1.isPragmatic() || act2.isPragmatic());
+		talk_about_self = (act1.isTalkAboutSelf() || act2.isTalkAboutSelf());
+		future = (act1.isFuture() || act2.isFuture());
+		past = (act1.isPast() || act2.isPast());
+		event = (act1.isEvent() || act2.isEvent());
+		action = (act1.isAction() || act2.isAction());
+		laugh = (act1.isLaugh() || act2.isLaugh());
+		change_speaker = (act1.isChangeSpeaker() || act2.isChangeSpeaker());
+		
+		target_character = act1.getTargetCharacter() + " " + act2.getTargetCharacter();
 	}
 
 	/**

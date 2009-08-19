@@ -217,14 +217,14 @@ public class TurnTakingInterpreter extends Component
 		if( userInfo.hasInfo("speaking") ) {
 			if( userInfo.getInfo("speaking").equals("true") ) {
 				if( userSpeakingState != SPEAKING ) {
-					System.out.println("++ Detected user speaking");
+					System.out.println("Detected user speaking");
 					backchannel_given = false;
 					userSpeakingState = SPEAKING;
 					userSpeakingStateTime = meta.getTime();
 				}
 			} else if( userInfo.getInfo("speaking").equals("false") ) {
 				if( userSpeakingState != SILENT ) {
-					System.out.println("++ Detected user silent");
+					System.out.println("Detected user silent");
 					latestUtteranceLength = meta.getTime() - userSpeakingStateTime;
 					userSpeakingState = SILENT;
 					userSpeakingStateTime = meta.getTime();
@@ -370,10 +370,8 @@ public class TurnTakingInterpreter extends Component
 		Map<String,String> agentStateInfo = new HashMap<String,String>();
 		if( agentSpeakingIntention == SPEAKING ) {
 			agentStateInfo.put("turnTakingIntention", "startSpeaking");
-			System.out.println("Agent should start speaking");
 		} else if( agentSpeakingIntention == SILENT ) {
 			agentStateInfo.put("turnTakingIntention", "stopSpeaking");
-			System.out.println("Agent should stop speaking");
 		} else {
 			return;
 		}

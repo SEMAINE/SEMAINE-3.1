@@ -164,39 +164,10 @@ public class TestGui extends Component
 				}
 			}
 		}
-		if( isSentence(m) ) {
-			printLine(getSentence(m));
+		String sentence = getSentence(m);
+		if( sentence != null ) {
+			printLine(sentence);
 		}
-		
-	}
-	
-	/**
-	 * Checks if the Message is ASR output and if it contains a sentence.
-	 * @param m the message to check
-	 * @return true if the message says that the user is currently silent
-	 */
-	public boolean isSentence( SEMAINEMessage m ) throws JMSException
-	{
-		if( m instanceof SEMAINEEmmaMessage ) {
-			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
-			Element interpretation = em.getTopLevelInterpretation();
-			if (interpretation != null && interpretation.getAttribute("processed").equals("")) {
-				List<Element> texts = em.getTextElements(interpretation);
-				for (Element text : texts) {
-					
-					String utterance = text.getTextContent();
-					if( utterance != null ) {
-						return true;
-					}
-					/*
-					if( text.getAttribute("name") != null ) {
-						return true;
-					}
-					*/
-				}
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -206,25 +177,32 @@ public class TestGui extends Component
 	 */
 	public String getSentence( SEMAINEMessage m ) throws JMSException
 	{
+		String words = "";
 		if( m instanceof SEMAINEEmmaMessage ) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
-			Element interpretation = em.getTopLevelInterpretation();
-			if (interpretation != null) {
-				List<Element> texts = em.getTextElements(interpretation);
-				for (Element text : texts) {
-					
-					String utterance = text.getTextContent();
-					if( utterance != null ) {
-						return utterance;
+			
+			/* Reading words */
+			//System.out.println(em.getText());
+			Element wordSequence = em.getSequence();
+			if( wordSequence != null ) {
+				//System.out.println("WordSequence found");
+				List<Element> wordElements = XMLTool.getChildrenByLocalNameNS(wordSequence, EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+				if( wordElements.size() > 0 ) {
+					//System.out.println("WordElements found");
+					String starttime = null;
+					for( Element wordElem : wordElements ) {
+						if( wordElem.hasAttribute("tokens") ) {
+							words = words + wordElem.getAttribute("tokens") + " ";
+						}
 					}
-					/*
-					if( text.getAttribute("name") != null ) {
-						return text.getAttribute("name");
-					}*/
 				}
 			}
 		}
-		return null;
+		if( words.length() == 0 ) {
+			return null;
+		} else {
+			return words.trim();
+		}
 	}
 	
 	/**
@@ -336,7 +314,6 @@ public class TestGui extends Component
 			sendSpeaking();
 		}
 		
-		System.out.println("Sending line");
 		String[] words = line.split(" ");
 		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
 		Element sequence = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_SEQUENCE );

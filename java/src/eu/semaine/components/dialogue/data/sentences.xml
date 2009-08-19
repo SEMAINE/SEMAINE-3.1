@@ -11,6 +11,7 @@
 			<utterance value="Go on." />
 			<utterance value="Go on, give me one happy thought." />
 			<utterance value="How?" />
+			<utterance value="That sounds interesting, tell me more."/>
 			<utterance value="Tell me more." />
 		</category>
 		
@@ -22,6 +23,7 @@
 			<utterance value="So what makes you happy?" />
 			<utterance value="So what would you like to do?" />
 			<utterance value="So, what's happening at the moment?" />
+			<utterance value="So what would put you in a really good mood?"/>
 			<utterance value="Tell me what makes you feel really happy." />
 			<utterance value="Tell me what you're really looking forward to." />
 			<utterance value="There must be good things that you remember!" />
@@ -39,6 +41,38 @@
 			<utterance value="When?" />
 			<utterance value="Why do you say that?" />
 			<utterance value="Why?" />
+		</category>
+		
+		<category name="cheer_up">
+			<utterance value="Cheer up."/>
+		  	<utterance value="Don't feel bad."/>
+		  	<utterance value="Don't worry, the whole world can't be bad, it's just the way you feel at the moment."/>
+		  	<utterance value="Every cloud has a silver lining."/>
+		  	<utterance value="I'm not so sure that you should be so negative."/>
+		  	<utterance value="It'll all sort itself out."/>
+		  	<utterance value="It's never that bad."/>
+		  	<utterance value="It's not that bad."/>
+		  	<utterance value="Just have some fun."/>
+		  	<utterance value="Look on the bright side!"/>
+		  	<utterance value="Oh come on, let your hair down and be happy!"/>
+		  	<utterance value="Pull yourself together!"/>
+		  	<utterance value="Smile"/>
+		  	<utterance value="Smile, it will make you feel so much better."/>
+		  	<utterance value="Things have a way of sorting themselves out."/>
+		  	<utterance value="Think of something positive!"/>
+		  	<utterance value="Worse things happen at sea."/>
+		</category>
+		
+		<category name="agree_with_emotion">
+			<utterance value="Absolutely!"/>
+		    <utterance value="Absolutely fantastic!"/>
+		    <utterance value="Happy days!"/>
+		    <utterance value="Isn't that nice?"/>
+		    <utterance value="It doesn't get any better than that!"/>
+		    <utterance value="It's great to hear someone sound happy."/>
+		    <utterance value="That sounds very positive."/>
+		    <utterance value="That's great!"/>
+		    <utterance value="That's wonderful, isn't it?"/>
 		</category>
 		
 		<category name="ask_next_character">
@@ -111,11 +145,11 @@
 			<utterance value="What are you doing this week?" />
 			<utterance value="What are you planning to do?" />
 			<utterance value="What have you been doing?" />
+			<utterance value="What would you like to talk about?"/>
 		</category>
 		
 		<category name="random">
 			<utterance value="Do you feel a little unsure?" />
-			<utterance value="Do you think that you are wise?" />
 			<utterance value="So where do you think your attitude to life comes from?" />
 			<utterance value="So?" />
 			<utterance value="That's interesting!" />
@@ -125,6 +159,26 @@
 			<utterance value="Why do you say that?" />
 			<utterance value="Why?" />
 			<utterance value="Would you say you have everything under control?" />
+		</category>
+		
+		<category name="cheer_up">
+			<utterance value="Worse things happen at sea."/>
+		  	<utterance value="I'm not sure that you should be so negative."/>
+		  	<utterance value="It can't be that bad, perhaps you're over-reacting?"/>
+		  	<utterance value="It will all seem better in a few days time."/>
+		  	<utterance value="It will get better."/>
+		  	<utterance value="It'll all sort itself out."/>
+		  	<utterance value="Pull yourself together!"/>
+		</category>
+		
+		<category name="cheer_down">
+			<utterance value="Don't get too excited!"/>
+    		<utterance value="Enjoy it while it lasts!"/>
+    		<utterance value="I'm not sure that you should be so enthusiastic."/>
+		</category>
+		
+		<category name="agree_with_emotion">
+			<utterance value="That sounds like a sensible attitude."/>
 		</category>
 		
 		<category name="ask_next_character">
@@ -202,6 +256,16 @@
 			<utterance value="Everything can be just crap!" />
 			<utterance value="Life's a war, you're either a winner or a loser." />
 			<utterance value="Why?" />
+		</category>
+		
+		<category name="cheer_down">
+			<utterance value="I don't really have any time for all this happy nonsense. You're wasting my time."/>
+    		<utterance value="I don't really understand. Why exactly are you in this great mood?"/>
+    		<utterance value="I don't see why you're in such a good mood."/>
+		</category>
+		
+		<category name="agree_with_emotion">
+			<utterance value="I know exactly how you feel."/>
 		</category>
 		
 		<category name="ask_next_character">
@@ -288,6 +352,35 @@
 			<utterance value="Where do you think it will lead?" />
 			<utterance value="Why do you think so?" />
 			<utterance value="Why?" />
+		</category>
+		
+		<category name="cheer_down">
+			<utterance value="Come down to earth a bit. Just think about all those depressing things you have to do."/>
+		    <utterance value="Don't get too excited."/>
+		    <utterance value="Don't know what you've got to feel so cheery about."/>
+		    <utterance value="Don't you think life wears you down?"/>
+		    <utterance value="How can you be so cheerful with all the death and suffering in the world? Don't you feel guilty?"/>
+		    <utterance value="I'm not sure that you should be so positive."/>
+		    <utterance value="It won't last, you know."/>
+		    <utterance value="Life's a bitch and then you die."/>
+		    <utterance value="Things often get worse you know."/>
+		    <utterance value="Well I suppose you have to make the best of it while you can."/>
+		    <utterance value="What about all the death and suffering in the world?"/>
+		    <utterance value="What about all the people who let you down?"/>
+		    <utterance value="What about when it all goes wrong?"/>
+		    <utterance value="Yeah, but you never know what's round the corner."/>
+		    <utterance value="You're probably stuck with it."/>
+		</category>
+		
+		<category name="agree_with_emotion">
+			<utterance value="Can it get any worse?"/>
+		    <utterance value="Don't you sometimes wish that you could just run away?"/>
+		    <utterance value="I sympathise."/>
+		    <utterance value="It can be so depressing."/>
+		    <utterance value="It wears you down, doesn't it?"/>
+		    <utterance value="Life can be just unbearable."/>
+		    <utterance value="Maybe you should just go out and get drunk?"/>
+		    <utterance value="What can you do?"/>
 		</category>
 		
 		<category name="ask_next_character">

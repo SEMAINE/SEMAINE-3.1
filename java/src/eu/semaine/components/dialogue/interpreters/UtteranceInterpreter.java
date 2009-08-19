@@ -148,7 +148,6 @@ public class UtteranceInterpreter extends Component
 						}
 					}
 					detectedKeywords = detectedKeywords.trim();
-					System.out.println("Detected: " + detectedKeywords);
 					if(starttime != null) {
 						DialogueAct act = analyseData( detectedKeywords, Long.parseLong( starttime ) );
 						sendDialogueAct( act );
@@ -222,7 +221,7 @@ public class UtteranceInterpreter extends Component
 		userStateInfo.put("userUtterance", act.getUtterance());
 		userStateInfo.put("userUtteranceStartTime", ""+act.getStarttime());
 		userStateInfo.put("userUtteranceFeatures", act.getFeatures());
-		System.out.println("Detected the following utterance (t:" + act.getStarttime() + "): " + act.getUtterance() + ".");
+		System.out.println("Detected the following utterance (t:" + act.getStarttime() + "): " + act.getUtterance() + ". ("+act.getFeatures()+")");
 		
 		UserStateInfo usi = new UserStateInfo(userStateInfo	);
 		userStateSender.sendStateInfo(usi, meta.getTime());	
