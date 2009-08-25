@@ -52,7 +52,7 @@ function func_build_opensmile {
 
     if test "x$doconf" = "xyes" ; then
       #echo "Using PortAudio (?) $PORTAUDIOPATH"
-    ./autogen.sh &&
+    ./autogen.sh ; ./autogen.sh &&
     export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib"
     if test "x$PORTAUDIOPATH" != "x" ; then
       echo ""
