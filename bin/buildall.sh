@@ -34,9 +34,24 @@ cd `dirname $0`
 #OFLAGS="-O2 -mfpmath=sse,387 -march=athlon64";
 
 DBGFLAGS="-g -ggdb"
-OFLAGS="-O2 -mfpmath=sse,387 -march=native";
+
+# this gives problems on some systems...
+#OFLAGS="-O2 -mfpmath=sse -march=native";
+
+OFLAGS="-O2 -mfpmath=sse";
 
 
+# print some warnings and infos on how to use us:
+echo ">> IMPORTANT ::::::::::::::::::::::::::::::::::::"
+echo "  If you get any kind of build errors, edit the file buildall/modules.config"
+echo "  and change 'enabled' or 'rebuild' to 'clean'"
+echo "  for the modules or parts of the build process"
+echo "  you got errors."
+echo "  In most cases this helps to build successfully."
+echo "  This is especially true after a SVN update!!"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::"
+echo ""
+sleep 5
 
 # directory where all the builds will be performed
 # everything will be installed in $BASE/inst by default

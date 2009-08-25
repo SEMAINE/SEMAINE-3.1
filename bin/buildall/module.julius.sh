@@ -29,8 +29,15 @@ function func_build_julius {
 
     export CFLAGS="-DEXTERNAL_FV $DBGFLAGS -fPIC $OFLAGS"
 
+    
+    doconf=$1
+    if test -e "Makefile" ; then
+      echo "found Makefile, not configuring (use 'clean' parameter to override)"
+    else 
+      doconf="clean";
+    fi
 
-    if test "x$1" = "xclean" ; then
+    if test "x$doconf" = "xclean" ; then
 
     cat Makefile.in | sed 's/^CONFIG_SUBDIRS.\+$/CONFIG_SUBDIRS=julius libjulius libsent/' > Makefile.in2
     cat Makefile.in2 | sed 's/^SUBDIRS.\+$/SUBDIRS=julius libjulius libsent/' > Makefile.in3
