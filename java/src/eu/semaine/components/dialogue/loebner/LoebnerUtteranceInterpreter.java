@@ -92,6 +92,9 @@ public class LoebnerUtteranceInterpreter extends Component
 	
 	public void sendDetectedWords( String[] detectedWordsPlusTime ) throws JMSException
 	{
+		if( detectedWordsPlusTime[0].length() < 1 ) {
+			return;
+		}
 		Map<String,String> userStateInfo = new HashMap<String,String>();
 		userStateInfo.put("userUtterance", detectedWordsPlusTime[0]);
 		userStateInfo.put("userUtteranceStartTime", ""+detectedWordsPlusTime[1]);

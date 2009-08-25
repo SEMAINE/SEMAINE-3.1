@@ -217,6 +217,9 @@ public class UtteranceInterpreter extends Component
 	
 	public void sendDialogueAct( DialogueAct act ) throws JMSException
 	{
+		if( act.getUtterance().length() < 1 ) {
+			return;
+		}
 		Map<String,String> userStateInfo = new HashMap<String,String>();
 		userStateInfo.put("userUtterance", act.getUtterance());
 		userStateInfo.put("userUtteranceStartTime", ""+act.getStarttime());
