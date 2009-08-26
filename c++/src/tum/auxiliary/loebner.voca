@@ -4,6 +4,12 @@ breathe		[*breathe*]	nvb
 cough		[*cough*]	nvc
 garbage		[garbage]	nvg
 hesitation	[*hesitation*]	nvh
+hesitation	[*hesitation*]	er r m
+hesitation	[*hesitation*]	er m
+hesitation	[*hesitation*]	er ah m
+hesitation	[*hesitation*]	ah m
+hesitation	[*hesitation*]	aa r m
+hesitation	[*hesitation*]	uh r m
 laugh		[*laugh*]	nvl
 sigh		[*sigh*]	nvs
 mmh		[*mmh*]		nvmh
@@ -13,6 +19,7 @@ mmh		[*mmh*]		m hh m
 mmh		[*mmh*]		ah hh aa
 mmh		[*mmh*]		m hh
 AGO		[AGO]		ah g ow
+AIBO		[AIBO]		ay b ow
 ANYTHING	[ANYTHING]	eh n iy th ih ng
 ANYTHING	[ANYTHING]	ah n iy th ih ng
 ARE		[ARE]		aa r
@@ -103,6 +110,7 @@ PROVE		[PROVE]		p r uw f
 RANK		[RANK]		r ae ng k
 RANK		[RANK]		r ae n k
 REPAIR		[REPAIR]	r ih p eh r
+REPAIR		[REPAIR]	r ih p ey r
 REPAIR		[REPAIR]	r iy p eh r
 REPAIR		[REPAIR]	r ih p eh ah
 REPAIR		[REPAIR]	r iy p eh ah
@@ -117,6 +125,7 @@ SPACESHIP	[SPACESHIP]	s p ey sh ih b
 SPY		[SPY]		s p ay
 STEER		[STEER]		s t iy r
 STOP		[STOP]		s t aa p
+STOP		[STOP]		s t aw p
 SUPPLIES	[SUPPLIES]	s ah p l ay z
 SUPPLIES	[SUPPLIES]	s uh p l ay z
 SURE		[SURE]		sh uh r
@@ -131,6 +140,8 @@ SURVIVORS	[SURVIVORS]	s ah w ay w ah z
 TRUST		[TRUST]		t r ah s t
 TYPE		[TYPE]		t ay p
 UNIMAT		[UNIMAT]	y uw n iy m ae t
+UNIMAT		[UNIMAT]	y uw n iy m aa t
+UNIMAT		[UNIMAT]	ih uw n iy m aa t
 UNIMAT		[UNIMAT]	y uw n iy m ah t
 UNIMAT		[UNIMAT]	y uw n ih m ae t
 UNIMAT		[UNIMAT]	y uw n ih m ah t
