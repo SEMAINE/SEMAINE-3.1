@@ -199,12 +199,6 @@ public class TestGui extends Component
 				if( stateInfo.hasInfo("userUtterance") && stateInfo.hasInfo("userUtteranceStartTime") ) {
 					String newUtterance = stateInfo.getInfo("userUtterance");
 					long newUtteranceTime = Long.parseLong(stateInfo.getInfo("userUtteranceStartTime"));
-					System.out.println("+++++ New Keywords");
-					System.out.println(currUtterance);
-					System.out.println("CurrTime: " + currUtteranceTime);
-					System.out.println("NewTime: " + newUtteranceTime);
-					System.out.println("CurrUtterance: " + currUtterance);
-					System.out.println("NewUtterance: " + newUtterance);
 					if( Math.abs(newUtteranceTime-currUtteranceTime) < 10 ) {
 						currUtterance = newUtterance;
 					} else {
@@ -215,7 +209,6 @@ public class TestGui extends Component
 						currUtteranceTime = newUtteranceTime;
 					}
 					printLine();
-					System.out.println(currUtterance);
 				}
 			}
 		}
@@ -336,10 +329,8 @@ public class TestGui extends Component
 	{
 		if( currUtterance.length() == 0 ) {
 			output.setText( ("<html><body>" + outputText + "<br>" + line + "</body></html>").trim() );
-			System.out.println("<html><body>" + outputText + "<br>" + line + "</body></html>");
 		} else {
 			output.setText( ("<html><body>" + outputText + "<br>" + currUtterance + "<br>" + line + "</body></html>").trim() );
-			System.out.println("<html><body>" + outputText + "<br>" + currUtterance + "<br>" + line + "</body></html>");
 		}
 		output.setCaretPosition(output.getDocument().getLength());
 		outputText = outputText + "<br>" + line;
@@ -355,10 +346,8 @@ public class TestGui extends Component
 	{	
 		if( currUtterance.length() == 0 ) {
 			output.setText( ("<html><body>" + outputText + "</body></html>").trim() );
-			System.out.println("<html><body>" + outputText + "</body></html>");
 		} else {
 			output.setText( ("<html><body>" + outputText + "<br>" + currUtterance + "</body></html>").trim() );
-			System.out.println("<html><body>" + outputText + "<br>" + currUtterance + "</body></html>");
 		}
 		output.setCaretPosition(output.getDocument().getLength());
 		//JViewport view = scroller.getViewport();
@@ -395,6 +384,7 @@ public class TestGui extends Component
 		String[] words = line.split(" ");
 		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
 		Element sequence = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_SEQUENCE );
+		sequence.setAttribute("offset-to-start", String.valueOf(meta.getTime()));
 		for( String word : words ) {
 			Element interpretation = XMLTool.appendChildElement(sequence, EMMA.E_INTERPRETATION);
 			interpretation.setAttribute("offset-to-start", String.valueOf(meta.getTime()));

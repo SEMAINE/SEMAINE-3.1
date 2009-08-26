@@ -75,7 +75,6 @@ public class LoebnerUtteranceInterpreter extends Component
 					//System.out.println("WordElements found");
 					String starttime = null;
 					for( Element wordElem : wordElements ) {
-						System.out.println(em.getText());
 						if( wordElem.hasAttribute("tokens") ) {
 							detectedWordsPlusTime[0] = detectedWordsPlusTime[0] + wordElem.getAttribute("tokens") + " ";
 						}
