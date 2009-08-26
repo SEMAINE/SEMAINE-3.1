@@ -143,8 +143,8 @@ public class UtteranceInterpreter extends Component
 						if( wordElem.hasAttribute("tokens") ) {
 							detectedKeywords = detectedKeywords + wordElem.getAttribute("tokens") + " ";
 						}
-						if( starttime == null && wordElem.hasAttribute("offset-to-start") ) {
-							starttime = wordElem.getAttribute("offset-to-start");
+						if( starttime == null && wordSequence.hasAttribute("offset-to-start") ) {
+							starttime = wordSequence.getAttribute("offset-to-start");
 						}
 					}
 					detectedKeywords = detectedKeywords.trim();

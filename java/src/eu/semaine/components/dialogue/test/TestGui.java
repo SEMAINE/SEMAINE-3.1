@@ -32,9 +32,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 import eu.semaine.components.Component;
+import eu.semaine.components.dialogue.datastructures.AgentUtterance;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.EMMA;
@@ -43,10 +45,13 @@ import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.EmmaSender;
+import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.FeatureSender;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
@@ -75,6 +80,8 @@ public class TestGui extends Component
 	
 	/* The text in the textArea */
 	private String outputText = "++++++++ Welcome ++++++++";
+	private String currUtterance = "";
+	private long currUtteranceTime = 0;
 	
 	/* The last time a keypress was registered */
 	public long lastTickTime = meta.getTime();
@@ -86,10 +93,12 @@ public class TestGui extends Component
 	public boolean typing = false;
 	
 	/* Senders and Receivers */
+	private FMLSender fmlSender;
 	private StateSender userStateSender;
 	private EmmaSender emmaSender;
 	private FMLReceiver fmlReceiver;
-	private EmmaReceiver emmaReceiver;
+	//private EmmaReceiver emmaReceiver;
+	private StateReceiver userStateReceiver;
 	
 	Random r = new Random();
 	
@@ -115,10 +124,18 @@ public class TestGui extends Component
 		//featureSender.setFeatureNames(featureNames);
 		//senders.add(featureSender);
 		
+		// Temp
+		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
+		senders.add(fmlSender);
+		// Temp
+		
 		fmlReceiver = new FMLReceiver("semaine.data.action.candidate.function");
 		receivers.add(fmlReceiver); // to set up properly
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
-		receivers.add(emmaReceiver);
+		//emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
+		//receivers.add(emmaReceiver);
+		userStateReceiver = new StateReceiver("semaine.data.state.user.behaviour", StateInfo.Type.UserState);
+		receivers.add(userStateReceiver);
+		
 		
 		initGui();
 	}
@@ -150,6 +167,11 @@ public class TestGui extends Component
 					Element speech = XMLTool.getChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
 					if( speech != null ) {
 						try {
+							if( currUtterance.length() != 0 ) {
+								outputText = outputText + "<br>" + currUtterance;
+							}
+							currUtterance = "";
+							currUtteranceTime = 0;
 							printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
 						}catch(Exception e){e.printStackTrace();}
 						//printLine( "+ " + speech.getTextContent() );
@@ -159,14 +181,43 @@ public class TestGui extends Component
 				if( fml != null ) {
 					Element backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
 					if( backchannel != null ) {
+						if( currUtterance.length() != 0 ) {
+							outputText = outputText + "<br>" + currUtterance;
+						}
+						currUtterance = "";
+						currUtteranceTime = 0;
 						printLine("** Nods **");
 					}
 				}
 			}
 		}
-		String sentence = getSentence(m);
-		if( sentence != null ) {
-			printLine(sentence);
+		
+		if( m instanceof SEMAINEStateMessage ) {
+			SEMAINEStateMessage sm = ((SEMAINEStateMessage)m);
+			StateInfo stateInfo = sm.getState();
+			if (stateInfo.getType() == StateInfo.Type.UserState) {
+				if( stateInfo.hasInfo("userUtterance") && stateInfo.hasInfo("userUtteranceStartTime") ) {
+					String newUtterance = stateInfo.getInfo("userUtterance");
+					long newUtteranceTime = Long.parseLong(stateInfo.getInfo("userUtteranceStartTime"));
+					System.out.println("+++++ New Keywords");
+					System.out.println(currUtterance);
+					System.out.println("CurrTime: " + currUtteranceTime);
+					System.out.println("NewTime: " + newUtteranceTime);
+					System.out.println("CurrUtterance: " + currUtterance);
+					System.out.println("NewUtterance: " + newUtterance);
+					if( Math.abs(newUtteranceTime-currUtteranceTime) < 10 ) {
+						currUtterance = newUtterance;
+					} else {
+						if( currUtterance.length() != 0 ) {
+							outputText = outputText + "<br>" + currUtterance;
+						}
+						currUtterance = newUtterance;
+						currUtteranceTime = newUtteranceTime;
+					}
+					printLine();
+					System.out.println(currUtterance);
+				}
+			}
 		}
 	}
 
@@ -283,8 +334,32 @@ public class TestGui extends Component
 	 */
 	public void printLine( String line )
 	{
+		if( currUtterance.length() == 0 ) {
+			output.setText( ("<html><body>" + outputText + "<br>" + line + "</body></html>").trim() );
+			System.out.println("<html><body>" + outputText + "<br>" + line + "</body></html>");
+		} else {
+			output.setText( ("<html><body>" + outputText + "<br>" + currUtterance + "<br>" + line + "</body></html>").trim() );
+			System.out.println("<html><body>" + outputText + "<br>" + currUtterance + "<br>" + line + "</body></html>");
+		}
+		output.setCaretPosition(output.getDocument().getLength());
 		outputText = outputText + "<br>" + line;
-		output.setText( ("<html><body>" + outputText + "</body></html>").trim() );
+		//JViewport view = scroller.getViewport();
+		//view.setViewPosition(new java.awt.Point(10, 99999999));
+	}
+	
+	/**
+	 * This method prints the given line in the output textarea
+	 * @param line - the line to print
+	 */
+	public void printLine( )
+	{	
+		if( currUtterance.length() == 0 ) {
+			output.setText( ("<html><body>" + outputText + "</body></html>").trim() );
+			System.out.println("<html><body>" + outputText + "</body></html>");
+		} else {
+			output.setText( ("<html><body>" + outputText + "<br>" + currUtterance + "</body></html>").trim() );
+			System.out.println("<html><body>" + outputText + "<br>" + currUtterance + "</body></html>");
+		}
 		output.setCaretPosition(output.getDocument().getLength());
 		//JViewport view = scroller.getViewport();
 		//view.setViewPosition(new java.awt.Point(10, 99999999));
@@ -309,6 +384,9 @@ public class TestGui extends Component
 	 */
 	public void sendUtterance( String line )
 	{
+//		try {
+//			sendUtteranceToMary("Hello there, I'm Prudence, and I am very matter-of-fact. So tell me, what is your name?");
+//		}catch(Exception e) {}
 		/* If speech signals are not continuously send, send a speaking signal to indicate that an utterance has been spoken */
 		if( !sendSpeechSignals ) {
 			sendSpeaking();
@@ -356,6 +434,44 @@ public class TestGui extends Component
 	public long getTime()
 	{
 		return meta.getTime();
+	}
+	
+	/**
+	 * Sends the given utterance to the output modules.
+	 * 
+	 * @param utterance
+	 * @throws JMSException
+	 */
+	public void sendUtteranceToMary( String response ) throws JMSException
+	{	
+		String id = "s1";
+
+		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
+		Element root = doc.getDocumentElement();
+
+		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
+		bml.setAttribute(BML.A_ID, "bml1");
+		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
+		fml.setAttribute(FML.A_ID, "fml1");
+		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
+		speech.setAttribute(BML.A_ID, id);
+		speech.setAttribute(BML.E_TEXT, response);
+		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
+
+		//speech.setTextContent(response);
+
+		int counter=1;
+		for( String word : response.split(" ") ) {
+			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
+			mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
+			Node text = doc.createTextNode(word);
+			speech.appendChild(text);
+			counter++;
+		}
+		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
+		mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
+
+		fmlSender.sendXML(doc, meta.getTime());
 	}
 }
 
