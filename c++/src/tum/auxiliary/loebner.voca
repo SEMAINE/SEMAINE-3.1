@@ -14,62 +14,136 @@ mmh		[*mmh*]		ah hh aa
 mmh		[*mmh*]		m hh
 AGO		[AGO]		ah g ow
 ANYTHING	[ANYTHING]	eh n iy th ih ng
+ANYTHING	[ANYTHING]	ah n iy th ih ng
 ARE		[ARE]		aa r
 BELIEVE		[BELIEVE]	b ih l iy v
+BELIEVE		[BELIEVE]	b ah l iy v
+BELIEVE		[BELIEVE]	b ih l iy f
+BELIEVE		[BELIEVE]	b ah l iy f
 BRING		[BRING]		b r ih ng
 BROKEN		[BROKEN]	b r ow k ah n
+BROKEN		[BROKEN]	b r ow k eh n
+BROKEN		[BROKEN]	b r ow k n
 CARRY		[CARRY]		k ae r iy
 CHEATING	[CHEATING]	ch iy t ih ng
+CHEATING	[CHEATING]	ch iy t ih n
 COLLIDE		[COLLIDE]	k ah l ay d
+COLLIDE		[COLLIDE]	k ao l ay d
 COME		[COME]		k ah m
+CONVINCE	[CONVINCE]	k ah n w ih n s
+CONVINCE	[CONVINCE]	k ao n w ih n s
 CONVINCE	[CONVINCE]	k ah n v ih n s
+CONVINCE	[CONVINCE]	k ao n v ih n s
 DESTROY		[DESTROY]	d ih s t r oy
+DESTROY		[DESTROY]	d eh s t r oy
 DIE		[DIE]		d ay
 DO		[DO]		d uw
 DOCK		[DOCK]		d aa k
+DOCK		[DOCK]		d ao k
 FIX		[FIX]		f ih k s
 FROM		[FROM]		f r ah m
+FROM		[FROM]		f r ao m
 GIVE		[GIVE]		g ih v
+GIVE		[GIVE]		g ih f
 HAPPEN		[HAPPEN]	hh ae p ah n
+HAPPEN		[HAPPEN]	hh ae p eh n
+HAPPEN		[HAPPEN]	hh ae p n
 HAPPENS		[HAPPENS]	hh ae p ah n z
+HAPPENS		[HAPPENS]	hh ae p eh n z
+HAPPENS		[HAPPENS]	hh ae p n z
 HAPPENED	[HAPPENED]	hh ae p ah n d
+HAPPENED	[HAPPENED]	hh ae p eh n d
+HAPPENED	[HAPPENED]	hh ae p n d
 HELP		[HELP]		hh eh l p
-HERE		[HERE]		h iy r
+HERE		[HERE]		hh iy r
+HERE		[HERE]		hh iy ah
 HIT		[HIT]		hh ih t
 HUMAN		[HUMAN]		hh y uw m ah n
+HUMAN		[HUMAN]		hh y uw m eh n
 IF		[IF]		ih f
 INFILTRATOR	[INFILTRATOR]	ih n f ih l t r ey t er
+INFILTRATOR	[INFILTRATOR]	ih n f ih l t r ey d er
+INFILTRATOR	[INFILTRATOR]	ih n f ih l t r ey t ah
+INFILTRATOR	[INFILTRATOR]	ih n f ih l t r ey d ah
+INVESTIGATE	[INVESTIGATE]	ih n w eh s t ah g ey t
 INVESTIGATE	[INVESTIGATE]	ih n v eh s t ah g ey t
+INVESTIGATE	[INVESTIGATE]	ih n w eh s t ih g ey t
+INVESTIGATE	[INVESTIGATE]	ih n v eh s t ih g ey t
+INVESTIGATE	[INVESTIGATE]	ih n w eh s t ah g ey d
+INVESTIGATE	[INVESTIGATE]	ih n v eh s t ah g ey d
+INVESTIGATE	[INVESTIGATE]	ih n w eh s t ih g ey d
+INVESTIGATE	[INVESTIGATE]	ih n v eh s t ih g ey d
 KILL		[KILL]		k ih l
 KIND		[KIND]		k ay n d
 LONG		[LONG]		l ao ng
 MATTER		[MATTER]	m ae t er
+MATTER		[MATTER]	m ae t ah
+MATTER		[MATTER]	m ae d er
+MATTER		[MATTER]	m ae d ah
 MORE		[MORE]		m ao r
 MOVE		[MOVE]		m uw v
+MOVE		[MOVE]		m uw f
 NAME		[NAME]		n ey m
 OFFER		[OFFER]		ao f er
+OFFER		[OFFER]		ao f ah
 OTHER		[OTHER]		ah dh er
-OTHERS		[OTHERS]	ah dh er z
+OTHER		[OTHER]		ah dh ah
+OTHER		[OTHER]		ah th er
+OTHER		[OTHER]		ah th ah
 OTHERS		[OTHERS]	ah dh er s
+OTHERS		[OTHERS]	ah dh ah s
+OTHERS		[OTHERS]	ah th er s
+OTHERS		[OTHERS]	ah th ah s
+OTHERS		[OTHERS]	ah dh er z
+OTHERS		[OTHERS]	ah dh ah z
+OTHERS		[OTHERS]	ah th er z
+OTHERS		[OTHERS]	ah th ah z
 PROVE		[PROVE]		p r uw v
+PROVE		[PROVE]		p r uw f
 RANK		[RANK]		r ae ng k
+RANK		[RANK]		r ae n k
 REPAIR		[REPAIR]	r ih p eh r
+REPAIR		[REPAIR]	r iy p eh r
+REPAIR		[REPAIR]	r ih p eh ah
+REPAIR		[REPAIR]	r iy p eh ah
 ROLE		[ROLE]		r ow l
 SHIP		[SHIP]		sh ih p
 SHOULD		[SHOULD]	sh uh d
 SHOW		[SHOW]		sh ow
 SPACESHIP	[SPACESHIP]	s p ey s sh ih p
+SPACESHIP	[SPACESHIP]	s p ey sh ih p
+SPACESHIP	[SPACESHIP]	s p ey s sh ih b
+SPACESHIP	[SPACESHIP]	s p ey sh ih b
 SPY		[SPY]		s p ay
-STEER		[STEER]		s t ih r
+STEER		[STEER]		s t iy r
 STOP		[STOP]		s t aa p
 SUPPLIES	[SUPPLIES]	s ah p l ay z
+SUPPLIES	[SUPPLIES]	s uh p l ay z
 SURE		[SURE]		sh uh r
 SURVIVORS	[SURVIVORS]	s er v ay v er z
+SURVIVORS	[SURVIVORS]	s er w ay w er z
+SURVIVORS	[SURVIVORS]	s ah v ay v er z
+SURVIVORS	[SURVIVORS]	s ah w ay w er z
+SURVIVORS	[SURVIVORS]	s er v ay v ah z
+SURVIVORS	[SURVIVORS]	s er w ay w ah z
+SURVIVORS	[SURVIVORS]	s ah v ay v ah z
+SURVIVORS	[SURVIVORS]	s ah w ay w ah z
 TRUST		[TRUST]		t r ah s t
 TYPE		[TYPE]		t ay p
 UNIMAT		[UNIMAT]	y uw n iy m ae t
+UNIMAT		[UNIMAT]	y uw n iy m ah t
+UNIMAT		[UNIMAT]	y uw n ih m ae t
+UNIMAT		[UNIMAT]	y uw n ih m ah t
+UNIMAT		[UNIMAT]	y uw n iy m ae d
+UNIMAT		[UNIMAT]	y uw n iy m ah d
+UNIMAT		[UNIMAT]	y uw n ih m ae d
+UNIMAT		[UNIMAT]	y uw n ih m ah d
 VESSEL		[VESSEL]	v eh s ah l
+VESSEL		[VESSEL]	w eh s ah l
+VESSEL		[VESSEL]	v eh s l
+VESSEL		[VESSEL]	w eh s l
 WHAT		[WHAT]		w ah t
+WHAT		[WHAT]		w ao t
 WHEN		[WHEN]		w eh n
 WHO		[WHO]		hh uw
 WHY		[WHY]		w ay
