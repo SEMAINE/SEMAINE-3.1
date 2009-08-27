@@ -58,7 +58,7 @@ function func_build_opensmile {
       echo ""
       echo "./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$INSTALL_PREFIX/include" LDFLAGS="-L$INSTALL_PREFIX/lib -lspeex -lspeexdsp -ljulius -lsent" --with-rtnnllib="$INSTALL_PREFIX" --without-atklib"
       echo ""
-      ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$INSTALL_PREFIX/include $OFLAGS" LDFLAGS="-L$INSTALL_PREFIX/lib -lspeex -lspeexdsp -ljulius -lsent" --without-atklib
+      ./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_LIBSAMPLERATE -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$INSTALL_PREFIX/include $OFLAGS" LDFLAGS="-L$INSTALL_PREFIX/lib -lsamplerate -lspeex -lspeexdsp -ljulius -lsent" --without-atklib
       #./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src --with-portaudio=$INSTALL_PREFIX CXXFLAGS="-DHAVE_SPEEXLIB -DHAVE_JULIUSLIB -DEXTERNAL_FV  -I$INSTALL_PREFIX/include" LDFLAGS="-L$INSTALL_PREFIX/lib -lspeex -lspeexdsp -ljulius -lsent" --with-rtnnllib="$INSTALL_PREFIX" --without-atklib
     else
       #./configure --prefix=$INSTALL_PREFIX --with-semaineapi=$SEMAINE_ROOT/c++/src
