@@ -1,7 +1,7 @@
 
 #################### Package Configuration    #########################
-OPENSMILEMODELS="models.opensmile_v1.zip"
-OPENSMILEMODELS_URL="http://server/$SMILEMODELS"
+OPENSMILEMODELS="models-v1.zip"
+OPENSMILEMODELS_URL="http://www.mmk.ei.tum.de/~eyb/models-v1.zip"
 OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
 
 if test -d "$SEMAINE_ROOT/c++/src/tum/opensmile"; then
@@ -32,8 +32,8 @@ function func_build_opensmile {
 
     # install models if present in download directory
     if test -f $DOWNLOAD_PREFIX/$OPENSMILEMODELS ; then
-      if test ! -f models/sal/arousal.model || test ! -f models/avic2/interest.model || test "x$1" = "xclean" ; then
-        echo "unzipping SMILE models to $PWD/models"
+      if test ! -f models/emo/salaroc.lsvm.model || test "x$1" = "xclean" ; then
+        echo "unzipping openSMILE SEMAINE models to $PWD/models"
         unzip -o $DOWNLOAD_PREFIX/$OPENSMILEMODELS -d .
         if test "x$?" != "x0" ; then
           echo "Error extracting models.... !!!"
