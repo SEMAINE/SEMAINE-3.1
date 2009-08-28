@@ -90,6 +90,7 @@ MORE		[MORE]		m ao r
 MOVE		[MOVE]		m uw v
 MOVE		[MOVE]		m uw f
 NAME		[NAME]		n ey m
+NO		[NO]		n ow
 OFFER		[OFFER]		ao f er
 OFFER		[OFFER]		ao f ah
 OTHER		[OTHER]		ah dh er
@@ -158,6 +159,9 @@ WHEN		[WHEN]		w eh n
 WHO		[WHO]		hh uw
 WHY		[WHY]		w ay
 WOULD		[WOULD]		w uh d
+YEAH		[YEAH]		y eh ah
+YES		[YES]		y eh s
+YES		[YES]		iy eh s
 PHON_AA		[garbage]	aa
 PHON_AE		[garbage]	ae
 PHON_AH		[garbage]	ah
