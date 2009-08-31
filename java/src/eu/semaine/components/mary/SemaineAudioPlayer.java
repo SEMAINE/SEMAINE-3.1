@@ -10,19 +10,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import javax.jms.JMSException;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+
+import marytts.util.data.audio.AudioPlayer;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import marytts.util.data.audio.AudioPlayer;
 import eu.semaine.components.Component;
-import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.SemaineML;
-import eu.semaine.exceptions.SystemConfigurationException;
-import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEBytesMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.BytesReceiver;
@@ -49,7 +46,7 @@ public class SemaineAudioPlayer extends Component
 	{
 		super("SemaineAudioPlayer", false, true);
 		audioReceiver  = new BytesReceiver("semaine.data.synthesis.lowlevel.audio");
-		callbackSender = new XMLSender("semaine.data.synthesis.lowlevel.audio.played", "SemaineML", getName()); 
+		callbackSender = new XMLSender("semaine.callback.output.audio", "SemaineML", getName()); 
 		receivers.add(audioReceiver); // to set up properly
 		senders.add(callbackSender);
 		inputWaiting   = new LinkedBlockingQueue<byte[]>();
@@ -95,11 +92,12 @@ public class SemaineAudioPlayer extends Component
 				ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
 				
 				try {
+					sendCallbackMessage("start");
 					AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
 	            	AudioPlayer player = new AudioPlayer(ais);
 					player.start();
 					player.join();
-					sendCallbackMessage();
+					sendCallbackMessage("end");
 					//sleep(1000);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -109,17 +107,19 @@ public class SemaineAudioPlayer extends Component
 		
 	}
 	
-	public void sendCallbackMessage() throws JMSException {
+	public void sendCallbackMessage(String type) throws JMSException {
 		
 		Document doc = XMLTool.newDocument("callback", SemaineML.namespaceURI);
 		Element root = doc.getDocumentElement();
 		Element callback = XMLTool.appendChildElement(root, SemaineML.E_EVENT , SemaineML.namespaceURI);
-		callback.setAttribute("source",  BML.E_BML);
-		callback.setAttribute("id", "0");
+		callback.setAttribute("type", type);
+		callback.setAttribute("data",  "audio");
+		callback.setAttribute("id", "audio-01");
 		callback.setAttribute(SemaineML.A_TIME,  String.valueOf(meta.getTime()));
 		//callback.setTextContent("Synthesis request handled successfully.");
 		
 		callbackSender.sendXML(doc, meta.getTime());
+		//System.out.println(XMLTool.document2String(doc));
 	}
 	
 }
