@@ -298,7 +298,7 @@ public class TurnTakingInterpreter extends Component
 	public void determineAgentTurn() throws JMSException
 	{
 		int speakingIntention = getSpeakingIntentionValue();
-		if( speakingIntention >= curr_TT_Threshold && agentSpeakingIntention != SPEAKING ) {
+		if( speakingIntention >= curr_TT_Threshold && agentSpeakingIntention != SPEAKING && agentSpeakingState == SILENT && (meta.getTime() - agentSpeakingStateTime > 4000 ) ) {
 			agentSpeakingIntention = SPEAKING;
 			agentSpeakingIntentionTime = meta.getTime();
 			sendAgentTurnState();

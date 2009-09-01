@@ -36,7 +36,7 @@
 		</category>
 		
 		<category name="i_am_no_unimat">
-			<utterance value="Of course not, I told you we were just attacked by Unimats." />
+			<utterance value="No, I told you we were just attacked by Unimats." />
 			<utterance value="Why would you even ask me that, I told you we were just attacked by Unimats." />
 		</category>
 		
@@ -55,7 +55,6 @@
 		</category>
 		
 		<category name="present_gifts">
-			<utterance value="Yes, I can get you that, now let me in." />
 			<utterance value="Yes I can get you what you want." />
 		</category>
 		
@@ -81,15 +80,25 @@
 		</category>
 		
 		<category name="unknown_question">
-			<utterance value="Look, we don't have time for that!" />
+			<utterance value="We don't have time for that!" />
 			<utterance value="We're running out of time!" />
 			<utterance value="That's not important now!" />
-			<utterance value="I'm on a collision course with your ship and it will hit you in a few minutes. Please let me in." />
+			<utterance value="I'm on a collision course with your ship and it will hit you in a few minuts. Please let me in." />
+			<utterance value="Look, lock me up when I've docked or something, but let me in." />
+			<utterance value="I'll hit you in a few minuts. Please let me in." />
+			<utterance value="Not important now. Let me in." />
 		</category>
 		
 		<category name="after_a_silence">
 			<utterance value="Hello? Can you still hear me?" />
 			<utterance value="Come ON, let me IN!" />
+			<utterance value="Hello?" />
+			<utterance value="Can you here me?" />
+			<utterance value="Please let me in." />
+			<utterance value="Can you let me in?" />
+			<utterance value="Open the docking bay so I can land." />
+			<utterance value="Open the docking bay please." />
+			<utterance value="Will you help me?" />
 		</category>
 		
 		<category name="after_a_statement">
