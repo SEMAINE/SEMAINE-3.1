@@ -349,7 +349,7 @@ public class TurnTakingInterpreter extends Component
 		}
 		
 		/* emotion_value */
-		emotion_value = (detectedEmotions.size()-index)*10;
+		emotion_value = Math.min( (detectedEmotions.size()-index)*10, 80 );
 		
 		/* time_turn_value */
 		if( agentSpeakingState == SILENT ) {
