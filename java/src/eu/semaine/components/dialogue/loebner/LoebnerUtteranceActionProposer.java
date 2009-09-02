@@ -63,6 +63,7 @@ public class LoebnerUtteranceActionProposer extends Component
 	private boolean isUserPresent = false;	// Indicates if the user is currently present or not
 	private boolean systemStarted = false;	// Indicates if the system has started or not
 	private long systemStartTime = 0;		// The starttime of the system.
+	private boolean firstRandomAnswerGiven = false;
 
 	/* Senders and Receivers */
 	private StateReceiver agentStateReceiver;
@@ -212,7 +213,7 @@ public class LoebnerUtteranceActionProposer extends Component
 			return;
 		}
 		processUtteranceEnd();
-		checkUserSilenceTime();
+		//checkUserSilenceTime();
 	}
 	
 	public boolean speechReady( SEMAINEXMLMessage xm )
@@ -252,7 +253,7 @@ public class LoebnerUtteranceActionProposer extends Component
 		
 		long user_utterance_length = meta.getTime() - userTurnStart;
 		if( convState == STARTUP_1 ) {
-			if( user_utterance_length < 2000 || detectedKeywords.contains("yes") || detectedKeywords.contains("yeah") ) {
+			if( user_utterance_length < 2000 || detectedKeywords.contains("yes") || detectedKeywords.contains("yeah") || detectedKeywords.contains("here") ) {
 				convState = STARTUP_2;
 				return pickUtterances( "startup3" );
 			} else {
@@ -265,6 +266,17 @@ public class LoebnerUtteranceActionProposer extends Component
 	public AgentUtterance getResponse()
 	{
 		resetCategoryChances();
+		if( detectedWordsIndex == detectedWords.size() ) {
+//			if( convState == STARTUP_2 ) {
+//				agentSpeakingState = PREPARINT_TO_SPEAK;
+//				convState = SITUATION_EXPLAINED;
+//				return pickUtterances("explain_what_happened");
+//			} else {
+				agentSpeakingState = PREPARINT_TO_SPEAK;
+				return pickUtterances("after_a_silence");
+//			}
+		}
+		
 		for( int i=detectedWordsIndex; i<detectedWords.size(); i++ ) {
 			String str = detectedWords.get(i).toLowerCase();
 			Double chance;
@@ -391,6 +403,8 @@ public class LoebnerUtteranceActionProposer extends Component
 				chance += 0.6;
 			} else if( str.matches("((\\S)+ +)*(would|should) ((\\S)+ +){0,2}(dock|in|help)( *(\\S)+)*") ) {
 				chance += 0.3;
+			} else if( str.matches("((\\S)+ +)*why( *(\\S)+)*") ) {
+				chance += 0.2;
 			}
 			categoryChances.put("reasons_to_let_me_in", chance);
 
@@ -487,12 +501,16 @@ public class LoebnerUtteranceActionProposer extends Component
 		}
 
 		if( maxChance < 0.1 ) {
-			if( convState == STARTUP_2 ) {
-				maxCategory = "explain_what_happened";
-				convState = SITUATION_EXPLAINED;
-			} else {
-				maxCategory = "unknown_question";
-			}
+//			if( convState == STARTUP_2 ) {
+//				maxCategory = "explain_what_happened";
+//				convState = SITUATION_EXPLAINED;
+//			} else {
+				if( meta.getTime() - systemStartTime < 70000 ) {
+					maxCategory = "unknown_question_low_arousal";
+				} else {
+					maxCategory = "unknown_question_high_arousal";
+				}
+//			}
 		}
 		
 		if( convState == STARTUP_2 ) {
@@ -504,6 +522,7 @@ public class LoebnerUtteranceActionProposer extends Component
 
 	public AgentUtterance pickUtterances( String type )
 	{
+		System.out.println("Start: " + systemStartTime + ", now: " + meta.getTime()	);
 		/* Get all utterances of the given type that haven't been used for the last x utterances */
 		HashMap<String,ArrayList<String>> utterancesChar = allUtterances.get(3);
 		ArrayList<String> utterancesType = utteranceCopy( utterancesChar.get(type) );
@@ -517,11 +536,21 @@ public class LoebnerUtteranceActionProposer extends Component
 
 		if( utterancesType.size() == 0 ) {
 			/* If the list is empty do something else */
-			return pickUtterances("unknown_question");
+			if( meta.getTime() - systemStartTime < 70000 ) {
+				return pickUtterances("unknown_question_low_arousal");
+			} else {
+				return pickUtterances("unknown_question_high_arousal");
+			}
 
 		} else {
 			/* If the list isn't empty randomly pick an utterance from the list */
-			return new AgentUtterance( type, utterancesType.get(rand.nextInt(utterancesType.size())) );
+			System.out.println("Saying utterance of type: " + type);
+			if( type.equals("unknown_question_low_arousal") && !firstRandomAnswerGiven ) {
+				firstRandomAnswerGiven = true;
+				return new AgentUtterance( type, "I'm on a collision course with your ship and it will hit you in a few minutes. Please let me in." );
+			} else {
+				return new AgentUtterance( type, utterancesType.get(rand.nextInt(utterancesType.size())) );
+			}
 		}
 	}
 
