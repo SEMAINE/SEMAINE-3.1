@@ -101,7 +101,6 @@ public class SpeechInterpreter extends Component
 				List<Element> speakingList = em.getSpeakingElements(interpretation);
 				for (Element speaking : speakingList) {
 					if( speaking.hasAttribute("statusChange") ) {
-						System.out.println(speaking.getAttribute("statusChange"));
 						if( speaking.getAttribute("statusChange").equals("start") ) {
 							speakingParam = true;
 						} else if( speaking.getAttribute("statusChange").equals("stop") ) {

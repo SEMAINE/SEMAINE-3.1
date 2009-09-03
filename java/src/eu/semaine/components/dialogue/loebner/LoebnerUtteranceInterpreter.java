@@ -78,6 +78,9 @@ public class LoebnerUtteranceInterpreter extends Component
 						if( wordElem.hasAttribute("tokens") ) {
 							detectedWordsPlusTime[0] = detectedWordsPlusTime[0] + wordElem.getAttribute("tokens") + " ";
 						}
+						if( wordElem.hasAttribute("confidence") ) {
+							detectedWordsPlusTime[0] = detectedWordsPlusTime[0] + " (" + wordElem.getAttribute("confidence") + ") ";
+						}
 						if( starttime == null && wordSequence.hasAttribute("offset-to-start") ) {
 							starttime = wordSequence.getAttribute("offset-to-start");
 						}

@@ -15,6 +15,7 @@ import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.actionproposers.SentenceReader;
 import eu.semaine.components.dialogue.datastructures.AgentUtterance;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
+import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
@@ -149,11 +150,13 @@ public class LoebnerUtteranceActionProposer extends Component
 			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
 			
 			if( speechStarted(xm) ) {
+				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
 				agentSpeakingState = SPEAKING;
 				agentSpeakingStateTime = meta.getTime();
 			}
 			
 			if( speechReady(xm) ) {
+				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
 				System.out.println("Agent silent");
 				agentSpeakingState = LISTENING;
 				agentSpeakingStateTime = meta.getTime();
@@ -175,10 +178,6 @@ public class LoebnerUtteranceActionProposer extends Component
 
 				/* Updated analyzed Dialogue Acts history */
 				addDetectedWords( stateInfo);
-				
-				if( stateInfo.hasInfo("interest") ) {
-					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!! INTEREST: " + stateInfo.getInfo("interest"));
-				}
 			}
 
 			if( stateInfo.getType() == StateInfo.Type.ContextState ) {
@@ -522,7 +521,6 @@ public class LoebnerUtteranceActionProposer extends Component
 
 	public AgentUtterance pickUtterances( String type )
 	{
-		System.out.println("Start: " + systemStartTime + ", now: " + meta.getTime()	);
 		/* Get all utterances of the given type that haven't been used for the last x utterances */
 		HashMap<String,ArrayList<String>> utterancesChar = allUtterances.get(3);
 		ArrayList<String> utterancesType = utteranceCopy( utterancesChar.get(type) );
@@ -689,6 +687,7 @@ public class LoebnerUtteranceActionProposer extends Component
 	public void userAppeared() throws JMSException
 	{
 		System.out.println("User appeared");
+		DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
 
 		isUserPresent = true;
 		systemStarted = true;
@@ -706,6 +705,7 @@ public class LoebnerUtteranceActionProposer extends Component
 	 */
 	public void userDisappeared() throws JMSException
 	{
+		DMLogger.getLogger().log(meta.getTime(), "System:SystemStopped" );
 		convState = 0;
 		isUserPresent = false;
 
@@ -723,6 +723,35 @@ public class LoebnerUtteranceActionProposer extends Component
 		/* Send utterance to Greta */
 		String response = utterance.getUtterance();
 
+		if( response.contains("thank goodness") ) {
+			sendUtteranceAsFml( "Ah, thank goodness." );
+			sendUtteranceAsFml( "We were attacked by Unimats while bringing supplies to a refugee camp." );
+			sendUtteranceAsFml( "They killed almost all of our crew I could barely escape." );
+			sendUtteranceAsFml( "Please help me and let me dock." );
+		} else {
+			sendUtteranceAsFml( response );
+		}
+
+		/* Send the speaking-state around */
+		sendSpeaking();
+
+		/* Set indices */
+		emotionIndex = detectedEmotions.size();
+		detectedWordsIndex = detectedWords.size();
+
+		/* Add the utterance to the history */
+		utterance.setTime( meta.getTime() );
+		agentUtteranceHistory.add( utterance );
+
+		System.out.println("Agent speaking");
+		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getType() + ", utterance=" + utterance.getUtterance() );
+		
+		/* Set end time (temporary) */
+		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().split(" ").length * 250)+5000 );
+	}
+	
+	public void sendUtteranceAsFml( String response ) throws JMSException
+	{
 		String id = "s1";
 
 		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
@@ -751,21 +780,6 @@ public class LoebnerUtteranceActionProposer extends Component
 		mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
 
 		fmlSender.sendXML(doc, meta.getTime());
-
-		/* Send the speaking-state around */
-		sendSpeaking();
-
-		/* Set indices */
-		emotionIndex = detectedEmotions.size();
-		detectedWordsIndex = detectedWords.size();
-
-		/* Add the utterance to the history */
-		utterance.setTime( meta.getTime() );
-		agentUtteranceHistory.add( utterance );
-
-		System.out.println("Agent speaking");
-		/* Set end time (temporary) */
-		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().split(" ").length * 250)+5000 );
 	}
 
 	/**
@@ -781,7 +795,7 @@ public class LoebnerUtteranceActionProposer extends Component
 		dialogStateSender.sendStateInfo(dsi, meta.getTime());
 	}
 
-	/**
+	/**s
 	 * Sends around that the agent is silent
 	 * @throws JMSException
 	 */

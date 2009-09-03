@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
+import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
@@ -219,6 +220,7 @@ public class TurnTakingInterpreter extends Component
 		if( userInfo.hasInfo("speaking") ) {
 			if( userInfo.getInfo("speaking").equals("true") ) {
 				if( userSpeakingState != SPEAKING ) {
+					DMLogger.getLogger().log(meta.getTime(), "UserAction:UserStartedSpeaking" );
 					System.out.println("Detected user speaking");
 					backchannel_given = false;
 					userSpeakingState = SPEAKING;
@@ -226,6 +228,7 @@ public class TurnTakingInterpreter extends Component
 				}
 			} else if( userInfo.getInfo("speaking").equals("false") ) {
 				if( userSpeakingState != SILENT ) {
+					DMLogger.getLogger().log(meta.getTime(), "UserAction:UserStoppedSpeaking" );
 					System.out.println("Detected user silent");
 					latestUtteranceLength = meta.getTime() - userSpeakingStateTime;
 					userSpeakingState = SILENT;
@@ -385,6 +388,7 @@ public class TurnTakingInterpreter extends Component
 		/* Calculating the speaking intention value */
 		speakingIntention = user_silence_time_value + emotion_value + agent_silence_time_value + agent_end_wait_value + user_not_responding_value;
 		//System.out.println( speakingIntention + "	= " + user_silence_time_value + "	+ " + emotion_value + "	+ " + agent_silence_time_value + "	+ " + agent_end_wait_value + "	+ " + user_not_responding_value + "			: currTime: " + meta.getTime() );
+		DMLogger.getLogger().log(meta.getTime(), speakingIntention + "	= " + user_silence_time_value + "	+ " + emotion_value + "	+ " + agent_silence_time_value + "	+ " + agent_end_wait_value + "	+ " + user_not_responding_value);
 		
 		return speakingIntention;
 	}
@@ -394,8 +398,10 @@ public class TurnTakingInterpreter extends Component
 		Map<String,String> agentStateInfo = new HashMap<String,String>();
 		if( agentSpeakingIntention == SPEAKING ) {
 			agentStateInfo.put("turnTakingIntention", "startSpeaking");
+			DMLogger.getLogger().log(meta.getTime(), "TurnTakingIntention:StartSpeaking");
 		} else if( agentSpeakingIntention == SILENT ) {
 			agentStateInfo.put("turnTakingIntention", "stopSpeaking");
+			DMLogger.getLogger().log(meta.getTime(), "TurnTakingIntention:StartSpeaking");
 		} else {
 			return;
 		}
