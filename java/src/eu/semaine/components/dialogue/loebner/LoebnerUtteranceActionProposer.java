@@ -40,7 +40,7 @@ public class LoebnerUtteranceActionProposer extends Component
 	// Speaking state
 	public final static int WAITING = 0;	// Waiting for the other person to start speaking
 	public final static int LISTENING = 1;	// Listening to the speech of the user
-	public final static int PREPARINT_TO_SPEAK = 2;
+	public final static int PREPARING_TO_SPEAK = 2;
 	public final static int SPEAKING = 3;	// The agent is speaking
 
 	// Conversational state
@@ -148,7 +148,6 @@ public class LoebnerUtteranceActionProposer extends Component
 	{
 		if( m instanceof SEMAINEXMLMessage ){
 			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
-			
 			if( speechStarted(xm) ) {
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
 				agentSpeakingState = SPEAKING;
@@ -189,7 +188,7 @@ public class LoebnerUtteranceActionProposer extends Component
 		if( agentShouldSpeak( m ) ) {
 
 			/* Update agent speaking state */
-			agentSpeakingState = PREPARINT_TO_SPEAK;
+			agentSpeakingState = PREPARING_TO_SPEAK;
 
 			AgentUtterance utterance = null;
 
@@ -235,7 +234,7 @@ public class LoebnerUtteranceActionProposer extends Component
 		if( callbackElem != null ) {
 			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
 			if( eventElem != null ) {
-				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("start") && agentSpeakingState == PREPARINT_TO_SPEAK ) {
+				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("start") && (agentSpeakingState == PREPARING_TO_SPEAK || agentSpeakingState == LISTENING ) ) {
 					return true;
 				}
 			}
@@ -271,7 +270,7 @@ public class LoebnerUtteranceActionProposer extends Component
 //				convState = SITUATION_EXPLAINED;
 //				return pickUtterances("explain_what_happened");
 //			} else {
-				agentSpeakingState = PREPARINT_TO_SPEAK;
+				agentSpeakingState = PREPARING_TO_SPEAK;
 				return pickUtterances("after_a_silence");
 //			}
 		}
@@ -574,7 +573,7 @@ public class LoebnerUtteranceActionProposer extends Component
 
 				String intention = agentInfoMap.get("turnTakingIntention");
 				if( intention != null && intention.equals("startSpeaking") ) {
-					if( agentSpeakingState == SPEAKING || agentSpeakingState == PREPARINT_TO_SPEAK ) {
+					if( agentSpeakingState == SPEAKING || agentSpeakingState == PREPARING_TO_SPEAK ) {
 						return false;
 					} else {
 						return true;
@@ -693,7 +692,7 @@ public class LoebnerUtteranceActionProposer extends Component
 		systemStarted = true;
 		systemStartTime = meta.getTime();
 
-		agentSpeakingState = PREPARINT_TO_SPEAK;
+		agentSpeakingState = PREPARING_TO_SPEAK;
 
 		sendUtterance( pickUtterances("startup2") );
 		convState = STARTUP_1;
@@ -831,10 +830,10 @@ public class LoebnerUtteranceActionProposer extends Component
 	public void checkUserSilenceTime() throws JMSException
 	{
 		if( agentSpeakingState == LISTENING && userTurnStart == -1 && (meta.getTime() - agentSpeakingStateTime > MAX_SILENCE_TIME ) ) {
-			agentSpeakingState = PREPARINT_TO_SPEAK;
+			agentSpeakingState = PREPARING_TO_SPEAK;
 			sendUtterance( pickUtterances("after_a_silence") );
 		} else if( convState == STARTUP_2 &&  agentSpeakingState == LISTENING && userTurnStart == -1 && (meta.getTime() - agentSpeakingStateTime > 3000 ) ) {
-			agentSpeakingState = PREPARINT_TO_SPEAK;
+			agentSpeakingState = PREPARING_TO_SPEAK;
 			sendUtterance( pickUtterances("explain_what_happened") );
 			convState = SITUATION_EXPLAINED;
 		}
