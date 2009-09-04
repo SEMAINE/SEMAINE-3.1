@@ -156,7 +156,6 @@ public class LoebnerUtteranceActionProposer extends Component
 			
 			if( speechReady(xm) ) {
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
-				System.out.println("Agent silent");
 				agentSpeakingState = LISTENING;
 				agentSpeakingStateTime = meta.getTime();
 				sendListening();
@@ -330,7 +329,7 @@ public class LoebnerUtteranceActionProposer extends Component
 				chance += 0.4;
 			} else {
 				if( str.matches("((\\S)+ +)*(type|kind)( *(\\S)+)*") ) {
-					chance += 0.2;
+					chance += 0.0;
 				}
 				if( str.matches("((\\S)+ +)*supplies( *(\\S)+)*") ) {
 					chance += 0.2;
@@ -360,7 +359,7 @@ public class LoebnerUtteranceActionProposer extends Component
 				chance += 0.4;
 			}
 			if( str.matches("((\\S)+ +)*(name|role|rank|spaceship)( *(\\S)+)*") ) {
-				chance += 0.2;
+				chance += 0.0;
 			}
 			categoryChances.put("introduction", chance);
 
@@ -402,6 +401,8 @@ public class LoebnerUtteranceActionProposer extends Component
 			} else if( str.matches("((\\S)+ +)*(would|should) ((\\S)+ +){0,2}(dock|in|help)( *(\\S)+)*") ) {
 				chance += 0.3;
 			} else if( str.matches("((\\S)+ +)*why( *(\\S)+)*") ) {
+				chance += 0.2;
+			} else if( str.matches("((\\S)+ +)*no( *(\\S)+)*") ) {
 				chance += 0.2;
 			}
 			categoryChances.put("reasons_to_let_me_in", chance);

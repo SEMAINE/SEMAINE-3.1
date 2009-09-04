@@ -1,6 +1,8 @@
 package eu.semaine.components.dialogue.interpreters;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jms.JMSException;
 
@@ -9,10 +11,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
+import eu.semaine.datatypes.stateinfo.ContextStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
+import eu.semaine.datatypes.stateinfo.UserStateInfo;
+import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
+import eu.semaine.jms.sender.StateSender;
 import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.util.XMLTool;
 
@@ -20,13 +27,13 @@ public class HeadMovementInterpreter extends Component
 {
 	/* Senders and Receivers */
 	private EmmaReceiver emmaReceiver;
-	private XMLSender userStateSender;
+	private StateSender userStateSender;
 	
 	public HeadMovementInterpreter() throws JMSException
 	{
 		super( "HeadMovementInterpreter" );
 		
-		userStateSender = new XMLSender("semaine.data.state.user.behaviour", "datatype = 'UserState'", "");
+		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender); // so it can be started etc
 		
 		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
@@ -35,110 +42,63 @@ public class HeadMovementInterpreter extends Component
 	
 	public void react( SEMAINEMessage m ) throws JMSException
 	{
-		if( nodDetected(m) ) {
-			processNod();
-		} else if( shakeDetected(m) ) {
-			processShake();
+		int[] headMovement = getHeadMovement(m);
+		if( headMovement[0] != 0 ) {
+			sendHeadMovement( headMovement );
 		}
 	}
 	
 	/**
-	 * Checks the message for Nods
-	 * TODO: Implement
 	 * @param m
-	 * @return
+	 * @return 0 if nothing was detected, 1 if a nod was detected, and 2 if a shake was detected
+	 * @throws JMSException
 	 */
-	public boolean nodDetected( SEMAINEMessage m ) throws JMSException
+	public int[] getHeadMovement( SEMAINEMessage m ) throws JMSException
 	{
-		String sentence = getSentence(m);
-		if( sentence != null && sentence.toLowerCase().contains("*nod*") ) {
-			return true;
-		} else { 
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks the message for Shakes
-	 * TODO: Implement
-	 * @param m
-	 * @return
-	 */
-	public boolean shakeDetected( SEMAINEMessage m ) throws JMSException
-	{
-		String sentence = getSentence(m);
-		if( sentence != null && sentence.toLowerCase().contains("*shake*") ) {
-			return true;
-		} else { 
-			return false;
-		}
-	}
-	
-	/**
-	 * Returns the detected sentence in the SEMAINEMessage m
-	 * @param m the message to detect the sentence in
-	 * TODO: TEMPORARY, only to simulate nods and shakes by typing them
-	 * @return the detected sentence
-	 */
-	public String getSentence( SEMAINEMessage m ) throws JMSException
-	{
+		int[] result = new int[3];
 		if( m instanceof SEMAINEEmmaMessage ) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
+			
 			Element interpretation = em.getTopLevelInterpretation();
 			if (interpretation != null) {
-				List<Element> texts = em.getTextElements(interpretation);
-				for (Element text : texts) {
-					
-					String utterance = text.getTextContent();
-					if( utterance != null ) {
-						return utterance;
+				List<Element> behaviours = em.getBehaviourElements(interpretation);
+				for( Element behaviourElem : behaviours ) {
+					Element headMovement = XMLTool.getChildElementByLocalNameNS(behaviourElem, BML.E_HEAD, BML.namespaceURI);
+					if( headMovement != null && headMovement.hasAttribute(BML.A_TYPE) && headMovement.hasAttribute(BML.A_START) && headMovement.hasAttribute(BML.A_END) ) {
+						if( headMovement.getAttribute(BML.A_TYPE).equals("NOD") ) {
+							result[0] = 1;
+							result[1] = Integer.parseInt( headMovement.getAttribute(BML.A_START) );
+							result[2] = Integer.parseInt( headMovement.getAttribute(BML.A_END) );
+							return result;
+						} else if( headMovement.getAttribute(BML.A_TYPE).equals("SHAKE") ) {
+							result[0] = 2;
+							result[1] = Integer.parseInt( headMovement.getAttribute(BML.A_START) );
+							result[2] = Integer.parseInt( headMovement.getAttribute(BML.A_END) );
+							return result;
+						}
 					}
-					/*
-					if( text.getAttribute("name") != null ) {
-						return text.getAttribute("name");
-					}
-					*/
 				}
 			}
 		}
-		return null;
+		result[0] = 0;
+		return result;
 	}
 	
-	/**
-	 * Processes the appearance of a nod
-	 * TODO: Extend
-	 * Currently only sends 'agree' as user behaviour
-	 */
-	public void processNod() throws JMSException
+	public void sendHeadMovement( int[] headMovement ) throws JMSException
 	{
-		Document document = XMLTool.newDocument(SemaineML.E_USERSTATE, SemaineML.namespaceURI, SemaineML.version);
-		Element text = XMLTool.appendChildElement(document.getDocumentElement(), SemaineML.E_TEXT);
-		text.setAttribute(SemaineML.A_TIME, String.valueOf(meta.getTime()));
-		Node textNode = document.createTextNode("");
-		text.appendChild(textNode);
+		Map<String,String> userInfo = new HashMap<String,String>();
+		if( headMovement[0] == 1 ) {
+			userInfo.put("headGesture", "NOD");
+		} else if( headMovement[0] == 2 ) {
+			userInfo.put("headGesture", "SHAKE");
+		} else {
+			return;
+		}
+		userInfo.put("headGestureStarted", ""+headMovement[1]);
+		userInfo.put("headGestureStopped", ""+headMovement[2]);
 		
-		Element feature = XMLTool.appendChildElement(text, "feature", SemaineML.namespaceURI);
-		feature.setAttribute("name", "agree");
-		
-		userStateSender.sendXML(document, meta.getTime());
-	}
-	
-	/**
-	 * Processes the appearance of a shake
-	 * TODO: Extend
-	 * Currently only sends 'disagree' as user behaviour
-	 */
-	public void processShake() throws JMSException
-	{
-		Document document = XMLTool.newDocument(SemaineML.E_USERSTATE, SemaineML.namespaceURI, SemaineML.version);
-		Element text = XMLTool.appendChildElement(document.getDocumentElement(), SemaineML.E_TEXT);
-		text.setAttribute(SemaineML.A_TIME, String.valueOf(meta.getTime()));
-		Node textNode = document.createTextNode("");
-		text.appendChild(textNode);
-		
-		Element feature = XMLTool.appendChildElement(text, "feature", SemaineML.namespaceURI);
-		feature.setAttribute("name", "disagree");
-		
-		userStateSender.sendXML(document, meta.getTime());
+
+		UserStateInfo csi = new UserStateInfo(userInfo);
+		userStateSender.sendStateInfo( csi, meta.getTime() );
 	}
 }

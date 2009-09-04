@@ -155,6 +155,33 @@ public class UtteranceInterpreter extends Component
 				}
 			}
 		}
+		
+		if( m instanceof SEMAINEStateMessage ) {
+			SEMAINEStateMessage sm = ((SEMAINEStateMessage)m);
+			StateInfo stateInfo = sm.getState();
+			StateInfo.Type stateInfoType = stateInfo.getType();
+			
+			switch (stateInfoType) {
+			case UserState:
+				processHeadMovements( stateInfo );
+				break;
+			}
+		}
+	}
+	
+	public void processHeadMovements( StateInfo stateInfo ) throws JMSException
+	{
+		if( stateInfo.hasInfo("headGesture") && stateInfo.hasInfo("headGestureStarted") && stateInfo.hasInfo("headGestureStopped") ) {
+			if( stateInfo.getInfo("headGesture").equals("NOD") ) {
+				DialogueAct act = new DialogueAct("*nod*", Long.parseLong( stateInfo.getInfo("headGestureStarted")) );
+				act.setAgree(true);
+				sendDialogueAct(act);
+			} else if( stateInfo.getInfo("headGesture").equals("SHAKE") ) {
+				DialogueAct act = new DialogueAct("*shake*", Long.parseLong( stateInfo.getInfo("headGestureStarted")) );
+				act.setDisagree(true);
+				sendDialogueAct(act);
+			}
+		}
 	}
 
 	/**
