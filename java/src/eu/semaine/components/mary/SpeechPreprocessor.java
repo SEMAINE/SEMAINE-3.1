@@ -61,7 +61,7 @@ public class SpeechPreprocessor extends Component
 	private static TransformerFactory tFactory = null;
 	private static Templates fml2ssmlStylesheet = null;
 	private Transformer transformer;
-	private String currentCharacter = ParticipantControlGUI.SPIKE; 
+	private String currentCharacter = ParticipantControlGUI.PRUDENCE; 
     
     
 	/**

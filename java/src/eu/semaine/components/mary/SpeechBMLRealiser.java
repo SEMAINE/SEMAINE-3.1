@@ -64,7 +64,7 @@ public class SpeechBMLRealiser extends Component
     private Transformer transformer;
     private int backchannelNumber = 0;
     private int MaxNoOfBackchannels = 4;
-    private String currentCharacter = ParticipantControlGUI.SPIKE;
+    private String currentCharacter = ParticipantControlGUI.PRUDENCE;
     
 	/**
 	 * @param componentName

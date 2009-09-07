@@ -183,7 +183,8 @@ public class UtteranceActionProposer extends Component
 		senders.add(contextSender);
 
 		/* Determine the first character */
-		currChar = rand.nextInt(4)+1;
+		//currChar = rand.nextInt(4)+1;
+		currChar = PRUDENCE; // always start with Prudence
 
 		/* Initialize some data */
 		initData();
