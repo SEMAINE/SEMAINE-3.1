@@ -163,6 +163,10 @@ public class SpeechPreprocessor extends Component
     	Document inputDoc = xm.getDocument();
 		String inputText = xm.getText();
 		System.out.println(inputText);
+		
+		String localName    = xm.getDocument().getDocumentElement().getLocalName();
+		String namespaceURI = xm.getDocument().getDocumentElement().getNamespaceURI(); 
+		
 		if (XMLTool.getChildElementByLocalNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
 			
 			transformer = fml2ssmlStylesheet.newTransformer();
@@ -183,7 +187,13 @@ public class SpeechPreprocessor extends Component
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
 			
 			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
-		} 
+		}
+		else if ( localName.equals(FML.E_FML) && namespaceURI.equals(FML.namespaceURI)) {
+			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+		}
+		else if ( localName.equals(BML.E_BML) && namespaceURI.equals(BML.namespaceURI) ) {
+			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+		}
 		else {
 			Element backchannel = null;
 			Element fml = XMLTool.getChildElementByLocalNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);

@@ -11,7 +11,7 @@ package eu.semaine.datatypes.xml;
 public class FML 
 {
     public static final String version = "0.1";
-    public static final String namespaceURI = "http://www.mindmakers.org/fml";
+    public static final String namespaceURI = "http://www.mindmakers.org/projects/FML";
 
     // Elements
     public static final String E_FML = "fml";
