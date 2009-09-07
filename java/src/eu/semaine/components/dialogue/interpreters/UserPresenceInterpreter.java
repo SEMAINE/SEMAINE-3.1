@@ -27,7 +27,7 @@ public class UserPresenceInterpreter extends Component
 	/**
 	 * 	Limit that no life sign is detected, in ms
 	 */
-	public static final long SEMAINE_LIFESIGNLIMIT = 3000;
+	public static final long SEMAINE_LIFESIGNLIMIT = 10000;
 
 	
 	private long lastFaceTime = 0; // last time we've seen a face
