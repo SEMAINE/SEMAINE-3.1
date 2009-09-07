@@ -7,6 +7,11 @@
 		<category name="low_arousal">
 		</category>
 		
+		<category name="after_silence">
+			<utterance value="Are you still there?" />
+			<utterance value="Go on, tell me your news!" />
+		</category>
+		
 		<category name="tell_me_more">
 			<utterance value="Go on." />
 			<utterance value="Go on, give me one happy thought." />
@@ -123,6 +128,11 @@
 			<utterance value="You seem a bit flat." />
 		</category>
 		
+		<category name="after_silence">
+			<utterance value="Are you still there?" />
+			<utterance value="Keep going." />
+		</category>
+		
 		<category name="tell_me_more">
 			<utterance value="Can you enlarge on that?" />
 			<utterance value="Go on" />
@@ -221,6 +231,11 @@
 		<category name="low_arousal">
 		</category>
 		
+		<category name="after_silence">
+			<utterance value="Are you still there?" />
+			<utterance value="You're boring, don't you do anything exciting?" />
+		</category>
+		
 		<category name="insult">
 			<utterance value="Are you some kind of doormat?" />
 			<utterance value="I suppose you really think you're something." />
@@ -311,6 +326,10 @@
 		<category name="low_arousal">
 			<utterance value="I'm not so sure you should be so neutral about it all." />
 			<utterance value="You're a bit of a cold fish, aren't you?" />
+		</category>
+		
+		<category name="after_silence">
+			<utterance value="Are you still there?" />
 		</category>
 		
 		<category name="tell_me_more">

@@ -17,6 +17,7 @@ import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.EMMA;
+import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -108,6 +109,15 @@ public class SpeechInterpreter extends Component
 						}
 					}
 				}
+				
+				List<Element> pitchList = em.getPitchElements(interpretation);
+				for (Element pitchElem : pitchList) {
+					if( pitchElem.hasAttribute(SemaineML.A_DIRECTION) ) {
+						String direction = pitchElem.getAttribute(SemaineML.A_DIRECTION);
+						sendPitchDirection( direction );
+					}
+				}
+				
 			}
 			
 			/* Reading words */
@@ -152,6 +162,15 @@ public class SpeechInterpreter extends Component
 				sendSpeechState(  );
 			}
 		}
+	}
+	
+	public void sendPitchDirection( String direction ) throws JMSException
+	{
+		Map<String,String> userStateInfo = new HashMap<String,String>();
+		userStateInfo.put("pitchDirection", direction);
+		
+		UserStateInfo usi = new UserStateInfo(userStateInfo	);
+		userStateSender.sendStateInfo(usi, meta.getTime());	
 	}
 	
 	/**

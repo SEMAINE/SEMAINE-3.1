@@ -126,47 +126,54 @@ public class AgentMentalStateInterpreter extends Component
 	
 	public double[] getMentalState()
 	{
-		if( currChar.equals("Poppy") ) {
-			return poppyState;
-		} else if( currChar.equals("Prudence") ) {
-			return prudenceState;
-		} else if( currChar.equals("Obadiah") ) {
-			return obadiahState;
-		} else if( currChar.equals("Spike") ) {
-			return spikeState;
-		} else {
-			System.out.println("ERROR: Unknown character");
-			return null;
+		if( currChar != null ) {
+			if( currChar.equals("Poppy") ) {
+				return poppyState;
+			} else if( currChar.equals("Prudence") ) {
+				return prudenceState;
+			} else if( currChar.equals("Obadiah") ) {
+				return obadiahState;
+			} else if( currChar.equals("Spike") ) {
+				return spikeState;
+			} else {
+				System.out.println("ERROR: Unknown character");
+				return null;
+			}
 		}
+		return null;
 	}
 	
 	public void setMentalState( double[] state )
 	{
-		if( currChar.equals("Poppy") ) {
-			poppyState = state;
-		} else if( currChar.equals("Prudence") ) {
-			prudenceState = state;
-		} else if( currChar.equals("Obadiah") ) {
-			obadiahState = state;
-		} else if( currChar.equals("Spike") ) {
-			spikeState = state;
-		} else {
-			System.out.println("ERROR: Unknown character");
+		if( currChar != null ) {
+			if( currChar.equals("Poppy") ) {
+				poppyState = state;
+			} else if( currChar.equals("Prudence") ) {
+				prudenceState = state;
+			} else if( currChar.equals("Obadiah") ) {
+				obadiahState = state;
+			} else if( currChar.equals("Spike") ) {
+				spikeState = state;
+			} else {
+				System.out.println("ERROR: Unknown character");
+			}
 		}
 	}
 	
 	public void resetMentalState()
 	{
-		if( currChar.equals("Poppy") ) {
-			poppyState = poppyStateDefault;
-		} else if( currChar.equals("Prudence") ) {
-			prudenceState = prudenceStateDefault;
-		} else if( currChar.equals("Obadiah") ) {
-			obadiahState = obadiahStateDefault;
-		} else if( currChar.equals("Spike") ) {
-			spikeState = spikeStateDefault;
-		} else {
-			System.out.println("ERROR: Unknown character");
+		if( currChar != null ) {
+			if( currChar.equals("Poppy") ) {
+				poppyState = poppyStateDefault;
+			} else if( currChar.equals("Prudence") ) {
+				prudenceState = prudenceStateDefault;
+			} else if( currChar.equals("Obadiah") ) {
+				obadiahState = obadiahStateDefault;
+			} else if( currChar.equals("Spike") ) {
+				spikeState = spikeStateDefault;
+			} else {
+				System.out.println("ERROR: Unknown character");
+			}
 		}
 	}
 	
@@ -182,6 +189,10 @@ public class AgentMentalStateInterpreter extends Component
 	}
 	public boolean updateEmotions( StateInfo stateInfo ) throws JMSException
 	{
+		if( currChar == null ) {
+			return false;
+		}
+		
 		double[] state = getMentalState();
 		boolean changed = false;
 		

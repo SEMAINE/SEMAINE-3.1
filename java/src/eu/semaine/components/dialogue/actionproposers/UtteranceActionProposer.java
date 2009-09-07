@@ -22,6 +22,7 @@ import eu.semaine.components.dialogue.datastructures.AgentUtterance;
 import eu.semaine.components.dialogue.datastructures.ContextTemplate;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
+import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
@@ -66,7 +67,8 @@ public class UtteranceActionProposer extends Component
 	/* Speaking states */
 	public final static int WAITING = 0;	// Waiting for the other person to start speaking
 	public final static int LISTENING = 1;	// Listening to the speech of the user
-	public final static int SPEAKING = 2;	// The agent is speaking
+	public final static int PREPARING_TO_SPEAK = 2;
+	public final static int SPEAKING = 3;	// The agent is speaking
 
 	/* The four characters */
 	public final static int POPPY = 1;
@@ -101,6 +103,7 @@ public class UtteranceActionProposer extends Component
 	private StateReceiver agentStateReceiver;
 	private StateReceiver userStateReceiver;
 	private StateReceiver contextReceiver;
+	private XMLReceiver callbackReceiver;
 	private FMLSender fmlSender;
 	private StateSender dialogStateSender;
 	private StateSender contextSender;
@@ -168,6 +171,8 @@ public class UtteranceActionProposer extends Component
 		receivers.add(userStateReceiver);
 		contextReceiver = new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState);
 		receivers.add( contextReceiver );
+		callbackReceiver = new XMLReceiver("semaine.callback.output.audio");
+		receivers.add(callbackReceiver);
 
 		/* Initialize senders */
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
@@ -251,6 +256,23 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void react( SEMAINEMessage m ) throws JMSException
 	{
+		if( m instanceof SEMAINEXMLMessage ){
+			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
+			if( speechStarted(xm) ) {
+				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
+				agentSpeakingState = SPEAKING;
+				agentSpeakingStateTime = meta.getTime();
+			}
+			
+			if( speechReady(xm) ) {
+				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
+				agentSpeakingState = LISTENING;
+				agentSpeakingStateTime = meta.getTime();
+				sendListening();
+				userTurnStart = -1;
+			}
+		}
+		
 		/* Processes User state updates */
 		if( m instanceof SEMAINEStateMessage ) {
 			SEMAINEStateMessage sm = ((SEMAINEStateMessage)m);
@@ -279,7 +301,7 @@ public class UtteranceActionProposer extends Component
 		if( agentShouldSpeak( m ) ) {
 
 			/* Update agent speaking state */
-			agentSpeakingState = SPEAKING;
+			agentSpeakingState = PREPARING_TO_SPEAK;
 
 			AgentUtterance utterance = null;
 
@@ -301,6 +323,34 @@ public class UtteranceActionProposer extends Component
 				sendUtterance( utterance );
 			}			
 		}
+	}
+	
+	public boolean speechReady( SEMAINEXMLMessage xm )
+	{
+		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
+		if( callbackElem != null ) {
+			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
+			if( eventElem != null ) {
+				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && agentSpeakingState == SPEAKING ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean speechStarted( SEMAINEXMLMessage xm )
+	{
+		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
+		if( callbackElem != null ) {
+			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
+			if( eventElem != null ) {
+				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("start") && (agentSpeakingState == PREPARING_TO_SPEAK || agentSpeakingState == LISTENING ) ) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public void updateCharacterAndUser( StateInfo stateInfo ) throws JMSException
@@ -521,10 +571,16 @@ public class UtteranceActionProposer extends Component
 	{
 		if( charStartupState == INTRODUCED ) {
 			/* If the system just introduced himself then ask how the user feels today */
+			if( userTurnStart == -1 ) {
+				return pickUtterances("after_silence");
+			}
 			charStartupState = HOW_ARE_YOU_ASKED;
 			return pickUtterances("intro_how_are_you");
 		} else if( charStartupState == HOW_ARE_YOU_ASKED ) {
 			/* If the system just asked how the user feels it will ask the user to tell it more */
+			if( userTurnStart == -1 ) {
+				return pickUtterances("after_silence");
+			}
 			charStartupState = NEUTRAL;
 			return pickUtterances("intro_tell_me_more");
 		}
@@ -553,7 +609,7 @@ public class UtteranceActionProposer extends Component
 
 				String intention = agentInfoMap.get("turnTakingIntention");
 				if( intention != null && intention.equals("startSpeaking") ) {
-					if( agentSpeakingState == SPEAKING ) {
+					if( agentSpeakingState == SPEAKING || agentSpeakingState == PREPARING_TO_SPEAK ) {
 						return false;
 					} else {
 						return true;
@@ -574,6 +630,16 @@ public class UtteranceActionProposer extends Component
 	 */
 	public AgentUtterance getResponse()
 	{
+		/* If the user didn't say anything, motivate him */
+		if( userTurnStart == -1 ) {
+			int r = rand.nextInt(2);
+			if( r == 0 ) {
+				return pickUtterances("after_silence");
+			} else if( r == 1 ) {
+				return pickUtterances("change_subject");
+			}
+		}
+		
 		/* Determine high and low arousal indicators and user utterance length */
 		int high_intensity_arousal = 0;
 		int low_intensity_arousal = 0;
@@ -747,7 +813,7 @@ public class UtteranceActionProposer extends Component
 	public void processUtteranceEnd() throws JMSException
 	{	
 		if( agentSpeakingState == SPEAKING && meta.getTime() > utteranceEndTime ) {
-			System.out.println("Agent silent");
+			System.out.println("Agent silent (timeout)");
 			agentSpeakingState = LISTENING;
 			agentSpeakingStateTime = meta.getTime();
 			sendListening();
@@ -809,7 +875,7 @@ public class UtteranceActionProposer extends Component
 
 		System.out.println("Agent speaking");
 		/* Set end time (temporary) */
-		utteranceEndTime = meta.getTime() + ( utterance.getUtterance().split(" ").length * 250 );
+		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().split(" ").length * 250)+8000 );
 	}
 
 	/**

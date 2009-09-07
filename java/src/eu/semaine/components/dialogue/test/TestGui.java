@@ -70,7 +70,7 @@ import eu.semaine.datatypes.xml.SSML;
 public class TestGui extends Component
 {
 	/* Specifies if the gui should send speech/silence signals as well */
-	private boolean sendSpeechSignals = false;
+	private boolean sendSpeechSignals = true;
 	
 	/* GUI Elements */
 	private JFrame jframe;
@@ -363,7 +363,7 @@ public class TestGui extends Component
 		if( !typing ) {
 			typing = true;
 			lastTickTime = meta.getTime();
-			//sendSpeakingSignal();
+			sendSpeaking();
 		}
 	}
 	
@@ -551,11 +551,6 @@ class MyTimer extends Thread
 			}
 			if( gui.lastTickTime + 200 < gui.getTime() && gui.typing ) {
 				gui.typing = false;
-				//gui.sendSilenceSignal();
-			}
-			if( gui.typing ) {
-				gui.sendSpeaking();
-			} else {
 				gui.sendSilent();
 			}
 		}

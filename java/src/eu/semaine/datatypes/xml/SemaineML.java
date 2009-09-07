@@ -32,6 +32,7 @@ public class SemaineML
     public static final String E_USER = "user";
     public static final String E_CHARACTER = "character";
     public static final String E_SPEAKING = "speaking";
+    public static final String E_PITCH = "pitch";
     
     // Attributes
     public static final String A_WHO = "who";
@@ -42,6 +43,7 @@ public class SemaineML
     public static final String A_TIME = "time";
     public static final String A_INTENSITY = "intensity";
     public static final String A_STATUS = "status";
+    public static final String A_DIRECTION = "direction";
     
     // Attribute values
     // For A_STATUS:
