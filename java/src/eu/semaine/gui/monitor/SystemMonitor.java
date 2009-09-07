@@ -7,8 +7,6 @@ package eu.semaine.gui.monitor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,14 +25,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
-import java.util.Map.Entry;
 
 import javax.jms.JMSException;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -49,13 +44,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.jgraph.JGraph;
-import org.jgraph.event.GraphSelectionEvent;
-import org.jgraph.event.GraphSelectionListener;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultGraphModel;
@@ -678,6 +670,7 @@ public class SystemMonitor extends Thread
 	 * @param numGroups
 	 * @param coords
 	 */
+	@SuppressWarnings("unused")
 	private void layoutHalfCircle(int maxX, int maxY, int numGroups,
 			Rectangle2D.Double[][] coords)
 	{

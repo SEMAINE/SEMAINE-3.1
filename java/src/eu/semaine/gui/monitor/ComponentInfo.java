@@ -288,9 +288,15 @@ public class ComponentInfo extends Info
 				if (b.isInput()) return 0; // equal
 				return -1; // a smaller
 			}
+			if (b.isInput()) {
+				return 1; // b smaller
+			}
 			if (a.isOutput()) {
 				if (b.isOutput()) return 0;
 				return 1; // a bigger
+			}
+			if (b.isOutput()) {
+				return -1; // b bigger
 			}
 			// Compare sendTopics and receiveTopics. Basic strategy:
 			// if a's sendTopics match any of b's receiveTopics, then a<b, and vice versa,
