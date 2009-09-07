@@ -164,6 +164,11 @@ public class SpeechBMLRealiser extends Component
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
 		ByteArrayOutputStream bmlos = new ByteArrayOutputStream();
 		
+		if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0){
+			bmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+			return;
+		}
+		
 		if(XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_BACKCHANNEL, BML.namespaceURI) != null){
 			// Back-channel synthesis
 			
@@ -215,7 +220,7 @@ public class SpeechBMLRealiser extends Component
 			//transformer.setParameter("character.voice", "spike");
 			transformer.transform(new DOMSource(input), new StreamResult(bmlos));
 			String bml = bmlos.toString();
-			System.out.println("BML OUTPUT: "+ bml);
+			//System.out.println("BML OUTPUT: "+ bml);
 			
 			
 			// Utterance synthesis
