@@ -10,9 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
-import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
-import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -116,14 +114,14 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	 * Reads the received Message and tries to filter out the detected user speaking state.
 	 * @param m - the received message
 	 */
-	public void setAgentSpeakingState(StateInfo userInfo)
+	public void setAgentSpeakingState(StateInfo dialogInfo)
 	{
-		Map<String,String> userInfoMap = userInfo.getInfos();
+		Map<String,String> dialogInfoMap = dialogInfo.getInfos();
 
-		if( userInfoMap.get("speaker").equals("agent") ) {
+		if( dialogInfoMap.get("agentTurnState").equals("true") ) {
 			agentSpeakingState = SPEAKING;
 			agentSpeakingStateTime = meta.getTime();
-		} else if( userInfoMap.get("listener").equals("agent") ) {
+		} else if( dialogInfoMap.get("agentTurnState").equals("false") ) {
 			agentSpeakingState = SILENT;
 			agentSpeakingStateTime = meta.getTime();
 			if( userSpeakingState == SILENT ) {
@@ -140,13 +138,13 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	{
 		Map<String,String> userInfoMap = userInfo.getInfos();
 
-		if( userInfoMap.get("behaviour").equals("speaking") ) {
+		if( userInfoMap.get("speaking").equals("true") ) {
 			if( userSpeakingState != SPEAKING ) {
 				userSpeakingState = SPEAKING;
 				userSpeakingStateTime = meta.getTime();
 				backchannel_send = false;
 			}
-		} else if( userInfoMap.get("behaviour").equals("silence") ) {
+		} else if( userInfoMap.get("speaking").equals("false") ) {
 			if( userSpeakingState != SILENT ) {
 				userSpeakingState = SILENT;
 				userSpeakingStateTime = meta.getTime();
