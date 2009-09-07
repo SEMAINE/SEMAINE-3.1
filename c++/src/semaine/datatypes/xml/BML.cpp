@@ -14,8 +14,8 @@ namespace datatypes {
 namespace xml {
 
 const std::string BML::version = "1.0";
-const std::string BML::namespaceURI = "org.mindmakers.bml";
-	
+const std::string BML::namespaceURI = "http://www.mindmakers.org/projects/BML";
+
 	// Elements
 const std::string BML::E_BML = "bml";
 const std::string BML::E_ROOT_TAGNAME = "bml";
