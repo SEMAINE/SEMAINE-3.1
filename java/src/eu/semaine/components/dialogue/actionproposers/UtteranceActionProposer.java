@@ -374,7 +374,7 @@ public class UtteranceActionProposer extends Component
 				nrTopicChanges = 0;
 
 				/* Update agent speaking state */
-				agentSpeakingState = SPEAKING;
+				agentSpeakingState = PREPARING_TO_SPEAK;
 
 				if( charHistory.get(currChar) ) {
 					sendUtterance( pickUtterances("intro_old") );
@@ -390,7 +390,7 @@ public class UtteranceActionProposer extends Component
 			nrTopicChanges = 0;
 
 			/* Update agent speaking state */
-			agentSpeakingState = SPEAKING;
+			agentSpeakingState = PREPARING_TO_SPEAK;
 			AgentUtterance utterance;
 
 			if( charHistory.get(currChar) ) {
@@ -408,6 +408,7 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void userAppeared() throws JMSException
 	{
+		DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
 		System.out.println("User appeared");
 		isUserPresent = true;
 
@@ -420,11 +421,12 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void userDisappeared() throws JMSException
 	{
+		DMLogger.getLogger().log(meta.getTime(), "System:SystemStopped" );
 		charStartupState = NEUTRAL;
 		isUserPresent = false;
 
 		/* Update agent speaking state */
-		agentSpeakingState = SPEAKING;
+		agentSpeakingState = PREPARING_TO_SPEAK;
 
 		sendUtterance( pickUtterances("goodbye") );
 
@@ -876,6 +878,8 @@ public class UtteranceActionProposer extends Component
 		System.out.println("Agent speaking");
 		/* Set end time (temporary) */
 		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().split(" ").length * 250)+8000 );
+		
+		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getType() + ", utterance=" + utterance.getUtterance() );
 	}
 
 	/**

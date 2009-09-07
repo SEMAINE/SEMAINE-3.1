@@ -195,7 +195,7 @@ public class SpeechInterpreter extends Component
 		Map<String,String> userStateInfo = new HashMap<String,String>();
 		userStateInfo.put("userUtterance", detectedKeywords);
 		userStateInfo.put("userUtteranceStartTime", starttime);
-		System.out.println("Detected the following utterance (t:" + starttime + "): " + detectedKeywords + ".");
+		//System.out.println("Detected the following utterance (t:" + starttime + "): " + detectedKeywords + ".");
 		
 		UserStateInfo usi = new UserStateInfo(userStateInfo	);
 		userStateSender.sendStateInfo(usi, meta.getTime());	

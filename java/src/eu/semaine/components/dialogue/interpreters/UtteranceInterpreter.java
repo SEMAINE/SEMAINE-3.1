@@ -251,7 +251,7 @@ public class UtteranceInterpreter extends Component
 		userStateInfo.put("userUtterance", act.getUtterance());
 		userStateInfo.put("userUtteranceStartTime", ""+act.getStarttime());
 		userStateInfo.put("userUtteranceFeatures", act.getFeatures());
-		System.out.println("Detected the following utterance (t:" + act.getStarttime() + "): " + act.getUtterance() + ". ("+act.getFeatures()+")");
+		//System.out.println("Detected the following utterance (t:" + act.getStarttime() + "): " + act.getUtterance() + ". ("+act.getFeatures()+")");
 		
 		UserStateInfo usi = new UserStateInfo(userStateInfo	);
 		userStateSender.sendStateInfo(usi, meta.getTime());	
