@@ -164,11 +164,6 @@ public class SpeechBMLRealiser extends Component
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
 		ByteArrayOutputStream bmlos = new ByteArrayOutputStream();
 		
-		if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0){
-			bmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
-			return;
-		}
-		
 		if(XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_BACKCHANNEL, BML.namespaceURI) != null){
 			// Back-channel synthesis
 			
@@ -212,6 +207,9 @@ public class SpeechBMLRealiser extends Component
 			
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("Backchannel-Realised-Merge.xsl"), "semaine.mary.realised.acoustics");
 			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
+		}
+		else if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0){
+			bmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
 		}
 		else{
 			
