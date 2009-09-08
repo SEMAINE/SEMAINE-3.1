@@ -1,5 +1,6 @@
 package eu.semaine.components.dialogue.test;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -9,6 +10,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
@@ -71,12 +75,14 @@ public class DMLogger
 	
 	public void createTimeline()
 	{
+		
 		TimeLineComponent timeLine = new TimeLineComponent(lastTime);
+		timeLine.setBackground(Color.WHITE);
 		timeLine.importLog(log);
 		Dimension size = timeLine.getSize();
 		BufferedImage myImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = myImage.createGraphics();
-		timeLine.paint(g2);
+		timeLine.paintComponent(g2);
 		try {
 			OutputStream out = new FileOutputStream("log.jpg");
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);

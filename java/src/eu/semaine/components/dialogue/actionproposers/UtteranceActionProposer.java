@@ -815,8 +815,9 @@ public class UtteranceActionProposer extends Component
 	 */
 	public void processUtteranceEnd() throws JMSException
 	{	
-		if( agentSpeakingState == SPEAKING && meta.getTime() > utteranceEndTime ) {
+		if( (agentSpeakingState == SPEAKING || agentSpeakingState == PREPARING_TO_SPEAK) && meta.getTime() > utteranceEndTime ) {
 			System.out.println("Agent silent (timeout)");
+			DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
 			agentSpeakingState = LISTENING;
 			agentSpeakingStateTime = meta.getTime();
 			sendListening();
