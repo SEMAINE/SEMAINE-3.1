@@ -62,18 +62,20 @@ public class HeadMovementInterpreter extends Component
 			Element interpretation = em.getTopLevelInterpretation();
 			if (interpretation != null) {
 				List<Element> behaviours = em.getBehaviourElements(interpretation);
-				for( Element behaviourElem : behaviours ) {
+				Element behaviourElem = XMLTool.getChildElementByTagNameNS(interpretation, "bml", BML.namespaceURI);
+				//for( Element behaviourElem : behaviours ) {
+				if( behaviourElem != null ) {
 					Element headMovement = XMLTool.getChildElementByLocalNameNS(behaviourElem, BML.E_HEAD, BML.namespaceURI);
 					if( headMovement != null && headMovement.hasAttribute(BML.A_TYPE) && headMovement.hasAttribute(BML.A_START) && headMovement.hasAttribute(BML.A_END) ) {
 						if( headMovement.getAttribute(BML.A_TYPE).equals("NOD") ) {
 							result[0] = 1;
-							result[1] = Integer.parseInt( headMovement.getAttribute(BML.A_START) );
-							result[2] = Integer.parseInt( headMovement.getAttribute(BML.A_END) );
+							result[1] = ((int)(Double.parseDouble( headMovement.getAttribute(BML.A_START) )*1000));
+							result[2] = ((int)(Double.parseDouble( headMovement.getAttribute(BML.A_END) )*1000));
 							return result;
 						} else if( headMovement.getAttribute(BML.A_TYPE).equals("SHAKE") ) {
 							result[0] = 2;
-							result[1] = Integer.parseInt( headMovement.getAttribute(BML.A_START) );
-							result[2] = Integer.parseInt( headMovement.getAttribute(BML.A_END) );
+							result[1] = ((int)(Double.parseDouble( headMovement.getAttribute(BML.A_START) )*1000));
+							result[2] = ((int)(Double.parseDouble( headMovement.getAttribute(BML.A_END) )*1000));
 							return result;
 						}
 					}
