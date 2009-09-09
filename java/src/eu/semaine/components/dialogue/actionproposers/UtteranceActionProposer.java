@@ -87,7 +87,7 @@ public class UtteranceActionProposer extends Component
 	public final static int HOW_ARE_YOU_ASKED = 2;
 	
 	/* Thresholds */
-	public final static float HIGH_AROUSAL = 0.8f;
+	public final static float HIGH_AROUSAL = 1.0f;
 	public final static float LOW_AROUSAL = 0.1f;
 	public final static long SMALL_UTTERANCE = 3000;
 	
@@ -736,11 +736,12 @@ public class UtteranceActionProposer extends Component
 			/* If the number of 'tell me more' utterances is greater than 2
 			 * change the subject or change the character */
 			tellMeMoreCounter = 0;
-			if( nrTopicChanges < 5 && rand.nextBoolean() ) {
+			if( nrTopicChanges < 4 ) {
 				subjectIndex = utteranceHistory.size()-1;
 				nrTopicChanges++;
 				return pickUtterances("change_subject");
 			} else {
+				nrTopicChanges = 0;
 				if( rand.nextBoolean() ) {
 					// Ask for the character
 					charChangeState = CHAR_ASKED;
@@ -791,14 +792,27 @@ public class UtteranceActionProposer extends Component
 			}
 		}
 
+		// TODO: Random kiezen tussen change_subject en tell_me_more
 		if( utterancesType.size() == 0 ) {
 			/* If the list is empty do something else */
-			if( !type.equals("ask_next_character") && !type.equals("repair_ask_next_character") && !type.equals("suggest_next_character")&& !type.equals("repair_suggest_next_character") ) {
+			/*if( !type.equals("ask_next_character") && !type.equals("repair_ask_next_character") && !type.equals("suggest_next_character")&& !type.equals("repair_suggest_next_character") ) {
 				charChangeState = CHAR_ASKED;
+				System.out.println("Changing " + type + " to ask_next_character");
 				return pickUtterances("ask_next_character");
 			} else {
 				charChangeState = NEUTRAL;
 				subjectIndex = utteranceHistory.size()-1;
+				System.out.println("Changing "+type+" to change_subject");
+				return pickUtterances("change_subject");
+			}*/
+			if( rand.nextBoolean() ) {
+				charChangeState = NEUTRAL;
+				System.out.println("Changing "+type+" to tell_me_more");
+				return pickUtterances("tell_me_more");
+			} else {
+				charChangeState = NEUTRAL;
+				subjectIndex = utteranceHistory.size()-1;
+				System.out.println("Changing "+type+" to change_subject");
 				return pickUtterances("change_subject");
 			}
 		} else {
@@ -810,7 +824,6 @@ public class UtteranceActionProposer extends Component
 	/**
 	 * Called when the output module messages that the utterance is finished.
 	 * Will put the agent state on listening again and send this state around.
-	 * TODO: This method isn't called yet!
 	 * @throws JMSException
 	 */
 	public void processUtteranceEnd() throws JMSException

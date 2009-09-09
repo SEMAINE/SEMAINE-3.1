@@ -232,6 +232,7 @@ public class EmotionInterpreter extends Component
 		if( arousal > AROUSAL_THRESHOLD || arousal < -AROUSAL_THRESHOLD ) {
 			
 			userStateInfo.put("arousal",""+arousal);
+			System.out.println("Arousal: " + arousal);
 			newValue = true;
 		}
 		if( potency > POTENCY_THRESHOLD || potency < -POTENCY_THRESHOLD ) {

@@ -145,7 +145,6 @@
 		</category>
 		
 		<category name="change_subject">
-			<utterance value="How do you view other people?" />
 			<utterance value="How do you view people?" />
 			<utterance value="Is there anything else you want to say?" />
 			<utterance value="So what are you doing at the moment?" />
