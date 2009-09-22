@@ -94,6 +94,9 @@ public class TurnTakingInterpreter extends Component
 	
 	/* If a backchannel was given this silence */
 	private boolean backchannel_given = false;
+	
+	/* Most recent detected words */
+	private String currentDetectedKeywords = "";
 
 	/**
 	 * Constructor of TurnTakingInterpreter
@@ -137,7 +140,10 @@ public class TurnTakingInterpreter extends Component
 			StateInfo.Type stateInfoType = stateInfo.getType();
 			switch (stateInfoType) {
 			case UserState:
-				/* Processes User state updates */
+				/* Update current detected words */
+				if( stateInfo.hasInfo("userUtterance") ) {
+					currentDetectedKeywords = stateInfo.getInfo("userUtterance");
+				}
 
 				/* Updates user speaking state (speaking or silent) */
 				setUserSpeakingState(stateInfo);
@@ -230,7 +236,7 @@ public class TurnTakingInterpreter extends Component
 				}
 			} else if( userInfo.getInfo("speaking").equals("false") ) {
 				if( userSpeakingState != SILENT ) {
-					DMLogger.getLogger().log(meta.getTime(), "UserAction:UserStoppedSpeaking" );
+					DMLogger.getLogger().log(meta.getTime(), "UserAction:UserStoppedSpeaking words=" + currentDetectedKeywords );
 					System.out.println("Detected user silent");
 					latestUtteranceLength = meta.getTime() - userSpeakingStateTime;
 					userSpeakingState = SILENT;
@@ -290,7 +296,6 @@ public class TurnTakingInterpreter extends Component
 				recentEmotionCounter++;
 			}
 			detectedEmotions.add( ee );
-			DMLogger.getLogger().log(meta.getTime(), "UserAction:DetectedEmotion valence="+valence );
 		}
 		if( userInfo.hasInfo("arousal") ) {
 			float arousal = Float.parseFloat( userInfo.getInfo("arousal") );
@@ -299,7 +304,6 @@ public class TurnTakingInterpreter extends Component
 				recentEmotionCounter++;
 			}
 			detectedEmotions.add( ee );
-			DMLogger.getLogger().log(meta.getTime(), "UserAction:DetectedEmotion arousal="+arousal );
 		}
 		if( userInfo.hasInfo("interest") ) {
 			float interest = Float.parseFloat( userInfo.getInfo("interest") );
@@ -308,7 +312,6 @@ public class TurnTakingInterpreter extends Component
 				recentEmotionCounter++;
 			}
 			detectedEmotions.add( ee );
-			DMLogger.getLogger().log(meta.getTime(), "UserAction:DetectedEmotion interest="+interest );
 		}
 	}
 	

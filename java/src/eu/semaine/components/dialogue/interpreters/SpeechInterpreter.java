@@ -190,14 +190,14 @@ public class SpeechInterpreter extends Component
 		userStateSender.sendStateInfo(usi, meta.getTime());	
 	}
 	
-	public void sendDetectedKeywords( String detectedKeywords, String starttime ) throws JMSException
-	{
-		Map<String,String> userStateInfo = new HashMap<String,String>();
-		userStateInfo.put("userUtterance", detectedKeywords);
-		userStateInfo.put("userUtteranceStartTime", starttime);
-		//System.out.println("Detected the following utterance (t:" + starttime + "): " + detectedKeywords + ".");
-		
-		UserStateInfo usi = new UserStateInfo(userStateInfo	);
-		userStateSender.sendStateInfo(usi, meta.getTime());	
-	}
+//	public void sendDetectedKeywords( String detectedKeywords, String starttime ) throws JMSException
+//	{
+//		Map<String,String> userStateInfo = new HashMap<String,String>();
+//		userStateInfo.put("userUtterance", detectedKeywords);
+//		userStateInfo.put("userUtteranceStartTime", starttime);
+//		//System.out.println("Detected the following utterance (t:" + starttime + "): " + detectedKeywords + ".");
+//		
+//		UserStateInfo usi = new UserStateInfo(userStateInfo	);
+//		userStateSender.sendStateInfo(usi, meta.getTime());	
+//	}
 }

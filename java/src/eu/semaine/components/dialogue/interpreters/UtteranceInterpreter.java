@@ -26,6 +26,7 @@ import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
+import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
@@ -139,15 +140,21 @@ public class UtteranceInterpreter extends Component
 					//System.out.println("WordElements found");
 					String detectedKeywords = "";
 					String starttime = null;
+					String detectedTimes = "";
 					for( Element wordElem : wordElements ) {
 						if( wordElem.hasAttribute("tokens") ) {
 							detectedKeywords = detectedKeywords + wordElem.getAttribute("tokens") + " ";
+						}
+						if( wordElem.hasAttribute("offset-to-start") ) {
+							detectedTimes = detectedTimes + wordElem.getAttribute("offset-to-start") + " ";
 						}
 						if( starttime == null && wordSequence.hasAttribute("offset-to-start") ) {
 							starttime = wordSequence.getAttribute("offset-to-start");
 						}
 					}
 					detectedKeywords = detectedKeywords.trim();
+					detectedTimes = detectedTimes.trim();
+					DMLogger.getLogger().logWords( Long.parseLong( starttime ), detectedKeywords, detectedTimes );
 					if(starttime != null) {
 						DialogueAct act = analyseData( detectedKeywords, Long.parseLong( starttime ) );
 						sendDialogueAct( act );

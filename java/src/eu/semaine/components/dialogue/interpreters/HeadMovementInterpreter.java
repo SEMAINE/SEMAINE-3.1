@@ -11,6 +11,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
+import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
@@ -90,8 +91,10 @@ public class HeadMovementInterpreter extends Component
 	{
 		Map<String,String> userInfo = new HashMap<String,String>();
 		if( headMovement[0] == 1 ) {
+			DMLogger.getLogger().log(meta.getTime(), "UserAction:HeadMovement movement=nod starttime="+headMovement[1]+" endtime="+headMovement[2]);
 			userInfo.put("headGesture", "NOD");
 		} else if( headMovement[0] == 2 ) {
+			DMLogger.getLogger().log(meta.getTime(), "UserAction:HeadMovement movement=shake starttime="+headMovement[1]+" endtime="+headMovement[2]);
 			userInfo.put("headGesture", "SHAKE");
 		} else {
 			return;

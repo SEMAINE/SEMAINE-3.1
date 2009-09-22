@@ -14,6 +14,7 @@ import javax.jms.JMSException;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
+import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.EMMA;
@@ -226,20 +227,22 @@ public class EmotionInterpreter extends Component
 		boolean newValue = false;
 		Map<String,String> userStateInfo = new HashMap<String,String>();
 		if( valence > VALENCE_THRESHOLD || valence < -VALENCE_THRESHOLD ) {
+			DMLogger.getLogger().log(meta.getTime(), "UserAction:Valence value="+valence);
 			userStateInfo.put("valence",""+valence);
 			newValue = true;
 		}
 		if( arousal > AROUSAL_THRESHOLD || arousal < -AROUSAL_THRESHOLD ) {
-			
+			DMLogger.getLogger().log(meta.getTime(), "UserAction:Arousal value="+arousal);
 			userStateInfo.put("arousal",""+arousal);
-			System.out.println("Arousal: " + arousal);
 			newValue = true;
 		}
 		if( potency > POTENCY_THRESHOLD || potency < -POTENCY_THRESHOLD ) {
+			DMLogger.getLogger().log(meta.getTime(), "UserAction:Potency value="+potency);
 			userStateInfo.put("potency",""+potency);
 			newValue = true;
 		}
 		if( interest > INTEREST_THRESHOLD || interest < -INTEREST_THRESHOLD ) {
+			DMLogger.getLogger().log(meta.getTime(), "UserAction:Interest value="+interest);
 			userStateInfo.put("interest",""+interest);
 			newValue = true;
 		}
