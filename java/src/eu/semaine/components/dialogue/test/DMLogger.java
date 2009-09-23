@@ -21,8 +21,6 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class DMLogger
 {
-	private static boolean WILL_LOG = false;
-
 	private static DMLogger ref;
 	private PrintWriter out;
 
@@ -36,9 +34,15 @@ public class DMLogger
 	private String file = "DMlog.txt";
 	private String path = "";
 
-	private DMLogger( boolean willLog )
+	private DMLogger( boolean willLogParam )
 	{
-		this.willLog = willLog;
+		Object obj = System.getProperties().get("semaine.dialogue.logging");
+		if( obj != null ) {
+			willLog = Boolean.parseBoolean( obj.toString() );
+		} else {
+			willLog = willLogParam;
+		}
+		
 		if( willLog ) {
 			try {
 				out = new PrintWriter( new FileWriter(path+file) );
@@ -60,7 +64,7 @@ public class DMLogger
 	public static DMLogger getLogger()
 	{
 		if( ref == null ) {
-			ref = new DMLogger( WILL_LOG );
+			ref = new DMLogger( false );
 		}
 		return ref;
 	}
