@@ -177,7 +177,7 @@ public class SpeechBMLRealiser extends Component
 			 + "<maryxml xmlns=\"http://mary.dfki.de/2002/MaryXML\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"0.4\" xml:lang=\"en-GB\">"
 			 + "<p>"
 			 //+ "<voice name=\"cmu-slt-arctic\">"
-			 + "<voice name=\""+getCurrentCharacter().toLowerCase()+"\">"
+			 + "<voice name=\""+SpeechPreprocessor.characters2voices.get(getCurrentCharacter())+"\">"
 			 + "<nvv variant=\""+backchannelNumber+"\"/>"
 			 + "</voice>"
 			 + "</p>"
@@ -223,7 +223,7 @@ public class SpeechBMLRealiser extends Component
 			
 			// Utterance synthesis
 			transformer = bml2ssmlStylesheet.newTransformer();
-			transformer.setParameter("character.voice", getCurrentCharacter().toLowerCase());
+			transformer.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
 			//transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
 			transformer.transform(new DOMSource(XMLTool.string2Document(bml)), new StreamResult(ssmlos));
 			

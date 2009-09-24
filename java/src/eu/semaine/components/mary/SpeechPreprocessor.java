@@ -7,7 +7,9 @@ package eu.semaine.components.mary;
 import java.io.ByteArrayOutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.jms.JMSException;
 import javax.sound.sampled.AudioFileFormat;
@@ -61,7 +63,19 @@ public class SpeechPreprocessor extends Component
 	private static TransformerFactory tFactory = null;
 	private static Templates fml2ssmlStylesheet = null;
 	private Transformer transformer;
-	private String currentCharacter = ParticipantControlGUI.PRUDENCE; 
+	private String currentCharacter = ParticipantControlGUI.PRUDENCE;
+	
+	static final Map<String,String> characters2voices = fillCharacters2Voices();
+	
+	private static Map<String,String> fillCharacters2Voices()
+	{
+		Map<String,String> c2v = new HashMap<String, String>();
+		c2v.put("Prudence", "dfki-prudence");
+		c2v.put("Poppy", "dfki-poppy");
+		c2v.put("Obadiah", "dfki-obadiah");
+		c2v.put("Spike", "dfki-spike");
+		return c2v;
+	}
     
     
 	/**
@@ -170,7 +184,7 @@ public class SpeechPreprocessor extends Component
 		if (XMLTool.getChildElementByLocalNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
 			
 			transformer = fml2ssmlStylesheet.newTransformer();
-			transformer.setParameter("character.voice", getCurrentCharacter().toLowerCase());
+			transformer.setParameter("character.voice", characters2voices.get(getCurrentCharacter()));
 			transformer.transform(new DOMSource(inputDoc), new StreamResult(ssmlos));
 			String ssml = ssmlos.toString();
 			Reader reader = new StringReader(ssml);
