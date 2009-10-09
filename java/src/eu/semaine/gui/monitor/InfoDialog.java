@@ -7,6 +7,8 @@ package eu.semaine.gui.monitor;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 public class InfoDialog extends JFrame
 {
@@ -27,5 +29,24 @@ public class InfoDialog extends JFrame
 	{
 		textPane.setText(text);
 		textPane.setCaretPosition(textPane.getDocument().getLength());
+	}
+	
+	public void appendText(String text)
+	{
+		Document doc = textPane.getDocument();
+		boolean doScrollToEnd = false; // should we scroll to the (new) end?
+		if (textPane.getCaretPosition() == doc.getLength()) {
+			// scroll only if the current caret was at the end
+			doScrollToEnd = true;
+		}
+		try {
+			doc.insertString(doc.getLength(), text, null);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+			setText(text);
+		}
+		if (doScrollToEnd) {
+			textPane.setCaretPosition(doc.getLength());
+		}
 	}
 }

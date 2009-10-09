@@ -75,14 +75,16 @@ public class SystemMonitor extends Thread
 	private JComboBox logLevelBox;
 	private boolean componentListChanged = false;
 	private List<List<Info>> infoGroups;
+	private List<TopicInfo> callbackTopics;
 	private Map<String, TopicInfo> topics;
 	private List<DefaultGraphCell> cells;
 	private List<DefaultEdge> edges;
 	private JMSLogReader logReader;
 	private String currentLogComponent;
 	private String currentLogLevel;
+	private final Set<String> topicsToHide;
 	
-	public SystemMonitor(ComponentInfo[] componentInfos)
+	public SystemMonitor(ComponentInfo[] componentInfos, Set<String> topicsToHide)
 	{
 		// Sort components:
 		if (componentInfos != null)
@@ -92,7 +94,8 @@ public class SystemMonitor extends Thread
 		topics = new HashMap<String, TopicInfo>();
 		cells = new ArrayList<DefaultGraphCell>();
 		infoGroups = new LinkedList<List<Info>>();
-
+		callbackTopics = new LinkedList<TopicInfo>();
+		this.topicsToHide = topicsToHide;
 	}
 
 	private void setupGraphGUI() {
@@ -117,13 +120,20 @@ public class SystemMonitor extends Thread
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
 		// Menu
+		// Use CTRL key on most platforms
+		int magicKey = ActionEvent.CTRL_MASK;
+		// but apple key on the Mac:
+		if (System.getProperty("os.name").startsWith("Mac")) {
+			magicKey = ActionEvent.META_MASK;
+		}
+
 		//Create the menu bar.
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(fileMenu);
 		JMenuItem exitItem = new JMenuItem("Exit", KeyEvent.VK_X);
-		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.META_MASK));
+		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, magicKey));
 		exitItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				System.exit(0);
@@ -135,11 +145,16 @@ public class SystemMonitor extends Thread
 		guiMenu.getAccessibleContext().setAccessibleDescription("GUI menu");
 		menuBar.add(guiMenu);
 		JMenuItem resetItem = new JMenuItem("Reset GUI", KeyEvent.VK_R);
-		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.META_MASK));
+		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, magicKey));
 		resetItem.getAccessibleContext().setAccessibleDescription("Reset the GUI");
 		resetItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				setMustUpdateCells(true);
+				//setMustUpdateCells(true);
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						graph.refresh();
+					}
+				});
 			}
 		});
 		guiMenu.add(resetItem);
@@ -380,6 +395,7 @@ public class SystemMonitor extends Thread
 		updateLogComponents();
 		// Group components:
 		infoGroups.clear();
+		callbackTopics.clear();
 		List<Info> currentGroup = new LinkedList<Info>();
 		currentGroup.add(sortedComponentList.get(0));
 		infoGroups.add(currentGroup);
@@ -405,15 +421,27 @@ public class SystemMonitor extends Thread
 				String[] sendTopics = ci.sendTopics();
 				if (sendTopics == null) continue;
 				for (String topicName : sendTopics) {
+					if (topicsToHide.contains(topicName)) {
+						continue;
+					}
 					TopicInfo ti = topics.get(topicName);
 					if (ti == null) {
 						// a new topic
-						ti = new TopicInfo(topicName);
+						ti = ci.getTopicInfo(topicName);
 						topics.put(topicName, ti);
 					}
 					if (!topicsInGraph.contains(ti)) {
-						groupTopics.add(ti);
 						topicsInGraph.add(ti);
+						switch (ti.getType()) {
+						case Data: 
+							groupTopics.add(ti);
+							break;
+						case Callback:
+							callbackTopics.add(ti);
+							break;
+						default:
+							// shouldn't occur	
+						}
 					}
 				}
 			}
@@ -424,7 +452,7 @@ public class SystemMonitor extends Thread
 		}
 
 		// Create cells for components
-		List<DefaultGraphCell> newCells = new ArrayList<DefaultGraphCell>();
+		final List<DefaultGraphCell> newCells = new ArrayList<DefaultGraphCell>();
 		for (ComponentInfo ci : sortedComponentList) {
 			if (ci.getCell() != null) continue;
 			DefaultGraphCell cell = new DefaultGraphCell(ci);
@@ -453,20 +481,27 @@ public class SystemMonitor extends Thread
 				System.out.println("    "+c.toString());
 			}
 		}
-		graph.getGraphLayoutCache().insert(newCells.toArray());
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				graph.getGraphLayoutCache().insert(newCells.toArray());
+			}
+		});
 		createAllArrows();
 
 	}
 	
 	private void createAllArrows()
 	{
-		List<DefaultEdge> newEdges = new ArrayList<DefaultEdge>();
+		final List<DefaultEdge> newEdges = new ArrayList<DefaultEdge>();
 		// Create cells for arrows
 		for (ComponentInfo ci : sortedComponentList) {
 			String[] sendTopics = ci.sendTopics();
 			if (ci.getCell() == null) continue;
 			if (sendTopics != null) {
 				for (String topicName : sendTopics) {
+					if (topicsToHide.contains(topicName)) {
+						continue;
+					}
 					TopicInfo ti = topics.get(topicName);
 					if (ti != null) {
 						assert ti.getCell() != null;
@@ -479,6 +514,9 @@ public class SystemMonitor extends Thread
 			if (receiveTopics != null) {
 				// receiving can use wildcards, so we need to go through all topics
 				for (String topicName : topics.keySet()) {
+					if (topicsToHide.contains(topicName)) {
+						continue;
+					}
 					if (ci.canReceive(topicName)) {
 						TopicInfo ti = topics.get(topicName);
 						assert ti != null;
@@ -488,7 +526,11 @@ public class SystemMonitor extends Thread
 				}
 			}
 		}
-		graph.getGraphLayoutCache().insert(newEdges.toArray());
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				graph.getGraphLayoutCache().insert(newEdges.toArray());
+			}
+		});
 		if (edges != null) {
 			edges.addAll(newEdges);
 		} else {
@@ -528,7 +570,9 @@ public class SystemMonitor extends Thread
 	private void layoutCells(Map<DefaultGraphCell, Map<Object,Object>> allChanges)
 	{
 		int numGroups = infoGroups.size();
-		if (numGroups == 0) return;
+		if (numGroups == 0) {
+			return;
+		}
 		int maxX = frameSize.width;
 		int maxY = frameSize.height-30;
 		Point2D.Double[][] coords = new Point2D.Double[numGroups][];
@@ -555,7 +599,30 @@ public class SystemMonitor extends Thread
 			}
 		}
 		
+		int numCallbackTopics = callbackTopics.size();
+		if (numCallbackTopics == 0) {
+			return;
+		}
+		Point2D.Double[] cbCoords = new Point2D.Double[numCallbackTopics];
+		layoutCallbackTopics(maxX, maxY, numCallbackTopics, cbCoords);
+		for (int i=0; i<numCallbackTopics; i++) {
+			DefaultGraphCell cell = callbackTopics.get(i).getCell();
+			if (cell != null) {
+				Map<Object,Object> attributes = allChanges.get(cell);
+				if (attributes == null) {
+					attributes = new HashMap<Object, Object>();
+					allChanges.put(cell, attributes);
+				}
+				Rectangle2D.Double bounds = new Rectangle2D.Double(
+						cbCoords[i].getX()-componentWidth/2,
+						cbCoords[i].getY()-componentHeight/2,
+						componentWidth, componentHeight);
+				GraphConstants.setBounds(attributes, bounds);
+			}
+		}
 	}
+	
+	
 
 	/**
 	 * A three-section layout:
@@ -580,7 +647,7 @@ public class SystemMonitor extends Thread
 		int numRight = numLeft;
 		int numMid = numGroups - numLeft - numRight;
 
-		double SPACE = 50;
+		final double SPACE = 50;
 		// Coordinates of the middle of the respective section:
 		double leftCenterX = 0.15 * maxX;
 		double rightCenterX = 0.85 * maxX;
@@ -698,12 +765,34 @@ public class SystemMonitor extends Thread
 		}
 	}
 	
-	Point2D toLocation(double angle, double radiusX, double radiusY, Point2D center)
+	private Point2D toLocation(double angle, double radiusX, double radiusY, Point2D center)
 	{
 		double deltaX = -Math.cos(angle) * radiusX;
 		double deltaY = Math.sin(angle) * radiusY;
 		return new Point2D.Double(center.getX()+deltaX, center.getY()-deltaY);
 	}
+	
+	
+	private void layoutCallbackTopics(int maxX, int maxY, int numCallbackTopics, Point2D.Double[] coords) {
+		assert numCallbackTopics > 0;
+		final double SPACE = 50;
+		double x = 0.5 * maxX; // same X coordinate for all callback topics
+		double firstY = 0.5 * maxY;
+		double lastY = maxY - SPACE;
+		if (numCallbackTopics == 1) {
+			double y = firstY + (lastY-firstY)/2;
+			coords[0] = new Point2D.Double(x, y);
+		} else { // more than one callback topic
+			double stepY = (lastY - firstY) / (numCallbackTopics - 1);
+			for (int i=0; i<numCallbackTopics; i++) {
+				double y = firstY + i * stepY;
+				coords[i] = new Point2D.Double(x, y);
+			}
+		}
+	}
+
+	
+
 	
 	public void run()
 	{
@@ -816,7 +905,7 @@ public class SystemMonitor extends Thread
 						new String[] {"semaine.data.lowlevel.video"},
 						false, false)
 		};
-		SystemMonitor mon = new SystemMonitor(cis);
+		SystemMonitor mon = new SystemMonitor(cis, null);
 		//mon.start();
 		mon.setupGraphGUI();
 		for (int i=0; i<cis.length; i++) {

@@ -24,7 +24,6 @@ public class InfoGraphSelectionListener implements GraphSelectionListener
 						ci.setDialog(dialog);
 					}
 					dialog.setText(ci.getInfo());
-					
 					dialog.setVisible(true);
 				} else if (userObject instanceof TopicInfo) {
 					TopicInfo ti = (TopicInfo) userObject;

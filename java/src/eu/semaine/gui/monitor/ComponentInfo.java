@@ -87,6 +87,52 @@ public class ComponentInfo extends Info
 		return sendTopics != null ? sendTopics.toArray(new String[0]) : null;
 	}
 	
+	/**
+	 * Indicate whether the given topic name is a callback topic.
+	 * This implementation considers any topic to be a callback topic
+	 * if the topicName contains the substring "callback".
+	 * @param topicName
+	 * @return
+	 */
+	public boolean isCallbackTopic(String topicName)
+	{
+		return topicName != null && topicName.contains("callback");
+	}
+
+	/**
+	 * Indicate whether the given topic name is a data topic.
+	 * This implementation considers any topic to be a data topic
+	 * if the topicName contains the substring "data".
+	 * @param topicName
+	 * @return
+	 */
+	public boolean isDataTopic(String topicName)
+	{
+		return topicName != null && topicName.contains("data");
+	}
+	
+	/**
+	 * For the given topic, provide a topic info, including in particular the topic type.
+	 * This must succeed if topicName is one of our send topics,
+	 * and may or may not succeed otherwise.
+	 * @param topicName
+	 * @return a TopicInfo object corresponding to the given topicName if possible, null otherwise.
+	 */
+	public TopicInfo getTopicInfo(String topicName) {
+		if (topicName == null) {
+			return null;
+		}
+		TopicInfo.TopicType type = null;
+		if (isDataTopic(topicName)) {
+			type = TopicInfo.TopicType.Data;
+		} else if (isCallbackTopic(topicName)) {
+			type = TopicInfo.TopicType.Callback;
+		}
+		return new TopicInfo(topicName, type);
+		
+	}
+	
+
 	public synchronized Component.State getState()
 	{
 		return state;
@@ -156,7 +202,7 @@ public class ComponentInfo extends Info
 		switch (state) {
 		case failure: return Color.red;
 		case starting: return new Color(255, 200, 100);
-		case ready: return Color.green;
+		case ready: return new Color(50, 255, 50);
 		case stopped: return Color.blue;
 		case stalled: return new Color(255, 100, 255);
 		default: return Color.gray;
@@ -269,7 +315,8 @@ public class ComponentInfo extends Info
 	/**
 	 * Helper to sort CompareInfo objects so that input components are first,
 	 * output components last, and the others in an order consistent with 
-	 * sending/receiving topic properties.
+	 * sending/receiving topic properties -- taking only data topics into account
+	 * (and not, e.g., callback topics).
 	 * @author marc
 	 *
 	 */
@@ -362,7 +409,12 @@ public class ComponentInfo extends Info
 		private boolean sendFitsReceive(ComponentInfo a, ComponentInfo b) {
 			if (a.sendTopics() == null || b.receiveTopics() == null) return false;
 			for (String sendTopic : a.sendTopics()) {
-				if (b.canReceive(sendTopic)) return true;
+				if (!a.isDataTopic(sendTopic)) {
+					continue;
+				}
+				if (b.canReceive(sendTopic)) {
+					return true;
+				}
 			}
 			return false;
 		}

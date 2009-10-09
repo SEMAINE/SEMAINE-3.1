@@ -24,6 +24,8 @@ import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.GraphLayoutCache;
 import org.jgraph.graph.GraphModel;
 
+import eu.semaine.gui.monitor.TopicInfo.TopicType;
+
 public class JGraphTest {
 
 	/**
@@ -72,7 +74,7 @@ public class JGraphTest {
 		GraphConstants.setBorderColor(hello.getAttributes(), Color.black);
 		hello.addPort();
 		
-		DefaultGraphCell world = new DefaultGraphCell(new TopicInfo("Topic"));
+		DefaultGraphCell world = new DefaultGraphCell(new TopicInfo("Topic", TopicType.Data));
 		GraphConstants.setBounds(world.getAttributes(), new Rectangle2D.Double(100, 100, 80,20));
 		GraphConstants.setBorder(world.getAttributes(), BorderFactory.createRaisedBevelBorder());
 		GraphConstants.setBackground(world.getAttributes(), new Color(100, 255, 100));

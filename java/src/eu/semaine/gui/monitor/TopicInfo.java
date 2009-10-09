@@ -12,22 +12,27 @@ import java.util.Map;
 
 public class TopicInfo extends Info
 {
+	public enum TopicType { Data, Callback };
+	
 	private static final int MEMORY = 100; // number of topic posts to remember
 	private static final Color ACTIVECOLOR = new Color(255, 255, 100);
-	private static final Color PASSIVECOLOR = new Color(180, 180, 180);
+	private static final Color PASSIVECOLOR_DATA = new Color(180, 180, 180);
+	private static final Color PASSIVECOLOR_CALLBACK = new Color(90, 180, 255);
 	private static final int STEPS = 6;
 	private static final int STEPTIME = 500; // in ms
 	
 	private String name;
+	private TopicType type;
 	private Map<String,ConnectionInfo> sendingComponents;
 	private Map<String,ConnectionInfo> receivingComponents;
 	private LinkedList<String> messages;
 	private int currentStep;
 	private long nextStepDue;
 	
-	public TopicInfo(String name)
+	public TopicInfo(String name, TopicType type)
 	{
 		this.name = name;
+		this.type = type;
 		sendingComponents = new HashMap<String, ConnectionInfo>();
 		receivingComponents = new HashMap<String, ConnectionInfo>();
 		messages = new LinkedList<String>();
@@ -35,7 +40,13 @@ public class TopicInfo extends Info
 		nextStepDue = 0;
 	}
 	
-	public String getName() { return name; }
+	public String getName() {
+		return name;
+	}
+	
+	public TopicType getType() {
+		return type;
+	}
 	
 	public Map<String,ConnectionInfo> sendingComponents() { return sendingComponents; }
 
@@ -43,9 +54,14 @@ public class TopicInfo extends Info
 
 	public String toString()
 	{
-		String prefix = "semaine.data.";
-		if (name.startsWith(prefix)) {
-			return name.substring(prefix.length());
+		String[] prefixes = new String[] {
+				"semaine.data.",
+				"semaine.callback."
+		};
+		for (String prefix : prefixes) {
+			if (name.startsWith(prefix)) {
+				return name.substring(prefix.length());
+			}
 		}
 		return name; 
 	}
@@ -62,7 +78,7 @@ public class TopicInfo extends Info
 			senderCI.setActive();
 		}
 		if (dialog != null) {
-			dialog.setText(getInfo());
+			dialog.appendText(message+"\n\n");
 		}
 	}
 
@@ -81,13 +97,14 @@ public class TopicInfo extends Info
 
 	public Color getColor()
 	{
-		if (currentStep == 0) return PASSIVECOLOR;
+		Color passiveColor = TopicType.Callback.equals(type) ? PASSIVECOLOR_CALLBACK : PASSIVECOLOR_DATA;
+		if (currentStep == 0) return passiveColor;
 		if (currentStep == STEPS) return ACTIVECOLOR;
 		// interpolate
 		assert currentStep > 0 && currentStep < STEPS;
-		int red = PASSIVECOLOR.getRed() + (ACTIVECOLOR.getRed()-PASSIVECOLOR.getRed())*currentStep/STEPS;
-		int green = PASSIVECOLOR.getGreen() + (ACTIVECOLOR.getGreen()-PASSIVECOLOR.getGreen())*currentStep/STEPS;
-		int blue = PASSIVECOLOR.getBlue() + (ACTIVECOLOR.getBlue()-PASSIVECOLOR.getBlue())*currentStep/STEPS;
+		int red = passiveColor.getRed() + (ACTIVECOLOR.getRed()-passiveColor.getRed())*currentStep/STEPS;
+		int green = passiveColor.getGreen() + (ACTIVECOLOR.getGreen()-passiveColor.getGreen())*currentStep/STEPS;
+		int blue = passiveColor.getBlue() + (ACTIVECOLOR.getBlue()-passiveColor.getBlue())*currentStep/STEPS;
 		return new Color(red, green, blue);
 	}
 	

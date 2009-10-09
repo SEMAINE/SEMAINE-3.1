@@ -28,15 +28,21 @@ public class PositionComputer extends Component {
 	@Override protected void react(SEMAINEMessage m) throws MessageFormatException {
 		SEMAINEEmmaMessage emmaMessage = (SEMAINEEmmaMessage) m;
 		Element interpretation = emmaMessage.getTopLevelInterpretation();
+		if (interpretation == null) {
+			return;
+		}
 		List<Element> emotionElements = emmaMessage.getEmotionElements(interpretation);
 
 		for (Element emotion : emotionElements) {
 			Element dimensions = XMLTool.getChildElementByLocalNameNS(emotion, EmotionML.E_DIMENSIONS, EmotionML.namespaceURI);
 			if (dimensions != null) {
-				Element arousal = XMLTool.needChildElementByLocalNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
-				float arousalValue = Float.parseFloat(arousal.getAttribute(EmotionML.A_VALUE));
-				// Arousal influences the swimmer's position:
-				position += 10*arousalValue;
+				Element arousal = XMLTool.getChildElementByLocalNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
+				if (arousal != null) {
+					float arousalValue = Float.parseFloat(arousal.getAttribute(EmotionML.A_VALUE));
+					// Arousal influences the swimmer's position:
+					position += 3*arousalValue;
+					System.out.println("At time " + meta.getTime()+", arousal "+arousalValue+" -- new position "+position);
+				}
 			}
 		}
 	}

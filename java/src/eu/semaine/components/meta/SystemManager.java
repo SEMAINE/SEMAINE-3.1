@@ -40,8 +40,6 @@ import eu.semaine.jms.message.SEMAINEMessage;
  */
 public class SystemManager extends Component implements MessageListener
 {
-	private static final Set<String> IGNORE_COMPONENTS = new HashSet<String>(
-			Arrays.asList("SystemManager", "MessageLogComponent"));
 	private static long PING_PERIOD = 1000; // in ms 
 
 	private IOBase iobase;
@@ -52,8 +50,11 @@ public class SystemManager extends Component implements MessageListener
 	private boolean lastReportSystemReady = false;
 	private SystemMonitor systemMonitor;
 	private MessageConsumer dataConsumer;
+	private MessageConsumer callbackConsumer;
 	private long systemZeroTime;
 	private Set<String> ignoreStalledComponents;
+	private Set<String> componentsToHide;
+	private Set<String> topicsToHide;
 	
 	public SystemManager()
 	throws JMSException
@@ -69,10 +70,29 @@ public class SystemManager extends Component implements MessageListener
 		// we weren't listening yet:
 		meta.reportState(State.starting);
 		if (Boolean.getBoolean("semaine.systemmanager.gui")) {
-			systemMonitor = new SystemMonitor(null);
-			systemMonitor.start();
-			dataConsumer = iobase.getSession().createConsumer(iobase.getSession().createTopic("semaine.data.>"));
-			dataConsumer.setMessageListener(new MessageListener() {
+			// We hide components directly here (they never get to the GUI)
+			componentsToHide = new HashSet<String>();
+			componentsToHide.add("SystemManager");
+			componentsToHide.add("MessageLogComponent");
+			String cth = System.getProperty("semaine.systemmanager.hide.components");
+			if (cth != null) {
+				StringTokenizer st = new StringTokenizer(cth);
+				while (st.hasMoreElements()) {
+					componentsToHide.add(st.nextToken());
+				}
+			}
+			// The GUI doesn't draw the hidden topics, but they are listed in the component's detail view:
+			topicsToHide = new HashSet<String>();
+			String tth = System.getProperty("semaine.systemmanager.hide.topics");
+			if (tth != null) {
+				StringTokenizer st = new StringTokenizer(tth);
+				while (st.hasMoreElements()) {
+					topicsToHide.add(st.nextToken());
+				}
+			}
+
+			
+			MessageListener topicListener = new MessageListener() {
 				public void onMessage(Message m) {
 					try {
 						String topicName = ((Topic)m.getJMSDestination()).getTopicName();
@@ -86,7 +106,14 @@ public class SystemManager extends Component implements MessageListener
 						e.printStackTrace();
 					}
 				}
-			});
+			};
+			dataConsumer = iobase.getSession().createConsumer(iobase.getSession().createTopic("semaine.data.>"));
+			dataConsumer.setMessageListener(topicListener);
+			callbackConsumer = iobase.getSession().createConsumer(iobase.getSession().createTopic("semaine.callback.>"));
+			callbackConsumer.setMessageListener(topicListener);
+		
+			systemMonitor = new SystemMonitor(null, topicsToHide);
+			systemMonitor.start();
 		}
 		ignoreStalledComponents = new HashSet<String>();
 		String isc = System.getProperty("semaine.systemmanager.ignorestalled");
@@ -161,7 +188,9 @@ public class SystemManager extends Component implements MessageListener
 		try {
 			assert m.propertyExists(MetaMessenger.COMPONENT_NAME) : "message should contain header field '"+MetaMessenger.COMPONENT_NAME+"'";
 			String componentName = m.getStringProperty(MetaMessenger.COMPONENT_NAME);
-			if (IGNORE_COMPONENTS.contains(componentName)) return;
+			if (componentsToHide != null && componentsToHide.contains(componentName)) {
+				return;
+			}
 			
 			ComponentInfo ci = componentInfos.get(componentName);
 			if (ci == null) {
