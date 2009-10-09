@@ -6,8 +6,8 @@
 package eu.semaine.components.dialogue.actionproposers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -18,21 +18,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
+import eu.semaine.components.dialogue.datastructures.AgentSpokenUtterance;
 import eu.semaine.components.dialogue.datastructures.AgentUtterance;
 import eu.semaine.components.dialogue.datastructures.ContextTemplate;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.components.dialogue.test.DMLogger;
-import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
-import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.datatypes.xml.SemaineML;
-import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
@@ -40,7 +38,6 @@ import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.StateSender;
-import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -63,7 +60,7 @@ import eu.semaine.util.XMLTool;
 
 public class UtteranceActionProposer extends Component
 {	
-	
+
 	/* Speaking states */
 	public final static int WAITING = 0;	// Waiting for the other person to start speaking
 	public final static int LISTENING = 1;	// Listening to the speech of the user
@@ -75,26 +72,26 @@ public class UtteranceActionProposer extends Component
 	public final static int PRUDENCE = 2;
 	public final static int SPIKE = 3;
 	public final static int OBADIAH = 4;
-	
+
 	/* Character-change states */
 	public final static int NEUTRAL = 0;
 	public final static int CHANGE_ASKED = 1;
 	public final static int CHAR_SUGGESTED = 2;
 	public final static int CHAR_ASKED = 3;
-	
+
 	/* Introduction states */
 	public final static int INTRODUCED = 1;
 	public final static int HOW_ARE_YOU_ASKED = 2;
-	
+
 	/* Thresholds */
 	public final static float HIGH_AROUSAL = 1.0f;
 	public final static float LOW_AROUSAL = 0.1f;
 	public final static long SMALL_UTTERANCE = 3000;
-	
+
 	/* User-presence variables */
 	private static final String PRESENT = "present";
 	private static final String ABSENT = "absent";
-	
+
 	/* Data locations */
 	private final static String sentenceDataPath = "/eu/semaine/components/dialogue/data/sentences.xml";
 	private final static String contextFile = "/eu/semaine/components/dialogue/data/Context.csv";
@@ -107,33 +104,34 @@ public class UtteranceActionProposer extends Component
 	private FMLSender fmlSender;
 	private StateSender dialogStateSender;
 	private StateSender contextSender;
-	
+
 	/* Random generator */
 	private Random rand = new Random();
-	
+
 	/* The current state of the agent */
 	private int currChar; // The current character
-	
+
 	/* The current state of the agent */
 	public int agentSpeakingState = 1; 			// The current speaking state of the agent (SPEAKING, LISTENING or WAITING)
 	private long agentSpeakingStateTime = 0;	// The starttime of the current speaking state of the agent
 	private long utteranceEndTime = 0;			// The predicted endtime of the agent utterance
-	private ArrayList<AgentUtterance> utteranceHistory = new ArrayList<AgentUtterance>();
+	private ArrayList<AgentSpokenUtterance> utteranceHistory = new ArrayList<AgentSpokenUtterance>();
 	private int subjectIndex = 0;				// The index to the Agent utterance which is the start of the current topic
-	
+
 	/* The current state of the user */
 	private int userSpeakingState = 1;			// The current speaking state of the agent (SPEAKING, LISTENING or WAITING)
 	private long userSpeakingStateTime = 0;		// The starttime of the current speaking state of the agent
 	private long userTurnStart = -1;			// The starttime of the user turn, set to -1 after an agent turn
-	
+
 	/* Global state information */
 	private boolean systemStarted = false;		// Indicates if the system has started or not
 	private boolean isUserPresent = false;		// Indicates if the user is currently present or not
 	private int nrTopicChanges = 0;				// The number of topic changes for the current character so far
+	private int tellMeMoreCounter = 0;			// How many Tell Me More utterances are uttered within this subject
 	public int charChangeState = 0;				// The current state in the character-change process
 	public int charStartupState = 0;			// The current state in the startup process
 	public int suggestedChar = 0;				// The suggested next character
-	
+
 	/* Detected events */
 	/* List of detected emotion events (generated by the EmotionInterpreter) */
 	private ArrayList<EmotionEvent> detectedEmotions = new ArrayList<EmotionEvent>();
@@ -142,17 +140,17 @@ public class UtteranceActionProposer extends Component
 	/* List of all detected Dialogue Acts (generated by the UtteranceInterpreter) */
 	private ArrayList<DialogueAct> detectedDActs = new ArrayList<DialogueAct>();
 	private int dActIndex = 0;
-	
+
 	private HashMap<Integer,String> charNames = new HashMap<Integer,String>();
 	private HashMap<String,Integer> charNumbers = new HashMap<String,Integer>();
 	private HashMap<Integer,Boolean> charHistory = new HashMap<Integer,Boolean>();
 
 	/* All agent utterances grouped by utterance-type */
-	private HashMap<Integer,HashMap<String,ArrayList<String>>> allUtterances = new HashMap<Integer,HashMap<String,ArrayList<String>>>();
-	
+	private HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>> allUtterances = new HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>>();
+
 	/* A list with all context-templates, used for picking a response */
 	private ArrayList<ContextTemplate> templates ;
-	
+
 
 	/**
 	 * Constructor of UtteranceActionProposer
@@ -188,7 +186,7 @@ public class UtteranceActionProposer extends Component
 
 		/* Initialize some data */
 		initData();
-		
+
 		/* Import response-model data */		
 		DataImporter importer = new DataImporter( contextFile, null );
 		templates = importer.importContextData();
@@ -264,7 +262,7 @@ public class UtteranceActionProposer extends Component
 				agentSpeakingState = SPEAKING;
 				agentSpeakingStateTime = meta.getTime();
 			}
-			
+
 			if( speechReady(xm) ) {
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
 				agentSpeakingState = LISTENING;
@@ -273,7 +271,7 @@ public class UtteranceActionProposer extends Component
 				userTurnStart = -1;
 			}
 		}
-		
+
 		/* Processes User state updates */
 		if( m instanceof SEMAINEStateMessage ) {
 			SEMAINEStateMessage sm = ((SEMAINEStateMessage)m);
@@ -304,28 +302,29 @@ public class UtteranceActionProposer extends Component
 			/* Update agent speaking state */
 			agentSpeakingState = PREPARING_TO_SPEAK;
 
-			AgentUtterance utterance = null;
+			AgentSpokenUtterance spokenUtterance = null;
 
 			/* Check if the character change process should be started or continued */
-			utterance = manageCharChange();
-			if( utterance == null ) {
+			spokenUtterance = manageCharChange();
+			if( spokenUtterance == null ) {
 				/* Check if the character start process should be started or continued */
-				utterance = manageAgentStart();
-				if( utterance == null ) {
+				spokenUtterance = manageAgentStart();
+				if( spokenUtterance == null ) {
 					/* Get an utterance to say */
-					utterance = getResponse();
+					//spokenUtterance = getResponse(); // TODO: TESTING
+					spokenUtterance = getResponse2(); // TODO: TESTING
 				}
 			}
-			
-			if( utterance.getType().equals("sendCharacterChange") ) {
-				sendNewCharacter( Integer.parseInt(utterance.getUtterance()) );
+
+			if( spokenUtterance.getNewCharacter() != -1 ) {
+				sendNewCharacter( spokenUtterance.getNewCharacter() );
 			} else {
 				/* Distribute the chosen utterance */
-				sendUtterance( utterance );
+				sendUtterance( spokenUtterance );
 			}			
 		}
 	}
-	
+
 	public boolean speechReady( SEMAINEXMLMessage xm )
 	{
 		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
@@ -339,7 +338,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return false;
 	}
-	
+
 	public boolean speechStarted( SEMAINEXMLMessage xm )
 	{
 		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
@@ -392,7 +391,7 @@ public class UtteranceActionProposer extends Component
 
 			/* Update agent speaking state */
 			agentSpeakingState = PREPARING_TO_SPEAK;
-			AgentUtterance utterance;
+			AgentSpokenUtterance spokenUtterance;
 
 			if( charHistory.get(currChar) ) {
 				sendUtterance( pickUtterances("intro_old") );
@@ -448,7 +447,7 @@ public class UtteranceActionProposer extends Component
 	 * If the user is not in the character change process it will return null
 	 * @throws JMSException
 	 */
-	public AgentUtterance manageCharChange() throws JMSException
+	public AgentSpokenUtterance manageCharChange() throws JMSException
 	{
 		/* Make a list of all analyzed Dialogue Acts since the last time the agent talked */
 		ArrayList<DialogueAct> recentDActs = new ArrayList<DialogueAct>( detectedDActs.subList(dActIndex, detectedDActs.size()) );
@@ -476,12 +475,12 @@ public class UtteranceActionProposer extends Component
 //					nrTopicChanges = 0;
 					charChangeState = NEUTRAL;
 //					sendNewCharacter( charNumbers.get(targetCharacter) );
-					return new AgentUtterance("sendCharacterChange", ""+charNumbers.get(targetCharacter));
+					return new AgentSpokenUtterance( charNumbers.get(targetCharacter) );
 //					if( charHistory.get(currChar) ) {
-//						return pickUtterances("intro_old");
+//					return pickUtterances("intro_old");
 //					} else {
-//						charHistory.put(currChar, true);
-//						return pickUtterances("intro_new");
+//					charHistory.put(currChar, true);
+//					return pickUtterances("intro_new");
 //					}
 				} else {
 					/* If the user did not mention a character then either ask for it or propose one */
@@ -496,7 +495,7 @@ public class UtteranceActionProposer extends Component
 						while( suggestedChar == currChar ) {
 							suggestedChar = rand.nextInt(4)+1;
 						}
-						return new AgentUtterance( "change_character", "Do you want to talk to " + charNames.get(suggestedChar) + "?" );
+						return new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
 					}
 				}
 			}
@@ -513,14 +512,14 @@ public class UtteranceActionProposer extends Component
 				/* If the user chose a character then take this one */
 				charChangeState = NEUTRAL;
 //				sendNewCharacter( charNumbers.get(targetCharacter) );
-				return new AgentUtterance("sendCharacterChange", ""+charNumbers.get(targetCharacter));
+				return new AgentSpokenUtterance( charNumbers.get(targetCharacter) );
 //				charStartupState = INTRODUCED;
 //				nrTopicChanges = 0;
 //				if( charHistory.get(currChar) ) {
-//					return pickUtterances("intro_old");
+//				return pickUtterances("intro_old");
 //				} else {
-//					charHistory.put(currChar, true);
-//					return pickUtterances("intro_new");
+//				charHistory.put(currChar, true);
+//				return pickUtterances("intro_new");
 //				}
 			} else {
 				/* If the user did not choose a character then try to repair it */
@@ -546,14 +545,14 @@ public class UtteranceActionProposer extends Component
 				/* If the user agreed to the suggestion then use it */
 				charChangeState = NEUTRAL;
 //				sendNewCharacter( suggestedChar );
-				return new AgentUtterance("sendCharacterChange", ""+suggestedChar);
+				return new AgentSpokenUtterance( suggestedChar );
 //				charStartupState = INTRODUCED;
 //				nrTopicChanges = 0;
 //				if( charHistory.get(currChar) ) {
-//					return pickUtterances("intro_old");
+//				return pickUtterances("intro_old");
 //				} else {
-//					charHistory.put(currChar, true);
-//					return pickUtterances("intro_new");
+//				charHistory.put(currChar, true);
+//				return pickUtterances("intro_new");
 //				}
 			} else if( disagree ) {
 				/* If the user disagreed to the suggestion then ask for the next character */
@@ -570,7 +569,7 @@ public class UtteranceActionProposer extends Component
 	 * and return an AgentUtterance to speak.
 	 * If the user is not in this process it will return null.
 	 */
-	public AgentUtterance manageAgentStart( )
+	public AgentSpokenUtterance manageAgentStart( )
 	{
 		if( charStartupState == INTRODUCED ) {
 			/* If the system just introduced himself then ask how the user feels today */
@@ -624,6 +623,266 @@ public class UtteranceActionProposer extends Component
 		}
 		return false;
 	}
+	
+	public AgentSpokenUtterance getResponse2()
+	{
+		ArrayList<AgentSpokenUtterance> possibleUtterances = new ArrayList<AgentSpokenUtterance>();
+		ArrayList<AgentSpokenUtterance> suggestions;
+		
+		/* Get combined dialogue acts of the previous user turn */
+		DialogueAct act = getCombinedUserDialogueAct();
+		
+		/* After silence */
+		suggestions = suggestAfterSilence();
+		possibleUtterances.addAll(suggestions);
+		
+		/* Linking sentences */
+		suggestions = suggestLinkingSentence( act );
+		possibleUtterances.addAll(suggestions);
+		
+		/* Based on content features */
+		suggestions = suggestOnContentFeatures( act );
+		possibleUtterances.addAll(suggestions);
+		
+		/* Based on arousal */
+		suggestions = suggestOnArousal();
+		possibleUtterances.addAll(suggestions);
+		
+		/* Last resort options, will always return something */
+		suggestions = suggestLastOptions();
+		possibleUtterances.addAll(suggestions);
+		
+		// qualities aanpassen based on history
+		adaptQualityToHistory(possibleUtterances);
+		
+		// Find best sentences
+		ArrayList<AgentSpokenUtterance> bestSentences = new ArrayList<AgentSpokenUtterance>();
+		double bestValue = -1d;
+		for( AgentSpokenUtterance uttr : possibleUtterances ) {
+			if( uttr.getQuality() > bestValue ) {
+				bestSentences.clear();
+				bestSentences.add( uttr );
+				bestValue = uttr.getQuality();
+			} else if( uttr.getQuality() == bestValue ) {
+				bestSentences.add( uttr );
+			}
+		}
+		
+		/* TEST print all options TEST */
+		for( AgentSpokenUtterance uttr : bestSentences ) {
+			System.out.println(uttr.getQuality() + "	- " + uttr.getUtterance().getUtterance() + "("+uttr.getUtterance().getCategory()+")");
+		}
+		
+		// Pick one
+		AgentSpokenUtterance response = bestSentences.get( rand.nextInt(bestSentences.size()) );
+		
+		/* Set corresponding parameters */
+		if( response.getUtterance().getCategory().equals("tell_me_more") ) {
+			tellMeMoreCounter++;
+		}
+		if( response.getUtterance().getCategory().equals("change_subject") ) {
+			tellMeMoreCounter++;
+			nrTopicChanges++;
+			subjectIndex = utteranceHistory.size()-1;
+		}
+		if( response.getUtterance().getCategory().equals("ask_next_character") ) {
+			tellMeMoreCounter++;
+			nrTopicChanges = 0;
+			charChangeState = CHAR_ASKED;
+		}
+		if( response.getUtterance().getCategory().equals("change_character") ) {
+			tellMeMoreCounter++;
+			charChangeState = CHAR_SUGGESTED;
+			suggestedChar = response.getNewCharacter();
+		}
+		
+		return response;
+	}
+	
+	public ArrayList<AgentSpokenUtterance> suggestAfterSilence()
+	{
+		AgentSpokenUtterance lastUtterance = utteranceHistory.get( utteranceHistory.size()-1 );
+		double quality = 1.0d;
+		
+		/* If the user didn't say anything, motivate him */
+		if( userTurnStart == -1 ) {
+			AgentUtterance elaborationUtterance = lastUtterance.getUtterance().getElaborationUtterance();
+			if( elaborationUtterance != null ) {
+				ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
+				AgentSpokenUtterance uttr =  new AgentSpokenUtterance( elaborationUtterance );
+				uttr.setQuality(quality);
+				spokenUtterances.add(uttr);
+				return spokenUtterances;
+			}
+			int r = rand.nextInt(2);
+			if( r == 0 ) {
+				return getUtterancesFromCategory("after_silence", quality);
+			} else if( r == 1 ) {
+				return getUtterancesFromCategory("change_subject", quality);
+			}
+		}
+		return new ArrayList<AgentSpokenUtterance>();
+	}
+	
+	public DialogueAct getCombinedUserDialogueAct()
+	{
+		DialogueAct act = null;
+		System.out.print( "Combining: " );
+		for( int i=dActIndex; i<detectedDActs.size(); i++ ) {
+			System.out.print("("+detectedDActs.get(i).getUtterance() + ") ");
+			if( act == null ) {
+				if( i == dActIndex ) {
+					act = detectedDActs.get(i);
+				} else {
+					// Something is wrong
+					// TODO: report error
+				}
+			} else {
+				act = new DialogueAct(act,detectedDActs.get(i));
+			}
+		}
+		System.out.println("");
+		return act;
+	}
+	
+	public ArrayList<AgentSpokenUtterance> suggestLinkingSentence( DialogueAct act )
+	{
+		if( act == null ) {
+			return new ArrayList<AgentSpokenUtterance>();
+		}
+		
+		double quality = 0.7;
+		AgentSpokenUtterance lastUtterance = utteranceHistory.get( utteranceHistory.size()-1 );
+		ArrayList<String> features = new ArrayList<String>(Arrays.asList(act.getFeatures().trim().split(" ")));
+		ArrayList<AgentUtterance> linkingUtterances = lastUtterance.getUtterance().getLinkingUtterances( features );
+		
+		ArrayList<AgentSpokenUtterance> linkingSpokenUtterances = new ArrayList<AgentSpokenUtterance>();
+		for( AgentUtterance link : linkingUtterances ) {
+			if( allUtterances.get(currChar).get(link.getUtterance()) != null ) {
+				linkingSpokenUtterances.addAll( getUtterancesFromCategory(link.getUtterance(), quality) ) ;
+				
+			} else {
+				AgentSpokenUtterance uttr = new AgentSpokenUtterance( link );
+				uttr.setQuality(quality);
+				linkingSpokenUtterances.add(uttr);
+			}
+		}
+		return linkingSpokenUtterances;
+	}
+	
+	public ArrayList<AgentSpokenUtterance> suggestOnContentFeatures( DialogueAct act )
+	{
+		if( act == null ) {
+			return new ArrayList<AgentSpokenUtterance>();
+		}
+		
+		double quality = 0.8;
+		HashMap<String,Integer> scores = giveResponseRatings(act);
+		AgentSpokenUtterance reaction;
+		int maxReactions = 4;
+		int firstScore = -1;
+		int latestScore = -1;
+		ArrayList<String> bestResponses = new ArrayList<String>();
+		while( scores.keySet().size()>0 && ( bestResponses.size() < maxReactions || ( bestResponses.size() > maxReactions && latestScore == firstScore ) ) ) {
+			reaction = getMaxUtterance( scores, "Content_Based" );
+			if( reaction != null ) {
+				String reactionUtterance = reaction.getUtterance().getUtterance();
+				if( firstScore == -1 ) {
+					firstScore = scores.get(reactionUtterance);
+				}
+				latestScore = scores.get(reactionUtterance);
+				bestResponses.add(reaction.getUtterance().getUtterance());
+
+				scores.remove(reactionUtterance);
+			} else {
+				break;
+			}
+		}
+		ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
+		if( firstScore > 0 ) {
+			for( String utterance : bestResponses ) {
+				if( allUtterances.get(currChar).get( utterance ) != null ) {
+					spokenUtterances.addAll( getUtterancesFromCategory( utterance, quality) ) ;
+				} 
+				else {
+					AgentSpokenUtterance uttr = new AgentSpokenUtterance( findAgentUtterance(utterance, "Content_Based") );
+					uttr.setQuality( uttr.getQuality() / 10 * quality );
+					spokenUtterances.add(uttr);
+				}
+			}
+		}
+		return spokenUtterances;
+	}
+	
+	public ArrayList<AgentSpokenUtterance> suggestOnArousal()
+	{
+		double quality = 0.4;
+		/* Determine high and low arousal indicators and user utterance length */
+		int high_intensity_arousal = 0;
+		int low_intensity_arousal = 0;
+
+		for( int i=emotionIndex; i< detectedEmotions.size(); i++ ) {
+			EmotionEvent ee = detectedEmotions.get(i);
+			if( ee.getType() == EmotionEvent.AROUSAL ) {
+				if( ee.getIntensity() > HIGH_AROUSAL ) {
+					high_intensity_arousal++;
+				} else if( ee.getIntensity() < LOW_AROUSAL ) {
+					low_intensity_arousal++;
+				}
+			}
+		}
+
+		ArrayList<AgentSpokenUtterance> suggestions = new ArrayList<AgentSpokenUtterance>();
+		if( high_intensity_arousal-low_intensity_arousal > 0 || (high_intensity_arousal > 0 && low_intensity_arousal == high_intensity_arousal) ) {
+			/* If there are high arousal indicators and there are more than low arousal indicators
+			 * respond with a 'high arousal utterance' */
+			suggestions.addAll( getUtterancesFromCategory( "high_arousal", quality ) );
+		} else if( low_intensity_arousal-high_intensity_arousal > 0 ) {
+			/* If there are low arousal indicators and there are more than high arousal indicators
+			 * respond with a 'low arousal utterance' */
+			suggestions.addAll( getUtterancesFromCategory( "low_arousal", quality ) );
+		}
+		return suggestions;
+	}
+	
+	public ArrayList<AgentSpokenUtterance> suggestLastOptions()
+	{
+		double quality = 0.1;
+		ArrayList<AgentSpokenUtterance> suggestions = new ArrayList<AgentSpokenUtterance>();
+		
+		long user_utterance_length = meta.getTime() - userTurnStart;
+		
+		if( tellMeMoreCounter >= 2 ) {
+			/* If the number of 'tell me more' utterances is greater than 2
+			 * change the subject or change the character */
+			if( nrTopicChanges < 4 ) {
+				return getUtterancesFromCategory("change_subject", quality);
+			} else {
+				if( rand.nextBoolean() ) {
+					// Ask for the character
+					return getUtterancesFromCategory("ask_next_character", quality);
+				} else {
+					// Suggest a character
+					int suggestedChar = rand.nextInt(4)+1;
+					while( suggestedChar == currChar ) {
+						suggestedChar = rand.nextInt(4)+1;
+					}
+					AgentSpokenUtterance suggestion =  new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
+					suggestion.setNewCharacter(suggestedChar);
+					suggestions.add(suggestion);
+				}
+			}
+		} else if( user_utterance_length < SMALL_UTTERANCE ) {
+			/* If the user utterance is smaller than a predefined threshold
+			 * respond with a 'tell me more utterance' */
+			return getUtterancesFromCategory( "tell_me_more", quality);
+		} else {
+			/* If no utterance can be determined pick one of the random utterances */
+			return getUtterancesFromCategory( "random", quality);
+		}
+		
+		return suggestions;
+	}
 
 	/**
 	 * Determines what to say based on the context
@@ -631,10 +890,16 @@ public class UtteranceActionProposer extends Component
 	 * and the history of agent utterances.
 	 * @return the AgentUtterance to speak next
 	 */
-	public AgentUtterance getResponse()
+	public AgentSpokenUtterance getResponse()
 	{
+		AgentSpokenUtterance lastUtterance = utteranceHistory.get( utteranceHistory.size()-1 );
+		
 		/* If the user didn't say anything, motivate him */
 		if( userTurnStart == -1 ) {
+			AgentUtterance elaborationUtterance = lastUtterance.getUtterance().getElaborationUtterance();
+			if( elaborationUtterance != null ) {
+				return new AgentSpokenUtterance( elaborationUtterance );
+			}
 			int r = rand.nextInt(2);
 			if( r == 0 ) {
 				return pickUtterances("after_silence");
@@ -642,7 +907,7 @@ public class UtteranceActionProposer extends Component
 				return pickUtterances("change_subject");
 			}
 		}
-		
+
 		/* Determine high and low arousal indicators and user utterance length */
 		int high_intensity_arousal = 0;
 		int low_intensity_arousal = 0;
@@ -658,10 +923,12 @@ public class UtteranceActionProposer extends Component
 				}
 			}
 		}
-		
-		/* Get the best responses based on the detected features */
+
+		/* Combine Dialogue Acts */
 		DialogueAct act = null;
+		System.out.print( "Combining: " );
 		for( int i=dActIndex; i<detectedDActs.size(); i++ ) {
+			System.out.print("("+detectedDActs.get(i).getUtterance() + ") ");
 			if( act == null ) {
 				if( i == dActIndex ) {
 					act = detectedDActs.get(i);
@@ -673,8 +940,19 @@ public class UtteranceActionProposer extends Component
 				act = new DialogueAct(act,detectedDActs.get(i));
 			}
 		}
+		System.out.println("");
+		
+		System.out.println(act.toString());
+		
+		/* Determine if a linking sentence can be used */
+		ArrayList<String> features = new ArrayList<String>(Arrays.asList(act.getFeatures().trim().split(" ")));
+		ArrayList<AgentUtterance> linkingUtterances = lastUtterance.getUtterance().getLinkingUtterances( features );
+		if( linkingUtterances.size() > 0 ) {
+			return new AgentSpokenUtterance( linkingUtterances.get( rand.nextInt(linkingUtterances.size()) ) );
+		}
+		
+		/* Determine a response based on content-features */
 		if( act != null ) {
-			HashMap<String,Integer> responseRatings = giveResponseRatings(act);
 			HashMap<String,Integer> scores = giveResponseRatings(act);
 			String reaction;
 			int maxReactions = 4;
@@ -689,29 +967,28 @@ public class UtteranceActionProposer extends Component
 					}
 					latestScore = scores.get(reaction);
 					bestResponses.add(reaction);
-					
+
 					scores.remove(reaction);
 				} else {
 					break;
 				}
 			}
 			if( firstScore > 0 ) {
-				HashMap<String,ArrayList<String>> utterancesChar = allUtterances.get(currChar);
+				HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
 				if( utterancesChar.keySet().contains(bestResponses.get(0)) ) {
 					return pickUtterances( bestResponses.get(0) );
 				} else {
-					return new AgentUtterance("Content_Based", bestResponses.get(0));
+					return new AgentSpokenUtterance( new AgentUtterance(bestResponses.get(0), "Content_Based") );
 				}
 				// TODO: Fixen dat er geen dubbele zinnen achter elkaar komen.
-				
 			}
 		}
 
 		/* Determine the number of 'tell me more' utterances in this subject */
 		int tellMeMoreCounter = 0;
 		for( int i=subjectIndex; i<utteranceHistory.size(); i++ ) {
-			AgentUtterance utterance = utteranceHistory.get(i);
-			if( utterance.getType().equals("tell_me_more") ) {
+			AgentSpokenUtterance spokenUtterance = utteranceHistory.get(i);
+			if( spokenUtterance.getUtterance().getCategory().equals("tell_me_more") ) {
 				tellMeMoreCounter++;
 			}
 		}
@@ -719,14 +996,14 @@ public class UtteranceActionProposer extends Component
 		if( high_intensity_arousal-low_intensity_arousal > 0 || (high_intensity_arousal > 0 && low_intensity_arousal == high_intensity_arousal) ) {
 			/* If there are high arousal indicators and there are more than low arousal indicators
 			 * respond with a 'high arousal utterance' */
-			AgentUtterance uttr = pickUtterances( "high_arousal" ) ;
+			AgentSpokenUtterance uttr = pickUtterances( "high_arousal" ) ;
 			if( uttr != null ) {
 				return uttr;
 			}
 		} else if( low_intensity_arousal-high_intensity_arousal > 0 ) {
 			/* If there are low arousal indicators and there are more than high arousal indicators
 			 * respond with a 'low arousal utterance' */
-			AgentUtterance uttr = pickUtterances( "low_arousal" ) ;
+			AgentSpokenUtterance uttr = pickUtterances( "low_arousal" ) ;
 			if( uttr != null ) {
 				return uttr;
 			}
@@ -753,24 +1030,76 @@ public class UtteranceActionProposer extends Component
 					while( suggestedChar == currChar ) {
 						suggestedChar = rand.nextInt(4)+1;
 					}
-					return new AgentUtterance( "change_character", "Do you want to talk to " + charNames.get(suggestedChar) + "?" );
+					return new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
 				}
 			}
 		} else if( user_utterance_length < SMALL_UTTERANCE ) {
 			/* If the user utterance is smaller than a predefined threshold
 			 * respond with a 'tell me more utterance' */
-			AgentUtterance uttr = pickUtterances( "tell_me_more" ) ;
+			AgentSpokenUtterance uttr = pickUtterances( "tell_me_more" ) ;
 			if( uttr != null ) {
 				return uttr;
 			}
 		} else {
-			/* If no utterance can be determind pick one of the random utterances */
-			AgentUtterance uttr = pickUtterances( "random" ) ;
+			/* If no utterance can be determined pick one of the random utterances */
+			AgentSpokenUtterance uttr = pickUtterances( "random" ) ;
 			if( uttr != null ) {
 				return uttr;
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Based on the given type of sentence this method tries to find an utterance of that type
+	 * that hasn't been said for the last x agent utterances.
+	 * @param type - the type of the utterance
+	 * @return - the AgentUtterance which includes the utterance type and the utterance itself
+	 */
+	public ArrayList<AgentSpokenUtterance> getUtterancesFromCategory( String category, double quality )
+	{
+		/* Get all utterances of the given type */
+		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
+		ArrayList<AgentSpokenUtterance> spokenUtterances = convertToSpokenUtterances( utterancesChar.get(category) );
+		for( AgentSpokenUtterance uttr : spokenUtterances ) {
+			uttr.setQuality(quality);
+		}
+		return spokenUtterances;
+	}
+	
+	public ArrayList<AgentSpokenUtterance> convertToSpokenUtterances( ArrayList<AgentUtterance> uttrs )
+	{
+		ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
+		for( AgentUtterance uttr : uttrs ) {
+			spokenUtterances.add( new AgentSpokenUtterance( uttr ) );
+		}
+		return spokenUtterances;
+	}
+	
+	public void adaptQualityToHistory( ArrayList<AgentSpokenUtterance> utterances )
+	{
+		HashMap<String,Integer> utteranceDistances = new HashMap<String,Integer>();
+		int size = utteranceHistory.size();
+		for( int i=0; i<utteranceHistory.size(); i++ ) {
+			AgentSpokenUtterance uttr = utteranceHistory.get(i);
+			utteranceDistances.put(uttr.getUtterance().getUtterance(),(size-i) );
+		}
+		
+		for( AgentSpokenUtterance uttr : utterances ) {
+			Integer distance = utteranceDistances.get(uttr.getUtterance().getUtterance());
+			if( distance == null ) {
+				distance = 0;
+			}
+			if( distance >= 1 && distance <= 5 ) {
+				uttr.setQuality( uttr.getQuality() - 0.8d );
+			}
+			else if( distance >= 6 && distance <= 10 ) {
+				uttr.setQuality( uttr.getQuality() - 0.4d );
+			}
+			else if( distance > 10 ) {
+				uttr.setQuality( uttr.getQuality() - 0.2d );
+			}
+		}
 	}
 
 	/**
@@ -779,16 +1108,22 @@ public class UtteranceActionProposer extends Component
 	 * @param type - the type of the utterance
 	 * @return - the AgentUtterance which includes the utterance type and the utterance itself
 	 */
-	public AgentUtterance pickUtterances( String type )
+	public AgentSpokenUtterance pickUtterances( String type )
 	{
 		/* Get all utterances of the given type that haven't been used for the last x utterances */
-		HashMap<String,ArrayList<String>> utterancesChar = allUtterances.get(currChar);
-		ArrayList<String> utterancesType = utteranceCopy( utterancesChar.get(type) );
+		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
+		ArrayList<AgentUtterance> utterancesType = utteranceCopy( utterancesChar.get(type) );
 
+		ArrayList<AgentUtterance> utteranceToRemove = new ArrayList<AgentUtterance>();
 		for( int i=utteranceHistory.size()-1; i>=(Math.max(0, utteranceHistory.size()-3)); i-- ) {
-			AgentUtterance uttr = utteranceHistory.get(i);
-			if( utterancesType.contains( uttr.getUtterance() ) ) {
-				utterancesType.remove(uttr.getUtterance());
+			AgentSpokenUtterance spUttr = utteranceHistory.get(i);
+			for( AgentUtterance uttr : utterancesType ) {
+				if( uttr.getUtterance().equals(spUttr.getUtterance()) ) {
+					utteranceToRemove.add(uttr);
+				}
+			}
+			for( AgentUtterance uttr : utteranceToRemove ) {
+				utterancesType.remove( uttr );
 			}
 		}
 
@@ -817,8 +1152,21 @@ public class UtteranceActionProposer extends Component
 			}
 		} else {
 			/* If the list isn't empty randomly pick an utterance from the list */
-			return new AgentUtterance( type, utterancesType.get(rand.nextInt(utterancesType.size())) );
+			return new AgentSpokenUtterance( utterancesType.get(rand.nextInt(utterancesType.size())) );
 		}
+	}
+	
+	public AgentUtterance findAgentUtterance( String utterance, String newType )
+	{
+		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
+		for( ArrayList<AgentUtterance> utterances : utterancesChar.values() ) {
+			for( AgentUtterance au : utterances ) {
+				if( au.getUtterance().equals(utterance) ) {
+					return au;
+				}
+			}
+		}
+		return new AgentUtterance( utterance, newType );
 	}
 
 	/**
@@ -844,10 +1192,10 @@ public class UtteranceActionProposer extends Component
 	 * @param utterance
 	 * @throws JMSException
 	 */
-	public void sendUtterance( AgentUtterance utterance ) throws JMSException
+	public void sendUtterance( AgentSpokenUtterance utterance ) throws JMSException
 	{	
 		/* Send utterance to Greta */
-		String response = utterance.getUtterance();
+		String response = utterance.getUtterance().getUtterance();
 
 		String id = "s1";
 
@@ -892,9 +1240,9 @@ public class UtteranceActionProposer extends Component
 
 		System.out.println("Agent speaking");
 		/* Set end time (temporary) */
-		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().split(" ").length * 250)+8000 );
-		
-		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getType() + ", utterance=" + utterance.getUtterance() );
+		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().getUtterance().split(" ").length * 250)+8000 );
+
+		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance().getUtterance() );
 	}
 
 	/**
@@ -1001,8 +1349,11 @@ public class UtteranceActionProposer extends Component
 			DialogueAct act = new DialogueAct( utterance, time );
 			if( f.contains("positive") ) act.setPositive(true);
 			if( f.contains("negative") ) act.setNegative(true);
+			if( f.contains("disagree") ) {
+				act.setDisagree(true);
+				f = f.replace("disagree", "");
+			}
 			if( f.contains("agree") ) act.setAgree(true);
-			if( f.contains("disagree") ) act.setDisagree(true);
 			if( f.contains("about_other_people") ) act.setAboutOtherPeople(true);
 			if( f.contains("about_other_character") ) act.setAboutOtherCharacter(true);
 			if( f.contains("about_current_character") ) act.setAboutCurrentCharacter(true);
@@ -1019,7 +1370,7 @@ public class UtteranceActionProposer extends Component
 			detectedDActs.add(act);
 		}
 	}
-	
+
 	/**
 	 * Returns a map with all possible responses plus the ratings of those
 	 * responses (based on the response model)
@@ -1086,7 +1437,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return scores;
 	}
-	
+
 	/**
 	 * Returns the best possible utterance from the given map with responses and scores
 	 * Only returns utterances with a score higher than 0.
@@ -1110,20 +1461,39 @@ public class UtteranceActionProposer extends Component
 			return maxString;
 		}
 	}
+	
+	public AgentSpokenUtterance getMaxUtterance( HashMap<String, Integer> scores, String type )
+	{
+		String maxString = "";
+		int maxScore = -99;
+		for( Map.Entry<String,Integer> entry : scores.entrySet() ) {
+			if( entry.getValue() > maxScore ) {
+				maxString = entry.getKey();
+				maxScore = scores.get(entry.getKey());
+			}
+		}
+		if( maxScore <= 0 ) {
+			return null;
+		} else {
+			AgentSpokenUtterance maxUttr = new AgentSpokenUtterance( findAgentUtterance(maxString, type) );
+			maxUttr.setQuality(maxScore);
+			return maxUttr;
+		}
+	}
 
 	/**
 	 * Makes a deepcopy of the given ArrayList
 	 * @param utterances - the list to copy
 	 * @return
 	 */
-	public ArrayList<String> utteranceCopy( ArrayList<String> utterances )
+	public ArrayList<AgentUtterance> utteranceCopy( ArrayList<AgentUtterance> utterances )
 	{
 		if( utterances == null ) {
-			return new ArrayList<String>();
+			return new ArrayList<AgentUtterance>();
 		}
-		ArrayList<String> newUtterances = new ArrayList<String>();
-		for( String str : utterances ) {
-			newUtterances.add( ""+str );
+		ArrayList<AgentUtterance> newUtterances = new ArrayList<AgentUtterance>();
+		for( AgentUtterance uttr : utterances ) {
+			newUtterances.add( uttr );
 		}
 		return newUtterances;
 	}

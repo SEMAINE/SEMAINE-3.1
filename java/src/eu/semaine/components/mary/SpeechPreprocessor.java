@@ -176,7 +176,7 @@ public class SpeechPreprocessor extends Component
 		
     	Document inputDoc = xm.getDocument();
 		String inputText = xm.getText();
-		System.out.println(inputText);
+		//System.out.println(inputText);
 		
 		String localName    = xm.getDocument().getDocumentElement().getLocalName();
 		String namespaceURI = xm.getDocument().getDocumentElement().getNamespaceURI(); 

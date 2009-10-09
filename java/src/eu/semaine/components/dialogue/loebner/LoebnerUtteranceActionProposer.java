@@ -13,6 +13,7 @@ import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.actionproposers.SentenceReader;
+import eu.semaine.components.dialogue.datastructures.AgentSpokenUtterance;
 import eu.semaine.components.dialogue.datastructures.AgentUtterance;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.components.dialogue.test.DMLogger;
@@ -94,10 +95,10 @@ public class LoebnerUtteranceActionProposer extends Component
 	private int detectedWordsIndex = 0;
 
 	/* All utterances of the agent */
-	private ArrayList<AgentUtterance> agentUtteranceHistory = new ArrayList<AgentUtterance>();
+	private ArrayList<AgentSpokenUtterance> agentUtteranceHistory = new ArrayList<AgentSpokenUtterance>();
 
 	/* All agent utterances grouped by utterance-type */
-	private HashMap<Integer,HashMap<String,ArrayList<String>>> allUtterances = new HashMap<Integer,HashMap<String,ArrayList<String>>>();
+	private HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>> allUtterances = new HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>>();
 
 	/* All utterance categories and their changes of using them */
 	private HashMap<String,Double> categoryChances = new HashMap<String,Double>();
@@ -189,18 +190,18 @@ public class LoebnerUtteranceActionProposer extends Component
 			/* Update agent speaking state */
 			agentSpeakingState = PREPARING_TO_SPEAK;
 
-			AgentUtterance utterance = null;
+			AgentSpokenUtterance spokenUtterance = null;
 
 			/* Check if the character start process should be started or continued */
-			utterance = manageAgentStart();
-			if( utterance == null ) {
+			spokenUtterance = manageAgentStart();
+			if( spokenUtterance == null ) {
 				/* Get an utterance to say */
-				utterance = getResponse();
+				spokenUtterance = getResponse();
 			}
 
 
 			/* Distribute the chosen utterance */
-			sendUtterance( utterance );
+			sendUtterance( spokenUtterance );
 		}
 	}
 
@@ -241,7 +242,7 @@ public class LoebnerUtteranceActionProposer extends Component
 		return false;
 	}
 
-	public AgentUtterance manageAgentStart()
+	public AgentSpokenUtterance manageAgentStart()
 	{
 		String detectedKeywords = "";
 		for( int i=detectedWordsIndex; i<detectedWords.size(); i++ ) {
@@ -260,7 +261,7 @@ public class LoebnerUtteranceActionProposer extends Component
 		return null;
 	}
 
-	public AgentUtterance getResponse()
+	public AgentSpokenUtterance getResponse()
 	{
 		resetCategoryChances();
 		if( detectedWordsIndex == detectedWords.size() ) {
@@ -302,7 +303,7 @@ public class LoebnerUtteranceActionProposer extends Component
 
 			/* Category 'explain_when_it_happened' */
 			chance = categoryChances.get("explain_when_it_happened");
-			if( !agentUtteranceHistory.get( agentUtteranceHistory.size()-1).getType().equals("explain_what_happened") ) {
+			if( !agentUtteranceHistory.get( agentUtteranceHistory.size()-1).getUtterance().getCategory().equals("explain_what_happened") ) {
 				chance -= 0.2;
 			}
 			if( str.matches("((\\S)+ +)*when ((\\S)+ +){0,3}(happen)( *(\\S)+)*") ) {
@@ -320,7 +321,7 @@ public class LoebnerUtteranceActionProposer extends Component
 
 			/* Category 'explain_what_kind_of_supplies' */
 			chance = categoryChances.get("explain_what_kind_of_supplies");
-			if( !agentUtteranceHistory.get( agentUtteranceHistory.size()-1).getType().equals("explain_what_happened") ) {
+			if( !agentUtteranceHistory.get( agentUtteranceHistory.size()-1).getUtterance().getCategory().equals("explain_what_happened") ) {
 				chance -= 0.2;
 			}
 			if( str.matches("((\\S)+ +)*what ((\\S)+ +){0,2}(type|kind) ((\\S)+ +){0,2}supplies( *(\\S)+)*") ) {
@@ -519,16 +520,22 @@ public class LoebnerUtteranceActionProposer extends Component
 		return pickUtterances(maxCategory);
 	}
 
-	public AgentUtterance pickUtterances( String type )
+	public AgentSpokenUtterance pickUtterances( String type )
 	{
 		/* Get all utterances of the given type that haven't been used for the last x utterances */
-		HashMap<String,ArrayList<String>> utterancesChar = allUtterances.get(3);
-		ArrayList<String> utterancesType = utteranceCopy( utterancesChar.get(type) );
+		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(3);
+		ArrayList<AgentUtterance> utterancesType = utteranceCopy( utterancesChar.get(type) );
 
+		ArrayList<AgentUtterance> utteranceToRemove = new ArrayList<AgentUtterance>();
 		for( int i=agentUtteranceHistory.size()-1; i>=(Math.max(0, agentUtteranceHistory.size()-3)); i-- ) {
-			AgentUtterance uttr = agentUtteranceHistory.get(i);
-			if( utterancesType.contains( uttr.getUtterance() ) ) {
-				utterancesType.remove(uttr.getUtterance());
+			AgentSpokenUtterance spUttr = agentUtteranceHistory.get(i);
+			for( AgentUtterance uttr : utterancesType ) {
+				if( uttr.getUtterance().equals(spUttr.getUtterance()) ) {
+					utteranceToRemove.add(uttr);
+				}
+			}
+			for( AgentUtterance uttr : utteranceToRemove ) {
+				utterancesType.remove( uttr );
 			}
 		}
 
@@ -545,9 +552,9 @@ public class LoebnerUtteranceActionProposer extends Component
 			System.out.println("Saying utterance of type: " + type);
 			if( type.equals("unknown_question_low_arousal") && !firstRandomAnswerGiven ) {
 				firstRandomAnswerGiven = true;
-				return new AgentUtterance( type, "I'm on a collision course with your ship and it will hit you in a few minutes. Please let me in." );
+				return new AgentSpokenUtterance( new AgentUtterance( "I'm on a collision course with your ship and it will hit you in a few minutes. Please let me in.",type ) );
 			} else {
-				return new AgentUtterance( type, utterancesType.get(rand.nextInt(utterancesType.size())) );
+				return new AgentSpokenUtterance( utterancesType.get(rand.nextInt(utterancesType.size())) );
 			}
 		}
 	}
@@ -718,10 +725,10 @@ public class LoebnerUtteranceActionProposer extends Component
 	 * @param utterance
 	 * @throws JMSException
 	 */
-	public void sendUtterance( AgentUtterance utterance ) throws JMSException
+	public void sendUtterance( AgentSpokenUtterance utterance ) throws JMSException
 	{	
 		/* Send utterance to Greta */
-		String response = utterance.getUtterance();
+		String response = utterance.getUtterance().getUtterance();
 
 		if( response.contains("thank goodness") ) {
 			sendUtteranceAsFml( "Ah, thank goodness." );
@@ -744,10 +751,10 @@ public class LoebnerUtteranceActionProposer extends Component
 		agentUtteranceHistory.add( utterance );
 
 		System.out.println("Agent speaking");
-		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getType() + ", utterance=" + utterance.getUtterance() );
+		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance() );
 		
 		/* Set end time (temporary) */
-		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().split(" ").length * 250)+5000 );
+		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().getUtterance().split(" ").length * 250)+5000 );
 	}
 	
 	public void sendUtteranceAsFml( String response ) throws JMSException
@@ -845,14 +852,14 @@ public class LoebnerUtteranceActionProposer extends Component
 	 * @param utterances - the list to copy
 	 * @return
 	 */
-	public ArrayList<String> utteranceCopy( ArrayList<String> utterances )
+	public ArrayList<AgentUtterance> utteranceCopy( ArrayList<AgentUtterance> utterances )
 	{
 		if( utterances == null ) {
-			return new ArrayList<String>();
+			return new ArrayList<AgentUtterance>();
 		}
-		ArrayList<String> newUtterances = new ArrayList<String>();
-		for( String str : utterances ) {
-			newUtterances.add( ""+str );
+		ArrayList<AgentUtterance> newUtterances = new ArrayList<AgentUtterance>();
+		for( AgentUtterance uttr : utterances ) {
+			newUtterances.add( uttr );
 		}
 		return newUtterances;
 	}

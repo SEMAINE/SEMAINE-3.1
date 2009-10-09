@@ -14,6 +14,8 @@ package eu.semaine.components.dialogue.datastructures;
 
 public class DialogueAct 
 {
+	public enum Length {SHORT, NORMAL, LONG}
+	
 	private String utterance;
 	private String taggedUtterance;
 	private String[] tags;
@@ -35,6 +37,7 @@ public class DialogueAct
 	private boolean action = false;
 	private boolean laugh = false;
 	private boolean change_speaker = false;
+	private Length length = Length.NORMAL; 
 	private String target_character;
 	
 	
@@ -72,6 +75,11 @@ public class DialogueAct
 		event = (act1.isEvent() || act2.isEvent());
 		action = (act1.isAction() || act2.isAction());
 		laugh = (act1.isLaugh() || act2.isLaugh());
+		if( act1.getLength() == Length.LONG && act2.getLength() == Length.LONG ) {
+			length = Length.LONG;
+		} else {
+			length = Length.NORMAL;
+		}
 		change_speaker = (act1.isChangeSpeaker() || act2.isChangeSpeaker());
 		
 		target_character = act1.getTargetCharacter() + " " + act2.getTargetCharacter();
@@ -362,6 +370,20 @@ public class DialogueAct
 		return starttime;
 	}
 	
+	/**
+	 * @return the length
+	 */
+	public Length getLength() {
+		return length;
+	}
+
+	/**
+	 * @param length the length to set
+	 */
+	public void setLength(Length length) {
+		this.length = length;
+	}
+
 	public String getFeatures()
 	{
 		String features = "";
@@ -381,6 +403,8 @@ public class DialogueAct
 		if( event ) features += " event";
 		if( laugh ) features += " laugh";
 		if( change_speaker ) features += " change_speaker";
+		if( length == Length.SHORT ) features += " short";
+		if( length == Length.LONG ) features += " long";
 		if( target_character != null && target_character.length() != 0 ) features += " target:" + target_character;
 		
 		return features;
@@ -410,6 +434,7 @@ public class DialogueAct
 		str += "event:			" + event + "\r\n";
 		str += "laugh:			" + laugh + "\r\n";
 		str += "change speaker:	" + change_speaker + "\r\n";
+		str += "length: " + length + "\r\n";
 		str += "target speaker:	" + target_character + "\r\n";
 		return str;
 	}

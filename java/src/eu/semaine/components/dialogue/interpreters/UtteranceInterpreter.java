@@ -56,6 +56,9 @@ import opennlp.tools.postag.POSTaggerME;
 
 public class UtteranceInterpreter extends Component 
 {	
+	private static long SHORT_LENGTH = 2000;
+	private static long LONG_LENGTH = 15000;
+	
 	/* Receivers */
 	private EmmaReceiver emmaReceiver;
 	private StateReceiver userStateReceiver;
@@ -399,6 +402,7 @@ public class UtteranceInterpreter extends Component
 		act.setAction( detectAction( act ) );
 		act.setChangeSpeaker( detectChangeSpeaker( act ) );
 		act.setTargetCharacter( detectTargetCharacter( act ) );
+		act.setLength( detectLength( act ) );
 
 		return act;
 	}
@@ -973,6 +977,16 @@ public class UtteranceInterpreter extends Component
 		} else {
 			return "Obadiah";
 		}
+	}
+	
+	public DialogueAct.Length detectLength( DialogueAct act )
+	{
+		if( meta.getTime() - act.getStarttime() < SHORT_LENGTH ) {
+			return DialogueAct.Length.SHORT;
+		} else if( meta.getTime() - act.getStarttime() > LONG_LENGTH ) {
+			return DialogueAct.Length.LONG;
+		}
+		return DialogueAct.Length.NORMAL;
 	}
 
 	/**

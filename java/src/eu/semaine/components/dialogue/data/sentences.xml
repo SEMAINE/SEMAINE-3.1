@@ -1,5 +1,6 @@
 <semaine_sentences>
 
+<!-- +++++++++++++++++++++++ POPPY ++++++++++++++++++++++++++  -->
 	<character name="poppy">
 		<category name="high_arousal">
 		</category>
@@ -21,19 +22,90 @@
 		</category>
 		
 		<category name="change_subject">
-			<utterance value="I think you should feel really happy today." />
-			<utterance value="Do you have any good news to tell me?" />
+			<utterance value="Do you have any good news to tell me?">
+				<link pre="is_agree" response="Please tell me!" />
+				<link pre="is_agree" response="Isn't that nice? Please tell me!" />
+				<link pre="is_agree" response="I'd love to hear about it." />
+				<link pre="is_agree" response="I'd love to hear more." />
+				<link pre="is_agree" response="Go on, tell me your news!" />
+				<link pre="is_disagree" response="What exactly happened?" />
+				<link pre="is_disagree" response="Can't you do anything about it?" />
+				<link pre="is_disagree" response="Give me just one happy thought and you'll feel better." />
+				<link pre="is_disagree" response="There must be something that you're really looking forward to." />
+				<elaboration response="Anything good that happened?" />
+				<features features="" />
+			</utterance>
+			<utterance value="I think you should feel really happy today.">
+				<link pre="is_disagree" response="I'm not so sure that you should be so negative." />
+				<link pre="is_disagree" response="It's not that bad." />
+				<link pre="is_disagree" response="Every cloud has a silver lining." />
+				<link pre="is_disagree" response="Look on the bright side!" />
+				<link pre="is_disagree" response="Everything will work out, you'll see!" />
+				<link pre="is_disagree" response="Don't worry, the whole world can't be bad, it's just the way you feel at the moment." />
+				<elaboration response="Tell me what makes you feel really happy." />
+			</utterance>
 			<utterance value="How did we get on to this subject?" />
-			<utterance value="Is there anything else you want to say?" />
-			<utterance value="So what makes you happy?" />
-			<utterance value="So what would you like to do?" />
+			<utterance value="Is there anything else you want to say?">
+				<link pre="is_agree" response="tell_me_more" />
+				<link pre="is_disagree" response="change_subject" />
+			</utterance>
+			<utterance value="So what makes you happy?">
+				<link pre="short" response="That sounds lovely!" />
+				<link pre="short" response="That sounds exciting!" />
+				<link pre="short" response="That's wonderful, isn't it?" />
+				<link pre="short" response="Do go on, I love hearing all this happiness." />
+				<elaboration response="Go on, give me one happy thought." />
+			</utterance>
+			<utterance value="So what would you like to do?">
+				<link pre="short" response="How will you do that?" />
+				<link pre="short" response="Go on." />
+				<link pre="short" response="I'd love to hear about it." />
+				<link pre="short" response="I'd love to hear more." />
+			</utterance>
 			<utterance value="So, what's happening at the moment?" />
-			<utterance value="So what would put you in a really good mood?"/>
-			<utterance value="Tell me what makes you feel really happy." />
-			<utterance value="Tell me what you're really looking forward to." />
-			<utterance value="There must be good things that you remember!" />
-			<utterance value="There must be something that you're really looking forward to." />
-			<utterance value="What have you been doing?" />
+			<utterance value="So what would put you in a really good mood?">
+				<link pre="short" response="Really? That sounds lovely!" />
+				<link pre="short" response="Really? That sounds exciting!" />
+				<elaboration response="Anything that would make you happy?" />
+			</utterance>
+			<utterance value="Tell me what makes you feel really happy.">
+				<link pre="short" response="Really? That sounds lovely!" />
+				<link pre="short" response="Really? That sounds exciting!" />
+			</utterance>
+			<utterance value="Tell me what you're really looking forward to.">
+				<link pre="short" response="Go on." />
+				<link pre="short" response="I'd love to hear about it." />
+				<link pre="short" response="I'd love to hear more." />
+			</utterance>
+			<utterance value="There must be good things that you remember!">
+				<link pre="is_agree" response="Isn't that nice? Tell me about it." />
+				<link pre="is_agree" response="I'd love to hear about it." />
+				<link pre="is_agree" response="That sounds interesting, tell me more." />
+				<link pre="is_agree" response="I'd love to hear more." />
+				<link pre="is_agree" response="I'm glad to hear that." />
+				<link pre="is_disagree" response="Pull yourself together. Give me just one happy thought and you'll feel better." />
+				<link pre="is_disagree" response="Can't you do anything about it?" />
+				<link pre="is_disagree" response="Go on, give me one happy thought." />
+				<link pre="is_disagree" response="Give me just one happy thought and you'll feel better." />
+				<link pre="is_disagree" response="Don't feel bad. Things have a way of sorting themselves out." />
+				<elaboration response="Or something that you're really looking forward to." />
+			</utterance>
+			<utterance value="There must be something that you're really looking forward to.">
+				<link pre="is_agree" response="Tell me more." />
+				<link pre="is_agree" response="I'd love to hear about it." />
+				<link pre="is_agree" response="I'd love to hear more." />
+				<link pre="is_agree" response="Do go on, I love hearing all this happiness." />
+				<link pre="is_disagree" response="It's not that bad. You just need a good, long rest." />
+				<link pre="is_disagree" response="Can't you do anything about it?" />
+				<link pre="is_disagree" response="Give me just one happy thought and you'll feel better." />
+				<link pre="is_disagree" response="Think about your best holiday ever, that'll make you feel good." />
+				<link pre="is_disagree" response="What would make you feel happy in the future?" />
+			</utterance>
+			<utterance value="What have you been doing?">
+				<link pre="short" response="Go on." />
+				<link pre="short" response="I'd love to hear about it." />
+				<link pre="short" response="I'd love to hear more." />
+			</utterance>
 			<utterance value="What's good in your life at the moment?" />
 		</category>
 		
@@ -113,6 +185,7 @@
 		</category>
 	</character>
 	
+<!-- +++++++++++++++++++++++ PRUDENCE ++++++++++++++++++++++++++  -->
 	<character name="prudence">
 		<category name="high_arousal">
 			<utterance value="Do you think that you are wise?" />
@@ -145,16 +218,45 @@
 		</category>
 		
 		<category name="change_subject">
-			<utterance value="How do you view people?" />
-			<utterance value="Is there anything else you want to say?" />
-			<utterance value="So what are you doing at the moment?" />
+			<utterance value="How do you view people?">
+				<link pre="is_positive" response="So where do you think your attitude to life comes from?" />
+				<link pre="is_positive" response="That sounds like a sensible attitude." />
+				<link pre="is_positive" response="It's always good to be rational." />
+				<link pre="is_positive" response="I admire that." />
+				<link pre="is_negative" response="So where do you think your attitude to life comes from?" />
+				<link pre="is_negative" response="Can you enlarge on that?" />
+				<link pre="is_negative" response="It’s always worth thinking these things through." />
+				<link pre="is_negative" response="Try to give me a more balanced picture." />
+			</utterance>
+			<utterance value="Is there anything else you want to say?">
+				<elaboration response="What haven't you talked about in this session?" />
+			</utterance>
+			<utterance value="So what are you doing at the moment?">
+				<elaboration response="What's going on at the moment." />
+			</utterance>
 			<utterance value="Tell me about a time when you felt a bit better." />
 			<utterance value="Tell me what is going on at the moment." />
-			<utterance value="Tell me what you would like to do?" />
+			<utterance value="Tell me what you would like to do?">
+				<link pre="short" response="Why?" />
+				<link pre="short" response="Why do you want it?" />
+				<link pre="short" response="So tell me the details." />
+				<link pre="short" response="When?" />
+				<link pre="short" response="Keep going." />
+				<elaboration response="Or what are you planning to do?" />
+			</utterance>
 			<utterance value="What are you doing this week?" />
-			<utterance value="What are you planning to do?" />
+			<utterance value="What are you planning to do?">
+				<link pre="short" response="Keep going." />
+				<link pre="short" response="Why do you want it?" />
+				<link pre="short" response="So tell me the details." />
+				<link pre="" response="When?" />
+				<link pre="" response="Why?" />
+			</utterance>
 			<utterance value="What have you been doing?" />
-			<utterance value="What would you like to talk about?"/>
+			<utterance value="What would you like to talk about?">
+				<link pre="" response="Ok. Go on." />
+				<link pre="" response="So tell me the details." />
+			</utterance>
 		</category>
 		
 		<category name="random">
@@ -223,6 +325,7 @@
 		</category>
 	</character>
 	
+<!-- +++++++++++++++++++++++ SPIKE ++++++++++++++++++++++++++  -->
 	<character name="spike">
 		<category name="high_arousal">
 		</category>
@@ -258,10 +361,29 @@
 		</category>
 		
 		<category name="change_subject">
-			<utterance value="Is there anything else you want to say?" />
-			<utterance value="What's been going on?" />
-			<utterance value="When was the last time you got angry at something?" />
-			<utterance value="When was the last time you really said what you meant?" />
+			<utterance value="Is there anything else you want to say?">
+				<link pre="is_agree" response="Like what?" />
+				<link pre="is_agree" response="Well, what happened?" />
+				<link pre="is_agree" response="That's something I'd like to hear about!" />
+				<link pre="is_agree" response="tell_me_more" />
+				<link pre="is_disagree" response="You're wasting my time." />
+				<link pre="is_disagree" response="You're boring, don't you do anything exciting?" />
+				<link pre="is_disagree" response="That's so superficial it's incredible." />
+				<elaboration response="You're boring, don't you do anything exciting?" />
+			</utterance>
+			<utterance value="What's been going on?">
+				<link pre="short" response="tell_me_more" />
+			</utterance>
+			<utterance value="When was the last time you got angry at something?">
+				<link pre="short" response="Well, what happened?" />
+				<link pre="short" response="That's something I'd like to hear about!" />
+				<link pre="short" response="tell_me_more" />
+				<elaboration response="Don't you ever get angry at the world?" />
+			</utterance>
+			<utterance value="When was the last time you really said what you meant?">
+				<link pre="short" response="tell_me_more" />
+				<elaboration response="You shouldn't let people off with it, you know!" />
+			</utterance>
 			<utterance value="You're boring, don't you do anything exciting?" />
 		</category>
 		
@@ -315,6 +437,7 @@
 		</category>
 	</character>
 	
+<!-- +++++++++++++++++++++++ OBADIAH ++++++++++++++++++++++++++  -->
 	<character name="obadiah">
 		<category name="high_arousal">
 			<utterance value="Don't get too carried away!" />
@@ -340,15 +463,42 @@
 		</category>
 		
 		<category name="change_subject">
-			<utterance value="Is there anything else you want to say?" />
-			<utterance value="Remind me about the last time you got carried away and then everything went wrong." />
-			<utterance value="Tell me about the things you don't want to think about." />
-			<utterance value="Tell me about issues that get you down." />
-			<utterance value="Tell me about people that get you down." />
-			<utterance value="Tell me about places that get you down." />
-			<utterance value="Tell me about the last time you were really hurt." />
-			<utterance value="Tell me just how bad you feel." />
-			<utterance value="Tell me what you dread most." />
+			<utterance value="Is there anything else you want to say?">
+				<link pre="is_agree" response="tell_me_more" />
+				<link pre="is_disagree" response="Maybe you should just go out and get drunk?" />
+				<link pre="is_disagree" response="Don't you sometimes wish that you could just run away?" />
+				<link pre="is_disagree" response="It can be so painful can't it?" />
+				<link pre="is_disagree" response="You don't need to pretend with me!" />
+				<link pre="is_disagree" response="You don't sound very sure." />
+				<elaboration response="What about all the death and suffering in the world?" />
+			</utterance>
+			<utterance value="Remind me about the last time you got carried away and then everything went wrong.">
+				<link pre="short" response="tell_me_more" />
+				<elaboration response="Tell me how bad that felt." />
+			</utterance>
+			<utterance value="Tell me about the things you don't want to think about.">
+				<elaboration response="What about the hidden problems, you know the ones you can't see." />
+			</utterance>
+			<utterance value="Tell me about issues that get you down.">
+				<link pre="short" response="tell_me_more" />
+				<elaboration response="Or people that get you down." />
+			</utterance>
+			<utterance value="Tell me about people that get you down.">
+				<link pre="short" response="tell_me_more" />
+				<elaboration response="Or places that get you down." />
+			</utterance>
+			<utterance value="Tell me about places that get you down.">
+				<link pre="short" response="tell_me_more" />
+			</utterance>
+			<utterance value="Tell me about the last time you were really hurt.">
+				<elaboration response="Something painful." />
+			</utterance>
+			<utterance value="Tell me just how bad you feel.">
+				<elaboration response="Or tell me about what might get in the way of your happiness." />
+			</utterance>
+			<utterance value="Tell me what you dread most.">
+				<elaboration response="Or the things you don't want to think about." />
+			</utterance>
 			<utterance value="What about when people let you down?" />
 		</category>
 		
