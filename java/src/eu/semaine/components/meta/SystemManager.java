@@ -60,15 +60,6 @@ public class SystemManager extends Component implements MessageListener
 	throws JMSException
 	{
 		super("SystemManager");
-		iobase = new IOBase("semaine.meta");
-		componentInfos = new TreeMap<String, ComponentInfo>();
-		consumer = iobase.getSession().createConsumer(iobase.getTopic(), MetaMessenger.COMPONENT_NAME + " IS NOT NULL");
-		producer = iobase.getSession().createProducer(iobase.getTopic());
-		consumer.setMessageListener(this);
-		iobase.startConnection();
-		// need to send our own start again because when super() sent it,
-		// we weren't listening yet:
-		meta.reportState(State.starting);
 		if (Boolean.getBoolean("semaine.systemmanager.gui")) {
 			// We hide components directly here (they never get to the GUI)
 			componentsToHide = new HashSet<String>();
@@ -91,6 +82,15 @@ public class SystemManager extends Component implements MessageListener
 				}
 			}
 
+			iobase = new IOBase("semaine.meta");
+			componentInfos = new TreeMap<String, ComponentInfo>();
+			consumer = iobase.getSession().createConsumer(iobase.getTopic(), MetaMessenger.COMPONENT_NAME + " IS NOT NULL");
+			producer = iobase.getSession().createProducer(iobase.getTopic());
+			consumer.setMessageListener(this);
+			iobase.startConnection();
+			// need to send our own start again because when super() sent it,
+			// we weren't listening yet:
+			meta.reportState(State.starting);
 			
 			MessageListener topicListener = new MessageListener() {
 				public void onMessage(Message m) {

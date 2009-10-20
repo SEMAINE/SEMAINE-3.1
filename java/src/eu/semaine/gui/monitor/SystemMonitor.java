@@ -389,8 +389,13 @@ public class SystemMonitor extends Thread
 		if (sortedComponentList.isEmpty()) return;
 		// each time we get here, we expect to know about new topics,
 		// so we need to sort again the components:
-		Comparator<ComponentInfo> ciComparator = new ComponentInfo.Comparator(
-				new HashSet<ComponentInfo>(sortedComponentList)); 
+/*		Comparator<ComponentInfo> ciComparator = new ComponentInfo.SimpleComparator(
+			new HashSet<ComponentInfo>(sortedComponentList));
+*/		Comparator<ComponentInfo> ciComparator = new ComponentInfo.CountingComparator(
+				new HashSet<ComponentInfo>(sortedComponentList));
+/*		Comparator<ComponentInfo> ciComparator = new ComponentInfo.VoteComparator(
+				new HashSet<ComponentInfo>(sortedComponentList), topicsToHide);
+*/
 		Collections.sort(sortedComponentList, ciComparator);
 		updateLogComponents();
 		// Group components:

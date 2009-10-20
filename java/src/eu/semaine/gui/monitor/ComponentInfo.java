@@ -7,8 +7,11 @@ package eu.semaine.gui.monitor;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import eu.semaine.components.Component;
@@ -311,7 +314,6 @@ public class ComponentInfo extends Info
 	
 	
 	
-	
 	/**
 	 * Helper to sort CompareInfo objects so that input components are first,
 	 * output components last, and the others in an order consistent with 
@@ -320,10 +322,10 @@ public class ComponentInfo extends Info
 	 * @author marc
 	 *
 	 */
-	public static class Comparator implements java.util.Comparator<ComponentInfo>
+	public static class SimpleComparator implements java.util.Comparator<ComponentInfo>
 	{
 		private Set<ComponentInfo> cis;
-		public Comparator(Set<ComponentInfo> allCIs)
+		public SimpleComparator(Set<ComponentInfo> allCIs)
 		{
 			this.cis = allCIs;
 		}
@@ -425,4 +427,326 @@ public class ComponentInfo extends Info
 		}
 	}
 	
+	/**
+	 * Helper to sort CompareInfo objects so that input components are first,
+	 * output components last, and the others in an order consistent with 
+	 * sending/receiving topic properties -- taking only data topics into account
+	 * (and not, e.g., callback topics).
+	 * 
+	 * This implementation counts the number of connections from a to b and from b to a;
+	 * the one that is higher indicates the right order.
+	 * @author marc
+	 *
+	 */
+	public static class CountingComparator implements java.util.Comparator<ComponentInfo>
+	{
+		private Set<ComponentInfo> cis;
+		public CountingComparator(Set<ComponentInfo> allCIs)
+		{
+			this.cis = allCIs;
+		}
+		
+		public int compare(ComponentInfo a, ComponentInfo b)
+		{
+			if (a.equals(b)) return 0; // equal
+			if (a.isInput()) {
+				if (b.isInput()) return 0; // equal
+				return -1; // a smaller
+			}
+			if (b.isInput()) {
+				return 1; // b smaller
+			}
+			if (a.isOutput()) {
+				if (b.isOutput()) return 0;
+				return 1; // a bigger
+			}
+			if (b.isOutput()) {
+				return -1; // b bigger
+			}
+			// Compare sendTopics and receiveTopics. Basic strategy:
+			// 1. count number of connections from a to b, and number of connections from b to a.
+			// 2. if #ab > #ba, then a < b; if #ab < #ba, then a > b;
+			// 3. if #ab == #ba, then both are equal.
+			int numABPaths = countPaths(a, b);
+			int numBAPaths = countPaths(b, a);
+			if (numABPaths > numBAPaths) {
+				return -1; // a smaller
+			} else if (numABPaths < numBAPaths) {
+				return 1; // a bigger
+			} else { // ==
+				return 0;
+			}
+		}
+
+		private int countPaths(ComponentInfo a, ComponentInfo b) {
+			Set<ComponentInfo> possibleIntermediaries = new HashSet<ComponentInfo>(cis);
+			possibleIntermediaries.remove(a);
+			possibleIntermediaries.remove(b);
+			return countPaths(a, b, possibleIntermediaries);
+		}
+		
+		private int countPaths(ComponentInfo a, ComponentInfo b,
+				Set<ComponentInfo> possibleIntermediaries)
+		{
+			if (a.sendTopics() == null || a.sendTopics().length == 0)
+				return 0; // this cannot fit with any intermediaries
+			if (b.receiveTopics() == null || b.receiveTopics().length == 0)
+				return 0; // this cannot fit with any intermediaries
+			int totalPaths = countDirectConnections(a, b);
+			Set<ComponentInfo> nextSteps = new HashSet<ComponentInfo>();
+			for (ComponentInfo ci : possibleIntermediaries) {
+				if (countDirectConnections(a, ci) > 0) {
+					nextSteps.add(ci);
+				}
+			}
+			Set<ComponentInfo> nextIntermediaries = new HashSet<ComponentInfo>(possibleIntermediaries);
+			nextIntermediaries.removeAll(nextSteps);
+
+			for (ComponentInfo ci : nextSteps) {
+				int numA2CI = countDirectConnections(a, ci);
+				int numFromCiToB = countPaths(ci, b, nextIntermediaries);
+				if (numFromCiToB > 0) {
+					totalPaths += numA2CI * numFromCiToB;
+				}
+			}
+			return totalPaths;
+		}
+		
+		private int countDirectConnections(ComponentInfo a, ComponentInfo b) {
+			int num = 0;
+			for (String sendTopic : a.sendTopics()) {
+				if (!a.isDataTopic(sendTopic)) {
+					continue;
+				}
+				if (b.canReceive(sendTopic)) {
+					num++;
+				}
+			}
+			return num;
+		}
+
+		public boolean equals(Object obj)
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Helper to sort CompareInfo objects so that input components are first,
+	 * output components last, and the others in an order consistent with 
+	 * sending/receiving topic properties -- taking only data topics into account
+	 * (and not, e.g., callback topics).
+	 * 
+	 * This implementation uses a voting mechanism for determining the order of components,
+	 * taking output-input relationships between components as partial ordering requests.
+	 * 
+	 *  In detail, the algorithm proceeds as follows.
+	 *  <ol>
+	 *  <li>
+	 *  If component i publishes to a data Topic and component j subscribes to that Topic,
+	 *  this is taken as a partial ordering request (POR);
+	 *  </li>
+	 *  <li>
+	 *  In an iterative loop, PORs vote for components to either stay where they are, or move left or right.
+	 *  For a POR involving components i and j, the POR will vote for both to stay where they are if the 
+	 *  current position of component j is to the right of component i; otherwise, it will vote for both 
+	 *  to move such that they get closer to that configuration. 
+	 *  </li>
+	 *  <li>
+	 *  After taking all PORs into account, the votes for each component are analysed as follows. The net requests 
+	 *  to move left or right are computed by substraction; only if the absolute value of this difference is larger
+	 *  than the votes to stay in place will the component move in the appropriate direction. A move is effected
+	 *  by increasing the position of the component by 1 to move right, and by decreasing it by 1 to move left. 
+	 *  </li>
+	 *  <li>
+	 *  The algorithm stops when all components stay in place.
+	 *  </li>
+	 *  </ol>
+	 *  <b>Doesn't work properly. Leaving code just in case some time I want to build on top of this.</b>
+	 * @author marc
+	 *
+	 */
+	@Deprecated
+	public static class VoteComparator implements java.util.Comparator<ComponentInfo>
+	{
+		private ComponentInfo[] components;
+		private Map<ComponentInfo, Integer> componentIndices;
+		private int[] positions;
+		private boolean[] isFixed;
+		
+		public VoteComparator(Set<ComponentInfo> allCIs, final Set<String> topicsToHide)
+		{
+			this.components = (ComponentInfo[]) allCIs.toArray(new ComponentInfo[0]);
+			this.componentIndices = new HashMap<ComponentInfo, Integer>();
+			this.positions = new int[components.length];
+			this.isFixed = new boolean[components.length];
+			
+			System.out.println("Starting with components in the following order:");
+			for (int i=0; i<components.length; i++) {
+				System.out.println(i+" "+components[i].name);
+				componentIndices.put(components[i], i); // for faster lookup in compare()
+				if (components[i].isInput()) {
+					positions[i] = 0;
+					isFixed[i] = true;
+				} else if (components[i].isOutput()) {
+					positions[i] = components.length - 1;
+					isFixed[i] = true;
+				} else {
+					positions[i] = i;
+					isFixed[i] = false;
+				}
+			}
+			// each POR consists of the index numbers of the components involved in a
+			// publish-subscribe relationship.
+			List<int[]> partialOrderingRequests = new ArrayList<int[]>();
+			for (int i=0; i<components.length; i++) {
+				String[] sendTopics = components[i].sendTopics();
+				if (sendTopics == null) {
+					continue;
+				}
+				for (String sendTopic : sendTopics) {
+					if (topicsToHide.contains(sendTopic) || !components[i].isDataTopic(sendTopic)) {
+						continue;
+					}
+					for (int j=0; j<components.length; j++) {
+						if (i == j) {
+							continue;
+						}
+						if (components[j].canReceive(sendTopic)) {
+							// i provides direct input to j, so j should immediately follow i
+							partialOrderingRequests.add(new int[] {i, j});
+						}
+					}
+				}
+			}
+			// Now move component positions according to votes until there are no more changes:
+			boolean isChanged = true;
+			int maxIterations = 20; // just to make sure we don't ever loop infinitely
+			int iteration = 0;
+			int votesForFixedComponents = 10;
+			Random random = new Random();
+			while (isChanged && iteration++ < maxIterations) {
+				isChanged = false;
+				int[][] votes = new int[components.length][2]; // 0: votes to stay in place; 1: votes to move left (<0) or right (>0)
+				for (int[] por : partialOrderingRequests) {
+					int i = por[0];
+					int j = por[1];
+					if (isFixed[i] && isFixed[j]) {
+						continue;
+					}
+					if (positions[i] + 1 == positions[j]) {
+						System.out.println(components[i].name+" and "+components[j].name+" are in right order");
+						if (isFixed[i]) {
+							System.out.println(components[i].name+" votes for "+components[j].name+" to stay in place");
+							// vote to stay in place
+							votes[j][0] += votesForFixedComponents;
+						} else if (isFixed[j]) {
+							System.out.println(components[j].name+" votes for "+components[i].name+" to stay in place");
+							// vote to stay in place on both
+							votes[i][0] += votesForFixedComponents;
+						}
+					} else if (positions[i] < positions[j]) {
+						System.out.print("POR "+components[i].name+"->"+components[j].name+" votes for ");
+						// vote to move component i right and component j left
+						if (isFixed[i]) {
+							System.out.println(components[j].name+" left by "+votesForFixedComponents);
+							votes[j][1] -= votesForFixedComponents;
+						} else if (isFixed[j]) {
+							System.out.println(components[i].name+" right by "+votesForFixedComponents);
+							votes[i][1] += votesForFixedComponents;
+						} else {
+							System.out.println(components[i].name+" right");
+							votes[i][1]++;
+							System.out.println(components[j].name+" left");
+							votes[j][1]--;
+/*							// flip a coin
+							if (random.nextBoolean()) {
+								System.out.println(components[i].name+" right");
+								votes[i][1]++;
+							} else {
+								System.out.println(components[j].name+" left");
+								votes[j][1]--;
+							}
+	*/					}
+					} else { // positions[i] >= positions[j]
+						System.out.print("POR "+components[i].name+"->"+components[j].name+" votes for ");
+						// vote to move component i left and component j right
+						System.out.println(components[i].name+" left");
+						votes[i][1]--;
+						System.out.println(components[j].name+" right");
+						votes[j][1]++;
+/*						// flip a coin
+						if (random.nextBoolean()) {
+							System.out.println(components[i].name+" left");
+							votes[i][1]--;
+						} else {
+							System.out.println(components[j].name+" right");
+							votes[j][1]++;
+						}
+	*/				}
+				}
+				System.out.println("Iteration "+iteration);
+				// Now, move only the mobile components:
+				for (int i=0; i<components.length; i++) {
+					System.out.println("Component "+i+" ("+components[i].name+"):"+(isFixed[i]?" fixed":"")+" position="+positions[i]+", stay="+votes[i][0]+", move="+votes[i][1]);
+					if (isFixed[i]) {
+						continue;
+					}
+					if (votes[i][0] >= Math.abs(votes[i][1])) {
+						// votes to stay in place win
+						// if we stay and we are a neighbour of a fixed component, we become a fixed component
+						for (int j=0; j<components.length; j++) {
+							if (isFixed[j] && (positions[i] + 1 == positions[j] || positions[i] - 1 == positions[j])) {
+								isFixed[i] = true;
+								//System.out.println("Fixing component "+components[i].name+" because it stays a neighbour of "+components[j].name);
+								break;
+							}
+						}
+						continue;
+					}
+					// votes to move win
+					if (votes[i][1] > 0) { // move right
+						positions[i]++;
+						//System.out.println("Moving component "+ components[i].name+ " right (-> "+positions[i]+")");
+					} else { // move left
+						positions[i]--;
+						//System.out.println("Moving component "+ components[i].name+ " left (-> "+positions[i]+")");
+					}
+					isChanged = true;
+				}
+			}
+			System.out.println("Sorting completed after "+iteration+" iterations");
+			
+		}
+		
+		public int compare(ComponentInfo a, ComponentInfo b)
+		{
+			if (a.equals(b)) return 0; // equal
+			if (a.isInput()) {
+				if (b.isInput()) return 0; // equal
+				return -1; // a smaller
+			}
+			if (b.isInput()) {
+				return 1; // b smaller
+			}
+			if (a.isOutput()) {
+				if (b.isOutput()) return 0;
+				return 1; // a bigger
+			}
+			if (b.isOutput()) {
+				return -1; // b bigger
+			}
+			// Find index position of a and b:
+			int ia = componentIndices.get(a);
+			int ib = componentIndices.get(b);
+			Integer pa = new Integer(positions[ia]);
+			Integer pb = new Integer(positions[ib]);
+			return pa.compareTo(pb);
+		}
+
+		public boolean equals(Object obj)
+		{
+			return false;
+		}
+	}
 }
