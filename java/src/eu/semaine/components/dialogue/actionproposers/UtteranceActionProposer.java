@@ -1210,6 +1210,7 @@ public class UtteranceActionProposer extends Component
 		speech.setAttribute(BML.A_ID, id);
 		speech.setAttribute(BML.E_TEXT, response);
 		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
+		speech.setAttribute("voice", "activemary");
 
 		//speech.setTextContent(response);
 
