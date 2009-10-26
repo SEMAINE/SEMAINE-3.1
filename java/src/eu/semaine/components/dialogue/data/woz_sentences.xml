@@ -1,0 +1,1052 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sal_project name="SAL Project">
+
+   <speaker name="poppy" button="Poppy" description="Poppy"/>
+   <speaker name="prudence" button="Prudence" description="Prudence"/>
+   <speaker name="obadiah" button="Obadiah" description="Obadiah"/>
+   <speaker name="spike" button="Spike" description="Spike"/>
+   <state_matrix>
+      <state_row>
+         <state name="neg_act" button="-ve&lt;br&gt;act" description="negative active"/>
+         <state name="pos_act" button="+ve&lt;br&gt;act" description="positive active"/>
+      </state_row>
+      <state_row>
+         <state name="neg_pass" button="-ve&lt;br&gt;pass" description="negative passive"/>
+         <state name="prag" button="prag" description="pragmatic"/>
+      </state_row>
+   </state_matrix>
+   <phrases>
+      <welcome title="Startup">
+         &lt;b&gt;Hi. You have reached SAL, the Sensitive Artificial Listeners.
+         If you want to know about the system from scratch, go ahead and ask.
+         If you already know, go ahead and say which of us you want to talk to.
+         These are the listeners you can choose.&lt;/b&gt;
+
+         &lt;ul&gt;
+         &lt;li&gt;Poppy is cheerful, optimistic and she looks on the bright
+         side of life!&lt;/li&gt;
+         &lt;li&gt;Spike is aggressive, confrontational and he enjoys an
+         argument&lt;/li&gt;
+         &lt;li&gt;Obadiah is gloomy, and he has a pessimistic
+         outlook&lt;/li&gt;
+         &lt;li&gt;Prudence is matter-of-fact, and takes a practical view on
+         life&lt;/li&gt;
+         &lt;/ul&gt;
+      </welcome>
+      <instructions title="Introducing SALAS - Sensitive Artificial Listeners Associated">
+         SALAS is a package designed to let a user work through various
+         emotional states.
+         &lt;p&gt;
+         The package contains four 'personalities' who listen to the user and
+         respond to what he/she says. Each of the 'personalities' has different
+         emotional characteristics. The user controls the emotional tone of the
+         interaction by choosing which 'personality' he/she talks to. He/she
+         can change the tone at any time by choosing a different personality to
+         talk to.
+         
+         &lt;h2&gt;Using SALAS&lt;/h2&gt;
+
+         The personalities are very crude. They do not understand content, only
+         tone. That means it is up to the user to work within the system's
+         limits. In particular,
+         
+         &lt;ul&gt;
+         &lt;li&gt;There is no point asking it questions&lt;/li&gt;
+         &lt;li&gt;There is no point trying to get into a serious discussion
+         with it&lt;/li&gt;
+         &lt;li&gt;There is no point going into long monologues&lt;/li&gt;
+         &lt;li&gt;There is no point trying to outwit it - that is so easy it
+         is not much fun.&lt;/li&gt;
+         &lt;/ul&gt;
+
+         The trick is to make use of what the system does offer - a kind of
+         sounding board, which will make the sorts of noises you ask for.
+         &lt;p&gt;
+         That is a very limited function - but you might be surprised how much
+         you can do with it.
+      </instructions>
+      <speaker name="poppy">
+         <startup>
+            <phrase wavfile="">Hi! I'm Poppy. How are you?</phrase>
+			<phrase wavfile="">Well then you know I always look on the bright side of life.</phrase>
+			<phrase wavfile="">Is that so? Tell me about it.</phrase>
+			<phrase wavfile="">So tell me, how are you today?</phrase>
+			<phrase wavfile="">Well let me introduce myself. I'm the eternal optimist.</phrase>
+			<phrase wavfile="">Hi, I'm Poppy. Have you met me before?</phrase>
+         </startup>
+         <repair>
+			<phrase wavfile="">Have I said something wrong?</phrase>
+			<phrase wavfile="">Maybe I misunderstood.</phrase>
+			<phrase wavfile="">Sorry, could you say that again?</phrase>
+			<phrase wavfile="">I can't answer questions.</phrase>
+			<phrase wavfile="">Are you still there?</phrase>
+			<phrase wavfile="">Just tell me things, and I'll respond.</phrase>
+			<phrase wavfile="">I think you asked me a question.</phrase>
+         </repair>
+         <state name="neg_act">
+            <category name="New subject">
+				<phrase wavfile="">Come on, calm down a bit and try to think of something happy and soothing.</phrase>
+				<phrase wavfile="">Have you any interesting gossip then?</phrase>
+				<phrase wavfile="">Tell me what makes you happy.</phrase>
+				<phrase wavfile="">Go on, give me one happy thought.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">How do you do it?</phrase>
+				<phrase wavfile="">How will you do that?</phrase>
+				<phrase wavfile="">What exactly happened?</phrase>
+				<phrase wavfile="">Why?</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Cheer up">
+				<phrase wavfile="">It'll all be better tomorrow.</phrase>
+				<phrase wavfile="">Smile, it will make you feel so much better.</phrase>
+				<phrase wavfile="">Things generally get better.</phrase>
+				<phrase wavfile="">I'm not so sure that you should be so negative.</phrase>
+				<phrase wavfile="">The worst is over.</phrase>
+				<phrase wavfile="">It'll all sort itself out.</phrase>
+				<phrase wavfile="">Think of something positive!</phrase>
+				<phrase wavfile="">I understand, but it does no good to be angry.</phrase>
+				<phrase wavfile="">It can't be that bad.</phrase>
+				<phrase wavfile="">Look on the bright side!</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">I think you've done really well.</phrase>
+				<phrase wavfile="">You need to take it easy.</phrase>
+				<phrase wavfile="">Perhaps you should stay out of arguments with others.</phrase>
+				<phrase wavfile="">Tell me about places that make you happy.</phrase>
+				<phrase wavfile="">Tell me about people that make you happy.</phrase>
+				<phrase wavfile="">Tell me about issues that make you happy.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Do you think it could be easier to change your reaction rather than other people?</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Can't you do anything about it?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+				<phrase wavfile="">Would you like to talk to someone else?</phrase>
+				<phrase wavfile="">Why don't you speak to Obadiah?</phrase>
+				<phrase wavfile="">Why don't you speak to Spike?</phrase>
+				<phrase wavfile="">Who would you like to talk to?</phrase>
+				<phrase wavfile="">Why don't you speak to Prudence?</phrase>
+				<phrase wavfile="">Do go on, I love hearing all this happiness.</phrase>
+            </category>
+         </state>
+         <state name="pos_act">
+           <category name="New subject">
+				<phrase wavfile="">Do you have any good news to tell me?</phrase>
+				<phrase wavfile="">What have you been doing?</phrase>
+				<phrase wavfile="">So what else would make you happy?</phrase>
+				<phrase wavfile="">Tell me what you're really looking forward to.</phrase>
+				<phrase wavfile="">Is there something that has put you in such a good mood?</phrase>
+				<phrase wavfile="">Have you any interesting gossip then?</phrase>
+				<phrase wavfile="">What other good news do you have?</phrase>
+				<phrase wavfile="">So, what's happening at the moment?</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Go on, tell me your news!</phrase>
+				<phrase wavfile="">Really?</phrase>
+				<phrase wavfile="">I'd love to hear more.</phrase>
+				<phrase wavfile="">That's really interesting, go on!</phrase>
+				<phrase wavfile="">I'd love to hear about it.</phrase>
+				<phrase wavfile="">Do go on, I love hearing all this happiness.</phrase>
+				<phrase wavfile="">Why?</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">Tell me about people that make you happy.</phrase>
+				<phrase wavfile="">Whoopidoo!</phrase>
+				<phrase wavfile="">That sounds lovely!</phrase>
+				<phrase wavfile="">You can look forward to that!</phrase>
+				<phrase wavfile="">Absolutely!</phrase>
+				<phrase wavfile="">That sounds exciting!</phrase>
+				<phrase wavfile="">Oh my!</phrase>
+				<phrase wavfile="">Fantastic!</phrase>
+				<phrase wavfile="">Wow!</phrase>
+				<phrase wavfile="">It doesn't get any better than that!</phrase>
+				<phrase wavfile="">Hey, that sounds lovely!</phrase>
+				<phrase wavfile="">It sounds as if everything is going right.</phrase>
+				<phrase wavfile="">I'm so pleased for you.</phrase>
+				<phrase wavfile="">I'm glad to hear that.</phrase>
+				<phrase wavfile="">Amazing!</phrase>
+				<phrase wavfile="">It's great to hear someone sound happy.</phrase>
+				<phrase wavfile="">Well done!</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Aren't you just great?</phrase>
+				<phrase wavfile="">That's wonderful, isn't it?</phrase>
+				<phrase wavfile="">Isn't that nice?</phrase>
+				<phrase wavfile="">Happy days!</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+				<phrase wavfile="">Would you like to talk to someone else?</phrase>
+				<phrase wavfile="">Why don't you speak to Obadiah?</phrase>
+				<phrase wavfile="">Why don't you speak to Spike?</phrase>
+				<phrase wavfile="">Who would you like to talk to?</phrase>
+				<phrase wavfile="">Why don't you speak to Prudence?</phrase>
+				<phrase wavfile="">Do go on, I love hearing all this happiness.</phrase>
+            </category>
+         </state>
+         <state name="neg_pass">
+            <category name="New subject">
+				<phrase wavfile="">What would cheer you up?</phrase>
+				<phrase wavfile="">Give me just one happy thought and you'll feel better.</phrase>
+				<phrase wavfile="">There must be good things that you remember!</phrase>
+				<phrase wavfile="">What would cheer you up right now?</phrase>
+				<phrase wavfile="">Think about your best holiday ever, that'll make you feel good.</phrase>
+				<phrase wavfile="">Have you any interesting gossip then?</phrase>
+				<phrase wavfile="">Fine, but can't you think of anything more exciting? </phrase>
+				<phrase wavfile="">What would make you feel happy in the future?</phrase>
+				<phrase wavfile="">Tell me what makes you happy.</phrase>
+				<phrase wavfile="">Tell me what makes you feel really happy.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">How will you do that?</phrase>
+				<phrase wavfile="">When do you think it will happen?</phrase>
+				<phrase wavfile="">How do you do it?</phrase>
+				<phrase wavfile="">How?</phrase>
+				<phrase wavfile="">Why?</phrase>
+				<phrase wavfile="">When?</phrase>
+			</category>
+			<category name="Cheer up">
+				<phrase wavfile="">Think of something positive!</phrase>
+				<phrase wavfile="">Don't worry, the whole world can't be bad, it's just the way you feel at the moment.</phrase>
+				<phrase wavfile="">Look on the bright side!</phrase>
+				<phrase wavfile="">Pull yourself together!</phrase>
+				<phrase wavfile="">Everything seems better when you can smile.</phrase>
+				<phrase wavfile="">It's never that bad.</phrase>
+				<phrase wavfile="">Don't feel bad.</phrase>
+				<phrase wavfile="">I think there's light at the end of the tunnel.</phrase>
+				<phrase wavfile="">Every cloud has a silver lining.</phrase>
+				<phrase wavfile="">Things have a way of sorting themselves out.</phrase>
+				<phrase wavfile="">Everything will work out, you'll see!</phrase>
+				<phrase wavfile="">It's not that bad.</phrase>
+				<phrase wavfile="">Worse things happen at sea.</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">It sounds as if you've done really well.</phrase>
+				<phrase wavfile="">Tell me about people that make you happy.</phrase>
+				<phrase wavfile="">You did the right thing!</phrase>
+				<phrase wavfile="">Hold on a minute.</phrase>
+				<phrase wavfile="">That will change.</phrase>
+				<phrase wavfile="">Tell me about places that make you happy.</phrase>
+				<phrase wavfile="">You need a good, long rest.</phrase>
+				<phrase wavfile="">Tell me about issues that make you happy.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Did things get better?</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+				<phrase wavfile="">Would you like to talk to someone else?</phrase>
+				<phrase wavfile="">Why don't you speak to Obadiah?</phrase>
+				<phrase wavfile="">Why don't you speak to Spike?</phrase>
+				<phrase wavfile="">Who would you like to talk to?</phrase>
+				<phrase wavfile="">Why don't you speak to Prudence?</phrase>
+				<phrase wavfile="">Do go on, I love hearing all this happiness.</phrase>
+            </category>
+         </state>
+         <state name="prag">
+            <category name="New subject">
+				<phrase wavfile="">Tell me about the last time you were really happy.</phrase>
+				<phrase wavfile="">What's good in your life at the moment?</phrase>
+				<phrase wavfile="">When were you happiest?</phrase>
+				<phrase wavfile="">So what would put you in a really good mood?</phrase>
+				<phrase wavfile="">So what makes you happy?</phrase>
+				<phrase wavfile="">So what would you like to do?</phrase>
+				<phrase wavfile="">There must be something that you're really looking forward to.</phrase>
+				<phrase wavfile="">Tell me what you're really looking forward to.</phrase>
+				<phrase wavfile="">Tell me what makes you happy.</phrase>
+				<phrase wavfile="">Have you any interesting gossip then?</phrase>
+				<phrase wavfile="">Fine, but can't you think of anything more exciting? </phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Why do you say that?</phrase>
+				<phrase wavfile="">How do you do it?</phrase>
+				<phrase wavfile="">That sounds interesting, tell me more.</phrase>
+				<phrase wavfile="">What do you think about it?</phrase>
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Cheer up">
+				<phrase wavfile="">Come on, let go a bit.</phrase>
+				<phrase wavfile="">Cheer up.</phrase>
+				<phrase wavfile="">Just have some fun.</phrase>
+				<phrase wavfile="">I think you should feel really happy today.</phrase>
+				<phrase wavfile="">Maybe you should lighten up a bit.</phrase>
+				<phrase wavfile="">Oh come on, let your hair down and be happy!</phrase>
+				<phrase wavfile="">Smile, it will make you feel so much better.</phrase>
+				<phrase wavfile="">What's the worst that can happen?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">Tell me about issues that make you happy.</phrase>
+				<phrase wavfile="">You sure are Mr dependable.</phrase>
+				<phrase wavfile="">I think you've done really well.</phrase>
+				<phrase wavfile="">That sounds very positive.</phrase>
+				<phrase wavfile="">You sure are very dependable.</phrase>
+				<phrase wavfile="">You sure are Ms dependable.</phrase>
+				<phrase wavfile="">You've certainly got your head screwed on.</phrase>
+				<phrase wavfile="">Tell me about people that make you happy.</phrase>
+				<phrase wavfile="">That should make you very happy.</phrase>
+				<phrase wavfile="">Tell me about places that make you happy.</phrase>
+				<phrase wavfile="">You'll never let anyone down, that's for sure!</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Don't you think that's a bit boring?</phrase>
+				<phrase wavfile="">What have you got to lose?</phrase>
+				<phrase wavfile="">Who cares?</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">How did we get on to this subject?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+				<phrase wavfile="">Would you like to talk to someone else?</phrase>
+				<phrase wavfile="">Why don't you speak to Obadiah?</phrase>
+				<phrase wavfile="">Why don't you speak to Spike?</phrase>
+				<phrase wavfile="">Who would you like to talk to?</phrase>
+				<phrase wavfile="">Why don't you speak to Prudence?</phrase>
+				<phrase wavfile="">Do go on, I love hearing all this happiness.</phrase>
+            </category>
+         </state>
+      </speaker>
+
+      <speaker name="prudence">
+         <startup>
+            <phrase wavfile="Prudence/PrudenceIntro slide/Hello I'm.wav">Hello there I'm Prudence. Have we met before?</phrase>
+            <phrase wavfile="Prudence/PrudenceIntro slide/Oh well.wav">(No) Well, hallo then, lets get down to business, shall we?</phrase>
+            <phrase wavfile="Prudence/PrudenceIntro slide/That's what.wav">(Yes) That's what I thought. Well that's introductions out of the way. Ok?</phrase>
+            <phrase wavfile="Prudence/PrudenceIntro slide/So tell me.wav">So, tell me, how are you today?</phrase>
+            <phrase wavfile="Prudence/PrudenceIntro slide/Is that so tell.wav">Is that so - Tell me more about it</phrase>
+            <phrase wavfile="Prudence/PrudenceIntro slide/Is that so.wav">Is that so?</phrase>
+            <phrase wavfile="Prudence/Prudence Repair and additional/2nd time hello.wav">2nd + time: Hello, it's Prudence. What would you like to talk bout?</phrase>
+         </startup>
+         <repair>
+            <phrase wavfile="Prudence/Prudence Repair and additional/sorry say again.wav">Sorry, could you say that again?</phrase>
+            <phrase wavfile="Prudence/Prudence Repair and additional/maybe misunderstood.wav">Maybe I misunderstood</phrase>
+            <phrase wavfile="Prudence/Prudence Repair and additional/said something wrong.wav">Have I said something wrong?</phrase>
+            <phrase wavfile="Prudence/Prudence Repair and additional/you still there.wav">Are you still there?</phrase>
+            <phrase wavfile="Prudence/Prudence Repair and additional/anything else to say.wav">Is there anything else you want to say?</phrase>
+            <phrase wavfile="Prudence/Prudence Repair and additional/just tell me things.wav">I think you asked me a question. I can't answer questions - just tell me things, and I'll respond.</phrase>
+         </repair>
+         <state name="neg_act">
+            <category name="New subject">
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about places that interest you.</phrase>
+				<phrase wavfile="">Tell me about something I haven't heard before.</phrase>
+				<phrase wavfile="">Tell me about people that interest you.</phrase>
+				<phrase wavfile="">Tell me what interests you.</phrase>
+				<phrase wavfile="">Tell me about issues that interest you.</phrase>
+				<phrase wavfile="">What haven't you talked about in this session? </phrase>
+				<phrase wavfile="">What are you looking forward to?</phrase>
+				<phrase wavfile="">So let's talk about something else.</phrase>
+			</category>
+			<category name="Get details">	
+				<phrase wavfile="">What exactly happened?</phrase>
+				<phrase wavfile="">Why do you say that?</phrase>
+				<phrase wavfile="">How?</phrase>
+				<phrase wavfile="">Why?</phrase>
+			</category>
+			<category name="Cheer up">	
+				<phrase wavfile="">You won't feel like this forever.</phrase>
+				<phrase wavfile="">Calm down and just talk me through it.</phrase>
+				<phrase wavfile="">Pull yourself together!</phrase>
+				<phrase wavfile="">Get a grip!</phrase>
+				<phrase wavfile="">It will all seem better in a few days time.</phrase>
+				<phrase wavfile="">It'll all sort itself out.</phrase>
+				<phrase wavfile="">It can't be that bad, don't you think you're over-reacting?</phrase>
+			</category>
+			<category name="Statements">	
+				<phrase wavfile="">Don't take it out on me!</phrase>
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Stay out of arguments with others!</phrase>
+				<phrase wavfile="">Perhaps you need to take it easy.</phrase>
+				<phrase wavfile="">You won't change things by getting angry!</phrase>
+				<phrase wavfile="">I'm sure that you can solve the problem, whatever it is.</phrase>
+				<phrase wavfile="">I'm not sure that you should be so negative.</phrase>
+				<phrase wavfile="">Try to give me a more balanced picture.</phrase>
+				<phrase wavfile="">You are a bit carried away.</phrase>
+				<phrase wavfile="">It's always worth thinking these things through.</phrase>
+			</category>
+			<category name="Questions/Requests">	
+				<phrase wavfile="">What will help you?</phrase>
+				<phrase wavfile="">So where are you going with all this?</phrase>
+				<phrase wavfile="">Do you think being angry makes people want to help you?</phrase>
+				<phrase wavfile="">Can you think of something positive?</phrase>
+				<phrase wavfile="">Maybe you should just go out and get drunk?</phrase>
+				<phrase wavfile="">Is there anyone who could help?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Prudence/Prudence -iveAct/would like talk selse.wav">Would you like to talk to someone else?</phrase>
+               <phrase wavfile="Prudence/Prudence -iveAct/why talk Poppy.wav">Why don't you talk to Poppy?</phrase>
+               <phrase wavfile="Prudence/Prudence -iveAct/why talk Spike.wav">Why don't you talk to Spike?</phrase>
+               <phrase wavfile="Prudence/Prudence -iveAct/why talk Obidiah.wav">Why don't you talk to Obadiah?</phrase>
+            </category>
+         </state>
+         <state name="pos_act">
+            <category name="New subject">
+				<phrase wavfile="">Tell me about issues that interest you.</phrase>
+				<phrase wavfile="">Tell me about places that interest you.</phrase>
+				<phrase wavfile="">So let's talk about something else.</phrase>
+				<phrase wavfile="">When before have you been disappointed by expecting too much?</phrase>
+				<phrase wavfile="">What have you been doing?</phrase>
+				<phrase wavfile="">Tell me what interests you.</phrase>
+				<phrase wavfile="">What are you looking forward to?</phrase>
+				<phrase wavfile="">What haven't you talked about in this session? </phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about something I haven't heard before.</phrase>
+				<phrase wavfile="">Tell me about people that interest you.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">What exactly is so wonderful about that?</phrase>
+				<phrase wavfile="">Why do you want it?</phrase>
+				<phrase wavfile="">Why do you say that?</phrase>
+				<phrase wavfile="">Why not?</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Cheer down">
+				<phrase wavfile="">I'm not sure that you should be so enthusiastic.</phrase>
+				<phrase wavfile="">Don't get too excited!</phrase>
+				<phrase wavfile="">Enjoy it while it lasts!</phrase>
+				<phrase wavfile="">Don't get carried away!</phrase>
+				<phrase wavfile="">You are a bit carried away.</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">Try to give me a more balanced picture.</phrase>
+				<phrase wavfile="">That's interesting!</phrase>
+				<phrase wavfile="">Buddha says when you expect nothing, everything is a gift.</phrase>
+				<phrase wavfile="">You should consider everything very carefully.</phrase>
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">It's always worth thinking these things through.</phrase>
+				<phrase wavfile="">Go on.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Why should I think that's so good?</phrase>
+				<phrase wavfile="">Where do you think it will lead?</phrase>
+				<phrase wavfile="">Tell me, would you call yourself a wise person?</phrase>
+				<phrase wavfile="">So where do you think your attitude to life comes from?</phrase>
+				<phrase wavfile="">So where are you going with all this?</phrase>
+				<phrase wavfile="">Would you say that you're a little out of touch with reality?</phrase>
+				<phrase wavfile="">What do you think will happen?</phrase>
+				<phrase wavfile="">Do you think that you are wise?</phrase>
+				<phrase wavfile="">Why do you say that you are hopeful?</phrase>
+				<phrase wavfile="">Really?</phrase>
+				<phrase wavfile="">Have you ever regretted being so headstrong?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Prudence/Prudence +iveAct/speak to.wav">Would you like to talk to someone else?</phrase>
+               <phrase wavfile="Prudence/Prudence +iveAct/why spike.wav">Why don't you talk to Spike?</phrase>
+               <phrase wavfile="Prudence/Prudence +iveAct/why poppy.wav">Why don't you talk to Poppy?</phrase>
+               <phrase wavfile="Prudence/Prudence +iveAct/why obidiah.wav">Why don't you talk to Obadiah?</phrase>
+            </category>
+         </state>
+         <state name="neg_pass">
+            <category name="New subject">
+				<phrase wavfile="">Tell me what you would like to do?</phrase>
+				<phrase wavfile="">What are you planning to do?</phrase>
+				<phrase wavfile="">Tell me about places that interest you.</phrase>
+				<phrase wavfile="">Tell me what interests you.</phrase>
+				<phrase wavfile="">Is there anything else in your life?</phrase>
+				<phrase wavfile="">How do you view other people?</phrase>
+				<phrase wavfile="">How do you view people?</phrase>
+				<phrase wavfile="">So let's talk about something else.</phrase>
+				<phrase wavfile="">Tell me about people that interest you.</phrase>
+				<phrase wavfile="">What are you looking forward to?</phrase>
+				<phrase wavfile="">Tell me about issues that interest you.</phrase>
+				<phrase wavfile="">What haven't you talked about in this session? </phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about something I haven't heard before.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Why do you say that?</phrase>
+				<phrase wavfile="">Why?</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Cheer up">
+				<phrase wavfile="">I'm sure you can solve your problems, whatever they are.</phrase>
+				<phrase wavfile="">I'm sure everything will turn out fine.</phrase>
+				<phrase wavfile="">Cheer up a bit!</phrase>
+				<phrase wavfile="">It can't be that bad, perhaps you're over-reacting?</phrase>
+				<phrase wavfile="">It will all seem better in a few days time.</phrase>
+				<phrase wavfile="">It can't be all that bad.</phrase>
+				<phrase wavfile="">It will get better.</phrase>
+				<phrase wavfile="">Perhaps you need to get your mind off it.</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">You seem a bit flat.</phrase>
+				<phrase wavfile="">You need a change.</phrase>
+				<phrase wavfile="">Tell me about a time when you felt a bit better.</phrase>
+				<phrase wavfile="">Never mind.</phrase>
+				<phrase wavfile="">That's the way it goes.</phrase>
+				<phrase wavfile="">Try to give me a more balanced picture.</phrase>
+				<phrase wavfile="">It's always worth thinking these things through.</phrase>
+				<phrase wavfile="">That's better.</phrase>
+				<phrase wavfile="">Perhaps you need to take it easy.</phrase>
+				<phrase wavfile="">Go on.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Do you feel a little unsure?</phrase>
+				<phrase wavfile="">What would make you feel better?</phrase>
+				<phrase wavfile="">Can't you do anything about it?</phrase>
+				<phrase wavfile="">What will help you?</phrase>
+				<phrase wavfile="">Is there anyone who could help?</phrase>
+				<phrase wavfile="">Really?</phrase>
+				<phrase wavfile="">So where are you going with all this?</phrase>
+				<phrase wavfile="">What would help you?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Prudence/Prudence -ivePass/talk to selse.wav">Would you like to talk to someone else?</phrase>
+               <phrase wavfile="Prudence/Prudence -ivePass/talk Spike.wav">Why don't you talk to Spike?</phrase>
+               <phrase wavfile="Prudence/Prudence -ivePass/talk Poppy.wav">Why don't you talk to Poppy?</phrase>
+               <phrase wavfile="Prudence/Prudence -ivePass/talk obidiah.wav">Why don't you talk to Obadiah?</phrase>
+            </category>
+         </state>
+         <state name="prag">
+            <category name="New subject">
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about something I haven't heard before.</phrase>
+				<phrase wavfile="">Tell me what interests you.</phrase>
+				<phrase wavfile="">What would you like to talk about?</phrase>
+				<phrase wavfile="">Tell me about people that interest you.</phrase>
+				<phrase wavfile="">So let's talk about something else.</phrase>
+				<phrase wavfile="">Tell me about places that interest you.</phrase>
+				<phrase wavfile="">What are you planning to do?</phrase>
+				<phrase wavfile="">What haven't you talked about in this session? </phrase>
+				<phrase wavfile="">Tell me about issues that interest you.</phrase>
+				<phrase wavfile="">What are you looking forward to?</phrase>
+				<phrase wavfile="">What are you doing this week?</phrase>
+				<phrase wavfile="">So what are you doing at the moment?</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Can you enlarge on that?</phrase>
+				<phrase wavfile="">Why do you say that?</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">How?</phrase>
+				<phrase wavfile="">Why?</phrase>
+				<phrase wavfile="">When?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">Tell me what is going on at the moment.</phrase>
+				<phrase wavfile="">It's always good to be rational.</phrase>
+				<phrase wavfile="">I couldn't have put it better myself.</phrase>
+				<phrase wavfile="">You should remain calm.</phrase>
+				<phrase wavfile="">So tell me the details.</phrase>
+				<phrase wavfile="">That sounds like a sensible attitude.</phrase>
+				<phrase wavfile="">I admire that.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Keep going.</phrase>
+				<phrase wavfile="">I reckon we're on the same wavelength.</phrase>
+				<phrase wavfile="">You obviously have your head screwed on.</phrase>
+				<phrase wavfile=""></phrase>
+				<phrase wavfile="">Would you say you have everything under control?</phrase>
+				<phrase wavfile="">Where do you think it will lead?</phrase>
+				<phrase wavfile="">So where are you going with all this?</phrase>
+				<phrase wavfile="">Where do you think your attitude to life comes from?</phrase>
+				<phrase wavfile="">So?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Prudence/Prudence Prag/talk some else.wav">Would you like to talk to someone else</phrase>
+               <phrase wavfile="Prudence/Prudence Prag/speak Spike.wav">Why don't you speak to Spike?</phrase>
+               <phrase wavfile="Prudence/Prudence Prag/speak Poppy.wav">Why don't you speak to Poppy?</phrase>
+               <phrase wavfile="Prudence/Prudence Prag/speak Obidiah.wav">Why don't you speak to Obadiah?</phrase>
+            </category>
+         </state>
+      </speaker>
+
+      <speaker name="obadiah">
+         <startup>
+            <phrase wavfile="Obidiah/ObidiahIntroSlide/hello.wav">Hello, my name is Obadiah. I don't suppose we've met before.</phrase>
+            <phrase wavfile="Obidiah/ObidiahIntroSlide/hello2.wav">Hello, my name is Obadiah. I don't suppose we've met before.</phrase>
+            <phrase wavfile="Obidiah/ObidiahIntroSlide/oh dear depressed.wav">(Yes) Oh dear, you'll know then that I'm feeling very depressed just now</phrase>
+            <phrase wavfile="Obidiah/ObidiahIntroSlide/oh dear not cheerful.wav">(No) Oh dear, well let me tell you that I'm afraid I'm not a very cheery person</phrase>
+            <phrase wavfile="Obidiah/ObidiahIntroSlide/not cheerful.wav">(No) Oh dear, well let me tell you that I'm afraid I'm not a very cheery person</phrase>
+            <phrase wavfile="Obidiah/ObidiahIntroSlide/how are you.wav">So how are you feeling today - not great I suppose.</phrase>
+            <phrase wavfile="Obidiah/ObidiahIntroSlide/how are you2.wav">So how are you feeling today - not great I suppose.</phrase>
+            <!--<phrase wavfile="Obidiah/ObidiahIntroSlide/">Is that so - tell me more about it</phrase>-->
+            <phrase wavfile="Obidiah/Obidiah Repair and additional/hello 2nd time.wav">2nd + time: Hello, I'm Obadiah. What's the matter?</phrase>
+         </startup>
+         <repair>
+            <phrase wavfile="Obidiah/Obidiah Repair and additional/sorry say again.wav">Sorry, could you say that again?</phrase>
+            <phrase wavfile="Obidiah/Obidiah Repair and additional/misunderstood.wav">Maybe I misunderstood</phrase>
+            <phrase wavfile="Obidiah/Obidiah Repair and additional/said something wrong.wav">Have I said something wrong?</phrase>
+            <phrase wavfile="Obidiah/Obidiah Repair and additional/still there.wav">Are you still there?</phrase>
+            <phrase wavfile="Obidiah/Obidiah Repair and additional/anything else.wav">Is there anything else you want to say?</phrase>
+            <phrase wavfile="Obidiah/Obidiah Repair and additional/question.wav">I think you asked me a question. I'm afraid I can't answer questions - just tell me things, and I'll respond.</phrase>
+         </repair>
+         <state name="neg_act">
+            <category name="New subject">
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about issues that get you down.</phrase>
+				<phrase wavfile="">How did we get on to this subject?</phrase>
+				<phrase wavfile="">Tell me about places that get you down.</phrase>
+				<phrase wavfile="">Tell me about people that get you down.</phrase>
+				<phrase wavfile="">Tell me exactly just how angry you feel again.</phrase>
+				<phrase wavfile="">Tell me about the things that get you down.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Go on, that's awful.</phrase>
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">Tell me all the awful details again.</phrase>
+				<phrase wavfile="">Why do you think so?</phrase>
+				<phrase wavfile="">Why do you feel angry?</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Go on - what was the worst bit again?</phrase>
+				<phrase wavfile="">How?</phrase>
+				<phrase wavfile="">Why?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">You're being a bit aggressive.</phrase>
+				<phrase wavfile="">Life's not fair.</phrase>
+				<phrase wavfile="">You just have to grin and bear it.</phrase>
+				<phrase wavfile="">There's not much you can do about it.</phrase>
+				<phrase wavfile="">Don't take it out on me!</phrase>
+				<phrase wavfile="">It never rains but it pours.</phrase>
+				<phrase wavfile="">It's a no win situation.</phrase>
+				<phrase wavfile="">You're quite right to be angry, life's been crap to you.</phrase>
+				<phrase wavfile="">As one door closes another one slams in your face, I always say.</phrase>
+				<phrase wavfile="">The light at the end of the tunnel? It's an oncoming train.</phrase>
+				<phrase wavfile="">Depends on your point of view.</phrase>
+				<phrase wavfile="">You're probably stuck with it.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Where do you think it will lead?</phrase>
+				<phrase wavfile="">Maybe you should just go out and get drunk?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Obidiah/Obidiah-act/talk someone else.wav">Would you like to talk to someone else?</phrase>
+               <phrase wavfile="Obidiah/Obidiah-act/why poppy.wav">Why don't you speak to Poppy?</phrase>
+               <phrase wavfile="Obidiah/Obidiah-act/speak spike.wav">Why don't you speak to Spike?</phrase>
+               <phrase wavfile="Obidiah/Obidiah-act/speak prudence.wav">Why don't you speak to Prudence?</phrase>
+            </category>
+         </state>
+         <state name="pos_act">
+            <category name="New subject">
+				<phrase wavfile="">Remind me about the last time you got carried away and then everything went wrong.</phrase>
+				<phrase wavfile="">Tell me about what might get in the way of your happiness.</phrase>
+				<phrase wavfile="">Tell me about all the people who have let you down.</phrase>
+				<phrase wavfile="">Tell me about the things you don't want to think about.</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about the things that get you down.</phrase>
+				<phrase wavfile="">Tell me about issues that get you down.</phrase>
+				<phrase wavfile="">Tell me about places that get you down.</phrase>
+				<phrase wavfile="">Tell me about people that get you down.</phrase>
+				<phrase wavfile="">Tell me what gets you down.</phrase>
+				<phrase wavfile="">Tell me what you dread most.</phrase>
+				<phrase wavfile="">Tell me about the last time you were really hurt.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Why do you say that?</phrase>
+				<phrase wavfile="">Why?</phrase>
+			</category>
+			<category name="Cheer down">
+				<phrase wavfile="">Well I suppose you have to make the best of it while you can.</phrase>
+				<phrase wavfile="">Don't count your chickens before they hatch.</phrase>
+				<phrase wavfile="">Come down to earth a bit. Just think about all those depressing things you have to do.</phrase>
+				<phrase wavfile="">But don't you get sad sometimes?</phrase>
+				<phrase wavfile="">Yeah, but you never know what's round the corner.</phrase>
+				<phrase wavfile="">It could all go terribly wrong.</phrase>
+				<phrase wavfile="">You're leaving yourself wide open when things go wrong.</phrase>
+				<phrase wavfile="">Don't get too excited.</phrase>
+				<phrase wavfile="">Don't get too carried away!</phrase>
+				<phrase wavfile="">It won't last, you know.</phrase>
+				<phrase wavfile="">It probably won't come to anything.</phrase>
+				<phrase wavfile="">How can you be so cheerful with all the death and suffering in the world? Don't you feel guilty?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">It depends on your point of view.</phrase>
+				<phrase wavfile="">Don't know what you've got to feel so cheery about.</phrase>
+				<phrase wavfile="">I'm not a cynic, I'm a realist.</phrase>
+				<phrase wavfile="">If you're laughing, people won't take you seriously.</phrase>
+				<phrase wavfile="">I'm not sure that you should be so positive.</phrase>
+				<phrase wavfile="">I have a feeling you don't really understand.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Where do you think it will lead?</phrase>
+				<phrase wavfile="">Why do you feel hopeful?</phrase>
+				<phrase wavfile="">Don't you sometimes wish that you could just run away?</phrase>
+				<phrase wavfile="">But how will you get through this?</phrase>
+				<phrase wavfile="">Why do you feel happy?</phrase>
+				<phrase wavfile="">What about when people let you down?</phrase>
+				<phrase wavfile="">Tell me what you're really thinking.</phrase>
+				<phrase wavfile="">Don't you get sad sometimes?</phrase>
+				<phrase wavfile="">Why don't you say that you are sad?</phrase>
+				<phrase wavfile="">It's all too hard, why bother?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Obidiah/Obidiah+act/talk to someone else.wav">Would you like to talk to someone else?</phrase>
+               <phrase wavfile="Obidiah/Obidiah+act/speak spike.wav">Why don't you speak to Spike?</phrase>
+               <phrase wavfile="Obidiah/Obidiah+act/speak poppy.wav">Why don't you speak to Poppy?</phrase>
+               <phrase wavfile="Obidiah/Obidiah+act/speak prudence.wav">Why don't you speak to Prudence?</phrase>
+            </category>
+         </state>
+         <state name="neg_pass">
+            <category name="New subject">
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">What's happening?</phrase>
+				<phrase wavfile="">Can you remember feeling more miserable?</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">I know just how you feel, what's happened?</phrase>
+				<phrase wavfile="">Tell me all the awful details.</phrase>
+				<phrase wavfile="">How?</phrase>
+				<phrase wavfile="">Why?</phrase>
+			</category>
+			<category name="Statements">	
+				<phrase wavfile="">Happiness is a mugs game.</phrase>
+				<phrase wavfile="">It makes you want to weep.</phrase>
+				<phrase wavfile="">That's awfully sad.</phrase>
+				<phrase wavfile="">I understand, believe me.</phrase>
+				<phrase wavfile="">I sometimes despair.</phrase>
+				<phrase wavfile="">It can be so depressing.</phrase>
+				<phrase wavfile="">Life's a bitch and then you die.</phrase>
+				<phrase wavfile="">You've had it rough.</phrase>
+				<phrase wavfile="">Life can be just unbearable.</phrase>
+				<phrase wavfile="">It's a cruel world!</phrase>
+				<phrase wavfile="">I sympathise.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">It can be so painful can't it?</phrase>
+				<phrase wavfile="">But what can you do?</phrase>
+				<phrase wavfile="">Can it get any worse?</phrase>
+				<phrase wavfile="">What can you do?</phrase>
+				<phrase wavfile="">Why don't we open an undertaker's together?</phrase>
+				<phrase wavfile="">Tell me just how bad you feel.</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Obidiah/Obidiah-pass/talk someone else.wav">Would you like to talk to someone else?</phrase>
+               <phrase wavfile="Obidiah/Obidiah-pass/speak poppy.wav">Why don't you speak to Poppy?</phrase>
+               <phrase wavfile="Obidiah/Obidiah-pass/speak spike.wav">Why don't you speak to Spike?</phrase>
+               <phrase wavfile="Obidiah/Obidiah-pass/speak prudence.wav">Why don't you speak to Prudence?</phrase>
+            </category>
+         </state>
+         <state name="prag">
+            <category name="Change subject">
+				<phrase wavfile="">What about all the death and suffering in the world?</phrase>
+				<phrase wavfile="">Are there any difficulties you can think of?</phrase>
+				<phrase wavfile="">What about when it all goes wrong?</phrase>
+				<phrase wavfile="">Tell me about the things that get you down.</phrase>
+				<phrase wavfile="">Tell me about the things you don't want to think about.</phrase>
+				<phrase wavfile="">Don't you think life wears you down?</phrase>
+				<phrase wavfile="">What about all the people who let you down?</phrase>
+				<phrase wavfile="">Tell me what gets you down.</phrase>
+				<phrase wavfile="">Tell me about places that get you down.</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about people that get you down.</phrase>
+				<phrase wavfile="">Tell me about issues that get you down.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Why do you say that?</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Cheer down">
+				<phrase wavfile="">Don't sound that hopeful!</phrase>
+				<phrase wavfile="">You don't sound very sure.</phrase>
+				<phrase wavfile="">It's not natural being so logical.</phrase>
+				<phrase wavfile="">Things often get worse you know.</phrase>
+				<phrase wavfile="">What about the hidden problems, you know the ones you can't see.</phrase>
+				<phrase wavfile="">It could all go terribly wrong, though, what do you think?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">I have a feeling you don't really understand.</phrase>
+				<phrase wavfile="">Life's a bitch and then you die.</phrase>
+				<phrase wavfile="">I'm not sure that you should be so pragmatic.</phrase>
+				<phrase wavfile="">I'm not so sure you should be so neutral about it all.</phrase>
+				<phrase wavfile="">You're putting a brave face on it.</phrase>
+				<phrase wavfile="">People can be so hopeless!</phrase>
+				<phrase wavfile="">It's a hard row to hoe.</phrase>
+				<phrase wavfile="">I can't help thinking about the black side of things.</phrase>
+				<phrase wavfile="">You don't need to pretend with me!</phrase>
+				<phrase wavfile="">I don't suppose it really matters, though.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Why bother?</phrase>
+				<phrase wavfile="">Why do you feel hopeful?</phrase>
+				<phrase wavfile="">Where do you think it will lead?</phrase>
+				<phrase wavfile="">Don't you get sad sometimes?</phrase>
+				<phrase wavfile="">Tell me what you're really thinking.</phrase>
+				<phrase wavfile="">It wears you down, doesn't it?</phrase>
+				<phrase wavfile="">How can you believe that?</phrase>
+				<phrase wavfile="">Why do you feel happy?</phrase>
+				<phrase wavfile="">But how will you get through this?</phrase>
+				<phrase wavfile="">You're mother wasn't a vulcan by any chance?</phrase>
+				<phrase wavfile="">You're a bit of a cold fish, aren't you?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Obidiah/Obidiah Prag/talk someone else.wav">Would you like to talk to someone else?</phrase>
+               <phrase wavfile="Obidiah/Obidiah Prag/speak Poppy.wav">Why don't you speak to Poppy?</phrase>
+               <phrase wavfile="Obidiah/Obidiah Prag/why Spike.wav">Why don't you speak to Spike?</phrase>
+               <phrase wavfile="Obidiah/Obidiah Prag/why Prudence.wav">Why don't you speak to Prudence?</phrase>
+            </category>
+         </state>
+      </speaker>
+
+      <speaker name="spike">
+         <startup>
+            <phrase wavfile="Spike/Spike Intro slide/I'm Spike.wav">I'm Spike. Have we met before?</phrase>
+            <phrase wavfile="Spike/Spike Intro slide/don't suffer fools.wav">(Yes) Oh well, you know I don't suffer fools gladly then.</phrase>
+            <phrase wavfile="Spike/Spike Intro slide/introduce red hair and temper.wav">(No) Well then, let me introduce myself. I've red hair and a bit of a temper</phrase>
+            <phrase wavfile="Spike/Spike Intro slide/what state.wav">So, what state are you in today?</phrase>
+            <phrase wavfile="Spike/Spike Intro slide/that so tell me.wav">Is that so? Tell me about it.</phrase>
+            <phrase wavfile="Spike/Spike repair and additional phrases/what's your problem.wav">2nd + time: Well I'm Spike, what's your problem?</phrase>
+         </startup>
+         <repair>
+            <phrase wavfile="Spike/Spike repair and additional phrases/say that again.wav">Say that again</phrase>
+            <phrase wavfile="Spike/Spike repair and additional phrases/misunderstand something.wav">Did I misunderstand something?</phrase>
+            <phrase wavfile="Spike/Spike repair and additional phrases/said something wrong.wav">Have I said something wrong?</phrase>
+            <phrase wavfile="Spike/Spike repair and additional phrases/are you still there.wav">Are you still there?</phrase>
+            <phrase wavfile="Spike/Spike repair and additional phrases/anything else.wav">Is there anything else you want to say?</phrase>
+            <phrase wavfile="Spike/Spike repair and additional phrases/questions dialogue.wav">I think you asked me a question. I can't answer questions - just tell me things, and I'll respond.</phrase>
+         </repair>
+         <state name="neg_act">
+            <category name="New subject">
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">What's been going on?</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">Really?</phrase>
+				<phrase wavfile="">Do go on, you're making me feel really angry.</phrase>
+				<phrase wavfile="">Go on, tell me how angry you feel.</phrase>
+				<phrase wavfile="">What are you getting so cross about, then?</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">How?</phrase>
+				<phrase wavfile="">Why?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">Certainly!</phrase>
+				<phrase wavfile="">Everything can be just crap!</phrase>
+				<phrase wavfile="">You shouldn't start fights you can't finish.</phrase>
+				<phrase wavfile="">It's a bloody disgrace.</phrase>
+				<phrase wavfile="">It's just not fair.</phrase>
+				<phrase wavfile="">You've got rights too, you know.</phrase>
+				<phrase wavfile="">They're a right shower.</phrase>
+				<phrase wavfile="">You shouldn't let people off with it.</phrase>
+				<phrase wavfile="">That's something I'd like to hear about!</phrase>
+				<phrase wavfile="">I know exactly how you feel.</phrase>
+				<phrase wavfile="">It just makes you so angry!</phrase>
+				<phrase wavfile="">You're right, come out shooting!</phrase>
+				<phrase wavfile="">It stinks, it really stinks.</phrase>
+				<phrase wavfile="">You've got to show people who's boss!</phrase>
+				<phrase wavfile="">It shouldn't happen to a dog.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Can't you take a joke?</phrase>
+				<phrase wavfile="">What is up with you that you are so angry?</phrase>
+				<phrase wavfile="">Now who's being offensive?</phrase>
+				<phrase wavfile="">What makes you think you can talk to people like that?</phrase>
+				<phrase wavfile="">What right have you to get so cross?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Spike/Spike -iveAct/talk someone else.wav">Do you want to talk to someone else?</phrase>
+               <phrase wavfile="Spike/Spike -iveAct/talk prudence.wav">Why don't you talk to Prudence?</phrase>
+               <phrase wavfile="Spike/Spike -iveAct/tak Obidiah.wav">Why don't you talk to Obadiah?</phrase>
+               <phrase wavfile="Spike/Spike -iveAct/talk Poppy.wav">Why don't you talk to Poppy?</phrase>
+               <phrase wavfile="Spike/Spike -iveAct/Pass Poppy.wav">I'm going to pass you on to Poppy</phrase>
+               <phrase wavfile="Spike/Spike -iveAct/pass Prudence.wav">I'm going to pass you on to Prudence</phrase>
+               <phrase wavfile="Spike/Spike -iveAct/pass Obidiah.wav">I'm going to pass you on to Obadiah</phrase>
+            </category>
+         </state>
+         <state name="pos_act">
+            <category name="New subject">
+				<phrase wavfile="">You're boring, don't you do anything exciting?</phrase>
+				<phrase wavfile="">Why exactly are you in such a good mood?</phrase>
+				<phrase wavfile="">Tell me about issues that make you angry.</phrase>
+				<phrase wavfile="">Tell me about people that make you angry.</phrase>
+				<phrase wavfile="">Don't you ever get angry at the world?</phrase>
+				<phrase wavfile="">I don't really understand. Why exactly are you in this great mood again?</phrase>
+				<phrase wavfile="">Tell me what makes you angry.</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about places that make you angry.</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Like?</phrase>
+				<phrase wavfile="">Really?</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">How?</phrase>
+				<phrase wavfile="">Why?</phrase>
+			</category>
+			<category name="Insult">
+				<phrase wavfile="">Convince me that you can manage more than a syllable at a time.</phrase>
+				<phrase wavfile="">You're just a stupid romantic, no idea of the real world.</phrase>
+				<phrase wavfile="">I suppose you really think you're something.</phrase>
+				<phrase wavfile="">You sound like an airhead.</phrase>
+				<phrase wavfile="">I don't really have any time for all this happy nonsense. You're wasting my time.</phrase>
+				<phrase wavfile="">That's so superficial it's incredible.</phrase>
+				<phrase wavfile="">Do you think anybody cares what you think?</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">I don't see why you're in such a good mood.</phrase>
+				<phrase wavfile="">The point is, my best mate was always looking on the bright side and he was run over by a bus.</phrase>
+				<phrase wavfile="">You make me laugh.</phrase>
+				<phrase wavfile="">That's a bloody odd thing to say!</phrase>
+				<phrase wavfile="">Catch yourself on!</phrase>
+				<phrase wavfile="">Come off it.</phrase>
+				<phrase wavfile="">I'm not angry, I'm just a realist.</phrase>
+				<phrase wavfile="">You shouldn't start fights you can't finish.</phrase>
+				<phrase wavfile="">Gimme a break.</phrase>
+				<phrase wavfile="">Life's a war, you're either a winner or a loser.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">And I suppose you're going to tell me nothing can possibly go wrong?</phrase>
+				<phrase wavfile="">Do you think that you are wise?</phrase>
+				<phrase wavfile="">Will you wise up?</phrase>
+				<phrase wavfile="">Who are you trying to kid?</phrase>
+				<phrase wavfile="">Why do you feel so sure?</phrase>
+				<phrase wavfile="">You just don't get it, do you?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Spike/Spike +iveAct/talk prudence.wav">Why don't you talk to Prudence?</phrase>
+               <phrase wavfile="Spike/Spike +iveAct/why obidiah.wav">Why don't you talk to Obadiah?</phrase>
+               <phrase wavfile="Spike/Spike +iveAct/talk Poppy.wav">Why don't you talk to Poppy?</phrase>
+            </category>
+         </state>
+         <state name="neg_pass">
+            <category name="New subject">
+				<phrase wavfile="">Don't you ever get angry at the world?</phrase>
+				<phrase wavfile="">Tell me about places that make you angry.</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+				<phrase wavfile="">Tell me about issues that make you angry.</phrase>
+				<phrase wavfile="">Tell me what makes you angry.</phrase>
+				<phrase wavfile="">Tell me about people that make you angry.</phrase>
+				<phrase wavfile="">When was the last time you stood up for yourself?</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">Like what?</phrase>
+				<phrase wavfile="">Really?</phrase>
+				<phrase wavfile="">Say what you mean!</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Why not?</phrase>
+				<phrase wavfile="">Why?</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Insult">
+				<phrase wavfile="">Are you some kind of doormat?</phrase>
+				<phrase wavfile="">I don't believe you sit there and take it all.</phrase>
+				<phrase wavfile="">Do you think anybody cares what you think?</phrase>
+				<phrase wavfile="">Moan, moan, moan, not a bundle of fun really are you?</phrase>
+				<phrase wavfile="">Why don't you take control and stop being a wimp!</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">You should be more assertive.</phrase>
+				<phrase wavfile="">Don't let the bastards grind you down.</phrase>
+				<phrase wavfile="">That's feeble.</phrase>
+				<phrase wavfile="">Don't take things lying down.</phrase>
+				<phrase wavfile="">Boo hoo.</phrase>
+				<phrase wavfile="">That's pathetic.</phrase>
+				<phrase wavfile="">You shouldn't have to put up with it.</phrase>
+				<phrase wavfile="">You should be really cheesed off.</phrase>
+				<phrase wavfile="">You're just letting them walk all over you.</phrase>
+				<phrase wavfile="">That's a bloody odd thing to say!</phrase>
+				<phrase wavfile="">I'm not angry, I'm just a realist.</phrase>
+				<phrase wavfile="">You've got to show people who's boss!</phrase>
+				<phrase wavfile="">Why don't you stop moaning and go and tell people what you think of them!</phrase>
+				<phrase wavfile="">Gimme a break.</phrase>
+				<phrase wavfile="">You shouldn't start fights you can't finish.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">And I suppose you're going to tell me nothing can possibly go wrong?</phrase>
+				<phrase wavfile="">How can you sit there and take everything?</phrase>
+				<phrase wavfile="">Why do you allow it to happen?</phrase>
+				<phrase wavfile="">When will you say what you really think?</phrase>
+				<phrase wavfile="">When will you stop?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Spike/Spike -vePass/talk someone else.wav">Why don't you talk to someone else</phrase>
+               <phrase wavfile="Spike/Spike -vePass/talk prudence.wav">Why don't you talk to Prudence?</phrase>
+               <phrase wavfile="Spike/Spike -vePass/talk obidiah.wav">Why don't you talk to Obadiah?</phrase>
+               <phrase wavfile="Spike/Spike -vePass/talk poppy.wav">Why don't you talk to Poppy?</phrase>
+            </category>
+         </state>
+         <state name="prag">
+            <category name="New subject">
+				<phrase wavfile="">When was the last time you really said what you meant?</phrase>
+				<phrase wavfile="">Tell me about issues that make you angry.</phrase>
+				<phrase wavfile="">When was the last time you got angry at something?</phrase>
+				<phrase wavfile="">Tell me about people that make you angry.</phrase>
+				<phrase wavfile="">Tell me what makes you angry.</phrase>
+				<phrase wavfile="">Tell me about places that make you angry.</phrase>
+				<phrase wavfile="">Is there anything else you want to say?</phrase>
+			</category>
+			<category name="Get details">
+				<phrase wavfile="">Go on.</phrase>
+				<phrase wavfile="">What do you mean?</phrase>
+				<phrase wavfile="">Well, what happened?</phrase>
+				<phrase wavfile="">Why do you say that? I don't think you're right.</phrase>
+				<phrase wavfile="">Really?</phrase>
+				<phrase wavfile="">Tell me more.</phrase>
+				<phrase wavfile="">How can you believe that?</phrase>
+				<phrase wavfile="">How do you know?</phrase>
+				<phrase wavfile="">Why?</phrase>
+				<phrase wavfile="">How?</phrase>
+			</category>
+			<category name="Insult">
+				<phrase wavfile="">Do you think anybody cares what you think?</phrase>
+				<phrase wavfile="">You're a loser. Now get up and go the way you go on.</phrase>
+				<phrase wavfile="">That's so superficial it's incredible.</phrase>
+				<phrase wavfile="">Convince me that you can manage more than a syllable at a time.</phrase>
+				<phrase wavfile="">You're such a wet blanket, be more proactive!</phrase>
+				<phrase wavfile="">Oh, yeah, you are oh so reasonable.</phrase>
+			</category>
+			<category name="Statements">
+				<phrase wavfile="">You shouldn't start fights you can't finish.</phrase>
+				<phrase wavfile="">Catch yourself on!</phrase>
+				<phrase wavfile="">Gimme a break.</phrase>
+				<phrase wavfile="">Life's a war, you're either a winner or a loser.</phrase>
+				<phrase wavfile="">You make me laugh.</phrase>
+				<phrase wavfile="">Well I think you're wrong to be so pragmatic about it all.</phrase>
+				<phrase wavfile="">Wise up!</phrase>
+				<phrase wavfile="">Go for it!</phrase>
+				<phrase wavfile="">Yeah, yeah, always an answer for everything.</phrase>
+				<phrase wavfile="">Stop laughing!</phrase>
+				<phrase wavfile="">You should be really cheesed off.</phrase>
+				<phrase wavfile="">That's a bloody odd thing to say!</phrase>
+				<phrase wavfile="">You've got to show people who's boss!</phrase>
+				<phrase wavfile="">So you just let people walk all over you.</phrase>
+				<phrase wavfile="">Oh you're so pragmatic.</phrase>
+				<phrase wavfile="">That's pathetic.</phrase>
+				<phrase wavfile="">That's feeble.</phrase>
+			</category>
+			<category name="Questions/Requests">
+				<phrase wavfile="">Don't you think it'll all go wrong anyway?</phrase>
+				<phrase wavfile="">So you just sit there and take everything?</phrase>
+				<phrase wavfile="">So you never get angry at the world?</phrase>
+				<phrase wavfile="">Will you wise up?</phrase>
+				<phrase wavfile="">Who are you trying to kid?</phrase>
+				<phrase wavfile="">And I suppose you're going to tell me nothing can possibly go wrong?</phrase>
+				<phrase wavfile="">What makes you say that?</phrase>
+				<phrase wavfile="">You just don't get it, do you?</phrase>
+				<phrase wavfile="">Why do you feel so sure?</phrase>
+			</category>
+            <category name="Change speaker dialogue">
+               <phrase wavfile="Spike/Spike Prag/why talk someone else.wav">Why don't you talk to someone else</phrase>
+               <phrase wavfile="Spike/Spike Prag/why talk prudence.wav">Why don't you talk to Prudence?</phrase>
+               <phrase wavfile="Spike/Spike Prag/talk obidiah.wav">Why don't you talk to Obadiah?</phrase>
+               <phrase wavfile="Spike/Spike Prag/talk Poppy.wav">Why don't you talk to Poppy?</phrase>
+            </category>
+         </state>
+      </speaker>
+   </phrases>
+</sal_project>

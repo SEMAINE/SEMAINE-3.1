@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="sal_project" type="salProjectType"/>
+
+   <xs:complexType name="salProjectType">
+      <xs:sequence>
+         <xs:element name="speaker" type="nameType" maxOccurs="unbounded"/>
+         <xs:element name="state_matrix" type="stateMatrixType"/>
+         <xs:element name="phrases" type="allPhrasesType"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   
+   <xs:complexType name="nameType">
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="button" type="xs:string" use="required"/>
+      <xs:attribute name="description" type="xs:string" use="required"/>
+   </xs:complexType>
+
+   <xs:complexType name="stateMatrixType">
+      <xs:sequence>
+         <xs:element name="state_row" type="stateRowType" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:complexType name="stateRowType">
+      <xs:sequence>
+         <xs:element name="state" type="nameType" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:complexType name="allPhrasesType">
+      <xs:sequence>
+         <xs:element name="welcome" type="htmlType"/>
+         <xs:element name="instructions" type="htmlType"/>
+         <xs:element name="speaker" type="speakerPhrasesType" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:complexType name="htmlType">
+      <xs:simpleContent>
+         <xs:extension base="xs:string">
+            <xs:attribute name="title" type="xs:string"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   
+   <xs:complexType name="speakerPhrasesType">
+      <xs:sequence>
+         <xs:element name="startup" type="phraseListType"/>
+         <xs:element name="repair" type="phraseListType"/>
+         <xs:element name="state" type="statePhrasesType" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   
+   <xs:complexType name="phraseListType">
+      <xs:sequence>
+         <xs:element name="phrase" type="phraseType" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:complexType name="phraseType">
+      <xs:simpleContent>
+         <xs:extension base="xs:string">
+            <xs:attribute name="wavfile" type="xs:string" use="required"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   
+   <xs:complexType name="statePhrasesType">
+      <xs:sequence>
+         <xs:element name="category" type="categoryType" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   
+   <xs:complexType name="categoryType">
+      <xs:sequence>
+         <xs:element name="phrase" type="phraseType" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+</xs:schema>
