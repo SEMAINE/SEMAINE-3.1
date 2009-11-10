@@ -4,6 +4,7 @@ BINDIR=`dirname "$0"`
 BINDIR=`(cd $BINDIR ; pwd)`
 
 MARYDIR="$BINDIR/../MARY399alpha"
+#MARYDIR=/Users/marc/mary4trunk
 
 if [ ! -e $MARYDIR ] ; then
   echo "MARY directory not found in $MARYDIR. Cannot start."
@@ -20,7 +21,7 @@ fi
 CONFIG=$1
 if [ -z "$CONFIG" ] ; then
   CONFDIR=`(cd $BINDIR/../java/config ; pwd)`
-  CONFIG=$CONFDIR/speech2speech.config
+  CONFIG=$CONFDIR/woz2speech.config
 fi
 
 JMS_URL_SETTING=""

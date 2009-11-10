@@ -16,7 +16,7 @@ if not exist %JARDIR%\semaine.jar (
 )
 
 if %1%a==a (
-  set CONFIG="%BINDIR%..\java\config\speech2face.config"
+  set CONFIG="%BINDIR%..\java\config\woz2face.config"
 ) else (
   set CONFIG=%1%
 )
