@@ -32,6 +32,7 @@ import eu.semaine.components.Component;
 import eu.semaine.components.control.ParticipantControlGUI;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
+import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
@@ -62,8 +63,6 @@ public class SpeechBMLRealiser extends Component
 	private static Templates bml2ssmlStylesheet = null;
 	private static Templates bmlSpeechTimingRemoverStylesheet = null;
     private Transformer transformer;
-    private int backchannelNumber = 0;
-    private int MaxNoOfBackchannels = 4;
     private String currentCharacter = ParticipantControlGUI.PRUDENCE;
     
 	/**
@@ -141,7 +140,7 @@ public class SpeechBMLRealiser extends Component
 			StateInfo state = ssm.getState();
 			if (state.hasInfo("character")) {
                 currentCharacter = state.getInfo("character");
-                System.out.println(currentCharacter);
+                //System.out.println(currentCharacter);
             } 
 		}
 		
@@ -164,25 +163,27 @@ public class SpeechBMLRealiser extends Component
 		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
 		ByteArrayOutputStream bmlos = new ByteArrayOutputStream();
 		
-		if(XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_BACKCHANNEL, BML.namespaceURI) != null){
+		boolean isBackChannel = isBackChannelRequest(xm);
+		
+		
+		if(isBackChannel){
 			// Back-channel synthesis
+			Element bmlSpeech = XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_SPEECH, BML.namespaceURI);
+			String backchannelString = XMLTool.getAttributeIfAvailable(bmlSpeech, "text");
+				
 			
-			
-			backchannelNumber++;
-			if(backchannelNumber >= MaxNoOfBackchannels){
-				backchannelNumber = 0;
-			}
 			// Backchannel input to MARY is hard-coded
 			String words = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
 			 + "<maryxml xmlns=\"http://mary.dfki.de/2002/MaryXML\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"0.4\" xml:lang=\"en-GB\">"
 			 + "<p>"
 			 //+ "<voice name=\"cmu-slt-arctic\">"
 			 + "<voice name=\""+SpeechPreprocessor.characters2voices.get(getCurrentCharacter())+"\">"
-			 + "<nvv variant=\""+backchannelNumber+"\"/>"
+			 + "<nvv variant=\""+backchannelString+"\"/>"
 			 + "</voice>"
 			 + "</p>"
 			 + "</maryxml>";
 			
+			//System.out.println(words);
 			
 			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
 			
@@ -204,8 +205,9 @@ public class SpeechBMLRealiser extends Component
 			request.readInputData(reader);
 			request.process();
 			request.writeOutputData(realisedOS);
-			
+			//System.out.println("MARY OUT: " + realisedOS.toString());
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("Backchannel-Realised-Merge.xsl"), "semaine.mary.realised.acoustics");
+			//System.out.println("Final data : " + finalData);
 			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
 		}
 		else if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0){
@@ -258,7 +260,18 @@ public class SpeechBMLRealiser extends Component
 		}
 	}
 	
-    public String getCurrentCharacter()
+    private boolean isBackChannelRequest(SEMAINEXMLMessage xm) {
+    	Document input = xm.getDocument();
+    	Element bmlSpeech = XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_SPEECH, BML.namespaceURI);
+    	
+    	if(XMLTool.getChildElementByLocalNameNS(bmlSpeech, SSML.E_MARK, SSML.namespaceURI) == null){
+    		return true;
+    	}
+    	
+		return false;
+	}
+
+	public String getCurrentCharacter()
     {
         return currentCharacter;
     }
