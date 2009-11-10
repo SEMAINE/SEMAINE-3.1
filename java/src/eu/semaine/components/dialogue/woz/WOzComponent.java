@@ -75,6 +75,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -99,15 +100,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
+import eu.semaine.datatypes.stateinfo.ContextStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.jms.sender.FMLSender;
+import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
 
 public class WOzComponent extends Component implements PhraseLabelListener	
 {
 	private FMLSender fmlSender;
+	private StateSender contextSender;
 	
 	private String WOZ_FILE = "/eu/semaine/components/dialogue/data/woz_sentences.xml"; 
 	
@@ -154,6 +159,8 @@ public class WOzComponent extends Component implements PhraseLabelListener
 		
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
 		senders.add(fmlSender);
+		contextSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
+		senders.add(contextSender);
 		
 		speakerStartup = new Hashtable<String,PhrasesPanel>();
 		speakerRepair = new Hashtable<String,PhrasesPanel>();
@@ -359,7 +366,8 @@ public class WOzComponent extends Component implements PhraseLabelListener
 		interactPanel.repaint();
 	}
 	
-	public void loadSpeaker(String speaker) {
+	public void loadSpeaker(String speaker)
+	{
 		if (currentSpeaker != null && currentSpeaker.equals(speaker))
 			return;
 		currentSpeaker = speaker;
@@ -370,6 +378,21 @@ public class WOzComponent extends Component implements PhraseLabelListener
 		controlPanel.setBoxVisible(GOTO_BOX,false);
 		controlPanel.setBoxVisible(STATE_BOX,true);
 		layoutPhrasePanels(speakerStartup.get(speaker), speakerRepair.get(speaker));
+		
+		Map<String,String> contextInfo = new HashMap<String,String>();
+		if( speaker.equals("poppy") ) speaker = "Poppy";
+		if( speaker.equals("spike") ) speaker = "Spike";
+		if( speaker.equals("obadiah") ) speaker = "Obadiah";
+		if( speaker.equals("prudence") ) speaker = "Prudence";
+		contextInfo.put("character", speaker);
+
+		try {
+			ContextStateInfo csi = new ContextStateInfo(contextInfo);
+			contextSender.sendStateInfo( csi, meta.getTime() );
+		}catch( JMSException e ) {
+			System.out.println("Failed to send speaker-change.");
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadSpeakerState(String state) {
@@ -461,7 +484,7 @@ public class WOzComponent extends Component implements PhraseLabelListener
 		speech.setAttribute(BML.A_ID, id);
 		speech.setAttribute(BML.E_TEXT, response);
 		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
-		speech.setAttribute("voice", "activemary");
+		//speech.setAttribute("voice", "activemary");
 
 		//speech.setTextContent(response);
 

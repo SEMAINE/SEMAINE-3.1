@@ -319,21 +319,45 @@
 
       <speaker name="prudence">
          <startup>
-            <phrase wavfile="Prudence/PrudenceIntro slide/Hello I'm.wav">Hello there I'm Prudence. Have we met before?</phrase>
-            <phrase wavfile="Prudence/PrudenceIntro slide/Oh well.wav">(No) Well, hallo then, lets get down to business, shall we?</phrase>
-            <phrase wavfile="Prudence/PrudenceIntro slide/That's what.wav">(Yes) That's what I thought. Well that's introductions out of the way. Ok?</phrase>
-            <phrase wavfile="Prudence/PrudenceIntro slide/So tell me.wav">So, tell me, how are you today?</phrase>
-            <phrase wavfile="Prudence/PrudenceIntro slide/Is that so tell.wav">Is that so - Tell me more about it</phrase>
-            <phrase wavfile="Prudence/PrudenceIntro slide/Is that so.wav">Is that so?</phrase>
-            <phrase wavfile="Prudence/Prudence Repair and additional/2nd time hello.wav">2nd + time: Hello, it's Prudence. What would you like to talk bout?</phrase>
+         	<phrase wavfile="">Hi. You have reached SAL, the Sensitive Artificial Listeners.</phrase>
+			<phrase wavfile="">If you want to know about the system from scratch, go ahead and ask.</phrase>
+			<phrase wavfile="">If you already know, go ahead and say which of us you want to talk to.</phrase>
+			<phrase wavfile="">These are the listeners you can choose.</phrase>
+			<phrase wavfile="">Poppy is cheerful, optimistic and she looks on the bright side of life!</phrase>
+			<phrase wavfile="">Spike is aggressive, confrontational and he enjoys an argument.</phrase>
+			<phrase wavfile="">Obadiah is gloomy, and he has a pessimistic outlook.</phrase>
+			<phrase wavfile="">Prudence is matter-of-fact, and takes a practical view on life.</phrase>
+			<phrase wavfile="">SALAS is a package designed to let a user work through various emotional states.</phrase>
+			<phrase wavfile="">The package contains four 'personalities' who listen to the user and respond to what he or she says.</phrase>
+			<phrase wavfile="">Each of the 'personalities' has different emotional characteristics.</phrase>
+			<phrase wavfile="">The user controls the emotional tone of the interaction by choosing which 'personality' he or she talks to.</phrase>
+			<phrase wavfile="">He or she can change the tone at any time by choosing a different personality to talk to.</phrase>
+			<phrase wavfile="">Using SALAS.</phrase>
+			<phrase wavfile="">The personalities are very crude.</phrase>
+			<phrase wavfile="">They do not understand content, only tone.</phrase>
+			<phrase wavfile="">That means it is up to the user to work within the system's limits.</phrase>
+			<phrase wavfile="">In particular, there is no point asking it questions.</phrase>
+			<phrase wavfile="">There is no point trying to get into a serious discussion with it.</phrase>
+			<phrase wavfile="">There is no point going into long monologues.</phrase>
+			<phrase wavfile="">There is no point trying to outwit it: that is so easy it is not much fun.</phrase>
+			<phrase wavfile="">The trick is to make use of what the system does offer: a kind of sounding board, which will make the sorts of noises you ask for.</phrase>
+			<phrase wavfile="">That is a very limited function, but you might be surprised how much you can do with it.</phrase>
+	        <phrase wavfile="">Which character do you want to speak to?</phrase>
+	        <phrase wavfile="">Hello there, I'm Prudence. Have we met before?</phrase>
+			<phrase wavfile="">Well, hallo then, lets get down to business, shall we?</phrase>
+			<phrase wavfile="">That's what I thought. Well that's introductions out of the way. Ok?</phrase>
+			<phrase wavfile="">So, tell me, how are you today?</phrase>
+			<phrase wavfile="">Is that so, tell me more about it.</phrase>
+			<phrase wavfile="">Is that so?</phrase>
+			<phrase wavfile="">Hello, it's Prudence. What would you like to talk about?</phrase>
          </startup>
          <repair>
-            <phrase wavfile="Prudence/Prudence Repair and additional/sorry say again.wav">Sorry, could you say that again?</phrase>
-            <phrase wavfile="Prudence/Prudence Repair and additional/maybe misunderstood.wav">Maybe I misunderstood</phrase>
-            <phrase wavfile="Prudence/Prudence Repair and additional/said something wrong.wav">Have I said something wrong?</phrase>
-            <phrase wavfile="Prudence/Prudence Repair and additional/you still there.wav">Are you still there?</phrase>
-            <phrase wavfile="Prudence/Prudence Repair and additional/anything else to say.wav">Is there anything else you want to say?</phrase>
-            <phrase wavfile="Prudence/Prudence Repair and additional/just tell me things.wav">I think you asked me a question. I can't answer questions - just tell me things, and I'll respond.</phrase>
+         	<phrase wavfile="">Sorry, could you say that again?</phrase>
+			<phrase wavfile="">Maybe I misunderstood.</phrase>
+			<phrase wavfile="">Have I said something wrong?</phrase>
+			<phrase wavfile="">Are you still there?</phrase>
+			<phrase wavfile="">Is there anything else you want to say?</phrase>
+			<phrase wavfile="">I think you asked me a question. I can't answer questions. Just tell me things, and I'll respond.</phrase>
          </repair>
          <state name="neg_act">
             <category name="New subject">
@@ -567,23 +591,22 @@
 
       <speaker name="obadiah">
          <startup>
-            <phrase wavfile="Obidiah/ObidiahIntroSlide/hello.wav">Hello, my name is Obadiah. I don't suppose we've met before.</phrase>
-            <phrase wavfile="Obidiah/ObidiahIntroSlide/hello2.wav">Hello, my name is Obadiah. I don't suppose we've met before.</phrase>
-            <phrase wavfile="Obidiah/ObidiahIntroSlide/oh dear depressed.wav">(Yes) Oh dear, you'll know then that I'm feeling very depressed just now</phrase>
-            <phrase wavfile="Obidiah/ObidiahIntroSlide/oh dear not cheerful.wav">(No) Oh dear, well let me tell you that I'm afraid I'm not a very cheery person</phrase>
-            <phrase wavfile="Obidiah/ObidiahIntroSlide/not cheerful.wav">(No) Oh dear, well let me tell you that I'm afraid I'm not a very cheery person</phrase>
-            <phrase wavfile="Obidiah/ObidiahIntroSlide/how are you.wav">So how are you feeling today - not great I suppose.</phrase>
-            <phrase wavfile="Obidiah/ObidiahIntroSlide/how are you2.wav">So how are you feeling today - not great I suppose.</phrase>
-            <!--<phrase wavfile="Obidiah/ObidiahIntroSlide/">Is that so - tell me more about it</phrase>-->
-            <phrase wavfile="Obidiah/Obidiah Repair and additional/hello 2nd time.wav">2nd + time: Hello, I'm Obadiah. What's the matter?</phrase>
+         
+         	<phrase wavfile="">Hello, my name is Obadiah. I don't suppose we've met before.</phrase>
+			<phrase wavfile="">Oh dear, you'll know then that I'm feeling very depressed just now.</phrase>
+			<phrase wavfile="">Oh dear, well let me tell you that I'm afraid I'm not a very cheery person.</phrase>
+			<phrase wavfile="">So how are you feeling today? Not great I suppose.</phrase>
+			<phrase wavfile="">Is that so? Tell me more about it.</phrase>
+			<phrase wavfile="">Hello, I'm Obadiah. What's the matter?</phrase>
          </startup>
          <repair>
-            <phrase wavfile="Obidiah/Obidiah Repair and additional/sorry say again.wav">Sorry, could you say that again?</phrase>
-            <phrase wavfile="Obidiah/Obidiah Repair and additional/misunderstood.wav">Maybe I misunderstood</phrase>
-            <phrase wavfile="Obidiah/Obidiah Repair and additional/said something wrong.wav">Have I said something wrong?</phrase>
-            <phrase wavfile="Obidiah/Obidiah Repair and additional/still there.wav">Are you still there?</phrase>
-            <phrase wavfile="Obidiah/Obidiah Repair and additional/anything else.wav">Is there anything else you want to say?</phrase>
-            <phrase wavfile="Obidiah/Obidiah Repair and additional/question.wav">I think you asked me a question. I'm afraid I can't answer questions - just tell me things, and I'll respond.</phrase>
+         
+         	<phrase wavfile="">Sorry, could you say that again?</phrase>
+			<phrase wavfile="">Maybe I misunderstood.</phrase>
+			<phrase wavfile="">Have I said something wrong?</phrase>
+			<phrase wavfile="">Are you still there?</phrase>
+			<phrase wavfile="">Is there anything else you want to say?</phrase>
+			<phrase wavfile="">I think you asked me a question. I'm afraid I can't answer questions. Just tell me things, and I'll respond.</phrase>
          </repair>
          <state name="neg_act">
             <category name="New subject">
@@ -802,20 +825,22 @@
 
       <speaker name="spike">
          <startup>
-            <phrase wavfile="Spike/Spike Intro slide/I'm Spike.wav">I'm Spike. Have we met before?</phrase>
-            <phrase wavfile="Spike/Spike Intro slide/don't suffer fools.wav">(Yes) Oh well, you know I don't suffer fools gladly then.</phrase>
-            <phrase wavfile="Spike/Spike Intro slide/introduce red hair and temper.wav">(No) Well then, let me introduce myself. I've red hair and a bit of a temper</phrase>
-            <phrase wavfile="Spike/Spike Intro slide/what state.wav">So, what state are you in today?</phrase>
-            <phrase wavfile="Spike/Spike Intro slide/that so tell me.wav">Is that so? Tell me about it.</phrase>
-            <phrase wavfile="Spike/Spike repair and additional phrases/what's your problem.wav">2nd + time: Well I'm Spike, what's your problem?</phrase>
+         
+         	<phrase wavfile="">I'm Spike. Have we met before?</phrase>
+			<phrase wavfile="">Oh well, you know I don't suffer fools gladly then.</phrase>
+			<phrase wavfile="">Well then, let me introduce myself. I've red hair and a bit of a temper.</phrase>
+			<phrase wavfile="">So, what state are you in today?</phrase>
+			<phrase wavfile="">Is that so? Tell me about it.</phrase>
+			<phrase wavfile="">Well I'm Spike, what's your problem?</phrase>
          </startup>
          <repair>
-            <phrase wavfile="Spike/Spike repair and additional phrases/say that again.wav">Say that again</phrase>
-            <phrase wavfile="Spike/Spike repair and additional phrases/misunderstand something.wav">Did I misunderstand something?</phrase>
-            <phrase wavfile="Spike/Spike repair and additional phrases/said something wrong.wav">Have I said something wrong?</phrase>
-            <phrase wavfile="Spike/Spike repair and additional phrases/are you still there.wav">Are you still there?</phrase>
-            <phrase wavfile="Spike/Spike repair and additional phrases/anything else.wav">Is there anything else you want to say?</phrase>
-            <phrase wavfile="Spike/Spike repair and additional phrases/questions dialogue.wav">I think you asked me a question. I can't answer questions - just tell me things, and I'll respond.</phrase>
+         
+         	<phrase wavfile="">Say that again.</phrase>
+			<phrase wavfile="">Did I misunderstand something?</phrase>
+			<phrase wavfile="">Have I said something wrong?</phrase>
+			<phrase wavfile="">Are you still there?</phrase>
+			<phrase wavfile="">Is there anything else you want to say?</phrase>
+			<phrase wavfile="">I think you asked me a question. I can't answer questions. Just tell me things, and I'll respond.</phrase>
          </repair>
          <state name="neg_act">
             <category name="New subject">
