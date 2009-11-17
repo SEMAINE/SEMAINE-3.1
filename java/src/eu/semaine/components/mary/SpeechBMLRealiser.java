@@ -64,6 +64,8 @@ public class SpeechBMLRealiser extends Component
 	private static Templates bmlSpeechTimingRemoverStylesheet = null;
     private Transformer transformer;
     private String currentCharacter = ParticipantControlGUI.PRUDENCE;
+    private int backchannelNumber = 0; 
+    private int MaxNoOfBackchannels = 4; 
     
 	/**
 	 * @param componentName
@@ -169,8 +171,19 @@ public class SpeechBMLRealiser extends Component
 		if(isBackChannel){
 			// Back-channel synthesis
 			Element bmlSpeech = XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_SPEECH, BML.namespaceURI);
+			if(bmlSpeech == null) {
+				bmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+				return;
+			}
+			
 			String backchannelString = XMLTool.getAttributeIfAvailable(bmlSpeech, "text");
-				
+			if ( backchannelString == null || "".equals(backchannelString) ) {	
+				backchannelNumber++; 
+				if (backchannelNumber >= MaxNoOfBackchannels ) { 
+					backchannelNumber = 0; 
+				}
+				backchannelString = (new Integer(backchannelNumber)).toString(); // default listener vocalization
+			}
 			
 			// Backchannel input to MARY is hard-coded
 			String words = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
@@ -264,7 +277,7 @@ public class SpeechBMLRealiser extends Component
     	Document input = xm.getDocument();
     	Element bmlSpeech = XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_SPEECH, BML.namespaceURI);
     	
-    	if(XMLTool.getChildElementByLocalNameNS(bmlSpeech, SSML.E_MARK, SSML.namespaceURI) == null){
+    	if((bmlSpeech == null) || XMLTool.getChildElementByLocalNameNS(bmlSpeech, SSML.E_MARK, SSML.namespaceURI) == null){
     		return true;
     	}
     	
