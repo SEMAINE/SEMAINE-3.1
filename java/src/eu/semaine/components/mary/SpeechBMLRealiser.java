@@ -177,7 +177,11 @@ public class SpeechBMLRealiser extends Component
 			}
 			
 			String backchannelString = XMLTool.getAttributeIfAvailable(bmlSpeech, "text");
-			if ( backchannelString == null || "".equals(backchannelString) ) {	
+			Element speechVocalization = XMLTool.getChildElementByLocalNameNS(bmlSpeech, "vocalization", "http://mary.dfki.de/2002/MaryXML");
+			boolean hasSpeechVocalization = speechVocalization != null;
+			boolean isNullBackchannel    = backchannelString == null || "".equals(backchannelString);
+			
+			if( hasSpeechVocalization || isNullBackchannel ) {
 				backchannelNumber++; 
 				if (backchannelNumber >= MaxNoOfBackchannels ) { 
 					backchannelNumber = 0; 
