@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openSmilePASemaine", "openSmilePASemaine.vcproj", "{264EDD6D-E130-4E30-9607-D6D74EF856B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openSmileLibPASemaine", "openSmileLibPASemaine.vcproj", "{F5F2B328-E89C-4ED7-9A16-91E547F99E6E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{264EDD6D-E130-4E30-9607-D6D74EF856B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{264EDD6D-E130-4E30-9607-D6D74EF856B5}.Debug|Win32.Build.0 = Debug|Win32
+		{264EDD6D-E130-4E30-9607-D6D74EF856B5}.Release|Win32.ActiveCfg = Release|Win32
+		{264EDD6D-E130-4E30-9607-D6D74EF856B5}.Release|Win32.Build.0 = Release|Win32
+		{F5F2B328-E89C-4ED7-9A16-91E547F99E6E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F5F2B328-E89C-4ED7-9A16-91E547F99E6E}.Debug|Win32.Build.0 = Debug|Win32
+		{F5F2B328-E89C-4ED7-9A16-91E547F99E6E}.Release|Win32.ActiveCfg = Release|Win32
+		{F5F2B328-E89C-4ED7-9A16-91E547F99E6E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

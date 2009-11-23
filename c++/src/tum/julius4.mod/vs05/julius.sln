@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjulius", "libjulius\libjulius.vcproj", "{DD88ADEC-F468-4BA5-9F17-E2E4EDABDCFA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsent", "libsent\libsent.vcproj", "{6656BB9A-2730-4057-A010-1EF3674C3222}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD88ADEC-F468-4BA5-9F17-E2E4EDABDCFA} = {DD88ADEC-F468-4BA5-9F17-E2E4EDABDCFA}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD88ADEC-F468-4BA5-9F17-E2E4EDABDCFA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD88ADEC-F468-4BA5-9F17-E2E4EDABDCFA}.Debug|Win32.Build.0 = Debug|Win32
+		{DD88ADEC-F468-4BA5-9F17-E2E4EDABDCFA}.Release|Win32.ActiveCfg = Release|Win32
+		{DD88ADEC-F468-4BA5-9F17-E2E4EDABDCFA}.Release|Win32.Build.0 = Release|Win32
+		{6656BB9A-2730-4057-A010-1EF3674C3222}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6656BB9A-2730-4057-A010-1EF3674C3222}.Debug|Win32.Build.0 = Debug|Win32
+		{6656BB9A-2730-4057-A010-1EF3674C3222}.Release|Win32.ActiveCfg = Release|Win32
+		{6656BB9A-2730-4057-A010-1EF3674C3222}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

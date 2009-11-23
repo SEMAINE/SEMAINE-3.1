@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="openSmileSemaine"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="&quot;$(Portaudio)\include&quot;;&quot;$(Julius)\libsent\include&quot;;&quot;$(Julius)\libjulius\include&quot;"
+		AdditionalUsingDirectories=""
+		PreprocessorDefinitions="EXTERNAL_FV;HAVE_PORTAUDIO;HAVE_PORTAUDIO_V19;HAVE_SEMAINEAPI;HAVE_JULIUSLIB"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="portaudio_x86$(ConfigurationName).lib libsent$(ConfigurationName).lib libjulius$(ConfigurationName).lib"
+		AdditionalLibraryDirectories="&quot;$(Thirdparty)\portaudio-win&quot;;&quot;$(Julius)\vs05\$(ConfigurationName)&quot;"
+	/>
+	<UserMacro
+		Name="SemaineApiVS"
+		Value="$(SolutionDir)..\..\..\..\..\vs2005\"
+	/>
+	<UserMacro
+		Name="Thirdparty"
+		Value="$(SemaineApiVS)..\..\thirdparty\build"
+	/>
+	<UserMacro
+		Name="Portaudio"
+		Value="$(Thirdparty)\portaudio-win"
+	/>
+	<UserMacro
+		Name="Julius"
+		Value="$(Thirdparty)\julius-win"
+	/>
+</VisualStudioPropertySheet>
