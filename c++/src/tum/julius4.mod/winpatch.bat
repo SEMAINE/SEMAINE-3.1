@@ -8,6 +8,7 @@ copy /Y win\sent\config.h %jpath%\libsent\include\sent
 copy /Y win\sent\config-win.h %jpath%\libsent\include\sent
 copy /Y win\sent\gzfile.c %jpath%\libsent\src\util
 copy /Y win\sent\server-client.c %jpath%\libsent\src\net
+copy /Y win\sent\vsegment.c %jpath%\libsent\src\phmm
 
 copy /Y win\julius\recog.h %jpath%\libjulius\include\julius
 copy /Y win\julius\jconf.h %jpath%\libjulius\include\julius
@@ -24,6 +25,7 @@ copy /Y win\julius\m_info.c %jpath%\libjulius\src
 copy /Y win\julius\m_adin.c %jpath%\libjulius\src
 copy /Y win\julius\m_jconf.c %jpath%\libjulius\src
 copy /Y win\julius\wchmm_check.c %jpath%\libjulius\src
+copy /Y win\julius\word_align.c %jpath%\libjulius\src
 
 mkdir %jpath%\vs05
 copy vs05 %jpath%\vs05
