@@ -1,0 +1,79 @@
+This file contains information on how to build the Windows openSMILE Semaine component.
+=======================================================================
+
+This document assumes that you have obtained the SemaineAPI and System code from SVN and you have created the following directories in the semaine root directory:
+  thirdparty/
+  thirdparty/build
+
+Moreover you must create the directory
+  c++/src/tum/opensmile  (if it does not already exist)
+and change to this directory and then type:
+  svn co https://opensmile.svn.sourceforge.net/svnroot/opensmile .
+
+Now you are ready to follow these steps to build the Semaine system and the openSMILE component:
+
+1.) Obtain (windows - where available -) sources for:
+      activemq-cpp version 2.2.1
+      xerces-c     version 3.0.1
+      xqilla       version 2.2.0
+
+    Unpack activemq-cpp, xerces-c, and xqilla  to the directories
+     thirdparty/build/activemq-cpp
+     thirdparty/build/xerces-c-src
+     thirdparty/build/xqilla
+
+2.) Download the Apache Webserver Windows Installer (Version 2.2.x) and install the webserver to the default path (C:\Program Files\Apache Software Foundation\Apache2.2). Be sure to use the "Custom" installation option and check the feature "install build headers and libraries".
+
+3.) Open the Visual Studio 2005 solution c++/vs2005/semaineF.sln
+    Apply the property sheet "c++/vs2005/semaineProperties.vsprops" to Debug and Release configurations of the "vs2005-activemq" project.
+
+4.) Build the semaine solution (semaineF.sln). Build at least the "Release" configuration. If you are a developer, also build the "Debug" configuration.
+
+5.) Get the Julius LVCSR engine, unpack it to thirdparty/build/julius-win
+
+6.) Run c++/src/tum/julius4.mod/winpatch.bat 
+    This will apply patches to the Julius code and copy VS05 build projects.
+
+7.) Now open thirdparty/build/julius-win/vs05/julius.sln and build it. 
+    (Build the Debug configuration too, if you are a developer)
+
+8.) Get the latest Portaudio SVN snapshot, 
+    unpack it to thirdparty/build/portaudio-win
+
+9.) Copy the files "portaudio.vcproj" and "portaudio.def" 
+    from c++/src/tum/auxiliary/build/vs05 
+    to thirdparty/build/portaudio-win/build/msvc
+
+10.) Build the portaudio solution 
+    (thirdparty/build/portaudio-win/build/msvc/portaudio.sln)
+    (Build the Debug configuration too, if you are a developer)
+
+11.) Copy openSmile*.vcproj, *.vsprops, and openSmile*.sln 
+     from c++/src/tum/auxiliary/build/vs05 
+     to c++/src/tum/opensmile/ide/vs05/ 
+
+12.) Build the "openSmileSemaineComponent.sln" solution
+     (in c++/src/tum/opensmile/ide/vs05/)
+
+13.) Copy the required dll files to the directory 
+       c++/src/tum/opensmile  (or to a system wide path)
+
+     Copy these files from thirdparty\build:
+       portaudio-win\portaudio_x86Release.dll
+       xerces-c-src\Build\Win32\VC8\Release\xerces-c_3_0.dll
+       xqilla\build\windows\VC8\Win32\Release\xqilla22.dll
+       (portaudio-win\portaudio_x86Debug.dll)
+       (xerces-c-src\Build\Win32\VC8\Debug\xerces-c_3_0D.dll)
+       (xqilla\build\windows\VC8\Win32\Debug\xqilla22d.dll)
+
+     Copy these files from your Apache installation (if required):
+       C:\Program Files\Apache Software Foundation\Apache2.2\bin\libapr-1.dll
+       C:\Program Files\Apache Software Foundation\Apache2.2\bin\libapriconv-1.dll
+       C:\Program Files\Apache Software Foundation\Apache2.2\bin\libaprutil-1.dll
+
+
+     You can also use the batch script "c++/src/tum/auxiliary/build/copy_libs.bat" to copy the dll files to the correct path
+
+14.) Now start the openSMILE Semaine component using "bin/semaine-openSMILE-run.bat"
+
+
