@@ -26,6 +26,8 @@ function func_build_julius {
     cp $JROOT/julius4.mod/recogmain.c libjulius/src
     cp $JROOT/julius4.mod/plugin.c libjulius/src
     cp $JROOT/julius4.mod/m_info.c libjulius/src
+    cp $JROOT/julius4.mod/vsegment.c libsent/src/phmm
+    cp $JROOT/julius4.mod/word_align.c libjulius/src
 
     export CFLAGS="-DEXTERNAL_FV $DBGFLAGS -fPIC $OFLAGS"
 
