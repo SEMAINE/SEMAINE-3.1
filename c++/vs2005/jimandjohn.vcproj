@@ -20,6 +20,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets=".\semaineProperties.vsprops;.\SemaineLibsDebug.vsprops"
 			CharacterSet="1"
 			BuildLogFile="$(IntDir)\jimandjohn-BuildLog.htm"
 			>
@@ -63,7 +64,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="semaineapi.lib xerces-c_3D.lib xqilla22d.lib libactivemq-cppd.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="Debug;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Lib&quot;;&quot;..\..\..\XQilla-2.2.0\build\windows\VC8\Win32\Debug&quot;;&quot;..\..\..\xerces-c-src\lib&quot;;&quot;..\..\..\activemq-cpp-2.2.1\vs2005-build\Debug&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\lib&quot;"
 				GenerateDebugInformation="true"
@@ -100,6 +100,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets=".\semaineProperties.vsprops;.\SemaineLibs.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
