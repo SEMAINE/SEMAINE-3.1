@@ -6,7 +6,6 @@ package eu.semaine.gui.monitor;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,9 +17,20 @@ import eu.semaine.components.Component;
 
 public class ComponentInfo extends Info
 {
+	protected static Set<String> topicsToIgnoreWhenSorting;
+	
+	/**
+	 * Remember a list of topics that should be ignored when sorting the components in the GUI.
+	 * @param topics
+	 */
+	public static void setTopicsToIgnoreWhenSorting(Set<String> topics) {
+		topicsToIgnoreWhenSorting = topics;
+	}
+	
+	
 	private String name;
-	private List<String> receiveTopics;
-	private List<String> sendTopics;
+	private String[] receiveTopics;
+	private String[] sendTopics;
 	private boolean isInput;
 	private boolean isOutput;
 	private Component.State state;
@@ -36,8 +46,8 @@ public class ComponentInfo extends Info
 			boolean isInput, boolean isOutput)
 	{
 		this.name = name;
-		this.receiveTopics = receiveTopics != null ? Arrays.asList(receiveTopics) : null;
-		this.sendTopics = sendTopics != null ? Arrays.asList(sendTopics) : null;
+		this.receiveTopics = receiveTopics != null ? receiveTopics.clone() : null;
+		this.sendTopics = sendTopics != null ? sendTopics.clone() : null;
 		this.isInput = isInput;
 		this.isOutput = isOutput;
 		this.state = null;
@@ -82,12 +92,12 @@ public class ComponentInfo extends Info
 
 	public String[] receiveTopics()
 	{
-		return receiveTopics != null ? receiveTopics.toArray(new String[0]) : null;
+		return receiveTopics;
 	}
 	
 	public String[] sendTopics()
 	{
-		return sendTopics != null ? sendTopics.toArray(new String[0]) : null;
+		return sendTopics;
 	}
 	
 	/**
@@ -171,14 +181,14 @@ public class ComponentInfo extends Info
 	public synchronized void setReceiveTopics(String... newReceiveTopics) {
 		if (newReceiveTopics == null) receiveTopics = null;
 		else
-			receiveTopics = Arrays.asList(newReceiveTopics);
+			receiveTopics = newReceiveTopics.clone();
 		setTopicsChanged(true);
 	}
 	
 	public synchronized void setSendTopics(String... newSendTopics) {
 		if (newSendTopics == null) sendTopics = null;
 		else
-			sendTopics = Arrays.asList(newSendTopics);
+			sendTopics = newSendTopics.clone();
 		setTopicsChanged(true);
 	}
 	
@@ -296,13 +306,13 @@ public class ComponentInfo extends Info
 		if (messagesReceived != -1) {
 			sb.append("Total messages received: ").append(messagesReceived).append("\n");
 		}
-		if (receiveTopics != null && receiveTopics.size() > 0) {
+		if (receiveTopics != null && receiveTopics.length > 0) {
 			sb.append("Receiving from topics:\n");
 			for (String t : receiveTopics) {
 				sb.append("    ").append(t).append("\n");
 			}
 		}
-		if (sendTopics != null && sendTopics.size() > 0) {
+		if (sendTopics != null && sendTopics.length > 0) {
 			sb.append("Sending to topics:\n");
 			for (String t : sendTopics) {
 				sb.append("    ").append(t).append("\n");
@@ -448,19 +458,32 @@ public class ComponentInfo extends Info
 		
 		public int compare(ComponentInfo a, ComponentInfo b)
 		{
-			if (a.equals(b)) return 0; // equal
+			if (a.equals(b)) {
+				//System.out.println(a.name + " is equal to "+b.name+" because they are actually equal");
+				return 0; // equal
+			}
 			if (a.isInput()) {
-				if (b.isInput()) return 0; // equal
+				if (b.isInput()) {
+					//System.out.println(a.name + " is equal to "+b.name+" because both are input components");
+					return 0; // equal
+				}
+				//System.out.println(a.name + " is before "+b.name+" because it is an input component");
 				return -1; // a smaller
 			}
 			if (b.isInput()) {
+				//System.out.println(b.name + " is before "+a.name+" because it is an input component");
 				return 1; // b smaller
 			}
 			if (a.isOutput()) {
-				if (b.isOutput()) return 0;
+				if (b.isOutput()) {
+					//System.out.println(a.name + " is equal to "+b.name+" because both are output components");
+					return 0;
+				}
+				//System.out.println(a.name + " is after "+b.name+" because it is an output component");
 				return 1; // a bigger
 			}
 			if (b.isOutput()) {
+				//System.out.println(b.name + " is after "+a.name+" because it is an output component");
 				return -1; // b bigger
 			}
 			// Compare sendTopics and receiveTopics. Basic strategy:
@@ -470,10 +493,13 @@ public class ComponentInfo extends Info
 			int numABPaths = countPaths(a, b);
 			int numBAPaths = countPaths(b, a);
 			if (numABPaths > numBAPaths) {
+				//System.out.println(a.name + " is before "+b.name+" because AB="+numABPaths+" > BA="+numBAPaths);
 				return -1; // a smaller
 			} else if (numABPaths < numBAPaths) {
+				//System.out.println(b.name + " is before "+a.name+" because AB="+numBAPaths+" > BA="+numABPaths);
 				return 1; // a bigger
 			} else { // ==
+				//System.out.println(a.name + " is equal to "+b.name+" because AB="+numABPaths+" = BA");
 				return 0;
 			}
 		}
@@ -515,7 +541,8 @@ public class ComponentInfo extends Info
 		private int countDirectConnections(ComponentInfo a, ComponentInfo b) {
 			int num = 0;
 			for (String sendTopic : a.sendTopics()) {
-				if (!a.isDataTopic(sendTopic)) {
+				// ignore it if it's not a data topic or if user requested to hide or ignore it:
+				if (!a.isDataTopic(sendTopic) || topicsToIgnoreWhenSorting.contains(sendTopic)) {
 					continue;
 				}
 				if (b.canReceive(sendTopic)) {

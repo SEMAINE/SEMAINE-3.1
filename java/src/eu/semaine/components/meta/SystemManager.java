@@ -4,7 +4,6 @@
  */
 package eu.semaine.components.meta;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -81,6 +80,17 @@ public class SystemManager extends Component implements MessageListener
 					topicsToHide.add(st.nextToken());
 				}
 			}
+			// To clean up the system monitor, users can indicate which topics not to use for sorting:
+			Set<String> topicsToIgnoreWhenSorting = new HashSet<String>();
+			topicsToIgnoreWhenSorting.addAll(topicsToHide);
+			String ttiws = System.getProperty("semaine.systemmanager.gui.topics_to_ignore_when_sorting");
+			if (ttiws != null) {
+				StringTokenizer st = new StringTokenizer(ttiws);
+				while (st.hasMoreElements()) {
+					topicsToIgnoreWhenSorting.add(st.nextToken());
+				}
+			}
+			ComponentInfo.setTopicsToIgnoreWhenSorting(topicsToIgnoreWhenSorting);
 
 			iobase = new IOBase("semaine.meta");
 			componentInfos = new TreeMap<String, ComponentInfo>();
