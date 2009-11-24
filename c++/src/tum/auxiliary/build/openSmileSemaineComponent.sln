@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openSmilePASemaine", "openSmilePASemaine.vcproj", "{264EDD6D-E130-4E30-9607-D6D74EF856B5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F5F2B328-E89C-4ED7-9A16-91E547F99E6E} = {F5F2B328-E89C-4ED7-9A16-91E547F99E6E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openSmileLibPASemaine", "openSmileLibPASemaine.vcproj", "{F5F2B328-E89C-4ED7-9A16-91E547F99E6E}"
 EndProject

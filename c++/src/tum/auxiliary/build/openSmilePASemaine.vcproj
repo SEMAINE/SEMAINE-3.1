@@ -138,6 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/LTCG"
 				AdditionalDependencies="..\..\openSmileLibSemaine$(ConfigurationName).lib"
 				OutputFile="..\..\SEMAINExtract.exe"
 				LinkIncremental="2"
@@ -235,6 +236,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\auxiliary\opensmileSemaine.conf"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

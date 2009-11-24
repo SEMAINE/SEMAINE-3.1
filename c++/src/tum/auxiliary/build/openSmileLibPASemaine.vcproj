@@ -465,6 +465,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\pitchDirection.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\portaudioDuplex.hpp"
 				>
 			</File>
@@ -978,6 +982,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\pitchACF.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchDirection.cpp"
 				>
 			</File>
 			<File
