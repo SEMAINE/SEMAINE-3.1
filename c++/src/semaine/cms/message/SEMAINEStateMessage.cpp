@@ -26,7 +26,7 @@ namespace message {
 
 SEMAINEStateMessage::SEMAINEStateMessage(const Message * message, StateInfo::Type stateInfoType)
 throw(SystemConfigurationException, MessageFormatException)
-: SEMAINEXMLMessage(message), stateInfoType(stateInfoType)
+: SEMAINEXMLMessage(message), stateInfoType(stateInfoType), state(NULL)
 {
 	try {
 		state = createState(document);
@@ -44,6 +44,10 @@ throw(SystemConfigurationException, MessageFormatException)
 }
 
 SEMAINEStateMessage::~SEMAINEStateMessage() {
+	if (state != NULL) {
+		delete state;
+		state = NULL;
+	}
 }
 
 StateInfo * SEMAINEStateMessage::createState(DOMDocument * doc)

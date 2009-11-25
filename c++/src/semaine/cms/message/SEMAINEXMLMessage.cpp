@@ -20,7 +20,7 @@ const std::string SEMAINEXMLMessage::IS_XML = "xml";
 
 SEMAINEXMLMessage::SEMAINEXMLMessage(const Message * message)
 throw(MessageFormatException,SystemConfigurationException) :
-	SEMAINEMessage(message)
+	SEMAINEMessage(message), document(NULL)
 {
 	const TextMessage * tm = dynamic_cast<const TextMessage *>(message);
 	if (tm == NULL) {
@@ -40,6 +40,10 @@ throw(MessageFormatException,SystemConfigurationException) :
 
 SEMAINEXMLMessage::~SEMAINEXMLMessage()
 {
+	if (document != NULL) {
+		document->release();
+		document = NULL;
+	}
 }
 
 void SEMAINEXMLMessage::parseDocument()
