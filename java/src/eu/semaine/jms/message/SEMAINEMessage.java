@@ -61,6 +61,8 @@ public class SEMAINEMessage
 	 * The name of the property used for the content's creation time, if given.
 	 */
 	public static final String CONTENT_CREATION_TIME = "content-creation-time";
+
+	
 	protected Message message;
 
 	/**
