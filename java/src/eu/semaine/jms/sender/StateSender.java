@@ -59,7 +59,33 @@ public class StateSender extends XMLSender
 		super(jmsUrl, jmsUser, jmsPassword, topicName, datatype, source);
 	}
 
+	/**
+	 * Send the given state information.
+	 * @param s a state information
+	 * @param usertime the "user" time that this message refers to,
+	 * in milliseconds since system startup.
+	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
+	 * @throws JMSException
+	 */
 	public void sendStateInfo(StateInfo s, long usertime)
+	throws JMSException
+	{
+		sendStateInfo(s, usertime, null, -1);
+	}
+
+	/**
+	 * Send the given state information.
+	 * @param s a state information
+	 * @param usertime the "user" time that this message refers to,
+	 * in milliseconds since system startup.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
+	 * @throws JMSException
+	 */
+	public void sendStateInfo(StateInfo s, long usertime, String contentID, long contentCreationTime)
 	throws JMSException
 	{
 		if (s == null)
@@ -74,7 +100,7 @@ public class StateSender extends XMLSender
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
 		TextMessage message = session.createTextMessage(XMLTool.document2String(document));
-		fillMessageProperties(message, usertime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		message.setStringProperty(s.toString()+"APIVersion", s.getAPIVersion());
 		message.setStringProperty(SEMAINEMessage.EVENT, Event.single.toString());
 		producer.send(message);

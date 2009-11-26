@@ -70,6 +70,14 @@ public class MessageLogComponent extends Component
 			} else {
 				buf.append("period=").append(m.getPeriod()).append(" ");
 			}
+			String contentID = m.getContentID();
+			if (contentID != null) {
+				buf.append("ID=").append(contentID).append(" ");
+			}
+			long contentCreationTime = m.getContentCreationTime();
+			if (contentCreationTime >= 0) {
+				buf.append("(created ").append(contentCreationTime).append(") ");
+			}
 			if (m.getMessage() instanceof TextMessage) {
 				buf.append("\n");
 				buf.append(m.getText());

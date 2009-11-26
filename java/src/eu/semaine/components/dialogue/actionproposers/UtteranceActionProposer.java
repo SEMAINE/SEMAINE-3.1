@@ -1202,7 +1202,7 @@ public class UtteranceActionProposer extends Component
 	{	
 		/* Send utterance to Greta */
 		String response = utterance.getUtterance().getUtterance();
-
+		
 		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
 		Element root = doc.getDocumentElement();
 
@@ -1229,7 +1229,10 @@ public class UtteranceActionProposer extends Component
 		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
 		mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
 
-		fmlSender.sendXML(doc, meta.getTime());
+		String contentID = "fml_uap_"+output_counter;
+		long contentCreationTime = meta.getTime();
+		long userTime = contentCreationTime;
+		fmlSender.sendXML(doc, userTime, contentID, contentCreationTime);
 
 		/* Send the speaking-state around */
 		sendSpeaking();

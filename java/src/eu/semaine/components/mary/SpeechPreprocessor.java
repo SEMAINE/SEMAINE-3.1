@@ -176,7 +176,7 @@ public class SpeechPreprocessor extends Component
 		
     	Document inputDoc = xm.getDocument();
 		String inputText = xm.getText();
-		System.out.println(inputText);
+		//System.out.println(inputText);
 		
 		String localName    = xm.getDocument().getDocumentElement().getLocalName();
 		String namespaceURI = xm.getDocument().getDocumentElement().getNamespaceURI(); 
@@ -200,13 +200,13 @@ public class SpeechPreprocessor extends Component
 			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
 			
-			fmlbmlSender.sendTextMessage(finalData, xm.getUsertime(), xm.getEventType());
+			fmlbmlSender.sendTextMessage(finalData, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 		}
 		else if ( localName.equals(FML.E_FML) && namespaceURI.equals(FML.namespaceURI)) {
-			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 		}
 		else if ( localName.equals(BML.E_BML) && namespaceURI.equals(BML.namespaceURI) ) {
-			fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 		}
 		else {
 			Element backchannel = null;
@@ -215,7 +215,7 @@ public class SpeechPreprocessor extends Component
 				backchannel = XMLTool.getChildElementByLocalNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
 			}
 			if (backchannel != null) {
-				fmlbmlSender.sendXML(inputDoc, xm.getUsertime(), xm.getEventType());
+				fmlbmlSender.sendXML(inputDoc, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 			}
 			else{
 				log.debug("Received fml document without bml or backchannel content -- ignoring.");

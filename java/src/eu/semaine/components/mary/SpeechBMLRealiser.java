@@ -172,7 +172,7 @@ public class SpeechBMLRealiser extends Component
 			// Back-channel synthesis
 			Element bmlSpeech = XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_SPEECH, BML.namespaceURI);
 			if(bmlSpeech == null) {
-				bmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+				bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 				return;
 			}
 			
@@ -228,7 +228,7 @@ public class SpeechBMLRealiser extends Component
 			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
 		}
 		else if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0){
-			bmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
+			bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 		}
 		else{
 			
@@ -263,7 +263,7 @@ public class SpeechBMLRealiser extends Component
 			log.debug("input bml: "+inputText);
 			log.debug("output maryxml: "+realisedOS.toString());
 			log.debug("merged speech output: "+finalData);
-			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
+			bmlSender.sendTextMessage(finalData,  meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 			
 			// SSML to AUDIO using MARY 
 	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.ENGLISH, 
@@ -273,7 +273,7 @@ public class SpeechBMLRealiser extends Component
 			request.readInputData(reader);
 			request.process();
 			request.writeOutputData(audioos);
-			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
+			audioSender.sendBytesMessage(audioos.toByteArray(),  meta.getTime(), xm.getContentID(), xm.getContentCreationTime());
 		}
 	}
 	

@@ -52,6 +52,15 @@ public class SEMAINEMessage
 	 */
 	public static final String PERIOD = "period";
 	
+	/**
+	 * The name of the property used for the content's unique identifier, if any. 
+	 */
+	public static final String CONTENT_ID = "content-id";
+	
+	/**
+	 * The name of the property used for the content's creation time, if given.
+	 */
+	public static final String CONTENT_CREATION_TIME = "content-creation-time";
 	protected Message message;
 
 	/**
@@ -189,6 +198,30 @@ public class SEMAINEMessage
 		return message.getIntProperty(PERIOD);
 	}
 
+	/**
+	 * Get the unique ID of the content in the message, if any. 
+	 * @return the content ID as a string, or null if the message doesn't have a content ID.
+	 * @throws JMSException
+	 */
+	public String getContentID() throws JMSException {
+		if (message.propertyExists(CONTENT_ID)) {
+			return message.getStringProperty(CONTENT_ID);
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the time when the content was originally created.
+	 * @return the time in user time, or -1 if the message doesn't contain this property.
+	 * @throws JMSException
+	 */
+	public long getContentCreationTime() throws JMSException {
+		if (message.propertyExists(CONTENT_CREATION_TIME)) {
+			return message.getLongProperty(CONTENT_CREATION_TIME);
+		}
+		return -1;
+	}
+	
 	/**
 	 * Determine whether the message is a text message.
 	 * @return true if the message is a text message, false otherwise.

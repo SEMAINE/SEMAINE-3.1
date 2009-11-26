@@ -35,7 +35,7 @@ public class SemaineAudioPlayer extends Component
 {
 	private BytesReceiver audioReceiver;
 	private XMLSender callbackSender;
-	private BlockingQueue<byte[]> inputWaiting;
+	private BlockingQueue<SEMAINEBytesMessage> inputWaiting;
 	Playloop player;
 	
 	/**
@@ -49,7 +49,7 @@ public class SemaineAudioPlayer extends Component
 		callbackSender = new XMLSender("semaine.callback.output.audio", "SemaineML", getName()); 
 		receivers.add(audioReceiver); // to set up properly
 		senders.add(callbackSender);
-		inputWaiting   = new LinkedBlockingQueue<byte[]>();
+		inputWaiting   = new LinkedBlockingQueue<SEMAINEBytesMessage>();
 		player =  new Playloop(inputWaiting);
 	}
 	
@@ -58,9 +58,8 @@ public class SemaineAudioPlayer extends Component
 	{
 		if(m.isBytesMessage()){
 			SEMAINEBytesMessage bm = (SEMAINEBytesMessage)m;
-			byte[] audioData =  bm.getBytes();
 			try {
-				inputWaiting.put(audioData);
+				inputWaiting.put(bm);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -70,34 +69,35 @@ public class SemaineAudioPlayer extends Component
 	
 	public class Playloop extends Thread{
 		
-		protected BlockingQueue<byte[]> inputWaiting;
+		protected BlockingQueue<SEMAINEBytesMessage> inputWaiting;
 		protected boolean playing = false;
 		
-		public Playloop(BlockingQueue<byte[]> inputWaiting){
+		public Playloop(BlockingQueue<SEMAINEBytesMessage> inputWaiting){
 			this.inputWaiting = inputWaiting;	
 			start();
 		}
 		
 		public void run(){
 			for (;;)  {  
-				byte[] audioData = null;
+				SEMAINEBytesMessage bm = null;
 				try {
 					// block until input becomes available
-					audioData = inputWaiting.poll(waitingTime, TimeUnit.MILLISECONDS);
-					if(audioData == null) continue;
+					bm = inputWaiting.poll(waitingTime, TimeUnit.MILLISECONDS);
+					if(bm == null) continue;
 				} catch (InterruptedException ie) {
 					// if we have no input, we'll keep on waiting
 					continue;
 				}
-				ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
+				ByteArrayInputStream bais = new ByteArrayInputStream(bm.getBytes());
 				
 				try {
-					sendCallbackMessage("start");
+					sendCallbackMessage("start", bm.getContentID());
+					log.debug(bm.getContentID()+" started playing "+(meta.getTime()-bm.getContentCreationTime())+" ms after creation");
 					AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
 	            	AudioPlayer player = new AudioPlayer(ais);
 					player.start();
 					player.join();
-					sendCallbackMessage("end");
+					sendCallbackMessage("end", bm.getContentID());
 					//sleep(1000);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -107,14 +107,14 @@ public class SemaineAudioPlayer extends Component
 		
 	}
 	
-	public void sendCallbackMessage(String type) throws JMSException {
+	public void sendCallbackMessage(String type, String contentID) throws JMSException {
 		
 		Document doc = XMLTool.newDocument("callback", SemaineML.namespaceURI);
 		Element root = doc.getDocumentElement();
 		Element callback = XMLTool.appendChildElement(root, SemaineML.E_EVENT , SemaineML.namespaceURI);
 		callback.setAttribute("type", type);
 		callback.setAttribute("data",  "audio");
-		callback.setAttribute("id", "audio-01");
+		callback.setAttribute("id", contentID != null ? contentID : "unknown");
 		callback.setAttribute(SemaineML.A_TIME,  String.valueOf(meta.getTime()));
 		//callback.setTextContent("Synthesis request handled successfully.");
 		

@@ -64,7 +64,11 @@ public class DummyVisualFML2BML extends Component
 				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
 				doc.adoptNode(bml);
 				doc.replaceChild(bml, doc.getDocumentElement());
-				bmlSender.sendXML(doc, xm.getUsertime(), xm.getEventType());
+				String contentID = bml.getAttribute(BML.A_ID);
+				if ("".equals(contentID)) {
+					contentID = null;
+				}
+				bmlSender.sendXML(doc, meta.getTime(), xm.getEventType(), contentID, xm.getContentCreationTime());
 			}
 			else{
 				Element backchannel = null;
