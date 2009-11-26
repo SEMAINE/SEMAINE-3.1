@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
@@ -35,12 +36,18 @@ public class MessageLogComponent extends Component
 	 * @param componentName
 	 * @throws JMSException
 	 */
-	public MessageLogComponent(String topic, String messageSelector)
+	public MessageLogComponent(String topics, String messageSelector)
 	throws JMSException
 	{
 		super("MessageLogComponent");
-		receiver = new Receiver(topic, messageSelector);
-		receivers.add(receiver);
+		StringTokenizer st = new StringTokenizer(topics);
+		while (st.hasMoreTokens()) {
+			String topic = st.nextToken().trim();
+			if (!"".equals(topic)) {
+				receiver = new Receiver(topic, messageSelector);
+				receivers.add(receiver);
+			}
+		}
 	}
 
 	@Override
