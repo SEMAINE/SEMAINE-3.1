@@ -328,7 +328,7 @@ public class Sender extends IOBase
 	 * normally call this method as well (as <code>super.fillMessageProperties(message, usertime)</code>).
 	 * @param a message object in preparation for sending.
 	 * @param usertime the "user" time that this message refers to,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
 	 */
 	protected void fillMessageProperties(Message message, long usertime)
 	throws JMSException
