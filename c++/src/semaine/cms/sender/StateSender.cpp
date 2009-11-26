@@ -22,7 +22,7 @@ namespace cms {
 
 namespace sender {
 
-void StateSender::sendStateInfo(StateInfo * s, long long usertime)
+void StateSender::sendStateInfo(StateInfo * s, long long usertime, const std::string & contentID, long long contentCreationTime)
 throw(CMSException, SystemConfigurationException)
 {
 	if (s == NULL)
@@ -35,7 +35,7 @@ throw(CMSException, SystemConfigurationException)
 	if (!isConnectionStarted)
 		throw SystemConfigurationException("Connection is not started!");
 	TextMessage * message = session->createTextMessage(XMLTool::dom2string(document));
-	fillMessageProperties(message, usertime);
+	Sender::fillMessageProperties(message, usertime, contentID, contentCreationTime);
 	message->setStringProperty(s->toString()+"APIVersion", s->getAPIVersion());
 	message->setStringProperty(SEMAINEMessage::EVENT, SEMAINE_CMS_EVENT_SINGLE);
 	producer->send(message);

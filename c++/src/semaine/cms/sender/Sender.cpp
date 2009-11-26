@@ -15,7 +15,7 @@ namespace semaine {
 namespace cms {
 namespace sender {
 
-	Sender::Sender(const std::string & topicName, const std::string & datatype, const std::string & source) 
+	Sender::Sender(const std::string & topicName, const std::string & datatype, const std::string & source)
 	throw (CMSException) :
 	IOBase(topicName),
 	datatype(datatype),
@@ -37,7 +37,7 @@ namespace sender {
 
 
 	void Sender::initialise()
-	throw (CMSException) 
+	throw (CMSException)
 	{
 		producer = session->createProducer(topic);
 		producer->setDeliveryMode(DeliveryMode::PERSISTENT);
@@ -47,10 +47,16 @@ namespace sender {
 	void Sender::sendTextMessage(const std::string & text, long long usertime)
 	throw(CMSException, SystemConfigurationException)
 	{
+		sendTextMessage(text, usertime, "", -1);
+	}
+
+	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & contentID, long long contentCreationTime)
+	throw(CMSException, SystemConfigurationException)
+	{
 		if (!isConnectionStarted)
 			throw SystemConfigurationException("Connection is not started!");
 		TextMessage * message = session->createTextMessage(text);
-		fillMessageProperties(message, usertime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		if (isPeriodic())
 			message->setIntProperty(SEMAINEMessage::PERIOD, getPeriod());
 		else // event-based
@@ -60,6 +66,12 @@ namespace sender {
 	}
 
 	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & eventType)
+	throw(CMSException, SystemConfigurationException)
+	{
+		sendTextMessage(text, usertime, eventType, "", -1);
+	}
+
+	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & eventType, const std::string & contentID, long long contentCreationTime)
 	throw(CMSException, SystemConfigurationException)
 	{
 		if (!isConnectionStarted)

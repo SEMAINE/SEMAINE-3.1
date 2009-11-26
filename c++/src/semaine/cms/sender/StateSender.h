@@ -57,7 +57,7 @@ public:
 
 	virtual ~StateSender() {}
 
-	void sendStateInfo(semaine::datatypes::stateinfo::StateInfo * state, long long usertime)
+	void sendStateInfo(semaine::datatypes::stateinfo::StateInfo * state, long long usertime, const std::string & contentID = "", long long contentCreationTime = -1)
 	throw(CMSException, SystemConfigurationException);
 };
 

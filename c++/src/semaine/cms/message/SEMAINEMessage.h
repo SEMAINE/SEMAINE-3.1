@@ -70,7 +70,17 @@ public:
 	 */
 	static const std::string PERIOD;
 
-		/**
+	/**
+	 * The name of the property used for the content's unique identifier, if any.
+	 */
+	static const std::string CONTENT_ID;
+
+	/**
+	 * The name of the property used for the content's creation time, if given.
+	 */
+	static const std::string CONTENT_CREATION_TIME;
+
+	/**
 	 * Create a SEMAINE specific abstraction from the given message.
 	 * @param message a message containing SEMAINE-specific properties.
 	 * @throws NullPointerException if message is null.
@@ -160,6 +170,32 @@ public:
 		if (!message->propertyExists(PERIOD))
 			throw MessageFormatException("Message is not periodic, cannot provide period length");
 		return message->getIntProperty(PERIOD);
+	}
+
+	/**
+	 * Get the unique ID of the content in the message, if any.
+	 * @return the content ID as a string, or the empty string if the message doesn't have a content ID.
+	 * @throws CMSException if the CMS provider fails to get the property value due to some internal error.
+	 */
+	std::string getContentID() throw (CMSException)
+	{
+		if (message->propertyExists(CONTENT_ID)) {
+			return message->getStringProperty(CONTENT_ID);
+		}
+		return "";
+	}
+
+	/**
+	 * Get the time when the content was originally created.
+	 * @return the time in user time, or -1 if the message doesn't contain this property.
+	 * @throws CMSException if the CMS provider fails to get the property value due to some internal error.
+	 */
+	long long getContentCreationTime() throw (CMSException)
+	{
+		if (message->propertyExists(CONTENT_CREATION_TIME)) {
+			return message->getLongProperty(CONTENT_CREATION_TIME);
+		}
+		return -1;
 	}
 
 	/**

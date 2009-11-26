@@ -69,7 +69,7 @@ public:
 		const std::string & topicName, const std::string & datatype, const std::string & source)
 	throw (CMSException);
 
-		
+
 	/**
 	 * The name of the data type sent.
 	 * @return a non-null and non-empty string.
@@ -78,7 +78,7 @@ public:
 	{
 		return datatype;
 	}
-	
+
 	/**
 	 * The name of the source component sending the data.
 	 * @return a non-null and non-empty string.
@@ -99,7 +99,7 @@ public:
 			throw SEMAINEException("Period must be positive");
 		this->period = aPeriod;
 	}
-	
+
 	/**
 	 * Determine that the data is event-based, not periodic.
 	 * Individual messages can transport different kinds of events,
@@ -111,16 +111,16 @@ public:
 	}
 
 	/**
-	 * Test whether this sender is set to send messages periodically. 
+	 * Test whether this sender is set to send messages periodically.
 	 * @return true if sender is set to periodic, false otherwise.
 	 */
 	bool isPeriodic()
 	{
 		return period != 0;
 	}
-	
+
 	/**
-	 * Test whether this sender is set to send messages in an event-based way. 
+	 * Test whether this sender is set to send messages in an event-based way.
 	 * @return true if sender is set to event-based, false otherwise.
 	 */
 	bool isEventBased()
@@ -130,7 +130,7 @@ public:
 
 	/**
 	 * For periodic senders, get the period of sending.
-	 * @return An integer representing the period of sending, in milliseconds. 
+	 * @return An integer representing the period of sending, in milliseconds.
 	 */
 	int getPeriod()
 	{
@@ -138,9 +138,9 @@ public:
 			throw SEMAINEException("Cannot report period for event-based Sender!");
 		return period;
 	}
-	
+
 	/**
-	 * Set the time to live for all messages sent by this sender, 
+	 * Set the time to live for all messages sent by this sender,
 	 * i.e. the number of milliseconds before the message is considered
 	 * obsolete by the JMS system. Messages that are not delivered by their
 	 * expiration time are deleted by the JMS system.
@@ -151,23 +151,23 @@ public:
 	{
 		producer->setTimeToLive(aTimeToLive);
 	}
-	
+
 	/**
-	 * Get the time to live for all messages sent by this sender, 
+	 * Get the time to live for all messages sent by this sender,
 	 * i.e. the number of milliseconds before the message is considered
 	 * obsolete by the JMS system. Messages that are not delivered by their
 	 * expiration time are deleted by the JMS system.
-	 * @return time to live, in milliseconds. 
+	 * @return time to live, in milliseconds.
 	 * A value of 0 means unlimited time, i.e. the messages will not expire.
 	 */
 	long long getTimeToLive() throw(CMSException)
 	{
 		return producer->getTimeToLive();
 	}
-	
+
 	/**
 	 * Send a text message via this sender.
-	 * This will send a message to the registered topic 
+	 * This will send a message to the registered topic
 	 * with the following message properties:
 	 * <ul>
 	 *   <li><code>datatype</code> is a String property containing the value produced by {@link #getDatatype()};</li>
@@ -183,15 +183,43 @@ public:
 	 * will expire.
 	 * @param text the message text.
 	 * @param usertime the "user" time that this message refers to,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
 	 * @throws SystemConfigurationException if the connection is not started or the sender is in event-based mode.
 	 */
 	void sendTextMessage(const std::string & text, long long usertime)
 	throw(CMSException, SystemConfigurationException);
-	
+
+	/**
+	 * Send a text message via this sender.
+	 * This will send a message to the registered topic
+	 * with the following message properties:
+	 * <ul>
+	 *   <li><code>datatype</code> is a String property containing the value produced by {@link #getDatatype()};</li>
+	 *   <li><code>source</code> is a String property containing the value produced by {@link #getSource()};</li>
+	 *   <li><code>usertime</code> is a long property containing the value of parameter <code>usertime</code>;</li>
+	 *   <li>if the message is periodic ({@link #isPeriodic()} returns <code>true</code>),
+	 *   <code>period</code> is an int property containing the value returned by {@link #getPeriod()};</li>
+	 *   <li>else, the message is event-based. <code>event</code> is a String property; as
+	 *   this method does not specify an event type, the default value <code>single</code> is assumed.</li>
+	 * </ul>
+	 * Furthermore, if {@link #getTimeToLive()} returns a non-zero value, the message will
+	 * contain a header field <code>JMSExpiration</code> containing the time when the message
+	 * will expire.
+	 * @param text the message text.
+	 * @param usertime the "user" time that this message refers to,
+	 * in milliseconds since system startup.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @throws SystemConfigurationException if the connection is not started or the sender is in event-based mode.
+	 */
+	void sendTextMessage(const std::string & text, long long usertime, const std::string & contentID, long long contentCreationTime)
+	throw(CMSException, SystemConfigurationException);
+
 	/**
 	 * Send a text message via this sender, for event-based messages.
-	 * This will send a message to the registered topic 
+	 * This will send a message to the registered topic
 	 * with the following message properties:
 	 * <ul>
 	 *   <li><code>datatype</code> is a String property containing the value produced by {@link #getDatatype()};</li>
@@ -205,11 +233,38 @@ public:
 	 * will expire.
 	 * @param text the message text.
 	 * @param usertime the "user" time that this message refers to,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
 	 * @param event the type of event represented by this message.
 	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
 	 */
 	void sendTextMessage(const std::string & text, long long usertime, const std::string & eventType)
+	throw(CMSException, SystemConfigurationException);
+
+	/**
+	 * Send a text message via this sender, for event-based messages.
+	 * This will send a message to the registered topic
+	 * with the following message properties:
+	 * <ul>
+	 *   <li><code>datatype</code> is a String property containing the value produced by {@link #getDatatype()};</li>
+	 *   <li><code>source</code> is a String property containing the value produced by {@link #getSource()};</li>
+	 *   <li><code>usertime</code> is a long property containing the value of parameter <code>usertime</code>;</li>
+	 *   <li><code>event</code> is a String property containing
+	 *   the String representation of the event parameter to this method.</li>
+	 * </ul>
+	 * Furthermore, if {@link #getTimeToLive()} returns a non-zero value, the message will
+	 * contain a header field <code>JMSExpiration</code> containing the time when the message
+	 * will expire.
+	 * @param text the message text.
+	 * @param usertime the "user" time that this message refers to,
+	 * in milliseconds since system startup.
+	 * @param event the type of event represented by this message.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @throws SystemConfigurationException if the connection is not started or the sender is in periodic mode.
+	 */
+	void sendTextMessage(const std::string & text, long long usertime, const std::string & eventType, const std::string & contentID, long long contentCreationTime)
 	throw(CMSException, SystemConfigurationException);
 
 
@@ -226,7 +281,7 @@ protected:
 	const std::string source;
 	/**
 	 * If data is periodic, the period in which data is sent, in milliseconds.
-	 * A value of 0 means not periodic. 
+	 * A value of 0 means not periodic.
 	 * Data can be either periodic or event-based, but not both at the same time.
 	 */
 	int period;
@@ -239,7 +294,7 @@ protected:
 	 * normally call this method as well (as <code>super.fillMessageProperties(message, usertime)</code>).
 	 * @param a pointer to a message object in preparation for sending.
 	 * @param usertime the "user" time that this message refers to,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
 	 */
 	virtual void fillMessageProperties(Message * message, long long usertime)
 	throw(CMSException)
@@ -248,7 +303,20 @@ protected:
 		message->setStringProperty(SEMAINEMessage::SOURCE, getSource());
 		message->setLongProperty(SEMAINEMessage::USERTIME, usertime);
 	}
-	
+
+	void fillMessageProperties(Message * message, long long usertime, const std::string & contentID, long long contentCreationTime)
+	throw(CMSException)
+	{
+		fillMessageProperties(message, usertime);
+
+		if (contentID != "") {
+			message->setStringProperty(SEMAINEMessage::CONTENT_ID, contentID);
+		}
+		if (contentCreationTime >= 0) {
+			message->setLongProperty(SEMAINEMessage::CONTENT_CREATION_TIME, contentCreationTime);
+		}
+
+	}
 
 
 };

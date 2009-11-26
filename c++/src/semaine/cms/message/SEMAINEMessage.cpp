@@ -18,6 +18,8 @@ const std::string SEMAINEMessage::DATATYPE = "datatype";
 const std::string SEMAINEMessage::SOURCE = "source";
 const std::string SEMAINEMessage::EVENT = "event";
 const std::string SEMAINEMessage::PERIOD = "period";
+const std::string SEMAINEMessage::CONTENT_ID = "content-id";
+const std::string SEMAINEMessage::CONTENT_CREATION_TIME = "content-creation-time";
 
 
 	SEMAINEMessage::SEMAINEMessage(const Message * message)

@@ -49,7 +49,7 @@ public:
 	 */
 	XMLSender(const std::string & topicName, const std::string & datatype, const std::string & source)
 	throw(CMSException, SystemConfigurationException);
-	
+
 	/**
 	 * Create a new CMS IOBase connection with the given topic on the given JMS server.
 	 * @param cmsUrl the url where to contact the JMS server
@@ -64,11 +64,35 @@ public:
 	throw (CMSException, SystemConfigurationException);
 
 	virtual ~XMLSender();
-	
-	void sendXML(const XERCES_CPP_NAMESPACE::DOMDocument * document, long long usertime, const std::string & event = SEMAINE_CMS_EVENT_SINGLE)
+
+	/**
+	 * Send an XML message via this sender, for event-based messages.
+	 * This will send a message to the registered topic
+	 * with the following message properties:
+	 * <ul>
+	 *   <li><code>datatype</code> is a String property containing the value produced by {@link #getDatatype()};</li>
+	 *   <li><code>source</code> is a String property containing the value produced by {@link #getSource()};</li>
+	 *   <li><code>usertime</code> is a long property containing the value of parameter <code>usertime</code>;</li>
+	 *   <li><code>event</code> is a String property containing
+	 *   the String representation of the event parameter to this method.</li>
+	 * </ul>
+	 * Furthermore, if {@link #getTimeToLive()} returns a non-zero value, the message will
+	 * contain a header field <code>JMSExpiration</code> containing the time when the message
+	 * will expire.
+	 * @param text the message text.
+	 * @param usertime the "user" time that this message refers to,
+	 * in milliseconds since system startup.
+	 * @param event the type of event represented by this message.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @throws SystemConfigurationException if the connection is not started or the sender is in periodic mode.
+	 */
+	void sendXML(const XERCES_CPP_NAMESPACE::DOMDocument * document, long long usertime, const std::string & event = SEMAINE_CMS_EVENT_SINGLE, const std::string & contentID = "", long long contentCreationTime = -1)
 	throw(CMSException, SystemConfigurationException);
-	
-	
+
+
 
 
 protected:
