@@ -30,9 +30,9 @@ public class UserPresenceInterpreter extends Component
 	public static final long SEMAINE_LIFESIGNLIMIT = 10000;
 
 	
-	private long lastFaceTime = 0; // last time we've seen a face
+	private long lastFaceTime = -9999999; // last time we've seen a face
 	private long faceElapsed = 0; // Estimation of time elapsed since seeing a face
-	private long lastVoiceTime = 0; // last time we've heard a voice
+	private long lastVoiceTime = -9999999; // last time we've heard a voice
 	private long voiceElapsed = 0; // Estimation of time elapsed since hearing a voice
 	private long lifeElapsed = 0; // Estimation of time elapsed since sensing life
 	private boolean userPresent = false;
@@ -102,6 +102,7 @@ public class UserPresenceInterpreter extends Component
 	private void sendUserPresenceChange()
 	throws JMSException
 	{
+		System.out.println("XXXXXXXXXXXXXXX User present = " + userPresent);
 		Map<String, String> info = new HashMap<String, String>();
 		info.put("userPresent", userPresent ? SemaineML.V_PRESENT : SemaineML.V_ABSENT);
 		ContextStateInfo csi = new ContextStateInfo(info);
@@ -128,7 +129,8 @@ public class UserPresenceInterpreter extends Component
 		boolean voice = false;
 		String topicName  = m.getTopicName();
 		if (topicName.equals(facedetReceiver.getTopicName())) {
-			// -- Wehn we receve a faceloc, it MEANS that a face is detected (no need to read message)
+			// -- When we receve a faceloc, it MEANS that a face is detected (no need to read message)
+			System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
 			face = true;
 		} else if (topicName.equals(speakingReceiver.getTopicName())) {
 			// TODO: verify if the message is a speaking message
