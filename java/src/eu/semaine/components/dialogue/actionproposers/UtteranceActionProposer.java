@@ -1070,6 +1070,9 @@ public class UtteranceActionProposer extends Component
 	public ArrayList<AgentSpokenUtterance> convertToSpokenUtterances( ArrayList<AgentUtterance> uttrs )
 	{
 		ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
+		if( uttrs == null ) {
+			return spokenUtterances;
+		}
 		for( AgentUtterance uttr : uttrs ) {
 			spokenUtterances.add( new AgentSpokenUtterance( uttr ) );
 		}
