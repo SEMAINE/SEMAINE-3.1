@@ -54,8 +54,8 @@ public class MessageLogInspectorGUI extends javax.swing.JFrame {
         StringBuilder buf = new StringBuilder();
         while ((line = br.readLine()) != null) {
             if (line.startsWith("DEBUG semaine.log.")
-                || line.startsWith("INFO semaine.log.")
-                || line.startsWith("WARN semaine.log.")
+                || line.startsWith("INFO  semaine.log.")
+                || line.startsWith("WARN  semaine.log.")
                 || line.startsWith("ERROR semaine.log.")) {
                 // New section starts
                 if (topic != null && buf.length() > 0) {
@@ -194,6 +194,12 @@ public class MessageLogInspectorGUI extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
+
         pSelectTopics.setLayout(new javax.swing.BoxLayout(pSelectTopics, javax.swing.BoxLayout.Y_AXIS));
 
         pSelectTopics.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Select Topics to display"));
@@ -276,6 +282,10 @@ public class MessageLogInspectorGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        System.exit(0);
+    }//GEN-LAST:event_formWindowClosed
 
     private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
         resetTable();
