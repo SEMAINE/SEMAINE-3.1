@@ -150,6 +150,9 @@ public class UtteranceActionProposer extends Component
 
 	/* A list with all context-templates, used for picking a response */
 	private ArrayList<ContextTemplate> templates ;
+	
+	/* Running number for the ID's of the output */
+	private int output_counter = 1;
 
 
 	/**
@@ -1200,17 +1203,15 @@ public class UtteranceActionProposer extends Component
 		/* Send utterance to Greta */
 		String response = utterance.getUtterance().getUtterance();
 
-		String id = "s1";
-
 		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
 		Element root = doc.getDocumentElement();
 
 		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
-		bml.setAttribute(BML.A_ID, "bml1");
+		bml.setAttribute(BML.A_ID, "bml_uap_"+output_counter);
 		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
-		fml.setAttribute(FML.A_ID, "fml1");
+		fml.setAttribute(FML.A_ID, "fml_uap_"+output_counter);
 		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
-		speech.setAttribute(BML.A_ID, id);
+		speech.setAttribute(BML.A_ID, "speech_uap_"+output_counter);
 		speech.setAttribute(BML.E_TEXT, response);
 		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
 		speech.setAttribute("voice", "activemary");
@@ -1247,6 +1248,8 @@ public class UtteranceActionProposer extends Component
 		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().getUtterance().split(" ").length * 250)+8000 );
 
 		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance().getUtterance() );
+		
+		output_counter++;
 	}
 
 	/**
