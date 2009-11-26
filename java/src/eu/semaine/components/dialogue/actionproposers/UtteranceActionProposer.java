@@ -1221,13 +1221,13 @@ public class UtteranceActionProposer extends Component
 		int counter=1;
 		for( String word : response.split(" ") ) {
 			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
-			mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
+			mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
 			Node text = doc.createTextNode(word);
 			speech.appendChild(text);
 			counter++;
 		}
 		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
-		mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
+		mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
 
 		fmlSender.sendXML(doc, meta.getTime());
 
