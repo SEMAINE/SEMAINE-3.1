@@ -21,6 +21,8 @@ import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -36,9 +38,13 @@ import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
+import org.w3c.dom.traversal.DocumentTraversal;
+import org.w3c.dom.traversal.NodeFilter;
+import org.w3c.dom.traversal.NodeIterator;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 
@@ -424,6 +430,46 @@ public class XMLTool
     }
 	
 	/**
+	 * Merge two XML files using XSLT
+	 * @param xmlFileContent1, first XML file content 
+	 * @param xmlFileContent2, second XML file content
+	 * @param xmlStyleSheet, XSL style sheet as a inputstream 
+	 * @param refCodeName, code name used in xsl sheet to refer xmlFile2 (example: semaine.mary.intonation ) 
+	 * @return output of merged xml file
+	 * @throws Exception
+	 * @throws FileNotFoundException
+	 */
+	public static Document mergeTwoXMLFiles(Document xmlFileContent1, final Document xmlFileContent2, InputStream xmlStyleSheet, final String refCodeName) throws Exception,FileNotFoundException
+    {
+	     
+	    Templates mergeXML2IntoStylesheet;
+	    TransformerFactory tFactory = TransformerFactory.newInstance();
+	    //StreamSource stylesheetStream = new StreamSource(new FileReader(xmlStyleSheet));
+	    StreamSource stylesheetStream = new StreamSource(xmlStyleSheet);
+        
+        mergeXML2IntoStylesheet = tFactory.newTemplates(stylesheetStream);
+        DOMSource xml1Source = new DOMSource(xmlFileContent1);
+        DOMResult mergedDR = new DOMResult();
+        // Transformer is not guaranteed to be thread-safe -- therefore, we
+        // need one per thread.
+        Transformer mergingTransformer = mergeXML2IntoStylesheet.newTransformer();
+        mergingTransformer.setURIResolver(new URIResolver() {
+            public Source resolve(String href, String base) {
+                if (href == null) {
+                    return null;
+                } else if (href.equals(refCodeName)) {
+                	return (new DOMSource(xmlFileContent2));
+				} else {
+                    return null;
+                }
+            }
+        });
+
+        mergingTransformer.transform(xml1Source, mergedDR);
+        return (Document) mergedDR.getNode();
+    }
+
+	/**
 	 * Document type to String format conversion 
 	 * @param document
 	 * @return
@@ -453,4 +499,33 @@ public class XMLTool
     }
 	
 
+	/**
+	 * Create a node iterator for the current document, which will provide exactly
+	 * the elements below root in the given namespace whose local names are in localNames.
+	 * This is independent of any namespace prefixes.
+	 * @param doc
+	 * @param root
+	 * @param namespaceURI
+	 * @param localNames the array of local names to be accepted.
+	 * @return
+	 */
+	public static NodeIterator createNodeIterator(Document doc, Node root, final String namespaceURI, final String... localNames) {
+		NodeIterator ni = ((DocumentTraversal)doc).createNodeIterator(root, NodeFilter.SHOW_ELEMENT, 
+				new NodeFilter() {
+					@Override
+					public short acceptNode(Node n) {
+						if (!isSameNamespace(n.getNamespaceURI(), namespaceURI)) {
+							return NodeFilter.FILTER_SKIP;
+						}
+						for (String localName : localNames) {
+							if (localName.equals(n.getLocalName())) {
+								return NodeFilter.FILTER_ACCEPT;
+							}
+						}
+						return NodeFilter.FILTER_SKIP;
+					}
+		}, false);
+		return ni;
+	}
+	
 }

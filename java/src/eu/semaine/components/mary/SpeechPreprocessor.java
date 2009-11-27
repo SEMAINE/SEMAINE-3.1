@@ -18,10 +18,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import marytts.datatypes.MaryData;
 import marytts.datatypes.MaryDataType;
 import marytts.modules.synthesis.Voice;
 import marytts.server.Mary;
@@ -29,12 +31,17 @@ import marytts.server.Request;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.traversal.DocumentTraversal;
+import org.w3c.dom.traversal.NodeFilter;
+import org.w3c.dom.traversal.NodeIterator;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.control.ParticipantControlGUI;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
+import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
@@ -164,7 +171,6 @@ public class SpeechPreprocessor extends Component
 	{	
 		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
-		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
 		//Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
 		Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
 		AudioFormat af = voice.dbAudioFormat();
@@ -172,11 +178,9 @@ public class SpeechPreprocessor extends Component
             af, AudioSystem.NOT_SPECIFIED);
     	
         //Request request = new Request(MaryDataType.SSML,MaryDataType.INTONATION,Locale.US,Voice.getDefaultVoice(Locale.ENGLISH),null,null,1,null);
-    	Request request = new Request(MaryDataType.SSML,MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.ENGLISH,voice,"","",1,aff);
+    	Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
 		
     	Document inputDoc = xm.getDocument();
-		String inputText = xm.getText();
-		//System.out.println(inputText);
 		
 		String localName    = xm.getDocument().getDocumentElement().getLocalName();
 		String namespaceURI = xm.getDocument().getDocumentElement().getNamespaceURI(); 
@@ -185,22 +189,58 @@ public class SpeechPreprocessor extends Component
 			
 			transformer = fml2ssmlStylesheet.newTransformer();
 			transformer.setParameter("character.voice", characters2voices.get(getCurrentCharacter()));
-			transformer.transform(new DOMSource(inputDoc), new StreamResult(ssmlos));
-			String ssml = ssmlos.toString();
-			Reader reader = new StringReader(ssml);
-			ByteArrayOutputStream  intonationOS = new ByteArrayOutputStream();
-			try {
-				request.readInputData(reader);
-				request.process();
-				request.writeOutputData(intonationOS);
-			} catch (Exception e) {
-				throw new Exception("MARY cannot process input -- SSML input was:\n"+ssml, e);
+
+			// Marc, 27.11.09:
+			// Use DOM rather than strings so we can replace identifiers in document with
+			// standard ones, and translate them back in the result:
+			DOMResult ssmlDR = new DOMResult();
+			transformer.transform(new DOMSource(inputDoc), ssmlDR);
+			Document ssmlDoc = (Document) ssmlDR.getNode();
+			// Normalise documents for MARY Cache:
+			// Replace identifiers (<mark name="..."/> attributes) with placeholders, and remember them:
+			Map<String, String> placeholders = new HashMap<String, String>();
+			NodeIterator ni = XMLTool.createNodeIterator(ssmlDoc, ssmlDoc, SSML.namespaceURI, SSML.E_MARK);
+			Element elt = null;
+			int i = 0;
+			while ((elt = (Element)ni.nextNode()) != null) {
+				String name = elt.getAttribute(SSML.A_NAME);
+				if (!"".equals(name)) {
+					String placeholder = "m"+i;
+					elt.setAttribute(SSML.A_NAME, placeholder);
+					placeholders.put(placeholder, name);
+					i++;
+				}
 			}
 			
-			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
-			String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			String ssmlString = XMLTool.document2String(ssmlDoc);
+			log.debug("Sending the following SSML to MARY:\n"+ssmlString);
+			Document maryDoc = null;
+			try {
+				MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
+				ssmlData.setDocument(ssmlDoc);
+				request.setInputData(ssmlData);
+				request.process();
+				MaryData maryOut = request.getOutputData();
+				maryDoc = maryOut.getDocument();
+			} catch (Exception e) {
+				throw new Exception("MARY cannot process input -- SSML input was:\n"+ssmlString, e);
+			}
+			assert maryDoc != null;
+			// Replace placeholders in maryDoc back into original names:
+			NodeIterator ni2 = XMLTool.createNodeIterator(maryDoc, maryDoc, maryDoc.getDocumentElement().getNamespaceURI(), "mark");
+			Element elt2 = null;
+			while ((elt2 = (Element)ni2.nextNode()) != null) {
+				String placeholder = elt2.getAttribute("name");
+				String name = placeholders.get(placeholder);
+				elt2.setAttribute("name", name);
+			}
 			
-			fmlbmlSender.sendTextMessage(finalData, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			
+			
+			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
+			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			Document finalData = XMLTool.mergeTwoXMLFiles(inputDoc, maryDoc, SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			fmlbmlSender.sendXML(finalData, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 		}
 		else if ( localName.equals(FML.E_FML) && namespaceURI.equals(FML.namespaceURI)) {
 			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());

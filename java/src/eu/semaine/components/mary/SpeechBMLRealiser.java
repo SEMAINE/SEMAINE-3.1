@@ -7,7 +7,9 @@ package eu.semaine.components.mary;
 import java.io.ByteArrayOutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.jms.JMSException;
 import javax.sound.sampled.AudioFileFormat;
@@ -16,10 +18,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import marytts.datatypes.MaryData;
 import marytts.datatypes.MaryDataType;
 import marytts.modules.synthesis.Voice;
 import marytts.server.Mary;
@@ -27,6 +31,7 @@ import marytts.server.Request;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.traversal.NodeIterator;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.control.ParticipantControlGUI;
@@ -162,8 +167,6 @@ public class SpeechBMLRealiser extends Component
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 		Document input = xm.getDocument();
 		String inputText = xm.getText();
-		ByteArrayOutputStream ssmlos = new ByteArrayOutputStream();
-		ByteArrayOutputStream bmlos = new ByteArrayOutputStream();
 		
 		boolean isBackChannel = isBackChannelRequest(xm);
 		
@@ -235,44 +238,93 @@ public class SpeechBMLRealiser extends Component
 			// BML speech timing info removal
 			transformer = bmlSpeechTimingRemoverStylesheet.newTransformer();
 			//transformer.setParameter("character.voice", "spike");
-			transformer.transform(new DOMSource(input), new StreamResult(bmlos));
-			String bml = bmlos.toString();
-			//System.out.println("BML OUTPUT: "+ bml);
-			
+
+			// Marc, 27.11.09:
+			// Use DOM rather than strings so we can replace identifiers in document with
+			// standard ones, and translate them back in the result:
+
+			DOMResult bmlDR = new DOMResult();
+			transformer.transform(new DOMSource(input), bmlDR);
+			Document bmlDoc = (Document) bmlDR.getNode();
 			
 			// Utterance synthesis
 			transformer = bml2ssmlStylesheet.newTransformer();
 			transformer.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
 			//transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
-			transformer.transform(new DOMSource(XMLTool.string2Document(bml)), new StreamResult(ssmlos));
+			DOMResult ssmlDR = new DOMResult();
+			transformer.transform(new DOMSource(bmlDoc), ssmlDR);
+			Document ssmlDoc = (Document) ssmlDR.getNode();
+			// Normalise documents for MARY Cache:
+			// Replace identifiers (<mark name="..."/> attributes) with placeholders, and remember them:
+			Map<String, String> placeholders = new HashMap<String, String>();
+			NodeIterator ni = XMLTool.createNodeIterator(ssmlDoc, ssmlDoc, SSML.namespaceURI, SSML.E_MARK);
+			Element elt = null;
+			int i = 0;
+			while ((elt = (Element)ni.nextNode()) != null) {
+				String name = elt.getAttribute(SSML.A_NAME);
+				if (!"".equals(name)) {
+					String placeholder = "m"+i;
+					elt.setAttribute(SSML.A_NAME, placeholder);
+					placeholders.put(placeholder, name);
+					i++;
+				}
+			}
 			
+			String ssmlString = XMLTool.document2String(ssmlDoc);
+			log.debug("Sending the following SSML to MARY:\n"+ssmlString);
+
 			// SSML to Realised Acoustics using MARY 
 			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
 			AudioFormat af = voice.dbAudioFormat();
 	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
 	            af, AudioSystem.NOT_SPECIFIED);
-			Request request = new Request(MaryDataType.get("SSML"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.ENGLISH,voice,"","",1,aff);
+			Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
+
+			Document maryDoc = null;
+			try {
+				MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
+				ssmlData.setDocument(ssmlDoc);
+				request.setInputData(ssmlData);
+				request.process();
+				MaryData maryOut = request.getOutputData();
+				maryDoc = maryOut.getDocument();
+			} catch (Exception e) {
+				throw new Exception("MARY cannot process input -- SSML input was:\n"+ssmlString, e);
+			}
+			assert maryDoc != null;
+			// Replace placeholders in maryDoc back into original names:
+			NodeIterator ni2 = XMLTool.createNodeIterator(maryDoc, maryDoc, maryDoc.getDocumentElement().getNamespaceURI(), "mark");
+			Element elt2 = null;
+			while ((elt2 = (Element)ni2.nextNode()) != null) {
+				String placeholder = elt2.getAttribute("name");
+				String name = placeholders.get(placeholder);
+				elt2.setAttribute("name", name);
+			}
 			
-			Reader reader = new StringReader(ssmlos.toString());
-			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
-			request.readInputData(reader);
-			request.process();
-			request.writeOutputData(realisedOS);
-			//Merge realised acoustics into output format
-			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("BML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
-			log.debug("input bml: "+inputText);
-			log.debug("output maryxml: "+realisedOS.toString());
-			log.debug("merged speech output: "+finalData);
-			bmlSender.sendTextMessage(finalData,  meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			
+			
+			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
+			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			Document finalData = XMLTool.mergeTwoXMLFiles(input, maryDoc, SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+
+			log.debug("input bml: "+XMLTool.document2String(input));
+			log.debug("output maryxml: "+XMLTool.document2String(maryDoc));
+			log.debug("merged speech output: "+XMLTool.document2String(finalData));
+			bmlSender.sendXML(finalData,  meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 			
 			// SSML to AUDIO using MARY 
 	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.ENGLISH, 
 	            voice, "", "", 1, aff);
-			reader = new StringReader(ssmlos.toString());
 			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
-			request.readInputData(reader);
-			request.process();
-			request.writeOutputData(audioos);
+			try {
+				MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
+				ssmlData.setDocument(ssmlDoc);
+				request.setInputData(ssmlData);
+				request.process();
+				request.writeOutputData(audioos);
+			} catch (Exception e) {
+				throw new Exception("MARY cannot process input -- SSML input was:\n"+ssmlString, e);
+			}
 			audioSender.sendBytesMessage(audioos.toByteArray(),  meta.getTime(), xm.getContentID(), xm.getContentCreationTime());
 		}
 	}
