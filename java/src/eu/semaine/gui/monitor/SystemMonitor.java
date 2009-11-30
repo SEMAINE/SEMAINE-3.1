@@ -178,6 +178,7 @@ public class SystemMonitor extends Thread
 		logConfig.setLayout(new BorderLayout());
 		logComponentBox = new JComboBox();
 		logComponentBox.setMinimumSize(new Dimension(10,10));// can get really small if needed
+		logComponentBox.setMaximumRowCount(20);
 		updateLogComponents();
 		logConfig.add(logComponentBox, BorderLayout.CENTER);
 		logLevelBox = new JComboBox(new String[] {"DEBUG", "INFO", "WARN", "ERROR"});

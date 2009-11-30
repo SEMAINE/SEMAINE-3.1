@@ -433,26 +433,20 @@ public class XMLTool
 	 * Merge two XML files using XSLT
 	 * @param xmlFileContent1, first XML file content 
 	 * @param xmlFileContent2, second XML file content
-	 * @param xmlStyleSheet, XSL style sheet as a inputstream 
+	 * @param mergingStylesheet, the XSLT style sheet merging xml2 into xml1.
 	 * @param refCodeName, code name used in xsl sheet to refer xmlFile2 (example: semaine.mary.intonation ) 
 	 * @return output of merged xml file
 	 * @throws Exception
 	 * @throws FileNotFoundException
 	 */
-	public static Document mergeTwoXMLFiles(Document xmlFileContent1, final Document xmlFileContent2, InputStream xmlStyleSheet, final String refCodeName) throws Exception,FileNotFoundException
+	public static Document mergeTwoXMLFiles(Document xmlFileContent1, final Document xmlFileContent2, Templates mergingStylesheet, final String refCodeName) throws Exception,FileNotFoundException
     {
 	     
-	    Templates mergeXML2IntoStylesheet;
-	    TransformerFactory tFactory = TransformerFactory.newInstance();
-	    //StreamSource stylesheetStream = new StreamSource(new FileReader(xmlStyleSheet));
-	    StreamSource stylesheetStream = new StreamSource(xmlStyleSheet);
-        
-        mergeXML2IntoStylesheet = tFactory.newTemplates(stylesheetStream);
         DOMSource xml1Source = new DOMSource(xmlFileContent1);
         DOMResult mergedDR = new DOMResult();
         // Transformer is not guaranteed to be thread-safe -- therefore, we
         // need one per thread.
-        Transformer mergingTransformer = mergeXML2IntoStylesheet.newTransformer();
+        Transformer mergingTransformer = mergingStylesheet.newTransformer();
         mergingTransformer.setURIResolver(new URIResolver() {
             public Source resolve(String href, String base) {
                 if (href == null) {

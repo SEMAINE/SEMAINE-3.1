@@ -4,9 +4,6 @@
  */
 package eu.semaine.components.mary;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -20,7 +17,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import marytts.datatypes.MaryData;
@@ -31,9 +27,6 @@ import marytts.server.Request;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.traversal.DocumentTraversal;
-import org.w3c.dom.traversal.NodeFilter;
 import org.w3c.dom.traversal.NodeIterator;
 
 import eu.semaine.components.Component;
@@ -42,7 +35,6 @@ import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SSML;
-import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -51,7 +43,6 @@ import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
-import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.util.XMLTool;
 
@@ -70,6 +61,7 @@ public class SpeechPreprocessor extends Component
 	private static TransformerFactory tFactory = null;
 	private static Templates fml2ssmlStylesheet = null;
 	private Transformer transformer;
+	private Templates mergingStylesheet;
 	private String currentCharacter = ParticipantControlGUI.PRUDENCE;
 	
 	static final Map<String,String> characters2voices = fillCharacters2Voices();
@@ -101,6 +93,9 @@ public class SpeechPreprocessor extends Component
 		
 		fmlbmlSender = new FMLSender("semaine.data.action.selected.speechpreprocessed", getName());
 		senders.add(fmlbmlSender); // so it can be started etc
+		
+		
+
 	}
 	
 	protected void customStartIO() throws Exception
@@ -109,9 +104,12 @@ public class SpeechPreprocessor extends Component
             tFactory = TransformerFactory.newInstance();
 		 }
     	StreamSource stylesheetStream =
-	        new StreamSource( SpeechPreprocessor.class.getResourceAsStream(          
-	                 "FML2SSML.xsl"));
+	        new StreamSource(SpeechPreprocessor.class.getResourceAsStream("FML2SSML.xsl"));
 		fml2ssmlStylesheet = tFactory.newTemplates(stylesheetStream);
+		
+	    StreamSource stylesheetStream2 = new StreamSource(SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"));
+        mergingStylesheet = tFactory.newTemplates(stylesheetStream2);
+
 		// Read properties:
         // (Will throw exceptions if problems are found)
     	System.setProperty("log.level", "WARN"); // avoid flood of MARY messages
@@ -193,9 +191,12 @@ public class SpeechPreprocessor extends Component
 			// Marc, 27.11.09:
 			// Use DOM rather than strings so we can replace identifiers in document with
 			// standard ones, and translate them back in the result:
+			long tStart = System.currentTimeMillis();
 			DOMResult ssmlDR = new DOMResult();
 			transformer.transform(new DOMSource(inputDoc), ssmlDR);
 			Document ssmlDoc = (Document) ssmlDR.getNode();
+			long t1 = System.currentTimeMillis();
+			long durExtractSSML = t1 - tStart;
 			// Normalise documents for MARY Cache:
 			// Replace identifiers (<mark name="..."/> attributes) with placeholders, and remember them:
 			Map<String, String> placeholders = new HashMap<String, String>();
@@ -211,9 +212,15 @@ public class SpeechPreprocessor extends Component
 					i++;
 				}
 			}
+			long t2 = System.currentTimeMillis();
+			long durReplace1 = t2 - t1;
 			
-			String ssmlString = XMLTool.document2String(ssmlDoc);
-			log.debug("Sending the following SSML to MARY:\n"+ssmlString);
+			// This costs as much time as a call to cached mary (~10 ms):
+			//String ssmlString = XMLTool.document2String(ssmlDoc);
+			//log.debug("Sending the following SSML to MARY:\n"+ssmlString);
+			
+			long t3 = System.currentTimeMillis();
+			long durToString = t3 - t2;
 			Document maryDoc = null;
 			try {
 				MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
@@ -223,9 +230,11 @@ public class SpeechPreprocessor extends Component
 				MaryData maryOut = request.getOutputData();
 				maryDoc = maryOut.getDocument();
 			} catch (Exception e) {
-				throw new Exception("MARY cannot process input -- SSML input was:\n"+ssmlString, e);
+				throw new Exception("MARY cannot process input -- SSML input was:\n"+XMLTool.document2String(ssmlDoc), e);
 			}
 			assert maryDoc != null;
+			long t4 = System.currentTimeMillis();
+			long durMary = t4 - t3;
 			// Replace placeholders in maryDoc back into original names:
 			NodeIterator ni2 = XMLTool.createNodeIterator(maryDoc, maryDoc, maryDoc.getDocumentElement().getNamespaceURI(), "mark");
 			Element elt2 = null;
@@ -234,13 +243,20 @@ public class SpeechPreprocessor extends Component
 				String name = placeholders.get(placeholder);
 				elt2.setAttribute("name", name);
 			}
-			
+			long t5 = System.currentTimeMillis();
+			long durReplace2 = t5 - t4;
 			
 			
 			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-Intonation-Merge.xsl"), "semaine.mary.intonation");
 			//String finalData = XMLTool.mergeTwoXMLFiles(inputText, intonationOS.toString(), SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
-			Document finalData = XMLTool.mergeTwoXMLFiles(inputDoc, maryDoc, SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"), "semaine.mary.realised.acoustics");
+			Document finalData = XMLTool.mergeTwoXMLFiles(inputDoc, maryDoc, mergingStylesheet, "semaine.mary.realised.acoustics");
+			long t6 = System.currentTimeMillis();
+			long durMerge = t6 - t5;
 			fmlbmlSender.sendXML(finalData, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			long t7 = System.currentTimeMillis();
+			long durSend = t7 - t7;
+			log.debug("Times needed:\n"+durExtractSSML+" extract SSML\n"+durReplace1+" replace1\n"+durToString+" to string\n"+durMary+" MARY\n"
+					+durReplace2+" replace2\n"+durMerge+" merge\n"+durSend+" send\n");
 		}
 		else if ( localName.equals(FML.E_FML) && namespaceURI.equals(FML.namespaceURI)) {
 			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
