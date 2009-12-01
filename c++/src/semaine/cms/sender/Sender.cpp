@@ -79,7 +79,7 @@ namespace sender {
 		if (isPeriodic())
 			throw SystemConfigurationException("This method is for event-based messages, but sender is in periodic mode.");
 		TextMessage * message = session->createTextMessage(text);
-		fillMessageProperties(message, usertime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		message->setStringProperty(SEMAINEMessage::EVENT, eventType);
 		producer->send(message);
 		delete message;
