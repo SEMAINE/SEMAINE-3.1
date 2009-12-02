@@ -30,6 +30,9 @@ public:
 	static const std::string E_AROUSAL;
 	static const std::string E_VALENCE;
 	static const std::string E_POTENCY;
+  static const std::string E_POWER;
+  static const std::string E_INTENSITY;
+  static const std::string E_ANTICIPATION;
 	static const std::string E_OBJECT;
 
 	// Attributes

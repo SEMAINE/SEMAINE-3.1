@@ -35,6 +35,8 @@ const std::string SemaineML::E_TOPIC = "topic";
 const std::string SemaineML::E_USER = "user";
 const std::string SemaineML::E_CHARACTER = "character";
 const std::string SemaineML::E_SPEAKING = "speaking";
+const std::string SemaineML::E_GENDER = "gender";
+const std::string SemaineML::E_PITCH = "pitch";
 
 	// Attributes
 const std::string SemaineML::A_WHO = "who";
@@ -44,6 +46,7 @@ const std::string SemaineML::A_TOPIC = "topic";
 const std::string SemaineML::A_VALUE = "value";
 const std::string SemaineML::A_TIME = "time";
 const std::string SemaineML::A_INTENSITY = "intensity";
+const std::string SemaineML::A_DIRECTION = "direction";
 const std::string SemaineML::A_STATUS = "status";
 const std::string SemaineML::A_STATUS_CHANGE = "statusChange";
 
