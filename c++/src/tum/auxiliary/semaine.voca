@@ -12,13 +12,16 @@ mmh		[*mmh*]		aa hh ah
 mmh		[*mmh*]		m hh m
 mmh		[*mmh*]		ah hh aa
 mmh		[*mmh*]		m hh
+ABOUT		[ABOUT]		ah b aw t
 AFRAID		[AFRAID]	ah f r ey d
 AFRAID		[AFRAID]	ae f r ey d
 AFRAID		[AFRAID]	ah f r ey t
 AFRAID		[AFRAID]	ae f r ey t
 AFRAID		[AFRAID]	ae f er ey t
+AGAIN		[AGAIN]		ah g eh n
 AGGRESSIVE	[AGGRESSIVE]	ah g r eh s ih v
 AGGRESSIVE	[AGGRESSIVE]	ah g r eh s ah v
+ALL 		[ALL]		ao l
 AM		[AM]		ae m
 AMAZING		[AMAZING]	ah m ey z ih n g
 AMAZING		[AMAZING]	ae m ey z ih n g
@@ -34,6 +37,9 @@ ANOTHER		[ANOTHER]	ah n ah dh eh r
 APPEARING	[APPEARING]	ah p ih r ih ng
 APPEARING	[APPEARING]	ah p iy r ih ng
 APPEARING	[APPEARING]	ah p iy y uh r ih ng
+ARRIVED		[ARRIVED]	er ay v d
+AS		[AS]		ae z
+ASSERTIVE	[ASSERTIVE]	ah s er t ih v
 BACK		[BACK]		b ae k
 BAD		[BAD]		b ae d
 BALANCE		[BALANCE]	b ae l ah n s
@@ -44,10 +50,14 @@ BEST		[BEST]		b eh s t
 BETTER		[BETTER]	b eh t er
 BETTER		[BETTER]	b eh t ah
 BETTER		[BETTER]	b ae t ah
+BIT		[BIT]		b ih t
 BLAH		[BLAH]		b l aa
 BLOODY		[BLOODY]	b l ah d iy
 BLOODY		[BLOODY]	b l eh d iy
+BORED		[BORED]		b ao r d
+BOSS		[BOSS]		b aa s
 BRIGHT		[BRIGHT]	b r ay t
+BURNT		[BURNT]		b er n t
 CHARACTER	[CHARACTER]	k ae r ah k t er
 CHARACTER	[CHARACTER]	k ah r ah k t er
 CHARACTER	[CHARACTER]	k eh r ih k t er
@@ -67,6 +77,8 @@ DID		[DID]		d ih d
 DID		[DID]		d ih t
 DIDN_T		[DIDN_T]	d ih d n t
 DIDN_T		[DIDN_T]	d ih d ah n t
+DOING		[DOING]		d uw ih ng
+DON_T		[DON_T]		d ow n t
 ELSE		[ELSE]		eh l s
 ELSE		[ELSE]		ae l s
 ENERGETIC	[ENERGETIC]	eh n er jh eh t ih k
@@ -76,6 +88,8 @@ FED_UP		[FED_UP]	f eh d ah p
 FEEL		[FEEL]		f iy l
 FEELING		[FEELING]	f iy l ih ng
 FELT		[FELT]		f eh l t
+FEW		[FEW]		f y uw
+FIND		[FIND]		f ay n d
 FINE		[FINE]		f ay n
 FOOL		[FOOL]		f uw l
 FRUSTRATED	[FRUSTRATED]	f r ah s t r ey t ah d
@@ -116,31 +130,45 @@ HADN_T		[HADN_T]	hh ae d n t
 HADN_T		[HADN_T]	hh ae d ah n t
 HAPPY		[HAPPY]		hh ae p iy
 HAPPY		[HAPPY]		hh ae b iy
+HASN_T		[HASN_T]	hh ae z ah n t
 HAVE		[HAVE]		hh ae v
 HAVE		[HAVE]		hh ae f
 HE		[HE]		hh iy
+HE_S		[HE_S]		hh iy z
 HELL		[HELL]		hh eh l
+HERE		[HERE]		hh iy r
+HOME		[HOME]		hh ow m
 HORRIBLE	[HORRIBLE]	hh ao r ah b ah l
 HORRIBLE	[HORRIBLE]	hh ao r ah b l
 HORRIBLE	[HORRIBLE]	hh ah r ah b ah l
 HORRIBLE	[HORRIBLE]	hh ah r ah b l
+HUNDRED		[HUNDRED]	hh ah n d r ah d
 I		[I]		ay
 I_LL		[I_LL]		ay l
 I_M		[I_M]		ay m
+IF		[IF]		ih f
+IN		[IN]		ih n
 INSULTED	[INSULTED]	ih n s ah l t ih d
 INSULTED	[INSULTED]	ih n s ah l t eh d
 INSULTED	[INSULTED]	iy n s ah l t ih d
 INSULTED	[INSULTED]	iy n s ah l t eh d
+ISLAND		[ISLAND]	ay l ah n d
+IT		[IT]		ih t
 I_VE		[I_VE]		ay v
+JUST		[JUST]		jh ah s t
 KNOW		[KNOW]		n ow
+LIFE		[LIFE]		l ay f
+LIKE		[LIKE]		l ay k
 LOSER		[LOSER]		l uw z er
 LOSER		[LOSER]		l uw z ah
 LOSER		[LOSER]		l uw s er
 LOSER		[LOSER]		l uw s ah
+LOTS		[LOTS]		l aa t s
 LOVELY		[LOVELY]	l ah v l iy
 LOVELY		[LOVELY]	l ao v l iy
 LOVELY		[LOVELY]	l ah f l iy
 LOVELY		[LOVELY]	l ao f l iy
+MANAGE		[MANAGE]	m ae n ah jh
 MANIC		[MANIC]		m ae n ih k
 ME		[ME]		m iy
 MISERABLE	[MISERABLE]	m ih z er ah b ah l
@@ -156,15 +184,18 @@ MISUNDERSTOOD	[MISUNDERSTOOD]	m ih s ah n d ah s d uh d
 MOOD		[MOOD]		m uw d
 MOOD		[MOOD]		m uw t
 MY		[MY]		m ay
+MYSELF		[MYSELF]	m ay s eh l f
 NASTY		[NASTY]		n ae s t iy
 NASTY		[NASTY]		n ae s d iy
 NEED		[NEED]		n iy d
 NERVES		[NERVES]	n er v z
 NERVES		[NERVES]	n er f z
+NEW		[NEW]		n uw
 NEXT		[NEXT]		n eh k s t
 NEXT		[NEXT]		n eh k s d
 NICE		[NICE]		n ay s
 NO		[NO]		n ow
+NOBODY		[NOBODY]	n ow b aa d iy
 NOT		[NOT]		n aa t
 NOT		[NOT]		n ao t
 OBADIAH		[OBADIAH]	ow b ah d ay ah
@@ -249,6 +280,7 @@ SENSIBLE	[SENSIBLE]	s eh n s ah b l
 SENSIBLE	[SENSIBLE]	s eh n s eh b ah l
 SENSIBLE	[SENSIBLE]	s eh n s eh b l
 SHE		[SHE]		sh iy
+SHE_S		[SHE_S]		sh iy z
 SHIT		[SHIT]		sh ih t
 SHIT		[SHIT]		sh iy t
 SHIT		[SHIT]		sh ih d
@@ -259,6 +291,7 @@ SHOULDN_T	[SHOULDN_T]	sh uh d n t
 SHOULDN_T	[SHOULDN_T]	sh uh d ah n d
 SHOULDN_T	[SHOULDN_T]	sh uh n d
 SHOULDN_T	[SHOULDN_T]	sh uh d n d
+SHOW		[SHOW]		sh ow
 SICK		[SICK]		s ih k
 SMILING		[SMILING]	s m ay l ih ng
 SMILING		[SMILING]	s m ay l ih n
@@ -292,6 +325,7 @@ TERRIBLY	[TERRIBLY]	t eh r ah b l iy
 TERRIBLY	[TERRIBLY]	t eh r ih b l iy
 THANK		[THANK]		th ae ng k
 THANK		[THANK]		th ae ng g
+THAT		[THAT]		dh ae t
 THEIR		[THEIR]		dh eh r
 THEM		[THEM]		dh eh m
 THEY		[THEY]		dh ey
@@ -306,6 +340,7 @@ TOMORROW	[TOMORROW]	t ah m aa r ow
 TOMORROW	[TOMORROW]	t ah m ao r ow
 TOMORROW	[TOMORROW]	t uw m aa r ow
 TOMORROW	[TOMORROW]	t uw m ao r ow
+TOTALLY		[TOTALLY]	t ow t ah l iy
 TRUE		[TRUE]		t r uw
 UNHAPPY		[UNHAPPY]	ah n hh ae p iy
 UNHAPPY		[UNHAPPY]	ah n hh ae p ih
@@ -315,6 +350,7 @@ USELESS		[USELESS]	y uw s l ah s
 USELESS		[USELESS]	y uw s l eh s
 USELESS		[USELESS]	y uw z l ah s
 USELESS		[USELESS]	y uw z l eh s
+VERY		[VERY]		v eh r iy
 VERY_WELL	[VERY_WELL]	v eh r iy w eh l
 VERY_WELL	[VERY_WELL]	w eh r iy w eh l
 VERY_WELL	[VERY_WELL]	v eh r ih w eh l
@@ -325,6 +361,10 @@ WASN_T		[WASN_T]	w aa z ah n t
 WASN_T		[WASN_T]	w ah z ah n t
 WASN_T		[WASN_T]	w aa z n t
 WASN_T		[WASN_T]	w ah z n t
+WE		[WE]		w iy
+WE_LL		[WE_LL]		w iy l
+WE_RE		[WE_RE]		w iy r
+WEE		[WEE]		w iy
 WEEK		[WEEK]		w iy k
 WEEK		[WEEK]		w ih k
 WENT		[WENT]		w eh n t
