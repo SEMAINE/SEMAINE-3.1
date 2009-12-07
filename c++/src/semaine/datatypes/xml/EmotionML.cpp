@@ -23,10 +23,10 @@ const std::string EmotionML::E_CATEGORY = "category";
 const std::string EmotionML::E_DIMENSIONS = "dimensions";
 const std::string EmotionML::E_AROUSAL = "arousal";
 const std::string EmotionML::E_VALENCE = "valence";
-const std::string EmotionML::E_POTENCY = "potency";
+//const std::string EmotionML::E_POTENCY = "potency";
 const std::string EmotionML::E_POWER = "power";
 const std::string EmotionML::E_INTENSITY = "intensity";
-const std::string EmotionML::E_ANTICIPATION = "anticipation";
+const std::string EmotionML::E_EXPECTATION = "expectation";
 const std::string EmotionML::E_OBJECT = "object";
 
 	// Attributes
