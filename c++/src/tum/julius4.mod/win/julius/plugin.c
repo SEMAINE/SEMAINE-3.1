@@ -505,6 +505,7 @@ mfc_module_init(MFCCCalc *mfcc, Recog *recog)
   return TRUE;
 }
 
+
 boolean
 mfc_module_set_header(MFCCCalc *mfcc, Recog *recog)
 {
@@ -572,6 +573,8 @@ mfc_module_end(MFCCCalc *mfcc)
   return ret;
 }
 
+#endif /* ENABLE_PLUGIN */
+
 int
 mfc_module_read(MFCCCalc *mfcc, int *new_t)
 {
@@ -587,9 +590,9 @@ mfc_module_read(MFCCCalc *mfcc, int *new_t)
 #ifdef EXTERNAL_FV
   /* get data */
   if (mfcc->ext.fv_read != NULL) {
+    int i;
     float * tmp = calloc(1,sizeof(float)*mfcc->param->veclen);
     ret = mfcc->ext.fv_read(mfcc->ext.userptr, tmp, mfcc->param->veclen);
-    int i;
     for (i=0; i< mfcc->param->veclen; i++) 
       mfcc->param->parvec[mfcc->f][i] = tmp[i];
     free(tmp);
@@ -623,6 +626,5 @@ mfc_module_read(MFCCCalc *mfcc, int *new_t)
 }  
 
 
-#endif /* ENABLE_PLUGIN */
 
 /* end of file */

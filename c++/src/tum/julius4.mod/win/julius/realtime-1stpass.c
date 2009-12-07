@@ -1521,15 +1521,11 @@ mfcc_go(Recog *recog, int (*ad_check)(Recog *))
   
   while(1/*in_data_vec*/) {
 
-#ifdef ENABLE_PLUGIN
     ret = mfc_module_read(recog->mfcclist, &new_f);
-#else
-    ret = 0; // TODO:::: this is not the correct way of doing things without plugin support!!
-#endif
 
     if (debug2_flag) {
       if (recog->mfcclist->f < new_f) {
-	jlog("%d: %d (%d)\n", recog->mfcclist->f, new_f, ret);
+      	jlog("%d: %d (%d)\n", recog->mfcclist->f, new_f, ret);
       }
     }
  
