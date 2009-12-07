@@ -121,6 +121,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/arch:SSE2"
+				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src;..\.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OPENSMILELIB_EXPORTS;__WINDOWS;BUILDING_DLL;_CRT_SECURE_NO_DEPRECATE;HAVE_PORTAUDIO;HAVE_PORTAUDIO_V19"
 				ExceptionHandling="2"
@@ -202,6 +204,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\arffSource.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\bowProducer.hpp"
 				>
 			</File>
 			<File
@@ -706,6 +712,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\arffSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\bowProducer.cpp"
 				>
 			</File>
 			<File

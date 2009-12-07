@@ -240,6 +240,10 @@
 			RelativePath="..\..\..\auxiliary\opensmileSemaine.conf"
 			>
 		</File>
+		<File
+			RelativePath="..\..\..\..\..\..\bin\semaine-openSMILE-run.bat"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
