@@ -20,6 +20,7 @@ public class DialogueAct
 	private String taggedUtterance;
 	private String[] tags;
 	private long starttime;
+	private long endtime;
 	
 	private boolean positive = false;
 	private boolean negative = false;
@@ -60,6 +61,7 @@ public class DialogueAct
 	{
 		utterance = act1.getUtterance() + " " + act2.getUtterance();
 		starttime = Math.min(act1.getStarttime(), act2.getStarttime());
+		endtime = Math.max(act1.getEndtime(), act2.getEndtime());
 		positive = (act1.isPositive() || act2.isPositive());
 		negative = (act1.isNegative() || act2.isNegative());
 		agree = (act1.isAgree() || act2.isAgree());
@@ -83,6 +85,22 @@ public class DialogueAct
 		change_speaker = (act1.isChangeSpeaker() || act2.isChangeSpeaker());
 		
 		target_character = act1.getTargetCharacter() + " " + act2.getTargetCharacter();
+	}
+	
+	
+
+	/**
+	 * @return the endtime
+	 */
+	public long getEndtime() {
+		return endtime;
+	}
+
+	/**
+	 * @param endtime the endtime to set
+	 */
+	public void setEndtime(long endtime) {
+		this.endtime = endtime;
 	}
 
 	/**
@@ -405,8 +423,8 @@ public class DialogueAct
 		if( change_speaker ) features += " change_speaker";
 		if( length == Length.SHORT ) features += " short";
 		if( length == Length.LONG ) features += " long";
+		if( length == Length.NORMAL ) features += " normal";
 		if( target_character != null && target_character.length() != 0 ) features += " target:" + target_character;
-		
 		return features;
 	}
 	

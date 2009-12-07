@@ -51,7 +51,6 @@ import eu.semaine.util.XMLTool;
 public class TurnTakingInterpreter extends Component
 {
 	/* Possible turn states */
-	private final static int UNKNOWN_STATE = 0;
 	private final static int WAITING = 0;
 	private final static int SILENT = 1;
 	private final static int SPEAKING = 2;

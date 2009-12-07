@@ -19,6 +19,7 @@
 			<utterance value="How?" />
 			<utterance value="That sounds interesting, tell me more."/>
 			<utterance value="Tell me more." />
+			<utterance value="Yeah." />
 		</category>
 		
 		<category name="change_subject">
@@ -215,6 +216,7 @@
 			<utterance value="Tell me more." />
 			<utterance value="What exactly happened?" />
 			<utterance value="When?" />
+			<utterance value="Yeah." />
 		</category>
 		
 		<category name="change_subject">
@@ -358,6 +360,7 @@
 			<utterance value="Tell me more." />
 			<utterance value="Well, what happened?" />
 			<utterance value="What makes you say that?" />
+			<utterance value="Yeah." />
 		</category>
 		
 		<category name="change_subject">
@@ -460,6 +463,7 @@
 			<utterance value="Tell me all the awful details." />
 			<utterance value="Tell me all the awful details again." />
 			<utterance value="Tell me more." />
+			<utterance value="Yeah." />
 		</category>
 		
 		<category name="change_subject">

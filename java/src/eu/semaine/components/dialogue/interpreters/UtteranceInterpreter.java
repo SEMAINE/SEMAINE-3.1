@@ -980,7 +980,8 @@ public class UtteranceInterpreter extends Component
 	}
 	
 	public DialogueAct.Length detectLength( DialogueAct act )
-	{
+	{	
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + (meta.getTime() - act.getStarttime()));
 		if( meta.getTime() - act.getStarttime() < SHORT_LENGTH ) {
 			return DialogueAct.Length.SHORT;
 		} else if( meta.getTime() - act.getStarttime() > LONG_LENGTH ) {
