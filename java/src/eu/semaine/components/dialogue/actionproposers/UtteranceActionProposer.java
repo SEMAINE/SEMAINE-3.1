@@ -471,18 +471,30 @@ public class UtteranceActionProposer extends Component
 	public void giveIntro() throws JMSException
 	{
 		AgentSpokenUtterance au1 = new AgentSpokenUtterance( new AgentUtterance("Hi. You have reached SAL, the Sensitive Artificial Listeners.", "Introduction") );
-		AgentSpokenUtterance au2 = new AgentSpokenUtterance( new AgentUtterance("SALAS is a package designed to let a user work through various emotional states.", "Introduction") );
-		AgentSpokenUtterance au3 = new AgentSpokenUtterance( new AgentUtterance("The package contains four 'personalities' who listen to the user and respond to what he or she says.", "Introduction") );
-		AgentSpokenUtterance au4 = new AgentSpokenUtterance( new AgentUtterance("Each of the 'personalities' has different emotional characteristics.", "Introduction") );
-		AgentSpokenUtterance au5 = new AgentSpokenUtterance( new AgentUtterance("The user controls the emotional tone of the interaction by choosing which 'personality' he or she talks to.", "Introduction") );
-		AgentSpokenUtterance au6 = new AgentSpokenUtterance( new AgentUtterance("He or she can change the tone at any time by choosing a different personality to talk to.", "Introduction") );
+		AgentSpokenUtterance au2 = new AgentSpokenUtterance( new AgentUtterance("These are the listeners you can choose.", "Introduction") );
+		AgentSpokenUtterance au3 = new AgentSpokenUtterance( new AgentUtterance("Poppy is cheerful, optimistic and she looks on the bright side of life!", "Introduction") );
+		AgentSpokenUtterance au4 = new AgentSpokenUtterance( new AgentUtterance("Spike is aggressive, confrontational and he enjoys an argument.", "Introduction") );
+		AgentSpokenUtterance au5 = new AgentSpokenUtterance( new AgentUtterance("Obadiah is gloomy, and he has a pessimistic outlook.", "Introduction") );
+		AgentSpokenUtterance au6 = new AgentSpokenUtterance( new AgentUtterance("Prudence is matter-of-fact, and takes a practical view on life.", "Introduction") );
+		AgentSpokenUtterance au7 = new AgentSpokenUtterance( new AgentUtterance("The personalities are very crude.", "Introduction") );
+		AgentSpokenUtterance au8 = new AgentSpokenUtterance( new AgentUtterance("They do not understand content, only tone.", "Introduction") );
+		AgentSpokenUtterance au9 = new AgentSpokenUtterance( new AgentUtterance("That means it is up to the user to work within the system's limits.", "Introduction") );
+		AgentSpokenUtterance au10 = new AgentSpokenUtterance( new AgentUtterance("In particular, there is no point asking it questions.", "Introduction") );
+		AgentSpokenUtterance au11 = new AgentSpokenUtterance( new AgentUtterance("There is no point trying to get into a serious discussion with it.", "Introduction") );
+		AgentSpokenUtterance au12 = new AgentSpokenUtterance( new AgentUtterance("Which of us would you like to talk to?", "Introduction") );
 		
 		sendUtterance(au1);
 		sendUtterance(au2);
 		sendUtterance(au3);
 		sendUtterance(au4);
 		sendUtterance(au5);
-		waitingID = sendUtterance(au6);
+		sendUtterance(au6);
+		sendUtterance(au7);
+		sendUtterance(au8);
+		sendUtterance(au9);
+		sendUtterance(au10);
+		sendUtterance(au11);
+		waitingID = sendUtterance(au12);
 		waitingFor = 1;
 	}
 
