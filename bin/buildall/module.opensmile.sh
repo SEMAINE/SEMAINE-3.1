@@ -1,7 +1,7 @@
 
 #################### Package Configuration    #########################
-OPENSMILEMODELS="models-07-12-2009.zip"
-OPENSMILEMODELS_URL="http://www.mmk.ei.tum.de/~eyb/models-07-12-2009.zip"
+OPENSMILEMODELS="models-09-12-2009.zip"
+OPENSMILEMODELS_URL="http://www.mmk.ei.tum.de/~eyb/semaine/models-09-12-2009.zip"
 OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
 
 if test -d "$SEMAINE_ROOT/c++/src/tum/opensmile"; then
