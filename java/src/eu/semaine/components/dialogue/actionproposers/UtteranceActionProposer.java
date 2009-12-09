@@ -146,6 +146,7 @@ public class UtteranceActionProposer extends Component
 	private HashMap<Integer,String> charNames = new HashMap<Integer,String>();
 	private HashMap<String,Integer> charNumbers = new HashMap<String,Integer>();
 	private HashMap<Integer,Boolean> charHistory = new HashMap<Integer,Boolean>();
+	private ArrayList<String> introductionSentences = new ArrayList<String>();
 
 	/* All agent utterances grouped by utterance-type */
 	private HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>> allUtterances = new HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>>();
@@ -346,13 +347,8 @@ public class UtteranceActionProposer extends Component
 				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") ) {
 					if( waitingFor != 0 && waitingID != null && eventElem.hasAttribute("id") && eventElem.getAttribute("id").equals(waitingID) ) {
 						if( waitingFor == 1 ) {
-							// Introduction finished
-							introGiven = 2;
-							if( isUserPresent ) {
-								systemStarted = true;
-							}
-							waitingID = "";
-							waitingFor = 0;
+							// Introduction-sentence finished
+							giveIntro();
 						}
 						else if( waitingFor == 2 ) {
 							// Char-change message finished
@@ -432,7 +428,7 @@ public class UtteranceActionProposer extends Component
 			}
 		}
 
-		if( newUser && charStartupState != INTRODUCED ) {
+		if( systemStarted && newUser && charStartupState != INTRODUCED ) {
 			charStartupState = INTRODUCED;
 			nrTopicChanges = 0;
 
@@ -458,44 +454,51 @@ public class UtteranceActionProposer extends Component
 		DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
 		System.out.println("User appeared");
 		isUserPresent = true;
-		
 		if( introGiven == 2 ) {
 			systemStarted = true;
 		}
 		if( introGiven == 0 ) {
 			giveIntro();
-			introGiven = 1;
 		}
 	}
 	
 	public void giveIntro() throws JMSException
 	{
-		AgentSpokenUtterance au1 = new AgentSpokenUtterance( new AgentUtterance("Hi. You have reached SAL, the Sensitive Artificial Listeners.", "Introduction") );
-		AgentSpokenUtterance au2 = new AgentSpokenUtterance( new AgentUtterance("These are the listeners you can choose.", "Introduction") );
-		AgentSpokenUtterance au3 = new AgentSpokenUtterance( new AgentUtterance("Poppy is cheerful, optimistic and she looks on the bright side of life!", "Introduction") );
-		AgentSpokenUtterance au4 = new AgentSpokenUtterance( new AgentUtterance("Spike is aggressive, confrontational and he enjoys an argument.", "Introduction") );
-		AgentSpokenUtterance au5 = new AgentSpokenUtterance( new AgentUtterance("Obadiah is gloomy, and he has a pessimistic outlook.", "Introduction") );
-		AgentSpokenUtterance au6 = new AgentSpokenUtterance( new AgentUtterance("Prudence is matter-of-fact, and takes a practical view on life.", "Introduction") );
-		AgentSpokenUtterance au7 = new AgentSpokenUtterance( new AgentUtterance("The personalities are very crude.", "Introduction") );
-		AgentSpokenUtterance au8 = new AgentSpokenUtterance( new AgentUtterance("They do not understand content, only tone.", "Introduction") );
-		AgentSpokenUtterance au9 = new AgentSpokenUtterance( new AgentUtterance("That means it is up to the user to work within the system's limits.", "Introduction") );
-		AgentSpokenUtterance au10 = new AgentSpokenUtterance( new AgentUtterance("In particular, there is no point asking it questions.", "Introduction") );
-		AgentSpokenUtterance au11 = new AgentSpokenUtterance( new AgentUtterance("There is no point trying to get into a serious discussion with it.", "Introduction") );
-		AgentSpokenUtterance au12 = new AgentSpokenUtterance( new AgentUtterance("Which of us would you like to talk to?", "Introduction") );
-		
-		sendUtterance(au1);
-		sendUtterance(au2);
-		sendUtterance(au3);
-		sendUtterance(au4);
-		sendUtterance(au5);
-		sendUtterance(au6);
-		sendUtterance(au7);
-		sendUtterance(au8);
-		sendUtterance(au9);
-		sendUtterance(au10);
-		sendUtterance(au11);
-		waitingID = sendUtterance(au12);
-		waitingFor = 1;
+		if( introGiven == 0 ) {
+			introductionSentences.add("Hi. You have reached SAL, the Sensitive Artificial Listeners.");
+			introductionSentences.add("These are the listeners you can choose.");
+			introductionSentences.add("Poppy is cheerful, optimistic and she looks on the bright side of life!");
+			introductionSentences.add("Spike is aggressive, confrontational and he enjoys an argument.");
+			introductionSentences.add("Obadiah is gloomy, and he has a pessimistic outlook.");
+			introductionSentences.add("Prudence is matter-of-fact, and takes a practical view on life.");
+			introductionSentences.add("The personalities are very crude.");
+			introductionSentences.add("They do not understand content, only tone.");
+			introductionSentences.add("That means it is up to the user to work within the system's limits.");
+			introductionSentences.add("In particular, there is no point asking it questions.");
+			introductionSentences.add("There is no point trying to get into a serious discussion with it.");
+			introductionSentences.add("Which of us would you like to talk to?");
+			introGiven = 1;
+			
+			AgentSpokenUtterance au = new AgentSpokenUtterance( new AgentUtterance(introductionSentences.get(0), "introduction"));
+			introductionSentences.remove(0);
+			waitingID = sendUtterance(au);
+			waitingFor = 1;
+		} else if( introGiven == 1 ) {
+			if( introductionSentences.size() > 0 ) {
+				AgentSpokenUtterance au = new AgentSpokenUtterance( new AgentUtterance(introductionSentences.get(0), "introduction"));
+				introductionSentences.remove(0);
+				waitingID = sendUtterance(au);
+				waitingFor = 1;
+			} else {
+				introGiven = 2;
+				if( isUserPresent ) {
+					systemStarted = true;
+				}
+				charChangeState = CHAR_ASKED;
+				waitingID = "";
+				waitingFor = 0;
+			}
+		}
 	}
 
 	/**
