@@ -102,9 +102,12 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\libjulius\include&quot;;&quot;$(SolutionDir)..\libsent\include&quot;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;EXTERNAL_FV"
 				RuntimeLibrary="2"
+				EnableEnhancedInstructionSet="2"
+				FloatingPointModel="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"

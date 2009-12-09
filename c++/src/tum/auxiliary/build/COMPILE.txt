@@ -12,6 +12,11 @@ and change to this directory and then type:
 
 Now you are ready to follow these steps to build the Semaine system and the openSMILE component:
 
+0.) If you don't already have it, download and install the
+    "Microsoft® Windows® Software Development Kit Update for Windows Vista™"
+    If should create a directory C:\Program Files\Microsoft SDKs\Windows\v6.0A
+    with Lib\ and Include\ directories in it.
+
 1.) Obtain (windows - where available -) sources for:
       activemq-cpp version 2.2.1
       xerces-c     version 3.0.1
@@ -29,7 +34,8 @@ Now you are ready to follow these steps to build the Semaine system and the open
 
 4.) Build the semaine solution (semaineF.sln). Build at least the "Release" configuration. If you are a developer, also build the "Debug" configuration.
 
-5.) Get the Julius LVCSR engine, unpack it to thirdparty/build/julius-win
+5.) Get the Julius LVCSR engine (Version 4.1.2), 
+    unpack it to thirdparty/build/julius-win
 
 6.) Run c++/src/tum/julius4.mod/winpatch.bat 
     This will apply patches to the Julius code and copy VS05 build projects.
@@ -75,5 +81,7 @@ Now you are ready to follow these steps to build the Semaine system and the open
      You can also use the batch script "c++/src/tum/auxiliary/build/copy_libs.bat" to copy the dll files to the correct path
 
 14.) Now start the openSMILE Semaine component using "bin/semaine-openSMILE-run.bat"
+
+15.) Please note, that openSMILE runs very slow on windows. We don't know why, but fact is that we run it on a 2.8GHz Pentium 4 at 30-40% load on windows. While we can run with under 8% load on one core of a 2.2Ghz AMD Phenom. If you have any suggestions for speed-ups, they are more than welcome!
 
 
