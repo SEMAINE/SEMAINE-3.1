@@ -109,20 +109,28 @@ const std::string Component::STATE_STALLED = "stalled";
 			// (in case we were stalled due to a long act() or react() this
 			// means we "report back" to the rest of the system)
 			meta.IamAlive();
+      //printf("run %i\n",exitRequested());
 			// Check at every loop that the total system is ready
+			bool exitFlag = false;
 			synchronized (&meta) {
 				while (!meta.isSystemReady()) {
 					log->info("waiting for system to become ready");
 					try {
-						meta.wait();
+						meta.wait(1000);
 					} catch (decaf::lang::Exception & ie) {
 						ie.printStackTrace();
 					}
 					if (meta.isSystemReady()) {
 						log->info("system ready - let's go");
 					}
+					if (exitRequested()) {
+						exitFlag = true;
+						break;
+					}
 				}
 			}
+			if (exitFlag) break;
+
 			try {
 				// Check if we should do something proactively:
 				long long before = System::currentTimeMillis();
