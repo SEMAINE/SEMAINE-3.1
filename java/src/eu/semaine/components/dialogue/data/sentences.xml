@@ -53,7 +53,7 @@
 			<utterance value="So what makes you happy?">
 				<link pre="short" response="That sounds lovely!" />
 				<link pre="short" response="That sounds exciting!" />
-				<link pre="short" response="That's wonderful, isn't it?" />
+				<link pre="short" response="That's wonderful isn't it?" />
 				<link pre="short" response="Do go on, I love hearing all this happiness." />
 				<elaboration response="Go on, give me one happy thought." />
 			</utterance>
@@ -166,15 +166,15 @@
 		</category>
 		
 		<category name="intro_new">
-			<utterance value="Hi, I'm Poppy, the eternal optimist. What's your name?" />
+			<utterance value="Hi! I'm Poppy, the eternal optimist. What's your name?" />
 		</category>
 		
 		<category name="intro_old">
-			<utterance value="Hi, I'm Poppy. How are you?" />
+			<utterance value="Hi! I'm Poppy. How are you?" />
 		</category>
 		
 		<category name="intro_how_are_you">
-			<utterance value="So tell me, how are you today?" />
+			<utterance value="So tell me how are you today?" />
 		</category>
 		
 		<category name="intro_tell_me_more">
@@ -346,8 +346,8 @@
 			<utterance value="That's feeble." />
 			<utterance value="That's pathetic." />
 			<utterance value="That's so superficial it's incredible." />
-			<utterance value="Yeah, yeah, always an answer for everything." />
-			<utterance value="You just don't get it, do you?" />
+			<utterance value="Yeah yeah, always an answer for everything." />
+			<utterance value="You just don't get it do you?" />
 			<utterance value="You make me laugh." />
 			<utterance value="You should be more assertive." />
 			<utterance value="You’re a loser, now get up and go the way you go on." />
@@ -399,7 +399,7 @@
 		
 		<category name="cheer_down">
 			<utterance value="I don't really have any time for all this happy nonsense. You're wasting my time."/>
-    		<utterance value="I don't really understand. Why exactly are you in this great mood?"/>
+    		<utterance value="I don't really understand. Why exactly are you in this great mood again?"/>
     		<utterance value="I don't see why you're in such a good mood."/>
 		</category>
 		
@@ -512,9 +512,9 @@
 			<utterance value="Don't you think life wears you down?" />
 			<utterance value="How did we get on to this subject?" />
 			<utterance value="I can't help thinking about the black side of things." />
-			<utterance value="I don't suppose it really matters, though." />
+			<utterance value="I don't suppose it really matters though." />
 			<utterance value="I sometimes despair." />
-			<utterance value="It could all go terribly wrong, though, what do you think?" />
+			<utterance value="It could all go terribly wrong though, what do you think?" />
 			<utterance value="It could all go terribly wrong." />
 			<utterance value="It never rains but it pours." />
 			<utterance value="Life can be just unbearable." />
@@ -533,7 +533,7 @@
 		    <utterance value="Don't you think life wears you down?"/>
 		    <utterance value="How can you be so cheerful with all the death and suffering in the world? Don't you feel guilty?"/>
 		    <utterance value="I'm not sure that you should be so positive."/>
-		    <utterance value="It won't last, you know."/>
+		    <utterance value="It won't last you know."/>
 		    <utterance value="Life's a bitch and then you die."/>
 		    <utterance value="Things often get worse you know."/>
 		    <utterance value="Well I suppose you have to make the best of it while you can."/>
@@ -568,11 +568,11 @@
 		</category>
 		
 		<category name="intro_new">
-			<utterance value="Hello, my name is Obadiah, and I'm feeling very depressed right now. And who are you?" />
+			<utterance value="Hello, my name is Obadiah, and I'm feeling very depressed just now. And who are you?" />
 		</category>
 		
 		<category name="intro_old">
-			<utterance value="Hello, I'm Obadiah. What's the matter?" />
+			<utterance value="Hello, I am Obadiah. What's the matter?" />
 		</category>
 		
 		<category name="intro_how_are_you">
