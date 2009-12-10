@@ -233,7 +233,7 @@ public class SpeechBMLRealiser extends Component
 			//System.out.println("MARY OUT: " + realisedOS.toString());
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("Backchannel-Realised-Merge.xsl"), "semaine.mary.realised.acoustics");
 			//System.out.println("Final data : " + finalData);
-			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType());
+			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 		}
 		else if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0){
 			bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
