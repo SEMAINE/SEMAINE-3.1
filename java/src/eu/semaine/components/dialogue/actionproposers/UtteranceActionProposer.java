@@ -345,7 +345,7 @@ public class UtteranceActionProposer extends Component
 			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
 			if( eventElem != null ) {
 				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") ) {
-					if( waitingFor != 0 && waitingID != null && eventElem.hasAttribute("id") && eventElem.getAttribute("id").equals(waitingID) ) {
+					if( waitingFor != 0 && waitingID != null && eventElem.hasAttribute("id") && eventElem.getAttribute("id").startsWith(waitingID) ) {
 						if( waitingFor == 1 ) {
 							// Introduction-sentence finished
 							giveIntro();
@@ -1116,11 +1116,9 @@ public class UtteranceActionProposer extends Component
 		Element root = doc.getDocumentElement();
 
 		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
-		bml.setAttribute(BML.A_ID, "bml_uap_"+output_counter);
 		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
 		fml.setAttribute(FML.A_ID, "fml_uap_"+output_counter);
 		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
-		speech.setAttribute(BML.A_ID, "speech_uap_"+output_counter);
 		speech.setAttribute(BML.E_TEXT, response);
 		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
 		speech.setAttribute("voice", "activemary");
@@ -1162,7 +1160,7 @@ public class UtteranceActionProposer extends Component
 		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance().getUtterance() );
 		
 		output_counter++;
-		return "bml_uap_"+(output_counter-1);
+		return "fml_uap_"+(output_counter-1);
 	}
 
 	/**
