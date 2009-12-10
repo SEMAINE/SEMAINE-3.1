@@ -922,6 +922,10 @@ public class UtteranceActionProposer extends Component
 		double quality = 0.1;
 		ArrayList<AgentSpokenUtterance> suggestions = new ArrayList<AgentSpokenUtterance>();
 		
+		if( act == null ) {
+			return getUtterancesFromCategory( "tell_me_more", quality);
+		}
+		
 		long user_utterance_length = meta.getTime() - userTurnStart;
 		
 		if( tellMeMoreCounter >= 4 ) {
