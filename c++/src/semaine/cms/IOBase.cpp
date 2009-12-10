@@ -46,7 +46,7 @@ throw (CMSException)
 {
 	ConnectionFactory* factory = new activemq::core::ActiveMQConnectionFactory(cmsUrl, cmsUser, cmsPassword);
 	connection = factory->createConnection();
-    delete factory;
+  delete factory; // <-- NOTE: this memory is NOT freed, if an exception is thrown by createConnection()
 	session = connection->createSession(Session::AUTO_ACKNOWLEDGE);
 	topic = session->createTopic(topicName);
 }
