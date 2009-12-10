@@ -78,6 +78,8 @@ public class UtteranceActionProposer extends Component
 	public final static int CHANGE_ASKED = 1;
 	public final static int CHAR_SUGGESTED = 2;
 	public final static int CHAR_ASKED = 3;
+	public final static int CHAR_SUGGESTED_2 = 4;
+	public final static int CHAR_ASKED_2 = 5;
 
 	/* Introduction states */
 	public final static int INTRODUCED = 1;
@@ -153,14 +155,15 @@ public class UtteranceActionProposer extends Component
 
 	/* A list with all context-templates, used for picking a response */
 	private ArrayList<ContextTemplate> templates ;
-	
+
 	/* Running number for the ID's of the output */
 	private int output_counter = 1;
-	
+
 	/* Variables used when waiting */
 	private String waitingID;	// The ID the system is waiting for.
 	private int waitingFor;		// What the system is waiting for. 0=nothing, 1=introduction finished, 2=character change message
 	private int nextChar;		// The next character
+	private long waitingSince;	// Waiting for response since...
 
 
 	/**
@@ -323,6 +326,7 @@ public class UtteranceActionProposer extends Component
 				}
 				if( au != null ) {
 					waitingID = sendUtterance(au);
+					waitingSince = meta.getTime();
 					waitingFor = 2;
 				}
 			} else {
@@ -358,7 +362,7 @@ public class UtteranceActionProposer extends Component
 						}
 					}
 				}
-				
+
 				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && agentSpeakingState == SPEAKING ) {
 					finishedSentences++;
 					return true;
@@ -461,7 +465,7 @@ public class UtteranceActionProposer extends Component
 			giveIntro();
 		}
 	}
-	
+
 	public void giveIntro() throws JMSException
 	{
 		if( introGiven == 0 ) {
@@ -478,16 +482,18 @@ public class UtteranceActionProposer extends Component
 			introductionSentences.add("There is no point trying to get into a serious discussion with it.");
 			introductionSentences.add("Which of us would you like to talk to?");
 			introGiven = 1;
-			
+
 			AgentSpokenUtterance au = new AgentSpokenUtterance( new AgentUtterance(introductionSentences.get(0), "introduction"));
 			introductionSentences.remove(0);
 			waitingID = sendUtterance(au);
+			waitingSince = meta.getTime();
 			waitingFor = 1;
 		} else if( introGiven == 1 ) {
 			if( introductionSentences.size() > 0 ) {
 				AgentSpokenUtterance au = new AgentSpokenUtterance( new AgentUtterance(introductionSentences.get(0), "introduction"));
 				introductionSentences.remove(0);
 				waitingID = sendUtterance(au);
+				waitingSince = meta.getTime();
 				waitingFor = 1;
 			} else {
 				introGiven = 2;
@@ -575,7 +581,7 @@ public class UtteranceActionProposer extends Component
 					}
 				}
 			}
-		} else if( charChangeState == CHAR_ASKED ) {
+		} else if( charChangeState == CHAR_ASKED || charChangeState == CHAR_ASKED_2 ) {
 			/* If the system just asked for the next character it will have to determine if a suggestion was made */
 			String targetCharacter = null;
 			for( DialogueAct act : recentDActs ) {
@@ -590,9 +596,19 @@ public class UtteranceActionProposer extends Component
 				return new AgentSpokenUtterance( charNumbers.get(targetCharacter) );
 			} else {
 				/* If the user did not choose a character then try to repair it */
-				return pickUtterances("repair_ask_next_character");
+				if( charChangeState == CHAR_ASKED_2 ) {
+					charChangeState = NEUTRAL;
+					int nextC = rand.nextInt(4)+1;
+					while( nextC == currChar ) {
+						nextC = rand.nextInt(4)+1;
+					}
+					return new AgentSpokenUtterance( nextC );
+				} else {
+					charChangeState = CHAR_ASKED_2;
+					return pickUtterances("repair_ask_next_character");
+				}
 			}
-		} else if( charChangeState == CHAR_SUGGESTED ) {
+		} else if( charChangeState == CHAR_SUGGESTED | charChangeState == CHAR_SUGGESTED_2 ) {
 			/* If the system just suggested a character than it will have to determine if the user
 			 * agreed or disagreed with this suggestion */
 			boolean agree = false;
@@ -607,7 +623,13 @@ public class UtteranceActionProposer extends Component
 			}
 			if( !agree && !disagree ) {
 				/* If the user did not give any sign try to repair it */
-				return pickUtterances("repair_suggest_next_character");
+				if( charChangeState == CHAR_SUGGESTED_2 ) {
+					charChangeState = NEUTRAL;
+					return new AgentSpokenUtterance( suggestedChar );
+				} else {
+					charChangeState = CHAR_SUGGESTED_2;
+					return pickUtterances("repair_suggest_next_character");
+				}
 			} else if( agree ) {
 				/* If the user agreed to the suggestion then use it */
 				charChangeState = NEUTRAL;
@@ -681,7 +703,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Determines what to say based on the context
 	 * Calls different suggestion-methods which return a set of suggestions, with for each
@@ -694,33 +716,33 @@ public class UtteranceActionProposer extends Component
 	{
 		ArrayList<AgentSpokenUtterance> possibleUtterances = new ArrayList<AgentSpokenUtterance>();
 		ArrayList<AgentSpokenUtterance> suggestions;
-		
+
 		/* Get combined dialogue acts of the previous user turn */
 		DialogueAct act = getCombinedUserDialogueAct();
-		
+
 		/* After silence */
 		suggestions = suggestAfterSilence();
 		possibleUtterances.addAll(suggestions);
-		
+
 		/* Linking sentences */
 		suggestions = suggestLinkingSentence( act );
 		possibleUtterances.addAll(suggestions);
-		
+
 		/* Based on content features */
 		suggestions = suggestOnContentFeatures( act );
 		possibleUtterances.addAll(suggestions);
-		
+
 		/* Based on arousal */
 		suggestions = suggestOnArousal();
 		possibleUtterances.addAll(suggestions);
-		
+
 		/* Last resort options, will always return something */
 		suggestions = suggestLastOptions( act );
 		possibleUtterances.addAll(suggestions);
-		
+
 		// qualities aanpassen based on history
 		adaptQualityToHistory(possibleUtterances);
-		
+
 		// Find best sentences
 		ArrayList<AgentSpokenUtterance> bestSentences = new ArrayList<AgentSpokenUtterance>();
 		double bestValue = -1d;
@@ -733,15 +755,15 @@ public class UtteranceActionProposer extends Component
 				bestSentences.add( uttr );
 			}
 		}
-		
+
 		/* TEST print all options TEST */
 		for( AgentSpokenUtterance uttr : bestSentences ) {
 			System.out.println(uttr.getQuality() + "	- " + uttr.getUtterance().getUtterance() + "("+uttr.getUtterance().getCategory()+")");
 		}
-		
+
 		// Pick one
 		AgentSpokenUtterance response = bestSentences.get( rand.nextInt(bestSentences.size()) );
-		
+
 		/* Set corresponding parameters */
 		if( response.getUtterance().getCategory().equals("tell_me_more") ) {
 			tellMeMoreCounter++;
@@ -761,10 +783,10 @@ public class UtteranceActionProposer extends Component
 			charChangeState = CHAR_SUGGESTED;
 			suggestedChar = response.getNewCharacter();
 		}
-		
+
 		return response;
 	}
-	
+
 	/**
 	 * Returns a list of possible responses based on the fact that a user did not start
 	 * speaking after the agent's turn.
@@ -774,7 +796,7 @@ public class UtteranceActionProposer extends Component
 	{
 		AgentSpokenUtterance lastUtterance = utteranceHistory.get( utteranceHistory.size()-1 );
 		double quality = 1.0d;
-		
+
 		/* If the user didn't say anything, motivate him */
 		if( userTurnStart == -1 ) {
 			AgentUtterance elaborationUtterance = lastUtterance.getUtterance().getElaborationUtterance();
@@ -794,7 +816,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return new ArrayList<AgentSpokenUtterance>();
 	}
-	
+
 	/**
 	 * Returns a list of possible linking utterances based on the previous agent utterance and 
 	 * the user's response.
@@ -806,17 +828,17 @@ public class UtteranceActionProposer extends Component
 		if( act == null ) {
 			return new ArrayList<AgentSpokenUtterance>();
 		}
-		
+
 		double quality = 0.7;
 		AgentSpokenUtterance lastUtterance = utteranceHistory.get( utteranceHistory.size()-1 );
 		ArrayList<String> features = new ArrayList<String>(Arrays.asList(act.getFeatures().trim().split(" ")));
 		ArrayList<AgentUtterance> linkingUtterances = lastUtterance.getUtterance().getLinkingUtterances( features );
-		
+
 		ArrayList<AgentSpokenUtterance> linkingSpokenUtterances = new ArrayList<AgentSpokenUtterance>();
 		for( AgentUtterance link : linkingUtterances ) {
 			if( allUtterances.get(currChar).get(link.getUtterance()) != null ) {
 				linkingSpokenUtterances.addAll( getUtterancesFromCategory(link.getUtterance(), quality) ) ;
-				
+
 			} else {
 				AgentSpokenUtterance uttr = new AgentSpokenUtterance( link );
 				uttr.setQuality(quality);
@@ -825,7 +847,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return linkingSpokenUtterances;
 	}
-	
+
 	/**
 	 * Returns a list of possible responses based on the detected Content Features 
 	 * in the given DialogueAct 
@@ -837,7 +859,7 @@ public class UtteranceActionProposer extends Component
 		if( act == null ) {
 			return new ArrayList<AgentSpokenUtterance>();
 		}
-		
+
 		double quality = 0.8;
 		HashMap<String,Integer> scores = giveResponseRatings(act);
 		AgentSpokenUtterance reaction;
@@ -875,7 +897,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return spokenUtterances;
 	}
-	
+
 	/**
 	 * Returns a list of possible responses based on the arousal.
 	 * @param act the DialogueAct of the user's previous turn
@@ -911,7 +933,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return suggestions;
 	}
-	
+
 	/**
 	 * Returns a list of generic responses with a very low quality. 
 	 * @param act the DialogueAct of the user's previous turn
@@ -921,13 +943,13 @@ public class UtteranceActionProposer extends Component
 	{
 		double quality = 0.1;
 		ArrayList<AgentSpokenUtterance> suggestions = new ArrayList<AgentSpokenUtterance>();
-		
+
 		if( act == null ) {
 			return getUtterancesFromCategory( "tell_me_more", quality);
 		}
-		
+
 		long user_utterance_length = meta.getTime() - userTurnStart;
-		
+
 		if( tellMeMoreCounter >= 4 ) {
 			if( act.getLength() == DialogueAct.Length.SHORT ) {
 				/* Change topic or character */
@@ -961,10 +983,10 @@ public class UtteranceActionProposer extends Component
 			/* If no utterance can be determined pick one of the random utterances */
 			return getUtterancesFromCategory( "random", quality);
 		}
-		
+
 		return suggestions;
 	}
-	
+
 	/**
 	 * Based on the given type of sentence this method tries to find an utterance of that type
 	 * that hasn't been said for the last x agent utterances.
@@ -981,7 +1003,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return spokenUtterances;
 	}
-	
+
 	public ArrayList<AgentSpokenUtterance> convertToSpokenUtterances( ArrayList<AgentUtterance> uttrs )
 	{
 		ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
@@ -993,7 +1015,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return spokenUtterances;
 	}
-	
+
 	public void adaptQualityToHistory( ArrayList<AgentSpokenUtterance> utterances )
 	{
 		HashMap<String,Integer> utteranceDistances = new HashMap<String,Integer>();
@@ -1002,7 +1024,7 @@ public class UtteranceActionProposer extends Component
 			AgentSpokenUtterance uttr = utteranceHistory.get(i);
 			utteranceDistances.put(uttr.getUtterance().getUtterance(),(size-i) );
 		}
-		
+
 		for( AgentSpokenUtterance uttr : utterances ) {
 			Integer distance = utteranceDistances.get(uttr.getUtterance().getUtterance());
 			if( distance == null ) {
@@ -1073,7 +1095,7 @@ public class UtteranceActionProposer extends Component
 			return new AgentSpokenUtterance( utterancesType.get(rand.nextInt(utterancesType.size())) );
 		}
 	}
-	
+
 	public AgentUtterance findAgentUtterance( String utterance, String newType )
 	{
 		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
@@ -1102,6 +1124,18 @@ public class UtteranceActionProposer extends Component
 			sendListening();
 			userTurnStart = -1;
 		}
+		if( waitingFor != 0 && waitingID != null && meta.getTime()-waitingSince > 10000 ) {
+			if( waitingFor == 1 ) {
+				// Introduction-sentence finished
+				giveIntro();
+			}
+			else if( waitingFor == 2 ) {
+				// Char-change message finished
+				sendNewCharacter( nextChar );
+				waitingID = "";
+				waitingFor = 0;
+			}
+		}	
 	}
 
 	/**
@@ -1115,7 +1149,7 @@ public class UtteranceActionProposer extends Component
 	{	
 		/* Send utterance to Greta */
 		String response = utterance.getUtterance().getUtterance();
-		
+
 		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
 		Element root = doc.getDocumentElement();
 
@@ -1164,7 +1198,7 @@ public class UtteranceActionProposer extends Component
 		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().getUtterance().split(" ").length * 250)+8000 );
 
 		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance().getUtterance() );
-		
+
 		output_counter++;
 		return "fml_uap_"+(output_counter-1);
 	}
@@ -1388,7 +1422,7 @@ public class UtteranceActionProposer extends Component
 			return maxString;
 		}
 	}
-	
+
 	public AgentSpokenUtterance getMaxUtterance( HashMap<String, Integer> scores, String type )
 	{
 		String maxString = "";
@@ -1424,7 +1458,7 @@ public class UtteranceActionProposer extends Component
 		}
 		return newUtterances;
 	}
-	
+
 	/**
 	 * Combines the detected Dialogue Acts of the previous user turn into 1 DialogueAct
 	 * @return the combined DialogueAct
