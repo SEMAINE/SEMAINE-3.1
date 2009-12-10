@@ -1116,9 +1116,11 @@ public class UtteranceActionProposer extends Component
 		Element root = doc.getDocumentElement();
 
 		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
+		bml.setAttribute(BML.A_ID, "bml_uap_"+output_counter); 
 		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
 		fml.setAttribute(FML.A_ID, "fml_uap_"+output_counter);
 		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
+		speech.setAttribute(BML.A_ID, "speech_uap_"+output_counter);
 		speech.setAttribute(BML.E_TEXT, response);
 		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
 		speech.setAttribute("voice", "activemary");
