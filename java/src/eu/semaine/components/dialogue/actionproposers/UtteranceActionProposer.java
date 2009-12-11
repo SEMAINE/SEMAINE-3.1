@@ -423,7 +423,7 @@ public class UtteranceActionProposer extends Component
 				waitingID = "";
 				waitingFor = 0;
 				introductionSentences.clear();
-				systemStarted = 1;
+				systemStarted = true;
 			}
 			currChar = charNumbers.get( stateInfo.getInfo("character") );
 			if( systemStarted ) {
