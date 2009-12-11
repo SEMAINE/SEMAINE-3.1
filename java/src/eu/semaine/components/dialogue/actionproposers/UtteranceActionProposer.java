@@ -346,6 +346,7 @@ public class UtteranceActionProposer extends Component
 	 */
 	public boolean speechReady( SEMAINEXMLMessage xm ) throws JMSException
 	{
+		boolean nextUtteranceStarted = false;
 		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
 		if( callbackElem != null ) {
 			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
@@ -354,7 +355,7 @@ public class UtteranceActionProposer extends Component
 					if( waitingFor != 0 && waitingID != null && eventElem.hasAttribute("id") && eventElem.getAttribute("id").startsWith(waitingID) ) {
 						if( waitingFor == 1 ) {
 							// Introduction-sentence finished
-							giveIntro();
+							nextUtteranceStarted = giveIntro();
 						}
 						else if( waitingFor == 2 ) {
 							// Char-change message finished
@@ -367,7 +368,7 @@ public class UtteranceActionProposer extends Component
 
 				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && agentSpeakingState == SPEAKING ) {
 					finishedSentences++;
-					return true;
+					return !nextUtteranceStarted;
 				} else if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && agentSpeakingState != SPEAKING ) {
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
 					return false;
@@ -460,7 +461,20 @@ public class UtteranceActionProposer extends Component
 		DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
 		System.out.println("User appeared");
 		isUserPresent = true;
-		introGiven = 2;
+		
+		Object obj = System.getProperties().get("semaine.introduction");
+		boolean doIntro;
+		if( obj != null ) {
+			doIntro = Boolean.parseBoolean( obj.toString() );
+		} else {
+			doIntro = true;
+		}
+		if( !doIntro ) {
+			introGiven = 2;
+		} else {
+			introGiven = 0;
+		}
+		
 		if( introGiven == 2 ) {
 			systemStarted = true;
 		}
@@ -469,7 +483,12 @@ public class UtteranceActionProposer extends Component
 		}
 	}
 
-	public void giveIntro() throws JMSException
+	/**
+	 * 
+	 * @return true if a next utterance is started
+	 * @throws JMSException
+	 */
+	public boolean giveIntro() throws JMSException
 	{
 		if( introGiven == 0 ) {
 			introductionSentences.add("Hi. You have reached SAL, the Sensitive Artificial Listeners.");
@@ -491,6 +510,7 @@ public class UtteranceActionProposer extends Component
 			waitingID = sendUtterance(au);
 			waitingSince = meta.getTime();
 			waitingFor = 1;
+			return true;
 		} else if( introGiven == 1 ) {
 			if( introductionSentences.size() > 0 ) {
 				AgentSpokenUtterance au = new AgentSpokenUtterance( new AgentUtterance(introductionSentences.get(0), "introduction"));
@@ -498,6 +518,7 @@ public class UtteranceActionProposer extends Component
 				waitingID = sendUtterance(au);
 				waitingSince = meta.getTime();
 				waitingFor = 1;
+				return true;
 			} else {
 				introGiven = 2;
 				if( isUserPresent ) {
@@ -506,8 +527,10 @@ public class UtteranceActionProposer extends Component
 				charChangeState = CHAR_ASKED;
 				waitingID = "";
 				waitingFor = 0;
+				return false;
 			}
 		}
+		return false;
 	}
 
 	/**
