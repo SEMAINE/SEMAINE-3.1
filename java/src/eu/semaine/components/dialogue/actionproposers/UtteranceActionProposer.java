@@ -419,6 +419,12 @@ public class UtteranceActionProposer extends Component
 		/* Update current character */
 		if( stateInfo.hasInfo("character") ) {
 			currChar = charNumbers.get( stateInfo.getInfo("character") );
+			if( introGiven != 2 ) {
+				introGiven = 2;
+				waitingID = "";
+				waitingFor = 0;
+				introductionSentences.clear();
+			}
 			if( systemStarted ) {
 				charStartupState = INTRODUCED;
 				nrTopicChanges = 0;
@@ -556,6 +562,13 @@ public class UtteranceActionProposer extends Component
 		charHistory.put( OBADIAH, false );
 
 		systemStarted = false;
+		
+		if( introGiven != 2 ) {
+			introGiven = 2;
+			waitingID = "";
+			waitingFor = 0;
+			introductionSentences.clear();
+		}
 	}
 
 	/**
