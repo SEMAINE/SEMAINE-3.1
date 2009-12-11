@@ -20,7 +20,10 @@ public class EmotionML
 	public static final String E_DIMENSIONS = "dimensions";
 	public static final String E_AROUSAL = "arousal";
 	public static final String E_VALENCE = "valence";
-	public static final String E_POTENCY = "potency";
+	//public static final String E_POTENCY = "potency";
+	public static final String E_POWER = "power";
+	public static final String E_INTENSITY = "intensity";
+	public static final String E_EXPECTATION = "expectation";
 	public static final String E_OBJECT = "object";
 	
 	// Attributes
