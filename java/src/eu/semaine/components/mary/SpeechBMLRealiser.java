@@ -20,7 +20,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import marytts.datatypes.MaryData;
@@ -38,7 +37,6 @@ import eu.semaine.components.control.ParticipantControlGUI;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.SSML;
-import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -46,7 +44,6 @@ import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
-import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.BMLSender;
 import eu.semaine.jms.sender.BytesSender;
 import eu.semaine.util.XMLTool;
@@ -222,7 +219,7 @@ public class SpeechBMLRealiser extends Component
 			request.readInputData(reader);
 			request.process();
 			request.writeOutputData(audioos);
-			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime());
+			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime(), xm.getContentID(), xm.getContentCreationTime());
 			
 			request = new Request(MaryDataType.get("WORDS"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.ENGLISH,voice,"","",1,aff);
 			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
