@@ -351,9 +351,9 @@ public class TurnTakingInterpreter extends Component
 	 * Currently, the speaking intention value is the sum of these values: 
 	 * user_silence_time_value: 	a value between 0 and 100 which is higher when the user is silent for a longer time (max is reached after 0.8 seconds).
 	 * emotion_value: 				a value based on the number of detected emotion events. More detected events lead to a higher value.
-	 * agent_silence_time_value: 	a value that's higher when the agent is silent for a longer period (max is reached after 30 seconds).
+	 * agent_silence_time_value: 	a value that's higher when the agent is silent (user is speaking) for a longer period (max is reached after 30 seconds).
 	 * agent_end_wait_value:		a value that starts at -100 when the agent finishes its utterance, and in the next 2 seconds slowly rises (linear) to 0;
-	 * user_not_responding_value:	a value that rises from 0 to 100 when the user does not start talking after an agent-turn. It starts after 2 seconds, and then rises to 100 in 4 seconds unless the user starts speaking.
+	 * user_not_responding_value:	a value that rises from 0 to 100 when the user does not start talking after an agent-turn. It starts after 2 seconds, and then rises to 100 in 8 seconds unless the user starts speaking.
 	 * @return
 	 */
 	public int getSpeakingIntentionValue()
@@ -408,10 +408,10 @@ public class TurnTakingInterpreter extends Component
 		if( agentSpeakingState == SILENT && userSpeakingState == WAITING && Math.abs(agentSpeakingTime - userSpeakingTime) < 30  ) {
 			if( userSpeakingTime < 2000 ) {
 				// Do nothing
-			} else if( userSpeakingTime > 6000 ) {
+			} else if( userSpeakingTime > 8000 ) {
 				user_not_responding_value = 100;
 			} else {
-				user_not_responding_value = ((int)(0.025*(agentSpeakingTime-2000)));
+				user_not_responding_value = ((int)(0.0125*(agentSpeakingTime-2000)));
 			}
 		}
 		
