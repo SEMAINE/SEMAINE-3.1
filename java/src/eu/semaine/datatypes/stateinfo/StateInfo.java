@@ -358,7 +358,7 @@ public abstract class StateInfo
 				String resultString = (String) result;
 				if (resultString != null && !resultString.equals("")) {
 					info.put(shortName, resultString);
-					log.debug("Read info: "+shortName+" = "+resultString);
+					//log.debug("Read info: "+shortName+" = "+resultString);
 				}
 			} catch (XPathExpressionException xee) {
 				throw new MessageFormatException("Problem analysing value of '"+shortName+"'", xee);
