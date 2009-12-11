@@ -418,13 +418,14 @@ public class UtteranceActionProposer extends Component
 
 		/* Update current character */
 		if( stateInfo.hasInfo("character") ) {
-			currChar = charNumbers.get( stateInfo.getInfo("character") );
-			if( introGiven != 2 ) {
+			if( introGiven == 1 && currChar != charNumbers.get( stateInfo.getInfo("character") ) ) {
 				introGiven = 2;
 				waitingID = "";
 				waitingFor = 0;
 				introductionSentences.clear();
+				systemStarted = 1;
 			}
+			currChar = charNumbers.get( stateInfo.getInfo("character") );
 			if( systemStarted ) {
 				charStartupState = INTRODUCED;
 				nrTopicChanges = 0;
@@ -475,7 +476,7 @@ public class UtteranceActionProposer extends Component
 		} else {
 			doIntro = true;
 		}
-		if( !doIntro ) {
+		if( !doIntro || introGiven == 2 ) {
 			introGiven = 2;
 		} else {
 			introGiven = 0;
