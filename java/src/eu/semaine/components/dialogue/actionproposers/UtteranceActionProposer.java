@@ -97,6 +97,8 @@ public class UtteranceActionProposer extends Component
 	/* Data locations */
 	private final static String sentenceDataPath = "/eu/semaine/components/dialogue/data/sentences.xml";
 	private final static String contextFile = "/eu/semaine/components/dialogue/data/Context.csv";
+	
+	private String convState = "";
 
 	/* Senders and Receivers */
 	private StateReceiver agentStateReceiver;
@@ -458,6 +460,7 @@ public class UtteranceActionProposer extends Component
 		DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
 		System.out.println("User appeared");
 		isUserPresent = true;
+		introGiven = 2;
 		if( introGiven == 2 ) {
 			systemStarted = true;
 		}
@@ -1199,6 +1202,17 @@ public class UtteranceActionProposer extends Component
 
 		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance().getUtterance() );
 
+		String cat = utterance.getUtterance().getCategory(); 
+		if( cat.equals("ask_next_character") || cat.equals("change_character") || cat.equals("repair_ask_next_character") || cat.equals("repair_suggest_next_character") || cat.equals("ask_next_character") || cat.equals("intro_how_are_you") || cat.equals("intro_old") || cat.equals("intro_new") ) {
+			if( !convState.equals("asking") ) {
+				convState = "asking";
+				sendConvState();
+			}
+		} else if( !convState.equals("listening") ) {
+			convState = "listening";
+			sendConvState();
+		}
+			
 		output_counter++;
 		return "fml_uap_"+(output_counter-1);
 	}
@@ -1224,6 +1238,19 @@ public class UtteranceActionProposer extends Component
 	{
 		Map<String,String> dialogInfo = new HashMap<String,String>();		
 		dialogInfo.put("agentTurnState", "false");
+
+		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
+		dialogStateSender.sendStateInfo(dsi, meta.getTime());
+	}
+	
+	/**
+	 * Sends around that the agent is silent
+	 * @throws JMSException
+	 */
+	public void sendConvState() throws JMSException
+	{
+		Map<String,String> dialogInfo = new HashMap<String,String>();		
+		dialogInfo.put("convState", convState);
 
 		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
 		dialogStateSender.sendStateInfo(dsi, meta.getTime());

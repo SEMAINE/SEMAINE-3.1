@@ -63,6 +63,8 @@ public class TurnTakingInterpreter extends Component
 	private final static int SPIKE_TT_THRESHOLD = 30;
 	private final static int OBADIAH_TT_THRESHOLD = 100;
 	private int curr_TT_Threshold = 100;
+	
+	private String convState = "";
 
 	/* Senders and Receivers */
 	private StateReceiver userStateReceiver;
@@ -158,6 +160,11 @@ public class TurnTakingInterpreter extends Component
 				/* Processes Dialog state updates */
 				/* updates agent speaking state */
 				setAgentSpeakingState(stateInfo);
+				
+				if( stateInfo.hasInfo("convState") ) {
+					convState = stateInfo.getInfo("convState");
+				}
+				
 				break;
 				
 			case AgentState:
@@ -165,9 +172,11 @@ public class TurnTakingInterpreter extends Component
 				/* processes an agent backchannel */
 				processBackchannel(stateInfo);
 				break;
+				
 			case ContextState:
 				updateCharacter( stateInfo );
 				break;
+				
 		    default:
 		    	// We could complain here if we were certain we don't expect other state infos, as in:
 		    	// throw new MessageFormatException("Unexpected state info type: "+stateInfo.getType().toString());
@@ -367,6 +376,9 @@ public class TurnTakingInterpreter extends Component
 			//double value = Math.max( Math.min( -(Math.sqrt(time))+1, 100 ), 0 );
 			double value;
 			if( time >= 0 ) {
+				if( convState.equals("listening") ) {
+					time /= 9;
+				}
 				value = Math.max( Math.min( Math.pow(time+0.3,2), 1 ), 0 );
 			} else {
 				value = 0;
