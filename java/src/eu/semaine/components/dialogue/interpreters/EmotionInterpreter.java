@@ -163,7 +163,7 @@ public class EmotionInterpreter extends Component
 						emotions[1] = Float.parseFloat( arousalElement.getAttribute(EmotionML.A_VALUE) );
 						emotionsChanged = true;
 					}
-					Element potencyElement = XMLTool.getChildElementByLocalNameNS(dimension, EmotionML.E_POTENCY, EmotionML.namespaceURI);
+					Element potencyElement = XMLTool.getChildElementByLocalNameNS(dimension, EmotionML.E_POWER, EmotionML.namespaceURI);
 					if( potencyElement != null && potencyElement.hasAttribute(EmotionML.A_VALUE) ) {
 						emotions[2] = Float.parseFloat( potencyElement.getAttribute(EmotionML.A_VALUE) );
 						emotionsChanged = true;
