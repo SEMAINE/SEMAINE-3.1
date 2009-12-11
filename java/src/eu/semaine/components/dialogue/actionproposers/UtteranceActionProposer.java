@@ -498,7 +498,7 @@ public class UtteranceActionProposer extends Component
 	public boolean giveIntro() throws JMSException
 	{
 		if( introGiven == 0 ) {
-			introductionSentences.add("Hi. You have reached SAL, the Sensitive Artificial Listeners.");
+			introductionSentences.add("Hi. You have reached SAL, the Sensitive Artificial Listener.");
 			introductionSentences.add("These are the listeners you can choose.");
 			introductionSentences.add("Poppy is cheerful, optimistic and she looks on the bright side of life!");
 			introductionSentences.add("Spike is aggressive, confrontational and he enjoys an argument.");
@@ -593,8 +593,21 @@ public class UtteranceActionProposer extends Component
 					// User wants to change the speaker
 					wantChange = true;
 				}
+				
 				if( act.getTargetCharacter() != null ) {
 					targetCharacter = act.getTargetCharacter();
+				}
+				int userActsSeen = 0;
+				int index = detectedDActs.size()-2;
+				while( index >= 0 && userActsSeen < 4 ) {
+					DialogueAct a = detectedDActs.get(index);
+					if( a.getTargetCharacter() != null && a.getTargetCharacter().equals(targetCharacter) ) {
+						charChangeState = CHAR_SUGGESTED;
+						suggestedChar = charNumbers.get(targetCharacter);
+						return new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
+					}
+					userActsSeen++;
+					index--;
 				}
 			}
 
