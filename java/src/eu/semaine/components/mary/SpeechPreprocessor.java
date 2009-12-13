@@ -4,6 +4,7 @@
  */
 package eu.semaine.components.mary;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -14,6 +15,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
@@ -28,6 +31,7 @@ import marytts.server.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.traversal.NodeIterator;
+import org.xml.sax.SAXException;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.control.ParticipantControlGUI;
@@ -60,7 +64,6 @@ public class SpeechPreprocessor extends Component
 	private FMLSender fmlbmlSender;
 	private static TransformerFactory tFactory = null;
 	private static Templates fml2ssmlStylesheet = null;
-	private Transformer transformer;
 	private Templates mergingStylesheet;
 	private String currentCharacter = ParticipantControlGUI.PRUDENCE;
 	
@@ -127,11 +130,12 @@ public class SpeechPreprocessor extends Component
 		
     	Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-            	if(Mary.STATE_SHUTTING_DOWN == Mary.currentState() || Mary.STATE_OFF == Mary.currentState()){
+            	if(!(Mary.STATE_SHUTTING_DOWN == Mary.currentState() || Mary.STATE_OFF == Mary.currentState())){
             		Mary.shutdown();
             	}
             }
         });
+    	dummyTestRun();
 	}
 	
   
@@ -185,7 +189,7 @@ public class SpeechPreprocessor extends Component
 		
 		if (XMLTool.getChildElementByLocalNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
 			
-			transformer = fml2ssmlStylesheet.newTransformer();
+			Transformer transformer = fml2ssmlStylesheet.newTransformer();
 			transformer.setParameter("character.voice", characters2voices.get(getCurrentCharacter()));
 
 			// Marc, 27.11.09:
@@ -285,4 +289,30 @@ public class SpeechPreprocessor extends Component
         return currentCharacter;
     }
 	
+    /**
+     * Run the full processing queue once, including XML parsing, XSLT transformation back and forth, and MARY processing.
+     * The idea is to trigger just-in-time compilation by Java and thus avoid stalling at the first message.
+     */
+    private void dummyTestRun()
+    throws IOException, SAXException, TransformerConfigurationException, TransformerException, Exception {
+    	Document testFmlApml = XMLTool.parse(this.getClass().getResourceAsStream("fml-apml-example.xml"));
+		Transformer transformer = fml2ssmlStylesheet.newTransformer();
+		transformer.setParameter("character.voice", characters2voices.get(getCurrentCharacter()));
+		DOMResult ssmlDR = new DOMResult();
+		transformer.transform(new DOMSource(testFmlApml), ssmlDR);
+		Document ssmlDoc = (Document) ssmlDR.getNode();
+
+		Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
+		AudioFormat af = voice.dbAudioFormat();
+        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE, af, AudioSystem.NOT_SPECIFIED);
+    	Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
+		MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
+		ssmlData.setDocument(ssmlDoc);
+		request.setInputData(ssmlData);
+		request.process();
+		MaryData maryOut = request.getOutputData();
+		Document maryDoc = maryOut.getDocument();
+		/*Document finalData = */XMLTool.mergeTwoXMLFiles(testFmlApml, maryDoc, mergingStylesheet, "semaine.mary.realised.acoustics");
+    }
+    
 }

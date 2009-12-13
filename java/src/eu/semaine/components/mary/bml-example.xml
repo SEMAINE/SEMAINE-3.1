@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><bml xmlns="http://www.mindmakers.org/projects/BML" id="bml_uap_1">
+      <speech id="speech_uap_1" language="en-GB" text="Hi. You have reached SAL, the Sensitive Artificial Listener." voice="activemary" xmlns:ssml="http://www.w3.org/2001/10/synthesis">
+         <ssml:mark name="speech_uap_1:tm1"/>
+         <phrase xmlns="http://mary.dfki.de/2002/MaryXML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Hi.<mary:boundary xmlns:mary="http://mary.dfki.de/2002/MaryXML" duration="200" id="b3" start="speech_uap_1:tm2" type="HH"/>
+         </phrase>Hi<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
+            <mary:ph d="52" end="0.0523125" p="h"/>
+            <mary:ph d="424" end="0.446125" p="AI"/>
+         </mary:syllable>.<mary:boundary xmlns:mary="http://mary.dfki.de/2002/MaryXML" duration="200" id="b14" start="speech_uap_1:tm2" type="HH"/>
+         <ssml:mark name="speech_uap_1:tm2"/>
+         <phrase xmlns="http://mary.dfki.de/2002/MaryXML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">You<ssml:mark name="speech_uap_1:tm3"/>have<ssml:mark name="speech_uap_1:tm4"/>reached<ssml:mark name="speech_uap_1:tm5"/>SAL,<mary:boundary xmlns:mary="http://mary.dfki.de/2002/MaryXML" duration="400" id="b9" start="speech_uap_1:tm6" type="HH"/>
+         </phrase>You<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" stress="1">
+            <mary:ph d="104" end="0.10412499" p="j"/>
+            <mary:ph d="62" end="0.116437495" p="u"/>
+         </mary:syllable>
+         <ssml:mark name="speech_uap_1:tm3"/>have<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" stress="1">
+            <mary:ph d="56" end="0.1723125" p="h"/>
+            <mary:ph d="68" end="0.24025" p="{"/>
+            <mary:ph d="115" end="0.355125" p="v"/>
+         </mary:syllable>
+         <ssml:mark name="speech_uap_1:tm4"/>reached<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
+            <mary:ph d="41" end="0.396625" p="r"/>
+            <mary:ph d="104" end="0.5003125" p="i"/>
+            <mary:ph d="131" end="0.63187504" p="tS"/>
+            <mary:ph d="79" end="0.71018755" p="t"/>
+         </mary:syllable>
+         <ssml:mark name="speech_uap_1:tm5"/>SAL<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
+            <mary:ph d="153" end="0.8635625" p="s"/>
+            <mary:ph d="190" end="1.053" p="{"/>
+            <mary:ph d="124" end="1.177625" p="l"/>
+         </mary:syllable>,<mary:boundary xmlns:mary="http://mary.dfki.de/2002/MaryXML" duration="400" id="b43" start="speech_uap_1:tm6" type="HH"/>
+         <ssml:mark name="speech_uap_1:tm6"/>
+         <phrase xmlns="http://mary.dfki.de/2002/MaryXML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">the<ssml:mark name="speech_uap_1:tm7"/>Sensitive<ssml:mark name="speech_uap_1:tm8"/>Artificial<ssml:mark name="speech_uap_1:tm9"/>Listener.<mary:boundary xmlns:mary="http://mary.dfki.de/2002/MaryXML" duration="200" id="b9" start="speech_uap_1:tm10" type="HH"/>
+         </phrase>the<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="33" end="1.6103126" p="D"/>
+            <mary:ph d="41" end="1.6515626" p="@"/>
+         </mary:syllable>
+         <ssml:mark name="speech_uap_1:tm7"/>Sensitive<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
+            <mary:ph d="138" end="1.7891251" p="s"/>
+            <mary:ph d="38" end="1.82725" p="E"/>
+            <mary:ph d="73" end="1.9007499" p="n"/>
+         </mary:syllable>
+         <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="83" end="1.9831249" p="s"/>
+            <mary:ph d="43" end="2.0261872" p="@"/>
+         </mary:syllable>
+         <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="101" end="2.1276872" p="t"/>
+            <mary:ph d="58" end="2.1851873" p="I"/>
+            <mary:ph d="42" end="2.227" p="v"/>
+         </mary:syllable>
+         <ssml:mark name="speech_uap_1:tm8"/>Artificial<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
+            <mary:ph d="159" end="2.386625" p="A"/>
+            <mary:ph d="26" end="2.4121876" p="r"/>
+         </mary:syllable>
+         <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="76" end="2.4885626" p="t"/>
+            <mary:ph d="26" end="2.514625" p="@"/>
+         </mary:syllable>
+         <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="70" end="2.5845" p="f"/>
+            <mary:ph d="49" end="2.6331875" p="I"/>
+         </mary:syllable>
+         <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="115" end="2.748375" p="S"/>
+            <mary:ph d="20" end="2.7680626" p="@"/>
+            <mary:ph d="55" end="2.8230624" p="l"/>
+         </mary:syllable>
+         <ssml:mark name="speech_uap_1:tm9"/>Listener<mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
+            <mary:ph d="61" end="2.8844373" p="l"/>
+            <mary:ph d="35" end="2.9196873" p="I"/>
+         </mary:syllable>
+         <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="140" end="3.0593123" p="s"/>
+            <mary:ph d="29" end="3.0880623" p="@"/>
+         </mary:syllable>
+         <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML">
+            <mary:ph d="60" end="3.1487498" p="n"/>
+            <mary:ph d="299" end="3.4471874" p="r="/>
+         </mary:syllable>.<mary:boundary xmlns:mary="http://mary.dfki.de/2002/MaryXML" duration="200" id="b91" start="speech_uap_1:tm10" type="HH"/>
+         <ssml:mark name="speech_uap_1:tm10"/>
+         <pitchaccent end="speech_uap_1:tm2" id="xpa1" start="speech_uap_1:tm1" time="0.22321875"/>
+         <pitchaccent end="speech_uap_1:tm5" id="xpa5" start="speech_uap_1:tm4" time="0.532906275"/>
+         <pitchaccent end="speech_uap_1:tm6" id="xpa6" start="speech_uap_1:tm5" time="0.94409375"/>
+         <pitchaccent end="speech_uap_1:tm8" id="xpa9" start="speech_uap_1:tm7" time="1.7759375"/>
+         <pitchaccent end="speech_uap_1:tm9" id="xpa10" start="speech_uap_1:tm8" time="2.3199063000000004"/>
+         <pitchaccent end="speech_uap_1:tm10" id="xpa11" start="speech_uap_1:tm9" time="2.8715623"/>
+      </speech>
+   </bml>

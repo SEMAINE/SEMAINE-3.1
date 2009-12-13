@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><fml-apml version="0.1">
+   <bml xmlns="http://www.mindmakers.org/projects/BML" id="bml_uap_1">
+      <speech id="speech_uap_1" language="en-GB" text="Hi. You have reached SAL, the Sensitive Artificial Listener." voice="activemary">
+         <mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm1"/>Hi.<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm2"/>You<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm3"/>have<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm4"/>reached<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm5"/>SAL,<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm6"/>the<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm7"/>Sensitive<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm8"/>Artificial<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm9"/>Listener.<mark xmlns="http://www.w3.org/2001/10/synthesis" name="speech_uap_1:tm10"/>
+      </speech>
+   </bml>
+   <fml xmlns="http://www.mindmakers.org/fml" id="fml_uap_1"/>
+</fml-apml>

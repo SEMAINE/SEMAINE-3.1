@@ -5,6 +5,7 @@
 package eu.semaine.components.mary;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -17,6 +18,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
@@ -31,6 +34,7 @@ import marytts.server.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.traversal.NodeIterator;
+import org.xml.sax.SAXException;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.control.ParticipantControlGUI;
@@ -64,7 +68,6 @@ public class SpeechBMLRealiser extends Component
 	private static TransformerFactory tFactory = null;
 	private static Templates bml2ssmlStylesheet = null;
 	private static Templates bmlSpeechTimingRemoverStylesheet = null;
-    private Transformer transformer;
 	private Templates mergingStylesheet;
 	private String currentCharacter = ParticipantControlGUI.PRUDENCE;
     private int backchannelNumber = 0; 
@@ -128,11 +131,12 @@ public class SpeechBMLRealiser extends Component
     	//startup();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-            	if(Mary.STATE_SHUTTING_DOWN == Mary.currentState() || Mary.STATE_OFF == Mary.currentState()){
+            	if(!(Mary.STATE_SHUTTING_DOWN == Mary.currentState() || Mary.STATE_OFF == Mary.currentState())) {
             		Mary.shutdown();
             	}
             }
         });
+        dummyTestRun();
 	}
 	
   
@@ -239,7 +243,7 @@ public class SpeechBMLRealiser extends Component
 			
 			long t0 = System.currentTimeMillis();
 			// BML speech timing info removal
-			transformer = bmlSpeechTimingRemoverStylesheet.newTransformer();
+			Transformer transformer = bmlSpeechTimingRemoverStylesheet.newTransformer();
 			//transformer.setParameter("character.voice", "spike");
 			long t1 = System.currentTimeMillis();
 			long durCreateTransformer = t1 - t0;
@@ -255,11 +259,11 @@ public class SpeechBMLRealiser extends Component
 			long durExtractBML = t2 - t1;
 			
 			// Utterance synthesis
-			transformer = bml2ssmlStylesheet.newTransformer();
-			transformer.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
+			Transformer transformer2 = bml2ssmlStylesheet.newTransformer();
+			transformer2.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
 			//transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
 			DOMResult ssmlDR = new DOMResult();
-			transformer.transform(new DOMSource(bmlDoc), ssmlDR);
+			transformer2.transform(new DOMSource(bmlDoc), ssmlDR);
 			Document ssmlDoc = (Document) ssmlDR.getNode();
 			
 			long t3 = System.currentTimeMillis();
@@ -382,5 +386,44 @@ public class SpeechBMLRealiser extends Component
     {
         return currentCharacter;
     }
+	
+    /**
+     * Run the full processing queue once, including XML parsing, XSLT transformation back and forth, and MARY processing.
+     * The idea is to trigger just-in-time compilation by Java and thus avoid stalling at the first message.
+     */
+    private void dummyTestRun()
+    throws IOException, SAXException, TransformerConfigurationException, TransformerException, Exception {
+    	Document testBml = XMLTool.parse(this.getClass().getResourceAsStream("bml-example.xml"));
+		Transformer transformer = bmlSpeechTimingRemoverStylesheet.newTransformer();
+		DOMResult bmlDR = new DOMResult();
+		transformer.transform(new DOMSource(testBml), bmlDR);
+		Document bmlDoc = (Document) bmlDR.getNode();
+		Transformer transformer2 = bml2ssmlStylesheet.newTransformer();
+		transformer2.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
+		DOMResult ssmlDR = new DOMResult();
+		transformer2.transform(new DOMSource(bmlDoc), ssmlDR);
+		Document ssmlDoc = (Document) ssmlDR.getNode();
+
+		Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
+		AudioFormat af = voice.dbAudioFormat();
+        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE, af, AudioSystem.NOT_SPECIFIED);
+    	Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
+		MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
+		ssmlData.setDocument(ssmlDoc);
+		request.setInputData(ssmlData);
+		request.process();
+		MaryData maryOut = request.getOutputData();
+		Document maryDoc = maryOut.getDocument();
+		/*Document finalData = */XMLTool.mergeTwoXMLFiles(testBml, maryDoc, mergingStylesheet, "semaine.mary.realised.acoustics");
+		
+        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.ENGLISH, voice, "", "", 1, aff);
+		ByteArrayOutputStream audioos = new ByteArrayOutputStream();
+		MaryData ssmlData2 = new MaryData(request.getInputType(), request.getDefaultLocale());
+		ssmlData2.setDocument(ssmlDoc);
+		request.setInputData(ssmlData2);
+		request.process();
+		request.writeOutputData(audioos);
+    }
+
 	
 }
