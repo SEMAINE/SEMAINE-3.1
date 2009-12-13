@@ -176,8 +176,8 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			meta.statistics().countMessageReceived();
 			
 			try {
-				// time travelled, ignoring clock differences between sender and receiver:
-				long timeMessageTravelled = System.currentTimeMillis() - message.getMessage().getJMSTimestamp();
+				// time that the message travelled, in "user" time (ms since system startup -- this should be independent of clock asynchrony)
+				long timeMessageTravelled = meta.getTime() - message.getUsertime();
 				meta.statistics().transmitTime(timeMessageTravelled);
 				// Now, do something meaningful with the message,
 				// and possibly send output via the Senders.

@@ -80,7 +80,7 @@ public:
 	 * contain a header field <code>JMSExpiration</code> containing the time when the message
 	 * will expire.
 	 * @param text the message text.
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @param event the type of event represented by this message.
 	 * @param contentID a unique identifier for the message's content.

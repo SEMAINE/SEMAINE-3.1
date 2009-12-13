@@ -58,7 +58,7 @@ public class BytesSender extends Sender
 	 * contain a header field <code>JMSExpiration</code> containing the time when the message
 	 * will expire.
 	 * @param bytes the message data, as a byte array.
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @throws IllegalStateException if the connection is not started or the sender is in event-based mode.
 	 */

@@ -62,7 +62,7 @@ public class StateSender extends XMLSender
 	/**
 	 * Send the given state information.
 	 * @param s a state information
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
 	 * @throws JMSException
@@ -76,7 +76,7 @@ public class StateSender extends XMLSender
 	/**
 	 * Send the given state information.
 	 * @param s a state information
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @param contentID a unique identifier for the message's content.
 	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.

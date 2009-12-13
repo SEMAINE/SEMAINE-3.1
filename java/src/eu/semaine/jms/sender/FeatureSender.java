@@ -95,8 +95,8 @@ public class FeatureSender extends Sender
 	 * {@link #setFeatureNames(String[]) must be called, and the
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
-	 * @param usertime the time in "user" space that these features
-	 * refer to, in milliseconds since 1970.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since 1970.
 	 * @throws JMSException
 	 */
 	public void sendFeatureVector(float[] features, long usertime)
@@ -109,8 +109,8 @@ public class FeatureSender extends Sender
 	 * {@link #setFeatureNames(String[]) must be called, and the
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
-	 * @param usertime the time in "user" space that these features
-	 * refer to, in milliseconds since 1970.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since 1970.
 	 * @throws JMSException
 	 */
 	public void sendFeatureVector(float[] features, long usertime, boolean sendBinary)

@@ -380,7 +380,7 @@ public class SystemManager extends Component implements MessageListener
 			if (nNumMsg == 0) nNumMsg = 1;
 			sb.append("...time spent in act(): ").append(actTime/nAct).append(" ms\n");
 			sb.append("...time spent in react(): ").append(reactTime/nReact).append(" ms\n");
-			sb.append("...message travel time (ignoring clock async): ").append(transmitTime/nTransmit).append(" ms\n");
+			sb.append("...message travel time: ").append(transmitTime/nTransmit).append(" ms\n");
 			sb.append("...number of messages received: ").append(numMsg/nNumMsg).append("\n");
 		} else {
 			sb.append("not ready:\n");

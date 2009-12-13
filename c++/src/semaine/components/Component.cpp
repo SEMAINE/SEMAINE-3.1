@@ -168,8 +168,8 @@ const std::string Component::STATE_STALLED = "stalled";
 			meta.statistics()->countMessageReceived();
 
 			try {
-				// time travelled, ignoring clock differences between sender and receiver:
-				long long timeMessageTravelled = System::currentTimeMillis() - message->getMessage()->getCMSTimestamp();
+				// time that the message travelled, in "user" time (ms since system startup -- this should be independent of clock asynchrony)
+				long long timeMessageTravelled = meta.getTime() - message->getUsertime();
 				meta.statistics()->transmitTime((long)timeMessageTravelled);
 				// Now, do something meaningful with the message,
 				// and possibly send output via the Senders.

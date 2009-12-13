@@ -65,8 +65,8 @@ public class XMLSender extends Sender
 	/**
 	 * Send an XML document as a "single" event.
 	 * @param document the document to send.
-	 * @param usertime the time in "user" space that these features
-	 * refer to, in milliseconds since system startup.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
 	 * @throws JMSException
 	 */
 	public void sendXML(Document document, long usertime)
@@ -78,8 +78,8 @@ public class XMLSender extends Sender
 	/**
 	 * Send an XML document as a "single" event.
 	 * @param document the document to send.
-	 * @param usertime the time in "user" space that these features
-	 * refer to, in milliseconds since system startup.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
 	 * @param contentID a unique identifier for the message's content.
 	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
 	 * @param contentCreationTime the time when the content in this message was created.
@@ -95,8 +95,8 @@ public class XMLSender extends Sender
 	/**
 	 * Send an XML document with the given event tag.
 	 * @param document the document to send.
-	 * @param usertime the time in "user" space that these features
-	 * refer to, in milliseconds since system startup.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
 	 * @param event the kind of event represented by this message
 	 * @throws JMSException
 	 * @throws NullPointerException if document or event is null
@@ -111,8 +111,8 @@ public class XMLSender extends Sender
 	/**
 	 * Send an XML document with the given event tag.
 	 * @param document the document to send.
-	 * @param usertime the time in "user" space that these features
-	 * refer to, in milliseconds since system startup.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
 	 * @param event the kind of event represented by this message
 	 * @param contentID a unique identifier for the message's content.
 	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.

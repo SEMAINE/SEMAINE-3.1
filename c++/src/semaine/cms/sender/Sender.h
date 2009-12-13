@@ -182,7 +182,7 @@ public:
 	 * contain a header field <code>JMSExpiration</code> containing the time when the message
 	 * will expire.
 	 * @param text the message text.
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @throws SystemConfigurationException if the connection is not started or the sender is in event-based mode.
 	 */
@@ -206,7 +206,7 @@ public:
 	 * contain a header field <code>JMSExpiration</code> containing the time when the message
 	 * will expire.
 	 * @param text the message text.
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @param contentID a unique identifier for the message's content.
 	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
@@ -232,7 +232,7 @@ public:
 	 * contain a header field <code>JMSExpiration</code> containing the time when the message
 	 * will expire.
 	 * @param text the message text.
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @param event the type of event represented by this message.
 	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
@@ -255,7 +255,7 @@ public:
 	 * contain a header field <code>JMSExpiration</code> containing the time when the message
 	 * will expire.
 	 * @param text the message text.
-	 * @param usertime the "user" time that this message refers to,
+	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
 	 * @param event the type of event represented by this message.
 	 * @param contentID a unique identifier for the message's content.

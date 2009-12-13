@@ -301,7 +301,7 @@ public class ComponentInfo extends Info
 			sb.append("Average time spent in react(): ").append(avgReactTime).append(" ms").append("\n");
 		}
 		if (avgTransmitTime != -1) {
-			sb.append("Average travel time of incoming messages (ignoring clock differences!): ").append(avgTransmitTime).append(" ms").append("\n");
+			sb.append("Average travel time of incoming messages: ").append(avgTransmitTime).append(" ms").append("\n");
 		}
 		if (messagesReceived != -1) {
 			sb.append("Total messages received: ").append(messagesReceived).append("\n");

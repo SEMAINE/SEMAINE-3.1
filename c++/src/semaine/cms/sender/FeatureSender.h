@@ -94,8 +94,8 @@ public:
 	 * {@link #setFeatureNames() must be called, and the
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
-	 * @param usertime the time in "user" space that these features
-	 * refer to, in milliseconds since 1970.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
 	 * @param sendBinary whether to send the message as a binary message
 	 * (defaults to false)
 	 * @throws CMSException
