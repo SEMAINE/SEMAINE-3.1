@@ -49,6 +49,7 @@
 		</jar>
 		<jar destfile="lib/semaine-mary.jar" basedir="bin"
 			includes="eu/semaine/components/mary/**/*.class
+				eu/semaine/components/mary/**/*.xml
 				eu/semaine/components/mary/**/*.xsl">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
