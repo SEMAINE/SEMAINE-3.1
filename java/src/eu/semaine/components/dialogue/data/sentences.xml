@@ -19,7 +19,8 @@
 			<utterance value="How?" />
 			<utterance value="That sounds interesting, tell me more."/>
 			<utterance value="Tell me more." />
-			<utterance value="Yeah." />
+			<!--utterance value="Yeah." /--><!-- sounds bad with MARY 4.0.0 -->
+			<utterance value="uh-huh"/><!-- reasonable replacement with MARY 4.0.0 -->
 		</category>
 		
 		<category name="change_subject">
@@ -41,7 +42,7 @@
 				<link pre="is_disagree" response="It's not that bad." />
 				<link pre="is_disagree" response="Every cloud has a silver lining." />
 				<link pre="is_disagree" response="Look on the bright side!" />
-				<link pre="is_disagree" response="Everything will work out, you'll see!" />
+				<link pre="is_disagree" response="Everything will work out you'll see!" />
 				<link pre="is_disagree" response="Don't worry, the whole world can't be bad, it's just the way you feel at the moment." />
 				<elaboration response="Tell me what makes you feel really happy." />
 			</utterance>
@@ -150,7 +151,7 @@
 		    <utterance value="It's great to hear someone sound happy."/>
 		    <utterance value="That sounds very positive."/>
 		    <utterance value="That's great!"/>
-		    <utterance value="That's wonderful, isn't it?"/>
+		    <utterance value="That's wonderful isn't it?"/>
 		</category>
 		
 		<category name="ask_next_character">
@@ -162,7 +163,7 @@
 		</category>
 		
 		<category name="repair_suggest_next_character">
-			<utterance value="What do you mean? yes or noe?" />
+			<utterance value="What do you mean? yes or no?" /><!-- yes sounds bad with MARY 4.0.0 -->
 		</category>
 		
 		<category name="intro_new">
@@ -220,7 +221,7 @@
 		</category>
 		
 		<category name="change_subject">
-			<utterance value="How do you view people?">
+			<utterance value="How do you view other people?"><!-- added 'other' because it sounds better in MARY 4.0.0 -->
 				<link pre="is_positive" response="So where do you think your attitude to life comes from?" />
 				<link pre="is_positive" response="That sounds like a sensible attitude." />
 				<link pre="is_positive" response="It's always good to be rational." />
@@ -275,7 +276,7 @@
 		</category>
 		
 		<category name="cheer_up">
-			<utterance value="Worse things happen at sea."/>
+			<!--utterance value="Worse things happen at sea."/--><!-- Worse sounds bad in MARY 4.0.0 -->
 		  	<utterance value="I'm not sure that you should be so negative."/>
 		  	<utterance value="It can't be that bad, perhaps you're over-reacting?"/>
 		  	<utterance value="It will all seem better in a few days time."/>
@@ -299,15 +300,15 @@
 		</category>
 		
 		<category name="repair_ask_next_character">
-			<utterance value="m sorry, but who would you like to talk to?" />
+			<utterance value="I'm sawry, but who would you like to talk to?" /><!--sorry sounds bad-->
 		</category>
 		
 		<category name="repair_suggest_next_character">
-			<utterance value="What do you mean? yes or noe?" />
+			<utterance value="What do you mean? yes or no?" />
 		</category>
 		
 		<category name="intro_new">
-			<utterance value="Hello there, I'm Prudence, and I am very matter-of-fact. So tell me, what is your name?" />
+			<utterance value="Hello there, I'm Prudence and I am very matter-of-fact. So tell me, what is your name?" />
 		</category>
 		
 		<category name="intro_old">
@@ -412,11 +413,11 @@
 		</category>
 		
 		<category name="repair_ask_next_character">
-			<utterance value="Sorrry, but who would you like to talk to?" />
+			<utterance value="Sorry, but who would you like to talk to?" />
 		</category>
 		
 		<category name="repair_suggest_next_character">
-			<utterance value="What do you mean? yes or noe?" />
+			<utterance value="What do you mean? yes or no?" />
 		</category>
 		
 		<category name="intro_new">
@@ -560,7 +561,7 @@
 		</category>
 		
 		<category name="repair_ask_next_character">
-			<utterance value="I'm sorry, but who would you like to talk to?" />
+			<utterance value="I'm sorry, who would you like to talk to?" />
 		</category>
 		
 		<category name="repair_suggest_next_character">
@@ -568,11 +569,11 @@
 		</category>
 		
 		<category name="intro_new">
-			<utterance value="Hello, my name is Obadiah, and I'm feeling very depressed just now. And who are you?" />
+			<utterance value="Hello, my name is Obadiah, and I'm feeling very depressed just now. Who are you?" />
 		</category>
 		
 		<category name="intro_old">
-			<utterance value="Hello, I am Obadiah. What's the matter?" />
+			<utterance value="Hello I'm Obadiah. What's the matter?" />
 		</category>
 		
 		<category name="intro_how_are_you">
