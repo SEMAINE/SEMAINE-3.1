@@ -75,19 +75,19 @@ public class XMLTool
     }
     
 
-    public static Document string2Document(String stringRepresentationOfDocument)
+    public static synchronized Document string2Document(String stringRepresentationOfDocument)
     throws SAXException, IOException
     {
     	return docBuilder.parse(new InputSource(new StringReader(stringRepresentationOfDocument)));
     }
     
-    public static Document parse(File file)
+    public static synchronized Document parse(File file)
     throws SAXException, IOException
     {
     	return docBuilder.parse(file);
     }
     
-    public static Document parse(InputStream in)
+    public static synchronized Document parse(InputStream in)
     throws SAXException, IOException
     {
     	return docBuilder.parse(in);
