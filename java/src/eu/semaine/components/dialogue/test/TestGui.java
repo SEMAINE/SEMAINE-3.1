@@ -10,15 +10,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.jms.JMSException;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -60,11 +65,18 @@ public class TestGui extends Component
 	/* Specifies if the gui should send speech/silence signals as well */
 	private boolean sendSpeechSignals = true;
 	
+	private ImageIcon userSpeakingIcon;
+	private ImageIcon userListeningIcon;
+	private ImageIcon agentSpeakingIcon;
+	private ImageIcon agentListeningIcon;
+	
 	/* GUI Elements */
 	private JFrame jframe;
 	private JTextField input;
 	private JEditorPane output;
 	private JScrollPane scroller;
+	private JLabel userSpeakingState;
+	private JLabel agentSpeakingState;
 	
 	/* The text in the textArea */
 	private String outputText = "++++++++ Welcome ++++++++";
@@ -123,7 +135,7 @@ public class TestGui extends Component
 		//receivers.add(emmaReceiver);
 		userStateReceiver = new StateReceiver("semaine.data.state.user.behaviour", StateInfo.Type.UserState);
 		receivers.add(userStateReceiver);
-		
+		receivers.add( new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState) );
 		
 		initGui();
 	}
@@ -198,6 +210,22 @@ public class TestGui extends Component
 					}
 					printLine();
 				}
+				if( stateInfo.hasInfo("speaking") ) {
+					if( stateInfo.getInfo("speaking").equals("true") ) {
+						userSpeakingState.setIcon(userSpeakingIcon);
+					} else if( stateInfo.getInfo("speaking").equals("false") ) {
+						userSpeakingState.setIcon(userListeningIcon);
+					}
+				}
+			}
+			if (stateInfo.getType() == StateInfo.Type.DialogState) {
+				if( stateInfo.hasInfo("agentTurnState") ) {
+					if( stateInfo.getInfo("agentTurnState").equals("true") ) {
+						agentSpeakingState.setIcon(agentSpeakingIcon);
+					} else {
+						agentSpeakingState.setIcon(agentListeningIcon);
+					}
+				}
 			}
 		}
 	}
@@ -242,6 +270,16 @@ public class TestGui extends Component
 	 */
 	public void initGui()
 	{
+		try {
+			userSpeakingIcon = new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/eu/semaine/components/dialogue/data/speaking.png")));
+			userListeningIcon = new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/eu/semaine/components/dialogue/data/silent.png")));
+			agentSpeakingIcon = new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/eu/semaine/components/dialogue/data/agentSpeaking.png")));
+			agentListeningIcon = new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/eu/semaine/components/dialogue/data/agentListening.png")));
+		} catch( IOException e ) {
+			e.printStackTrace();
+		}
+		
+		
 		/* Creates new Frame */
 		jframe = new JFrame();
 		jframe.setLayout( new BorderLayout() );
@@ -282,6 +320,11 @@ public class TestGui extends Component
 	{
 		/* Create new Panel */
 		JPanel panel = new JPanel();
+		
+		userSpeakingState = new JLabel(userListeningIcon);
+		agentSpeakingState = new JLabel(agentListeningIcon);
+		panel.add(userSpeakingState);
+		panel.add(agentSpeakingState);
 		
 		/* Create input textfield */
 		input = new JTextField(45);

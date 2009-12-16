@@ -601,7 +601,7 @@ public class UtteranceActionProposer extends Component
 				int index = detectedDActs.size()-2;
 				while( index >= 0 && userActsSeen < 4 ) {
 					DialogueAct a = detectedDActs.get(index);
-					if( a.getTargetCharacter() != null && a.getTargetCharacter().equals(targetCharacter) ) {
+					if( a.getTargetCharacter() != null && a.getTargetCharacter().equals(targetCharacter) && !targetCharacter.equals(charNames.get(currChar)) ) {
 						charChangeState = CHAR_SUGGESTED;
 						suggestedChar = charNumbers.get(targetCharacter);
 						return new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
