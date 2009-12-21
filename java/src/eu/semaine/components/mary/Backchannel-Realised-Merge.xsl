@@ -24,7 +24,7 @@ select="document('semaine.mary.realised.acoustics')"/>
     <speech id="s1" language="en-GB" text=""> 
 		<ssml:mark name="tm1"/>
 	    <mary:syllable xmlns:mary="http://mary.dfki.de/2002/MaryXML" accent="1" stress="1">
-        <xsl:apply-templates select="$emps/descendant::mary:nvv/*"/>
+        <xsl:apply-templates select="$emps/descendant::mary:vocalization/*"/>
 	    </mary:syllable>
     	<ssml:mark name="tm2"/>
     	<mary:boundary duration="1"/>

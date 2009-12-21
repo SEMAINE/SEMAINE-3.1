@@ -67,11 +67,10 @@ public class SpeechBMLRealiser extends Component
 	
 	private static TransformerFactory tFactory = null;
 	private static Templates bml2ssmlStylesheet = null;
+	private static Templates bml2BackchannelStylesheet = null;
 	private static Templates bmlSpeechTimingRemoverStylesheet = null;
 	private Templates mergingStylesheet;
 	private String currentCharacter = ParticipantControlGUI.PRUDENCE;
-    private int backchannelNumber = 0; 
-    private int MaxNoOfBackchannels = 4; 
     
 	/**
 	 * @param componentName
@@ -111,6 +110,11 @@ public class SpeechBMLRealiser extends Component
 		
 	    StreamSource stylesheetStream2 = new StreamSource(SpeechPreprocessor.class.getResourceAsStream("FML-RealisedSpeech-Merge.xsl"));
         mergingStylesheet = tFactory.newTemplates(stylesheetStream2);
+        
+        // BML2backchannel conversion
+        StreamSource bml2BackchannelStream =
+	        new StreamSource( SpeechBMLRealiser.class.getResourceAsStream("BML2Backchannel.xsl"));
+		bml2BackchannelStylesheet = tFactory.newTemplates(bml2BackchannelStream);
 
 		
     	// Read properties:
@@ -185,31 +189,12 @@ public class SpeechBMLRealiser extends Component
 				return;
 			}
 			
-			String backchannelString = XMLTool.getAttributeIfAvailable(bmlSpeech, "text");
-			Element speechVocalization = XMLTool.getChildElementByLocalNameNS(bmlSpeech, "vocalization", "http://mary.dfki.de/2002/MaryXML");
-			boolean hasSpeechVocalization = speechVocalization != null;
-			boolean isNullBackchannel    = backchannelString == null || "".equals(backchannelString);
-			
-			if( hasSpeechVocalization || isNullBackchannel ) {
-				backchannelNumber++; 
-				if (backchannelNumber >= MaxNoOfBackchannels ) { 
-					backchannelNumber = 0; 
-				}
-				backchannelString = (new Integer(backchannelNumber)).toString(); // default listener vocalization
-			}
-			
-			// Backchannel input to MARY is hard-coded
-			String words = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
-			 + "<maryxml xmlns=\"http://mary.dfki.de/2002/MaryXML\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"0.4\" xml:lang=\"en-GB\">"
-			 + "<p>"
-			 //+ "<voice name=\"cmu-slt-arctic\">"
-			 + "<voice name=\""+SpeechPreprocessor.characters2voices.get(getCurrentCharacter())+"\">"
-			 + "<nvv variant=\""+backchannelString+"\"/>"
-			 + "</voice>"
-			 + "</p>"
-			 + "</maryxml>";
-			
-			//System.out.println(words);
+			Transformer backchannelTransformer = bml2BackchannelStylesheet.newTransformer();
+			backchannelTransformer.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
+			DOMResult backchannelDR = new DOMResult();
+			backchannelTransformer.transform(new DOMSource(input), backchannelDR);
+			Document bcWordDoc = (Document) backchannelDR.getNode();
+			String words = XMLTool.document2String(bcWordDoc);
 			
 			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
 			

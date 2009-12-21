@@ -118,10 +118,13 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	{
 		Map<String,String> dialogInfoMap = dialogInfo.getInfos();
 
-		if( dialogInfoMap.get("agentTurnState").equals("true") ) {
+		String agentHasTurn = dialogInfoMap.get("agentTurnState");
+		if (agentHasTurn == null) return;
+
+		if( agentHasTurn.equals("true") ) {
 			agentSpeakingState = SPEAKING;
 			agentSpeakingStateTime = meta.getTime();
-		} else if( dialogInfoMap.get("agentTurnState").equals("false") ) {
+		} else if( agentHasTurn.equals("false") ) {
 			agentSpeakingState = SILENT;
 			agentSpeakingStateTime = meta.getTime();
 			if( userSpeakingState == SILENT ) {
@@ -137,14 +140,16 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 	public void setUserSpeakingState(StateInfo userInfo)
 	{
 		Map<String,String> userInfoMap = userInfo.getInfos();
+		String speaking = userInfoMap.get("speaking");
+		if (speaking == null) return;
 
-		if( userInfoMap.get("speaking").equals("true") ) {
+		if( speaking.equals("true") ) {
 			if( userSpeakingState != SPEAKING ) {
 				userSpeakingState = SPEAKING;
 				userSpeakingStateTime = meta.getTime();
 				backchannel_send = false;
 			}
-		} else if( userInfoMap.get("speaking").equals("false") ) {
+		} else if( speaking.equals("false") ) {
 			if( userSpeakingState != SILENT ) {
 				userSpeakingState = SILENT;
 				userSpeakingStateTime = meta.getTime();
@@ -190,10 +195,10 @@ public class BackchannelActionProposer extends eu.semaine.components.Component
 		fmlSender.sendXML(doc, meta.getTime());
 		
 		/* Send backchannel behaviour around */
-		Map<String,String> agentStateInfo = new HashMap<String,String>();
-		agentStateInfo.put("intention", "backchannel");
+		//Map<String,String> agentStateInfo = new HashMap<String,String>();
+		//agentStateInfo.put("intention", "backchannel");
 		
-		AgentStateInfo asi = new AgentStateInfo( agentStateInfo );
-		agentStateSender.sendStateInfo(asi, meta.getTime());
+		//AgentStateInfo asi = new AgentStateInfo( agentStateInfo );
+		//agentStateSender.sendStateInfo(asi, meta.getTime());
 	}
 }
