@@ -1,14 +1,32 @@
 
 #################### Package Configuration    #########################
-OPENSMILEMODELS="models-09-12-2009b.zip"
+
+ ## set this to "true" to enable building of opensmile from the latest svn revision
+USE_SVN="false"
+ ####################
+
+OPENSMILEMODELS="models-21-12-2009.zip"
 OPENSMILEMODELS_URL="http://www.mmk.ei.tum.de/~eyb/semaine/$OPENSMILEMODELS"
 OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
+
+### this i the openSMILE svn revision used in the 2.0 release
+#OPENSMILE_SVN_20="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
+#OPENSMILE_REV_20="238"
+
+### the tarball should be included in the release, 
+### in case it is not, we include the download here
+OPENSMILE_TARBALL="openSMILE_SEMAINE_2.0.tar.gz"
+OPENSMILE_TARBALL_URL="http://www.mmk.ei.tum.de/~eyb/semaine/$OPENSMILE_TARBALL"
+
+
+############################################################################
 
 if test -d "$SEMAINE_ROOT/c++/src/tum/opensmile"; then
   true
 else
   mkdir "$SEMAINE_ROOT/c++/src/tum/opensmile"
 fi
+
 
 register_semaine_build "tum.opensmile" "c++/src/tum/opensmile" "func_build_opensmile" $1
 
@@ -24,11 +42,13 @@ function func_build_opensmile {
       fi
     fi
 
-
     # download the SMILE models
     # the nc version of the download function is used here, 
     # since smile runs without models (feature extractor only)
-    aux_download_nc "$OPENSMILEMODELS_URL" "$OPENSMILEMODELS"
+    if test ! -f $DOWNLOAD_PREFIX/$OPENSMILEMODELS || "x$1" = "xclean" ; then
+      echo "DOWNLOADING openSMILE ASR and affect models"
+      aux_download_nc "$OPENSMILEMODELS_URL" "$OPENSMILEMODELS"
+    fi
 
     # install models if present in download directory
     if test -f $DOWNLOAD_PREFIX/$OPENSMILEMODELS ; then
@@ -42,11 +62,33 @@ function func_build_opensmile {
      fi
     fi
 
-    # check for source code
-    if test -f autogen.sh ; then
-      svn update
+    if test "$USE_SVN" = "true" ; then
+      if test -f autogen.sh ; then
+        # update an existing tree
+        svn update
+        # abort on SVN errors (maybe no .svn directory found if you attempt to svn update the tarball release...)
+        if test "$?" != 0 ; then
+          echo "ERROR during svn update. Are you attempting to update the release tarball which has no .svn directories? Remove the opensmile directory completely. This script will do a clean checkout from the svn trunk then. If you do not want the HEAD revision, edit the file bin/buildall/module.opensmile.sh."
+         return 1;
+        fi 
+      else
+        # check out a new tree
+        svn co $OPENSMILE_SVN .
+      fi
     else
-      svn co $OPENSMILE_SVN .
+
+      # check for the tarball in thirdparty/download, and unpack if necessary
+      if test -f autogen.sh ; then
+        echo "$PWD/autogen.sh was found, assuming the tarball has already been unpacked...";
+      else
+        P=`pwd`;
+        if test ! -f $DOWNLOAD_PREFIX/$OPENSMILE_TARBALL ; then
+          echo "DOWNLOADING openSMILE tarball package"
+          aux_download_nc "$OPENSMILE_TARBALL_URL" "$OPENSMILE_TARBALL"
+        fi
+        echo "unpacking openSMILE tarball..."
+        tar --overwrite -C $P/../ -zxvf $DOWNLOAD_PREFIX/$OPENSMILE_TARBALL 
+      fi
     fi
 
 
