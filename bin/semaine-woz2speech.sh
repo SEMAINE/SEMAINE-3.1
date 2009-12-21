@@ -3,8 +3,7 @@
 BINDIR=`dirname "$0"`
 BINDIR=`(cd $BINDIR ; pwd)`
 
-MARYDIR="$BINDIR/../MARY399alpha"
-#MARYDIR=/Users/marc/mary4trunk
+MARYDIR="$BINDIR/../MARY"
 
 if [ ! -e $MARYDIR ] ; then
   echo "MARY directory not found in $MARYDIR. Cannot start."

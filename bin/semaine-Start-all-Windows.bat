@@ -2,22 +2,23 @@
 
 :: Update this to match the location of your GRETA installation, if needed:
 :: set GRETADIR="..\GretaActive"
-set GRETADIR="..\..\private-svn\GretaXerces3"
+:: set GRETADIR="..\..\private-svn\GretaXerces3"
+set GRETADIR="..\..\GretaSVN\XERCES"
 set IMPERIALDIR="C:\Program Files\Departmet of Computing\Setup1"
 
-start /MIN .\%GRETADIR%\bin\Active_ActionSelectionDebug.exe
+start /MIN /D %GRETADIR%\bin\ Active_ActionSelection.exe
 %GRETADIR%\bin\utils\WAIT.exe 1
 
-start /MIN .\%GRETADIR%\bin\Active_BehaviorPlannerDebug.exe
+start /MIN /D %GRETADIR%\bin\ Active_BehaviorPlanner.exe
 %GRETADIR%\bin\utils\WAIT.exe 1
 
-start /MIN .\%GRETADIR%\bin\Active_BehaviorRealizerDebug.exe
+start /MIN /D %GRETADIR%\bin\ Active_BehaviorRealizer.exe
 %GRETADIR%\bin\utils\WAIT.exe 1
 
-start /MIN .\%GRETADIR%\bin\Active_ListenerIntentPlannerDebug.exe
+start /MIN /D %GRETADIR%\bin\ Active_ListenerIntentPlanner.exe
 %GRETADIR%\bin\utils\WAIT.exe 1
 
-start /MIN .\%GRETADIR%\bin\Active_PlayerDebug.exe
+start /D %GRETADIR%\bin\ Active_Player.exe
 %GRETADIR%\bin\utils\WAIT.exe 1
 
 start /MIN /D %IMPERIALDIR% VideoFeatureExtractorConsole.exe

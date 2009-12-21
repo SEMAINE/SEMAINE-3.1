@@ -1,7 +1,7 @@
 @echo off
 set BINDIR=%~dp0%
 
-set MARYDIR="%BINDIR%\..\MARY400beta"
+set MARYDIR="%BINDIR%\..\MARY"
 
 if not exist %MARYDIR% (
   echo.MARY directory not found in %MARYDIR%. Cannot start.

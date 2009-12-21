@@ -8,7 +8,7 @@ REM else echo "Connecting to ActiveMQ server at tcp://localhost:61616"
 REM fi
 REM USE THE FOLLOWING LINE TO SEE A LIST OF AVAILABLE AUDIO DEVICES:
 REM SEMAINExtract -C ..\auxiliary\opensmileSemaine.conf -listdevices 1
-SEMAINExtract -C ..\auxiliary\opensmileSemaine.conf
+SEMAINExtract -C ..\auxiliary\opensmileSemaine.conf -l 4 -d
 echo "COMPONENT START SCRIPT: component "tum.opensmile" exited"
 pause
 

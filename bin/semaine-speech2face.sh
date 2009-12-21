@@ -3,7 +3,7 @@
 BINDIR=`dirname "$0"`
 BINDIR=`(cd $BINDIR ; pwd)`
 
-MARYDIR="$BINDIR/../MARY399alpha"
+MARYDIR="$BINDIR/../MARY"
 #MARYDIR=/Users/marc/mary4trunk
 
 if [ ! -e $MARYDIR ] ; then

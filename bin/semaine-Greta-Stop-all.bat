@@ -1,6 +1,7 @@
-taskkill /f /im Active_ActionSelectionDebug.exe
-taskkill /f /im Active_BehaviorPlannerDebug.exe
-taskkill /f /im Active_BehaviorRealizerDebug.exe
-taskkill /f /im Active_ListenerIntentPlannerDebug.exe
-taskkill /f /im Active_PlayerDebug.exe
+taskkill /f /im Active_ActionSelection.exe
+taskkill /f /im Active_BehaviorPlanner.exe
+taskkill /f /im Active_BehaviorRealizer.exe
+taskkill /f /im Active_ListenerIntentPlanner.exe
+taskkill /f /im Active_Player.exe
+
 
