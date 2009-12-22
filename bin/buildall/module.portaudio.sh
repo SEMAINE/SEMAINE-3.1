@@ -9,7 +9,7 @@ register_build "portaudio" "$PA_URL" "$PA_BASE" "func_build_portaudio" $1
 #######################################################################
 
 if [ -e "$SEMAINE_ROOT/bin/buildall/portaudio_working.tgz" ]; then
-  cp $SEMAINE_ROOT/bin/buildall/portaudio_working.tgz $DOWNLOAD_PREFIX/portaudio.tgz
+  cp $SEMAINE_ROOT/bin/buildall/portaudio_working.tgz $DOWNLOAD_PREFIX/pa_snapshot.tgz
 fi
 
 # build_nr var must be set before this function is called
