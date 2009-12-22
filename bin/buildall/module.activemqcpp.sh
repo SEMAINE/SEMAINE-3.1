@@ -10,6 +10,11 @@ register_build "activemqcpp" "$AMQCPP_URL" "$AMQCPP_BASE" "func_build_activemqcp
 
 # build_nr var must be set before this function is called
 function func_build_activemqcpp {
+
+    # we have to test for existing config/ directory on some systems
+    if test ! -d config/ ; then
+      mkdir config/
+    fi
   
         # cygwin:  requires activemq patch!!   error in some thread file...
     ./autogen.sh
