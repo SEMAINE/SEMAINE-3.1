@@ -30,9 +30,9 @@ if [ -n "$CMS_URL" ] ; then
 fi
 
 echo "Starting SEMAINE system as:"
-echo "java -Xmx400m $JMS_URL_SETTING -classpath $JARDIR/semaine-examples.jar -Dmary.base="$MARYDIR" eu.semaine.system.ComponentRunner $CONFIG" 
+echo "java -Xmx1g $JMS_URL_SETTING -classpath $JARDIR/semaine-examples.jar -Dmary.base="$MARYDIR" eu.semaine.system.ComponentRunner $CONFIG" 
 
-java -Xmx400m $JMS_URL_SETTING -classpath $JARDIR/semaine-examples.jar -Dmary.base="$MARYDIR" eu.semaine.system.ComponentRunner $CONFIG 
+java -Xmx1g $JMS_URL_SETTING -classpath $JARDIR/semaine-examples.jar -Dmary.base="$MARYDIR" eu.semaine.system.ComponentRunner $CONFIG 
 
 
 

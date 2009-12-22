@@ -36,3 +36,4 @@ java -Xmx1g $JMS_URL_SETTING -classpath $JARDIR/semaine.jar:$JARDIR/semaine-mary
 
 
 
+
