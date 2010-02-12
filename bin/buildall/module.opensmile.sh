@@ -7,7 +7,10 @@ USE_SVN="false"
 
 OPENSMILEMODELS="models-21-12-2009.zip"
 OPENSMILEMODELS_URL="http://www.mmk.ei.tum.de/~eyb/semaine/$OPENSMILEMODELS"
-OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
+# use this line in combination with USE_SVN="true" for the bleeding edge development version:
+OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile/trunk"
+# enable this to get the semaine-2.0-fixes only
+#OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile/branches/semaine-2.0-fixes"
 
 ### this i the openSMILE svn revision used in the 2.0 release
 #OPENSMILE_SVN_20="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
