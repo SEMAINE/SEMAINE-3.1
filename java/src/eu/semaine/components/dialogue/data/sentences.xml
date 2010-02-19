@@ -9,8 +9,12 @@
 		</category>
 		
 		<category name="after_silence">
-			<utterance value="Are you still there?" />
+			<!-- <utterance value="Are you still there?" /> -->
+			<utterance value="Keep going." />
 			<utterance value="Go on, tell me your news!" />
+			<utterance value="Go on." />
+			<utterance value="Come on, tell me more." />
+			<utterance value="Well?" />
 		</category>
 		
 		<category name="tell_me_more">
@@ -204,8 +208,12 @@
 		</category>
 		
 		<category name="after_silence">
-			<utterance value="Are you still there?" />
+			<!-- <utterance value="Are you still there?" /> -->
 			<utterance value="Keep going." />
+			<utterance value="Go on, tell me your news!" />
+			<utterance value="Go on." />
+			<utterance value="Come on, tell me more." />
+			<utterance value="Well?" />
 		</category>
 		
 		<category name="tell_me_more">
@@ -268,7 +276,7 @@
 			<utterance value="So?" />
 			<utterance value="That's interesting!" />
 			<utterance value="That's the way it goes." />
-			<utterance value="Where do you think it will lead?" />
+			<utterance value="Where do you think it will leed?" />
 			<utterance value="Where do you think your attitude to life comes from?" />
 			<utterance value="Why do you say that?" />
 			<utterance value="Why?" />
@@ -337,7 +345,12 @@
 		</category>
 		
 		<category name="after_silence">
-			<utterance value="Are you still there?" />
+			<!-- <utterance value="Are you still there?" /> -->
+			<utterance value="Keep going." />
+			<utterance value="Go on, tell me your news!" />
+			<utterance value="Go on." />
+			<utterance value="Come on, tell me more." />
+			<utterance value="Well?" />
 			<utterance value="You're boring, don't you do anything exciting?" />
 		</category>
 		
@@ -455,7 +468,12 @@
 		</category>
 		
 		<category name="after_silence">
-			<utterance value="Are you still there?" />
+			<!-- <utterance value="Are you still there?" /> -->
+			<utterance value="Keep going." />
+			<utterance value="Go on, tell me your news!" />
+			<utterance value="Go on." />
+			<utterance value="Come on, tell me more." />
+			<utterance value="Well?" />
 		</category>
 		
 		<category name="tell_me_more">

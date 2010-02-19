@@ -180,14 +180,14 @@ public class TestGui extends Component
 				Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
 				if( fml != null ) {
 					Element backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
-					if( backchannel != null ) {
-						if( currUtterance.length() != 0 ) {
-							outputText = outputText + "<br>" + currUtterance;
-						}
-						currUtterance = "";
-						currUtteranceTime = 0;
-						printLine("** Nods **");
-					}
+//					if( backchannel != null ) {
+//						if( currUtterance.length() != 0 ) {
+//							outputText = outputText + "<br>" + currUtterance;
+//						}
+//						currUtterance = "";
+//						currUtteranceTime = 0;
+//						printLine("** Nods **");
+//					}
 				}
 			}
 		}

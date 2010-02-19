@@ -34,6 +34,7 @@ import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
+import eu.semaine.jms.receiver.FMLReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
@@ -97,7 +98,7 @@ public class UtteranceActionProposer extends Component
 	/* Data locations */
 	private final static String sentenceDataPath = "/eu/semaine/components/dialogue/data/sentences.xml";
 	private final static String contextFile = "/eu/semaine/components/dialogue/data/Context.csv";
-	
+
 	private String convState = "";
 
 	/* Senders and Receivers */
@@ -105,6 +106,7 @@ public class UtteranceActionProposer extends Component
 	private StateReceiver userStateReceiver;
 	private StateReceiver contextReceiver;
 	private XMLReceiver callbackReceiver;
+	private FMLReceiver fmlReceiver;
 	private FMLSender fmlSender;
 	private StateSender dialogStateSender;
 	private StateSender contextSender;
@@ -188,6 +190,7 @@ public class UtteranceActionProposer extends Component
 		callbackReceiver = new XMLReceiver("semaine.callback.output.audio");
 		receivers.add(callbackReceiver);
 
+
 		/* Initialize senders */
 		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
 		senders.add(fmlSender);
@@ -195,6 +198,8 @@ public class UtteranceActionProposer extends Component
 		senders.add(dialogStateSender);
 		contextSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(contextSender);
+		fmlReceiver = new FMLReceiver("semaine.data.action.candidate.function");
+		receivers.add(fmlReceiver);
 
 		/* Determine the first character */
 		currChar = PRUDENCE; // always start with Prudence
@@ -256,18 +261,31 @@ public class UtteranceActionProposer extends Component
 	{
 		if( m instanceof SEMAINEXMLMessage ){
 			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
-			if( speechStarted(xm) ) {
-				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
-				agentSpeakingState = SPEAKING;
-				agentSpeakingStateTime = meta.getTime();
+			if( !xm.getText().contains("fml_lip") ) {
+				if( speechStarted(xm) ) {
+					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
+					agentSpeakingState = SPEAKING;
+					agentSpeakingStateTime = meta.getTime();
+				}
+
+				if( speechReady(xm) ) {
+					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
+					agentSpeakingState = LISTENING;
+					agentSpeakingStateTime = meta.getTime();
+					sendListening();
+					userTurnStart = -1;
+				}
 			}
 
-			if( speechReady(xm) ) {
-				DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
-				agentSpeakingState = LISTENING;
-				agentSpeakingStateTime = meta.getTime();
-				sendListening();
-				userTurnStart = -1;
+			boolean isFML = xm.getDatatype().equals("FML");
+			if (isFML) {
+				Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
+				if( fml != null ) {
+					Element backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
+					if( backchannel != null ) {
+						DMLogger.getLogger().log(meta.getTime(), "AgentAction:Backchannel" );
+					}
+				}
 			}
 		}
 
@@ -355,6 +373,7 @@ public class UtteranceActionProposer extends Component
 					if( waitingFor != 0 && waitingID != null && eventElem.hasAttribute("id") && eventElem.getAttribute("id").startsWith(waitingID) ) {
 						if( waitingFor == 1 ) {
 							// Introduction-sentence finished
+							DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
 							nextUtteranceStarted = giveIntro();
 						}
 						else if( waitingFor == 2 ) {
@@ -468,7 +487,7 @@ public class UtteranceActionProposer extends Component
 		DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
 		System.out.println("User appeared");
 		isUserPresent = true;
-		
+
 		Object obj = System.getProperties().get("semaine.introduction");
 		boolean doIntro;
 		if( obj != null ) {
@@ -481,7 +500,7 @@ public class UtteranceActionProposer extends Component
 		} else {
 			introGiven = 0;
 		}
-		
+
 		if( introGiven == 2 ) {
 			systemStarted = true;
 		}
@@ -563,7 +582,7 @@ public class UtteranceActionProposer extends Component
 		charHistory.put( OBADIAH, false );
 
 		systemStarted = false;
-		
+
 		if( introGiven != 2 ) {
 			introGiven = 2;
 			waitingID = "";
@@ -593,7 +612,7 @@ public class UtteranceActionProposer extends Component
 					// User wants to change the speaker
 					wantChange = true;
 				}
-				
+
 				if( act.getTargetCharacter() != null ) {
 					targetCharacter = act.getTargetCharacter();
 				}
@@ -707,14 +726,14 @@ public class UtteranceActionProposer extends Component
 		if( charStartupState == INTRODUCED ) {
 			/* If the system just introduced himself then ask how the user feels today */
 			if( userTurnStart == -1 ) {
-				return pickUtterances("after_silence");
+				return new AgentSpokenUtterance( new AgentUtterance("Well?", "after_silence") );
 			}
 			charStartupState = HOW_ARE_YOU_ASKED;
 			return pickUtterances("intro_how_are_you");
 		} else if( charStartupState == HOW_ARE_YOU_ASKED ) {
 			/* If the system just asked how the user feels it will ask the user to tell it more */
 			if( userTurnStart == -1 ) {
-				return pickUtterances("after_silence");
+				return new AgentSpokenUtterance( new AgentUtterance("Well?", "after_silence") );
 			}
 			charStartupState = NEUTRAL;
 			return pickUtterances("intro_tell_me_more");
@@ -1253,16 +1272,18 @@ public class UtteranceActionProposer extends Component
 		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance().getUtterance() );
 
 		String cat = utterance.getUtterance().getCategory(); 
-		if( cat.equals("ask_next_character") || cat.equals("change_character") || cat.equals("repair_ask_next_character") || cat.equals("repair_suggest_next_character") || cat.equals("ask_next_character") || cat.equals("intro_how_are_you") || cat.equals("intro_old") || cat.equals("intro_new") ) {
-			if( !convState.equals("asking") ) {
-				convState = "asking";
+		if( !cat.equals("after_silence") ) { // Do not change the conversational state if the agent is trying to repair something.
+			if( cat.equals("ask_next_character") || cat.equals("change_character") || cat.equals("repair_ask_next_character") || cat.equals("repair_suggest_next_character") || cat.equals("ask_next_character") || cat.equals("intro_how_are_you") || cat.equals("intro_old") || cat.equals("intro_new") ) {
+				if( !convState.equals("asking") ) {
+					convState = "asking";
+					sendConvState();
+				}
+			} else if( !convState.equals("listening") ) {
+				convState = "listening";
 				sendConvState();
 			}
-		} else if( !convState.equals("listening") ) {
-			convState = "listening";
-			sendConvState();
 		}
-			
+
 		output_counter++;
 		return "fml_uap_"+(output_counter-1);
 	}
@@ -1292,7 +1313,7 @@ public class UtteranceActionProposer extends Component
 		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
 		dialogStateSender.sendStateInfo(dsi, meta.getTime());
 	}
-	
+
 	/**
 	 * Sends around that the agent is silent
 	 * @throws JMSException
@@ -1405,7 +1426,13 @@ public class UtteranceActionProposer extends Component
 			if( f.contains("target:") ) act.setTargetCharacter( f.substring(f.indexOf("target:")+7, Math.max(f.length(),f.indexOf(" ", f.indexOf("target:")+7))) );
 			if( f.contains("short") ) act.setLength(DialogueAct.Length.SHORT);
 			if( f.contains("long") ) act.setLength(DialogueAct.Length.LONG);
-			detectedDActs.add(act);
+			
+			if( detectedDActs.size() > 1 && Math.abs(detectedDActs.get(detectedDActs.size()-1).getStarttime() - act.getStarttime()) < 10 ) {
+				// Same dialogueAct, so update the last DA in the list
+				detectedDActs.set(detectedDActs.size()-1, act);
+			} else {
+				detectedDActs.add(act);
+			}
 		}
 	}
 

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
@@ -31,11 +33,15 @@ public class DMLogger
 
 	private ArrayList<DetectedWords> detectedWords = new ArrayList<DetectedWords>();
 
+	private String dateAndTime;
 	private String file = "DMlog.txt";
 	private String path = "";
 
 	private DMLogger( boolean willLogParam )
 	{
+		GregorianCalendar cal = new GregorianCalendar();
+		dateAndTime = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH)+1) + "-" + cal.get(Calendar.DAY_OF_MONTH) + "_" + cal.get(Calendar.HOUR_OF_DAY) + "." + cal.get(Calendar.MINUTE);
+		file = "DMLog_"+dateAndTime+".txt";
 		Object obj = System.getProperties().get("semaine.dialogue.logging");
 		if( obj != null ) {
 			willLog = Boolean.parseBoolean( obj.toString() );
@@ -81,18 +87,21 @@ public class DMLogger
 		}
 	}
 
-	public void logWords( long starttime, String keywords, String times )
+	public void logWords( long starttime, String keywords, String times, String confidences )
 	{
-		long oldStarttime;
-		if( detectedWords.size() == 0 ) {
-			oldStarttime = -100;
-		} else {
-			oldStarttime = detectedWords.get( detectedWords.size()-1 ).starttime;
-		}
-		if( Math.abs(starttime - oldStarttime) > 10 ) {
+		
+//		long oldStarttime;
+//		if( detectedWords.size() == 0 ) {
+//			oldStarttime = -100;
+//		} else {
+//			oldStarttime = detectedWords.get( detectedWords.size()-1 ).starttime;
+//		}
+//		if( Math.abs(starttime - oldStarttime) > 10 ) {
+//			detectedWords.add(new DetectedWords(starttime, keywords,times));
+//		}
+		if( Double.parseDouble( confidences.split(" ")[0]) != 0 ) {
 			detectedWords.add(new DetectedWords(starttime, keywords,times));
 		}
-
 	}
 
 	public void createTimeline()
@@ -114,7 +123,7 @@ public class DMLogger
 		Graphics2D g2 = myImage.createGraphics();
 		timeLine.paintComponent(g2);
 		try {
-			OutputStream out = new FileOutputStream("DMlog.jpg");
+			OutputStream out = new FileOutputStream("DMLog_"+dateAndTime+".jpg");
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 			encoder.encode(myImage);
 			out.close();

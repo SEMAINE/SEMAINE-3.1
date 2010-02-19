@@ -101,7 +101,7 @@ public class TurnTakingInterpreter extends Component
 
 	/**
 	 * Constructor of TurnTakingInterpreter
-	 * Initializes the senders and receivers, and sets the waitingtime for Act()	
+	 * Initializes the senders and receivers, and sets the waitingtime for Act()
 	 * @throws JMSException
 	 */
 	public TurnTakingInterpreter() throws JMSException
@@ -152,6 +152,8 @@ public class TurnTakingInterpreter extends Component
 				/* Updates detected emotions (valence, arousal, interest) */
 				addDetectedEmotions(stateInfo);
 				
+				processHeadMovements( stateInfo );
+				
 				/* called to determine the turn state of the agent */
 				determineAgentTurn();
 				break;
@@ -180,6 +182,17 @@ public class TurnTakingInterpreter extends Component
 		    default:
 		    	// We could complain here if we were certain we don't expect other state infos, as in:
 		    	// throw new MessageFormatException("Unexpected state info type: "+stateInfo.getType().toString());
+			}
+		}
+	}
+	
+	public void processHeadMovements( StateInfo stateInfo ) throws JMSException
+	{
+		if( stateInfo.hasInfo("headGesture") && stateInfo.hasInfo("headGestureStarted") && stateInfo.hasInfo("headGestureStopped") ) {
+			if( stateInfo.getInfo("headGesture").equals("NOD") ) {
+				userSpeakingState = SILENT;
+			} else if( stateInfo.getInfo("headGesture").equals("SHAKE") ) {
+				userSpeakingState = SILENT;
 			}
 		}
 	}
@@ -353,7 +366,7 @@ public class TurnTakingInterpreter extends Component
 	 * emotion_value: 				a value based on the number of detected emotion events. More detected events lead to a higher value.
 	 * agent_silence_time_value: 	a value that's higher when the agent is silent (user is speaking) for a longer period (max is reached after 30 seconds).
 	 * agent_end_wait_value:		a value that starts at -100 when the agent finishes its utterance, and in the next 2 seconds slowly rises (linear) to 0;
-	 * user_not_responding_value:	a value that rises from 0 to 100 when the user does not start talking after an agent-turn. It starts after 2 seconds, and then rises to 100 in 8 seconds unless the user starts speaking.
+	 * user_not_responding_value:	a value that rises from 0 to 100 when the user does not start talking after an agent-turn. It starts after 2 seconds, and then rises to 100 in 4 seconds unless the user starts speaking.
 	 * @return
 	 */
 	public int getSpeakingIntentionValue()
@@ -378,6 +391,7 @@ public class TurnTakingInterpreter extends Component
 			if( time >= 0 ) {
 				if( convState.equals("listening") ) {
 					time /= 9;
+					// time /= 6;
 				}
 				value = Math.max( Math.min( Math.pow(time+0.3,2), 1 ), 0 );
 			} else {
@@ -408,10 +422,10 @@ public class TurnTakingInterpreter extends Component
 		if( agentSpeakingState == SILENT && userSpeakingState == WAITING && Math.abs(agentSpeakingTime - userSpeakingTime) < 30  ) {
 			if( userSpeakingTime < 2000 ) {
 				// Do nothing
-			} else if( userSpeakingTime > 8000 ) {
+			} else if( userSpeakingTime > 6000 ) {
 				user_not_responding_value = 100;
 			} else {
-				user_not_responding_value = ((int)(0.0125*(agentSpeakingTime-2000)));
+				user_not_responding_value = ((int)(0.025*(agentSpeakingTime-2000)));
 			}
 		}
 		

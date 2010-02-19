@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -15,17 +16,19 @@ public class TimeLineComponent extends JComponent
 {
 	/* The heights of the lines where the speech-objects and signal-objects are drawn on */
 	private static int AGENT_SPEECH_LINE_HEIGHT = 65;
-	private static int USER_SPEECH_LINE_HEIGHT = 105;
-	private static int USER_WORDS_LINE_HEIGHT = 145;
-	private static int USER_FEATURES_LINE_HEIGHT = 185;
-	private static int USER_HEADMOVEMENT_LINE_HEIGHT = 225;
-	private static int USER_VALENCE_AROUSAL_LINE_HEIGHT = 265;
-	private static int USER_POTENCY_INTEREST_LINE_HEIGHT = 305;
+	private static int AGENT_BACKCHANNEL_LINE_HEIGHT = 105;
+	private static int USER_SPEECH_LINE_HEIGHT = 145;
+	private static int USER_WORDS_LINE_HEIGHT = 185;
+	private static int USER_FEATURES_LINE_HEIGHT = 225;
+	private static int USER_HEADMOVEMENT_LINE_HEIGHT = 265;
+	private static int USER_VALENCE_AROUSAL_LINE_HEIGHT = 305;
+	private static int USER_POTENCY_INTEREST_LINE_HEIGHT = 345;
 	
 	private static int NAME_SPACE = 150;
 	
 	private ArrayList<UserSpeech> userSpeechObjects = new ArrayList<UserSpeech>();
 	private ArrayList<AgentSpeech> agentSpeechObjects = new ArrayList<AgentSpeech>();
+	private ArrayList<Backchannel> backchannels = new ArrayList<Backchannel>();
 	private ArrayList<HeadMovement> headMovements = new ArrayList<HeadMovement>();
 	private ArrayList<Features> featureList = new ArrayList<Features>();
 	private ArrayList<Emotion> emotions = new ArrayList<Emotion>();
@@ -46,7 +49,7 @@ public class TimeLineComponent extends JComponent
 	
 	public TimeLineComponent( long time, String words, String times )
 	{
-		height = 300;
+		height = 400;
 		width = ((int)(time/10 + NAME_SPACE));
 		setBackground(Color.WHITE);
 		setOpaque(true);
@@ -65,63 +68,80 @@ public class TimeLineComponent extends JComponent
 	{
 		for( String line : log ) {
 			//System.out.println(line);
-			long time = Long.parseLong( line.substring(0, line.indexOf("	")) );
-			if( line.contains("AgentAction:SendUtterance") ) {
-				agentSpeechPrepTime = time;
-				type = line.substring( line.indexOf("type=")+5, line.indexOf(",",line.indexOf("type=")) );
-				utterance = line.substring( line.indexOf("utterance=")+10,line.length() );
-			} else if( line.contains("AgentAction:UtteranceStarted") ) {
-				agentSpeechStartTime = time;
-			} else if( line.contains("AgentAction:UtteranceStopped") ) {
-				if( agentSpeechStartTime == 0 ) {
-					agentSpeechStartTime = time-500;
-				}
-				if( agentSpeechPrepTime == 0 || type == null || utterance == null ) {
-					System.out.println("Something is wrong in the log! Line: " + line);
-				} else {
-					//System.out.println(line);
-					// TODO: Deze info staat bij de start, niet bij de stop ;)
-					agentSpeechObjects.add(new AgentSpeech(agentSpeechPrepTime, agentSpeechStartTime, time, type, utterance) );
-					agentSpeechPrepTime = 0;
-					agentSpeechStartTime = 0;
-					type = null;
-					utterance = null;
-				}
-			} else if( line.contains("UserAction:UserStartedSpeaking") ) {
-				userSpeechStartTime = time;
-			} else if( line.contains("UserAction:UserStoppedSpeaking") ) {
-				if( userSpeechStartTime == 0 ) {
-					System.out.println("Something is wrong in the log!");
-				} else {
-					String keywords = "";
-					if( line.indexOf("words=")+6 < line.length() ) {
-						keywords = line.substring( line.indexOf("words=")+6, line.length() );
+			if( line == null ) {
+				break;
+			}
+			try {
+				long time = Long.parseLong( line.substring(0, line.indexOf("	")) );
+				if( line.contains("AgentAction:SendUtterance") ) {
+					if( agentSpeechStartTime != 0 && agentSpeechPrepTime != 0 && type != null && utterance != null ) {
+						agentSpeechObjects.add(new AgentSpeech(agentSpeechPrepTime, agentSpeechStartTime, time, type, utterance) );
+						agentSpeechPrepTime = 0;
+						agentSpeechStartTime = 0;
+						type = null;
+						utterance = null;
 					}
-					userSpeechObjects.add( new UserSpeech(userSpeechStartTime, time, keywords) );
-					userSpeechStartTime = 0;
+					agentSpeechPrepTime = time;
+					type = line.substring( line.indexOf("type=")+5, line.indexOf(",",line.indexOf("type=")) );
+					utterance = line.substring( line.indexOf("utterance=")+10,line.length() );
+				} else if( line.contains("AgentAction:UtteranceStarted") ) {
+					agentSpeechStartTime = time;
+				} else if( line.contains("AgentAction:UtteranceStopped") ) {
+					if( agentSpeechStartTime == 0 ) {
+						agentSpeechStartTime = time-500;
+					}
+					if( agentSpeechPrepTime == 0 || type == null || utterance == null ) {
+						System.out.println("Something is wrong in the log! Line: " + line);
+					} else {
+						//System.out.println(line);
+						// TODO: Deze info staat bij de start, niet bij de stop ;)
+						agentSpeechObjects.add(new AgentSpeech(agentSpeechPrepTime, agentSpeechStartTime, time, type, utterance) );
+						agentSpeechPrepTime = 0;
+						agentSpeechStartTime = 0;
+						type = null;
+						utterance = null;
+					}
+				} else if( line.contains("UserAction:UserStartedSpeaking") ) {
+					userSpeechStartTime = time;
+				} else if( line.contains("UserAction:UserStoppedSpeaking") ) {
+					if( userSpeechStartTime == 0 ) {
+						System.out.println("Something is wrong in the log!");
+					} else {
+						String keywords = "";
+						if( line.indexOf("words=")+6 < line.length() ) {
+							keywords = line.substring( line.indexOf("words=")+6, line.length() );
+						}
+						userSpeechObjects.add( new UserSpeech(userSpeechStartTime, time, keywords) );
+						userSpeechStartTime = 0;
+					}
+				} else if( line.contains("AgentAction:Backchannel") ) {
+					backchannels.add( new Backchannel(time, time + 1000) );
+				} else if( line.contains("UserAction:HeadMovement") ){
+					String movement = line.substring( line.indexOf("movement=")+9, line.indexOf("starttime=",line.indexOf("movement=") ) );
+					long starttime = Long.parseLong( line.substring( line.indexOf("starttime=")+10, line.indexOf(" ",line.indexOf("starttime=") ) ) );
+					long endtime = Long.parseLong( line.substring( line.indexOf("endtime=")+8, line.length() ) );
+					headMovements.add( new HeadMovement(movement,starttime,endtime) );
+				} else if( line.contains("UserAction:ContentFeatures") ) {
+					String features = line.substring( line.indexOf("features=")+9, line.indexOf("starttime=",line.indexOf("features=") ) );
+					long starttime = Long.parseLong( line.substring( line.indexOf("starttime=")+10, line.indexOf(" ",line.indexOf("starttime=") ) ) );
+					long endtime = Long.parseLong( line.substring( line.indexOf("endtime=")+8, line.length() ) );
+					featureList.add( new Features(features,starttime,endtime) );
+				} else if( line.contains("UserAction:Valence") ) {
+					float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
+					emotions.add( new Emotion("valence", value, time ) );
+				} else if( line.contains("UserAction:Arousal") ) {
+					float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
+					emotions.add( new Emotion("arousal", value, time ) );
+				} else if( line.contains("UserAction:Potency") ) {
+					float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
+					emotions.add( new Emotion("potency", value, time ) );
+				} else if( line.contains("UserAction:Interest") ) {
+					float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.indexOf("value=")+11 ) );
+					emotions.add( new Emotion("interest", value, time ) );
 				}
-			} else if( line.contains("UserAction:HeadMovement") ){
-				String movement = line.substring( line.indexOf("movement=")+9, line.indexOf("starttime=",line.indexOf("movement=") ) );
-				long starttime = Long.parseLong( line.substring( line.indexOf("starttime=")+10, line.indexOf(" ",line.indexOf("starttime=") ) ) );
-				long endtime = Long.parseLong( line.substring( line.indexOf("endtime=")+8, line.length() ) );
-				headMovements.add( new HeadMovement(movement,starttime,endtime) );
-			} else if( line.contains("UserAction:ContentFeatures") ) {
-				String features = line.substring( line.indexOf("features=")+9, line.indexOf("starttime=",line.indexOf("features=") ) );
-				long starttime = Long.parseLong( line.substring( line.indexOf("starttime=")+10, line.indexOf(" ",line.indexOf("starttime=") ) ) );
-				long endtime = Long.parseLong( line.substring( line.indexOf("endtime=")+8, line.length() ) );
-				featureList.add( new Features(features,starttime,endtime) );
-			} else if( line.contains("UserAction:Valence") ) {
-				float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
-				emotions.add( new Emotion("valence", value, time ) );
-			} else if( line.contains("UserAction:Arousal") ) {
-				float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
-				emotions.add( new Emotion("arousal", value, time ) );
-			} else if( line.contains("UserAction:Potency") ) {
-				float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
-				emotions.add( new Emotion("potency", value, time ) );
-			} else if( line.contains("UserAction:Interest") ) {
-				float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.indexOf("value=")+11 ) );
-				emotions.add( new Emotion("interest", value, time ) );
+			}catch( java.lang.StringIndexOutOfBoundsException e ) {
+				System.out.println("Errorline: " + line);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -134,6 +154,9 @@ public class TimeLineComponent extends JComponent
 		
 		for( AgentSpeech obj : agentSpeechObjects ) {
 			drawAgentSpeech( g2d, obj );
+		}
+		for( Backchannel obj : backchannels ) {
+			drawBackchannel( g2d, obj );
 		}
 		for( UserSpeech obj : userSpeechObjects ) {
 			drawUserSpeech( g2d, obj );
@@ -161,6 +184,7 @@ public class TimeLineComponent extends JComponent
 		g2d.setColor(Color.BLACK);
 		
 		g2d.drawString("Agent", NAME_SPACE-60, AGENT_SPEECH_LINE_HEIGHT+5);
+		g2d.drawString("Backchannels", NAME_SPACE-100, AGENT_BACKCHANNEL_LINE_HEIGHT+5);
 		g2d.drawString("User", NAME_SPACE-55, USER_SPEECH_LINE_HEIGHT+5);
 		g2d.drawString("User words", NAME_SPACE-90, USER_WORDS_LINE_HEIGHT+5);
 		g2d.drawString("Content Features", NAME_SPACE-135, USER_FEATURES_LINE_HEIGHT+5);
@@ -174,6 +198,7 @@ public class TimeLineComponent extends JComponent
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g2d.drawLine( NAME_SPACE, AGENT_SPEECH_LINE_HEIGHT, width-20, AGENT_SPEECH_LINE_HEIGHT );
+		g2d.drawLine( NAME_SPACE, AGENT_BACKCHANNEL_LINE_HEIGHT, width-20, AGENT_BACKCHANNEL_LINE_HEIGHT );
 		g2d.drawLine( NAME_SPACE, USER_WORDS_LINE_HEIGHT, width-20, USER_WORDS_LINE_HEIGHT );
 		g2d.drawLine( NAME_SPACE, USER_SPEECH_LINE_HEIGHT, width-20, USER_SPEECH_LINE_HEIGHT );
 		g2d.drawLine( NAME_SPACE, USER_FEATURES_LINE_HEIGHT, width-20, USER_FEATURES_LINE_HEIGHT );
@@ -216,6 +241,27 @@ public class TimeLineComponent extends JComponent
 		/* Fill in the utterance */
 		g2d.setColor( Color.BLACK );
 		g2d.drawString(obj.utterance+" ("+obj.type+")", (int)(obj.starttime/10)+NAME_SPACE+10, tierHeight+(rectHeight/4));
+	}
+	
+	public void drawBackchannel( Graphics2D g2d, Backchannel obj )
+	{
+		int rectHeight = 20;
+		int tierHeight = AGENT_BACKCHANNEL_LINE_HEIGHT;
+		
+		
+		/* Draw the outline of the object */
+		g2d.setColor( Color.BLACK );
+		g2d.drawRect((int)(obj.starttime/10)+NAME_SPACE, tierHeight-(rectHeight/2), (int)((obj.endtime/10)-(obj.starttime/10)), rectHeight);
+		
+		/* Set the fill-color of the object*/
+		g2d.setColor( new Color(128, 255, 128) );
+		
+		/* Fill the object */
+		g2d.fillRect( (int)(obj.starttime/10)+NAME_SPACE, tierHeight-(rectHeight/2), (int)((obj.endtime/10)-(obj.starttime/10)), rectHeight);
+		
+		/* Fill in the utterance */
+		g2d.setColor( Color.BLACK );
+		g2d.drawString("Backchannel", (int)(obj.starttime/10)+NAME_SPACE+10, tierHeight+(rectHeight/4));
 	}
 	
 	public void drawUserSpeech( Graphics2D g2d, UserSpeech obj )
@@ -267,6 +313,9 @@ public class TimeLineComponent extends JComponent
 			}
 		}
 		
+		g2d.setFont(new Font("Helvetica", Font.PLAIN,  10));
+		g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		
 		for( int i=0; i<wordList.size(); i++ ) {
 			word = wordList.get(i);
 			time = timeList.get(i);
@@ -274,7 +323,11 @@ public class TimeLineComponent extends JComponent
 			g2d.setColor( Color.BLACK );
 			g2d.drawLine((int)time/10+NAME_SPACE, tierHeight-(rectHeight/2), (int)time/10+NAME_SPACE, tierHeight+(rectHeight/2));
 			
-			g2d.drawString(word, (int)(time/10)+5+NAME_SPACE, tierHeight+(rectHeight/4));
+			if( i % 2 == 0 ) {
+				g2d.drawString(word, (int)(time/10)+2+NAME_SPACE, tierHeight-5);
+			} else {
+				g2d.drawString(word, (int)(time/10)+2+NAME_SPACE, tierHeight+2*(rectHeight/4));
+			}
 		}
 	}
 	
@@ -332,7 +385,7 @@ public class TimeLineComponent extends JComponent
 		} else if( obj.emotion.equals("potency") ) {
 			tierHeight = USER_POTENCY_INTEREST_LINE_HEIGHT - (rectHeight/2)-2;
 		} else if( obj.emotion.equals("interest") ) {
-			tierHeight = USER_POTENCY_INTEREST_LINE_HEIGHT - (rectHeight/2)+2;
+			tierHeight = USER_POTENCY_INTEREST_LINE_HEIGHT + (rectHeight/2)+2;
 		}
 		
 		/* Draw the outline of the object */
@@ -379,6 +432,18 @@ public class TimeLineComponent extends JComponent
 			this.endtime = endtime;
 			this.type = type;
 			this.utterance = utterance;
+		}
+	}
+	
+	private class Backchannel
+	{
+		public long starttime;
+		public long endtime;
+		
+		public Backchannel( long starttime, long endtime )
+		{
+			this.starttime = starttime;
+			this.endtime = endtime;
 		}
 	}
 	

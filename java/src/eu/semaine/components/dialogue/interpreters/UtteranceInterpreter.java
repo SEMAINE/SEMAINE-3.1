@@ -88,7 +88,7 @@ public class UtteranceInterpreter extends Component
 	{
 		super("UtteranceInterpreter");
 
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma ");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma");
 		receivers.add(emmaReceiver);
 		userStateReceiver = new StateReceiver( "semaine.data.state.user.behaviour", StateInfo.Type.UserState );
 		receivers.add(userStateReceiver);
@@ -144,6 +144,7 @@ public class UtteranceInterpreter extends Component
 					String detectedKeywords = "";
 					String starttime = null;
 					String detectedTimes = "";
+					String confidences = "";
 					for( Element wordElem : wordElements ) {
 						if( wordElem.hasAttribute("tokens") ) {
 							detectedKeywords = detectedKeywords + wordElem.getAttribute("tokens") + " ";
@@ -151,13 +152,16 @@ public class UtteranceInterpreter extends Component
 						if( wordElem.hasAttribute("offset-to-start") ) {
 							detectedTimes = detectedTimes + wordElem.getAttribute("offset-to-start") + " ";
 						}
+						if( wordElem.hasAttribute("confidence") ) {
+							confidences = confidences + wordElem.getAttribute("confidence") + " ";
+						}
 						if( starttime == null && wordSequence.hasAttribute("offset-to-start") ) {
 							starttime = wordSequence.getAttribute("offset-to-start");
 						}
 					}
 					detectedKeywords = detectedKeywords.trim();
 					detectedTimes = detectedTimes.trim();
-					DMLogger.getLogger().logWords( Long.parseLong( starttime ), detectedKeywords, detectedTimes );
+					DMLogger.getLogger().logWords( Long.parseLong( starttime ), detectedKeywords, detectedTimes, confidences );
 					if(starttime != null) {
 						DialogueAct act = analyseData( detectedKeywords, Long.parseLong( starttime ) );
 						sendDialogueAct( act );
