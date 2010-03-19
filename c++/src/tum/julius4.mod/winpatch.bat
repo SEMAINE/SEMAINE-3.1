@@ -29,5 +29,9 @@ copy /Y win\julius\word_align.c %jpath%\libjulius\src
 
 mkdir %jpath%\vs05
 copy vs05 %jpath%\vs05
+mkdir %jpath%\vs05\libjulius
+copy vs05\libjulius %jpath%\vs05\libjulius
+mkdir %jpath%\vs05\libsent
+copy vs05\libsent %jpath%\vs05\libsent
 
 pause
