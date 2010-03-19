@@ -217,11 +217,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\channelMixer.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\chordFeatures.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\chroma.hpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\chromaFeatures.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\chromaPerFrame.hpp"
 				>
 			</File>
 			<File
@@ -357,6 +369,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\formantLpc.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\formantSmoother.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\framer.hpp"
 				>
 			</File>
@@ -409,6 +429,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\functionalSamples.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\functionalSegments.hpp"
 				>
 			</File>
@@ -418,6 +442,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\functionalTimes.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\gsl_zsolve.h"
 				>
 			</File>
 			<File
@@ -461,6 +489,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\multipleWaveSources.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\mzcr.hpp"
 				>
 			</File>
@@ -477,7 +509,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\pitchAmdfAcf.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchBase.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\pitchDirection.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchHpsLinf.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchJitter.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchShs.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchSmoother.hpp"
 				>
 			</File>
 			<File
@@ -533,6 +589,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\signalGenerator.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\smileCommon.hpp"
 				>
 			</File>
@@ -557,11 +617,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\smileResample.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\smileTypes.hpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\smileUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\specResample.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\specScale.hpp"
 				>
 			</File>
 			<File
@@ -578,6 +650,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\speexResample.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stretchToTime.hpp"
 				>
 			</File>
 			<File
@@ -669,6 +745,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\weightedDiff.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\windower.hpp"
 				>
 			</File>
@@ -729,11 +809,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\channelMixer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\chordFeatures.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\chroma.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\chromaFeatures.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\chromaPerFrame.cpp"
 				>
 			</File>
 			<File
@@ -893,6 +985,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\formantLpc.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\formantSmoother.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\framer.cpp"
 				>
 			</File>
@@ -945,6 +1045,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\functionalSamples.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\functionalSegments.cpp"
 				>
 			</File>
@@ -954,6 +1058,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\functionalTimes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\gsl_zsolve.c"
 				>
 			</File>
 			<File
@@ -993,6 +1101,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\multipleWaveSources.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\mzcr.cpp"
 				>
 			</File>
@@ -1005,7 +1117,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\pitchAmdfAcf.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchBase.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\pitchDirection.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchHpsLinf.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchJitter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchShs.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\pitchSmoother.cpp"
 				>
 			</File>
 			<File
@@ -1077,6 +1213,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\signalGenerator.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\smileCommon.cpp"
 				>
 			</File>
@@ -1109,6 +1249,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\smileResample.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\smileUtil.c"
 				>
 				<FileConfiguration
@@ -1121,11 +1265,23 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\src\specResample.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\specScale.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\spectral.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\speechLearn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stretchToTime.cpp"
 				>
 			</File>
 			<File
@@ -1210,6 +1366,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\waveSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\weightedDiff.cpp"
 				>
 			</File>
 			<File
