@@ -8,7 +8,8 @@ This document assumes that you have obtained the SemaineAPI and System code from
 Moreover you must create the directory
   c++/src/tum/opensmile  (if it does not already exist)
 and change to this directory and then type:
-  svn co https://opensmile.svn.sourceforge.net/svnroot/opensmile .
+  svn co https://opensmile.svn.sourceforge.net/svnroot/opensmile/trunk .
+(or perform this checkout with a client like TortoiseSVN, etc. Thereby it is important to select the trunk directory. You should have the opensmile files directly in the opensmile directory after the checkout, you may not have a trunk, tags and branches directory there!)
 
 Now you are ready to follow these steps to build the Semaine system and the openSMILE component:
 
@@ -31,35 +32,55 @@ Now you are ready to follow these steps to build the Semaine system and the open
 
 3.) Open the Visual Studio 2005 solution c++/vs2005/semaineF.sln
     Apply the property sheet "c++/vs2005/semaineProperties.vsprops" to Debug and Release configurations of the "vs2005-activemq" project.
+    (Click on Property Sheets Tab, then select the activemq project and right click on the Release and Debug configurations and choose 
+     "Add existing property sheet") 
 
-4.) Build the semaine solution (semaineF.sln). Build at least the "Release" configuration. If you are a developer, also build the "Debug" configuration.
+4.) Build the semaine solution (semaineF.sln). Be sure to build the "Release" configuration. If you are a developer, also build the "Debug" configuration.
 
+While building, you can perform the following steps in parallel:
 5.) Get the Julius LVCSR engine (Version 4.1.2), 
     unpack it to thirdparty/build/julius-win
 
 6.) Run c++/src/tum/julius4.mod/winpatch.bat 
     This will apply patches to the Julius code and copy VS05 build projects.
 
-7.) Now open thirdparty/build/julius-win/vs05/julius.sln and build it. 
+7.) Now open thirdparty/build/julius-win/vs05/julius.sln and build it. (Be sure to select the Release configuration!)
     (Build the Debug configuration too, if you are a developer)
+    If you get an error that "strings.h" is not found (referenced in stddefs.h), then simply comment out this line in stddefs.h, and rebuild.
 
 8.) Get the latest Portaudio SVN snapshot, 
     unpack it to thirdparty/build/portaudio-win
 
 9.) Copy the files "portaudio.vcproj" and "portaudio.def" 
     from c++/src/tum/auxiliary/build/vs05 
-    to thirdparty/build/portaudio-win/build/msvc
+    to thirdparty/build/portaudio-win/build/msvc, replacing the existing files there
 
 10.) Build the portaudio solution 
     (thirdparty/build/portaudio-win/build/msvc/portaudio.sln)
-    (Build the Debug configuration too, if you are a developer)
+    (Be sure to select the "Release" configuration. Build the Debug configuration too, if you are a developer)
 
 11.) Copy openSmile*.vcproj, *.vsprops, and openSmile*.sln 
      from c++/src/tum/auxiliary/build/vs05 
      to c++/src/tum/opensmile/ide/vs05/ 
 
+== Now, please wait until the build of semaineF.sln has finished, before proceeding ! ==
+
 12.) Build the "openSmileSemaineComponent.sln" solution
      (in c++/src/tum/opensmile/ide/vs05/)
+
+Note: If you get errors like: error C2146: syntax error : missing ';' before identifier 'cond'
+      Then you must open the property sheet "openSmileSemaine", and remove the __VISTA preprocessor define
+      from the C/C++ -> Preprocessor -> Preprocessor Definitions field (at the end).
+      Your are probably building on Windows XP system.
+      If you are building on Vista or Windows 7, then you must update your VS2005 installation for Vista:
+        Get the Windows 2008 SDK (Version 6.1), install it and run the Visual 2005 Registration Tool (from the Start Menu, Microsoft SDK v6.1)
+      (openSMILE uses native Windows condition variables on Vista and Windows 7 for thread synchronisation.)
+
+Note: If you get errors concerning unresolved symbols to some openSMILE components, you may have to add these files to the
+      openSmileLibPASemaine project. We frequently add new components to openSMILE, however we do not constantly sync the SEMAINE
+      build projects for visual studio. Just look for the component names in the error Messages beginning with "c" (e.g. cPitchXXXX)
+      and find the according files in the src/ directory and add them to the project. It should compile then.
+      Please report these kind of problems to the openSMILE developers. We will then commit your updated VS project to the SVN.
 
 13.) Copy the required dll files to the directory 
        c++/src/tum/opensmile  (or to a system wide path)
@@ -82,6 +103,5 @@ Now you are ready to follow these steps to build the Semaine system and the open
 
 14.) Now start the openSMILE Semaine component using "bin/semaine-openSMILE-run.bat"
 
-15.) Please note, that openSMILE runs very slow on windows. We don't know why, but fact is that we run it on a 2.8GHz Pentium 4 at 30-40% load on windows. While we can run with under 8% load on one core of a 2.2Ghz AMD Phenom. If you have any suggestions for speed-ups, they are more than welcome!
 
 
