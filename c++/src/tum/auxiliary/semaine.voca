@@ -3,9 +3,22 @@
 breathe		[*breathe*]	nvb
 cough		[*cough*]	nvc
 garbage		[garbage]	nvg
+garbage		[garbage]	sil
 hesitation	[*hesitation*]	nvh
+hesitation	[*hesitation*]	eh m
+hesitation	[*hesitation*]	er m
+hesitation	[*hesitation*]	aa m
 laugh		[*laugh*]	nvl
+laugh		[*laugh*]	hh ah hh ah
+laugh		[*laugh*]	hh hh
+laugh		[*laugh*]	hh hh hh
+laugh		[*laugh*]	hh ah sil
+laugh		[*laugh*]	nvb ah nvb ah
+laugh		[*laugh*]	nvb nvb
+laugh		[*laugh*]	nvb nvb nvb
 sigh		[*sigh*]	nvs
+sigh		[*sigh*]	nvb f
+sigh		[*sigh*]	nvb s
 mmh		[*mmh*]		nvmh
 mmh		[*mmh*]		ah hh ah
 mmh		[*mmh*]		aa hh ah
@@ -136,6 +149,8 @@ HAVE		[HAVE]		hh ae f
 HE		[HE]		hh iy
 HE_S		[HE_S]		hh iy z
 HELL		[HELL]		hh eh l
+HELLO		[HELLO]		hh eh l ow
+HELLO		[HELLO]		hh ah l ow
 HERE		[HERE]		hh iy r
 HOME		[HOME]		hh ow m
 HORRIBLE	[HORRIBLE]	hh ao r ah b ah l
@@ -198,6 +213,7 @@ NO		[NO]		n ow
 NOBODY		[NOBODY]	n ow b aa d iy
 NOT		[NOT]		n aa t
 NOT		[NOT]		n ao t
+OBADIAH		[OBADIAH]	ow b ah d ay aa hh
 OBADIAH		[OBADIAH]	ow b ah d ay ah
 OBADIAH		[OBADIAH]	ao b ah d ay ah
 OBADIAH		[OBADIAH]	uh b ah d ay ah
@@ -242,6 +258,8 @@ PRAGMATIC	[PRAGMATIC]	p r ae g m ae t ih k
 PRAGMATIC	[PRAGMATIC]	p r ah g m ae t ih k
 PRAGMATIC	[PRAGMATIC]	p r ae g m ae t ih g
 PRAGMATIC	[PRAGMATIC]	p r ah g m ae t ih g
+PRUDENCE	[PRUDENCE]	p r uw d ih n s
+PRUDENCE	[PRUDENCE]	p r uw d ih n z
 PRUDENCE	[PRUDENCE]	p r uw d ah n s
 PRUDENCE	[PRUDENCE]	p r uw d n s
 PRUDENCE	[PRUDENCE]	p r uw d ah n z
@@ -304,6 +322,7 @@ SOMEBODY	[SOMEBODY]	s ah m b ah d ih
 SOMEONE		[SOMEONE]	s ah m w ah n
 SOMEONE		[SOMEONE]	s ah m w ao n
 SPEAK		[SPEAK]		s p iy k
+SPEAK		[SPEAK]		s p ih k
 SPIKE		[SPIKE]		s p ay k
 SPIKE		[SPIKE]		s b ay k
 STRESS		[STRESS]	s t r eh s
@@ -315,6 +334,7 @@ STUPID		[STUPID]	s t uw p ih d
 STUPID		[STUPID]	s t y uw p ih d
 SWITCH		[SWITCH]	s w ih ch
 TALK		[TALK]		t ao k
+TALK		[TALK]		t ah k
 TERRIBLE	[TERRIBLE]	t eh r ah b ah l
 TERRIBLE	[TERRIBLE]	t eh r ih b ah l
 TERRIBLE	[TERRIBLE]	t eh r ah b l
@@ -336,6 +356,7 @@ TIREDER		[TIREDER]	t ey eh d er
 TIREDER		[TIREDER]	t ay eh d er
 TIREDER		[TIREDER]	t ay ah d er
 TO		[TO]		t uw
+TO		[TO]		t ah
 TOMORROW	[TOMORROW]	t ah m aa r ow
 TOMORROW	[TOMORROW]	t ah m ao r ow
 TOMORROW	[TOMORROW]	t uw m aa r ow
@@ -389,6 +410,9 @@ YEAH		[YEAH]		y eh ah
 YEAH		[YEAH]		y ah
 YES		[YES]		y eh s
 YES		[YES]		iy eh s
+YES		[YES]		iy ae ah s
+YES		[YES]		y ae ah s
+YES		[YES]		iy ae s
 YOU		[YOU]		y uw
 YOU		[YOU]		iy uw
 YOU_RE		[YOU_RE]	y uh r
