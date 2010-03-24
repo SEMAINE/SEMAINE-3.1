@@ -18,6 +18,8 @@ copy /Y win\julius\config-win-julius.h %jpath%\libjulius\include\julius
 
 copy /Y win\julius\version.c %jpath%\libjulius\src
 copy /Y win\julius\jfunc.c %jpath%\libjulius\src
+copy /Y win\julius\spsegment.c %jpath%\libjulius\src
+copy /Y win\julius\search_bestfirst_v1.c %jpath%\libjulius\src
 copy /Y win\julius\realtime-1stpass.c %jpath%\libjulius\src
 copy /Y win\julius\recogmain.c %jpath%\libjulius\src
 copy /Y win\julius\plugin.c %jpath%\libjulius\src
