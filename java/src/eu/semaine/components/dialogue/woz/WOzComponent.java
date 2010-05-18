@@ -101,10 +101,14 @@ import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
+import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SSML;
+import eu.semaine.datatypes.xml.SemaineML;
+import eu.semaine.jms.message.SEMAINEXMLMessage;
+import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
@@ -113,6 +117,8 @@ public class WOzComponent extends Component implements PhraseLabelListener
 {
 	private FMLSender fmlSender;
 	private StateSender contextSender;
+	private StateSender dialogStateSender;
+	private XMLReceiver callbackReceiver;
 	
 	private String WOZ_FILE = "/eu/semaine/components/dialogue/data/woz_sentences.xml"; 
 	
@@ -161,6 +167,11 @@ public class WOzComponent extends Component implements PhraseLabelListener
 		senders.add(fmlSender);
 		contextSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(contextSender);
+		dialogStateSender = new StateSender("semaine.data.state.dialog", StateInfo.Type.DialogState, getName());
+		senders.add(dialogStateSender);
+		
+		callbackReceiver = new XMLReceiver("semaine.callback.output.audio");
+		receivers.add(callbackReceiver);
 		
 		speakerStartup = new Hashtable<String,PhrasesPanel>();
 		speakerRepair = new Hashtable<String,PhrasesPanel>();
@@ -175,6 +186,39 @@ public class WOzComponent extends Component implements PhraseLabelListener
 			started = true;
 			loadProject();
 		}
+	}
+	
+	public void react( eu.semaine.jms.message.SEMAINEMessage m ) throws JMSException
+	{
+		if( m instanceof SEMAINEXMLMessage ){
+			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
+			
+			if( !xm.getText().contains("fml_lip") ) {
+				if( speechReady(xm) ) {
+					sendListening();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * This method checks if the given message contains the end signal of the animation that the agent
+	 * is playing.
+	 * @param xm the message to check
+	 * @return true if the message contains the end signal, false if it does not.
+	 */
+	public boolean speechReady( SEMAINEXMLMessage xm ) throws JMSException
+	{
+		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
+		if( callbackElem != null ) {
+			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
+			if( eventElem != null ) {
+				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") ) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public void createGui()
@@ -500,6 +544,35 @@ public class WOzComponent extends Component implements PhraseLabelListener
 		mark.setAttribute(SSML.A_NAME, id+":tm"+counter);
 
 		fmlSender.sendXML(doc, meta.getTime());
+		
+		/* Send the speaking-state around */
+		sendSpeaking();
+	}
+	
+	/**
+	 * Sends around that the agent is speaking
+	 * @throws JMSException
+	 */
+	public void sendSpeaking() throws JMSException
+	{
+		Map<String,String> dialogInfo = new HashMap<String,String>();		
+		dialogInfo.put("agentTurnState", "true");
+
+		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
+		dialogStateSender.sendStateInfo(dsi, meta.getTime());
+	}
+	
+	/**
+	 * Sends around that the agent is silent
+	 * @throws JMSException
+	 */
+	public void sendListening() throws JMSException
+	{
+		Map<String,String> dialogInfo = new HashMap<String,String>();		
+		dialogInfo.put("agentTurnState", "false");
+
+		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
+		dialogStateSender.sendStateInfo(dsi, meta.getTime());
 	}
 	
 	/*private void applyMargins() {
