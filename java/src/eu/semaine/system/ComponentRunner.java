@@ -44,6 +44,8 @@ public class ComponentRunner
 		p.load(new FileInputStream(configFile));
 		// make config settings available in the entire system, as system properties:
 		System.getProperties().putAll(p);
+		// Also remember the config file itself:
+		System.getProperties().setProperty("semaine.config-file", configFile);
 		String[] componentClassDescriptions = p.getProperty("semaine.components").split("\\|");
 		for (String d : componentClassDescriptions) {
 			// component class descriptions are expected to have one of the following formats:

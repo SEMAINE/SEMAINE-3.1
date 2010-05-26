@@ -142,6 +142,7 @@ exclude-result-prefixes="bml mary #default"
    	<xsl:choose>
 		<xsl:when test="not(parent::mary:mtu)">
 			<xsl:copy-of select="text()"/>
+			<xsl:value-of select="' '"/><!-- don't glue words together in case there are no marks between them -->
 		</xsl:when>
 	</xsl:choose>
    </xsl:template>

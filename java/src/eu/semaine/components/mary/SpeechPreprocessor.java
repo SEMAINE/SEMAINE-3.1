@@ -41,6 +41,7 @@ import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
+import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
@@ -48,6 +49,8 @@ import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.FMLSender;
+import eu.semaine.system.CharacterConfigInfo;
+import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -65,20 +68,8 @@ public class SpeechPreprocessor extends Component
 	private static TransformerFactory tFactory = null;
 	private static Templates fml2ssmlStylesheet = null;
 	private Templates mergingStylesheet;
-	private String currentCharacter = ParticipantControlGUI.PRUDENCE;
+	private String currentCharacter = CharacterConfigInfo.getDefaultCharacter().getName();
 	
-	static final Map<String,String> characters2voices = fillCharacters2Voices();
-	
-	private static Map<String,String> fillCharacters2Voices()
-	{
-		Map<String,String> c2v = new HashMap<String, String>();
-		c2v.put("Prudence", "dfki-prudence");
-		c2v.put("Poppy", "dfki-poppy");
-		c2v.put("Obadiah", "dfki-obadiah");
-		c2v.put("Spike", "dfki-spike");
-		return c2v;
-	}
-    
     
 	/**
 	 * @param componentName
@@ -167,20 +158,100 @@ public class SpeechPreprocessor extends Component
 	}
 	
 	/**
+	 * For an FML-APML or BML message, find the content of the 'language' attribute of the speech tag,
+	 * and return a corresponding Locale object.
+	 * @param xm
+	 * @return the message locale, or null if none could be found.
+	 */
+	public static Locale getMessageLocale(SEMAINEXMLMessage xm) {
+		Document doc = xm.getDocument();
+		if (doc == null) return null;
+		Element root = doc.getDocumentElement();
+		if (root == null) return null;
+		// Now either root is <bml>, or it has a <bml> child:
+		Element bml;
+		if (root.getLocalName().equals(BML.E_BML) && root.getNamespaceURI().equals(BML.namespaceURI)) {
+			bml = root;
+		} else {
+			bml = XMLTool.getChildElementByLocalNameNS(root, BML.E_BML, BML.namespaceURI);
+		}
+		if (bml == null) return null;
+		Element speech = XMLTool.getChildElementByLocalNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
+		if (speech == null) return null;
+		String language = speech.getAttribute("language");
+		if (language.equals("")) return null;
+		return SEMAINEUtils.string2locale(language);
+	}
+	
+	/**
+	 * Find a suitable voice for the given combination of FML-APML message and character name.
+	 * Normally, the character name will correspond to an entry in the CharacterConfigInfo, and
+	 * its voice locale will match the message's locale. If either of the two is not available,
+	 * the method tries to get a good approximation.
+	 * @param xm an FML-APML message
+	 * @param character a character name
+	 * @return a voice if possible, or null.
+	 */
+	public static Voice getVoice(SEMAINEXMLMessage xm, String character) {
+		Locale messageLocale = null;
+		Voice voice = null;
+		if (xm != null) {
+			messageLocale = getMessageLocale(xm);
+			voice = Voice.getDefaultVoice(messageLocale);
+		}
+		CharacterConfigInfo charInfo = CharacterConfigInfo.getInfo(character);
+		if (charInfo != null) {
+			Locale characterLocale = charInfo.getVoiceLocale();
+			if (messageLocale != null && !messageLocale.equals(characterLocale)) {
+				JMSLogger.getLog("SpeechPreprocessor").warn("Message locale '"+messageLocale+"' is different from current character locale '"
+						+characterLocale+"' -- will ignore character.");
+			} else {
+				voice = Voice.getVoice(charInfo.getVoice());
+				if (voice == null) {
+					Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
+					JMSLogger.getLog("SpeechPreprocessor").warn("Voice '"+charInfo.getVoice()+"' defined for character '"+charInfo.getName()
+							+"' is not available in MARY TTS. "
+							+(fallbackVoice != null ? "Will fall back to voice '"+fallbackVoice.getName()+"'" : "No fallback available."));
+					voice = fallbackVoice;
+				} else if (!voice.getLocale().equals(characterLocale)) {
+					Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
+					JMSLogger.getLog("SpeechPreprocessor").warn("Voice '"+charInfo.getVoice()+"' defined for character '"+charInfo.getName()
+							+"' has locale '"+voice.getLocale()+"' but character expects '"+characterLocale+"'. "
+							+(fallbackVoice != null ? "Will fall back to voice '"+fallbackVoice.getName()+"'" : "No fallback available."));
+					voice = fallbackVoice;
+				}
+			}
+		}
+		return voice;
+	}
+	
+	/**
+	 * For the given combination of FML-APML message and character name, if they fit together,
+	 * return any voice effects listed in the character's entry in the CharacterConfigInfo.
+	 * @param xm an FML-APML message
+	 * @param character a character name
+	 * @return a string containing voice effects, or the empty string.
+	 */
+	public static String getVoiceEffects(SEMAINEXMLMessage xm, String character) {
+		Locale messageLocale = null;
+		if (xm != null) {
+			messageLocale = getMessageLocale(xm);
+		}
+		CharacterConfigInfo charInfo = CharacterConfigInfo.getInfo(character);
+		if (charInfo != null && (messageLocale == null || charInfo.getVoiceLocale().equals(messageLocale))) {
+			return charInfo.getVoiceEffects();
+		}
+		return "";
+	}
+	
+	
+	/**
 	 * Speech Preprocessor
 	 */
 	private void speechPreProcessor(SEMAINEMessage m) throws Exception
 	{	
 		
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
-		//Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
-		Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
-		AudioFormat af = voice.dbAudioFormat();
-        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
-            af, AudioSystem.NOT_SPECIFIED);
-    	
-        //Request request = new Request(MaryDataType.SSML,MaryDataType.INTONATION,Locale.US,Voice.getDefaultVoice(Locale.ENGLISH),null,null,1,null);
-    	Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
 		
     	Document inputDoc = xm.getDocument();
 		
@@ -188,9 +259,16 @@ public class SpeechPreprocessor extends Component
 		String namespaceURI = xm.getDocument().getDocumentElement().getNamespaceURI(); 
 		
 		if (XMLTool.getChildElementByLocalNameNS(inputDoc.getDocumentElement(), BML.E_BML, BML.namespaceURI) != null) {
+			// An FML-APML document with a BML child element -- Text-to-Speech mode:
+			Voice voice = getVoice(xm, getCurrentCharacter());
+			String voiceEffects = getVoiceEffects(xm, getCurrentCharacter());
+			AudioFormat af = voice.dbAudioFormat();
+	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE, af, AudioSystem.NOT_SPECIFIED);
+	    	Request request = new Request(MaryDataType.SSML, MaryDataType.REALISED_ACOUSTPARAMS, 
+	    			voice.getLocale(), voice, voiceEffects, "", 1, aff);
 			
 			Transformer transformer = fml2ssmlStylesheet.newTransformer();
-			transformer.setParameter("character.voice", characters2voices.get(getCurrentCharacter()));
+			transformer.setParameter("character.voice", voice.getName());
 
 			// Marc, 27.11.09:
 			// Use DOM rather than strings so we can replace identifiers in document with
@@ -297,15 +375,16 @@ public class SpeechPreprocessor extends Component
     throws IOException, SAXException, TransformerConfigurationException, TransformerException, Exception {
     	Document testFmlApml = XMLTool.parse(this.getClass().getResourceAsStream("fml-apml-example.xml"));
 		Transformer transformer = fml2ssmlStylesheet.newTransformer();
-		transformer.setParameter("character.voice", characters2voices.get(getCurrentCharacter()));
+		Voice voice = getVoice(null, getCurrentCharacter());
+		transformer.setParameter("character.voice", voice.getName());
 		DOMResult ssmlDR = new DOMResult();
 		transformer.transform(new DOMSource(testFmlApml), ssmlDR);
 		Document ssmlDoc = (Document) ssmlDR.getNode();
 
-		Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
 		AudioFormat af = voice.dbAudioFormat();
         AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE, af, AudioSystem.NOT_SPECIFIED);
-    	Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
+		String voiceEffects = getVoiceEffects(null, getCurrentCharacter());
+    	Request request = new Request(MaryDataType.SSML, MaryDataType.REALISED_ACOUSTPARAMS, voice.getLocale(), voice, voiceEffects, "", 1, aff);
 		MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
 		ssmlData.setDocument(ssmlDoc);
 		request.setInputData(ssmlData);

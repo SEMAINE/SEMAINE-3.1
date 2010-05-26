@@ -50,6 +50,7 @@ import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.BMLSender;
 import eu.semaine.jms.sender.BytesSender;
+import eu.semaine.system.CharacterConfigInfo;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -70,7 +71,7 @@ public class SpeechBMLRealiser extends Component
 	private static Templates bml2BackchannelStylesheet = null;
 	private static Templates bmlSpeechTimingRemoverStylesheet = null;
 	private Templates mergingStylesheet;
-	private String currentCharacter = ParticipantControlGUI.PRUDENCE;
+	private String currentCharacter = CharacterConfigInfo.getDefaultCharacter().getName();
     
 	/**
 	 * @param componentName
@@ -181,7 +182,7 @@ public class SpeechBMLRealiser extends Component
 		boolean isBackChannel = isBackChannelRequest(xm);
 		
 		
-		if(isBackChannel){
+		if(isBackChannel) {
 			// Back-channel synthesis
 			Element bmlSpeech = XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_SPEECH, BML.namespaceURI);
 			if(bmlSpeech == null) {
@@ -190,19 +191,18 @@ public class SpeechBMLRealiser extends Component
 			}
 			
 			Transformer backchannelTransformer = bml2BackchannelStylesheet.newTransformer();
-			backchannelTransformer.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
+			Voice voice = SpeechPreprocessor.getVoice(xm, getCurrentCharacter());
+			String voiceEffects = SpeechPreprocessor.getVoiceEffects(xm, getCurrentCharacter());
+			backchannelTransformer.setParameter("character.voice", voice.getName());
 			DOMResult backchannelDR = new DOMResult();
 			backchannelTransformer.transform(new DOMSource(input), backchannelDR);
 			Document bcWordDoc = (Document) backchannelDR.getNode();
 			String words = XMLTool.document2String(bcWordDoc);
 			
-			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
-			
 			AudioFormat af = voice.dbAudioFormat();
-	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
-	            af, AudioSystem.NOT_SPECIFIED);
-	        Request request = new Request(MaryDataType.WORDS, MaryDataType.AUDIO, Locale.ENGLISH, 
-		            voice, "", "", 1, aff);
+	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE, af, AudioSystem.NOT_SPECIFIED);
+	        Request request = new Request(MaryDataType.WORDS, MaryDataType.AUDIO, voice.getLocale(), 
+		            voice, voiceEffects, "", 1, aff);
 	        Reader reader = new StringReader(words);
 			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
 			request.readInputData(reader);
@@ -210,7 +210,8 @@ public class SpeechBMLRealiser extends Component
 			request.writeOutputData(audioos);
 			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime(), xm.getContentID(), xm.getContentCreationTime());
 			
-			request = new Request(MaryDataType.get("WORDS"),MaryDataType.get("REALISED_ACOUSTPARAMS"),Locale.ENGLISH,voice,"","",1,aff);
+			request = new Request(MaryDataType.WORDS, MaryDataType.REALISED_ACOUSTPARAMS, voice.getLocale(),
+					voice, voiceEffects, "", 1, aff);
 			ByteArrayOutputStream  realisedOS = new ByteArrayOutputStream();
 			reader = new StringReader(words);
 			request.readInputData(reader);
@@ -220,12 +221,11 @@ public class SpeechBMLRealiser extends Component
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("Backchannel-Realised-Merge.xsl"), "semaine.mary.realised.acoustics");
 			//System.out.println("Final data : " + finalData);
 			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
-		}
-		else if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0){
+		} else if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0) {
+			// plain bml -- forward unprocessed
 			bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
-		}
-		else{
-			
+		} else {
+			// TTS processing mode
 			long t0 = System.currentTimeMillis();
 			// BML speech timing info removal
 			Transformer transformer = bmlSpeechTimingRemoverStylesheet.newTransformer();
@@ -245,8 +245,9 @@ public class SpeechBMLRealiser extends Component
 			
 			// Utterance synthesis
 			Transformer transformer2 = bml2ssmlStylesheet.newTransformer();
-			transformer2.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
-			//transformer.transform(new DOMSource(input), new StreamResult(ssmlos));
+			Voice voice = SpeechPreprocessor.getVoice(xm, getCurrentCharacter());
+			String voiceEffects = SpeechPreprocessor.getVoiceEffects(xm, getCurrentCharacter());
+			transformer2.setParameter("character.voice", voice.getName());
 			DOMResult ssmlDR = new DOMResult();
 			transformer2.transform(new DOMSource(bmlDoc), ssmlDR);
 			Document ssmlDoc = (Document) ssmlDR.getNode();
@@ -278,12 +279,12 @@ public class SpeechBMLRealiser extends Component
 			long t5 = System.currentTimeMillis();
 			long durToString1 = t5 - t4;
 			
-			// SSML to Realised Acoustics using MARY 
-			Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
+			// SSML to Realised Acoustics using MARY
 			AudioFormat af = voice.dbAudioFormat();
 	        AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE,
 	            af, AudioSystem.NOT_SPECIFIED);
-			Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
+			Request request = new Request(MaryDataType.SSML, MaryDataType.REALISED_ACOUSTPARAMS, voice.getLocale(),
+					voice, voiceEffects, "", 1, aff);
 
 			Document maryDoc = null;
 			try {
@@ -331,8 +332,8 @@ public class SpeechBMLRealiser extends Component
 			long durSendXML = t10 - t9;
 			
 			// SSML to AUDIO using MARY 
-	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.ENGLISH, 
-	            voice, "", "", 1, aff);
+	        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, voice.getLocale(), 
+	            voice, voiceEffects, "", 1, aff);
 			ByteArrayOutputStream audioos = new ByteArrayOutputStream();
 			try {
 				MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
@@ -384,15 +385,17 @@ public class SpeechBMLRealiser extends Component
 		transformer.transform(new DOMSource(testBml), bmlDR);
 		Document bmlDoc = (Document) bmlDR.getNode();
 		Transformer transformer2 = bml2ssmlStylesheet.newTransformer();
-		transformer2.setParameter("character.voice", SpeechPreprocessor.characters2voices.get(getCurrentCharacter()));
+		Voice voice = SpeechPreprocessor.getVoice(null, getCurrentCharacter());
+		String voiceEffects = SpeechPreprocessor.getVoiceEffects(null, getCurrentCharacter());
+		transformer2.setParameter("character.voice", voice.getName());
 		DOMResult ssmlDR = new DOMResult();
 		transformer2.transform(new DOMSource(bmlDoc), ssmlDR);
 		Document ssmlDoc = (Document) ssmlDR.getNode();
 
-		Voice voice = Voice.getDefaultVoice(Locale.ENGLISH);
 		AudioFormat af = voice.dbAudioFormat();
         AudioFileFormat aff = new AudioFileFormat(AudioFileFormat.Type.WAVE, af, AudioSystem.NOT_SPECIFIED);
-    	Request request = new Request(MaryDataType.SSML,MaryDataType.REALISED_ACOUSTPARAMS,Locale.ENGLISH,voice,"","",1,aff);
+    	Request request = new Request(MaryDataType.SSML, MaryDataType.REALISED_ACOUSTPARAMS, voice.getLocale(),
+    			voice, voiceEffects, "", 1, aff);
 		MaryData ssmlData = new MaryData(request.getInputType(), request.getDefaultLocale());
 		ssmlData.setDocument(ssmlDoc);
 		request.setInputData(ssmlData);
@@ -401,7 +404,7 @@ public class SpeechBMLRealiser extends Component
 		Document maryDoc = maryOut.getDocument();
 		/*Document finalData = */XMLTool.mergeTwoXMLFiles(testBml, maryDoc, mergingStylesheet, "semaine.mary.realised.acoustics");
 		
-        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, Locale.ENGLISH, voice, "", "", 1, aff);
+        request = new Request(MaryDataType.SSML, MaryDataType.AUDIO, voice.getLocale(), voice, voiceEffects, "", 1, aff);
 		ByteArrayOutputStream audioos = new ByteArrayOutputStream();
 		MaryData ssmlData2 = new MaryData(request.getInputType(), request.getDefaultLocale());
 		ssmlData2.setDocument(ssmlDoc);

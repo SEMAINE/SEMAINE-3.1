@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class SEMAINEUtils 
 {
@@ -27,4 +29,36 @@ public class SEMAINEUtils
         
     }
 
+    public static Locale string2locale(String localeString)
+    {
+        Locale locale = null;
+        StringTokenizer localeST = new StringTokenizer(localeString, "_-");
+        String language = localeST.nextToken();
+        String country = "";
+        String variant = "";
+        if (localeST.hasMoreTokens()) {
+            country = localeST.nextToken();
+            if (localeST.hasMoreTokens()) {
+                variant = localeST.nextToken();
+            }
+         }
+        locale = new Locale(language, country, variant);
+        return locale;
+    }
+    
+    /**
+     * Convert a locale into a string that is conform with XML's xml:lang attribute.
+     * Basically it is language-COUNTRY, e.g. en-US.
+     * @param locale a locale, must not be null
+     * @return
+     * @throws IllegalArgumentException if locale is null
+     */
+    public static String locale2xmllang(Locale locale) 
+    {
+        if (locale == null) throw new IllegalArgumentException("Locale must not be null");
+        String country = locale.getCountry();
+        if (!"".equals(country))
+            return locale.getLanguage()+"-"+country;
+        return locale.getLanguage();
+    }
 }

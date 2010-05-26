@@ -12,12 +12,19 @@ xmlns:ssml="http://www.w3.org/2001/10/synthesis">
   </xsl:template-->
 
    <xsl:template match="/fml-apml/bml:bml/bml:speech">
-     <xsl:param name="character.voice">prudence</xsl:param>
+     <xsl:param name="character.voice">no-voice</xsl:param>
      <speak xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xml:lang="{@language}">
-      <voice name="{$character.voice}">       
-	  <xsl:copy-of select="ssml:*|text()"/>
-	  </voice>
+         <xsl:choose>
+             <xsl:when test="$character.voice!='no-voice'">
+                 <voice name="{$character.voice}">       
+	                 <xsl:copy-of select="ssml:*|text()"/>
+	             </voice>
+	         </xsl:when>
+	         <xsl:otherwise>
+	             <xsl:copy-of select="ssml:*|text()"/>
+	         </xsl:otherwise>
+	     </xsl:choose>
       </speak>
     </xsl:template>
 

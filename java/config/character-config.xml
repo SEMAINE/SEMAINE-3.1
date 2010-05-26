@@ -1,0 +1,15 @@
+<character-config xmlns="http://www.semaine-project.eu/semaineml">
+  <character name="Poppy">
+    <voice name="dfki-poppy" locale="en-GB"/>
+  </character>
+  <character name="Prudence" is-default="true">
+    <voice name="dfki-prudence" locale="en-GB"/>
+  </character>
+  <character name="Obadiah">
+    <voice name="dfki-obadiah" locale="en-GB"/>
+  </character>
+  <character name="Spike">
+    <voice name="dfki-spike" locale="en-GB"/>
+  </character>
+  
+</character-config>
