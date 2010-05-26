@@ -37,7 +37,6 @@ public class ContextStateInfo extends StateInfo
 	 * @throws JMSException
 	 */
 	public ContextStateInfo(Map<String, String> infoItems)
-	throws JMSException
 	{
 		super(infoItems, "ContextStateInfo", Type.ContextState);
 	}
