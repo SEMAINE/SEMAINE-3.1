@@ -1,0 +1,20 @@
+<character-config xmlns="http://www.semaine-project.eu/semaineml">
+  <character name="Prudence" is-default="true">
+    <voice name="dfki-prudence" locale="en-GB"/>
+  </character>
+  <character name="Pat">
+    <voice name="cmu-slt" locale="en-US"/>
+  </character>
+  <character name="Herbert">
+    <voice name="de6" locale="de"/>
+  </character>
+  <character name="Ferdinand">
+    <voice name="bits3-hsmm" locale="de"/>
+  </character>
+  <character name="Erkan">
+    <voice name="dfki-ot" locale="tr"/>
+  </character>
+  <character name="TeluguGirl">
+    <voice name="cmu-nk" locale="te"/>
+  </character>
+</character-config>

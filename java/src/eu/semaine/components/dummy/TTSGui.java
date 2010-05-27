@@ -6,17 +6,34 @@
 
 package eu.semaine.components.dummy;
 
+import eu.semaine.system.CharacterConfigInfo;
+
 /**
  *
  * @author  marc
  */
 public class TTSGui extends javax.swing.JFrame {
     private TTSInputComponent component;
+    private CharacterConfigInfo currentCharacter;
     
     /** Creates new form TTSGui */
     public TTSGui(TTSInputComponent component) {
         this.component = component;
         initComponents();
+        initCharacters();
+    }
+    
+    private void initCharacters() {
+        cbCharacter.removeAllItems();
+        for (String character : CharacterConfigInfo.getCharacterNames()) {
+            // We want to avoid sending context messages while filling the combobox;
+            // therefore we always fill currentSelection with the item of choice.
+            currentCharacter = CharacterConfigInfo.getInfo(character);
+            cbCharacter.addItem(currentCharacter);
+        }
+        // Now we do want to send a message:
+        currentCharacter = null;
+        cbCharacter.setSelectedItem(CharacterConfigInfo.getDefaultCharacter());
     }
     
     public String getText() {
@@ -24,11 +41,11 @@ public class TTSGui extends javax.swing.JFrame {
     }
     
     public String getLocaleString() {
-        return tfLocale.getText();
+        return ((CharacterConfigInfo)cbCharacter.getSelectedItem()).getVoiceLocaleString();
     }
     
     public String getCharacterName() {
-        return tfCharacter.getText();
+        return ((CharacterConfigInfo) cbCharacter.getSelectedItem()).getName();
     }
     
     /** This method is called from within the constructor to
@@ -40,13 +57,9 @@ public class TTSGui extends javax.swing.JFrame {
     private void initComponents() {
         jScrollPane1 = new javax.swing.JScrollPane();
         taText = new javax.swing.JTextArea();
-        tfLocale = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        tfCharacter = new javax.swing.JTextField();
         bSpeak = new javax.swing.JButton();
-        bSetCharacter = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
+        cbCharacter = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         taText.setColumns(20);
@@ -54,11 +67,7 @@ public class TTSGui extends javax.swing.JFrame {
         taText.setText("Put text to be spoken here.");
         jScrollPane1.setViewportView(taText);
 
-        tfLocale.setText("en-GB");
-
-        jLabel1.setText("Locale:");
-
-        jLabel2.setText("Character name:");
+        jLabel2.setText("Character:");
 
         bSpeak.setText("Speak");
         bSpeak.addActionListener(new java.awt.event.ActionListener() {
@@ -67,10 +76,9 @@ public class TTSGui extends javax.swing.JFrame {
             }
         });
 
-        bSetCharacter.setText("Set Character name");
-        bSetCharacter.addActionListener(new java.awt.event.ActionListener() {
+        cbCharacter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bSetCharacterActionPerformed(evt);
+                cbCharacterActionPerformed(evt);
             }
         });
 
@@ -81,18 +89,11 @@ public class TTSGui extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(12, 12, 12)
-                        .addComponent(tfLocale, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfCharacter, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bSetCharacter))
+                        .addComponent(cbCharacter, 0, 534, Short.MAX_VALUE))
                     .addComponent(bSpeak))
                 .addContainerGap())
         );
@@ -103,28 +104,33 @@ public class TTSGui extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(tfLocale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bSpeak)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(tfCharacter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bSetCharacter))
-                .addContainerGap())
+                    .addComponent(cbCharacter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bSpeak))
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bSetCharacterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSetCharacterActionPerformed
-    	component.setCharacter(getCharacterName());
-    }//GEN-LAST:event_bSetCharacterActionPerformed
+    private void cbCharacterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCharacterActionPerformed
+        CharacterConfigInfo cci = (CharacterConfigInfo) cbCharacter.getSelectedItem();
+        if (cci != currentCharacter) {
+            component.setCharacter(cci.getName());
+            currentCharacter = cci;
+            
+        }
+    }//GEN-LAST:event_cbCharacterActionPerformed
 
     public void updateCharacterDisplay(String newCharacterName) {
-    	tfCharacter.setText(newCharacterName);
+        for (int i=0, max = cbCharacter.getItemCount(); i<max; i++) {
+            CharacterConfigInfo cci = (CharacterConfigInfo) cbCharacter.getItemAt(i);
+            if (cci.getName().equals(newCharacterName)) {
+                // We want to update the display without sending a context message:
+                currentCharacter = cci;
+                cbCharacter.setSelectedIndex(i);
+                break;
+            }
+        }
     }
     
     private void bSpeakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSpeakActionPerformed
@@ -133,15 +139,11 @@ public class TTSGui extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bSetCharacter;
     private javax.swing.JButton bSpeak;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JComboBox cbCharacter;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea taText;
-    private javax.swing.JTextField tfCharacter;
-    private javax.swing.JTextField tfLocale;
     // End of variables declaration//GEN-END:variables
     
 }

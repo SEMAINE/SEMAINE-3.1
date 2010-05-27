@@ -134,6 +134,10 @@ public class CharacterConfigInfo {
 		return voiceEffects;
 	}
 	
+        @Override
+        public String toString() {
+            return name + " (voice " + voice + ", locale " + localeString + ")";
+        }
 	
 
 }
