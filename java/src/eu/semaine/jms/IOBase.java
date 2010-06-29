@@ -29,6 +29,7 @@ public class IOBase
 	protected Connection connection;
 	protected Session session;
 	protected Topic topic;
+	protected String topicName;
 	protected boolean isConnectionStarted = false;
 	
 	/**
@@ -81,6 +82,7 @@ public class IOBase
 		this.connection = factory.createConnection();
 		this.session = connection.createSession(false /*not transacted*/, Session.AUTO_ACKNOWLEDGE);
 		this.topic = session.createTopic(topicName);
+		this.topicName = topicName;
 	}
 	
 	/**
@@ -89,9 +91,8 @@ public class IOBase
 	 * @throws JMSException
 	 */
 	public String getTopicName()
-	throws JMSException
 	{
-		return topic.getTopicName();
+		return topicName;
 	}
 
 	/**

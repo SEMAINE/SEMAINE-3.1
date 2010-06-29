@@ -45,7 +45,13 @@ public class XMLReceiver extends Receiver
 	protected SEMAINEMessage createSEMAINEMessage(Message message)
 	throws MessageFormatException
 	{
-		return new SEMAINEXMLMessage(message);
+		SEMAINEMessage m = null;
+		try {
+			m = new SEMAINEXMLMessage(message);
+		} catch (MessageFormatException mfe) {
+			throw new MessageFormatException("Problem reading message from topic "+getTopicName());
+		}
+		return m;
 	}
 
 }

@@ -43,7 +43,7 @@ public class DummyBMLRealiser extends Component
 		super("DummyBMLRealiser");
 		bmlReceiver = new BMLReceiver("semaine.data.synthesis.plan");
 		receivers.add(bmlReceiver);
-		fapSender = new Sender("semaine.data.synthesis.lowlevel.video", "FAP", getName());
+		fapSender = new Sender("semaine.data.synthesis.lowlevel.video.FAP", "FAP", getName());
 		senders.add(fapSender);
 		
 		try {
@@ -99,6 +99,6 @@ public class DummyBMLRealiser extends Component
 			// shouldn't happen
 		}
 	    
-		fapSender.sendTextMessage(faps.toString(), meta.getTime());
+		fapSender.sendTextMessage(faps.toString(), meta.getTime(), m.getEventType(), m.getContentID(), m.getContentCreationTime());
 	}
 }

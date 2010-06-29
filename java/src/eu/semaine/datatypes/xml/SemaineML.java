@@ -44,10 +44,18 @@ public class SemaineML
     public static final String A_INTENSITY = "intensity";
     public static final String A_STATUS = "status";
     public static final String A_DIRECTION = "direction";
+    public static final String A_ID = "id";
+    public static final String A_DATA = "data";
+    public static final String A_TYPE = "type";
     
     // Attribute values
     // For A_STATUS:
     public static final String V_PRESENT = "present";
     public static final String V_ABSENT = "absent";
+    // For A_TYPE
+    public static final String V_CREATED = "created";
+    public static final String V_READY = "ready";
+    public static final String V_START = "start";
+    public static final String V_END = "end";
     
 }
