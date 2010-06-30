@@ -97,7 +97,6 @@ public class QueuingAudioPlayer extends Component
 				} else {
 					anim = new Animation(contentID, contentCreationTime);
 					availableAnimations.put(contentID, anim);
-					sendCallbackMessage(SemaineML.V_CREATED, contentID);
 					animationStates.put(contentID, AnimationState.CREATED);
 				}
 			}

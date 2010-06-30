@@ -53,9 +53,10 @@ public class SemaineML
     public static final String V_PRESENT = "present";
     public static final String V_ABSENT = "absent";
     // For A_TYPE
-    public static final String V_CREATED = "created";
     public static final String V_READY = "ready";
+    public static final String V_DELETED = "deleted";
     public static final String V_START = "start";
+    public static final String V_STOPPED = "stopped";
     public static final String V_END = "end";
     
 }
