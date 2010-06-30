@@ -13,6 +13,7 @@ import javax.jms.JMSException;
 import eu.semaine.components.Component;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
+import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.BMLReceiver;
@@ -29,6 +30,7 @@ public class DummyBMLRealiser extends Component
 {
 	private BMLReceiver bmlReceiver;
 	private Sender fapSender;
+	private Sender dataInfoSender;
 
 	private String dummyFAPData1;
 	private String dummyFAPData2;
@@ -45,6 +47,8 @@ public class DummyBMLRealiser extends Component
 		receivers.add(bmlReceiver);
 		fapSender = new Sender("semaine.data.synthesis.lowlevel.video.FAP", "FAP", getName());
 		senders.add(fapSender);
+		dataInfoSender = new Sender("semaine.data.synthesis.lowlevel.command", "dataInfo", getName());
+		senders.add(dataInfoSender);
 		
 		try {
 			dummyFAPData1 = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example2.fap"), "ASCII");
@@ -100,5 +104,8 @@ public class DummyBMLRealiser extends Component
 		}
 	    
 		fapSender.sendTextMessage(faps.toString(), meta.getTime(), m.getEventType(), m.getContentID(), m.getContentCreationTime());
+		
+		String dataInfoString = "HASAUDIO 1\nHASFAP 1\nHASBAP 0";
+		dataInfoSender.sendTextMessage(dataInfoString, meta.getTime(), Event.single, m.getContentID(), m.getContentCreationTime());
 	}
 }

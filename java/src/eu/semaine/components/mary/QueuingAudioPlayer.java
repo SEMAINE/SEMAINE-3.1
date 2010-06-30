@@ -6,6 +6,7 @@ package eu.semaine.components.mary;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +30,7 @@ import eu.semaine.jms.receiver.BytesReceiver;
 import eu.semaine.jms.receiver.FeatureReceiver;
 import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.sender.XMLSender;
+import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -42,14 +44,16 @@ public class QueuingAudioPlayer extends Component
 
 	public enum AnimationState { CREATED, READY, PLAYING, FINISHED, DEAD };
 	
+	public static final String COMMANDTYPE_INFO = "dataInfo";
+	public static final String COMMANDTYPE_PLAY = "playCommand";
 	
 	private BytesReceiver audioReceiver;
 	private Receiver dummyFapReceiver;
 	private Receiver dummyBapReceiver;
-	private FeatureReceiver commandReceiver;
+	private Receiver commandReceiver;
 	private XMLSender callbackSender;
 	private HashMap<String, Animation> availableAnimations;
-	private HashMap<String, AnimationState> oldAnimationStates;
+	private HashMap<String, AnimationState> animationStates;
 	private BlockingQueue<Animation> playerQueue;
 	Playloop player;
 	
@@ -66,12 +70,12 @@ public class QueuingAudioPlayer extends Component
 		receivers.add(dummyFapReceiver);
 		dummyBapReceiver = new Receiver("semaine.data.synthesis.lowlevel.video.BAP");
 		receivers.add(dummyBapReceiver);
-		commandReceiver = new FeatureReceiver("semaine.data.synthesis.lowlevel.command");
+		commandReceiver = new Receiver("semaine.data.synthesis.lowlevel.command");
 		receivers.add(commandReceiver);
 		callbackSender = new XMLSender("semaine.callback.output.player", "SemaineML", getName()); 
 		senders.add(callbackSender);
 		availableAnimations = new HashMap<String, Animation>();
-		oldAnimationStates = new HashMap<String, AnimationState>();
+		animationStates = new HashMap<String, AnimationState>();
 		playerQueue = new LinkedBlockingQueue<Animation>();
 		player = new Playloop(playerQueue);
 	}
@@ -85,7 +89,7 @@ public class QueuingAudioPlayer extends Component
 		synchronized (availableAnimations) {
 			anim = availableAnimations.get(contentID);
 			if (anim == null) {
-				AnimationState oldState = oldAnimationStates.get(contentID);
+				AnimationState oldState = animationStates.get(contentID);
 				if (oldState != null) {
 					log.warn("Received "+m.getDatatype()+" message from "+m.getSource()+" (topic "+m.getTopicName()
 							+") for content ID '"+contentID+"', but that ID is already in state '"+oldState.toString()+"' -- discarding message.");
@@ -93,6 +97,8 @@ public class QueuingAudioPlayer extends Component
 				} else {
 					anim = new Animation(contentID, contentCreationTime);
 					availableAnimations.put(contentID, anim);
+					sendCallbackMessage(SemaineML.V_CREATED, contentID);
+					animationStates.put(contentID, AnimationState.CREATED);
 				}
 			}
 		}
@@ -107,12 +113,14 @@ public class QueuingAudioPlayer extends Component
 		} else if (m.getTopicName().equals(dummyBapReceiver.getTopicName())) {
 			anim.setBAPData(m.getText());
 		} else if (m.getTopicName().equals(commandReceiver.getTopicName())) {
-			assert m instanceof SEMAINEFeatureMessage;
-			SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage) m;
-			fillAnimFromFeatureMessage(anim, fm);
+			fillAnimFromCommandMessage(anim, m);
 		}
-		if (anim.isReady()) {
+		// Have we just got ready?
+		if (animationStates.get(contentID) == AnimationState.CREATED && anim.isReady()) {
 			sendCallbackMessage(SemaineML.V_READY, contentID);
+			animationStates.put(contentID, AnimationState.READY);
+		}
+		if (anim.isReady() && anim.haveReceivedPlayCommand()) {
 			synchronized (availableAnimations) {
 				try {
 					playerQueue.put(anim);
@@ -120,37 +128,47 @@ public class QueuingAudioPlayer extends Component
 					log.error(e);
 				}
 				availableAnimations.remove(contentID);
-				oldAnimationStates.put(contentID, AnimationState.READY);
 			}
-		} else if (anim.hasFirstData()) {
-			sendCallbackMessage(SemaineML.V_CREATED, contentID);
 		}
 
 		
 	}
 	
 	
-	private boolean haveVerifiedFeatureNames = false;
-	
-	private void fillAnimFromFeatureMessage(Animation anim, SEMAINEFeatureMessage fm) throws JMSException, MessageFormatException {
-		if (!haveVerifiedFeatureNames) {
-			String[] featureNames = fm.getFeatureNames();
-			for (int i=0; i<featureNames.length; i++) {
-				String expectedFeatureName = PlayerFeatures.values()[i].toString();
-				if (!featureNames[i].equals(expectedFeatureName)) {
-					throw new MessageFormatException("Expected feature number "+i+" to be '"+expectedFeatureName+"', but found '"+featureNames[i]+"'");
-				}
+	private float[] getFloatValues(Map<String, String> features, String ... keys) throws MessageFormatException {
+		float[] vals = new float[keys.length];
+		for (int i=0; i<keys.length; i++) {
+			String key = keys[i];
+			String val = features.get(key);
+			if (val == null) {
+				throw new MessageFormatException("Feature '"+key+"' is missing");
 			}
-			haveVerifiedFeatureNames = true;
+			try {
+				vals[i] = Float.parseFloat(val);
+			} catch (NumberFormatException nfe) {
+				throw new MessageFormatException("Expected float value for feature '"+key+"', but got '"+val+"'");
+			}
 		}
-		float[] features = fm.getFeatureVector();
-		// TODO: ignoring STARTTIME for now -- always treat it as 0 = "when ready"
-		float priority = features[PlayerFeatures.PRIORITY.ordinal()];
-		int lifetime = Math.round(features[PlayerFeatures.LIFETIME.ordinal()]);
-		boolean needsAudio = features[PlayerFeatures.HASAUDIO.ordinal()] > 0.5;
-		boolean needsFAP = features[PlayerFeatures.HASFAP.ordinal()] > 0.5;
-		boolean needsBAP = features[PlayerFeatures.HASBAP.ordinal()] > 0.5;
-		anim.setCommand(priority, lifetime, needsAudio, needsFAP, needsBAP);
+		return vals;
+	}
+	
+	private void fillAnimFromCommandMessage(Animation anim, SEMAINEMessage message) throws JMSException, MessageFormatException {
+		Map<String, String> features = SEMAINEUtils.string2map(message.getText(), true);
+		if (message.getDatatype().equals(COMMANDTYPE_INFO)) {
+			// expect HASAUDIO, HASFAP and HASBAP features
+			float[] vals = getFloatValues(features, PlayerFeatures.HASAUDIO.toString(), PlayerFeatures.HASFAP.toString(), PlayerFeatures.HASBAP.toString());
+			boolean needsAudio = (vals[0] > 0.5);
+			boolean needsFAP   = (vals[1] > 0.5);
+			boolean needsBAP   = (vals[2] > 0.5);
+			anim.setDataInfo(needsAudio, needsFAP, needsBAP);
+		} else if (message.getDatatype().equals(COMMANDTYPE_PLAY)) {
+			// expect STARTAT, PRIORITY and LIFETIME
+			float[] vals = getFloatValues(features, PlayerFeatures.STARTAT.toString(), PlayerFeatures.PRIORITY.toString(), PlayerFeatures.LIFETIME.toString());
+			int startAt = Math.round(vals[0]);
+			float priority = vals[1];
+			int lifetime = Math.round(vals[2]);
+			anim.setPlayCommand(startAt, priority, lifetime);
+		}
 	}
 	
 	
@@ -184,18 +202,17 @@ public class QueuingAudioPlayer extends Component
 				ByteArrayInputStream bais = new ByteArrayInputStream(anim.getAudioData());
 				
 				try {
-					sendCallbackMessage(SemaineML.V_START, anim.getContentID());
-					oldAnimationStates.put(anim.getContentID(), AnimationState.PLAYING);
-					log.debug(anim.getContentID()+" started playing "+(meta.getTime()-anim.getContentCreationTime())+" ms after creation");
 					AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
 	            	AudioPlayer player = new AudioPlayer(ais);
 					player.start();
+					sendCallbackMessage(SemaineML.V_START, anim.getContentID());
+					animationStates.put(anim.getContentID(), AnimationState.PLAYING);
+					log.debug(anim.getContentID()+" started playing "+(meta.getTime()-anim.getContentCreationTime())+" ms after creation");
 					player.join();
 					sendCallbackMessage(SemaineML.V_END, anim.getContentID());
-					oldAnimationStates.put(anim.getContentID(), AnimationState.FINISHED);
-					//sleep(1000);
+					animationStates.put(anim.getContentID(), AnimationState.FINISHED);
 				} catch (Exception e) {
-					e.printStackTrace();
+					log.warn(e);
 				} 
 			}
 		}
@@ -220,24 +237,32 @@ public class QueuingAudioPlayer extends Component
 	private class Animation {
 		private String contentID;
 		private long contentCreationTime;
+		// Play command params:
+		private int startAt;
 		private float priority;
 		private int lifetime;
-		private byte[] audioData;
-		private Object fapData;
-		private Object bapData;
+		// dataInfo command params:
 		private boolean needsAudio;
 		private boolean needsFAP;
 		private boolean needsBAP;
-		private boolean haveReceivedCommand;
-		private boolean hasReportedFirstData = false;
+		// data
+		private byte[] audioData;
+		private Object fapData;
+		private Object bapData;
+
+		private boolean haveReceivedPlayCommand;
 		
 		public Animation(String contentID, long contentCreationTime) {
 			this.contentID = contentID;
 			this.contentCreationTime = contentCreationTime;
-			this.haveReceivedCommand = false;
+			this.haveReceivedPlayCommand = false;
 			this.audioData = null;
 			this.fapData = null;
 			this.bapData = null;
+			// Default is conservative: we need everything:
+			this.needsAudio = true;
+			this.needsFAP = true;
+			this.needsBAP = true;
 		}
 		
 		
@@ -253,21 +278,29 @@ public class QueuingAudioPlayer extends Component
 			this.bapData = newBAPData;
 		}
 
-		public void setCommand(float aPriority, int aLifetime, boolean hasAudio, boolean hasFAP, boolean hasBAP) {
-			this.priority = aPriority;
-			this.lifetime = aLifetime;
+		public void setDataInfo(boolean hasAudio, boolean hasFAP, boolean hasBAP) {
 			this.needsAudio = hasAudio;
 			this.needsFAP = hasFAP;
 			this.needsBAP = hasBAP;
-			this.haveReceivedCommand = true;
 		}
 		
+		public void setPlayCommand(int aStartAt, float aPriority, int aLifetime) {
+			this.startAt = aStartAt;
+			this.priority = aPriority;
+			this.lifetime = aLifetime;
+			this.haveReceivedPlayCommand = true;
+		}
+
 		public String getContentID() {
 			return contentID;
 		}
 		
 		public long getContentCreationTime() {
 			return contentCreationTime;
+		}
+		
+		public int getStartAt() {
+			return startAt;
 		}
 		
 		public float getPriority() {
@@ -291,29 +324,23 @@ public class QueuingAudioPlayer extends Component
 		}
 
 		/**
-		 * Returns true if the animation has any data of any kind. This is independent of the question whether
-		 * the animation has received a command.
+		 * Whether a play command has been received for this animation.
 		 * @return
 		 */
-		public boolean hasFirstData() {
-			if (!hasReportedFirstData && (audioData != null || fapData != null || bapData != null)) {
-				// not yet reported, but have data. Answer = yes
-				hasReportedFirstData = true;
-				return true;
-			}
-			return false;
+		public boolean haveReceivedPlayCommand() {
+			return haveReceivedPlayCommand;
 		}
+
 		
 		/**
-		 * The animation is ready when all parts that are needed are present, and the playback modalities are known.
-		 * Whether this is the case can only be known when a command has been received,
+		 * The animation is ready when all parts that are needed are present.
+		 * Whether this is the case is known when a dataInfo command has been received,
 		 * because the command includes the information about the types of data that must be present.
-		 * Therefore, when this method returns true, the Animation is ready to be played.
+		 * Therefore, when this method returns true, the Animation can be triggered at any time by a playCommand.
 		 * @return
 		 */
 		public boolean isReady() {
-			return haveReceivedCommand
-				&& (!needsAudio || audioData != null)
+			return (!needsAudio || audioData != null)
 				&& (!needsFAP || fapData != null)
 				&& (!needsBAP || bapData != null);
 		}

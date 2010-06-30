@@ -64,9 +64,8 @@ public class DummyVisualFML2BML extends Component
 				Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
 				doc.adoptNode(bml);
 				doc.replaceChild(bml, doc.getDocumentElement());
-				String contentID = xm.getContentID() != null ? xm.getContentID()+"_bml_1" : null;
 
-				bmlSender.sendXML(doc, meta.getTime(), xm.getEventType(), contentID, xm.getContentCreationTime());
+				bmlSender.sendXML(doc, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 			}
 			else{
 				Element backchannel = null;
@@ -78,8 +77,7 @@ public class DummyVisualFML2BML extends Component
 					Document doc = XMLTool.newDocument(BML.E_BML, BML.namespaceURI);
 					Element root = doc.getDocumentElement();
 					XMLTool.appendChildElement(root, BML.E_BACKCHANNEL, BML.namespaceURI);
-					String contentID = xm.getContentID() != null ? xm.getContentID()+"_bml_1" : null;
-					bmlSender.sendXML(doc, xm.getUsertime(), xm.getEventType(), contentID, xm.getContentCreationTime());
+					bmlSender.sendXML(doc, xm.getUsertime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 				}
 				else{
 					log.debug("Received fml document without bml or backchannel content -- ignoring.");

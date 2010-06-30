@@ -26,7 +26,7 @@ import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
-import eu.semaine.jms.sender.FeatureSender;
+import eu.semaine.jms.sender.Sender;
 import eu.semaine.util.XMLTool;
 
 import javax.jms.JMSException;
@@ -45,7 +45,7 @@ public class UtterancePreparationTestComponent extends Component {
     
     
 	private FMLSender fmlSender;
-	private FeatureSender commandSender;
+	private Sender commandSender;
 	private XMLReceiver callbackReceiver;
 	private UtterancePreparationTestGUI gui;
 	private String newText = null;
@@ -63,7 +63,7 @@ public class UtterancePreparationTestComponent extends Component {
         super("UtterancePreparation", true, false);
 		fmlSender = new FMLSender("semaine.data.action.selected.function", getName());
 		senders.add(fmlSender); // so it can be started etc
-		commandSender = new FeatureSender("semaine.data.synthesis.lowlevel.command", "command", getName());
+		commandSender = new Sender("semaine.data.synthesis.lowlevel.command", "playCommand", getName());
 		senders.add(commandSender);
         callbackReceiver = new XMLReceiver("semaine.callback.output.player");        
 		receivers.add(callbackReceiver);
@@ -73,7 +73,6 @@ public class UtterancePreparationTestComponent extends Component {
 		for (int i=0; i<playerFeatures.length; i++) {
 			playerFeatureNames[i] = playerFeatures[i].toString();
 		}
-		commandSender.setFeatureNames(playerFeatureNames);
 
 		gui = new UtterancePreparationTestGUI(this);
 		gui.setVisible(true);
@@ -104,15 +103,8 @@ public class UtterancePreparationTestComponent extends Component {
 		return doc;
     }
     
-    private float[] constructPlayCommand() {
-    	float[] fv = new float[PlayerFeatures.values().length];
-    	fv[PlayerFeatures.STARTAT.ordinal()] = 0;
-    	fv[PlayerFeatures.PRIORITY.ordinal()] = 0.5f;
-    	fv[PlayerFeatures.LIFETIME.ordinal()] = 5000;
-    	fv[PlayerFeatures.HASAUDIO.ordinal()] = 1;
-    	fv[PlayerFeatures.HASFAP.ordinal()] = 1;
-    	fv[PlayerFeatures.HASBAP.ordinal()] = 0;
-    	return fv;
+    private String constructPlayCommand() {
+    	return "STARTAT 0\nPRIORITY 0.5\nLIFETIME 5000\n";
     }
     
 
@@ -122,8 +114,8 @@ public class UtterancePreparationTestComponent extends Component {
 	}
 	
 	private void trigger(String contentID, long time) throws JMSException {
-		float[] featureVector = constructPlayCommand();
-		commandSender.sendFeatureVector(featureVector, time, Event.single, newID+"_bml_1", time);
+		String cmd = constructPlayCommand();
+		commandSender.sendTextMessage(cmd, time, Event.single, newID, time);
 	}
 	
 	
@@ -180,7 +172,7 @@ public class UtterancePreparationTestComponent extends Component {
         		}
         		long time = Long.parseLong(event.getAttribute(SemaineML.A_TIME));
         		String type = event.getAttribute(SemaineML.A_TYPE);
-        		if (type.equals(SemaineML.V_CREATED)) {
+        		if (type.equals(SemaineML.V_READY)) {
         			readyAnimations.add(id);
         		} else {
         			readyAnimations.remove(id);

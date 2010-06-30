@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class SEMAINEUtils 
@@ -61,4 +63,43 @@ public class SEMAINEUtils
             return locale.getLanguage()+"-"+country;
         return locale.getLanguage();
     }
+    
+    /**
+     * For a given string containing lines of key-value pairs, construct a map
+     * of key-value pairs.
+     * This assumes that the String contains whitespace-separated key-value pairs as follows:
+     * <code>
+     *   key1 value1
+     *   key2 value2
+     * </code>
+     * Leading or trailing whitespace is ignored.
+     * If a line contains only a single field, it is treated as a key that maps to the empty string.
+     * Empty lines are ignored. 
+     * @param s
+     * @param keysFirst if true, the first item in a line is the key, and the rest is the value; if false, the first item in the line is the value and the rest is the key.
+     * @return
+     */
+    public static Map<String, String> string2map(String s, boolean keysFirst) {
+    	String[] lines = s.split("\n");
+    	Map<String, String> m = new HashMap<String, String>();
+    	for (String l : lines) {
+    		l = l.trim();
+    		if (l.equals("")) {
+    			continue;
+    		}
+    		String[] parts = l.split("\\s+", 2);
+    		if (parts.length == 1) { // only key
+    			m.put(parts[0], "");
+    		} else {
+    			assert parts.length == 2;
+    			if (keysFirst) {
+    				m.put(parts[0], parts[1]);
+    			} else {
+    				m.put(parts[1], parts[0]);
+    			}
+    		}
+    	}
+    	return m;
+    }
+    
 }
