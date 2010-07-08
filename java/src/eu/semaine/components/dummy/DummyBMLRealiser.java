@@ -31,10 +31,12 @@ public class DummyBMLRealiser extends Component
 	private BMLReceiver bmlReceiver;
 	private Sender fapSender;
 	private Sender dataInfoSender;
-
-	private String dummyFAPData1;
-	private String dummyFAPData2;
-  private boolean nextIsOne = true;
+	private Sender commandSender;
+	
+	private String dummyFAPData;
+	
+	private boolean doSendPlayCommand;
+	
   
 	/**
 	 * @param componentName
@@ -42,22 +44,37 @@ public class DummyBMLRealiser extends Component
 	 */
 	public DummyBMLRealiser() throws JMSException 
 	{
-		super("DummyBMLRealiser");
-		bmlReceiver = new BMLReceiver("semaine.data.synthesis.plan");
+		this("DummyBMLRealiser",
+				"semaine.data.synthesis.plan",
+				"semaine.data.synthesis.lowlevel.video.FAP",
+				"semaine.data.synthesis.lowlevel.command",
+				true);
+	}
+	
+	protected DummyBMLRealiser(String compName,
+			String bmlReceiverTopic,
+			String fapSenderTopic,
+			String dataInfoSenderTopic,
+			boolean doSendPlayCommand) throws JMSException {
+		super(compName);
+		bmlReceiver = new BMLReceiver(bmlReceiverTopic);
 		receivers.add(bmlReceiver);
-		fapSender = new Sender("semaine.data.synthesis.lowlevel.video.FAP", "FAP", getName());
+		fapSender = new Sender(fapSenderTopic, "FAP", getName());
 		senders.add(fapSender);
-		dataInfoSender = new Sender("semaine.data.synthesis.lowlevel.command", "dataInfo", getName());
+		dataInfoSender = new Sender(dataInfoSenderTopic, "dataInfo", getName());
 		senders.add(dataInfoSender);
+		commandSender = new Sender("semaine.data.synthesis.lowlevel.command", "playCommand", getName());
+		senders.add(commandSender);
+		
+		this.doSendPlayCommand = doSendPlayCommand;
 		
 		try {
-			dummyFAPData1 = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example2.fap"), "ASCII");
+			dummyFAPData = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example2.fap"), "ASCII");
 			//dummyFAPData2 = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example3.fap"), "ASCII");
 		} catch (IOException ioe) {
 			throw new SystemConfigurationException("Cannot get FAP example", ioe);
 		}
 	}
-	
 
 	@Override
 	public void react(SEMAINEMessage m) throws JMSException
@@ -69,43 +86,16 @@ public class DummyBMLRealiser extends Component
 		boolean isBML = "BML".equals(xm.getDatatype());
 		if (!isBML)
 			throw new MessageFormatException("Expected BML message, got "+xm.getDatatype());
-	    String dummyFAPData;
-	    if (true || nextIsOne) {
-	        dummyFAPData = dummyFAPData1;
-	        nextIsOne = false;
-	    } else {
-	        dummyFAPData = dummyFAPData2;
-	        nextIsOne = true;
-	    }
 	    
-	    // Replace the time codes with current ones.
-	    StringBuilder faps = new StringBuilder();
-	    try {
-	    	int n = 0; // line number
-	    	long time = (meta.getTime() + 2000); // intended start time: two seconds from now
-	    	time -= time % 40; // make sure time is a multiple of 40, Greta needs that
-			String line;
-			BufferedReader sr = new BufferedReader(new StringReader(dummyFAPData));
-			while ((line = sr.readLine()) != null) {
-				if (n % 2 == 0) {
-					faps.append(time);
-					// discard number before the first space
-					int iSpace = line.indexOf(' ');
-					if (iSpace >= 0) faps.append(line.substring(iSpace));
-					faps.append("\n");
-				} else {
-					faps.append(line).append("\n");
-				}
-				n++;
-				time += 40;
-			}
-		} catch (IOException e) {
-			// shouldn't happen
-		}
-	    
-		fapSender.sendTextMessage(faps.toString(), meta.getTime(), m.getEventType(), m.getContentID(), m.getContentCreationTime());
+		fapSender.sendTextMessage(dummyFAPData, meta.getTime(), m.getEventType(), m.getContentID(), m.getContentCreationTime());
 		
-		String dataInfoString = "HASAUDIO 1\nHASFAP 1\nHASBAP 0";
+		String dataInfoString = "HASAUDIO 1\nHASFAP 1\nHASBAP 0\n";
 		dataInfoSender.sendTextMessage(dataInfoString, meta.getTime(), Event.single, m.getContentID(), m.getContentCreationTime());
+
+		if (doSendPlayCommand) {
+			String commandString = "STARTAT 0\nPRIORITY 0.5\nLIFETIME 5000\n";
+			commandSender.sendTextMessage(commandString, meta.getTime(), Event.single, m.getContentID(), m.getContentCreationTime());
+		}
+
 	}
 }

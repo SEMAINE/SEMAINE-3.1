@@ -79,17 +79,34 @@ public class SpeechBMLRealiser extends Component
 	 */
 	public SpeechBMLRealiser() throws JMSException 
 	{
-		super("SpeechBMLRealiser");
+		this("SpeechBMLRealiser",
+				"semaine.data.synthesis.plan",
+				"semaine.data.synthesis.plan.speechtimings",
+				"semaine.data.synthesis.lowlevel.audio");
+	}
+	
+	/**
+	 * Protected constructor which must be called by all constructors.
+	 * @param compName
+	 * @param bmlPlanReceiverTopic
+	 * @param bmlSenderTopic
+	 * @param audioSenderTopic
+	 * @throws JMSException
+	 */
+	protected SpeechBMLRealiser(String compName,
+			String bmlPlanReceiverTopic,
+			String bmlSenderTopic,
+			String audioSenderTopic) throws JMSException {
+		super(compName);
 		
-		bmlSender = new BMLSender("semaine.data.synthesis.plan.speechtimings", getName());
-		audioSender = new BytesSender("semaine.data.synthesis.lowlevel.audio","AUDIO",getName());
-		senders.add(bmlSender);
-		senders.add(audioSender); // so it can be started etc
-		
-		bmlPlanReceiver = new BMLReceiver("semaine.data.synthesis.plan");
+		bmlPlanReceiver = new BMLReceiver(bmlPlanReceiverTopic);
 		receivers.add(bmlPlanReceiver);
 		receivers.add(new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState));
 		
+		bmlSender = new BMLSender(bmlSenderTopic, getName());
+		audioSender = new BytesSender(audioSenderTopic, "AUDIO", getName());
+		senders.add(bmlSender);
+		senders.add(audioSender);
 	}
 	
 	protected void customStartIO() throws Exception
@@ -162,7 +179,7 @@ public class SpeechBMLRealiser extends Component
             } 
 		}
 		
-		if(m.getTopicName().equals("semaine.data.synthesis.plan")){
+		if(m.getTopicName().equals(bmlPlanReceiver.getTopicName())){
 			speechBMLRealiser(m);
 		}
 	}

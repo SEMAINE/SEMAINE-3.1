@@ -39,14 +39,22 @@ public class DummyVisualFML2BML extends Component
 	 */
 	public DummyVisualFML2BML() throws JMSException 
 	{
-		super("DummyVisualFML2BML");
-		fmlReceiver = new FMLReceiver("semaine.data.action.selected.speechpreprocessed");
-		receivers.add(fmlReceiver); // to set up properly
-		
-		bmlSender = new BMLSender("semaine.data.synthesis.plan", getName());
-		senders.add(bmlSender); // so it can be started etc
+		this("DummyVisualFML2BML",
+			"semaine.data.action.selected.speechpreprocessed",
+			"semaine.data.synthesis.plan");
 	}
 	
+	protected DummyVisualFML2BML(String compName,
+			String fmlReceiverTopic,
+			String bmlSenderTopic) throws JMSException {
+		super(compName);
+		
+		fmlReceiver = new FMLReceiver(fmlReceiverTopic);
+		receivers.add(fmlReceiver);
+		
+		bmlSender = new BMLSender(bmlSenderTopic, getName());
+		senders.add(bmlSender);
+	}
 
 	@Override
 	public void react(SEMAINEMessage m) throws JMSException

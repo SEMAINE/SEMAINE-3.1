@@ -45,6 +45,7 @@ public class UtterancePreparationTestComponent extends Component {
     
     
 	private FMLSender fmlSender;
+	private FMLSender queuingFMLSender;
 	private Sender commandSender;
 	private XMLReceiver callbackReceiver;
 	private UtterancePreparationTestGUI gui;
@@ -63,6 +64,8 @@ public class UtterancePreparationTestComponent extends Component {
         super("UtterancePreparation", true, false);
 		fmlSender = new FMLSender("semaine.data.action.selected.function", getName());
 		senders.add(fmlSender); // so it can be started etc
+		queuingFMLSender = new FMLSender("semaine.data.action.preparation.function", getName());
+		senders.add(queuingFMLSender);
 		commandSender = new Sender("semaine.data.synthesis.lowlevel.command", "playCommand", getName());
 		senders.add(commandSender);
         callbackReceiver = new XMLReceiver("semaine.callback.output.player");        
@@ -110,9 +113,14 @@ public class UtterancePreparationTestComponent extends Component {
 
 	private void prepare(String contentID, String text, long time) throws JMSException {
 		Document doc = constructTTSDocument(text, contentID);
+		queuingFMLSender.sendXML(doc, time, contentID, time);
+	}
+
+	private void playDirect(String contentID, String text, long time) throws JMSException {
+		Document doc = constructTTSDocument(text, contentID);
 		fmlSender.sendXML(doc, time, contentID, time);
 	}
-	
+
 	private void trigger(String contentID, long time) throws JMSException {
 		String cmd = constructPlayCommand();
 		commandSender.sendTextMessage(cmd, time, Event.single, newID, time);
@@ -134,14 +142,14 @@ public class UtterancePreparationTestComponent extends Component {
                 	trigger(newID, time);
                     break;
                 case PlayDirect:
-                	prepare(newID, newText, time);
-                	trigger(newID, time);
+                	playDirect(newID, newText, time);
                     break;
                 case Play:
-                	if (!isReady(newID)) {
-                		prepare(newID, newText, time);
+                	if (isReady(newID)) {
+                		trigger(newID, time);
+                	} else {
+                		playDirect(newID, newText, time);
                 	}
-                	trigger(newID, time);
                     break;
                 }
                 gui.log(meta.getTime()+" "+newAction+" "+newID);
@@ -177,14 +185,19 @@ public class UtterancePreparationTestComponent extends Component {
         		} else {
         			readyAnimations.remove(id);
         		}
+        		StringBuilder msg = new StringBuilder(time+" "+id+" ");
         		if (type.equals(SemaineML.V_START)) {
-        			StringBuilder msg = new StringBuilder(time+" "+id+" started playing");
-        			if (triggeredActions.containsKey(id)) {
-        				Pair<Action, Long> p = triggeredActions.remove(id);
-        				msg.append(" "+(time - p.getSecond())+" ms after "+p.getFirst());
-        			}
-        			gui.log(msg.toString());
+        			msg.append("started playing");
+        		} else if (type.equals(SemaineML.V_READY)) {
+        			msg.append("ready");
+        		} else {
+        			msg.append(type);
         		}
+    			if (triggeredActions.containsKey(id)) {
+    				Pair<Action, Long> p = triggeredActions.get(id);
+    				msg.append(" "+(time - p.getSecond())+" ms after "+p.getFirst());
+    			}
+    			gui.log(msg.toString());
         		gui.verifyButtonsEnabled();
         	}
     	}

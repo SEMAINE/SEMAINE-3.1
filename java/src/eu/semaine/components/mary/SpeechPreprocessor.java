@@ -70,26 +70,37 @@ public class SpeechPreprocessor extends Component
 	private Templates mergingStylesheet;
 	private String currentCharacter = CharacterConfigInfo.getDefaultCharacter().getName();
 	
-    
 	/**
 	 * @param componentName
 	 * @throws JMSException
 	 */
 	public SpeechPreprocessor() throws JMSException 
 	{
-		super("SpeechPreprocessor");
+		this("SpeechPreprocessor", 
+				"semaine.data.action.selected.function",
+				"semaine.data.action.selected.behaviour",
+				"semaine.data.action.selected.speechpreprocessed");
+	}
+	
+	/**
+	 * Protected constructor which must be called by every constructor
+	 * @param compName
+	 * @throws JMSException
+	 */
+	protected SpeechPreprocessor(String compName,
+			String fmlReceiverTopic,
+			String bmlReceiverTopic,
+			String fmlbmlSenderTopic) throws JMSException {
+		super(compName);
 		
-		fmlReceiver = new FMLReceiver("semaine.data.action.selected.function");
-		bmlReceiver = new BMLReceiver("semaine.data.action.selected.behaviour");
-		receivers.add(fmlReceiver); // to set up properly
+		this.fmlReceiver = new FMLReceiver(fmlReceiverTopic);
+		this.bmlReceiver = new BMLReceiver(bmlReceiverTopic);
+		receivers.add(fmlReceiver);
 		receivers.add(bmlReceiver);
 		receivers.add(new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState));
-		
-		fmlbmlSender = new FMLSender("semaine.data.action.selected.speechpreprocessed", getName());
-		senders.add(fmlbmlSender); // so it can be started etc
-		
-		
 
+		this.fmlbmlSender = new FMLSender(fmlbmlSenderTopic, getName());
+		senders.add(fmlbmlSender);
 	}
 	
 	protected void customStartIO() throws Exception
@@ -146,11 +157,11 @@ public class SpeechPreprocessor extends Component
             } 
 		}
 		
-		if (m.getTopicName().equals("semaine.data.action.selected.function")) {
+		if (m.getTopicName().equals(fmlReceiver.getTopicName())) {
 			speechPreProcessor(m);
 		}
 		
-		if (m.getTopicName().equals("semaine.data.action.selected.behaviour")) {
+		if (m.getTopicName().equals(bmlReceiver.getTopicName())) {
 			//SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			//fmlbmlSender.sendXML(xm.getDocument(), xm.getUsertime(), xm.getEventType());
 		}
