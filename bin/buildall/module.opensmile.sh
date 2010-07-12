@@ -2,7 +2,7 @@
 #################### Package Configuration    #########################
 
  ## set this to "true" to enable building of opensmile from the latest svn revision
-USE_SVN="false"
+USE_SVN="true"
  ####################
 
 OPENSMILEMODELS="models-21-12-2009.zip"
@@ -90,7 +90,7 @@ function func_build_opensmile {
           aux_download_nc "$OPENSMILE_TARBALL_URL" "$OPENSMILE_TARBALL"
         fi
         echo "unpacking openSMILE tarball..."
-        tar --overwrite -C $P/../ -zxvf $DOWNLOAD_PREFIX/$OPENSMILE_TARBALL 
+        tar -C $P/../ -zxvf $DOWNLOAD_PREFIX/$OPENSMILE_TARBALL 
       fi
     fi
 

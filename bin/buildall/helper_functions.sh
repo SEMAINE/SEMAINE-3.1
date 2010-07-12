@@ -209,7 +209,7 @@ function unpack_missing {
 
       #if clean option is given, untar always
       if test "x${builds_clean[$myI]}" = "xclean" ; then
-        tar --overwrite -C $BUILD_PREFIX $UNZ -xvf $DOWNLOAD_PREFIX/$dnBASE
+        tar -C $BUILD_PREFIX $UNZ -xvf $DOWNLOAD_PREFIX/$dnBASE
         if test "x$?" != "x0" ; then
           builderror "Unpack failed!"
         fi

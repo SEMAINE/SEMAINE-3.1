@@ -68,7 +68,7 @@ function func_build_julius {
     rm libsent/include/sent/config.h4
     mv libsent/include/sent/config.h5 libsent/include/sent/config.h
 
-    cat libsent/Makefile | sed 's/ src\/adin\/adin_.\+/ /g' > libsent/Makefile.1
+    cat libsent/Makefile | sed 's/ src\/adin\/adin_.*/ /g' > libsent/Makefile.1
     mv libsent/Makefile libsent/Makefile.bak
     mv libsent/Makefile.1 libsent/Makefile
 
