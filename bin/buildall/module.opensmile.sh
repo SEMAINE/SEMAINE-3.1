@@ -2,7 +2,7 @@
 #################### Package Configuration    #########################
 
  ## set this to "true" to enable building of opensmile from the latest svn revision
-USE_SVN="false"
+USE_SVN="true"
  ####################
 
 OPENSMILEMODELS="models-21-12-2009.zip"
