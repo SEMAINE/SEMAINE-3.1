@@ -27,6 +27,9 @@ public class EmotionExtractor extends Component {
 	@Override protected void react(SEMAINEMessage m) throws JMSException {
 		SEMAINEEmmaMessage emmaMessage = (SEMAINEEmmaMessage) m;
 		Element interpretation = emmaMessage.getTopLevelInterpretation();
+		if (interpretation == null) {
+			return;
+		}
 		List<Element> emotionElements = emmaMessage.getEmotionElements(interpretation);
 		if (emotionElements.size() > 0) {
 			Element emotion = emotionElements.get(0);

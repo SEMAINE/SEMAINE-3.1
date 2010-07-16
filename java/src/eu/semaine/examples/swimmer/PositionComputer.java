@@ -40,7 +40,7 @@ public class PositionComputer extends Component {
 				if (arousal != null) {
 					float arousalValue = Float.parseFloat(arousal.getAttribute(EmotionML.A_VALUE));
 					// Arousal influences the swimmer's position:
-					position += 3*arousalValue;
+					position += 10*arousalValue;
 					System.out.println("At time " + meta.getTime()+", arousal "+arousalValue+" -- new position "+position);
 				}
 			}

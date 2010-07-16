@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.BML;
+import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.sender.BMLSender;
@@ -50,8 +51,10 @@ public class Commentator extends Component {
 	private void say(String text) throws JMSException {
 		Document bml = XMLTool.newDocument(BML.ROOT_TAGNAME, BML.namespaceURI);
 		Element speech = XMLTool.appendChildElement(bml.getDocumentElement(), BML.E_SPEECH);
-		speech.setAttribute("language", "en-US");
+		speech.setAttribute("language", "en-GB");
 		speech.setTextContent(text);
+		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
+		mark.setAttribute(SSML.A_NAME, "m1");
 		bmlSender.sendXML(bml, meta.getTime());
 	}
 }

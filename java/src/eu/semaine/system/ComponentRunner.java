@@ -58,6 +58,11 @@ public class ComponentRunner
 			String[] args = null;
 			String className = null;
 			if (d.contains("(")) { // arguments
+				if (!d.contains(")")) {
+					throw new SystemConfigurationException("Error in config file '"+configFile+"', property 'semaine.components':\n"
+							+"The following component entry contains an open bracket but no closing bracket:\n"
+							+"'"+d+"'");
+				}
 				className = d.substring(0, d.indexOf('(')).trim();
 				args = d.substring(d.indexOf('(')+1, d.indexOf(')')).split("\\s*,\\s*");
 				for (int i=0; i<args.length; i++) {
@@ -70,22 +75,32 @@ public class ComponentRunner
 				className = d;
 			}
 			log.info("Now initiating class '"+className+"'");
-			Class<? extends Component> theClass = Class.forName(className).asSubclass(Component.class);
-			Component component = null;
-			// Now invoke Constructor with args.length String arguments
-			if (args != null) {
-				Class<String>[] constructorArgTypes = new Class[args.length];
-				Object[] constructorArgs = new Object[args.length];
-				for (int i=0; i<args.length; i++) {
-					constructorArgTypes[i] = String.class;
-					constructorArgs[i] = args[i];
+			try {
+				Class<? extends Component> theClass = Class.forName(className).asSubclass(Component.class);
+				Component component = null;
+				// Now invoke Constructor with args.length String arguments
+				if (args != null) {
+					Class<String>[] constructorArgTypes = new Class[args.length];
+					Object[] constructorArgs = new Object[args.length];
+					for (int i=0; i<args.length; i++) {
+						constructorArgTypes[i] = String.class;
+						constructorArgs[i] = args[i];
+					}
+					Constructor<? extends Component> constructor = (Constructor<? extends Component>) theClass.getConstructor(constructorArgTypes);
+					component = constructor.newInstance(constructorArgs);
+				} else {
+					component = theClass.newInstance();
 				}
-				Constructor<? extends Component> constructor = (Constructor<? extends Component>) theClass.getConstructor(constructorArgTypes);
-				component = constructor.newInstance(constructorArgs);
-			} else {
-				component = theClass.newInstance();
+				components.add(component);
+			} catch (ClassCastException e) {
+				throw new SystemConfigurationException("Error in config file '"+configFile+"', property 'semaine.components':\n"
+						+"The following entry represents a class which is not a subclass of eu.semaine.components.Component:\n"
+						+"'"+d+"'", e);
+			} catch (Exception e) {
+				throw new SystemConfigurationException("Error in config file '"+configFile+"', property 'semaine.components':\n"
+						+"The following entry cannot be instantiated:\n"
+						+"'"+d+"'", e);
 			}
-			components.add(component);
 		}
 		addShutdownHook();
 	}
@@ -151,8 +166,14 @@ public class ComponentRunner
 		BasicConfigurator.configure(new ConsoleAppender(layout));
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 		Logger.getLogger("org.apache").setLevel(Level.INFO);
-		ComponentRunner runner = new ComponentRunner(args[0]);
-		runner.go();
+		try {
+			ComponentRunner runner = new ComponentRunner(args[0]);
+			runner.go();
+		} catch (Exception e) {
+			System.err.println("Cannot start: ");
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 }
