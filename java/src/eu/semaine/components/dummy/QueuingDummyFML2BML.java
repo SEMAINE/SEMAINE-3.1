@@ -15,7 +15,7 @@ public class QueuingDummyFML2BML extends DummyVisualFML2BML {
 	{
 		super("QueuingDummyFML2BML",
 			"semaine.data.action.prepare.speechpreprocessed",
-			"semaine.data.synthesis.prepare.plan");
+			"semaine.data.synthesis.prepare");
 	}
 
 }

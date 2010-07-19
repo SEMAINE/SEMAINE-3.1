@@ -102,7 +102,7 @@ public class UtterancePreparationTestComponent extends Component {
 		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
 		speech.setTextContent(text);
 		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
-		mark.setAttribute(SSML.A_NAME, "m1");		
+		mark.setAttribute(SSML.A_NAME, "s1:m1");		
 		return doc;
     }
     
