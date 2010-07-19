@@ -68,7 +68,7 @@ public class UtterancePreparationTestComponent extends Component {
 		senders.add(queuingFMLSender);
 		commandSender = new Sender("semaine.data.synthesis.lowlevel.command", "playCommand", getName());
 		senders.add(commandSender);
-        callbackReceiver = new XMLReceiver("semaine.callback.output.player");        
+        callbackReceiver = new XMLReceiver("semaine.callback.output.Animation");        
 		receivers.add(callbackReceiver);
 
 		PlayerFeatures[] playerFeatures = PlayerFeatures.values();

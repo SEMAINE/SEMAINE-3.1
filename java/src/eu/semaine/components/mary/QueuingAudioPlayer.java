@@ -72,7 +72,7 @@ public class QueuingAudioPlayer extends Component
 		receivers.add(dummyBapReceiver);
 		commandReceiver = new Receiver("semaine.data.synthesis.lowlevel.command");
 		receivers.add(commandReceiver);
-		callbackSender = new XMLSender("semaine.callback.output.player", "SemaineML", getName()); 
+		callbackSender = new XMLSender("semaine.callback.output.Animation", "SemaineML", getName()); 
 		senders.add(callbackSender);
 		availableAnimations = new HashMap<String, Animation>();
 		animationStates = new HashMap<String, AnimationState>();
