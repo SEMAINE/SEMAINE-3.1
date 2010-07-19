@@ -64,7 +64,7 @@ public class UtterancePreparationTestComponent extends Component {
         super("UtterancePreparation", true, false);
 		fmlSender = new FMLSender("semaine.data.action.selected.function", getName());
 		senders.add(fmlSender); // so it can be started etc
-		queuingFMLSender = new FMLSender("semaine.data.action.preparation.function", getName());
+		queuingFMLSender = new FMLSender("semaine.data.action.prepare.function", getName());
 		senders.add(queuingFMLSender);
 		commandSender = new Sender("semaine.data.synthesis.lowlevel.command", "playCommand", getName());
 		senders.add(commandSender);

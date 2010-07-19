@@ -133,13 +133,13 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			// Check at every loop that the total system is ready
 			synchronized (meta) {
 				while (!meta.isSystemReady()) {
-					log.info("waiting for system to become ready");
+					log.info(meta.getTime(), "waiting for system to become ready");
 					try {
 						meta.wait();
 					} catch (InterruptedException ie) {
 					}
 					if (meta.isSystemReady()) {
-						log.info("system ready - let's go");
+						log.info(meta.getTime(), "system ready - let's go");
 					}
 				}
 			}
@@ -150,12 +150,12 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 				long timeSpentInAct = System.currentTimeMillis() - before;
 				meta.statistics().actTime(timeSpentInAct);
 			} catch (Throwable e) {
-				log.error("error when trying to act", e);
+				log.error(meta.getTime(), "error when trying to act", e);
 				try {
 					state = State.failure;
 					meta.reportState(state, "error when trying to act", e);
 				} catch (JMSException me) {
-					log.error("cannot report failure state", me);
+					log.error(meta.getTime(), "cannot report failure state", me);
 				}
 				requestExit();
 				return;
@@ -186,14 +186,14 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 				long timeSpentInReact = System.currentTimeMillis() - before;
 				meta.statistics().reactTime(timeSpentInReact);
 			} catch (Throwable e) {
-				log.error("error when trying to react", e);
-				log.debug("(message was: ", MessageLogComponent.message2logString(message), ")");
+				log.error(meta.getTime(), "error when trying to react", e);
+				log.debug(meta.getTime(), "(message was: ", MessageLogComponent.message2logString(message), ")");
 				try {
 					state = State.failure;
 					meta.reportState(state, "error when trying to react", e,
 							" (message was: ", MessageLogComponent.message2logString(message), ")");
 				} catch (JMSException me) {
-					log.error("cannot report failure state", me);
+					log.error(meta.getTime(), "cannot report failure state", me);
 				}
 				requestExit();
 				return;

@@ -91,7 +91,7 @@ public class QueuingAudioPlayer extends Component
 			if (anim == null) {
 				AnimationState oldState = animationStates.get(contentID);
 				if (oldState != null) {
-					log.warn("Received "+m.getDatatype()+" message from "+m.getSource()+" (topic "+m.getTopicName()
+					log.warn(meta.getTime(), "Received "+m.getDatatype()+" message from "+m.getSource()+" (topic "+m.getTopicName()
 							+") for content ID '"+contentID+"', but that ID is already in state '"+oldState.toString()+"' -- discarding message.");
 					return;
 				} else {
@@ -124,7 +124,7 @@ public class QueuingAudioPlayer extends Component
 				try {
 					playerQueue.put(anim);
 				} catch (InterruptedException e) {
-					log.error(e);
+					log.error(meta.getTime(), e);
 				}
 				availableAnimations.remove(contentID);
 			}
@@ -198,6 +198,10 @@ public class QueuingAudioPlayer extends Component
 					// if we have no input, we'll keep on waiting
 					continue;
 				}
+				if (!anim.needsAudio) {
+					continue;
+				}
+				log.debug(meta.getTime(), "Now playing: "+anim.contentID);
 				ByteArrayInputStream bais = new ByteArrayInputStream(anim.getAudioData());
 				
 				try {
@@ -206,7 +210,7 @@ public class QueuingAudioPlayer extends Component
 					player.start();
 					sendCallbackMessage(SemaineML.V_START, anim.getContentID());
 					animationStates.put(anim.getContentID(), AnimationState.PLAYING);
-					log.debug(anim.getContentID()+" started playing "+(meta.getTime()-anim.getContentCreationTime())+" ms after creation");
+					log.debug(meta.getTime(), anim.getContentID()+" started playing "+(meta.getTime()-anim.getContentCreationTime())+" ms after creation");
 					player.join();
 					sendCallbackMessage(SemaineML.V_END, anim.getContentID());
 					animationStates.put(anim.getContentID(), AnimationState.FINISHED);
@@ -229,7 +233,7 @@ public class QueuingAudioPlayer extends Component
 		callback.setAttribute(SemaineML.A_TIME,  String.valueOf(meta.getTime()));
 		
 		callbackSender.sendXML(doc, meta.getTime());
-		log.debug("Sending callback: ID '"+contentID+"' "+type);
+		log.debug(meta.getTime(), "Sending callback: ID '"+contentID+"' "+type);
 	}
 
 	

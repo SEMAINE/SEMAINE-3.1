@@ -14,8 +14,8 @@ public class QueuingDummyFML2BML extends DummyVisualFML2BML {
 	public QueuingDummyFML2BML() throws JMSException 
 	{
 		super("QueuingDummyFML2BML",
-			"semaine.data.action.preparation.speechpreprocessed",
-			"semaine.data.synthesis.preparation.plan");
+			"semaine.data.action.prepare.speechpreprocessed",
+			"semaine.data.synthesis.prepare.plan");
 	}
 
 }

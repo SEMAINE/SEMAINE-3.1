@@ -4,9 +4,6 @@
  */
 package eu.semaine.jms;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -28,7 +25,7 @@ import eu.semaine.jms.receiver.Receiver;
  */
 public class JMSLogReader extends Receiver 
 {
-	DateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	//DateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	
 	/**
 	 * @param topicName
@@ -58,7 +55,7 @@ public class JMSLogReader extends Receiver
 			String component = parts[parts.length-2];
 			Log log = LogFactory.getLog("semaine.log."+component);
 			String text = ((TextMessage)m).getText();
-			text = time.format(new Date(m.getJMSTimestamp())) + " " + text;
+			//text = time.format(new Date(m.getJMSTimestamp())) + " " + text;
 			if (level.equals("info")) log.info(text);
 			else if (level.equals("warn")) log.warn(text);
 			else if (level.equals("error")) log.error(text);

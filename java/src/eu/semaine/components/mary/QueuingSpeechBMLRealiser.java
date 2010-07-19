@@ -15,8 +15,8 @@ public class QueuingSpeechBMLRealiser extends SpeechBMLRealiser {
 	public QueuingSpeechBMLRealiser() throws JMSException 
 	{
 		super("QueuingSpeechBMLRealiser",
-				"semaine.data.synthesis.preparation.plan",
-				"semaine.data.synthesis.preparation.plan.speechtimings",
+				"semaine.data.synthesis.prepare.plan",
+				"semaine.data.synthesis.prepare.speechtimings",
 				"semaine.data.synthesis.lowlevel.audio");
 	}
 }

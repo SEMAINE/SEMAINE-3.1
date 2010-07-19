@@ -6,6 +6,7 @@ package eu.semaine.jms;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,8 @@ import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import eu.semaine.components.MessageLogComponent;
 
 /**
  * A relatively lightweight class logging messages to a JMS topic if possible,
@@ -90,27 +93,51 @@ public class JMSLogger
 	
 	public void error(Object... objects)
 	{
-		log(error, Level.error, objects);
+		log(error, Level.error, -1, objects);
 	}
 
 	public void warn(Object... objects)
 	{
-		log(warn, Level.warn, objects);
+		log(warn, Level.warn, -1, objects);
 	}
 
 	public void info(Object... objects)
 	{
-		log(info, Level.info, objects);
+		log(info, Level.info, -1, objects);
 	}
 
 	public void debug(Object... objects)
 	{
-		log(debug, Level.debug, objects);
+		log(debug, Level.debug, -1, objects);
 	}
 
-	private void log(MessageProducer target, Level level, Object... objects)
+	public void error(long usertime, Object... objects)
 	{
-		String logMessageText = toLogMessageText(objects);
+		log(error, Level.error, usertime, objects);
+	}
+
+	public void warn(long usertime, Object... objects)
+	{
+		log(warn, Level.warn, usertime, objects);
+	}
+
+	public void info(long usertime, Object... objects)
+	{
+		log(info, Level.info, usertime, objects);
+	}
+
+	public void debug(long usertime, Object... objects)
+	{
+		log(debug, Level.debug, usertime, objects);
+	}
+	
+	
+	
+
+
+	private void log(MessageProducer target, Level level, long usertime, Object... objects)
+	{
+		String logMessageText = toLogMessageText(usertime, objects);
 		try {
 			TextMessage message = session.createTextMessage(logMessageText);
 			target.send(message);
@@ -133,7 +160,15 @@ public class JMSLogger
 	}
 
 	public static String toLogMessageText(Object... objects) {
+		return toLogMessageText(-1, objects);
+	}
+	
+	public static String toLogMessageText(long usertime, Object... objects) {
 		StringBuilder builder = new StringBuilder();
+		if (usertime >= 0) {
+			builder.append("[").append(MessageLogComponent.TIME_FORMAT.format(new Date(usertime))).append("]");
+
+		}
 		for (Object o : objects) {
 			if (builder.length() > 0) {
 				builder.append(" ");

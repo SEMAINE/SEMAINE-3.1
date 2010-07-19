@@ -14,7 +14,7 @@ public class QueuingDummyBMLRealiser extends DummyBMLRealiser {
 	public QueuingDummyBMLRealiser() throws JMSException 
 	{
 		super("QueuingDummyBMLRealiser",
-				"semaine.data.synthesis.preparation.plan",
+				"semaine.data.synthesis.prepare.plan",
 				"semaine.data.synthesis.lowlevel.video.FAP",
 				"semaine.data.synthesis.lowlevel.command",
 				false);

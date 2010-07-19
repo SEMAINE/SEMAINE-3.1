@@ -14,8 +14,8 @@ import javax.jms.JMSException;
 public class QueuingSpeechPreprocessor extends SpeechPreprocessor {
 	public QueuingSpeechPreprocessor() throws JMSException {
 		super("QueuingSpeechPreprocessor", 
-			"semaine.data.action.preparation.function",
-			"semaine.data.action.preparation.behaviour",
-			"semaine.data.action.preparation.speechpreprocessed");
+			"semaine.data.action.prepare.function",
+			"semaine.data.action.prepare.behaviour",
+			"semaine.data.action.prepare.speechpreprocessed");
 	}
 }
