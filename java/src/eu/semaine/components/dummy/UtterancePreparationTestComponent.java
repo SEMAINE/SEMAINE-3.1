@@ -123,7 +123,7 @@ public class UtterancePreparationTestComponent extends Component {
 
 	private void trigger(String contentID, long time) throws JMSException {
 		String cmd = constructPlayCommand();
-		commandSender.sendTextMessage(cmd, time, Event.single, newID, time);
+		commandSender.sendTextMessage(cmd, time, Event.single, contentID, time);
 	}
 	
 	
@@ -133,26 +133,37 @@ public class UtterancePreparationTestComponent extends Component {
 
     	if (newAction != null && newText != null && newID != null) {
     		long time = meta.getTime();
-            triggeredActions.put(newID, new Pair<Action, Long>(newAction, time));
+    		String directID = newID + "direct";
+    		String prepareID = newID+"prepare";
+    		Pair<Action, Long> val = new Pair<Action, Long>(newAction, time); 
     		switch (newAction) {
                 case Prepare:
-                	prepare(newID, newText, time);
+                    triggeredActions.put(prepareID, val);
+                	prepare(prepareID, newText, time);
+                    gui.log(meta.getTime()+" "+newAction+" "+prepareID);
                     break;
                 case PlayPrepared:
-                	trigger(newID, time);
+                    triggeredActions.put(prepareID, val);
+                	trigger(prepareID, time);
+                    gui.log(meta.getTime()+" "+newAction+" "+prepareID);
                     break;
                 case PlayDirect:
-                	playDirect(newID, newText, time);
+                    triggeredActions.put(directID, val);
+                	playDirect(directID, newText, time);
+                    gui.log(meta.getTime()+" "+newAction+" "+directID);
                     break;
                 case Play:
                 	if (isReady(newID)) {
-                		trigger(newID, time);
+                        triggeredActions.put(prepareID, val);
+                		trigger(prepareID, time);
+                        gui.log(meta.getTime()+" "+newAction+" "+prepareID);
                 	} else {
-                		playDirect(newID, newText, time);
+                        triggeredActions.put(directID, val);
+                		playDirect(directID, newText, time);
+                        gui.log(meta.getTime()+" "+newAction+" "+directID);
                 	}
                     break;
-                }
-                gui.log(meta.getTime()+" "+newAction+" "+newID);
+            }
                 
     		newText = null;
     		newID = null;
@@ -163,7 +174,7 @@ public class UtterancePreparationTestComponent extends Component {
 
 
     public boolean isReady(String contentID) {
-    	return readyAnimations.contains(contentID);
+    	return readyAnimations.contains(contentID+"prepare");
     }
     
     // In case anyone else changes the character, we want to see it:
@@ -175,9 +186,6 @@ public class UtterancePreparationTestComponent extends Component {
         	Element event = XMLTool.getChildElementByLocalNameNS(doc.getDocumentElement(), SemaineML.E_EVENT, SemaineML.namespaceURI);
         	if (event != null) {
         		String id = event.getAttribute(SemaineML.A_ID);
-        		if (id.contains("_")) {
-        			id = id.substring(0, id.indexOf('_'));
-        		}
         		long time = Long.parseLong(event.getAttribute(SemaineML.A_TIME));
         		String type = event.getAttribute(SemaineML.A_TYPE);
         		if (type.equals(SemaineML.V_READY)) {
