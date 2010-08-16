@@ -1,0 +1,240 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+
+<!-- TellMeMore Rules -->
+
+	<template id="Obadiah_AudioBased_TellMeMore_1" name="Audio-based TellMeMore Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_max" comparator="smaller_equals" value2="0.03" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_max" comparator="greater_than" value2="90" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Obadiah_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_TellMeMore_2" name="Audio-based TellMeMore Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_avg" comparator="smaller_equals" value2="0.005" />
+		  <compare value1="$UserTurn.Potency.average" comparator="smaller_equals" value2="0.025" />
+		  <compare value1="$UserTurn.Interest.max" comparator="smaller_equals" value2="-0.75" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Obadiah_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_TellMeMore_3" name="Audio-based TellMeMore Rule 3">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_max" comparator="smaller_equals" value2="0.04" />
+		  <compare value1="$UserTurn.Potency.min" comparator="smaller_equals" value2="0.05" />
+		  <compare value1="$UserTurn.Interest.max" comparator="smaller_equals" value2="-0.75" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_equals" value2="140" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Obadiah_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+
+<!-- User Sad Rules --> 
+	
+	<template id="Obadiah_AudioBased_Sad_1" name="Audio-based Sad Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Arousal.nrLowEvents" comparator="greater_equals" value2="3" />
+		  <compare value1="$UserTurn.Arousal.average" comparator="smaller_equals" value2="-0.3" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Obadiah_user_sad" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_Sad_2" name="Audio-based Sad Rule 2">
+	   <preconditions>
+	   	  <compare value1="$Agent.character" value2="Obadiah" />
+	      <indicator startvalue="0" comparator="greater_equals" endvalue="5">
+	      	<icompare value1="$UserTurn.AudioFeatures.LOGenergy_avg" comparator="greater_equals" value2="-12.49305" modifier="+1" />
+	      	<icompare value1="$UserTurn.Potency.min" comparator="smaller_equals" value2="0.29" modifier="+1" />
+	      	<icompare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_equals" value2="111.20085" modifier="+1" />
+	      	<icompare value1="$UserTurn.Interest.average" comparator="greater_equals" value2="-0.8375" modifier="+1" />
+	      	<icompare value1="$UserTurn.Potency.average" comparator="smaller_equals" value2="0.0425" modifier="+1" />
+	      </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   <behaviour class="ResponseActionProposer" quality="0.8">
+	    	<argument name="response" value="##Obadiah_user_sad" />
+	   </behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_Sad_3" name="Audio-based Sad Rule 3">
+	   <preconditions>
+	      <compare value1="$UserTurn.Valence.min" comparator="smaller_than" value2="-0.1" />
+       	  <compare value1="$UserTurn.Arousal.min" comparator="smaller_than" value2="-0.1" />
+       	  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_than" value2="80" />
+	      <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   <behaviour class="ResponseActionProposer" quality="0.4">
+	    	<argument name="response" value="##Obadiah_user_sad" />
+	   </behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_Sad_4" name="Audio-based Sad Rule 4">
+	   <preconditions>
+	     <compare value1="$UserTurn.AudioFeatures.LOGenergy_avg" comparator="greater_equals" value2="-12.5" />
+       	 <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_than" value2="70" />
+	     <compare value1="$Agent.character" value2="Obadiah" />
+       	 <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   <behaviour class="ResponseActionProposer" quality="0.8">
+	    	<argument name="response" value="##Obadiah_user_sad" />
+	   </behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_Sad_5" name="Audio-based Sad Rule 5">
+	   <preconditions>
+	     <compare value1="$UserTurn.Interest.max" comparator="greater_equals" value2="-0.9" />
+       	 <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_max" comparator="greater_equals" value2="100" />
+	     <compare value1="$Agent.character" value2="Obadiah" />
+       	 <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   <behaviour class="ResponseActionProposer" quality="0.4">
+	    	<argument name="response" value="##Obadiah_user_sad" />
+	   </behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_Sad_6" name="Audio-based Sad Rule 6">
+	   <preconditions>
+	   	  <compare value1="$Agent.character" value2="Obadiah" />
+	      <indicator startvalue="0" comparator="greater_equals" endvalue="7">
+	      	<icompare value1="$UserTurn.AudioFeatures.LOGenergy_avg" comparator="greater_equals" value2="-12.28595" modifier="+1" />
+	      	<icompare value1="$UserTurn.AudioFeatures.RMSenergy_max" comparator="smaller_equals" value2="0.1647" modifier="+1" />
+	      	<icompare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="greater_equals" value2="-21.4205" modifier="+1" />
+	      	<icompare value1="$UserTurn.Arousal.max" comparator="smaller_equals" value2="-0.34" modifier="+1" />
+	      	<icompare value1="$UserTurn.AudioFeatures.RMSenergy_avg" comparator="greater_equals" value2="0.0065" modifier="+1" />
+	      	<icompare value1="$UserTurn.Arousal.max" comparator="greater_equals" value2="-0.46" modifier="+1" />
+	      	<icompare value1="$UserTurn.Valence.average" comparator="smaller_equals" value2="-0.1125" modifier="+1" />
+	      	<icompare value1="$UserTurn.Intensity.max" comparator="smaller_equals" value2="-0.53" modifier="+1" />
+	      	<icompare value1="$UserTurn.Interest.max" comparator="greater_equals" value2="-0.957" modifier="+1" />
+	      </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   <behaviour class="ResponseActionProposer" quality="0.8">
+	    	<argument name="response" value="##Obadiah_user_sad" />
+	   </behaviour>
+	</template>
+
+<!-- User Positive Rules --> 
+	<template id="Obadiah_AudioBased_Positive_1" name="Audio-based Positive Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Arousal.average" comparator="greater_equals" value2="0.1" />
+		  <compare value1="$UserTurn.Valence.average" comparator="greater_equals" value2="0.1" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Obadiah_user_positive" />
+	   	</behaviour>
+	</template>
+	
+	<template id="Obadiah_AudioBased_Positive_2" name="Audio-based Positive Rule 2">
+	   <preconditions>
+	   	  <compare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_than" value2="2" />
+	   	  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="smaller_than" value2="2" />
+	      <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   <behaviour class="ResponseActionProposer" quality="0.8">
+	    	<argument name="response" value="##Obadiah_user_positive" />
+	   </behaviour>
+	</template>
+	
+	<template id="Obadiah_AudioBased_Positive_3" name="Audio-based Positive Rule 3">
+	   <preconditions>
+	   	  <compare value1="$Agent.character" value2="Obadiah" />
+	      <indicator startvalue="0" comparator="greater_equals" endvalue="3">
+	         <icompare value1="$UserTurn.Intensity.nrHighEvents" comparator="greater_than" value2="0" modifier="+1" />
+	         <icompare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_than" value2="2" modifier="+1" />
+	         <icompare value1="$UserTurn.Arousal.nrLowEvents" comparator="greater_than" value2="3" modifier="+1" />
+	         <icompare value1="$UserTurn.Intensity.nrLowEvents" comparator="smaller_equals" value2="1" modifier="+1" />
+	         <icompare value1="$UserTurn.Interest.nrLowEvents" comparator="smaller_equals" value2="1" modifier="+1" />
+	         <icompare value1="$UserTurn.Valence.nrLowEvents" comparator="smaller_equals" value2="1" modifier="+1" />
+	         <icompare value1="$UserTurn.AudioFeatures.pitchDirectionScore_avg" comparator="smaller_equals" value2="-0.2316" modifier="+1" />
+	      </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   <behaviour class="ResponseActionProposer" quality="0.7">
+	    	<argument name="response" value="##Obadiah_user_positive" />
+	   </behaviour>
+	</template>
+	
+	<template id="Obadiah_AudioBased_Positive_4" name="Audio-based Positive Rule 4">
+		<preconditions>
+		  <compare value1="$UserTurn.Potency.average" comparator="greater_equals" value2="0.2" />
+		  <compare value1="$UserTurn.Arousal.average" comparator="greater_than" value2="0" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Obadiah_user_positive" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_Positive_5" name="Audio-based Positive Rule 5">
+		<preconditions>
+		  <compare value1="$UserTurn.Arousal.max" comparator="greater_equals" value2="-0.24" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.4">
+	   	 	<argument name="response" value="##Obadiah_user_positive" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_AudioBased_Positive_6" name="Audio-based Positive Rule 6">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="smaller_equals" value2="-21.421" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_min" comparator="smaller_equals" value2="-86.4622" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_min" comparator="greater_equals" value2="-101.638" />
+		  <compare value1="$Agent.character" value2="Obadiah" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Obadiah_user_positive" />
+	   	</behaviour>
+	</template>
+
+	
+</behaviourtemplates>

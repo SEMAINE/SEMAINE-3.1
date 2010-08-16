@@ -21,6 +21,8 @@ import javax.swing.JPanel;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import eu.semaine.components.dialogue.datastructures.DMProperties;
+
 public class DMLogger
 {
 	private static DMLogger ref;
@@ -40,14 +42,13 @@ public class DMLogger
 	private DMLogger( boolean willLogParam )
 	{
 		GregorianCalendar cal = new GregorianCalendar();
-		dateAndTime = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH)+1) + "-" + cal.get(Calendar.DAY_OF_MONTH) + "_" + cal.get(Calendar.HOUR_OF_DAY) + "." + cal.get(Calendar.MINUTE);
+		String month = ""+(cal.get(Calendar.MONTH)+1);
+		if( month.length() == 1 ) month = "0" + month;
+		String day = ""+cal.get(Calendar.DAY_OF_MONTH);
+		if( day.length() == 1 ) day = "0" + day;
+		dateAndTime = cal.get(Calendar.YEAR) + "-" + month + "-" + day + "_" + cal.get(Calendar.HOUR_OF_DAY) + "." + cal.get(Calendar.MINUTE);
 		file = "DMLog_"+dateAndTime+".txt";
-		Object obj = System.getProperties().get("semaine.dialogue.logging");
-		if( obj != null ) {
-			willLog = Boolean.parseBoolean( obj.toString() );
-		} else {
-			willLog = willLogParam;
-		}
+		willLog = DMProperties.getLogging();
 		
 		if( willLog ) {
 			try {

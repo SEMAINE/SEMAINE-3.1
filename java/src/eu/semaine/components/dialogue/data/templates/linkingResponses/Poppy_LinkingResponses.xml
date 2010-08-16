@@ -1,0 +1,457 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+	<template id="Poppy_linking1" name="Linking to 'Do you have any good news to tell me?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy57" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy156" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy44" />
+					<c_argument name="response2" value="#Poppy156" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy125" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy131" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking2" name="Linking to 'Do you have any good news to tell me?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy57" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy26" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy27" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy73" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy98" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking3" name="Linking to 'I think you should feel really happy today.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy94" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+		</preconditions>
+		
+		<optional>
+   			<option probability="0.17">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy33" />
+				</c_behaviour>
+			</option>
+			<option probability="0.17">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy66" />
+				</c_behaviour>
+			</option>
+			<option probability="0.17">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy71" />
+				</c_behaviour>
+			</option>
+			<option probability="0.17">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy72" />
+				</c_behaviour>
+			</option>
+			<option probability="0.17">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy79" />
+				</c_behaviour>
+			</option>
+			<option probability="0.15">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy70" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking4" name="Linking to 'Is there anything else you want to say?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy15" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Poppy_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_linking5" name="Linking to 'Is there anything else you want to say?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy15" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Poppy_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_linking6" name="Linking to 'So what makes you happy?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy100" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_negative" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy45" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy46" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy50" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy63" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking7" name="Linking to 'So what would you like to do?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy111" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy31" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy35" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy125" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking8" name="Linking to 'So what would put you in a really good mood?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy104" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_negative" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy56" />
+					<c_argument name="response2" value="#Poppy45" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy56" />
+					<c_argument name="response2" value="#Poppy46" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking9" name="Linking to 'Tell me what makes you feel really happy.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy88" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_negative" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy56" />
+					<c_argument name="response2" value="#Poppy45" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy56" />
+					<c_argument name="response2" value="#Poppy46" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking10" name="Linking to 'Tell me what you're really looking forward to.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy62" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy35" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy125" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking11" name="Linking to 'There must be good things that you remember!'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy91" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy44" />
+					<c_argument name="response2" value="#Poppy7" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy112" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy125" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy129" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking12" name="Linking to 'There must be good things that you remember!'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy91" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy69" />
+					<c_argument name="response2" value="#Poppy73" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy27" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy29" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy73" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy76" />
+					<c_argument name="response2" value="#Poppy75" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking13" name="Linking to 'There must be something that you're really looking forward to.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy98" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy123" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy125" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy63" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking14" name="Linking to 'There must be something that you're really looking forward to.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy98" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy66" />
+					<c_argument name="response2" value="#Poppy67" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy27" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy73" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy77" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy87" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Poppy_linking15" name="Linking to 'What have you been doing?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy59" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy35" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Poppy125" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+
+</behaviourtemplates>

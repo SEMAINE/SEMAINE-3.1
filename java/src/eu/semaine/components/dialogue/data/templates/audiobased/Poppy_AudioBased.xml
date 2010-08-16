@@ -1,0 +1,226 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+<!-- User Sad Rules -->
+	<template id="Poppy_AudioBased_Sad_1" name="Audio-based Sad Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.max" comparator="smaller_equals" value2="-0.44" />
+		  <compare value1="$UserTurn.Interest.max" comparator="greater_equals" value2="-0.547" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="greater_than" value2="80" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Poppy_user_sad" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Sad_2" name="Audio-based Sad Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.Valence.min" comparator="smaller_equals" value2="-0.05" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_max" comparator="greater_equals" value2="97" />
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="smaller_than" value2="-21.4" />
+		  <compare value1="$UserTurn.Potency.max" comparator="smaller_than" value2="-0.07" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Poppy_user_sad" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Sad_3" name="Audio-based Sad Rule 3">
+		<preconditions>
+		  <compare value1="$UserTurn.Potency.average" comparator="greater_equals" value2="0.1" />
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="smaller_equals" value2="-21" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="greater_equals" value2="108" />
+		  <compare value1="$UserTurn.Intensity.average" comparator="greater_equals" value2="-0.44" />
+		  <compare value1="$UserTurn.Valence.max" comparator="smaller_equals" value2="-0.05" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Poppy_user_sad" />
+	   	</behaviour>
+	</template>
+
+<!-- User Happy Rules -->
+	<template id="Poppy_AudioBased_Happy_1" name="Audio-based Happy Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.nrLowEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Happy_2" name="Audio-based Happy Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.Valence.average" comparator="greater_equals" value2="0.1" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+		   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Happy_3" name="Audio-based Happy Rule 3">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_max" comparator="greater_equals" value2="480" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Happy_4" name="Audio-based Happy Rule 4">
+		<preconditions>
+		<compare value1="$Agent.character" value2="Poppy" />
+		  <indicator startvalue="0" comparator="greater_equals" endvalue="2" >
+		  	<icompare value1="$UserTurn.Intensity.nrLowEvents" comparator="smaller_equals" value2="0" modifier="+1" />
+		  	<icompare value1="$UserTurn.Valence.average" comparator="greater_equals" value2="0.1" modifier="+1" />
+		  	<icompare value1="$UserTurn.AudioFeatures.F0frequency_max" comparator="greater_equals" value2="480" modifier="+1" />
+		  </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.7">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Happy_5" name="Audio-based Happy Rule 5">
+		<preconditions>
+		  <compare value1="$Agent.character" value2="Poppy" />
+		  <indicator startvalue="0" comparator="greater_equals" endvalue="3" >
+		  	<icompare value1="$UserTurn.Intensity.nrLowEvents" comparator="smaller_equals" value2="0" modifier="+1" />
+		  	<icompare value1="$UserTurn.Valence.average" comparator="greater_equals" value2="0.1" modifier="+1" />
+		  	<icompare value1="$UserTurn.AudioFeatures.F0frequency_max" comparator="greater_equals" value2="480" modifier="+1" />
+		  </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.9">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Happy_6" name="Audio-based Happy Rule 6">
+		<preconditions>
+		  <compare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_equals" value2="2" />
+		  <compare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_equals" value2="2" />
+		  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$UserTurn.Arousal.nrLowEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.9">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Happy_7" name="Audio-based Happy Rule 7">
+		<preconditions>
+		  <compare value1="$Agent.character" value2="Poppy" />
+		  <indicator startvalue="0" comparator="greater_equals" endvalue="3" >
+		  	<icompare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_equals" value2="2" modifier="+1" />
+		  	<icompare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_equals" value2="2" modifier="+1" />
+		  	<icompare value1="$UserTurn.Valence.nrLowEvents" comparator="smaller_equals" value2="0" modifier="+1" />
+		  	<icompare value1="$UserTurn.Arousal.nrLowEvents" comparator="smaller_equals" value2="0" modifier="+1" />
+		  </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_Happy_8" name="Audio-based Happy Rule 8">
+		<preconditions>
+		  <compare value1="$Agent.character" value2="Poppy" />
+		  <indicator startvalue="0" comparator="greater_equals" endvalue="2" >
+		  	<icompare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_equals" value2="2" modifier="+1" />
+		  	<icompare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_equals" value2="2" modifier="+1" />
+		  	<icompare value1="$UserTurn.Valence.nrLowEvents" comparator="smaller_equals" value2="0" modifier="+1" />
+		  	<icompare value1="$UserTurn.Arousal.nrLowEvents" comparator="smaller_equals" value2="0" modifier="+1" />
+		  </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.4">
+	   	 	<argument name="response" value="##Poppy_user_happy" />
+	   	</behaviour>
+	</template>
+
+<!-- TellMeMore Rules --> 
+	<template id="Poppy_AudioBased_TellMeMore_1" name="Audio-based TellMeMore Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_max" comparator="smaller_equals" value2="0.1" />
+		  <compare value1="$UserTurn.Interest.nrLowEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Poppy_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_AudioBased_TellMeMore_2" name="Audio-based TellMeMore Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.Interest.max" comparator="greater_than" value2="0.117" />
+		  <compare value1="$UserTurn.Intensity.nrHighEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$UserTurn.Potency.nrLowEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$UserTurn.Interest.nrLowEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Poppy_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+
+<!-- NewSubject Rules --> 
+
+	<template id="Poppy_AudioBased_NewSubject_1" name="Audio-based NewSubject Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_avg" comparator="smaller_equals" value2="0.01" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_min" comparator="greater_than" value2="-68" />
+		  <compare value1="$Agent.character" value2="Poppy" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	  
+	  <effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+	  </effects>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Poppy_new_subject_2" />
+	   	</behaviour>
+	</template>
+	
+	
+</behaviourtemplates>

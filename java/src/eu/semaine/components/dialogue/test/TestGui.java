@@ -129,7 +129,7 @@ public class TestGui extends Component
 		senders.add(fmlSender);
 		// Temp
 		
-		fmlReceiver = new FMLReceiver("semaine.data.action.candidate.function");
+		fmlReceiver = new FMLReceiver("semaine.data.action.selected.function");
 		receivers.add(fmlReceiver); // to set up properly
 		//emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
 		//receivers.add(emmaReceiver);

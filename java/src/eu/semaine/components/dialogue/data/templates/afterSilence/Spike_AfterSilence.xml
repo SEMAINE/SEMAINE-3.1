@@ -1,0 +1,50 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+	
+	<template id="Spike_After_Silence1" name="General response after silence">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$Agent.character" value2="Spike" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.3">
+			<argument name="response" value="##Spike_after_silence" />
+		</behaviour>
+	</template>
+	
+	<template id="Spike_After_Silence2" name="After silence elaboration 1">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike13" />
+			<compare value1="$Agent.character" value2="Spike" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Spike64" />
+		</behaviour>
+	</template>
+	
+	<template id="Spike_After_Silence3" name="After silence elaboration 2">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike103" />
+			<compare value1="$Agent.character" value2="Spike" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Spike59" />
+		</behaviour>
+	</template>
+	
+	<template id="Spike_After_Silence4" name="After silence elaboration 3">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike111" />
+			<compare value1="$Agent.character" value2="Spike" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Spike136" />
+		</behaviour>
+	</template>
+
+</behaviourtemplates>

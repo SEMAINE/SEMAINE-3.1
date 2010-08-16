@@ -4,6 +4,8 @@
  */
 package eu.semaine.components.dialogue.datastructures;
 
+import java.util.ArrayList;
+
 /**
  * This class is a container for an utterance plus all its features
  * 
@@ -39,7 +41,7 @@ public class DialogueAct
 	private boolean laugh = false;
 	private boolean change_speaker = false;
 	private Length length = Length.NORMAL; 
-	private String target_character;
+	private String target_character = "";
 	
 	
 	/**
@@ -373,7 +375,28 @@ public class DialogueAct
 	 * @return change_speaker
 	 */
 	public String getTargetCharacter() {
-		return target_character;
+		String[] characters = target_character.split(" ");
+		if( characters.length == 1 ) {
+			if( characters[0].equals("Poppy") ) return "Poppy";
+			if( characters[0].equals("Prudence") ) return "Prudence";
+			if( characters[0].equals("Obadiah") ) return "Obadiah";
+			if( characters[0].equals("Spike") ) return "Spike";
+			return "null";
+		}
+		
+		int[] counters = new int[4];
+		counters[0] = 0; counters[1] = 0; counters[2] = 0; counters[3] = 0;
+		for( String ch : characters ) {
+			if( ch.equals("Poppy") ) counters[0] = counters[0] + 1;
+			if( ch.equals("Prudence") ) counters[1] = counters[1] + 1;
+			if( ch.equals("Obadiah") ) counters[2] = counters[2] + 1;
+			if( ch.equals("Spike") ) counters[3] = counters[3] + 1;
+		}
+		if( counters[0] > 0 && counters[0] >= counters[1] && counters[0] >= counters[2] && counters[0] >= counters[3] ) return "Poppy";
+		if( counters[1] > 0 && counters[1] >= counters[0] && counters[1] >= counters[2] && counters[1] >= counters[3] ) return "Prudence";
+		if( counters[2] > 0 && counters[2] >= counters[0] && counters[2] >= counters[1] && counters[2] >= counters[3] ) return "Obadiah";
+		if( counters[3] > 0 && counters[3] >= counters[0] && counters[3] >= counters[1] && counters[3] >= counters[2] ) return "Spike";
+		return "null";
 	}
 
 	/**
@@ -426,6 +449,31 @@ public class DialogueAct
 		if( length == Length.NORMAL ) features += " normal";
 		if( target_character != null && target_character.length() != 0 ) features += " target:" + target_character;
 		return features;
+	}
+	
+	public ArrayList<String> getFeatureList()
+	{
+		ArrayList<String> featureList = new ArrayList<String>();
+		if( positive ) featureList.add("is_positive");
+		if( negative ) featureList.add("is_negative");
+		if( agree ) featureList.add("is_agree");
+		if( disagree ) featureList.add("is_disagree");
+		if( about_other_people ) featureList.add("about_other_people");
+		if( about_other_character ) featureList.add("about_other_character");
+		if( about_current_character ) featureList.add("about_current_character");
+		if( about_own_feelings ) featureList.add("about_own_feelings");
+		if( talk_about_self ) featureList.add("talk_about_self");
+		if( pragmatic ) featureList.add("pragmatic");
+		if( future ) featureList.add("future");
+		if( past ) featureList.add("past");
+		if( action ) featureList.add("action");
+		if( event ) featureList.add("event");
+		if( laugh ) featureList.add("laugh");
+		if( change_speaker ) featureList.add("change_speaker");
+		if( length == Length.SHORT ) featureList.add("short");
+		if( length == Length.LONG ) featureList.add("long");
+		if( length == Length.NORMAL ) featureList.add("normal");
+		return featureList;
 	}
 	
 	/**

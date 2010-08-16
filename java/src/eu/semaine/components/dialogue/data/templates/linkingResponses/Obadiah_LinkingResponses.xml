@@ -1,0 +1,104 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+	<template id="Obadiah_linking1" name="Linking to 'Is there anything else you want to say?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Obadiah14" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Obadiah_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_linking2" name="Linking to 'Is there anything else you want to say?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Obadiah14" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Obadiah30" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Obadiah63" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Obadiah92" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Obadiah104" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Obadiah113" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Obadiah_linking3" name="Linking to 'Remind me about the last time you got carried away and then everything went wrong.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Obadiah61" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Obadiah_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_linking4" name="Linking to 'Tell me about issues that get you down.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Obadiah134" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Obadiah_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_linking5" name="Linking to 'Tell me about people that get you down.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Obadiah132" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Obadiah_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_linking6" name="Linking to 'Tell me about places that get you down.'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Obadiah133" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Obadiah_tell_me_more" />
+		</behaviour>
+	</template>
+
+</behaviourtemplates>

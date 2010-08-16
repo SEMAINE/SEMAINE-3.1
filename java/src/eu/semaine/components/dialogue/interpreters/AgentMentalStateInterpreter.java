@@ -74,7 +74,7 @@ public class AgentMentalStateInterpreter extends Component
 	private double[] obadiahStateDefault = {0.3, 0.0, 0.3, 0.0, 0.5, 0.0, 0.4, 0.4, 0.8, 0.0, 0.2, 0.7};
 	private double[] spikeStateDefault = {0.0, 0.8, 0.0, 0.8, 0.0, 0.8, 0.0, 0.8, 0.8, 0.0, 0.0, 0.8};
 	
-	private HashMap<String,Integer> charNumbers = new HashMap<String,Integer>();
+	//private HashMap<String,Integer> charNumbers = new HashMap<String,Integer>();
 	private String currChar;
 	
 	private StateSender mentalStateSender;
@@ -93,10 +93,10 @@ public class AgentMentalStateInterpreter extends Component
 		mentalStateSender = new StateSender("semaine.data.state.agent", StateInfo.Type.AgentState, getName());
 		senders.add(mentalStateSender);
 		
-		charNumbers.put("poppy", UtteranceActionProposer.POPPY);
-		charNumbers.put("prudence", UtteranceActionProposer.PRUDENCE);
-		charNumbers.put("spike", UtteranceActionProposer.SPIKE);
-		charNumbers.put("obadiah", UtteranceActionProposer.OBADIAH);
+//		charNumbers.put("poppy", UtteranceActionProposer.POPPY);
+//		charNumbers.put("prudence", UtteranceActionProposer.PRUDENCE);
+//		charNumbers.put("spike", UtteranceActionProposer.SPIKE);
+//		charNumbers.put("obadiah", UtteranceActionProposer.OBADIAH);
 	}
 	
 	public void react( SEMAINEMessage m ) throws JMSException

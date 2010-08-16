@@ -1,0 +1,196 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+<!-- NewSubject Rules -->
+	<template id="Prudence_AudioBased_NewSubject_1" name="Audio-based NewSubject Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_max" comparator="smaller_equals" value2="73" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_equals" value2="96.5" />
+		  <compare value1="$UserTurn.Interest.average" comparator="smaller_equals" value2="-0.75" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.9">
+	   	 	<argument name="response" value="##Prudence_new_subject_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_NewSubject_2" name="Audio-based NewSubject Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_avg" comparator="smaller_equals" value2="-16" />
+		  <compare value1="$UserTurn.Arousal.average" comparator="greater_equals" value2="-0.4" />
+		  <compare value1="$UserTurn.Potency.average" comparator="smaller_equals" value2="0.1" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_new_subject_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_NewSubject_3" name="Audio-based NewSubject Rule 3">
+		<preconditions>
+		  <compare value1="$Agent.character" value2="Prudence" />
+		  <indicator startvalue="0" comparator="greater_equals" endvalue="2" >
+		  	<icompare value1="$UserTurn.Interest.nrLowEvents" comparator="smaller_than" value2="1" modifier="+1" />
+		  	<icompare value1="$UserTurn.Valence.average" comparator="smaller_equals" value2="-0.16" modifier="+1" />
+		  	<icompare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="smaller_equals" value2="-21.4946" modifier="+1" />
+		  </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_new_subject_2" />
+	   	</behaviour>
+	</template>
+
+
+<!-- User SadAngry Rules -->
+	<template id="Prudence_AudioBased_SadAngry_1" name="Audio-based SadAngry Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Interest.max" comparator="smaller_equals" value2="-0.971" />
+		  <compare value1="$UserTurn.Arousal.max" comparator="smaller_equals" value2="-0.4" />
+		  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="greater_than" value2="1" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.7">
+	   	 	<argument name="response" value="##Prudence_user_sadangry" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_SadAngry_2" name="Audio-based SadAngry Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.max" comparator="smaller_equals" value2="-0.44" />
+		  <compare value1="$UserTurn.Potency.nrHighEvents" comparator="greater_equals" value2="2" />
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_avg" comparator="smaller_equals" value2="-13.30545" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_min" comparator="greater_equals" value2="-94.4529" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_user_sadangry" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_SadAngry_3" name="Audio-based SadAngry Rule 3">
+		<preconditions>
+		  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="greater_than" value2="3" />
+		  <compare value1="$UserTurn.Valence.average" comparator="smaller_than" value2="-0.1" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Prudence_user_sadangry" />
+	   	</behaviour>
+	</template>
+
+<!-- User Rational Rules -->
+	<template id="Prudence_AudioBased_Rational_1" name="Audio-based Rational Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.min" comparator="smaller_equals" value2="-0.57" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_max" comparator="smaller_equals" value2="445" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_user_rational" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_Rational_2" name="Audio-based Rational Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.min" comparator="smaller_equals" value2="-0.57" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="greater_than" value2="145.5" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_user_rational" />
+	   	</behaviour>
+	</template>
+
+<!-- User Sad Rules --> 
+	<template id="Prudence_AudioBased_Sad_1" name="Audio-based Sad Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Interest.average" comparator="smaller_equals" value2="-0.5" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_equals" value2="85" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_min" comparator="smaller_equals" value2="-110" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_user_sad" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_Sad_2" name="Audio-based Sad Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.average" comparator="smaller_equals" value2="-0.4" />
+		  <compare value1="$UserTurn.Intensity.max" comparator="smaller_equals" value2="-0.54" />
+		  <compare value1="$UserTurn.Interest.max" comparator="greater_equals" value2="-0.95" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_user_sad" />
+	   	</behaviour>
+	</template>
+
+<!-- TellMeMore Rules -->
+	<template id="Prudence_AudioBased_TellMeMore_1" name="Audio-based TellMeMore Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Arousal.min" comparator="greater_than" value2="0" />
+		  <compare value1="$UserTurn.Arousal.max" comparator="greater_than" value2="-0.4" />
+		  <compare value1="$UserTurn.Valence.min" comparator="greater_than" value2="-0.05" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_max" comparator="smaller_equals" value2="111.5" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Prudence_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_TellMeMore_2" name="Audio-based TellMeMore Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="greater_equals" value2="-21.34" />
+		  <compare value1="$UserTurn.Valence.min" comparator="greater_equals" value2="-0.03" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.6">
+	   	 	<argument name="response" value="##Prudence_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+</behaviourtemplates>

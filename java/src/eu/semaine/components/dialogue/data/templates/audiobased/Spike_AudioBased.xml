@@ -1,0 +1,179 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+<!-- TellMeMore Rules -->
+	<template id="Spike_AudioBased_TellMeMore_1" name="Audio-based TellMeMore Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_avg" comparator="smaller_equals" value2="-14.8452" />
+		  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="greater_equals" value2="2" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.7">
+	   	 	<argument name="response" value="##Spike_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Spike_AudioBased_TellmeMore_2" name="Audio-based TellMeMore Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.nrLowEvents" comparator="smaller_equals" value2="2" />
+		  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="greater_than" value2="1" />
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_avg" comparator="smaller_equals" value2="0.0101" />
+		  <compare value1="$UserTurn.Interest.nrLowEvents" comparator="greater_than" value2="1" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="greater_than" value2="83.51735" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.7">
+	   	 	<argument name="response" value="##Spike_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Spike_AudioBased_TellmeMore_3" name="Audio-based TellMeMore Rule 3">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.nrLowEvents" comparator="smaller_equals" value2="2" />
+		  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="greater_than" value2="1" />
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_avg" comparator="greater_than" value2="0.0101" />
+		  <compare value1="$UserTurn.Valence.nrHighEvents" comparator="greater_than" value2="0" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_avg" comparator="smaller_equals" value2="0.0123" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.9">
+	   	 	<argument name="response" value="##Spike_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+
+<!-- NewSubject Rules -->
+	<template id="Spike_AudioBased_NewSubject_1" name="Audio-based NewSubject Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_avg" comparator="smaller_equals" value2="-16.09655" />
+		  <compare value1="$UserTurn.Arousal.max" comparator="smaller_equals" value2="-0.51" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	  
+	  	<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.7">
+	   	 	<argument name="response" value="##Spike_new_subject_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Spike_AudioBased_NewSubject_2" name="Audio-based NewSubject Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.RMSenergy_avg" comparator="smaller_equals" value2="0.0053" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_avg" comparator="greater_than" value2="-1.26035" />
+		  <compare value1="$UserTurn.Valence.nrHighEvents" comparator="smaller_equals" value2="0" />
+		  <compare value1="$UserTurn.Valence.max" comparator="greater_than" value2="-0.06" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	  
+	  	<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.7">
+	   	 	<argument name="response" value="##Spike_new_subject_2" />
+	   	</behaviour>
+	</template>
+
+<!-- User Happy Rules -->
+	<template id="Spike_AudioBased_Happy_1" name="Audio-based Happy Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Intensity.min" comparator="greater_equals" value2="-0.4" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_avg" comparator="greater_equals" value2="0.4" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_max" comparator="smaller_equals" value2="73" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Spike_user_happy" />
+	   	</behaviour>
+	</template>
+
+<!-- User Angry Rules -->
+	<template id="Spike_AudioBased_Angry_1" name="Audio-based Angry Rule 1">
+		<preconditions>
+		  <compare value1="$UserTurn.Arousal.nrHighEvents" comparator="greater_equals" value2="3" />
+		  <compare value1="$UserTurn.Valence.nrLowEvents" comparator="greater_equals" value2="3" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Spike_user_angry" />
+	   	</behaviour>
+	</template>
+
+<!-- Insult Rules -->
+	<template id="Spike_AudioBased_Insult_1" name="Audio-based Insult Rule 1">
+		<preconditions>
+		  <compare value1="$Agent.character" value2="Spike" />
+		  <indicator startvalue="0" comparator="greater_equals" endvalue="4" >
+		  	<icompare value1="$UserTurn.Arousal.min" comparator="greater_than" value2="-0.14" modifier="+1" />
+		  	<icompare value1="$UserTurn.Arousal.nrHighEvents" comparator="greater_than" value2="1" modifier="+1" />
+		  	<icompare value1="$UserTurn.Arousal.average" comparator="greater_than" value2="-0.0175" modifier="+1" />
+		  	<icompare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_equals" value2="100" modifier="+1" />
+		  </indicator>
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	 	<argument name="response" value="##Spike_insult_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Spike_AudioBased_Insult_2" name="Audio-based Insult Rule 2">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_avg" comparator="smaller_equals" value2="85" />
+		  <compare value1="$UserTurn.Arousal.max" comparator="greater_equals" value2="-0.35" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	 	<argument name="response" value="##Spike_insult_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Spike_AudioBased_Insult_3" name="Audio-based Insult Rule 3">
+		<preconditions>
+		  <compare value1="$UserTurn.Valence.min" comparator="greater_equals" value2="-0.02" />
+		  <compare value1="$UserTurn.AudioFeatures.F0frequency_max" comparator="smaller_than" value2="464.646" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_min" comparator="smaller_than" value2="-88.0413" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.6">
+	   	 	<argument name="response" value="##Spike_insult_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Spike_AudioBased_Insult_4" name="Audio-based Insult Rule 4">
+		<preconditions>
+		  <compare value1="$UserTurn.Valence.average" comparator="greater_equals" value2="0.11585" />
+		  <compare value1="$UserTurn.AudioFeatures.pitchDirectionScore_min" comparator="greater_equals" value2="-89.4806" />
+		  <compare value1="$Agent.character" value2="Spike" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	  </preconditions>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.6">
+	   	 	<argument name="response" value="##Spike_insult_2" />
+	   	</behaviour>
+	</template>
+	
+</behaviourtemplates>

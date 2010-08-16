@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
+import eu.semaine.components.dialogue.datastructures.DMProperties;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
@@ -50,6 +51,12 @@ import eu.semaine.util.XMLTool;
 
 public class TurnTakingInterpreter extends Component
 {
+	/* The four characters */
+	public final static int POPPY = 1;
+	public final static int PRUDENCE = 2;
+	public final static int SPIKE = 3;
+	public final static int OBADIAH = 4;
+	
 	/* Possible turn states */
 	private final static int WAITING = 0;
 	private final static int SILENT = 1;
@@ -58,10 +65,10 @@ public class TurnTakingInterpreter extends Component
 	private HashMap<String,Integer> charNumbers = new HashMap<String,Integer>();
 	
 	/* Take/release turn threshold */
-	private final static int POPPY_TT_THRESHOLD = 60;
-	private final static int PRUDENCE_TT_THRESHOLD = 80;
-	private final static int SPIKE_TT_THRESHOLD = 30;
-	private final static int OBADIAH_TT_THRESHOLD = 100;
+	private static int POPPY_TT_THRESHOLD; // = 60;
+	private static int PRUDENCE_TT_THRESHOLD; // = 80;
+	private static int SPIKE_TT_THRESHOLD; // = 30;
+	private static int OBADIAH_TT_THRESHOLD; // = 100;
 	private int curr_TT_Threshold = 100;
 	
 	private String convState = "";
@@ -108,10 +115,10 @@ public class TurnTakingInterpreter extends Component
 	{
 		super("TurnTakingInterpreter");
 		
-		charNumbers.put("poppy", UtteranceActionProposer.POPPY);
-		charNumbers.put("prudence", UtteranceActionProposer.PRUDENCE);
-		charNumbers.put("spike", UtteranceActionProposer.SPIKE);
-		charNumbers.put("obadiah", UtteranceActionProposer.OBADIAH);
+		charNumbers.put("poppy", POPPY);
+		charNumbers.put("prudence", PRUDENCE);
+		charNumbers.put("spike", SPIKE);
+		charNumbers.put("obadiah", OBADIAH);
 		
 		waitingTime = 50;
 
@@ -126,6 +133,11 @@ public class TurnTakingInterpreter extends Component
 		
 		agentStateSender = new StateSender( "semaine.data.state.agent", StateInfo.Type.AgentState, getName() );
 		senders.add( agentStateSender );
+		
+		POPPY_TT_THRESHOLD = DMProperties.getTurnTakingThresholdPoppy();
+		PRUDENCE_TT_THRESHOLD = DMProperties.getTurnTakingThresholdPrudence();
+		SPIKE_TT_THRESHOLD = DMProperties.getTurnTakingThresholdSpike();
+		OBADIAH_TT_THRESHOLD = DMProperties.getTurnTakingThresholdObadiah();
 	}
 
 	
@@ -278,16 +290,16 @@ public class TurnTakingInterpreter extends Component
 		String newChar = agentInfoMap.get( "character" );
 		if( newChar != null ) {
 			if( newChar.equals("poppy") ) {
-				character = UtteranceActionProposer.POPPY;
+				character = POPPY;
 				curr_TT_Threshold = POPPY_TT_THRESHOLD;
 			} else if( newChar.equals("prudence") ) {
-				character = UtteranceActionProposer.PRUDENCE;
+				character = PRUDENCE;
 				curr_TT_Threshold = PRUDENCE_TT_THRESHOLD;
 			} else if( newChar.equals("spike") ) {
-				character = UtteranceActionProposer.SPIKE;
+				character = SPIKE;
 				curr_TT_Threshold = SPIKE_TT_THRESHOLD;
 			} else if( newChar.equals("obadiah") ) {
-				character = UtteranceActionProposer.OBADIAH;
+				character = OBADIAH;
 				curr_TT_Threshold = OBADIAH_TT_THRESHOLD;
 			}
 		}

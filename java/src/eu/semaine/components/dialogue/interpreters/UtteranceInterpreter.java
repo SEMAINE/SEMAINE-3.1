@@ -950,7 +950,8 @@ public class UtteranceInterpreter extends Component
 		String pattern3 = ".*talk to ((\\S)+ +){0,2}(spike|poppy|obadiah|prudence).*";
 		String pattern4 = ".*speak to ((\\S)+ +){0,2}(spike|poppy|obadiah|prudence).*";
 		String pattern5 = ".*switch to ((\\S)+ +){0,2}(spike|poppy|obadiah|prudence).*";
-		if( utterance.matches(pattern1) || utterance.matches(pattern2) || utterance.matches(pattern3) || utterance.matches(pattern4) || utterance.matches(pattern5) ) {
+		String pattern6 = ".*(speak|talk) to.*";
+		if( utterance.matches(pattern1) || utterance.matches(pattern2) || utterance.matches(pattern3) || utterance.matches(pattern4) || utterance.matches(pattern5) || utterance.matches(pattern6) ) {
 			return true;
 		} else {
 			return false;
@@ -972,11 +973,11 @@ public class UtteranceInterpreter extends Component
 		if( i1 == -1 && i2 == -1 && i3 == -1 && i4 == -1 ) {
 			return null;
 		}
-		if( i1 > i2 && i1 > i3 & i1 > i4 ) {
+		if( i1 > i2 && i1 > i3 && i1 > i4 ) {
 			return "Poppy";
-		} else if( i2 > i1 && i2 > i3 & i2 > i4 ) {
+		} else if( i2 > i1 && i2 > i3 && i2 > i4 ) {
 			return "Prudence";
-		} else if( i3 > i1 && i3 > i2 & i3 > i4 ) {
+		} else if( i3 > i1 && i3 > i2 && i3 > i4 ) {
 			return "Spike";
 		} else {
 			return "Obadiah";

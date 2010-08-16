@@ -5,6 +5,8 @@ public class EmotionEvent
 	public final static int VALENCE = 0;
 	public final static int AROUSAL = 1;
 	public final static int INTEREST = 2;
+	public final static int POTENCY = 3;
+	public final static int INTENSITY = 4;
 	
 	private long time;
 	private long duration;

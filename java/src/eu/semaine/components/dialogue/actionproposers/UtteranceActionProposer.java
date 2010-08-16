@@ -5,24 +5,33 @@
 
 package eu.semaine.components.dialogue.actionproposers;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import javax.jms.JMSException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import eu.semaine.components.Component;
-import eu.semaine.components.dialogue.datastructures.AgentSpokenUtterance;
-import eu.semaine.components.dialogue.datastructures.AgentUtterance;
-import eu.semaine.components.dialogue.datastructures.ContextTemplate;
+import eu.semaine.components.dialogue.behaviourselection.TemplateController;
+import eu.semaine.components.dialogue.behaviourselection.behaviours.BehaviourClass;
+import eu.semaine.components.dialogue.behaviourselection.template.TemplateState;
+import eu.semaine.components.dialogue.datastructures.DMProperties;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
+import eu.semaine.components.dialogue.datastructures.Response;
+import eu.semaine.components.dialogue.informationstate.InformationState;
 import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
@@ -31,154 +40,87 @@ import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.FML;
 import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.datatypes.xml.SemaineML;
+import eu.semaine.jms.IOBase.Event;
+import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
-import eu.semaine.jms.receiver.FMLReceiver;
+import eu.semaine.jms.receiver.FeatureReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
+import eu.semaine.jms.sender.Sender;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
 
-/**
- * The UtteranceActionProposer determines what to say based on the current context.
- * TODO: uitbreiden, precieze werking beschrijven in details
- * 
- * Input
- * AgentStateReceiver('emaine.data.state.agent')			--> take/release turn messages
- * UserStateReceiver('semaine.data.state.user.behaviour') 	--> user speaking state and detected emotions
- * XMLReceiver('semaine.data.state.context')				--> For context information such as user present and the current character
- * 
- * Output
- * FMLSender('semaine.data.action.candidate.function')		--> utterances to the output modules
- * DialogStateSender('semaine.data.state.dialog')			--> dialog state (speaker & listener)
- * XMLSender('semaine.data.state.context')					--> For context information such as user present and the current character
- * 
- * @author MaatM
- *
- */
-
-public class UtteranceActionProposer extends Component
-{	
-
-	/* Speaking states */
-	public final static int WAITING = 0;	// Waiting for the other person to start speaking
-	public final static int LISTENING = 1;	// Listening to the speech of the user
-	public final static int PREPARING_TO_SPEAK = 2;
-	public final static int SPEAKING = 3;	// The agent is speaking
-
-	/* The four characters */
-	public final static int POPPY = 1;
-	public final static int PRUDENCE = 2;
-	public final static int SPIKE = 3;
-	public final static int OBADIAH = 4;
-
-	/* Character-change states */
-	public final static int NEUTRAL = 0;
-	public final static int CHANGE_ASKED = 1;
-	public final static int CHAR_SUGGESTED = 2;
-	public final static int CHAR_ASKED = 3;
-	public final static int CHAR_SUGGESTED_2 = 4;
-	public final static int CHAR_ASKED_2 = 5;
-
-	/* Introduction states */
-	public final static int INTRODUCED = 1;
-	public final static int HOW_ARE_YOU_ASKED = 2;
-
-	/* Thresholds */
-	public final static float HIGH_AROUSAL = 1.0f;
-	public final static float LOW_AROUSAL = 0.1f;
-	public final static long SMALL_UTTERANCE = 3000;
-
-	/* User-presence variables */
-	private static final String PRESENT = "present";
-	private static final String ABSENT = "absent";
-
-	/* Data locations */
-	private final static String sentenceDataPath = "/eu/semaine/components/dialogue/data/sentences.xml";
-	private final static String contextFile = "/eu/semaine/components/dialogue/data/Context.csv";
-
-	private String convState = "";
-
+public class UtteranceActionProposer extends Component implements BehaviourClass
+{
 	/* Senders and Receivers */
 	private StateReceiver agentStateReceiver;
 	private StateReceiver userStateReceiver;
 	private StateReceiver contextReceiver;
 	private XMLReceiver callbackReceiver;
-	private FMLReceiver fmlReceiver;
-	private FMLSender fmlSender;
+	private FeatureReceiver featureReceiver;
 	private StateSender dialogStateSender;
 	private StateSender contextSender;
+	private FMLSender fmlSender;
+	private FMLSender queuingFMLSender;
+	private Sender commandSender;
+	private XMLReceiver callbackReceiverAnimation;
 
-	/* Random generator */
-	private Random rand = new Random();
-
-	/* The current state of the agent */
-	private int currChar; // The current character
-
-	/* The current state of the agent */
-	public int agentSpeakingState = 1; 			// The current speaking state of the agent (SPEAKING, LISTENING or WAITING)
-	private long agentSpeakingStateTime = 0;	// The starttime of the current speaking state of the agent
-	private long utteranceEndTime = 0;			// The predicted endtime of the agent utterance
-	private ArrayList<AgentSpokenUtterance> utteranceHistory = new ArrayList<AgentSpokenUtterance>();
-	private int subjectIndex = 0;				// The index to the Agent utterance which is the start of the current topic
-
-	/* The current state of the user */
-	private int userSpeakingState = 1;			// The current speaking state of the agent (SPEAKING, LISTENING or WAITING)
-	private long userSpeakingStateTime = 0;		// The starttime of the current speaking state of the agent
-	private long userTurnStart = -1;			// The starttime of the user turn, set to -1 after an agent turn
-
-	/* Global state information */
-	private boolean systemStarted = false;		// Indicates if the system has started or not
-	private int introGiven = 0;					// Indicates if the system has not given an intro (0), is currently giving an intro (1) or has given an intro in the past (2).
-	private boolean isUserPresent = false;		// Indicates if the user is currently present or not
-	private int nrTopicChanges = 0;				// The number of topic changes for the current character so far
-	private int tellMeMoreCounter = 0;			// How many Tell Me More utterances are uttered within this subject
-	public int charChangeState = 0;				// The current state in the character-change process
-	public int charStartupState = 0;			// The current state in the startup process
-	public int suggestedChar = 0;				// The suggested next character
-	private int finishedSentences = 0;			// The number of finished utterances.
-
-	/* Detected events */
-	/* List of detected emotion events (generated by the EmotionInterpreter) */
+	/* A local copy of the current Information State */
+	private InformationState is;
+	
+	/* The TemplateController manages all Templates */
+	private TemplateController templateController;
+	
+	/*A list with all detected emotion events of the current UserTurn */
 	private ArrayList<EmotionEvent> detectedEmotions = new ArrayList<EmotionEvent>();
-	private int emotionIndex = 0;
+	
+	/* A list with all data to send when the agent finishes speaking */
+	private ArrayList<String[]> dataSendQueue = new ArrayList<String[]>();
 
 	/* List of all detected Dialogue Acts (generated by the UtteranceInterpreter) */
 	private ArrayList<DialogueAct> detectedDActs = new ArrayList<DialogueAct>();
 	private int dActIndex = 0;
-
-	private HashMap<Integer,String> charNames = new HashMap<Integer,String>();
-	private HashMap<String,Integer> charNumbers = new HashMap<String,Integer>();
-	private HashMap<Integer,Boolean> charHistory = new HashMap<Integer,Boolean>();
-	private ArrayList<String> introductionSentences = new ArrayList<String>();
-
-	/* All agent utterances grouped by utterance-type */
-	private HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>> allUtterances = new HashMap<Integer,HashMap<String,ArrayList<AgentUtterance>>>();
-
-	/* A list with all context-templates, used for picking a response */
-	private ArrayList<ContextTemplate> templates ;
-
-	/* Running number for the ID's of the output */
+	
+	/* All possible responses and response-groups, with their ID as the key */
+	private HashMap<String,Response> responses;
+	private HashMap<String,ArrayList<Response>> responseGroups;
+	
+	/* A list of responses that is prepared or being prepared, with the hashvalue of that response as key */
+	private HashMap<String,String> preparedResponses = new HashMap<String,String>();
+	private HashMap<String,String> preparingResponses = new HashMap<String,String>();
+	
+	/* A list of all detected audio-features of this UserTurn */
+	private HashMap<String,ArrayList<Float>> detectedFeatures = new HashMap<String,ArrayList<Float>>();
+	
+	/* To generate random numbers */
+	private Random random = new Random();
+	
+	/* Keeps track if the system has started or not */
+	private boolean systemStarted = false;
+	
+	/* The latest AgentResponse that was executed */
+	private Response latestResponse = null;
+	
+	/* If audiofeatures have to be stored at this moment or not */
+	private boolean isStoringFeatures = false;
+	
+	/* A counter to keep track of the number of FML-objects that is send */
 	private int output_counter = 1;
-
-	/* Variables used when waiting */
-	private String waitingID;	// The ID the system is waiting for.
-	private int waitingFor;		// What the system is waiting for. 0=nothing, 1=introduction finished, 2=character change message
-	private int nextChar;		// The next character
-	private long waitingSince;	// Waiting for response since...
-
+	
+	/* The BehaviourClass-instance of this class */
+	private static UtteranceActionProposer myClass;
 
 	/**
-	 * Constructor of UtteranceActionProposer
-	 * Initializes the senders and receivers, randomly determines the first character and 
-	 * initializes some data
-	 * @throws JMSException
+	 * Constructor of ResponseActionProposer
+	 * Initializes all Senders and Receivers, and initializes everything.
+	 *
 	 */
 	public UtteranceActionProposer() throws JMSException
 	{
-		super( "UtteranceActionProposer" );
+		super("UtteranceActionProposer");
 
 		/* Initialize receivers */
 		agentStateReceiver = new StateReceiver( "semaine.data.state.agent", StateInfo.Type.AgentState );
@@ -189,96 +131,148 @@ public class UtteranceActionProposer extends Component
 		receivers.add( contextReceiver );
 		callbackReceiver = new XMLReceiver("semaine.callback.output.audio");
 		receivers.add(callbackReceiver);
-
+		callbackReceiverAnimation = new XMLReceiver("semaine.callback.output.Animation");        
+		receivers.add(callbackReceiverAnimation);
+		featureReceiver = new FeatureReceiver("semaine.data.analysis.features.voice");
+		receivers.add(featureReceiver);
 
 		/* Initialize senders */
-		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
-		senders.add(fmlSender);
 		dialogStateSender = new StateSender("semaine.data.state.dialog", StateInfo.Type.DialogState, getName());
 		senders.add(dialogStateSender);
 		contextSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(contextSender);
-		fmlReceiver = new FMLReceiver("semaine.data.action.candidate.function");
-		receivers.add(fmlReceiver);
-
-		/* Determine the first character */
-		currChar = PRUDENCE; // always start with Prudence
-
-		/* Initialize some data */
-		initData();
-
-		/* Import response-model data */		
-		DataImporter importer = new DataImporter( contextFile, null );
-		templates = importer.importContextData();
-	}
-
-	/**
-	 * Initializes the utterances of the characters, the character names, and the character history
-	 */
-	public void initData()
-	{
-		/* Reads the utterances of all the characters */
-		SentenceReader sentenceReader = new SentenceReader( sentenceDataPath );
-		if( sentenceReader.readData() ) {
-			allUtterances = sentenceReader.getAllUtterances();
-		} else {
-			// TODO: Log error
+		fmlSender = new FMLSender("semaine.data.action.selected.function", getName());
+		senders.add(fmlSender);
+		queuingFMLSender = new FMLSender("semaine.data.action.prepare.function", getName());
+		senders.add(queuingFMLSender);
+		commandSender = new Sender("semaine.data.synthesis.lowlevel.command", "playCommand", getName());
+		senders.add(commandSender);
+		
+		/* Create TemplateController */
+		templateController = new TemplateController();
+		for( String templateFile : DMProperties.getTemplateFiles() ) {
+			System.out.println("Loading TemplateFile: " + templateFile);
+			templateController.processTemplateFile(templateFile.trim());
 		}
+		templateController.addFunction(this);
 
-		/* Set the character name to number conversion maps */
-		charNames.put( POPPY, "Poppy" );
-		charNames.put( PRUDENCE, "Prudence" );
-		charNames.put( SPIKE, "Spike" );
-		charNames.put( OBADIAH, "Obadiah" );
+		is = new InformationState();
+		is.set("User.present", 0);
+		
+		/* Initialize Responses */
+		String responseFile = DMProperties.getResponseFile();
+		ResponseReader reader = new ResponseReader( responseFile );
+		if( !reader.readData() ) {
+			System.out.println( "Error, could not load Responses." );
+		}
+		responses = reader.getResponses();
+		responseGroups = reader.getResponseGroups();
+		
+		/* Initializes detected AudioFeatures */
+		detectedFeatures.put("F0", new ArrayList<Float>());
+		detectedFeatures.put("pitchDirScore", new ArrayList<Float>());
+		detectedFeatures.put("RMSEnergy", new ArrayList<Float>());
+		detectedFeatures.put("LOGEnergy", new ArrayList<Float>());
 
-		charNumbers.put("Poppy", POPPY);
-		charNumbers.put("Prudence", PRUDENCE);
-		charNumbers.put("Spike", SPIKE);
-		charNumbers.put("Obadiah", OBADIAH);
-
-		/* resets the chat history of the characters (this determines if the characters have spoken
-		 * with these characters before in this conversation */
-		charHistory.put( POPPY, false );
-		charHistory.put( PRUDENCE, false );
-		charHistory.put( SPIKE, false );
-		charHistory.put( OBADIAH, false );
+		myClass = this;
+		waitingTime = 50;
 	}
 
 	/**
-	 * TODO: Herschrijven
+	 * Returns the instance of this class.
+	 */
+	public static UtteranceActionProposer getMyClass()
+	{
+		return myClass;
+	}
+
+	/**
+	 * Act method, called every 50ms. If the system is started and the Agent is not speaking at this moment,
+	 * check all Templates and execute any fitting behaviour.
 	 */
 	public void act() throws JMSException
 	{
-		processUtteranceEnd();
+		/* Summarize all detected AudioFeatures and put this in the InformationState */
+		summarizeFeatures();
+		
+		String speakingState = is.getString("Agent.speakingState");
+		if( systemStarted && (speakingState == null || (speakingState != null && speakingState.equals("listening"))) ) {
+			is.set("currTime", (int)meta.getTime());
+			TemplateState state = templateController.checkTemplates(is);
+			if( state != null ) {
+				//is.print();
+				detectedEmotions.clear();
+				dActIndex = detectedDActs.size();
+				
+				for( String featureName : detectedFeatures.keySet() ) {
+					is.remove("UserTurn.AudioFeatures."+featureName+"_min");
+					is.remove("UserTurn.AudioFeatures."+featureName+"_max");
+					is.remove("UserTurn.AudioFeatures."+featureName+"_avg");
+				}
+				
+				DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type="+state.getTemplate().getId()+", utterance="+latestResponse.getResponse());
+			}
+		}
 	}
 
 	/**
-	 * Sets context variables if updates are received.
-	 * If it receives the message that the agent should start talking it will determine what to say
-	 * and output this.
+	 * Updates the InformationState based on the SemaineMessages it receives
 	 */
 	public void react( SEMAINEMessage m ) throws JMSException
 	{
-		if( m instanceof SEMAINEXMLMessage ){
+		if( m instanceof SEMAINEFeatureMessage ) {
+			/* Process AudioFeatures */
+			if( isStoringFeatures ) {
+				SEMAINEFeatureMessage fm = (SEMAINEFeatureMessage)m;
+				
+				/* Reads the feature names and values */
+				String[] featureNames = fm.getFeatureNames();
+				float[] featureValues = fm.getFeatureVector();
+				
+				for( int i=0; i<featureNames.length; i++ ) {
+					if( detectedFeatures.get(featureNames[i]) != null ) {
+						detectedFeatures.get(featureNames[i]).add(featureValues[i]);
+					} else {
+						ArrayList<Float> tempList = new ArrayList<Float>();
+						tempList.add(featureValues[i]);
+						detectedFeatures.put(featureNames[i],tempList);
+					}
+				}
+			}
+		} else if( m instanceof SEMAINEXMLMessage ){
 			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
+			
+			/* Process Agent-animation updates */
 			if( !xm.getText().contains("fml_lip") ) {
 				if( speechStarted(xm) ) {
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
-					agentSpeakingState = SPEAKING;
-					agentSpeakingStateTime = meta.getTime();
+					is.set("Agent.speakingState","speaking");
+					is.set("Agent.speakingStateTime", (int)meta.getTime());
+					sendData("agentTurnState", "true", "dialogstate");
+					
+					isStoringFeatures = false;
+					for( ArrayList<Float> al : detectedFeatures.values() ) {
+						al.clear();
+					}
 				}
 
 				if( speechReady(xm) ) {
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
-					agentSpeakingState = LISTENING;
-					agentSpeakingStateTime = meta.getTime();
-					sendListening();
-					userTurnStart = -1;
+					is.set("Agent.speakingState","listening");
+					is.set("Agent.speakingStateTime", (int)meta.getTime());
+					is.set("User.speakingState","waiting");
+
+					sendData("agentTurnState", "false", "dialogstate");
+					for( String[] str : dataSendQueue ) {
+						if( str.length == 3 ) {
+							sendData(str[0], str[1], str[2]);
+						}
+					}
+					dataSendQueue.clear();
 				}
 			}
 
-			boolean isFML = xm.getDatatype().equals("FML");
-			if (isFML) {
+			if (xm.getDatatype().equals("FML")) {
 				Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
 				if( fml != null ) {
 					Element backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
@@ -287,6 +281,45 @@ public class UtteranceActionProposer extends Component
 					}
 				}
 			}
+			Document doc = xm.getDocument();
+			Element event = XMLTool.getChildElementByLocalNameNS(doc.getDocumentElement(), SemaineML.E_EVENT, SemaineML.namespaceURI);
+	    	if (event != null) {
+	    		String id = event.getAttribute(SemaineML.A_ID);
+	    		long time = Long.parseLong(event.getAttribute(SemaineML.A_TIME));
+	    		String type = event.getAttribute(SemaineML.A_TYPE);
+	    		if (type.equals(SemaineML.V_READY)) {
+	    			String keyToRemove = null;
+	    			for( String key : preparingResponses.keySet() ) {
+	    				if( preparingResponses.get(key).equals(id) ) {
+	    					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Utterance prepared");
+	    					preparedResponses.put(key, id);
+	    					keyToRemove = key;
+	    					break;
+	    				}
+	    			}
+	    			if( keyToRemove != null ) preparingResponses.remove(keyToRemove);
+	    		} else if (type.equals(SemaineML.V_DELETED)) {
+	    			String keyToRemove = null;
+	    			for( String key : preparingResponses.keySet() ) {
+	    				if( preparingResponses.get(key).equals(id) ) {
+	    					keyToRemove = key;
+	    					break;
+	    				}
+	    			}
+	    			if( keyToRemove != null ) preparingResponses.remove(keyToRemove);
+	    			
+	    			keyToRemove = null;
+	    			for( String key : preparedResponses.keySet() ) {
+	    				if( preparedResponses.get(key).equals(id) ) {
+	    					keyToRemove = key;
+	    					break;
+	    				}
+	    			}
+	    			if( keyToRemove != null ) preparedResponses.remove(keyToRemove);
+	    		} else {
+	    			// Do Nothing
+	    		}
+	    	}
 		}
 
 		/* Processes User state updates */
@@ -298,103 +331,136 @@ public class UtteranceActionProposer extends Component
 			switch (stateInfoType) {
 			case UserState:
 				/* Updates user speaking state (speaking or silent) */
-				setUserSpeakingState(stateInfo);
-
-				/* Updates detected emotions (valence, arousal, interest) */
-				addDetectedEmotions(stateInfo);
-
-				/* Updates the detected and analysed user utterances */
-				addDetectedDActs(stateInfo);
-				break;
-			case ContextState:
-				/* Updates the current character and the user */
-				updateCharacterAndUser( stateInfo );
-				break;
-			}
-		}
-
-		/* If the TurnTakingInterpreter decides that the agent should speak, determine what to say */
-		if( agentShouldSpeak( m ) ) {
-
-			/* Update agent speaking state */
-			agentSpeakingState = PREPARING_TO_SPEAK;
-
-			AgentSpokenUtterance spokenUtterance = null;
-
-			/* Check if the character change process should be started or continued */
-			spokenUtterance = manageCharChange();
-			if( spokenUtterance == null ) {
-				/* Check if the character start process should be started or continued */
-				spokenUtterance = manageAgentStart();
-				if( spokenUtterance == null ) {
-					/* Get an utterance to say */
-					spokenUtterance = getResponse(); // TODO: TESTING
-				}
-			}
-
-			if( spokenUtterance.getNewCharacter() != -1 ) {
-				nextChar = spokenUtterance.getNewCharacter();
-				AgentSpokenUtterance au = null;
-				if( nextChar == POPPY ) {
-					au = new AgentSpokenUtterance( new AgentUtterance("I'm going to pass you to Poppy. Goodbye.", "Changing_character") );
-				} else if( nextChar == PRUDENCE ) {
-					au = new AgentSpokenUtterance( new AgentUtterance("I'm going to pass you to Prudence. Goodbye.", "Changing_character") );
-				} else if( nextChar == OBADIAH ) {
-					au = new AgentSpokenUtterance( new AgentUtterance("I'm going to pass you to Obadiah. Goodbye.", "Changing_character") );
-				} else if( nextChar == SPIKE ) {
-					au = new AgentSpokenUtterance( new AgentUtterance("I'm going to pass you to Spike. Goodbye.", "Changing_character") );
-				}
-				if( au != null ) {
-					waitingID = sendUtterance(au);
-					waitingSince = meta.getTime();
-					waitingFor = 2;
-				}
-			} else {
-				/* Distribute the chosen utterance */
-				sendUtterance( spokenUtterance );
-			}			
-		}
-	}
-
-	/**
-	 * This method checks if the given message contains the end signal of the animation that the agent
-	 * is playing.
-	 * @param xm the message to check
-	 * @return true if the message contains the end signal, false if it does not.
-	 */
-	public boolean speechReady( SEMAINEXMLMessage xm ) throws JMSException
-	{
-		boolean nextUtteranceStarted = false;
-		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
-		if( callbackElem != null ) {
-			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
-			if( eventElem != null ) {
-				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") ) {
-					if( waitingFor != 0 && waitingID != null && eventElem.hasAttribute("id") && eventElem.getAttribute("id").startsWith(waitingID) ) {
-						if( waitingFor == 1 ) {
-							// Introduction-sentence finished
-							DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
-							nextUtteranceStarted = giveIntro();
+				if( stateInfo.hasInfo("speaking") ) {
+					if( stateInfo.getInfo("speaking").equals("true") ) {
+						if( is.getString("User.speakingState") == null || !is.getString("User.speakingState").equals("speaking") ) {
+							is.set("User.speakingState", "speaking");
+							is.set("User.speakingStateTime", (int)meta.getTime());
+							if(!isStoringFeatures) isStoringFeatures = true;
 						}
-						else if( waitingFor == 2 ) {
-							// Char-change message finished
-							sendNewCharacter( nextChar );
-							waitingID = "";
-							waitingFor = 0;
+					} else if( stateInfo.getInfo("speaking").equals("false") ) {
+						if( is.getString("User.speakingState") == null || !is.getString("User.speakingState").equals("listening") ) {
+							is.set("User.speakingState", "listening");
+							is.set("User.speakingStateTime", (int)meta.getTime());
 						}
 					}
 				}
-
-				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && agentSpeakingState == SPEAKING ) {
-					finishedSentences++;
-					return !nextUtteranceStarted;
-				} else if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && agentSpeakingState != SPEAKING ) {
-					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
-					return false;
+				/* Updates detected emotions (valence, arousal, interest) */
+				if( stateInfo.hasInfo("valence") ) {
+					float valence = Float.parseFloat( stateInfo.getInfo("valence") );
+					EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, valence );
+					detectedEmotions.add( ee );
+					summarizeEmotionEvents();
+				} else if( stateInfo.hasInfo("arousal") ) {
+					float arousal = Float.parseFloat( stateInfo.getInfo("arousal") );
+					EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, arousal );
+					detectedEmotions.add( ee );
+					summarizeEmotionEvents();
+				} else if( stateInfo.hasInfo("interest") ) {
+					float interest = Float.parseFloat( stateInfo.getInfo("interest") );
+					EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, interest );
+					detectedEmotions.add( ee );
+					summarizeEmotionEvents();
+				} else if( stateInfo.hasInfo("potency") ) {
+					float potency = Float.parseFloat( stateInfo.getInfo("potency") );
+					EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.POTENCY, potency );
+					detectedEmotions.add( ee );
+					summarizeEmotionEvents();
+				} else if( stateInfo.hasInfo("intensity") ) {
+					float intensity = Float.parseFloat( stateInfo.getInfo("intensity") );
+					EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTENSITY, intensity );
+					detectedEmotions.add( ee );
+					summarizeEmotionEvents();
 				}
+
+				/* Updates the detected and analysed user utterances */
+				if( stateInfo.hasInfo("userUtterance") && stateInfo.hasInfo("userUtteranceStartTime") ) {
+					String utterance = stateInfo.getInfo("userUtterance");
+					long time = Long.parseLong(stateInfo.getInfo("userUtteranceStartTime"));
+					String f = stateInfo.getInfo("userUtteranceFeatures");
+					if( f == null ) {
+						f = "";
+					}
+					DialogueAct act = new DialogueAct( utterance, time );
+					act.setEndtime(meta.getTime());
+					if( f.contains("positive") ) act.setPositive(true);
+					if( f.contains("negative") ) act.setNegative(true);
+					if( f.contains("disagree") ) {
+						act.setDisagree(true);
+						f = f.replace("disagree", "");
+					}
+					if( f.contains("agree") ) act.setAgree(true);
+					if( f.contains("about_other_people") ) act.setAboutOtherPeople(true);
+					if( f.contains("about_other_character") ) act.setAboutOtherCharacter(true);
+					if( f.contains("about_current_character") ) act.setAboutCurrentCharacter(true);
+					if( f.contains("about_own_feelings") ) act.setAboutOwnFeelings(true);
+					if( f.contains("pragmatic") ) act.setPragmatic(true);
+					if( f.contains("abou_self") ) act.setTalkAboutSelf(true);
+					if( f.contains("future") ) act.setFuture(true);
+					if( f.contains("past") ) act.setPast(true);
+					if( f.contains("event") ) act.setEvent(true);
+					if( f.contains("action") ) act.setAction(true);
+					if( f.contains("laugh") ) act.setLaugh(true);
+					if( f.contains("change_speaker") ) act.setChangeSpeaker(true);
+					if( f.contains("target:") ) act.setTargetCharacter( f.substring(f.indexOf("target:")+7, Math.max(f.length(),f.indexOf(" ", f.indexOf("target:")+7))) );
+					if( f.contains("short") ) act.setLength(DialogueAct.Length.SHORT);
+					if( f.contains("long") ) act.setLength(DialogueAct.Length.LONG);
+
+					if( detectedDActs.size() > 1 && Math.abs(detectedDActs.get(detectedDActs.size()-1).getStarttime() - act.getStarttime()) < 10 ) {
+						// Same dialogueAct, so update the last DA in the list
+						detectedDActs.set(detectedDActs.size()-1, act);
+					} else {
+						detectedDActs.add(act);
+					}
+					getCombinedUserDialogueAct();
+				}
+
+				break;
+			case ContextState:
+				/* Updates the current character and the user */
+				/* Update user presence */
+				if( stateInfo.hasInfo("userPresent") ) {
+					if( is.getInteger("User.present") == null ) {
+						is.set("User.present", 0);
+					}
+					System.out.println("XXXXXX " + is.getInteger("User.present"));
+					if( stateInfo.getInfo("userPresent").equals("present") &&  is.getInteger("User.present") == 0 ) {
+						DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
+						is.set("User.present", 1);
+						is.set("User.presentStateChanged",1);
+						systemStarted = true;
+
+					} else if( stateInfo.getInfo("userPresent").equals("absent") && is.getInteger("User.present") == 0 ) {
+						DMLogger.getLogger().log(meta.getTime(), "System:SystemStopped" );
+						is.set("User.present", 0);
+						is.set("User.presentStateChanged",1);
+						systemStarted = false;
+					}
+				}
+
+				/* Update current character */
+				if( stateInfo.hasInfo("character") ) {
+					is.set("Agent.character", stateInfo.getInfo("character"));
+					is.set("Agent.characterChanged", 1);
+				}
+				break;
+			case AgentState:
+				String intention = stateInfo.getInfo("turnTakingIntention");
+				if( intention != null && intention.equals("startSpeaking") ) {
+					String currSpeakingState = is.getString("Agent.speakingState");
+					if( currSpeakingState != null && !currSpeakingState.equals("speaking") && !currSpeakingState.equals("preparing") ) {
+						String userSpeakingState = is.getString("User.speakingState");
+						if( userSpeakingState != null && userSpeakingState.equals("waiting") ) {
+							is.set("Agent.speakingIntention","retake_turn");
+						} else {
+							is.set("Agent.speakingIntention","want_turn");
+						}
+					}
+				}
+				break;
 			}
 		}
-		return false;
+		//is.print();
 	}
 
 	/**
@@ -409,367 +475,43 @@ public class UtteranceActionProposer extends Component
 		if( callbackElem != null ) {
 			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
 			if( eventElem != null ) {
-				if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("start") && (agentSpeakingState == PREPARING_TO_SPEAK || agentSpeakingState == LISTENING ) ) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Checks the StateInfo for updates about user presence and character changes.
-	 * @param stateInfo
-	 * @throws JMSException
-	 */
-	public void updateCharacterAndUser( StateInfo stateInfo ) throws JMSException
-	{
-		/* Update user presence */
-		boolean newUser = false;
-		if( stateInfo.hasInfo("userPresent") ) {
-			if( stateInfo.getInfo("userPresent").equals("present") && !isUserPresent ) {
-				newUser = true;
-				userAppeared();
-			} else if( stateInfo.getInfo("userPresent").equals("absent") && isUserPresent ) {
-				userDisappeared();
-			}
-		}
-
-		/* Update current character */
-		if( stateInfo.hasInfo("character") ) {
-			if( introGiven == 1 && currChar != charNumbers.get( stateInfo.getInfo("character") ) ) {
-				introGiven = 2;
-				waitingID = "";
-				waitingFor = 0;
-				introductionSentences.clear();
-				systemStarted = true;
-			}
-			currChar = charNumbers.get( stateInfo.getInfo("character") );
-			if( systemStarted ) {
-				charStartupState = INTRODUCED;
-				nrTopicChanges = 0;
-
-				/* Update agent speaking state */
-				agentSpeakingState = PREPARING_TO_SPEAK;
-
-				if( charHistory.get(currChar) ) {
-					sendUtterance( pickUtterances("intro_old") );
-				} else {
-					charHistory.put(currChar, true);
-					sendUtterance( pickUtterances("intro_new") );
-				}
-			}
-		}
-
-		if( systemStarted && newUser && charStartupState != INTRODUCED ) {
-			charStartupState = INTRODUCED;
-			nrTopicChanges = 0;
-
-			/* Update agent speaking state */
-			agentSpeakingState = PREPARING_TO_SPEAK;
-			AgentSpokenUtterance spokenUtterance;
-
-			if( charHistory.get(currChar) ) {
-				sendUtterance( pickUtterances("intro_old") );
-			} else {
-				charHistory.put(currChar, true);
-				sendUtterance( pickUtterances("intro_new") );
-			}
-		}
-	}
-
-	/**
-	 * Called when a user is detected in the screen.
-	 * @throws JMSException
-	 */
-	public void userAppeared() throws JMSException
-	{
-		DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
-		System.out.println("User appeared");
-		isUserPresent = true;
-
-		Object obj = System.getProperties().get("semaine.introduction");
-		boolean doIntro;
-		if( obj != null ) {
-			doIntro = Boolean.parseBoolean( obj.toString() );
-		} else {
-			doIntro = true;
-		}
-		if( !doIntro || introGiven == 2 ) {
-			introGiven = 2;
-		} else {
-			introGiven = 0;
-		}
-
-		if( introGiven == 2 ) {
-			systemStarted = true;
-		}
-		if( introGiven == 0 ) {
-			giveIntro();
-		}
-	}
-
-	/**
-	 * 
-	 * @return true if a next utterance is started
-	 * @throws JMSException
-	 */
-	public boolean giveIntro() throws JMSException
-	{
-		if( introGiven == 0 ) {
-			introductionSentences.add("Hi. You have reached SAL, the Sensitive Artificial Listener.");
-			introductionSentences.add("These are the listeners you can choose.");
-			introductionSentences.add("Poppy is cheerful, optimistic and she looks on the bright side of life!");
-			introductionSentences.add("Spike is aggressive, confrontational and he enjoys an argument.");
-			introductionSentences.add("Obadiah is gloomy, and he has a pessimistic outlook.");
-			introductionSentences.add("Prudence is matter-of-fact, and takes a practical view on life.");
-			introductionSentences.add("The personalities are very crude.");
-			introductionSentences.add("They do not understand content, only tone.");
-			introductionSentences.add("That means it is up to the user to work within the system's limits.");
-			introductionSentences.add("In particular, there is no point asking it questions.");
-			introductionSentences.add("There is no point trying to get into a serious discussion with it.");
-			introductionSentences.add("Which of us would you like to talk to?");
-			introGiven = 1;
-
-			AgentSpokenUtterance au = new AgentSpokenUtterance( new AgentUtterance(introductionSentences.get(0), "introduction"));
-			introductionSentences.remove(0);
-			waitingID = sendUtterance(au);
-			waitingSince = meta.getTime();
-			waitingFor = 1;
-			return true;
-		} else if( introGiven == 1 ) {
-			if( introductionSentences.size() > 0 ) {
-				AgentSpokenUtterance au = new AgentSpokenUtterance( new AgentUtterance(introductionSentences.get(0), "introduction"));
-				introductionSentences.remove(0);
-				waitingID = sendUtterance(au);
-				waitingSince = meta.getTime();
-				waitingFor = 1;
-				return true;
-			} else {
-				introGiven = 2;
-				if( isUserPresent ) {
-					systemStarted = true;
-				}
-				charChangeState = CHAR_ASKED;
-				waitingID = "";
-				waitingFor = 0;
-				return false;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Called when the user disappears from the screen
-	 * @throws JMSException
-	 */
-	public void userDisappeared() throws JMSException
-	{
-		DMLogger.getLogger().log(meta.getTime(), "System:SystemStopped" );
-		charStartupState = NEUTRAL;
-		isUserPresent = false;
-
-		/* Update agent speaking state */
-		agentSpeakingState = PREPARING_TO_SPEAK;
-
-		sendUtterance( pickUtterances("goodbye") );
-
-		/* resets the chat history of the characters (this determines if the characters have spoken
-		 * with these characters before in this conversation */
-		charHistory.put( POPPY, false );
-		charHistory.put( PRUDENCE, false );
-		charHistory.put( SPIKE, false );
-		charHistory.put( OBADIAH, false );
-
-		systemStarted = false;
-
-		if( introGiven != 2 ) {
-			introGiven = 2;
-			waitingID = "";
-			waitingFor = 0;
-			introductionSentences.clear();
-		}
-	}
-
-	/**
-	 * Manages the character change process.
-	 * If the user is in this process it will determine what the next step is and return 
-	 * an AgentUtterance to speak.
-	 * If the user is not in the character change process it will return null
-	 * @throws JMSException
-	 */
-	public AgentSpokenUtterance manageCharChange() throws JMSException
-	{
-		/* Make a list of all analyzed Dialogue Acts since the last time the agent talked */
-		ArrayList<DialogueAct> recentDActs = new ArrayList<DialogueAct>( detectedDActs.subList(dActIndex, detectedDActs.size()) );
-
-		if( charChangeState == NEUTRAL ) {
-			/* Determine if the user wants to change the character */
-			boolean wantChange = false;
-			String targetCharacter = null;
-			for( DialogueAct act : recentDActs ) {
-				if( act.isChangeSpeaker() ) {
-					// User wants to change the speaker
-					wantChange = true;
-				}
-
-				if( act.getTargetCharacter() != null ) {
-					targetCharacter = act.getTargetCharacter();
-				}
-				int userActsSeen = 0;
-				int index = detectedDActs.size()-2;
-				while( index >= 0 && userActsSeen < 4 ) {
-					DialogueAct a = detectedDActs.get(index);
-					if( a.getTargetCharacter() != null && a.getTargetCharacter().equals(targetCharacter) && !targetCharacter.equals(charNames.get(currChar)) ) {
-						charChangeState = CHAR_SUGGESTED;
-						suggestedChar = charNumbers.get(targetCharacter);
-						return new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
-					}
-					userActsSeen++;
-					index--;
-				}
-			}
-
-			/* If the use wants to change the system has to determine the next character */
-			if( wantChange ) {
-				if( targetCharacter != null ) {
-					/* If the user already mentioned a new character then take this */
-					charChangeState = NEUTRAL;
-					return new AgentSpokenUtterance( charNumbers.get(targetCharacter) );
-				} else {
-					/* If the user did not mention a character then either ask for it or propose one */
-					if( rand.nextBoolean() ) {
-						// Ask for the character
-						charChangeState = CHAR_ASKED;
-						return pickUtterances("ask_next_character");
-					} else {
-						// Suggest a character
-						charChangeState = CHAR_SUGGESTED;
-						suggestedChar = rand.nextInt(4)+1;
-						while( suggestedChar == currChar ) {
-							suggestedChar = rand.nextInt(4)+1;
-						}
-						return new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
-					}
-				}
-			}
-		} else if( charChangeState == CHAR_ASKED || charChangeState == CHAR_ASKED_2 ) {
-			/* If the system just asked for the next character it will have to determine if a suggestion was made */
-			String targetCharacter = null;
-			for( DialogueAct act : recentDActs ) {
-				if( act.getTargetCharacter() != null ) {
-					targetCharacter = act.getTargetCharacter();
-				}
-			}
-
-			if( targetCharacter != null ) {
-				/* If the user chose a character then take this one */
-				charChangeState = NEUTRAL;
-				return new AgentSpokenUtterance( charNumbers.get(targetCharacter) );
-			} else {
-				/* If the user did not choose a character then try to repair it */
-				if( charChangeState == CHAR_ASKED_2 ) {
-					charChangeState = NEUTRAL;
-					int nextC = rand.nextInt(4)+1;
-					while( nextC == currChar ) {
-						nextC = rand.nextInt(4)+1;
-					}
-					return new AgentSpokenUtterance( nextC );
-				} else {
-					charChangeState = CHAR_ASKED_2;
-					return pickUtterances("repair_ask_next_character");
-				}
-			}
-		} else if( charChangeState == CHAR_SUGGESTED | charChangeState == CHAR_SUGGESTED_2 ) {
-			/* If the system just suggested a character than it will have to determine if the user
-			 * agreed or disagreed with this suggestion */
-			boolean agree = false;
-			boolean disagree = false;
-			for( DialogueAct act : recentDActs ) {
-				if( act.isAgree() ) {
-					agree = true;
-				}
-				if( act.isDisagree() ) {
-					disagree = true;
-				}
-			}
-			if( !agree && !disagree ) {
-				/* If the user did not give any sign try to repair it */
-				if( charChangeState == CHAR_SUGGESTED_2 ) {
-					charChangeState = NEUTRAL;
-					return new AgentSpokenUtterance( suggestedChar );
-				} else {
-					charChangeState = CHAR_SUGGESTED_2;
-					return pickUtterances("repair_suggest_next_character");
-				}
-			} else if( agree ) {
-				/* If the user agreed to the suggestion then use it */
-				charChangeState = NEUTRAL;
-				return new AgentSpokenUtterance( suggestedChar );
-			} else if( disagree ) {
-				/* If the user disagreed to the suggestion then ask for the next character */
-				charChangeState = CHAR_ASKED;
-				return pickUtterances("ask_next_character");
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Manages the agent startup process
-	 * If the user is in this process it will determine what the next step in the process is
-	 * and return an AgentUtterance to speak.
-	 * If the user is not in this process it will return null.
-	 */
-	public AgentSpokenUtterance manageAgentStart( )
-	{
-		if( charStartupState == INTRODUCED ) {
-			/* If the system just introduced himself then ask how the user feels today */
-			if( userTurnStart == -1 ) {
-				return new AgentSpokenUtterance( new AgentUtterance("Well?", "after_silence") );
-			}
-			charStartupState = HOW_ARE_YOU_ASKED;
-			return pickUtterances("intro_how_are_you");
-		} else if( charStartupState == HOW_ARE_YOU_ASKED ) {
-			/* If the system just asked how the user feels it will ask the user to tell it more */
-			if( userTurnStart == -1 ) {
-				return new AgentSpokenUtterance( new AgentUtterance("Well?", "after_silence") );
-			}
-			charStartupState = NEUTRAL;
-			return pickUtterances("intro_tell_me_more");
-		}
-		return null;
-	}
-
-	/**
-	 * Reads the messages from the TurnTakingInterpreter and decides if the agent should 
-	 * start speaking or not.
-	 * @param m - the received message
-	 * @return - true if the user should speak, false it if shouldn't
-	 */
-	public boolean agentShouldSpeak( SEMAINEMessage m )
-	{
-		/* Check if the system has started, if not return false */
-		if( !systemStarted ) {
-			return false;
-		}
-
-		if( m instanceof SEMAINEStateMessage ) {
-			SEMAINEStateMessage am = (SEMAINEStateMessage)m;
-
-			StateInfo agentInfo = am.getState();
-			if (agentInfo.getType() == StateInfo.Type.AgentState) {
-				Map<String,String> agentInfoMap = agentInfo.getInfos();
-
-				String intention = agentInfoMap.get("turnTakingIntention");
-				if( intention != null && intention.equals("startSpeaking") ) {
-					if( agentSpeakingState == SPEAKING || agentSpeakingState == PREPARING_TO_SPEAK ) {
-						return false;
-					} else {
+				String agentSpeakingState = is.getString("Agent.speakingState");
+				if( agentSpeakingState != null ) {
+					if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("start") && (agentSpeakingState.equals("preparing") || agentSpeakingState.equals("listening")) ) {
 						return true;
 					}
 				} else {
-					return false;
+					if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("start") ) {
+						return true;
+					}
+				}
+				
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * This method checks if the given message contains the end signal of the animation that the agent
+	 * is playing.
+	 * @param xm the message to check
+	 * @return true if the message contains the end signal, false if it does not.
+	 */
+	public boolean speechReady( SEMAINEXMLMessage xm ) throws JMSException
+	{
+		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
+		if( callbackElem != null ) {
+			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
+			if( eventElem != null ) {
+				String agentSpeakingState = is.getString("Agent.speakingState");
+				if( agentSpeakingState != null ) {
+					if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && (agentSpeakingState.equals("preparing") || agentSpeakingState.equals("speaking")) ) {
+						return true;
+					}
+				} else {
+					if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") ) {
+						return true;
+					}
 				}
 			}
 		}
@@ -777,797 +519,130 @@ public class UtteranceActionProposer extends Component
 	}
 
 	/**
-	 * Determines what to say based on the context
-	 * Calls different suggestion-methods which return a set of suggestions, with for each
-	 * suggestion a certain quality.
-	 * The final list of possible utterances is then modified to take history into account, 
-	 * and from this list the best (highest quality) option is chosen.
-	 * @return the AgentUtterance to speak next
+	 * Summarizes the detected Emotional events and puts this in the InformationState
 	 */
-	public AgentSpokenUtterance getResponse()
+	public void summarizeEmotionEvents()
 	{
-		ArrayList<AgentSpokenUtterance> possibleUtterances = new ArrayList<AgentSpokenUtterance>();
-		ArrayList<AgentSpokenUtterance> suggestions;
-
-		/* Get combined dialogue acts of the previous user turn */
-		DialogueAct act = getCombinedUserDialogueAct();
-
-		/* After silence */
-		suggestions = suggestAfterSilence();
-		possibleUtterances.addAll(suggestions);
-
-		/* Linking sentences */
-		suggestions = suggestLinkingSentence( act );
-		possibleUtterances.addAll(suggestions);
-
-		/* Based on content features */
-		suggestions = suggestOnContentFeatures( act );
-		possibleUtterances.addAll(suggestions);
-
-		/* Based on arousal */
-		suggestions = suggestOnArousal();
-		possibleUtterances.addAll(suggestions);
-
-		/* Last resort options, will always return something */
-		suggestions = suggestLastOptions( act );
-		possibleUtterances.addAll(suggestions);
-
-		// qualities aanpassen based on history
-		adaptQualityToHistory(possibleUtterances);
-
-		// Find best sentences
-		ArrayList<AgentSpokenUtterance> bestSentences = new ArrayList<AgentSpokenUtterance>();
-		double bestValue = -1d;
-		for( AgentSpokenUtterance uttr : possibleUtterances ) {
-			if( uttr.getQuality() > bestValue ) {
-				bestSentences.clear();
-				bestSentences.add( uttr );
-				bestValue = uttr.getQuality();
-			} else if( uttr.getQuality() == bestValue ) {
-				bestSentences.add( uttr );
-			}
-		}
-
-		/* TEST print all options TEST */
-		for( AgentSpokenUtterance uttr : bestSentences ) {
-			System.out.println(uttr.getQuality() + "	- " + uttr.getUtterance().getUtterance() + "("+uttr.getUtterance().getCategory()+")");
-		}
-
-		// Pick one
-		AgentSpokenUtterance response = bestSentences.get( rand.nextInt(bestSentences.size()) );
-
-		/* Set corresponding parameters */
-		if( response.getUtterance().getCategory().equals("tell_me_more") ) {
-			tellMeMoreCounter++;
-		}
-		if( response.getUtterance().getCategory().equals("change_subject") ) {
-			tellMeMoreCounter++;
-			nrTopicChanges++;
-			subjectIndex = utteranceHistory.size()-1;
-		}
-		if( response.getUtterance().getCategory().equals("ask_next_character") ) {
-			tellMeMoreCounter++;
-			nrTopicChanges = 0;
-			charChangeState = CHAR_ASKED;
-		}
-		if( response.getUtterance().getCategory().equals("change_character") ) {
-			tellMeMoreCounter++;
-			charChangeState = CHAR_SUGGESTED;
-			suggestedChar = response.getNewCharacter();
-		}
-
-		return response;
-	}
-
-	/**
-	 * Returns a list of possible responses based on the fact that a user did not start
-	 * speaking after the agent's turn.
-	 * @return a list of possible responses
-	 */
-	public ArrayList<AgentSpokenUtterance> suggestAfterSilence()
-	{
-		AgentSpokenUtterance lastUtterance = utteranceHistory.get( utteranceHistory.size()-1 );
-		double quality = 1.0d;
-
-		/* If the user didn't say anything, motivate him */
-		if( userTurnStart == -1 ) {
-			AgentUtterance elaborationUtterance = lastUtterance.getUtterance().getElaborationUtterance();
-			if( elaborationUtterance != null ) {
-				ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
-				AgentSpokenUtterance uttr =  new AgentSpokenUtterance( elaborationUtterance );
-				uttr.setQuality(quality);
-				spokenUtterances.add(uttr);
-				return spokenUtterances;
-			}
-			int r = rand.nextInt(4);
-			if( r == 0 ) {
-				return getUtterancesFromCategory("change_subject", quality);
-			} else {
-				return getUtterancesFromCategory("after_silence", quality);
-			}
-		}
-		return new ArrayList<AgentSpokenUtterance>();
-	}
-
-	/**
-	 * Returns a list of possible linking utterances based on the previous agent utterance and 
-	 * the user's response.
-	 * @param act the DialogueAct of the user's previous turn
-	 * @return a list of possible responses
-	 */
-	public ArrayList<AgentSpokenUtterance> suggestLinkingSentence( DialogueAct act )
-	{
-		if( act == null ) {
-			return new ArrayList<AgentSpokenUtterance>();
-		}
-
-		double quality = 0.7;
-		AgentSpokenUtterance lastUtterance = utteranceHistory.get( utteranceHistory.size()-1 );
-		ArrayList<String> features = new ArrayList<String>(Arrays.asList(act.getFeatures().trim().split(" ")));
-		ArrayList<AgentUtterance> linkingUtterances = lastUtterance.getUtterance().getLinkingUtterances( features );
-
-		ArrayList<AgentSpokenUtterance> linkingSpokenUtterances = new ArrayList<AgentSpokenUtterance>();
-		for( AgentUtterance link : linkingUtterances ) {
-			if( allUtterances.get(currChar).get(link.getUtterance()) != null ) {
-				linkingSpokenUtterances.addAll( getUtterancesFromCategory(link.getUtterance(), quality) ) ;
-
-			} else {
-				AgentSpokenUtterance uttr = new AgentSpokenUtterance( link );
-				uttr.setQuality(quality);
-				linkingSpokenUtterances.add(uttr);
-			}
-		}
-		return linkingSpokenUtterances;
-	}
-
-	/**
-	 * Returns a list of possible responses based on the detected Content Features 
-	 * in the given DialogueAct 
-	 * @param act the DialogueAct of the user's previous turn
-	 * @return a list of possible responses
-	 */
-	public ArrayList<AgentSpokenUtterance> suggestOnContentFeatures( DialogueAct act )
-	{
-		if( act == null ) {
-			return new ArrayList<AgentSpokenUtterance>();
-		}
-
-		double quality = 0.8;
-		HashMap<String,Integer> scores = giveResponseRatings(act);
-		AgentSpokenUtterance reaction;
-		int maxReactions = 4;
-		int firstScore = -1;
-		int latestScore = -1;
-		ArrayList<String> bestResponses = new ArrayList<String>();
-		while( scores.keySet().size()>0 && ( bestResponses.size() < maxReactions || ( bestResponses.size() > maxReactions && latestScore == firstScore ) ) ) {
-			reaction = getMaxUtterance( scores, "Content_Based" );
-			if( reaction != null ) {
-				String reactionUtterance = reaction.getUtterance().getUtterance();
-				if( firstScore == -1 ) {
-					firstScore = scores.get(reactionUtterance);
-				}
-				latestScore = scores.get(reactionUtterance);
-				bestResponses.add(reaction.getUtterance().getUtterance());
-
-				scores.remove(reactionUtterance);
-			} else {
-				break;
-			}
-		}
-		ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
-		if( firstScore > 0 ) {
-			for( String utterance : bestResponses ) {
-				if( allUtterances.get(currChar).get( utterance ) != null ) {
-					spokenUtterances.addAll( getUtterancesFromCategory( utterance, quality) ) ;
-				} 
-				else {
-					AgentSpokenUtterance uttr = new AgentSpokenUtterance( findAgentUtterance(utterance, "Content_Based") );
-					uttr.setQuality( uttr.getQuality() / 10 * quality );
-					spokenUtterances.add(uttr);
-				}
-			}
-		}
-		return spokenUtterances;
-	}
-
-	/**
-	 * Returns a list of possible responses based on the arousal.
-	 * @param act the DialogueAct of the user's previous turn
-	 * @return a list of possible responses
-	 */
-	public ArrayList<AgentSpokenUtterance> suggestOnArousal()
-	{
-		double quality = 0.4;
-		/* Determine high and low arousal indicators and user utterance length */
-		int high_intensity_arousal = 0;
-		int low_intensity_arousal = 0;
-
-		for( int i=emotionIndex; i< detectedEmotions.size(); i++ ) {
-			EmotionEvent ee = detectedEmotions.get(i);
-			if( ee.getType() == EmotionEvent.AROUSAL ) {
-				if( ee.getIntensity() > HIGH_AROUSAL ) {
-					high_intensity_arousal++;
-				} else if( ee.getIntensity() < LOW_AROUSAL ) {
-					low_intensity_arousal++;
-				}
-			}
-		}
-
-		ArrayList<AgentSpokenUtterance> suggestions = new ArrayList<AgentSpokenUtterance>();
-		if( high_intensity_arousal-low_intensity_arousal > 0 || (high_intensity_arousal > 0 && low_intensity_arousal == high_intensity_arousal) ) {
-			/* If there are high arousal indicators and there are more than low arousal indicators
-			 * respond with a 'high arousal utterance' */
-			suggestions.addAll( getUtterancesFromCategory( "high_arousal", quality ) );
-		} else if( low_intensity_arousal-high_intensity_arousal > 0 ) {
-			/* If there are low arousal indicators and there are more than high arousal indicators
-			 * respond with a 'low arousal utterance' */
-			suggestions.addAll( getUtterancesFromCategory( "low_arousal", quality ) );
-		}
-		return suggestions;
-	}
-
-	/**
-	 * Returns a list of generic responses with a very low quality. 
-	 * @param act the DialogueAct of the user's previous turn
-	 * @return a list of possible responses
-	 */
-	public ArrayList<AgentSpokenUtterance> suggestLastOptions( DialogueAct act )
-	{
-		double quality = 0.1;
-		ArrayList<AgentSpokenUtterance> suggestions = new ArrayList<AgentSpokenUtterance>();
-
-		if( act == null ) {
-			return getUtterancesFromCategory( "tell_me_more", quality);
-		}
-
-		long user_utterance_length = meta.getTime() - userTurnStart;
-
-		if( tellMeMoreCounter >= 4 ) {
-			if( act.getLength() == DialogueAct.Length.SHORT ) {
-				/* Change topic or character */
-				if( nrTopicChanges < 4 ) {
-					return getUtterancesFromCategory("change_subject", quality);
+		ArrayList<Float> highArousals = new ArrayList<Float>();
+		ArrayList<Float> lowArousals = new ArrayList<Float>();
+		ArrayList<Float> highValence = new ArrayList<Float>();
+		ArrayList<Float> lowValence = new ArrayList<Float>();
+		ArrayList<Float> highInterest = new ArrayList<Float>();
+		ArrayList<Float> lowInterest = new ArrayList<Float>();
+		ArrayList<Float> highPotency = new ArrayList<Float>();
+		ArrayList<Float> lowPotency = new ArrayList<Float>();
+		ArrayList<Float> highIntensity = new ArrayList<Float>();
+		ArrayList<Float> lowIntensity = new ArrayList<Float>();
+		for( EmotionEvent event : detectedEmotions ) {
+			if( event.getType() == EmotionEvent.AROUSAL ) {
+				if( event.getIntensity() >= 0 ) {
+					highArousals.add(event.getIntensity());
 				} else {
-					if( rand.nextBoolean() ) {
-						// Ask for the character
-						return getUtterancesFromCategory("ask_next_character", quality);
-					} else {
-						// Suggest a character
-						int suggestedChar = rand.nextInt(4)+1;
-						while( suggestedChar == currChar ) {
-							suggestedChar = rand.nextInt(4)+1;
-						}
-						AgentSpokenUtterance suggestion =  new AgentSpokenUtterance( new AgentUtterance("Do you want to talk to " + charNames.get(suggestedChar) + "?","change_character") );
-						suggestion.setNewCharacter(suggestedChar);
-						suggestions.add(suggestion);
-					}
+					lowArousals.add(event.getIntensity());
 				}
-			} else {
-				// TODO: Send continuer
-				// Temporary:
-				return getUtterancesFromCategory( "tell_me_more", quality);
+			} else if( event.getType() == EmotionEvent.VALENCE ) {
+				if( event.getIntensity() >= 0 ) {
+					highValence.add(event.getIntensity());
+				} else {
+					lowValence.add(event.getIntensity());
+				}
+			} else if( event.getType() == EmotionEvent.INTEREST ) {
+				if( event.getIntensity() >= 0 ) {
+					highInterest.add(event.getIntensity());
+				} else {
+					lowInterest.add(event.getIntensity());
+				}
+			} else if( event.getType() == EmotionEvent.POTENCY ) {
+				if( event.getIntensity() >= 0 ) {
+					highPotency.add(event.getIntensity());
+				} else {
+					lowPotency.add(event.getIntensity());
+				}
+			} else if( event.getType() == EmotionEvent.INTENSITY ) {
+				if( event.getIntensity() >= 0 ) {
+					highIntensity.add(event.getIntensity());
+				} else {
+					lowIntensity.add(event.getIntensity());
+				}
 			}
-		} else if( user_utterance_length < SMALL_UTTERANCE ) {
-			/* If the user utterance is smaller than a predefined threshold
-			 * respond with a 'tell me more utterance' */
-			return getUtterancesFromCategory( "tell_me_more", quality);
+		}
+		
+		setISEmotions("Valence", lowValence, highValence);
+		setISEmotions("Arousal", lowArousals, highArousals);
+		setISEmotions("Interest", lowInterest, highInterest);
+		setISEmotions("Potency", lowPotency, highPotency);
+		setISEmotions("Intensity", lowIntensity, highIntensity);
+	}
+	
+	/**
+	 * Based on the given emotion-name, and the list of low and high receives intensities, 
+	 * calculate the min,max and average values, and put this in the InformationState.
+	 *  
+	 * @param emotion - the name of the Emotion this data belongs to
+	 * @param nrLow - the number of low emotion-values (<0)
+	 * @param nrHigh - the number of high emotion-values (>=0)
+	 */
+	public void setISEmotions( String emotion, ArrayList<Float> nrLow, ArrayList<Float> nrHigh )
+	{
+		if( nrLow.size() == 0 && nrHigh.size() == 0 ) {
+			is.set("UserTurn."+emotion+".nrLowEvents", 0);
+			is.set("UserTurn."+emotion+".nrHighEvents", 0);
+			is.set("UserTurn."+emotion+".average", 0);
+			is.set("UserTurn."+emotion+".min", 0);
+			is.set("UserTurn."+emotion+".max", 0);
 		} else {
-			/* If no utterance can be determined pick one of the random utterances */
-			return getUtterancesFromCategory( "random", quality);
+			float sum = 0f;
+			float max = -999f;
+			float min = 999f;
+			for( Float fl : nrHigh ) {
+				if( fl > max ) max = fl;
+				if( fl < min ) min = fl;
+				sum = sum + fl;
+			}
+			for( Float fl : nrLow ) {
+				if( fl > max ) max = fl;
+				if( fl < min ) min = fl;
+				sum = sum + fl;
+			}
+			is.set("UserTurn."+emotion+".nrLowEvents", nrLow.size());
+			is.set("UserTurn."+emotion+".nrHighEvents", nrHigh.size());
+			is.set("UserTurn."+emotion+".average", new Float(sum / (nrLow.size() + nrHigh.size())).doubleValue());
+			is.set("UserTurn."+emotion+".min", new Double(min));
+			is.set("UserTurn."+emotion+".max", new Double(max));
 		}
-
-		return suggestions;
 	}
-
+	
 	/**
-	 * Based on the given type of sentence this method tries to find an utterance of that type
-	 * that hasn't been said for the last x agent utterances.
-	 * @param type - the type of the utterance
-	 * @return - the AgentUtterance which includes the utterance type and the utterance itself
+	 * Summarizes the detected AudioFeatures and puts this in the InformationState
 	 */
-	public ArrayList<AgentSpokenUtterance> getUtterancesFromCategory( String category, double quality )
+	public void summarizeFeatures()
 	{
-		/* Get all utterances of the given type */
-		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
-		ArrayList<AgentSpokenUtterance> spokenUtterances = convertToSpokenUtterances( utterancesChar.get(category) );
-		for( AgentSpokenUtterance uttr : spokenUtterances ) {
-			uttr.setQuality(quality);
-		}
-		return spokenUtterances;
-	}
-
-	public ArrayList<AgentSpokenUtterance> convertToSpokenUtterances( ArrayList<AgentUtterance> uttrs )
-	{
-		ArrayList<AgentSpokenUtterance> spokenUtterances = new ArrayList<AgentSpokenUtterance>();
-		if( uttrs == null ) {
-			return spokenUtterances;
-		}
-		for( AgentUtterance uttr : uttrs ) {
-			spokenUtterances.add( new AgentSpokenUtterance( uttr ) );
-		}
-		return spokenUtterances;
-	}
-
-	public void adaptQualityToHistory( ArrayList<AgentSpokenUtterance> utterances )
-	{
-		HashMap<String,Integer> utteranceDistances = new HashMap<String,Integer>();
-		int size = utteranceHistory.size();
-		for( int i=0; i<utteranceHistory.size(); i++ ) {
-			AgentSpokenUtterance uttr = utteranceHistory.get(i);
-			utteranceDistances.put(uttr.getUtterance().getUtterance(),(size-i) );
-		}
-
-		for( AgentSpokenUtterance uttr : utterances ) {
-			Integer distance = utteranceDistances.get(uttr.getUtterance().getUtterance());
-			if( distance == null ) {
-				distance = 0;
-			}
-			if( distance >= 1 && distance <= 5 ) {
-				uttr.setQuality( uttr.getQuality() - 0.8d );
-			}
-			else if( distance >= 6 && distance <= 10 ) {
-				uttr.setQuality( uttr.getQuality() - 0.4d );
-			}
-			else if( distance > 10 ) {
-				uttr.setQuality( uttr.getQuality() - 0.2d );
-			}
-		}
-	}
-
-	/**
-	 * Based on the given type of sentence this method tries to find an utterance of that type
-	 * that hasn't been said for the last x agent utterances.
-	 * @param type - the type of the utterance
-	 * @return - the AgentUtterance which includes the utterance type and the utterance itself
-	 */
-	public AgentSpokenUtterance pickUtterances( String type )
-	{
-		/* Get all utterances of the given type that haven't been used for the last x utterances */
-		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
-		ArrayList<AgentUtterance> utterancesType = utteranceCopy( utterancesChar.get(type) );
-
-		ArrayList<AgentUtterance> utteranceToRemove = new ArrayList<AgentUtterance>();
-		for( int i=utteranceHistory.size()-1; i>=(Math.max(0, utteranceHistory.size()-3)); i-- ) {
-			AgentSpokenUtterance spUttr = utteranceHistory.get(i);
-			for( AgentUtterance uttr : utterancesType ) {
-				if( uttr.getUtterance().equals(spUttr.getUtterance()) ) {
-					utteranceToRemove.add(uttr);
-				}
-			}
-			for( AgentUtterance uttr : utteranceToRemove ) {
-				utterancesType.remove( uttr );
-			}
-		}
-
-		// TODO: Random kiezen tussen change_subject en tell_me_more
-		if( utterancesType.size() == 0 ) {
-			/* If the list is empty do something else */
-			/*if( !type.equals("ask_next_character") && !type.equals("repair_ask_next_character") && !type.equals("suggest_next_character")&& !type.equals("repair_suggest_next_character") ) {
-				charChangeState = CHAR_ASKED;
-				System.out.println("Changing " + type + " to ask_next_character");
-				return pickUtterances("ask_next_character");
+		for( String featureName : detectedFeatures.keySet() ) {
+			ArrayList<Float> features = detectedFeatures.get(featureName);
+			if( features.size() == 0 ) {
+				continue;
 			} else {
-				charChangeState = NEUTRAL;
-				subjectIndex = utteranceHistory.size()-1;
-				System.out.println("Changing "+type+" to change_subject");
-				return pickUtterances("change_subject");
-			}*/
-			if( rand.nextBoolean() ) {
-				charChangeState = NEUTRAL;
-				System.out.println("Changing "+type+" to tell_me_more");
-				return pickUtterances("tell_me_more");
-			} else {
-				charChangeState = NEUTRAL;
-				subjectIndex = utteranceHistory.size()-1;
-				System.out.println("Changing "+type+" to change_subject");
-				return pickUtterances("change_subject");
-			}
-		} else {
-			/* If the list isn't empty randomly pick an utterance from the list */
-			return new AgentSpokenUtterance( utterancesType.get(rand.nextInt(utterancesType.size())) );
-		}
-	}
-
-	public AgentUtterance findAgentUtterance( String utterance, String newType )
-	{
-		HashMap<String,ArrayList<AgentUtterance>> utterancesChar = allUtterances.get(currChar);
-		for( ArrayList<AgentUtterance> utterances : utterancesChar.values() ) {
-			for( AgentUtterance au : utterances ) {
-				if( au.getUtterance().equals(utterance) ) {
-					return au;
+				float min = 99999;
+				float max = -99999;
+				float avg = 0;
+				for( float fl : features ) {
+					avg = avg + fl;
+					if( fl < min ) min = fl;
+					if( fl > max ) max = fl;
 				}
-			}
-		}
-		return new AgentUtterance( utterance, newType );
-	}
-
-	/**
-	 * Called when the output module messages that the utterance is finished.
-	 * Will put the agent state on listening again and send this state around.
-	 * @throws JMSException
-	 */
-	public void processUtteranceEnd() throws JMSException
-	{	
-		if( (agentSpeakingState == SPEAKING || agentSpeakingState == PREPARING_TO_SPEAK) && meta.getTime() > utteranceEndTime ) {
-			System.out.println("Agent silent (timeout)");
-			DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
-			agentSpeakingState = LISTENING;
-			agentSpeakingStateTime = meta.getTime();
-			sendListening();
-			userTurnStart = -1;
-		}
-		if( waitingFor != 0 && waitingID != null && meta.getTime()-waitingSince > 10000 ) {
-			if( waitingFor == 1 ) {
-				// Introduction-sentence finished
-				giveIntro();
-			}
-			else if( waitingFor == 2 ) {
-				// Char-change message finished
-				sendNewCharacter( nextChar );
-				waitingID = "";
-				waitingFor = 0;
-			}
-		}	
-	}
-
-	/**
-	 * Sends the given utterance to the output modules.
-	 * 
-	 * @param utterance
-	 * @return the id of the speech-part
-	 * @throws JMSException
-	 */
-	public String sendUtterance( AgentSpokenUtterance utterance ) throws JMSException
-	{	
-		/* Send utterance to Greta */
-		String response = utterance.getUtterance().getUtterance();
-
-		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
-		Element root = doc.getDocumentElement();
-
-		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
-		bml.setAttribute(BML.A_ID, "bml_uap_"+output_counter); 
-		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
-		fml.setAttribute(FML.A_ID, "fml_uap_"+output_counter);
-		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
-		speech.setAttribute(BML.A_ID, "speech_uap_"+output_counter);
-		speech.setAttribute(BML.E_TEXT, response);
-		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
-		speech.setAttribute("voice", "activemary");
-
-		//speech.setTextContent(response);
-
-		int counter=1;
-		for( String word : response.split(" ") ) {
-			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
-			mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
-			Node text = doc.createTextNode(word);
-			speech.appendChild(text);
-			counter++;
-		}
-		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
-		mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
-
-		String contentID = "fml_uap_"+output_counter;
-		long contentCreationTime = meta.getTime();
-		long userTime = contentCreationTime;
-		fmlSender.sendXML(doc, userTime, contentID, contentCreationTime);
-
-		/* Send the speaking-state around */
-		sendSpeaking();
-
-		/* Set indices */
-		emotionIndex = detectedEmotions.size();
-		dActIndex = detectedDActs.size();
-
-		/* Add the utterance to the history */
-		utterance.setTime( meta.getTime() );
-		utteranceHistory.add( utterance );
-
-
-		System.out.println("Agent speaking");
-		/* Set end time (temporary) */
-		utteranceEndTime = meta.getTime() + ( (utterance.getUtterance().getUtterance().split(" ").length * 250)+8000 );
-
-		DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type=" + utterance.getUtterance().getCategory() + ", utterance=" + utterance.getUtterance().getUtterance() );
-
-		String cat = utterance.getUtterance().getCategory(); 
-		if( !cat.equals("after_silence") ) { // Do not change the conversational state if the agent is trying to repair something.
-			if( cat.equals("ask_next_character") || cat.equals("change_character") || cat.equals("repair_ask_next_character") || cat.equals("repair_suggest_next_character") || cat.equals("ask_next_character") || cat.equals("intro_how_are_you") || cat.equals("intro_old") || cat.equals("intro_new") ) {
-				if( !convState.equals("asking") ) {
-					convState = "asking";
-					sendConvState();
-				}
-			} else if( !convState.equals("listening") ) {
-				convState = "listening";
-				sendConvState();
-			}
-		}
-
-		output_counter++;
-		return "fml_uap_"+(output_counter-1);
-	}
-
-	/**
-	 * Sends around that the agent is speaking
-	 * @throws JMSException
-	 */
-	public void sendSpeaking() throws JMSException
-	{
-		Map<String,String> dialogInfo = new HashMap<String,String>();		
-		dialogInfo.put("agentTurnState", "true");
-
-		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
-		dialogStateSender.sendStateInfo(dsi, meta.getTime());
-	}
-
-	/**
-	 * Sends around that the agent is silent
-	 * @throws JMSException
-	 */
-	public void sendListening() throws JMSException
-	{
-		Map<String,String> dialogInfo = new HashMap<String,String>();		
-		dialogInfo.put("agentTurnState", "false");
-
-		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
-		dialogStateSender.sendStateInfo(dsi, meta.getTime());
-	}
-
-	/**
-	 * Sends around that the agent is silent
-	 * @throws JMSException
-	 */
-	public void sendConvState() throws JMSException
-	{
-		Map<String,String> dialogInfo = new HashMap<String,String>();		
-		dialogInfo.put("convState", convState);
-
-		DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
-		dialogStateSender.sendStateInfo(dsi, meta.getTime());
-	}
-
-	/**
-	 * Sends around that the system has changed to a new character
-	 * @param character the new character
-	 * @throws JMSException
-	 */
-	public void sendNewCharacter( int character ) throws JMSException
-	{
-		Map<String,String> contextInfo = new HashMap<String,String>();
-		contextInfo.put("character", charNames.get(character));
-
-		ContextStateInfo csi = new ContextStateInfo(contextInfo);
-		contextSender.sendStateInfo( csi, meta.getTime() );
-	}
-
-	/**
-	 * Reads the received Message and tries to filter out the detected user speaking state.
-	 * @param m - the received message
-	 */
-	public void setUserSpeakingState(StateInfo userInfo)
-	{
-		if( userInfo.hasInfo("speaking") ) {
-			if( userInfo.getInfo("speaking").equals("true") ) {
-				if( userSpeakingState != SPEAKING ) {
-					userSpeakingState = SPEAKING;
-					userSpeakingStateTime = meta.getTime();
-					if( userTurnStart == -1 ) {
-						userTurnStart = userSpeakingStateTime;
-					}
-				}
-			} else if( userInfo.getInfo("speaking").equals("false") ) {
-				if( userSpeakingState != LISTENING ) {
-					userSpeakingState = LISTENING;
-					userSpeakingStateTime = meta.getTime();
-				}
+				avg = avg / features.size();
+				
+				is.set("UserTurn.AudioFeatures."+featureName+"_min",new Float(min).doubleValue());
+				is.set("UserTurn.AudioFeatures."+featureName+"_max",new Float(max).doubleValue());
+				is.set("UserTurn.AudioFeatures."+featureName+"_avg",new Float(avg).doubleValue());
 			}
 		}
 	}
 
 	/**
-	 * Reads the received Message and tries to filter out the detected Emotion Events.
-	 * @param m
+	 * Combines all DialogueActs of the last UserTurn, and puts this in the InformationState
 	 */
-	public void addDetectedEmotions(StateInfo userInfo)
-	{
-		//Map<String,String> dialogInfoMap = userInfo.getInfos();
-
-		if( userInfo.hasInfo("valence") ) {
-			float valence = Float.parseFloat( userInfo.getInfo("valence") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.VALENCE, valence );
-			detectedEmotions.add( ee );
-		} else if( userInfo.hasInfo("arousal") ) {
-			float arousal = Float.parseFloat( userInfo.getInfo("arousal") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.AROUSAL, arousal );
-			detectedEmotions.add( ee );
-		} else if( userInfo.hasInfo("interest") ) {
-			float interest = Float.parseFloat( userInfo.getInfo("interest") );
-			EmotionEvent ee = new EmotionEvent( meta.getTime(), 0, EmotionEvent.INTEREST, interest );
-			detectedEmotions.add( ee );
-		}
-	}
-
-	/**
-	 * Reads the received Message and tries to filter out the detected Dialogue Acts.
-	 * @param m
-	 * @throws JMSException
-	 */
-	public void addDetectedDActs( StateInfo stateInfo ) throws JMSException
-	{
-		if( stateInfo.hasInfo("userUtterance") && stateInfo.hasInfo("userUtteranceStartTime") ) {
-			String utterance = stateInfo.getInfo("userUtterance");
-			long time = Long.parseLong(stateInfo.getInfo("userUtteranceStartTime"));
-			String f = stateInfo.getInfo("userUtteranceFeatures");
-			if( f == null ) {
-				f = "";
-			}
-			DialogueAct act = new DialogueAct( utterance, time );
-			act.setEndtime(meta.getTime());
-			if( f.contains("positive") ) act.setPositive(true);
-			if( f.contains("negative") ) act.setNegative(true);
-			if( f.contains("disagree") ) {
-				act.setDisagree(true);
-				f = f.replace("disagree", "");
-			}
-			if( f.contains("agree") ) act.setAgree(true);
-			if( f.contains("about_other_people") ) act.setAboutOtherPeople(true);
-			if( f.contains("about_other_character") ) act.setAboutOtherCharacter(true);
-			if( f.contains("about_current_character") ) act.setAboutCurrentCharacter(true);
-			if( f.contains("about_own_feelings") ) act.setAboutOwnFeelings(true);
-			if( f.contains("pragmatic") ) act.setPragmatic(true);
-			if( f.contains("abou_self") ) act.setTalkAboutSelf(true);
-			if( f.contains("future") ) act.setFuture(true);
-			if( f.contains("past") ) act.setPast(true);
-			if( f.contains("event") ) act.setEvent(true);
-			if( f.contains("action") ) act.setAction(true);
-			if( f.contains("laugh") ) act.setLaugh(true);
-			if( f.contains("change_speaker") ) act.setChangeSpeaker(true);
-			if( f.contains("target:") ) act.setTargetCharacter( f.substring(f.indexOf("target:")+7, Math.max(f.length(),f.indexOf(" ", f.indexOf("target:")+7))) );
-			if( f.contains("short") ) act.setLength(DialogueAct.Length.SHORT);
-			if( f.contains("long") ) act.setLength(DialogueAct.Length.LONG);
-			
-			if( detectedDActs.size() > 1 && Math.abs(detectedDActs.get(detectedDActs.size()-1).getStarttime() - act.getStarttime()) < 10 ) {
-				// Same dialogueAct, so update the last DA in the list
-				detectedDActs.set(detectedDActs.size()-1, act);
-			} else {
-				detectedDActs.add(act);
-			}
-		}
-	}
-
-	/**
-	 * Returns a map with all possible responses plus the ratings of those
-	 * responses (based on the response model)
-	 * @param act
-	 * @return
-	 */
-	public HashMap<String,Integer> giveResponseRatings( DialogueAct act )
-	{
-		ArrayList<Integer> props = new ArrayList<Integer>();
-		HashMap<String,Integer> scores = new HashMap<String, Integer>();
-
-		if( currChar == POPPY ) {
-			props.add( 1 );
-		}else if( currChar == OBADIAH ) {
-			props.add( 2 );
-		} else if( currChar == PRUDENCE ) {
-			props.add( 3 );
-		} else if( currChar == SPIKE ) {
-			props.add( 4 );
-		}
-
-		if( act.isPositive() ) props.add( 8 );
-		if( act.isNegative() ) props.add( 9 );
-		if( act.isAgree() ) props.add( 10 );
-		if( act.isDisagree() ) props.add( 11 );
-		if( act.isAboutOtherPeople() ) props.add( 12 );
-		if( act.isAboutOtherCharacter() ) props.add( 13 );
-		if( act.isAboutCurrentCharacter() ) props.add( 14 );
-		if( act.isAboutOwnFeelings() ) props.add( 15 );
-		if( act.isPragmatic() ) props.add( 16 );
-		if( act.isTalkAboutSelf() ) props.add( 17 );
-		if( act.isPast() && act.isEvent() ) props.add( 18 );
-		if( act.isFuture() && act.isEvent() ) props.add( 19 );
-		if( act.isPast() && act.isAction() ) props.add( 20 );
-		if( act.isFuture() && act.isAction() ) props.add( 21 );
-		if( act.isLaugh() ) props.add( 22 );
-
-		int score;
-		for( ContextTemplate template : templates ) {
-
-			ArrayList<Integer> required = template.getRequiredFeatures();
-			ArrayList<Integer> optional = template.getExtraFeatures();
-			score = 10;
-			String reaction = template.getReaction();
-			for( int feature : props ) {
-				if( !required.contains(feature) && !optional.contains(feature) ) {
-					score -= 2;
-				}
-			}
-			for( int feature : required ) {
-				if( !props.contains(feature) ) {
-					score -= 10;
-				}
-			}
-			for( int feature : optional ) {
-				if( !props.contains(feature) ) {
-					score -= 1;
-				}
-			}
-
-			if( ! scores.containsKey(reaction) || scores.get(reaction) < score  ) {
-				scores.put(reaction, score);
-			}
-		}
-		return scores;
-	}
-
-	/**
-	 * Returns the best possible utterance from the given map with responses and scores
-	 * Only returns utterances with a score higher than 0.
-	 * When the highest score <= 0 is will return null.
-	 * @param scores
-	 * @return
-	 */
-	public String getMaxScorer( HashMap<String, Integer> scores )
-	{
-		String maxString = "";
-		int maxScore = -99;
-		for( Map.Entry<String,Integer> entry : scores.entrySet() ) {
-			if( entry.getValue() > maxScore ) {
-				maxString = entry.getKey();
-				maxScore = scores.get(entry.getKey());
-			}
-		}
-		if( maxScore <= 0 ) {
-			return null;
-		} else {
-			return maxString;
-		}
-	}
-
-	public AgentSpokenUtterance getMaxUtterance( HashMap<String, Integer> scores, String type )
-	{
-		String maxString = "";
-		int maxScore = -99;
-		for( Map.Entry<String,Integer> entry : scores.entrySet() ) {
-			if( entry.getValue() > maxScore ) {
-				maxString = entry.getKey();
-				maxScore = scores.get(entry.getKey());
-			}
-		}
-		if( maxScore <= 0 ) {
-			return null;
-		} else {
-			AgentSpokenUtterance maxUttr = new AgentSpokenUtterance( findAgentUtterance(maxString, type) );
-			maxUttr.setQuality(maxScore);
-			return maxUttr;
-		}
-	}
-
-	/**
-	 * Makes a deepcopy of the given ArrayList
-	 * @param utterances - the list to copy
-	 * @return
-	 */
-	public ArrayList<AgentUtterance> utteranceCopy( ArrayList<AgentUtterance> utterances )
-	{
-		if( utterances == null ) {
-			return new ArrayList<AgentUtterance>();
-		}
-		ArrayList<AgentUtterance> newUtterances = new ArrayList<AgentUtterance>();
-		for( AgentUtterance uttr : utterances ) {
-			newUtterances.add( uttr );
-		}
-		return newUtterances;
-	}
-
-	/**
-	 * Combines the detected Dialogue Acts of the previous user turn into 1 DialogueAct
-	 * @return the combined DialogueAct
-	 */
-	public DialogueAct getCombinedUserDialogueAct()
+	public void getCombinedUserDialogueAct()
 	{
 		DialogueAct act = null;
 		for( int i=dActIndex; i<detectedDActs.size(); i++ ) {
@@ -1585,6 +660,314 @@ public class UtteranceActionProposer extends Component
 				act = new DialogueAct(act,detectedDActs.get(i));
 			}
 		}
-		return act;
+		
+		if( act == null ) return;
+		
+		is.set("UserTurn.utterance", act.getUtterance());
+		is.set("UserTurn.starttime",(int)act.getStarttime());
+		is.set("UserTurn.endtime",(int)act.getStarttime());
+		is.set("UserTurn.targetCharacter",act.getTargetCharacter());
+		is.remove("UserTurn.SemanticFeatures");
+		for( String contentFeature : act.getFeatureList() ) {
+			is.set("UserTurn.SemanticFeatures._addlast",contentFeature);
+		}
+	}
+	
+	/**
+	 * Updates the InformationState with the behaviour that the Agent is performing now
+	 */
+	public void sendSpeaking()
+	{
+		is.set("Agent.speakingState","preparing");
+		is.set("Agent.speakingIntention","null");
+		is.set("ResponseHistory._addlast.id",latestResponse.getId());
+		is.set("ResponseHistory._last.response",latestResponse.getResponse());
+	}
+
+	/**
+	 * Adds the given data to the list of data to send to Semaine at the end of the Agent's turn
+	 * 
+	 * @param name - the name of the data-element to send.
+	 * @param value - the value of the data-element to send.
+	 * @param channel - the Semaine-channel to send the data too.
+	 */
+	public void sendDataAtEndOfTurn( String name, String value, String channel )
+	{
+		String[] queue = {name,value,channel};
+		dataSendQueue.add(queue);
+	}
+
+	/**
+	 * Sends the given data to the other Semaine components
+	 * 
+	 * @param name - the name of the data-element to send.
+	 * @param value - the value of the data-element to send.
+	 * @param channel - the Semaine-channel to send the data too (could be 'dialogstate' and 'contextstate')
+	 */
+	public void sendData( String name, String value, String channel ) throws JMSException
+	{
+		Map<String,String> info = new HashMap<String,String>();
+		info.put(name,value);
+
+		if( channel.toLowerCase().equals("dialogstate") ) {
+			DialogStateInfo dsi = new DialogStateInfo(info, null);
+			dialogStateSender.sendStateInfo(dsi, meta.getTime());
+		} else if( channel.toLowerCase().equals("contextstate") ) {
+			ContextStateInfo csi = new ContextStateInfo(info);
+			contextSender.sendStateInfo( csi, meta.getTime() );
+		}
+	}
+	
+	/**
+	 * Executes the Behaviour of a Template, with the given InformationState, and the given list of arguments.
+	 * 
+	 * @param is - the current InformationState
+	 * @param argNames - the list of names of the given arguments
+	 * @param argValues - the list of values of the given arguments
+	 */
+	public void execute( InformationState is, ArrayList<String> argNames, ArrayList<String> argValues )
+	{
+		if( argNames == null ) argNames = new ArrayList<String>();
+		if( argValues == null ) argValues = new ArrayList<String>();
+		
+		String id = preparedResponses.get(createHash(argNames, argValues)); 
+		if( id != null ) {
+			/* The Response has been prepared before, so it only has to be started. */
+			try {
+				latestResponse = getResponse(argNames, argValues);
+				sendSpeaking();
+				commandSender.sendTextMessage("STARTAT 0\nPRIORITY 0.5\nLIFETIME 5000\n", meta.getTime(), Event.single, id, meta.getTime());
+			}catch( JMSException e ){
+				// TODO: handle
+			}
+		} else {
+			/* The Response has not been prepared, so it has to be send directly. */
+			Document doc = constructFMLDocument(argNames, argValues);
+			if( doc == null ) return;
+			
+			//printDocument(doc);
+			
+			String contentID = "fml_uap_"+output_counter;
+			try {
+				sendSpeaking();
+				//printDocument(doc);
+				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
+			}catch( JMSException e ) {
+				// Handle
+			}
+			output_counter++;
+		}
+	}
+	
+	/**
+	 * Executes the Behaviour of a Template, with the given InformationState, and the given list of arguments.
+	 * 
+	 * @param is - the current InformationState
+	 * @param argNames - the list of names of the given arguments
+	 * @param argValues - the list of values of the given arguments
+	 */
+	public void prepare( InformationState is, ArrayList<String> argNames, ArrayList<String> argValues ) 
+	{
+		String hash = createHash(argNames, argValues);
+		if( preparingResponses.get(hash) != null || preparedResponses.get(hash) != null ) {
+			return;
+		}
+		if( argNames == null ) argNames = new ArrayList<String>();
+		if( argValues == null ) argValues = new ArrayList<String>();
+		
+		Document doc = constructFMLDocument(argNames, argValues);
+		if( doc == null ) return;
+//		try {
+//			// TODO: Uncomment and test
+//			queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
+			preparingResponses.put(hash, "bml_uap_"+output_counter);
+//		}catch( JMSException e ){
+//			// TODO Handle
+//		}
+		
+		output_counter++;
+	}
+	
+	/**
+	 * Constructs a FML-document from the given arguments
+	 * 
+	 * @param argNames - the names of the given arguments.
+	 * @param argValues - the values of the given arguments.
+	 * @return the constructed FML-document.
+	 */
+	public Document constructFMLDocument( ArrayList<String> argNames, ArrayList<String> argValues )
+	{
+		Response response = getResponse(argNames, argValues);
+		if( response == null ) return null;
+		
+		latestResponse = response;
+		String responseString = response.getResponse();
+		argNames.addAll(response.getArgNames());
+		argValues.addAll(response.getArgValues());
+		
+		Document doc = XMLTool.newDocument("fml-apml", null, FML.version);
+		Element root = doc.getDocumentElement();
+
+		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
+		bml.setAttribute(BML.A_ID, "bml_uap_"+output_counter); 
+		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
+		fml.setAttribute(FML.A_ID, "fml_uap_"+output_counter);
+		
+		/* Speech Element */
+		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
+		speech.setAttribute(BML.A_ID, "speech_uap_"+output_counter);
+		speech.setAttribute(BML.E_TEXT, responseString);
+		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
+		speech.setAttribute("voice", "activemary");
+		
+		/* Mark Elements */
+		int counter=1;
+		String[] words = responseString.split(" ");
+		for( String word : words ) {
+			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
+			mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
+			Node text = doc.createTextNode(word);
+			speech.appendChild(text);
+			counter++;
+		}
+		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
+		mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
+		
+		/* Add the arguments to the FML-document */
+		int tagCounter = 1;
+		for( int i=0; i<argNames.size(); i++ ) {
+			String argName = argNames.get(i);
+			if( !argName.equals("response") && !argName.equals("response2") && argName.contains(":") ) {
+				String[] tags = argName.split(":");
+				if( tags.length == 2 ) {
+					/* Determine start and endtime */
+					String starttime = null;
+					String endtime = null;
+					String argValue = argValues.get(i);
+					if( argValue.equals("_start") ) {
+						starttime = "speech_uap_"+output_counter+":tm1";
+						endtime = "speech_uap_"+output_counter+":tm"+(Math.min(3, counter));
+					} else if( argValue.equals("_end") ) {
+						starttime = "speech_uap_"+output_counter+":tm"+(Math.max(1,(counter-2)));
+						endtime = "speech_uap_"+output_counter+":tm"+counter;
+					} else if( argValue.equals("_all") ) {
+						starttime = "speech_uap_"+output_counter+":tm1";
+						endtime = "speech_uap_"+output_counter+":tm"+counter;
+					} else {
+						for( int j=0; j<words.length; j++ ) {
+							if( words[j].equals(argValue) ) {
+								starttime = "speech_uap_"+output_counter+":tm"+(j+1);
+								endtime = "speech_uap_"+output_counter+":tm"+(j+2);
+								break;
+							}
+						}
+					}
+					if( starttime == null || endtime == null ) continue;
+					
+					Element targetElement;
+					if( tags[0].equals("pitchaccent") ) {
+						targetElement = bml;
+					} else {
+						targetElement = fml;
+					}
+					
+					Element tagElement = XMLTool.appendChildElement(targetElement, tags[0]);
+					tagElement.setAttribute("id", "tag"+tagCounter);
+					tagElement.setAttribute("type", tags[1]);
+					tagElement.setAttribute("start", starttime);
+					tagElement.setAttribute("end", endtime);
+					tagElement.setAttribute("importance", ""+1);
+					tagCounter++;
+				}
+			}
+		}
+		return doc;
+	}
+
+	/**
+	 * Retrieves the Response from the given list of arguments. If two responses are present they are combined into 1.
+	 * 
+	 * @param argNames - the names of the given arguments.
+	 * @param argValues - the values of the given arguments.
+	 * @return the found Response
+	 */
+	public Response getResponse( ArrayList<String> argNames, ArrayList<String> argValues )
+	{
+		int responseIndex = argNames.indexOf("response");
+		if( responseIndex == -1 ) {
+			System.out.println("Error, no response given.");
+			return null;
+		}
+		Response response = responses.get(argValues.get(responseIndex));
+		if( response == null ) {
+			ArrayList<Response> responseGroup = responseGroups.get(argValues.get(responseIndex));
+			if( responseGroup == null ) {
+				System.out.println("Error, fitting Response ("+argValues.get(responseIndex)+") could not be found.");
+				return null;
+			} else {
+				response = responseGroup.get(random.nextInt(responseGroup.size()));
+			}
+		}
+		
+		int responseIndex2 = argNames.indexOf("response2");
+		if( responseIndex2 == -1 ) {
+			return response;
+		}
+		Response response2 = responses.get(argValues.get(responseIndex2));
+		if( response2 == null ) {
+			ArrayList<Response> responseGroup = responseGroups.get(argValues.get(responseIndex2));
+			if( responseGroup == null ) {
+				System.out.println("Error, fitting Response ("+argValues.get(responseIndex2)+") could not be found.");
+				return response;
+			} else {
+				response2 = responseGroup.get(random.nextInt(responseGroup.size()));
+			}
+		}
+		Response combinedResponse = new Response( response, response2 );
+		return combinedResponse;
+	}
+	
+	/**
+	 * Creates a unique Hash from the given list of arguments, to make a unique identifier of this particular Response.
+	 * 
+	 * @param argNames - the names of the given arguments.
+	 * @param argValues - the values of the given arguments.
+	 * @return the Hash-string creates from the list of arguments.
+	 */
+	public String createHash( ArrayList<String> argNames, ArrayList<String> argValues )
+	{
+		ArrayList<String> argNamesCopy = (ArrayList<String>)argNames.clone();
+		ArrayList<String> argValuesCopy = (ArrayList<String>)argValues.clone();
+		String hash = "";
+		Collections.sort(argNamesCopy);
+		Collections.sort(argValuesCopy);
+		for(String str : argNamesCopy ) {
+			hash = hash + str;
+		}
+		for(String str : argValuesCopy ) {
+			hash = hash + str;
+		}
+		return hash;
+	}
+	
+	/**
+	 * Prints the given Document to the Console (debugging-method).
+	 *
+	 * @param doc - the Document to print
+	 */
+	private void printDocument( Document doc )
+	{
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			
+			//initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(new StringWriter());
+			DOMSource source = new DOMSource(doc);
+			transformer.transform(source, result);
+
+			String xmlString = result.getWriter().toString();
+			System.out.println(xmlString);
+		}catch( Exception e ){}
 	}
 }

@@ -1,0 +1,74 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+	
+	<template id="Poppy_After_Silence1" name="General response after silence">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$Agent.character" value2="Poppy" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.3">
+			<argument name="response" value="##Poppy_after_silence" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_After_Silence2" name="After silence elaboration 1">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy57" />
+			<compare value1="$Agent.character" value2="Poppy" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Poppy153" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_After_Silence3" name="After silence elaboration 2">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy94" />
+			<compare value1="$Agent.character" value2="Poppy" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Poppy88" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_After_Silence4" name="After silence elaboration 3">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy100" />
+			<compare value1="$Agent.character" value2="Poppy" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Poppy29" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_After_Silence5" name="After silence elaboration 4">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy104" />
+			<compare value1="$Agent.character" value2="Poppy" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Poppy154" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_After_Silence6" name="After silence elaboration 5">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Poppy91" />
+			<compare value1="$Agent.character" value2="Poppy" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Poppy155" />
+		</behaviour>
+	</template>
+	
+</behaviourtemplates>

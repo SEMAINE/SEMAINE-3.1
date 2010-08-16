@@ -1,0 +1,139 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+	
+	<template id="Poppy_RandomResponse" name="Random Response of Poppy">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.nrTimesRandom" comparator="smaller_equals" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="$Agent.nrTimesRandom + 1" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Poppy_random" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_Random_ChangeSubject" name="Random ChangeSubject of Poppy">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$Agent.nrTimesRandom" comparator="greater_than" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Poppy_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_RandomResponse" name="Random Response of Prudence">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.nrTimesRandom" comparator="smaller_equals" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="$Agent.nrTimesRandom + 1" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Prudence_random" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_Random_ChangeSubject" name="Random ChangeSubject of Prudence">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.nrTimesRandom" comparator="greater_than" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Prudence_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_RandomResponse" name="Random Response of Obadiah">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.nrTimesRandom" comparator="smaller_equals" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="$Agent.nrTimesRandom + 1" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Obadiah_random" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_Random_ChangeSubject" name="Random ChangeSubject of Obadiah">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$Agent.nrTimesRandom" comparator="greater_than" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Obadiah_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_RandomResponse" name="Random Response of Spike">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$Agent.nrTimesRandom" comparator="smaller_equals" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="$Agent.nrTimesRandom + 1" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Spike_random" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_Random_ChangeSubject" name="Random ChangeSubject of Spike">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$Agent.nrTimesRandom" comparator="greater_than" value2="4" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Spike_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+</behaviourtemplates>

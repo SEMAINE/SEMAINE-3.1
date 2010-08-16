@@ -1,0 +1,173 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+	<template id="Prudence_linking1" name="Linking to 'How do you view other people?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence103" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_positive" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence85" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence112" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence113" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence135" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking2" name="Linking to 'How do you view other people?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence103" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_negative" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence85" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence120" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence131" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence134" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking3" name="Linking to 'Tell me what you would like to do?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence105" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<optional>
+   			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence57" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence87" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence118" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence127" />
+				</c_behaviour>
+			</option>
+			<option probability="0.2">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence117" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking4" name="Linking to 'What are you planning to do?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence102" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence117" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence87" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Prudence118" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking5" name="Linking to 'What are you planning to do?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence102" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence127" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence57" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking6" name="Linking to 'What would you like to talk about?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence124" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence150" />
+					<c_argument name="response2" value="#Prudence61" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence118" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+
+</behaviourtemplates>

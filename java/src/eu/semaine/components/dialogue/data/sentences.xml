@@ -110,7 +110,8 @@
 			<utterance value="What have you been doing?">
 				<link pre="short" response="Go on." />
 				<link pre="short" response="I'd love to hear about it." />
-				<link pre="short" response="I'd love to hear more." />
+				<lin
+				k pre="short" response="I'd love to hear more." />
 			</utterance>
 			<utterance value="What's good in your life at the moment?" />
 		</category>

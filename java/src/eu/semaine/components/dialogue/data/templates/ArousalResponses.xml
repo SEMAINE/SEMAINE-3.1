@@ -1,0 +1,54 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+	<template id="Prudence_HighArousal" name="Response after a detected high arousal">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$UserTurn.Arousal.max" comparator="greater_equals" value2="0.7" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Prudence_high_arousal" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_LowArousal" name="Response after a detected low arousal">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$UserTurn.Arousal.min" comparator="smaller_equals" value2="-0.7" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Prudence_low_arousal" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_HighArousal" name="Response after a detected high arousal">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$UserTurn.Arousal.max" comparator="greater_equals" value2="0.7" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Obadiah_high_arousal" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_LowArousal" name="Response after a detected low arousal">
+		<preconditions>
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$UserTurn.Arousal.min" comparator="smaller_equals" value2="-0.7" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Obadiah_low_arousal" />
+		</behaviour>
+	</template>
+
+</behaviourtemplates>

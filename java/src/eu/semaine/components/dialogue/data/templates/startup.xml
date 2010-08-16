@@ -1,0 +1,217 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+	
+<!-- +++++++++++++++++++++++ PRUDENCE ++++++++++++++++++++++++++  -->
+	<template id="Prudence_intro_1" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$User.presentStateChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$User.present" value2="1" />
+		</preconditions>
+		
+		<effects>
+			<update name="User.presentStateChanged" value="0" />
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<!-- <argument name="response" value="#Prudence149" /> -->
+			<argument name="response" value="#Prudence24" />
+			<argument name="response2" value="#Prudence30" />
+		</behaviour>
+	</template>
+	
+	<template id="Prudence_intro_2" name="Introduction after character change">
+		<preconditions>
+			<compare value1="$Agent.characterChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Prudence" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Prudence149" />
+		</behaviour>
+	</template>
+	
+	<template id="Prudence_intro_3" name="The second introduction sentence">
+		<preconditions>
+			<compare value1="$Dialogue.startupState" value2="1" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Dialogue.startupState" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Prudence31" />
+		</behaviour>
+	</template>
+
+<!-- +++++++++++++++++++++++ POPPY ++++++++++++++++++++++++++  -->
+	<template id="Poppy_intro_1" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$User.presentStateChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Poppy" />
+			<trigger value1="$User.present" value2="1" />
+		</preconditions>
+		
+		<effects>
+			<update name="User.presentStateChanged" value="0" />
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Poppy151" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_intro_2" name="Introduction after character change">
+		<preconditions>
+			<compare value1="$Agent.characterChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Poppy" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Poppy151" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_intro_3" name="The second introduction sentence">
+		<preconditions>
+			<compare value1="$Dialogue.startupState" value2="1" />
+			<compare value1="$Agent.character" value2="Poppy" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Dialogue.startupState" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Poppy152" />
+		</behaviour>
+	</template>
+	
+<!-- +++++++++++++++++++++++ Obadiah ++++++++++++++++++++++++++  -->
+	<template id="Obadiah_intro_1" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$User.presentStateChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<trigger value1="$User.present" value2="1" />
+		</preconditions>
+		
+		<effects>
+			<update name="User.presentStateChanged" value="0" />
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Obadiah143" />
+		</behaviour>
+	</template>
+	
+	<template id="Obadiah_intro_2" name="Introduction after character change">
+		<preconditions>
+			<compare value1="$Agent.characterChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Obadiah143" />
+		</behaviour>
+	</template>
+	
+	<template id="Obadiah_intro_3" name="The second introduction sentence">
+		<preconditions>
+			<compare value1="$Dialogue.startupState" value2="1" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Dialogue.startupState" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Obadiah144" />
+		</behaviour>
+	</template>
+	
+<!-- +++++++++++++++++++++++ SPIKE ++++++++++++++++++++++++++  -->
+	<template id="Spike_intro_1" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$User.presentStateChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Spike" />
+			<trigger value1="$User.present" value2="1" />
+		</preconditions>
+		
+		<effects>
+			<update name="User.presentStateChanged" value="0" />
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Spike8" />
+		</behaviour>
+	</template>
+	
+	<template id="Spike_intro_2" name="Introduction after character change">
+		<preconditions>
+			<compare value1="$Agent.characterChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Spike" />
+		</preconditions>
+		
+		<effects>
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Spike8" />
+		</behaviour>
+	</template>
+	
+	<template id="Spike_intro_3" name="The second introduction sentence">
+		<preconditions>
+			<compare value1="$Dialogue.startupState" value2="1" />
+			<compare value1="$Agent.character" value2="Spike" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<effects>
+			<update name="Dialogue.startupState" value="0" />
+		</effects>
+		
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Spike135" />
+		</behaviour>
+	</template>
+	
+</behaviourtemplates>

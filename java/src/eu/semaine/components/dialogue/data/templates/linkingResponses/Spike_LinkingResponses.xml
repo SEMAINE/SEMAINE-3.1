@@ -1,0 +1,114 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+	<template id="Spike_linking1" name="Linking to 'Is there anything else you want to say?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike13" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike86" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike110" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike123" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="##Spike_tell_me_more" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking2" name="Linking to 'Is there anything else you want to say?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike13" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike61" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike64" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike48" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking3" name="Linking to 'What's been going on?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike29" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Spike_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking4" name="Linking to 'When was the last time you really said what you meant?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike111" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Spike_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking5" name="Linking to 'When was the last time you got angry at something?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike103" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike110" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike123" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="##Spike_tell_me_more" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+
+</behaviourtemplates>
