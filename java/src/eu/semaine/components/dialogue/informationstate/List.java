@@ -495,6 +495,26 @@ public class List
 		}
 	}
 	
+	
+	/**
+	 * Returns a textual representation of the InformationState, with the given String before each line (used for structuring).
+	 * @param pre - the String to put in front of each line
+	 */
+	public String toString( String pre )
+	{
+		String str = "";
+		for( Item i : list ) {
+			if( i.getType() == Item.Type.String || i.getType() == Item.Type.Integer || i.getType() == Item.Type.Double ) {
+				str = str + pre + "-" + i.getValue().toString() + "\r\n";
+			} else if( i.getType() == Item.Type.Record ) {
+				str = str + pre + "-Record [\r\n" + i.getRecord().toString(pre + "  ");
+			} else if( i.getType() == Item.Type.List ) {
+				str = str + pre + "-List [\r\n" + i.getList().toString(pre + "  ");
+			}
+		}
+		return str;
+	}
+	
 	/**
 	 * Checks if the list contains the Object o (this Object can be a String, Integer, or Double).
 	 * 

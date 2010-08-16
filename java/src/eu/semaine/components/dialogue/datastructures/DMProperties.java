@@ -32,88 +32,88 @@ public class DMProperties
 	/* ================= Get-methods ====================== */
 	
 	/* +++ Location of files +++ */
-	public static String getSentenceFile()
-	{
-		String f = getProperty("sentences_file");
-		if( f == null ) {
-			f = "/eu/semaine/components/dialogue/data/sentences.xml";
-		}
-		return f;
-	}
+//	public static String getSentenceFile()
+//	{
+//		String f = getProperty("sentences_file");
+//		if( f == null ) {
+//			f = "/eu/semaine/components/dialogue/data/sentences.xml";
+//		}
+//		return f;
+//	}
 	
-	public static String getContextFile()
-	{
-		String f = getProperty("context_file");
-		if( f == null ) {
-			f = "/eu/semaine/components/dialogue/data/Context.csv";
-		}
-		return f;
-	}
+//	public static String getContextFile()
+//	{
+//		String f = getProperty("context_file");
+//		if( f == null ) {
+//			f = "/eu/semaine/components/dialogue/data/Context.csv";
+//		}
+//		return f;
+//	}
 	
 	/* +++ Introduction properties +++ */
-	public static boolean isBriefing()
-	{
-		Boolean b = Boolean.parseBoolean(getProperty("briefing"));
-		if( b == null ) {
-			b = false;
-		}
-		return b;
-	}
+//	public static boolean isBriefing()
+//	{
+//		Boolean b = Boolean.parseBoolean(getProperty("briefing"));
+//		if( b == null ) {
+//			b = false;
+//		}
+//		return b;
+//	}
 	
-	public static String getIntroduction()
-	{
-		String f = getProperty("introduction");
-		if( f == null ) {
-			f = "short";
-		}
-		return f;
-	}
+//	public static String getIntroduction()
+//	{
+//		String f = getProperty("introduction");
+//		if( f == null ) {
+//			f = "short";
+//		}
+//		return f;
+//	}
 	
 	/* +++ Utterance models +++ */
-	public static boolean useAfterSilenceModel()
-	{
-		Boolean b = Boolean.parseBoolean(getProperty("afterSilence_model"));
-		if( b == null ) {
-			b = true;
-		}
-		return b;
-	}
-	
-	public static boolean useLinkingSentenceModel()
-	{
-		Boolean b = Boolean.parseBoolean(getProperty("linkingSentences_model"));
-		if( b == null ) {
-			b = true;
-		}
-		return b;
-	}
-	
-	public static boolean useContextModel()
-	{
-		Boolean b = Boolean.parseBoolean(getProperty("context_model"));
-		if( b == null ) {
-			b = true;
-		}
-		return b;
-	}
-	
-	public static boolean useArousalModel()
-	{
-		Boolean b = Boolean.parseBoolean(getProperty("arousal_model"));
-		if( b == null ) {
-			b = true;
-		}
-		return b;
-	}
-	
-	public static boolean useHistoryCorrection()
-	{
-		Boolean b = Boolean.parseBoolean(getProperty("history_correction"));
-		if( b == null ) {
-			b = true;
-		}
-		return b;
-	}
+//	public static boolean useAfterSilenceModel()
+//	{
+//		Boolean b = Boolean.parseBoolean(getProperty("afterSilence_model"));
+//		if( b == null ) {
+//			b = true;
+//		}
+//		return b;
+//	}
+//	
+//	public static boolean useLinkingSentenceModel()
+//	{
+//		Boolean b = Boolean.parseBoolean(getProperty("linkingSentences_model"));
+//		if( b == null ) {
+//			b = true;
+//		}
+//		return b;
+//	}
+//	
+//	public static boolean useContextModel()
+//	{
+//		Boolean b = Boolean.parseBoolean(getProperty("context_model"));
+//		if( b == null ) {
+//			b = true;
+//		}
+//		return b;
+//	}
+//	
+//	public static boolean useArousalModel()
+//	{
+//		Boolean b = Boolean.parseBoolean(getProperty("arousal_model"));
+//		if( b == null ) {
+//			b = true;
+//		}
+//		return b;
+//	}
+//	
+//	public static boolean useHistoryCorrection()
+//	{
+//		Boolean b = Boolean.parseBoolean(getProperty("history_correction"));
+//		if( b == null ) {
+//			b = true;
+//		}
+//		return b;
+//	}
 	
 	/* +++ Turn taking values +++ */
 	public static int getTurnTakingThresholdPoppy()

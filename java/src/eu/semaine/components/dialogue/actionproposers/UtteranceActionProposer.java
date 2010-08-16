@@ -198,9 +198,10 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		String speakingState = is.getString("Agent.speakingState");
 		if( systemStarted && (speakingState == null || (speakingState != null && speakingState.equals("listening"))) ) {
 			is.set("currTime", (int)meta.getTime());
+			String context = is.toString();
 			TemplateState state = templateController.checkTemplates(is);
 			if( state != null ) {
-				//is.print();
+				DMLogger.getLogger().logUserTurn(meta.getTime(), latestResponse.getResponse() + "("+state.getTemplate().getId()+")", context);
 				detectedEmotions.clear();
 				dActIndex = detectedDActs.size();
 				

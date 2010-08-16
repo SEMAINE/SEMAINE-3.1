@@ -323,6 +323,37 @@ public class InformationState
 		}
 	}
 	
+	/**
+	 * Returns a textual representation of the InformationState.
+	 */
+	public String toString()
+	{
+		String str = "|----------- InformationState\r\n";
+		str = str + toString("| ");
+		str = str + "|===========\r\n";
+		return str;
+	}
+	
+	/**
+	 * Returns a textual representation of the InformationState, with the given String before each line (used for structuring).
+	 * @param pre - the String to put in front of each line
+	 */
+	public String toString( String pre )
+	{
+		String str = "";
+		for( String key : is.keySet() ) {
+			Item i = is.get(key);
+			if( i.getType() == Item.Type.String || i.getType() == Item.Type.Integer || i.getType() == Item.Type.Double ) {
+				str = str + pre + "-" + key + " = " + i.getValue().toString() + "\r\n";
+			} else if( i.getType() == Item.Type.Record ) {
+				str = str + pre + "-Record:" + key + " [\r\n" + i.getRecord().toString(pre + "  ");
+			} else if( i.getType() == Item.Type.List ) {
+				str = str + pre + "-List:" + key + " [\r\n" + i.getList().toString(pre + "  ");
+			}
+		}
+		return str;
+	}
+	
 	/* For testing purposes */
 	public static void main( String args[] )
 	{

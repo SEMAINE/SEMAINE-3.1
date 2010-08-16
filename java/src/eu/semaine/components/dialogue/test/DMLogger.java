@@ -27,6 +27,7 @@ public class DMLogger
 {
 	private static DMLogger ref;
 	private PrintWriter out;
+	private PrintWriter out2;
 
 	private boolean willLog;
 
@@ -37,7 +38,8 @@ public class DMLogger
 
 	private String dateAndTime;
 	private String file = "DMlog.txt";
-	private String path = "";
+	private String responseFile = "DMlog_Responses.txt";
+	private String path = "logs/";
 
 	private DMLogger( boolean willLogParam )
 	{
@@ -48,11 +50,14 @@ public class DMLogger
 		if( day.length() == 1 ) day = "0" + day;
 		dateAndTime = cal.get(Calendar.YEAR) + "-" + month + "-" + day + "_" + cal.get(Calendar.HOUR_OF_DAY) + "." + cal.get(Calendar.MINUTE);
 		file = "DMLog_"+dateAndTime+".txt";
+		responseFile = "ResponseLog_" + dateAndTime + "_Responses.txt";
+		
 		willLog = DMProperties.getLogging();
 		
 		if( willLog ) {
 			try {
 				out = new PrintWriter( new FileWriter(path+file) );
+				out2 = new PrintWriter( new FileWriter(path+responseFile) );
 			}catch( IOException e ) {
 				e.printStackTrace();
 			}
@@ -85,6 +90,15 @@ public class DMLogger
 				log.add(time + "	" + msg);
 			}
 			lastTime = time;
+		}
+	}
+	
+	public void logUserTurn( long time, String response, String context )
+	{
+		if( willLog ) {
+			out2.println(context + time + " : " + response);
+			out2.println();
+			out2.flush();
 		}
 	}
 
@@ -124,7 +138,7 @@ public class DMLogger
 		Graphics2D g2 = myImage.createGraphics();
 		timeLine.paintComponent(g2);
 		try {
-			OutputStream out = new FileOutputStream("DMLog_"+dateAndTime+".jpg");
+			OutputStream out = new FileOutputStream(path+"DMLog_"+dateAndTime+".jpg");
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 			encoder.encode(myImage);
 			out.close();
