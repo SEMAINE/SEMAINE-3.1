@@ -43,6 +43,7 @@ import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.FMLReceiver;
+import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.jms.sender.FMLSender;
@@ -97,10 +98,14 @@ public class TestGui extends Component
 	private StateSender userStateSender;
 	private EmmaSender emmaSender;
 	private FMLReceiver fmlReceiver;
+	private FMLReceiver queueReceiver;
+	private Receiver commandReceiver;
 	//private EmmaReceiver emmaReceiver;
 	private StateReceiver userStateReceiver;
 	
 	Random r = new Random();
+	
+	private HashMap<String,String> preparedResponses = new HashMap<String,String>();
 	
 	
 	/**
@@ -130,9 +135,11 @@ public class TestGui extends Component
 		// Temp
 		
 		fmlReceiver = new FMLReceiver("semaine.data.action.selected.function");
-		receivers.add(fmlReceiver); // to set up properly
-		//emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
-		//receivers.add(emmaReceiver);
+		receivers.add(fmlReceiver);
+		queueReceiver = new FMLReceiver("semaine.data.action.prepare.function");
+		receivers.add(queueReceiver);
+		commandReceiver = new Receiver("semaine.data.synthesis.lowlevel.command");
+		receivers.add(commandReceiver);
 		userStateReceiver = new StateReceiver("semaine.data.state.user.behaviour", StateInfo.Type.UserState);
 		receivers.add(userStateReceiver);
 		receivers.add( new StateReceiver("semaine.data.state.dialog", StateInfo.Type.DialogState) );
@@ -158,12 +165,26 @@ public class TestGui extends Component
 	@Override
 	public void react(SEMAINEMessage m) throws JMSException
 	{
+		if( m.getTopicName().equals("semaine.data.synthesis.lowlevel.command") ) {
+			if( m.getDatatype().equals("playCommand") ) {
+				String id = m.getContentID();
+				if( preparedResponses.get(id) != null ) {
+					printLine("* " + preparedResponses.get(id) );
+				}
+			}
+		}
 		if ( m instanceof SEMAINEXMLMessage ) {
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
 				Element bml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
 				if( bml != null ) {
+					String id;
+					if( bml.hasAttribute(BML.A_ID) ) {
+						id = bml.getAttribute(BML.A_ID);
+					} else {
+						id = "Unknown";
+					}
 					Element speech = XMLTool.getChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
 					if( speech != null ) {
 						try {
@@ -172,7 +193,11 @@ public class TestGui extends Component
 							}
 							currUtterance = "";
 							currUtteranceTime = 0;
-							printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
+							if( m.getTopicName().equals("semaine.data.action.selected.function") ) {
+								printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
+							} else if( m.getTopicName().equals("semaine.data.action.prepare.function") ) {
+								preparedResponses.put(id, speech.getAttribute(BML.E_TEXT));
+							}
 						}catch(Exception e){e.printStackTrace();}
 						//printLine( "+ " + speech.getTextContent() );
 					}

@@ -160,11 +160,20 @@ public class TemplateController
 			}
 		} else {
 			/* If there are no Behaviours to execute, check for conflicting Effects, apply the Effects, and prepare the Behaviours that can be prepared */
-			for( TemplateState state : templatesToPrepare ) {
+			// Semaine-fix: Only prepare the best one
+			if( templatesToPrepare.size() > 0 ) {
+				TemplateState bestState = templatesToPrepare.get(0);
+				double highestQuality = -1;
+				for( TemplateState state : templatesToPrepare ) {
+					if( state.getBehaviour().getQuality() > highestQuality ) {
+						bestState = state;
+						highestQuality = state.getBehaviour().getQuality();
+					}
+				}
 				try {
-					state.getBehaviour().prepare(is);
+					bestState.getBehaviour().prepare(is);
 				}catch( TemplateRunException e ) {
-					System.out.println("Error while preparing behaviour of Template  "+state.getTemplate().getId()+"("+state.getTemplate().getName()+")");
+					System.out.println("Error while preparing behaviour of Template  "+bestState.getTemplate().getId()+"("+bestState.getTemplate().getName()+")");
 					e.printStackTrace();
 				}
 			}

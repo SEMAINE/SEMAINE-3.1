@@ -155,7 +155,7 @@ public class TimeLineComponent extends JComponent
 					float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
 					emotions.add( new Emotion("potency", value, time ) );
 				} else if( line.contains("UserAction:Interest") ) {
-					float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.indexOf("value=")+11 ) );
+					float value = Float.parseFloat( line.substring( line.indexOf("value=")+6, line.length() ) );
 					emotions.add( new Emotion("interest", value, time ) );
 				}
 			}catch( java.lang.StringIndexOutOfBoundsException e ) {

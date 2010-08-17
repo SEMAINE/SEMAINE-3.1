@@ -178,6 +178,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 
 		myClass = this;
 		waitingTime = 50;
+		
+		summarizeEmotionEvents();
 	}
 
 	/**
@@ -198,6 +200,23 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		summarizeFeatures();
 		
 		String speakingState = is.getString("Agent.speakingState");
+		Integer agentSpeakingStateTime = is.getInteger("Agent.speakingStateTime");
+		if( speakingState != null && agentSpeakingStateTime != null && speakingState.equals("speaking") && meta.getTime() >= agentSpeakingStateTime + 8000 ) {
+			// Timeout
+			DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (timeout)" );
+			is.set("Agent.speakingState","listening");
+			is.set("Agent.speakingStateTime", (int)meta.getTime());
+			is.set("User.speakingState","waiting");
+
+			sendData("agentTurnState", "false", "dialogstate");
+			for( String[] str : dataSendQueue ) {
+				if( str.length == 3 ) {
+					sendData(str[0], str[1], str[2]);
+				}
+			}
+			dataSendQueue.clear();
+		}
+		
 		if( systemStarted && (speakingState == null || (speakingState != null && speakingState.equals("listening"))) ) {
 			is.set("currTime", (int)meta.getTime());
 			String context = is.toString();
@@ -260,7 +279,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				}
 
 				if( speechReady(xm) ) {
-					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped" );
+					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (feedback) " + xm.getText() );
 					is.set("Agent.speakingState","listening");
 					is.set("Agent.speakingStateTime", (int)meta.getTime());
 					is.set("User.speakingState","waiting");
@@ -302,6 +321,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	    			}
 	    			if( keyToRemove != null ) preparingResponses.remove(keyToRemove);
 	    		} else if (type.equals(SemaineML.V_DELETED)) {
+	    			System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	    			String keyToRemove = null;
 	    			for( String key : preparingResponses.keySet() ) {
 	    				if( preparingResponses.get(key).equals(id) ) {
@@ -743,7 +763,9 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			try {
 				latestResponse = currResponse;
 				sendSpeaking();
+				DMLogger.getLogger().log(meta.getTime(), "Using Prepared Response " + id);
 				commandSender.sendTextMessage("STARTAT 0\nPRIORITY 0.5\nLIFETIME 5000\n", meta.getTime(), Event.single, id, meta.getTime());
+				preparedResponses.remove(currHash);
 			}catch( JMSException e ){
 				// TODO: handle
 			}
@@ -753,7 +775,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			try {
 				latestResponse = currResponse;
 				sendSpeaking();
-				//printDocument(doc);
+				System.out.println(docToString(doc));
 				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
 			}catch( JMSException e ) {
 				// Handle
@@ -785,9 +807,11 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			
 			try {
 				// TODO: Uncomment and test
+				System.out.println(docToString(doc));
 				queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
 				preparingResponses.put(hash, "bml_uap_"+output_counter);
-				DMLogger.getLogger().log(meta.getTime(), "AgentAction:PrepareUtterance, utterance=" + getResponse(argNames, argValues).getResponse() );
+				DMLogger.getLogger().log(meta.getTime(),"PreparationHash = " + hash);
+				DMLogger.getLogger().log(meta.getTime(), "AgentAction:PrepareUtterance, utterance=" + currResponse.getResponse() );
 			}catch( JMSException e ){
 				// TODO Handle
 			}

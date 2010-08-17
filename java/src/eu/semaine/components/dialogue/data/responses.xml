@@ -3,10 +3,7 @@
 <response id="#goodbye" response="Ok, goodbye!" />
 
 <!-- +++++++++++++++++++++++ POPPY ++++++++++++++++++++++++++  -->
-			<response id="#Poppy0" response="Hi, I'm Poppy." >
-				<argument name="pitchaccent:Hstar" value="Poppy" />
-			</response>
-			
+			<response id="#Poppy0" response="Hi, I'm Poppy." />
 			<response id="#Poppy1" response="Have you met me before?" />
 			<response id="#Poppy2" response="Well let me introduce myself." />
 			<response id="#Poppy3" response="'m the eternal optimist." />

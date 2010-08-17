@@ -36,7 +36,7 @@ public class DMLogger
 	private long lastTime = 0;
 
 	private ArrayList<DetectedWords> detectedWords = new ArrayList<DetectedWords>();
-	private ArrayList<String> missingISParameters = new ArrayList<String>();
+	private HashMap<String,Integer> missingISParameters = new HashMap<String,Integer>();
 
 	private String dateAndTime;
 	private String file = "DMlog.txt";
@@ -72,12 +72,12 @@ public class DMLogger
 	private void addShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				for( String par : missingISParameters ) {
-					out.println("Missing IS-parameter: " + par);
+				createTimeline();
+				for( String par : missingISParameters.keySet() ) {
+					out.println("Missing IS-parameter: " + par + " ("+missingISParameters.get(par)+")");
 				}
 				out.flush();
-				
-				createTimeline();
+				out.close();
 			}
 		});
 	}
@@ -130,9 +130,10 @@ public class DMLogger
 	
 	public void logMissingISParameter( String parameter )
 	{
-		if( ! missingISParameters.contains(parameter) ) {
-			missingISParameters.add(parameter);
-		}
+		Integer i = missingISParameters.get(parameter);
+		if( i == null ) i = new Integer(0);
+		i = i + 1;
+		missingISParameters.put( parameter,i );
 	}
 
 	public void createTimeline()
