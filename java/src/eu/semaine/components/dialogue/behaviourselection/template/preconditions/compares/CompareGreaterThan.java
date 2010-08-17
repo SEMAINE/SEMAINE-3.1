@@ -5,6 +5,7 @@ import eu.semaine.components.dialogue.behaviourselection.template.value.Value;
 import eu.semaine.components.dialogue.exceptions.TemplateParseException;
 import eu.semaine.components.dialogue.exceptions.TemplateRunException;
 import eu.semaine.components.dialogue.informationstate.InformationState;
+import eu.semaine.components.dialogue.test.DMLogger;
 
 /**
  * A CompareGreaterThan checks if the first value is greater than the second value.
@@ -51,6 +52,8 @@ public class CompareGreaterThan extends Compare
 		
 		/* If one of the Values is null, return false; */
 		if( value1 == null || value2 == null ) {
+			if( value1 == null ) DMLogger.getLogger().logMissingISParameter(abstractValue1.getValueString());
+			if( value2 == null ) DMLogger.getLogger().logMissingISParameter(abstractValue2.getValueString());
 			return false;
 		}
 		

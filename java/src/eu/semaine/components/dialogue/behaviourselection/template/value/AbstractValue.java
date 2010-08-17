@@ -27,6 +27,8 @@ public class AbstractValue
 	/* A valueString can be 1 value, or 2 values combined with an arithmetic sign (+-/*). This int keeps track of the number of components (1 or 2) */
 	int numberOfComponents;
 	
+	private String totalValueString;
+	
 	/* The string-representation of the first value, and the real Value (NULL if the string is an IS-reference) */
 	private String valueString;
 	private Value value;
@@ -45,6 +47,7 @@ public class AbstractValue
 	 */
 	public AbstractValue( String valueString ) throws TemplateParseException
 	{	
+		totalValueString = valueString;
 		/* Check if the string is only 1 component, or 2 components divided by an arithmetic sign */
 		if( valueString.length() > 0 && (valueString.contains("+") || valueString.substring(1).contains("-") || valueString.contains("/") || valueString.contains("*")) ) {
 			/* Set the arithmetic sign */
@@ -59,7 +62,7 @@ public class AbstractValue
 			}
 			
 			/* Check if neither component is a reference to the InformationState */
-			if( !valueString.contains("$") && !valueString.contains("$") ) {
+			if( !valueString.contains("$") && !valueString2.contains("$") ) {
 				/* Calculate the atomic values and combine them */
 				Value v1 = getStaticValue(valueString.substring(0, valueString.indexOf(operator)).replaceAll(" ", ""));
 				Value v2 = getStaticValue(valueString.substring(valueString.indexOf(operator)+1).replaceAll(" ", ""));
@@ -77,7 +80,7 @@ public class AbstractValue
 				}
 				this.valueString2 = valueString.substring(valueString.indexOf(operator)+1).replaceAll(" ", "");
 				if( !valueString2.contains("$") ) {
-					value = getStaticValue( valueString2 );
+					value2 = getStaticValue( valueString2 );
 				}
 				numberOfComponents = 2;
 			}
@@ -100,6 +103,7 @@ public class AbstractValue
 	public Value getStaticValue( String str )
 	{
 		if( str.length() == 0 ) return new Value("");
+		str = str.trim();
 		
 		/* First, try to determine the type of the value. */
 		boolean isInt = true;
@@ -341,5 +345,10 @@ public class AbstractValue
 	public Double calcDivision( Integer i1, Integer i2 )
 	{
 		return i1.doubleValue()/i2.doubleValue();
+	}
+	
+	public String getValueString()
+	{
+		return totalValueString;
 	}
 }

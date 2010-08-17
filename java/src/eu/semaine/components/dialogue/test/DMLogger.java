@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -35,6 +36,7 @@ public class DMLogger
 	private long lastTime = 0;
 
 	private ArrayList<DetectedWords> detectedWords = new ArrayList<DetectedWords>();
+	private ArrayList<String> missingISParameters = new ArrayList<String>();
 
 	private String dateAndTime;
 	private String file = "DMlog.txt";
@@ -44,13 +46,15 @@ public class DMLogger
 	private DMLogger( boolean willLogParam )
 	{
 		GregorianCalendar cal = new GregorianCalendar();
-		String month = ""+(cal.get(Calendar.MONTH)+1);
-		if( month.length() == 1 ) month = "0" + month;
-		String day = ""+cal.get(Calendar.DAY_OF_MONTH);
-		if( day.length() == 1 ) day = "0" + day;
-		dateAndTime = cal.get(Calendar.YEAR) + "-" + month + "-" + day + "_" + cal.get(Calendar.HOUR_OF_DAY) + "." + cal.get(Calendar.MINUTE);
+		DecimalFormat twoPlaces = new DecimalFormat("00");
+		
+		//String month = ""+;
+		//if( month.length() == 1 ) month = "0" + month;
+		//String day = ""+;
+		//if( day.length() == 1 ) day = "0" + day;
+		dateAndTime = cal.get(Calendar.YEAR) + "-" + twoPlaces.format(cal.get(Calendar.MONTH)+1) + "-" + twoPlaces.format(cal.get(Calendar.DAY_OF_MONTH)) + "_" + twoPlaces.format(cal.get(Calendar.HOUR_OF_DAY)) + "." + twoPlaces.format(cal.get(Calendar.MINUTE));
 		file = "DMLog_"+dateAndTime+".txt";
-		responseFile = "ResponseLog_" + dateAndTime + "_Responses.txt";
+		responseFile = "DMLog_" + dateAndTime + "_Responses.txt";
 		
 		willLog = DMProperties.getLogging();
 		
@@ -68,6 +72,11 @@ public class DMLogger
 	private void addShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
+				for( String par : missingISParameters ) {
+					out.println("Missing IS-parameter: " + par);
+				}
+				out.flush();
+				
 				createTimeline();
 			}
 		});
@@ -118,9 +127,17 @@ public class DMLogger
 			detectedWords.add(new DetectedWords(starttime, keywords,times));
 		}
 	}
+	
+	public void logMissingISParameter( String parameter )
+	{
+		if( ! missingISParameters.contains(parameter) ) {
+			missingISParameters.add(parameter);
+		}
+	}
 
 	public void createTimeline()
 	{
+		
 		String words = "";
 		String times = "";
 		for( DetectedWords value : detectedWords ) {

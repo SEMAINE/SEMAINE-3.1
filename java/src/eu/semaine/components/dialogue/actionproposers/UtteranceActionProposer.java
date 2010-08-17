@@ -103,6 +103,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	
 	/* The latest AgentResponse that was executed */
 	private Response latestResponse = null;
+	private Response currResponse = null;
+	private String currHash = null;
 	
 	/* If audiofeatures have to be stored at this moment or not */
 	private boolean isStoringFeatures = false;
@@ -292,7 +294,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	    			String keyToRemove = null;
 	    			for( String key : preparingResponses.keySet() ) {
 	    				if( preparingResponses.get(key).equals(id) ) {
-	    					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Utterance prepared");
+	    					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtterancePrepared");
 	    					preparedResponses.put(key, id);
 	    					keyToRemove = key;
 	    					break;
@@ -731,11 +733,15 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		if( argNames == null ) argNames = new ArrayList<String>();
 		if( argValues == null ) argValues = new ArrayList<String>();
 		
-		String id = preparedResponses.get(createHash(argNames, argValues)); 
+		Document doc = constructFMLDocument(argNames, argValues);
+		if( doc == null ) return;
+		
+		String id = preparedResponses.get(currHash);
+		
 		if( id != null ) {
 			/* The Response has been prepared before, so it only has to be started. */
 			try {
-				latestResponse = getResponse(argNames, argValues);
+				latestResponse = currResponse;
 				sendSpeaking();
 				commandSender.sendTextMessage("STARTAT 0\nPRIORITY 0.5\nLIFETIME 5000\n", meta.getTime(), Event.single, id, meta.getTime());
 			}catch( JMSException e ){
@@ -743,13 +749,9 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			}
 		} else {
 			/* The Response has not been prepared, so it has to be send directly. */
-			Document doc = constructFMLDocument(argNames, argValues);
-			if( doc == null ) return;
-			
-			//printDocument(doc);
-			
 			String contentID = "fml_uap_"+output_counter;
 			try {
+				latestResponse = currResponse;
 				sendSpeaking();
 				//printDocument(doc);
 				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
@@ -769,24 +771,29 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 */
 	public void prepare( InformationState is, ArrayList<String> argNames, ArrayList<String> argValues ) 
 	{
-		String hash = createHash(argNames, argValues);
-		if( preparingResponses.get(hash) != null || preparedResponses.get(hash) != null ) {
-			return;
+		if( preparingResponses.size() == 0 ) {
+			if( argNames == null ) argNames = new ArrayList<String>();
+			if( argValues == null ) argValues = new ArrayList<String>();
+			
+			Document doc = constructFMLDocument(argNames, argValues);
+			if( doc == null ) return;
+			
+			String hash = currHash;
+			if( preparingResponses.get(hash) != null || preparedResponses.get(hash) != null ) {
+				return;
+			}
+			
+			try {
+				// TODO: Uncomment and test
+				queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
+				preparingResponses.put(hash, "bml_uap_"+output_counter);
+				DMLogger.getLogger().log(meta.getTime(), "AgentAction:PrepareUtterance, utterance=" + getResponse(argNames, argValues).getResponse() );
+			}catch( JMSException e ){
+				// TODO Handle
+			}
+			
+			output_counter++;
 		}
-		if( argNames == null ) argNames = new ArrayList<String>();
-		if( argValues == null ) argValues = new ArrayList<String>();
-		
-		Document doc = constructFMLDocument(argNames, argValues);
-		if( doc == null ) return;
-//		try {
-//			// TODO: Uncomment and test
-//			queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
-			preparingResponses.put(hash, "bml_uap_"+output_counter);
-//		}catch( JMSException e ){
-//			// TODO Handle
-//		}
-		
-		output_counter++;
 	}
 	
 	/**
@@ -801,7 +808,9 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		Response response = getResponse(argNames, argValues);
 		if( response == null ) return null;
 		
-		latestResponse = response;
+		currHash = createHash(response,argNames,argValues);
+		
+		currResponse = response;
 		String responseString = response.getResponse();
 		argNames.addAll(response.getArgNames());
 		argValues.addAll(response.getArgValues());
@@ -935,13 +944,29 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 * @param argValues - the values of the given arguments.
 	 * @return the Hash-string creates from the list of arguments.
 	 */
-	public String createHash( ArrayList<String> argNames, ArrayList<String> argValues )
-	{
+	public String createHash( Response r, ArrayList<String> argNames, ArrayList<String> argValues )
+	{	
 		ArrayList<String> argNamesCopy = (ArrayList<String>)argNames.clone();
 		ArrayList<String> argValuesCopy = (ArrayList<String>)argValues.clone();
-		String hash = "";
+		String hash = r.getResponse();
 		Collections.sort(argNamesCopy);
 		Collections.sort(argValuesCopy);
+		
+		ArrayList<String> nameToRemove = new ArrayList<String>();
+		ArrayList<String> valueToRemove = new ArrayList<String>();
+		for( int i=0; i<argNames.size(); i++ ) {
+			if( argNames.get(i).startsWith("response") ) {
+				nameToRemove.add(argNames.get(i));
+				valueToRemove.add(argValues.get(i));
+			}
+		}
+		for( String name : nameToRemove ) {
+			argNamesCopy.remove(name);
+		}
+		for( String value : valueToRemove ) {
+			argValuesCopy.remove(value);
+		}
+		
 		for(String str : argNamesCopy ) {
 			hash = hash + str;
 		}
@@ -956,7 +981,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 *
 	 * @param doc - the Document to print
 	 */
-	private void printDocument( Document doc )
+	private String docToString( Document doc )
 	{
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -968,7 +993,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			transformer.transform(source, result);
 
 			String xmlString = result.getWriter().toString();
-			System.out.println(xmlString);
+			return xmlString;
 		}catch( Exception e ){}
+		return null;
 	}
 }

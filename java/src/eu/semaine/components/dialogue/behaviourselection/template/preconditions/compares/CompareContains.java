@@ -6,6 +6,7 @@ import eu.semaine.components.dialogue.exceptions.TemplateParseException;
 import eu.semaine.components.dialogue.exceptions.TemplateRunException;
 import eu.semaine.components.dialogue.informationstate.InformationState;
 import eu.semaine.components.dialogue.informationstate.List;
+import eu.semaine.components.dialogue.test.DMLogger;
 
 /**
  * A CompareContains checks if the first value (which has to be a list) contains the second value.
@@ -49,6 +50,9 @@ public class CompareContains extends Compare
 			e.printStackTrace();
 			return false;
 		}
+		
+		if( value1 == null ) DMLogger.getLogger().logMissingISParameter(abstractValue1.getValueString());
+		if( value2 == null ) DMLogger.getLogger().logMissingISParameter(abstractValue2.getValueString());
 		
 		/* Checks if the first value is a list */
 		if( value1 != null && value1.getType() == Value.Type.List ) {
