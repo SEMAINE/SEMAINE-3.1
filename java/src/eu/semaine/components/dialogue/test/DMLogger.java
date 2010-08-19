@@ -60,6 +60,7 @@ public class DMLogger
 		
 		if( willLog ) {
 			try {
+				new File(path).mkdir(); // in case the directory doesn't exist yet, create it
 				out = new PrintWriter( new FileWriter(path+file) );
 				out2 = new PrintWriter( new FileWriter(path+responseFile) );
 			}catch( IOException e ) {
