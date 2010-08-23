@@ -205,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\semaine\cms\receiver\EmmaReceiver.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\semaine\cms\sender\EmmaSender.h"
 				>
 			</File>
@@ -266,6 +270,10 @@
 			</File>
 			<File
 				RelativePath="..\src\semaine\cms\receiver\Receiver.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\semaine\cms\message\SEMAINEEmmaMessage.h"
 				>
 			</File>
 			<File
@@ -420,6 +428,10 @@
 			</File>
 			<File
 				RelativePath="..\src\semaine\cms\receiver\Receiver.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\semaine\cms\message\SEMAINEEmmaMessage.cpp"
 				>
 			</File>
 			<File
