@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\..\xerces-c-src\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\..\activemq-cpp-2.2.1\src\main&quot;;&quot;..\..\..\XQilla-2.2.0\include&quot;"
+				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\thirdparty\build\xerces-c-src\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\thirdparty\build\activemq-cpp\src\main&quot;;..\..\thirdparty\build\xqilla\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -103,7 +103,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\..\xerces-c-src\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\..\activemq-cpp-2.2.1\src\main&quot;;&quot;..\..\..\XQilla-2.2.0\include&quot;"
+				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\thirdparty\build\xerces-c-src\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\thirdparty\build\activemq-cpp\src\main&quot;;..\..\thirdparty\build\xqilla\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
