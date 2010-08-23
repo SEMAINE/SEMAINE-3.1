@@ -7,6 +7,7 @@ semaine_api_sources_cpp = \
 	semaine/cms/message/SEMAINEMessage.cpp \
 	semaine/cms/message/SEMAINEFeatureMessage.cpp \
 	semaine/cms/message/SEMAINEXMLMessage.cpp \
+	semaine/cms/message/SEMAINEEmmaMessage.cpp \
 	semaine/cms/message/SEMAINEStateMessage.cpp \
 	semaine/cms/message/SEMAINEBytesMessage.cpp \
 	semaine/cms/receiver/Receiver.cpp \
@@ -60,7 +61,9 @@ semaine_api_sources_h = \
 	semaine/cms/receiver/XMLReceiver.h \
 	semaine/cms/receiver/FMLReceiver.h \
 	semaine/cms/receiver/BMLReceiver.h \
+	semaine/cms/receiver/EmmaReceiver.h \
 	semaine/cms/message/SEMAINEXMLMessage.h \
+	semaine/cms/message/SEMAINEEmmaMessage.h \
 	semaine/cms/message/SEMAINEStateMessage.h \
 	semaine/cms/sender/XMLSender.h \
 	semaine/cms/sender/StateSender.h \
