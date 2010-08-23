@@ -23,11 +23,13 @@ public class EMMA
 	
 	// Attributes
 	public static final String A_START = "start";
+	public static final String A_OFFSET_TO_START = "offset-to-start";
 	public static final String A_END = "end";
 	public static final String A_DURATION = "duration";
 	public static final String A_VERBAL = "verbal";
 	public static final String A_MODE = "mode";
 	public static final String A_CONFIDENCE = "confidence";
+	public static final String A_TOKENS = "tokens";
 
 
 }
