@@ -33,6 +33,29 @@ throw (CMSException) :
 	log = CMSLogger::getLog("Receiver");
 }
 
+Receiver::Receiver(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
+		const std::string & topicName)
+throw (CMSException) :
+	IOBase(cmsUrl, cmsUser, cmsPassword, topicName),
+	listener(NULL),
+	message(NULL)
+{
+	consumer = session->createConsumer(topic);
+	log = CMSLogger::getLog("Receiver");
+}
+
+
+Receiver::Receiver(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
+		const std::string & topicName, const std::string & messageSelector)
+throw (CMSException) :
+	IOBase(cmsUrl, cmsUser, cmsPassword, topicName),
+	listener(NULL),
+	message(NULL)
+{
+	consumer = session->createConsumer(topic, messageSelector);
+	log = CMSLogger::getLog("Receiver");
+}
+
 Receiver::~Receiver()
 {
 	delete consumer;
