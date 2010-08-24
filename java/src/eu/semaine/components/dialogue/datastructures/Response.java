@@ -29,7 +29,7 @@ public class Response
 	public void addArgument( String name, String value )
 	{
 		argNames.add(name);
-		argNames.add(value);
+		argValues.add(value);
 	}
 	
 	public String getId()

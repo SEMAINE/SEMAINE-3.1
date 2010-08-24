@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.jms.JMSException;
 import javax.xml.transform.OutputKeys;
@@ -169,6 +171,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		responses = reader.getResponses();
 		responseGroups = reader.getResponseGroups();
+		System.out.println("Loading Responses --- " + responses.size() + " SAL-Responses loaded.");
 		
 		/* Initializes detected AudioFeatures */
 		detectedFeatures.put("F0", new ArrayList<Float>());
@@ -877,6 +880,10 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					/* Determine start and endtime */
 					String starttime = null;
 					String endtime = null;
+					if( i >= argValues.size() ) {
+						System.out.println("Something is wrong in the Parameters of Response " + response.getId());
+						continue;
+					}
 					String argValue = argValues.get(i);
 					if( argValue.equals("_start") ) {
 						starttime = "speech_uap_"+output_counter+":tm1";
@@ -888,15 +895,52 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 						starttime = "speech_uap_"+output_counter+":tm1";
 						endtime = "speech_uap_"+output_counter+":tm"+counter;
 					} else {
-						for( int j=0; j<words.length; j++ ) {
-							if( words[j].equals(argValue) ) {
-								starttime = "speech_uap_"+output_counter+":tm"+(j+1);
-								endtime = "speech_uap_"+output_counter+":tm"+(j+2);
-								break;
+						Pattern pattern = Pattern.compile("[\\s]"+argValue.trim()+"[\\s.,\\?!]");
+						Pattern patternStart = Pattern.compile("^"+argValue.trim()+"[\\s.,\\?!]");
+						Pattern patternEnd = Pattern.compile("[\\s]"+argValue.trim()+"[\\s.,\\?!]*$");
+						Matcher matcher = pattern.matcher(responseString);
+						int startIndex = 0;
+						int endIndex = 0;
+						int startMarker = 0;
+						int endMarker = 0;
+						
+						if( matcher.find() ) {
+							System.out.println("General match");
+							startIndex = matcher.start();
+							endIndex = matcher.end();
+							startMarker = responseString.substring(0,startIndex).split(" ").length + 1;
+							endMarker = responseString.substring(0,endIndex).split(" ").length + 1;
+						} else {
+							matcher = patternStart.matcher(responseString);
+							if( matcher.find() ) {
+								System.out.println("Start match");
+								startIndex = matcher.start();
+								endIndex = matcher.end();
+								startMarker = 1;
+								endMarker = responseString.substring(0,endIndex).split(" ").length + 1;
+							} else {
+								matcher = patternEnd.matcher(responseString);
+								if( matcher.find() ) {
+									System.out.println("End match");
+									startIndex = matcher.start();
+									endIndex = matcher.end();
+									startMarker = responseString.substring(0,startIndex).split(" ").length + 1;
+									endMarker = responseString.split(" ").length+1;
+								} else {
+									continue;
+								}
 							}
 						}
+						starttime = "speech_uap_"+output_counter+":tm" + startMarker;
+						endtime = "speech_uap_"+output_counter+":tm" + endMarker;
+//						for( int j=0; j<words.length; j++ ) {
+//							if( words[j].equals(argValue) ) {
+//								starttime = "speech_uap_"+output_counter+":tm"+(j+1);
+//								endtime = "speech_uap_"+output_counter+":tm"+(j+2);
+//								break;
+//							}
+//						}
 					}
-					if( starttime == null || endtime == null ) continue;
 					
 					Element targetElement;
 					if( tags[0].equals("pitchaccent") ) {

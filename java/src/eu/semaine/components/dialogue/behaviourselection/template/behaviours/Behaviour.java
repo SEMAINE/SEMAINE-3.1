@@ -100,7 +100,7 @@ public class Behaviour
 			values.add(v.toString());
 		}
 		if( behaviour == null ) behaviour = getBehaviourClass(behaviourClassName);
-		behaviour.execute(is,argNames, values);
+		behaviour.execute(is,(ArrayList<String>)argNames.clone(), (ArrayList<String>)values.clone());
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class Behaviour
 			values.add(v.toString());
 		}
 		if( behaviour == null ) behaviour = getBehaviourClass(behaviourClassName);
-		behaviour.prepare(is,argNames, values);
+		behaviour.prepare(is,(ArrayList<String>)argNames.clone(), (ArrayList<String>)values.clone());
 	}
 	
 	/**
