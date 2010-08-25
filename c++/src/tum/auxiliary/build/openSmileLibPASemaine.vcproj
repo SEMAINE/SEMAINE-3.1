@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src;..\.."
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OPENSMILELIB_EXPORTS;__WINDOWS;BUILDING_DLL;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;OPENSMILELIB_EXPORTS;__WINDOWS;BUILDING_DLL;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -124,7 +124,7 @@
 				Optimization="2"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="..\..\src;..\.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OPENSMILELIB_EXPORTS;__WINDOWS;BUILDING_DLL;_CRT_SECURE_NO_DEPRECATE;HAVE_PORTAUDIO;HAVE_PORTAUDIO_V19"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OPENSMILELIB_EXPORTS;__WINDOWS;BUILDING_DLL;_CRT_SECURE_NO_DEPRECATE;HAVE_PORTAUDIO;HAVE_PORTAUDIO_V19;__VISTA"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="2"
@@ -148,6 +148,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/LTCG"
 				OutputFile="..\..\openSmileLibSemaine$(ConfigurationName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\.."
@@ -214,6 +215,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\buffer.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\cens.hpp"
 				>
 			</File>
 			<File
@@ -385,6 +390,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\fullturnMean.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\functionalComponent.hpp"
 				>
 			</File>
@@ -398,6 +407,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\functionalExtremes.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\functionalLpc.hpp"
 				>
 			</File>
 			<File
@@ -481,6 +494,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\maxIndex.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\melspec.hpp"
 				>
 			</File>
@@ -489,7 +506,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\monoMixdown.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\multipleWaveSources.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\mvfCovar.hpp"
 				>
 			</File>
 			<File
@@ -534,6 +559,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\pitchSmoother.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\plp.hpp"
 				>
 			</File>
 			<File
@@ -585,7 +614,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\rnn.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rnnProcessor.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rnnSink.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rnnVad.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\semaineSpeakerID1.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineTextOutput.hpp"
 				>
 			</File>
 			<File
@@ -725,6 +774,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\vectorSorter.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\vectorTransform.hpp"
 				>
 			</File>
@@ -806,6 +859,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\buffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\cens.cpp"
 				>
 			</File>
 			<File
@@ -1001,6 +1058,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\fullturnMean.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\functionalComponent.cpp"
 				>
 			</File>
@@ -1014,6 +1075,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\functionalExtremes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\functionalLpc.cpp"
 				>
 			</File>
 			<File
@@ -1093,6 +1158,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\maxIndex.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\melspec.cpp"
 				>
 			</File>
@@ -1101,7 +1170,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\monoMixdown.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\multipleWaveSources.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\mvfCovar.cpp"
 				>
 			</File>
 			<File
@@ -1142,6 +1219,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\pitchSmoother.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\plp.cpp"
 				>
 			</File>
 			<File
@@ -1209,7 +1290,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\rnn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rnnProcessor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rnnSink.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rnnVad.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\semaineSpeakerID1.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineTextOutput.cpp"
 				>
 			</File>
 			<File
@@ -1346,6 +1447,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\vectorProcessor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\vectorSorter.cpp"
 				>
 			</File>
 			<File

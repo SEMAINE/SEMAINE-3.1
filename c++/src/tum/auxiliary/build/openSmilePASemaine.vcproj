@@ -120,7 +120,7 @@
 				Name="VCCLCompilerTool"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="&quot;../../src&quot;;&quot;../..&quot;;&quot;../../svm&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;__WINDOWS;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;__WINDOWS;_CRT_SECURE_NO_DEPRECATE;__VISTA"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="2"
@@ -236,6 +236,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\TumFeatureExtractor.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="My Inspector Results"
+			>
+			<File
+				RelativePath=".\My Inspector Results\r000mi2\r000mi2.insp"
 				>
 			</File>
 		</Filter>
