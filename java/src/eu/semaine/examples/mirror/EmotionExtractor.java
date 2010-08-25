@@ -33,7 +33,7 @@ public class EmotionExtractor extends Component {
 		List<Element> emotionElements = emmaMessage.getEmotionElements(interpretation);
 		if (emotionElements.size() > 0) {
 			Element emotion = emotionElements.get(0);
-			Document emotionML = XMLTool.newDocument(EmotionML.ROOT_ELEMENT, EmotionML.namespaceURI);
+			Document emotionML = XMLTool.newDocument(EmotionML.E_ROOT_TAGNAME, EmotionML.namespaceURI);
 			emotionML.adoptNode(emotion);
 			emotionML.getDocumentElement().appendChild(emotion);
 			emotionSender.sendXML(emotionML, meta.getTime());

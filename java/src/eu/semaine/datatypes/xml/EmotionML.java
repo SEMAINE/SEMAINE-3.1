@@ -5,32 +5,173 @@
 package eu.semaine.datatypes.xml;
 
 /**
+ * This class provides string constants that match
+ * the Second Public Working Draft of EmotionML,
+ * http://www.w3.org/TR/2010/WD-emotionml-20100729/
  * @author marc
  *
  */
 public class EmotionML 
 {
-	public static final String namespaceURI = "http://www.w3.org/2005/Incubator/emotion";
-	public static final String version = "0.0.1";
+	public static final String namespaceURI = "http://www.w3.org/2009/10/emotionml";
+	public static final String version = "1.0-WD20100729";
 
 	// Elements
+	public static final String E_EMOTIONML = "emotionml";
 	public static final String E_EMOTION = "emotion";
-	public static final String ROOT_ELEMENT = E_EMOTION;
+	public static final String E_ROOT_TAGNAME = E_EMOTIONML;
 	public static final String E_CATEGORY = "category";
-	public static final String E_DIMENSIONS = "dimensions";
-	public static final String E_AROUSAL = "arousal";
-	public static final String E_VALENCE = "valence";
-	//public static final String E_POTENCY = "potency";
-	public static final String E_POWER = "power";
+	public static final String E_DIMENSION = "dimension";
+	public static final String E_APPRAISAL = "appraisal";
+	public static final String E_ACTION_TENDENCY = "action-tendency";
 	public static final String E_INTENSITY = "intensity";
-	public static final String E_EXPECTATION = "expectation";
-	public static final String E_OBJECT = "object";
+	public static final String E_INFO = "info";
+	public static final String E_REFERENCE = "reference";
+	public static final String E_TRACE = "trace";
 	
 	// Attributes
-	public static final String A_SET = "set";
+	// Attributes of <emotion>
+	public static final String A_CATEGORY_VOCABULARY = "category-set";
+	public static final String A_DIMENSION_VOCABULARY = "dimension-set";
+	public static final String A_APPRAISAL_VOCABULARY = "appraisal-set";
+	public static final String A_ACTION_TENDENCY_VOCABULARY = "action-tendency-set";
+	public static final String A_ID = "id";
+	public static final String A_START = "start";
+	public static final String A_END = "end";
+	public static final String A_VERSION = "version";
+	public static final String A_MODALITY = "modality";
+	
+	// Attributes of <category>, <dimension>, <appraisal>, <action-tendency> and <intensity>
 	public static final String A_NAME = "name";
 	public static final String A_VALUE = "value";
 	public static final String A_CONFIDENCE = "confidence";
-	public static final String A_TYPE = "type";
+
+	// Attributes of <reference>
+	public static final String A_URI = "uri";
+	public static final String A_ROLE = "role";
+	public static final String A_MEDIA_TYPE = "media-type";
+
+	// Attribute of <trace>:
+	public static final String A_FREQ = "freq";
+	public static final String A_SAMPLES = "samples";
+	
+	// Values
+	
+	// Values of A_ROLE:
+	public static final String V_EXPRESSED_BY = "expressedBy";
+	public static final String V_EXPERIENCED_BY = "experiencedBy";
+	public static final String V_TRIGGERED_BY = "triggeredBy";
+	public static final String V_TARGETED_AT = "targetedAt";
+	
+	
+	// Selected vocabularies
+	
+	// FSRE dimensions as in http://www.w3.org/TR/2010/WD-emotionml-20100729/#fsre-dimensions
+	public static final String VOC_FSRE_DIMENSION_DEFINITION = "http://www.example.com/emotion/dimension/FSRE.xml"; // provisional
+	public static final String VOC_FSRE_DIMENSION_VALENCE = "valence";
+	public static final String VOC_FSRE_DIMENSION_POTENCY = "potency";
+	public static final String VOC_FSRE_DIMENSION_AROUSAL = "arousal";
+	public static final String VOC_FSRE_DIMENSION_UNPREDICTABILITY = "unpredictability";
+	
+	
+	// SEMAINE-specific dimension vocabulary containing only one dimension, "intensity":
+	public static final String VOC_SEMAINE_INTENSITY_DIMENSION_DEFINITON = "http://www.semaine-project.eu/emo/dimension/intensity.xml";
+	public static final String VOC_SEMAINE_INTENSITY_DIMENSION_INTENSITY = "intensity";
+	
+	// SEMAINE-specific set of interest-related categories:
+	public static final String VOC_SEMAINE_INTEREST_CATEGORY_DEFINITION = "http://www.semaine-project.eu/emo/category/interest.xml";
+	public static final String VOC_SEMAINE_INTEREST_CATEGORY_BORED = "bored";
+	public static final String VOC_SEMAINE_INTEREST_CATEGORY_NEUTRAL = "neutral";
+	public static final String VOC_SEMAINE_INTEREST_CATEGORY_INTERESTED = "interested";
+	
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float semaineArousal2FSREArousal(float semaineArousal) {
+		return from11to01(semaineArousal);
+	}
+	
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float fsreArousal2SemaineArousal(float fsreArousal) {
+		return from01to11(fsreArousal);
+	}
+
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float semaineValence2FSREValence(float semaineValence) {
+		return from11to01(semaineValence);
+	}
+	
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float fsreValence2SemaineValence(float fsreValence) {
+		return from01to11(fsreValence);
+	}
+
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float semainePower2FSREPotency(float semainePower) {
+		return from11to01(semainePower);
+	}
+	
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float fsrePotency2SemainePower(float fsrePotency) {
+		return from01to11(fsrePotency);
+	}
+
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float semaineExpectation2FSREUnpredictability(float semaineExpectation) {
+		return 1 - from11to01(semaineExpectation); // opposite polarity
+	}
+	
+	/**
+	 * Convenience function to convert between the values as used in SEMAINE
+	 * and the FSRE scales used in EmotionML. 
+	 */
+	public static float fsreUnpredictability2SemaineExpectation(float fsreUnpredictability) {
+		return from01to11(fsreUnpredictability);
+	}
+
+	/**
+	 * Convert a value from the value range [-1;1] to the value range [0;1].
+	 * @param valueIn11
+	 * @return the value mapped to the target interval.
+	 */
+	private static float from11to01(float valueIn11) {
+		float valueIn01 = (valueIn11 + 1f) * 0.5f;
+		// and force into target interval
+		return Math.max(0f, Math.min(1f, valueIn01));
+	}
+	
+	/**
+	 * Convert a value from the value range [0;1] to the value range [-1;1].
+	 * @param valueIn01
+	 * @return the value mapped to the target interval.
+	 */
+	private static float from01to11(float valueIn01) {
+		float valueIn11 = valueIn01 * 2f - 1f;
+		// and force into target interval
+		return Math.max(-1f, Math.min(1f, valueIn11));
+	}
+	
+	
+	
+
 
 }

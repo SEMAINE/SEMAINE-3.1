@@ -34,14 +34,15 @@ public class HelloAnalyser extends Component {
 	}
 
 	private Document createEmotionML(int arousalValue, int valenceValue) {
-		Document emotionML = XMLTool.newDocument(EmotionML.ROOT_ELEMENT, EmotionML.namespaceURI);
+		Document emotionML = XMLTool.newDocument(EmotionML.E_ROOT_TAGNAME, EmotionML.namespaceURI);
 		Element emotion = XMLTool.appendChildElement(emotionML.getDocumentElement(), EmotionML.E_EMOTION);
-		Element dimensions = XMLTool.appendChildElement(emotion, EmotionML.E_DIMENSIONS);
-		dimensions.setAttribute(EmotionML.A_SET, "arousalValence");
-		Element arousal = XMLTool.appendChildElement(dimensions, EmotionML.E_AROUSAL);
-		arousal.setAttribute(EmotionML.A_VALUE, String.valueOf(arousalValue));
-		Element valence = XMLTool.appendChildElement(dimensions, EmotionML.E_VALENCE);
-		valence.setAttribute(EmotionML.A_VALUE, String.valueOf(valenceValue));
+		emotion.setAttribute(EmotionML.A_DIMENSION_VOCABULARY, EmotionML.VOC_FSRE_DIMENSION_DEFINITION);
+		Element arousal = XMLTool.appendChildElement(emotion, EmotionML.E_DIMENSION);
+		arousal.setAttribute(EmotionML.A_NAME, EmotionML.VOC_FSRE_DIMENSION_AROUSAL);
+		arousal.setAttribute(EmotionML.A_VALUE, String.valueOf(EmotionML.semaineArousal2FSREArousal(arousalValue)));
+		Element valence = XMLTool.appendChildElement(emotion, EmotionML.E_DIMENSION);
+		arousal.setAttribute(EmotionML.A_NAME, EmotionML.VOC_FSRE_DIMENSION_VALENCE);
+		valence.setAttribute(EmotionML.A_VALUE, String.valueOf(EmotionML.semaineValence2FSREValence(valenceValue)));
 		return emotionML;
 	}
 }

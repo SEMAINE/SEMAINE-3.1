@@ -1,5 +1,7 @@
 package eu.semaine.examples.hello;
 
+import java.util.List;
+
 import javax.jms.JMSException;
 
 import org.w3c.dom.Element;
@@ -21,15 +23,24 @@ public class EmoticonOutput extends Component {
 	
 	@Override protected void react(SEMAINEMessage m) throws MessageFormatException {
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
-		Element dimensions = (Element) xm.getDocument().getElementsByTagNameNS(EmotionML.namespaceURI, EmotionML.E_DIMENSIONS).item(0);
-		Element arousal = XMLTool.getChildElementByLocalNameNS(dimensions, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
-		Element valence = XMLTool.getChildElementByLocalNameNS(dimensions, EmotionML.E_VALENCE, EmotionML.namespaceURI);
-
-		if (arousal == null && valence == null) {
+		Element emotion = (Element) xm.getDocument().getElementsByTagNameNS(EmotionML.namespaceURI, EmotionML.E_EMOTION).item(0);
+		List<Element> dimensions = XMLTool.getChildrenByLocalNameNS(emotion, EmotionML.E_DIMENSION, EmotionML.namespaceURI);
+		float a = 0, v = 0;
+		boolean haveSomething = false;
+		for (Element dim : dimensions) {
+			String name = dim.getAttribute(EmotionML.A_NAME);
+			float value = Float.parseFloat(dim.getAttribute(EmotionML.A_VALUE));
+			if (name.equals(EmotionML.VOC_FSRE_DIMENSION_AROUSAL)) {
+				a = EmotionML.fsreArousal2SemaineArousal(value);
+				haveSomething = true;
+			} else if (name.equals(EmotionML.VOC_FSRE_DIMENSION_VALENCE)) {
+				v = EmotionML.fsreValence2SemaineValence(value);
+				haveSomething = true;
+			}
+		}
+		if (!haveSomething) {
 			return;
 		}
-		float a = Float.parseFloat(arousal == null ? "0" : arousal.getAttribute(EmotionML.A_VALUE));
-		float v = Float.parseFloat(valence == null ? "0" : valence.getAttribute(EmotionML.A_VALUE));
 		
 		String eyes  = a > 0.3 ? "8"/*active*/   : a < -0.3 ? "*"/*passive*/  : ":"/*neutral*/;
 		String mouth = v > 0.3 ? ")"/*positive*/ : v < -0.3 ? "("/*negative*/ : "|"/*neutral*/;
