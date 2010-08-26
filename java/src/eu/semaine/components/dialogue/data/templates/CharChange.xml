@@ -271,7 +271,7 @@
 			</function>
 			<remove name="DialogueState.charChangeState" />
 		</effects>
-		<behaviour class="ResponseActionProposer" quality="0.9">
+		<behaviour class="ResponseActionProposer" quality="0.8">
 			<argument name="response" value="#goodbye" />
 		</behaviour>
 	</template>
@@ -344,7 +344,7 @@
 		</behaviour>
 	</template>
 	
-	
+	<!--
 	<template id="ChangeChar" name="Change character based on user's request">
 		<preconditions>
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
@@ -363,6 +363,72 @@
 			<argument name="response" value="#goodbye" />
 		</behaviour>
 	</template>
+	-->
+	
+	
+	<template id="VerifySuggestedCharChangePoppy" name="Verify user-suggested (Poppy) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Poppy" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToPoppy" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="VerifySuggestedCharChangePrudence" name="Verify user-suggested (Prudence) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Prudence" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToPrudence" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="VerifySuggestedCharChangeObadiah" name="Verify user-suggested (Obadiah) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Obadiah" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToObadiah" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="VerifySuggestedCharChangeSpike" name="Verify user-suggested (Spike) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Spike" />
+			<compare value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToSpike" />
+		</behaviour>
+	</template>
+	
 	
 	
 	<template id="Prudence_ChangeDisagreed_ChangeTopic" name="User disagreed with change, start new topic">

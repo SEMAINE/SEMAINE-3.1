@@ -138,7 +138,6 @@ public class EmotionInterpreter extends Component
 	 */
 	public float[] getEmotions( SEMAINEEmmaMessage em ) throws JMSException
 	{
-		System.out.println(em.getText());
 		// valence, arousal, interest (in this order)
 		float[] emotions = new float[4];
 		emotions[0] = 0;

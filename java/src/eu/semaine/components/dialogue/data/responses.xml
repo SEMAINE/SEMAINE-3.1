@@ -13,6 +13,10 @@ Used response-arguments:
 <responses>
 
 		<response id="#goodbye" response="Ok, goodbye!" />
+		<response id="#wantToPoppy" response="Do you want to talk to Poppy?" />
+		<response id="#wantToPrudence" response="Do you want to talk to Prudence?" />
+		<response id="#wantToObadiah" response="Do you want to talk to Obadiah?" />
+		<response id="#wantToSpike" response="Do you want to talk to Spike?" />
 
 <!-- +++++++++++++++++++++++ POPPY ++++++++++++++++++++++++++  -->
 		<response id="#Poppy0" response="Hi, I'm Poppy." />
