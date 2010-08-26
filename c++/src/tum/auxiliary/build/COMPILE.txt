@@ -30,15 +30,19 @@ Now you are ready to follow these steps to build the Semaine system and the open
 
 2.) Download the Apache Webserver Windows Installer (Version 2.2.x) and install the webserver to the default path (C:\Program Files\Apache Software Foundation\Apache2.2). Be sure to use the "Custom" installation option and check the feature "install build headers and libraries".
 
-3.) Open the Visual Studio 2005 solution c++/vs2005/semaineF.sln
+3a.) Build thirdparty/activemq-cpp/vs2005-build/vs2005-activemq.vcproj  (Release config!)
+3b.) Build thirdparty/xerces-c-src/projects/Win32/VC8/xerces-all/xerces-all.sln  (Release config!)
+3c.) Build thirdparty/xqilla/Win32Projects/VC8/XQilla.sln  (Release config!)
+
+4a.) Open the Visual Studio 2005 solution c++/vs2005/semaine.sln
     Apply the property sheet "c++/vs2005/semaineProperties.vsprops" to Debug and Release configurations of the "vs2005-activemq" project.
     (Click on Property Sheets Tab, then select the activemq project and right click on the Release and Debug configurations and choose 
      "Add existing property sheet") 
 
-4.) Build the semaine solution (semaineF.sln). Be sure to build the "Release" configuration. If you are a developer, also build the "Debug" configuration.
+4b.) Now, build the semaine solution (semaine.sln). Be sure to build the "Release" configuration. If you are a developer, also build the "Debug" configuration.
 
 While building, you can perform the following steps in parallel:
-5.) Get the Julius LVCSR engine (Version 4.1.2), 
+5.) Get the Julius LVCSR engine (Version 4.1.2 !), 
     unpack it to thirdparty/build/julius-win
 
 6.) Run c++/src/tum/julius4.mod/winpatch.bat 
@@ -54,6 +58,7 @@ While building, you can perform the following steps in parallel:
 9.) Copy the files "portaudio.vcproj" and "portaudio.def" 
     from c++/src/tum/auxiliary/build/vs05 
     to thirdparty/build/portaudio-win/build/msvc, replacing the existing files there
+	(this will disable unnecessary APIs and build only the basic Windows Media API)
 
 10.) Build the portaudio solution 
     (thirdparty/build/portaudio-win/build/msvc/portaudio.sln)
