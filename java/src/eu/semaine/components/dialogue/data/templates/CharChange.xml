@@ -7,6 +7,13 @@
 			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Prudence" />
 		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
 		<optional>
    			<option probability="0.1">
    				<c_effects>
@@ -54,6 +61,13 @@
 			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Poppy" />
 		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
 		<optional>
    			<option probability="0.1">
    				<c_effects>
@@ -101,6 +115,13 @@
 			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Obadiah" />
 		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
 		<optional>
    			<option probability="0.1">
    				<c_effects>
@@ -148,6 +169,13 @@
 			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Spike" />
 		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
 		<optional>
    			<option probability="0.1">
    				<c_effects>

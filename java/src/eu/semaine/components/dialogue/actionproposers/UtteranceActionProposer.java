@@ -116,7 +116,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	
 	/* The BehaviourClass-instance of this class */
 	private static UtteranceActionProposer myClass;
-
+	
 	/**
 	 * Constructor of ResponseActionProposer
 	 * Initializes all Senders and Receivers, and initializes everything.
@@ -171,6 +171,11 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		responses = reader.getResponses();
 		responseGroups = reader.getResponseGroups();
+		for( String group : responseGroups.keySet() ) {
+			for( Response r : responseGroups.get(group) ) {
+				is.set("Responses." + group + "._addlast", r.getId());
+			}
+		}
 		System.out.println("Loading Responses --- " + responses.size() + " SAL-Responses loaded.");
 		
 		/* Initializes detected AudioFeatures */
@@ -211,7 +216,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			is.set("Agent.speakingStateTime", (int)meta.getTime());
 			is.set("User.speakingState","waiting");
 
-			sendData("agentTurnState", "false", "dialogstate");
+			sendData("agentTurnState", "listening", "dialogstate");
 			for( String[] str : dataSendQueue ) {
 				if( str.length == 3 ) {
 					sendData(str[0], str[1], str[2]);
@@ -273,8 +278,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
 					is.set("Agent.speakingState","speaking");
 					is.set("Agent.speakingStateTime", (int)meta.getTime());
-					sendData("agentTurnState", "true", "dialogstate");
-					
+					sendData("agentTurnState", "speaking", "dialogstate");
 					isStoringFeatures = false;
 					for( ArrayList<Float> al : detectedFeatures.values() ) {
 						al.clear();
@@ -282,12 +286,11 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				}
 
 				if( speechReady(xm) ) {
-					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (feedback) " + xm.getText() );
+					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (feedback)");
 					is.set("Agent.speakingState","listening");
 					is.set("Agent.speakingStateTime", (int)meta.getTime());
 					is.set("User.speakingState","waiting");
-
-					sendData("agentTurnState", "false", "dialogstate");
+					sendData("agentTurnState", "listening", "dialogstate");
 					for( String[] str : dataSendQueue ) {
 						if( str.length == 3 ) {
 							sendData(str[0], str[1], str[2]);
@@ -734,7 +737,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	{
 		Map<String,String> info = new HashMap<String,String>();
 		info.put(name,value);
-
 		if( channel.toLowerCase().equals("dialogstate") ) {
 			DialogStateInfo dsi = new DialogStateInfo(info, null);
 			dialogStateSender.sendStateInfo(dsi, meta.getTime());

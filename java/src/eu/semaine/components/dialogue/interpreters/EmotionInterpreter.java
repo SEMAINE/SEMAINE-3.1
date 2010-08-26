@@ -84,10 +84,11 @@ public class EmotionInterpreter extends Component
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 
 			float[] emotions = getEmotions(em);
-			String[] quadrant = getEmotionQuadrant(em);
+			//String[] quadrant = getEmotionQuadrant(em);
 			String gender = getGender(em);
 			
-			sendEmotions( emotions[0], emotions[1], emotions[2], emotions[3], quadrant[0], quadrant[1], gender );
+			//sendEmotions( emotions[0], emotions[1], emotions[2], emotions[3], quadrant[0], quadrant[1], gender );
+			sendEmotions( emotions[0], emotions[1], emotions[2], emotions[3], gender );
 		}
 	}
 	
@@ -108,27 +109,27 @@ public class EmotionInterpreter extends Component
 		return gender;
 	}
 
-	public String[] getEmotionQuadrant( SEMAINEEmmaMessage em ) throws JMSException
-	{
-		String[] quadrant = new String[2];
-		quadrant[0] = "";
-		quadrant[1] = "";
-
-		Element interpretation = XMLTool.getChildElementByLocalNameNS(em.getDocument().getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);
-		if( interpretation != null ) {
-			List<Element> categoryElements = em.getCategoryElements(interpretation);
-			for( Element category : categoryElements ) {
-				if( category.hasAttribute(EmotionML.A_SET) && category.getAttribute(EmotionML.A_SET).equals("fourQuadrants") ) {
-					if( category.hasAttribute(EmotionML.A_NAME) && category.hasAttribute(EmotionML.A_CONFIDENCE) ) {
-						quadrant[0] = category.getAttribute(EmotionML.A_NAME);
-						quadrant[1] = category.getAttribute(EmotionML.A_CONFIDENCE);
-					}
-				}
-			}
-		}
-		
-		return quadrant;
-	}
+//	public String[] getEmotionQuadrant( SEMAINEEmmaMessage em ) throws JMSException
+//	{
+//		String[] quadrant = new String[2];
+//		quadrant[0] = "";
+//		quadrant[1] = "";
+//
+//		Element interpretation = XMLTool.getChildElementByLocalNameNS(em.getDocument().getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+//		if( interpretation != null ) {
+//			List<Element> categoryElements = em.getCategoryElements(interpretation);
+//			for( Element category : categoryElements ) {
+//				if( category.hasAttribute(EmotionML.A_SET) && category.getAttribute(EmotionML.A_SET).equals("fourQuadrants") ) {
+//					if( category.hasAttribute(EmotionML.A_NAME) && category.hasAttribute(EmotionML.A_CONFIDENCE) ) {
+//						quadrant[0] = category.getAttribute(EmotionML.A_NAME);
+//						quadrant[1] = category.getAttribute(EmotionML.A_CONFIDENCE);
+//					}
+//				}
+//			}
+//		}
+//		
+//		return quadrant;
+//	}
 
 	/**
 	 * Retrieves the emotions from the given Message
@@ -137,6 +138,7 @@ public class EmotionInterpreter extends Component
 	 */
 	public float[] getEmotions( SEMAINEEmmaMessage em ) throws JMSException
 	{
+		System.out.println(em.getText());
 		// valence, arousal, interest (in this order)
 		float[] emotions = new float[4];
 		emotions[0] = 0;
@@ -151,21 +153,18 @@ public class EmotionInterpreter extends Component
 		if( interpretation != null ) {
 			List<Element> emotionElements = em.getEmotionElements(interpretation);
 			for( Element emotion : emotionElements ) {
-				List<Element> dimensionElements = XMLTool.getChildrenByLocalNameNS(emotion, EmotionML.E_DIMENSIONS, EmotionML.namespaceURI);
-				for( Element dimension : dimensionElements ) {
-					Element valenceElement = XMLTool.getChildElementByLocalNameNS(dimension, EmotionML.E_VALENCE, EmotionML.namespaceURI);
-					if( valenceElement != null && valenceElement.hasAttribute(EmotionML.A_VALUE) ) {
-						emotions[0] = Float.parseFloat( valenceElement.getAttribute(EmotionML.A_VALUE) );
+				List<Element> dimensions = XMLTool.getChildrenByLocalNameNS(emotion, EmotionML.E_DIMENSION, EmotionML.namespaceURI);
+				for (Element dim : dimensions) {
+					String name = dim.getAttribute(EmotionML.A_NAME);
+					float value = Float.parseFloat(dim.getAttribute(EmotionML.A_VALUE));
+					if (name.equals(EmotionML.VOC_FSRE_DIMENSION_VALENCE)) {
+						emotions[0] = EmotionML.fsreArousal2SemaineArousal(value);
 						emotionsChanged = true;
-					}
-					Element arousalElement = XMLTool.getChildElementByLocalNameNS(dimension, EmotionML.E_AROUSAL, EmotionML.namespaceURI);
-					if( arousalElement != null && arousalElement.hasAttribute(EmotionML.A_VALUE) ) {
-						emotions[1] = Float.parseFloat( arousalElement.getAttribute(EmotionML.A_VALUE) );
+					} else if (name.equals(EmotionML.VOC_FSRE_DIMENSION_AROUSAL)) {
+						emotions[1] = EmotionML.fsreValence2SemaineValence(value);
 						emotionsChanged = true;
-					}
-					Element potencyElement = XMLTool.getChildElementByLocalNameNS(dimension, EmotionML.E_POWER, EmotionML.namespaceURI);
-					if( potencyElement != null && potencyElement.hasAttribute(EmotionML.A_VALUE) ) {
-						emotions[2] = Float.parseFloat( potencyElement.getAttribute(EmotionML.A_VALUE) );
+					}  else if (name.equals(EmotionML.VOC_FSRE_DIMENSION_POTENCY)) {
+						emotions[2] = EmotionML.fsreValence2SemaineValence(value);
 						emotionsChanged = true;
 					}
 				}
@@ -222,7 +221,8 @@ public class EmotionInterpreter extends Component
 	 * @param value		- the value of the emotion to send
 	 * @throws JMSException
 	 */
-	public void sendEmotions( float valence, float arousal, float potency, float interest, String emoQuadrant, String emoQuadrantConfidence, String gender ) throws JMSException
+	//public void sendEmotions( float valence, float arousal, float potency, float interest, String emoQuadrant, String emoQuadrantConfidence, String gender ) throws JMSException
+	public void sendEmotions( float valence, float arousal, float potency, float interest, String gender ) throws JMSException
 	{	
 		boolean newValue = false;
 		Map<String,String> userStateInfo = new HashMap<String,String>();
@@ -247,10 +247,10 @@ public class EmotionInterpreter extends Component
 			newValue = true;
 		}
 		
-		if( emoQuadrant.length() > 0 && emoQuadrantConfidence.length() > 0 && Float.parseFloat(emoQuadrantConfidence) > QUADRANT_CONFIDENCE_THRESHOLD ) {
-			userStateInfo.put("emotion-quadrant",""+emoQuadrant);
-			newValue = true;
-		}
+//		if( emoQuadrant.length() > 0 && emoQuadrantConfidence.length() > 0 && Float.parseFloat(emoQuadrantConfidence) > QUADRANT_CONFIDENCE_THRESHOLD ) {
+//			userStateInfo.put("emotion-quadrant",""+emoQuadrant);
+//			newValue = true;
+//		}
 		
 		if( gender != null && gender.length() > 0 ) {
 			userStateInfo.put("gender",""+gender);

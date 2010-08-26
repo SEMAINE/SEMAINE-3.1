@@ -71,14 +71,17 @@ public class TurnTakingInterpreter extends Component
 	private static int OBADIAH_TT_THRESHOLD; // = 100;
 	private int curr_TT_Threshold = 100;
 	
-	private String convState = "";
+	private static int EXPECTING_ANSWER_TIMEOUT = 8000;
+	
+	private String convState = "listening";
 
 	/* Senders and Receivers */
 	private StateReceiver userStateReceiver;
 	private StateReceiver agentStateReceiver;
 	private StateReceiver dialogStateReceiver;
-	private XMLReceiver contextReceiver;
+	private StateReceiver contextReceiver;
 	private StateSender agentStateSender;
+	private StateSender dialogStateSender;
 
 	/* Turn state of speaker */
 	private int userSpeakingState = 0; // 	0 = unknown, 1 = silence, 2 = speaking
@@ -128,11 +131,13 @@ public class TurnTakingInterpreter extends Component
 		receivers.add( agentStateReceiver );
 		dialogStateReceiver = new StateReceiver( "semaine.data.state.dialog", StateInfo.Type.DialogState);
 		receivers.add( dialogStateReceiver );
-		contextReceiver = new XMLReceiver("semaine.data.state.context");
+		contextReceiver = new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState);
 		receivers.add( contextReceiver );
 		
 		agentStateSender = new StateSender( "semaine.data.state.agent", StateInfo.Type.AgentState, getName() );
 		senders.add( agentStateSender );
+		dialogStateSender = new StateSender("semaine.data.state.dialog", StateInfo.Type.DialogState, getName());
+		senders.add(dialogStateSender);
 		
 		POPPY_TT_THRESHOLD = DMProperties.getTurnTakingThresholdPoppy();
 		PRUDENCE_TT_THRESHOLD = DMProperties.getTurnTakingThresholdPrudence();
@@ -175,8 +180,8 @@ public class TurnTakingInterpreter extends Component
 				/* updates agent speaking state */
 				setAgentSpeakingState(stateInfo);
 				
-				if( stateInfo.hasInfo("convState") ) {
-					convState = stateInfo.getInfo("convState");
+				if( stateInfo.hasInfo("agentTurnState") ) {
+					convState = stateInfo.getInfo("agentTurnState");
 				}
 				
 				break;
@@ -188,7 +193,7 @@ public class TurnTakingInterpreter extends Component
 				break;
 				
 			case ContextState:
-				updateCharacter( stateInfo );
+				setCharacter( stateInfo );
 				break;
 				
 		    default:
@@ -223,6 +228,15 @@ public class TurnTakingInterpreter extends Component
 	public void act() throws JMSException
 	{
 		determineAgentTurn();
+		
+		// Determine if timeout of ExpectingAnswer is reached.
+		if( agentSpeakingState == WAITING && agentSpeakingStateTime + EXPECTING_ANSWER_TIMEOUT < meta.getTime() ) {
+			Map<String,String> info = new HashMap<String,String>();
+			info.put("agentTurnState","listening");
+
+			DialogStateInfo dsi = new DialogStateInfo(info, null);
+			dialogStateSender.sendStateInfo(dsi, meta.getTime());
+		}
 	}
 	
 	/**
@@ -232,15 +246,25 @@ public class TurnTakingInterpreter extends Component
 	public void setAgentSpeakingState(StateInfo dialogInfo)
 	{
 		if( dialogInfo.hasInfo("agentTurnState") ) {
-			if( dialogInfo.getInfo("agentTurnState").equals("true") ) {
+			if( dialogInfo.getInfo("agentTurnState").equals("speaking") ) {
 				backchannel_given = false;
 				agentSpeakingState = SPEAKING;
 				agentSpeakingStateTime = meta.getTime();
 				detectedEmotions.clear();
 				recentEmotionCounter = 0;
-			} else if( dialogInfo.getInfo("agentTurnState").equals("false") ) {
+			} else if( dialogInfo.getInfo("agentTurnState").equals("listening") ) {
 				backchannel_given = false;
 				agentSpeakingState = SILENT;
+				agentSpeakingStateTime = meta.getTime();
+				if( userSpeakingState == SILENT ) {
+					userSpeakingState = WAITING;
+					userSpeakingStateTime = meta.getTime();
+				} else if( userSpeakingState == WAITING ) {
+					userSpeakingStateTime = meta.getTime();
+				}
+			}  else if( dialogInfo.getInfo("agentTurnState").equals("expectingAnswer") ) {
+				backchannel_given = false;
+				agentSpeakingState = WAITING;
 				agentSpeakingStateTime = meta.getTime();
 				if( userSpeakingState == SILENT ) {
 					userSpeakingState = WAITING;
@@ -287,7 +311,7 @@ public class TurnTakingInterpreter extends Component
 	{
 		Map<String,String> agentInfoMap = agentInfo.getInfos();
 		
-		String newChar = agentInfoMap.get( "character" );
+		String newChar = agentInfoMap.get( "character" ).toLowerCase();
 		if( newChar != null ) {
 			if( newChar.equals("poppy") ) {
 				character = POPPY;
@@ -301,7 +325,9 @@ public class TurnTakingInterpreter extends Component
 			} else if( newChar.equals("obadiah") ) {
 				character = OBADIAH;
 				curr_TT_Threshold = OBADIAH_TT_THRESHOLD;
+			} else {
 			}
+		} else {
 		}
 	}
 	
@@ -355,7 +381,7 @@ public class TurnTakingInterpreter extends Component
 	public void determineAgentTurn() throws JMSException
 	{
 		int speakingIntention = getSpeakingIntentionValue();
-		if( speakingIntention >= curr_TT_Threshold && agentSpeakingIntention != SPEAKING && agentSpeakingState == SILENT ) {
+		if( speakingIntention >= curr_TT_Threshold && agentSpeakingIntention != SPEAKING && (agentSpeakingState == SILENT || agentSpeakingState == WAITING) ) {
 			agentSpeakingIntention = SPEAKING;
 			agentSpeakingIntentionTime = meta.getTime();
 			sendAgentTurnState();
@@ -402,7 +428,7 @@ public class TurnTakingInterpreter extends Component
 			double value;
 			if( time >= 0 ) {
 				if( convState.equals("listening") ) {
-					time /= 9;
+					time /= 6;
 					// time /= 6;
 				}
 				value = Math.max( Math.min( Math.pow(time+0.3,2), 1 ), 0 );
@@ -413,10 +439,10 @@ public class TurnTakingInterpreter extends Component
 		}
 		
 		/* emotion_value */
-		emotion_value = Math.min( recentEmotionCounter*10, 80 );
+		emotion_value = Math.min( recentEmotionCounter*10, 30 );
 		
 		/* time_turn_value */
-		if( agentSpeakingState == SILENT ) {
+		if( agentSpeakingState == SILENT || agentSpeakingState == WAITING ) {
 			double time = ((double)meta.getTime() - (double)agentSpeakingStateTime)/1000;
 			double value = Math.min( (4/3)*time, 30 );
 			agent_silence_time_value = (int)(value);
@@ -425,13 +451,13 @@ public class TurnTakingInterpreter extends Component
 		/* agent_end_wait_value */
 		long agentSpeakingTime = meta.getTime() - agentSpeakingStateTime;
 		long userSpeakingTime = meta.getTime() - userSpeakingStateTime;
-		if( agentSpeakingState == SILENT && agentSpeakingTime < 1000 ) {
-			agent_end_wait_value = ((int)(0.1*agentSpeakingTime - 100));
+		if( (agentSpeakingState == SILENT || agentSpeakingState == WAITING) && agentSpeakingTime < 1000 ) {
+			agent_end_wait_value = ((int)(0.05*agentSpeakingTime - 100));
 		}
 		
 		/* user_not_responding_value */
 		//System.out.println("Agent:" + agentSpeakingState + ", User:" + userSpeakingState + ", userSpeakingTime: " + userSpeakingTime + ", agentSpeakingTime: " + agentSpeakingTime );
-		if( agentSpeakingState == SILENT && userSpeakingState == WAITING && Math.abs(agentSpeakingTime - userSpeakingTime) < 30  ) {
+		if( (agentSpeakingState == SILENT || agentSpeakingState == WAITING ) && userSpeakingState == WAITING && Math.abs(agentSpeakingTime - userSpeakingTime) < 30  ) {
 			if( userSpeakingTime < 2000 ) {
 				// Do nothing
 			} else if( userSpeakingTime > 6000 ) {

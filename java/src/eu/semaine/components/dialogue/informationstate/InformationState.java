@@ -342,6 +342,7 @@ public class InformationState
 	{
 		String str = "";
 		for( String key : is.keySet() ) {
+			if( key.equals("Responses") ) continue;
 			Item i = is.get(key);
 			if( i.getType() == Item.Type.String || i.getType() == Item.Type.Integer || i.getType() == Item.Type.Double ) {
 				str = str + pre + "-" + key + " = " + i.getValue().toString() + "\r\n";

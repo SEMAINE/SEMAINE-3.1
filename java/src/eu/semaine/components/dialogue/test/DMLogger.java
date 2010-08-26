@@ -91,7 +91,7 @@ public class DMLogger
 		return ref;
 	}
 
-	public void log( long time, String msg )
+	public synchronized void log( long time, String msg )
 	{
 		if( willLog ) {
 			out.println(time + "	" + msg);
@@ -137,7 +137,7 @@ public class DMLogger
 		missingISParameters.put( parameter,i );
 	}
 
-	public void createTimeline()
+	public synchronized void createTimeline()
 	{
 		
 		String words = "";
@@ -151,7 +151,7 @@ public class DMLogger
 
 		TimeLineComponent timeLine = new TimeLineComponent(lastTime, words, times);
 		timeLine.setBackground(Color.WHITE);
-		timeLine.importLog(log);
+		timeLine.importLog((ArrayList<String>)log.clone());
 		Dimension size = timeLine.getSize();
 		BufferedImage myImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = myImage.createGraphics();
