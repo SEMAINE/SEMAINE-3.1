@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,7 @@ public class TestGui extends Component
 	Random r = new Random();
 	
 	private HashMap<String,String> preparedResponses = new HashMap<String,String>();
-	
+	private ArrayList<String> lines = new ArrayList<String>();
 	
 	/**
 	 * Creates a new GUI
@@ -226,12 +227,15 @@ public class TestGui extends Component
 					long newUtteranceTime = Long.parseLong(stateInfo.getInfo("userUtteranceStartTime"));
 					if( Math.abs(newUtteranceTime-currUtteranceTime) < 10 ) {
 						currUtterance = newUtterance;
+						lines.set(lines.size()-1, currUtterance);
 					} else {
 						if( currUtterance.length() != 0 ) {
 							outputText = outputText + "<br>" + currUtterance;
+							//lines.add(currUtterance);
 						}
 						currUtterance = newUtterance;
 						currUtteranceTime = newUtteranceTime;
+						lines.add(currUtterance);
 					}
 					printLine();
 				}
@@ -314,6 +318,7 @@ public class TestGui extends Component
 		output = new JEditorPane( "text/html", "<html><body>" + outputText + "</body></html>" );
 		output.setEditable( false );
 		output.setPreferredSize( new Dimension( 600, 200 ) );
+		lines.add("++++++++ Welcome ++++++++");
 		scroller = new JScrollPane (output);
 		scroller.setPreferredSize( new Dimension( 600, 200 ) );
 		jframe.add( scroller, BorderLayout.CENTER );
@@ -383,6 +388,10 @@ public class TestGui extends Component
 	 */
 	public void printLine( String line )
 	{
+		lines.add(line);
+		printLines();
+		
+		/*
 		if( currUtterance.length() == 0 ) {
 			output.setText( ("<html><body>" + outputText + "<br>" + line + "</body></html>").trim() );
 		} else {
@@ -390,6 +399,8 @@ public class TestGui extends Component
 		}
 		output.setCaretPosition(output.getDocument().getLength());
 		outputText = outputText + "<br>" + line;
+		*/
+		
 		//JViewport view = scroller.getViewport();
 		//view.setViewPosition(new java.awt.Point(10, 99999999));
 	}
@@ -400,14 +411,32 @@ public class TestGui extends Component
 	 */
 	public void printLine( )
 	{	
+		printLines();
+		
+		/*
 		if( currUtterance.length() == 0 ) {
 			output.setText( ("<html><body>" + outputText + "</body></html>").trim() );
 		} else {
 			output.setText( ("<html><body>" + outputText + "<br>" + currUtterance + "</body></html>").trim() );
 		}
 		output.setCaretPosition(output.getDocument().getLength());
+		*/
+		
 		//JViewport view = scroller.getViewport();
 		//view.setViewPosition(new java.awt.Point(10, 99999999));
+	}
+	
+	public void printLines()
+	{
+		String text = "<html><body>";
+		int startIndex = Math.max(lines.size()-10, 0);
+		for( int i=startIndex; i < lines.size(); i++ ) {
+			text = text + lines.get(i) + "<br>";
+		}
+		text = text.substring(0, text.length()-4);
+		text = text + "</body></html>";
+		output.setText(text);
+		output.setCaretPosition(output.getDocument().getLength());
 	}
 	
 	/**
