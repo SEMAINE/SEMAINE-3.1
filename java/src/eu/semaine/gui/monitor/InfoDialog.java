@@ -13,6 +13,7 @@ import javax.swing.text.Document;
 public class InfoDialog extends JFrame
 {
 	JTextPane textPane;
+	private static final int MAX_DOCUMENT_LENGTH = 100000; // num characters to show
 	
 	public InfoDialog(String title)
 	{
@@ -40,6 +41,24 @@ public class InfoDialog extends JFrame
 			doScrollToEnd = true;
 		}
 		try {
+			int len = doc.getLength();
+			if (len + text.length() > MAX_DOCUMENT_LENGTH) {
+				int maxlen = Math.max(0, MAX_DOCUMENT_LENGTH - text.length());
+				// current text must be shortened to maximally maxlen
+				String oldText = doc.getText(0, len-maxlen);
+				// But cut at line break:
+				int cutPos = oldText.lastIndexOf('\n');
+				if (cutPos == -1) {
+					cutPos = oldText.length(); 
+				}
+				int selStart = textPane.getSelectionStart();
+				int selEnd = textPane.getSelectionEnd();
+				doc.remove(0, cutPos);
+				if (selStart < selEnd) {
+					textPane.setSelectionStart(selStart - cutPos);
+					textPane.setSelectionEnd(selEnd - cutPos);
+				}
+			}
 			doc.insertString(doc.getLength(), text, null);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
