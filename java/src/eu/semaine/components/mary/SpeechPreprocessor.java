@@ -217,16 +217,22 @@ public class SpeechPreprocessor extends Component
 				JMSLogger.getLog("SpeechPreprocessor").warn("Message locale '"+messageLocale+"' is different from current character locale '"
 						+characterLocale+"' -- will ignore character.");
 			} else {
-				voice = Voice.getVoice(charInfo.getVoice());
+				String[] possibleVoices = charInfo.getVoices();
+				for (String v : possibleVoices) {
+					voice = Voice.getVoice(v);
+					if (voice != null) {
+						break;
+					}
+				}
 				if (voice == null) {
 					Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
-					JMSLogger.getLog("SpeechPreprocessor").warn("Voice '"+charInfo.getVoice()+"' defined for character '"+charInfo.getName()
-							+"' is not available in MARY TTS. "
+					JMSLogger.getLog("SpeechPreprocessor").warn("None of the voices defined for character '"+charInfo.getName()
+							+"' is available in MARY TTS. "
 							+(fallbackVoice != null ? "Will fall back to voice '"+fallbackVoice.getName()+"'" : "No fallback available."));
 					voice = fallbackVoice;
 				} else if (!voice.getLocale().equals(characterLocale)) {
 					Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
-					JMSLogger.getLog("SpeechPreprocessor").warn("Voice '"+charInfo.getVoice()+"' defined for character '"+charInfo.getName()
+					JMSLogger.getLog("SpeechPreprocessor").warn("Voice '"+voice.getName()+"' defined for character '"+charInfo.getName()
 							+"' has locale '"+voice.getLocale()+"' but character expects '"+characterLocale+"'. "
 							+(fallbackVoice != null ? "Will fall back to voice '"+fallbackVoice.getName()+"'" : "No fallback available."));
 					voice = fallbackVoice;

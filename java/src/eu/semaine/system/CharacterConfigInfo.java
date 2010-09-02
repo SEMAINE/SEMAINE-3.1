@@ -5,8 +5,11 @@
 package eu.semaine.system;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.w3c.dom.Document;
@@ -55,10 +58,15 @@ public class CharacterConfigInfo {
 				boolean isDefault = Boolean.parseBoolean(character.getAttribute("is-default"));
 				Element voice = XMLTool.getChildElementByLocalNameNS(character, "voice", SemaineML.namespaceURI);
 				if (voice != null) {
-					String voiceName = voice.getAttribute("name");
+					String voiceNames = voice.getAttribute("name");
 					String locale = voice.getAttribute("locale");
 					String effects = voice.getAttribute("effects");
-					CharacterConfigInfo cci = new CharacterConfigInfo(characterName, voiceName, locale, effects);
+					List<String> voices = new ArrayList<String>();
+					StringTokenizer st = new StringTokenizer(voiceNames);
+					while (st.hasMoreTokens()) {
+						voices.add(st.nextToken());
+					}
+					CharacterConfigInfo cci = new CharacterConfigInfo(characterName, voices.toArray(new String[voices.size()]), locale, effects);
 					theMap.put(characterName, cci);
 					if (isDefault) {
 						if (defaultCharacter != null) {
@@ -103,13 +111,13 @@ public class CharacterConfigInfo {
 	///////////////////////////////////////////////////////////////////////
 	
 	private String name;
-	private String voice;
+	private String[] voices;
 	private String localeString;
 	private String voiceEffects;
 	
-	private CharacterConfigInfo(String name, String voice, String voiceLocale, String voiceEffects) {
+	private CharacterConfigInfo(String name, String[] voices, String voiceLocale, String voiceEffects) {
 		this.name = name;
-		this.voice = voice;
+		this.voices = voices;
 		this.localeString = voiceLocale;
 		this.voiceEffects = voiceEffects;
 	}
@@ -118,8 +126,8 @@ public class CharacterConfigInfo {
 		return name;
 	}
 	
-	public String getVoice() {
-		return voice;
+	public String[] getVoices() {
+		return voices;
 	}
 	
 	public String getVoiceLocaleString() {
@@ -136,7 +144,14 @@ public class CharacterConfigInfo {
 	
         @Override
         public String toString() {
-            return name + " (voice " + voice + ", locale " + localeString + ")";
+        	StringBuilder sb = new StringBuilder(name);
+        	sb.append(" (voice ");
+        	for (int i=0; i<voices.length; i++) {
+        		if (i>0) sb.append("|");
+        		sb.append(voices[i]);
+        	}
+        	sb.append(", locale ").append(localeString).append(")");
+        	return sb.toString();
         }
 	
 

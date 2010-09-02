@@ -1,15 +1,15 @@
 <character-config xmlns="http://www.semaine-project.eu/semaineml">
   <character name="Poppy">
-    <voice name="dfki-poppy" locale="en-GB"/>
+    <voice name="dfki-poppy dfki-poppy-hsmm" locale="en-GB"/>
   </character>
   <character name="Prudence" is-default="true">
-    <voice name="dfki-prudence" locale="en-GB"/>
+    <voice name="dfki-prudence dfki-prudence-hsmm" locale="en-GB"/>
   </character>
   <character name="Obadiah">
-    <voice name="dfki-obadiah" locale="en-GB"/>
+    <voice name="dfki-obadiah dfki-obadiah-hsmm" locale="en-GB"/>
   </character>
   <character name="Spike">
-    <voice name="dfki-spike" locale="en-GB"/>
+    <voice name="dfki-spike dfki-spike-hsmm" locale="en-GB"/>
   </character>
   
 </character-config>
