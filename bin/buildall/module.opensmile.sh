@@ -155,10 +155,10 @@ function func_build_opensmile {
     # changes to the build directory of the component
     # and runs the command specified as first parameter
     # the script will be in located in bin/run_components
-    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine.conf" prefix "$INSTALL_PREFIX/bin/"
+    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine3a.conf" prefix "$INSTALL_PREFIX/bin/"
 
     # create a second version, for debugging the component with gdb
-    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine.conf -l 3 -d" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
+    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine3a.conf -l 3 -d" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
 
     return 0;
 }
