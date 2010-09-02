@@ -40,7 +40,7 @@ function func_build_semaineapi {
     fi
     
     # do not install components.. at least for now...
-    make # && make install
+    make && make install
     if test "x$?" != "x0" ; then
       return 1;
     fi
