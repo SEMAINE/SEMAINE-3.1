@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -448,7 +449,8 @@ public class TimeLineComponent extends JComponent
 
 		/* Fill in the utterance */
 		g2d.setColor( Color.BLACK );
-		g2d.drawString(""+obj.value, (int)(obj.time/10)+NAME_SPACE+10, tierHeight+(rectHeight/4)+2);
+		DecimalFormat df = new DecimalFormat("#.##");
+		g2d.drawString(df.format(obj.value), (int)(obj.time/10)+NAME_SPACE+10, tierHeight+(rectHeight/4)+2);
 	}
 
 	private class UserSpeech

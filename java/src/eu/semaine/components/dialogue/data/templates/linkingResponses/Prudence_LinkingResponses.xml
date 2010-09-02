@@ -3,9 +3,9 @@
 	<template id="Prudence_linking1" name="Linking to 'How do you view other people?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Prudence" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence103" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_positive" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.25">
@@ -35,9 +35,9 @@
 	<template id="Prudence_linking2" name="Linking to 'How do you view other people?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Prudence" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence103" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_negative" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.25">
@@ -67,9 +67,9 @@
 	<template id="Prudence_linking3" name="Linking to 'Tell me what you would like to do?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Prudence" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence105" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.2">
@@ -104,9 +104,9 @@
 	<template id="Prudence_linking4" name="Linking to 'What are you planning to do?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Prudence" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence102" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.33">
@@ -131,8 +131,8 @@
 	<template id="Prudence_linking5" name="Linking to 'What are you planning to do?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Prudence" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence102" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.5">
@@ -152,8 +152,8 @@
 	<template id="Prudence_linking6" name="Linking to 'What would you like to talk about?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Prudence" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence124" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.5">
@@ -169,5 +169,386 @@
 			</option>
 		</optional>
 	</template>
+	
+	
+	<template id="Prudence_linking7" name="Linking to 'Is there anyone who could help?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence48" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence63" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence151" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking8" name="Linking to 'Is there anyone who could help?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence48" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence89" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="##Prudence_cheer_up" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking9" name="Linking to 'It can't be that bad, don't you think you're over-reacting?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence48" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence50" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence51" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking10" name="Linking to 'It can't be that bad, perhaps you're over-reacting?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence100" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence50" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence51" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking11" name="Linking to 'It can't be that bad, don't you think you're over-reacting?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence48" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence68" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence69" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking12" name="Linking to 'It can't be that bad, perhaps you're over-reacting?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence100" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence68" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence69" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking13" name="Linking to 'Can you think of something positive?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence53" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Prudence_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking14" name="Linking to 'Can you think of something positive?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence53" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence94" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking15" name="Linking to 'Do you think being angry makes people want to help you?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence60" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence77" />
+			<argument name="response2" value="#Prudence63" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking16" name="Linking to 'Do you think being angry makes people want to help you?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence100" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence112" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence113" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence116" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking17" name="Linking to 'Have you ever regretted being so headstrong?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence80" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence77" />
+			<argument name="response2" value="#Prudence127" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking18" name="Linking to 'Have you ever regretted being so headstrong?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence80" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Prudence_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking19" name="Linking to 'Do you think that you are wise?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence84" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence77" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence77" />
+					<c_argument name="response" value="#Prudence57" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking20" name="Linking to 'Do you think that you are wise?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence84" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence89" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking21" name="Linking to 'Can't you do anything about it?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence98" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence99" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence48" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking22" name="Linking to 'Do you feel a little unsure?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence107" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence57" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking23" name="Linking to 'Do you feel a little unsure?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence107" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence116" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking24" name="Linking to 'Is there anything else in your life?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence110" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Prudence_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking25" name="Linking to 'Is there anything else in your life?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence110" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="##Prudence_cheer_up" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_linking26" name="Linking to 'Would you say you have everything under control?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence123" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+	   				<c_argument name="response" value="#Prudence152" />
+					<c_argument name="response2" value="#Prudence116" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence57" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Prudence_linking27" name="Linking to 'Would you say you have everything under control?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$ResponseHistory._last.id" value2="#Prudence123" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.5">
+					<c_argument name="response" value="#Prudence95" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
 
 </behaviourtemplates>

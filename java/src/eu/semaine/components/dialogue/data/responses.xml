@@ -946,6 +946,8 @@ Used response-arguments:
 		<response id="#Prudence150" response="Ok." >
 			<argument name="performative:agree" value="_all" />
 		</response>
+		<response id="#Prudence151" response="Who could help?" />
+		<response id="#Prudence152" response="Good." />
 
 		
 		<group id="##Prudence_high_arousal">
@@ -1101,7 +1103,6 @@ Used response-arguments:
 			<member id="#Prudence118" />
 			<member id="#Prudence117" />
 			<member id="#Prudence82" />
-			<member id="#Prudence102" />
 		</group>
 		
 		<group id="##Prudence_Questions">
@@ -1496,6 +1497,10 @@ Used response-arguments:
 		<response id="#Spike137" response="Ok." />
 		<response id="#Spike138" response="Tell me about people that make you angry." />
 		<response id="#Spike139" response="Tell me what makes you angry." />
+		<response id="#Spike140" response="Good." />
+		<response id="#Spike141" response="You make me laugh. That's so superficial it's incredible." >
+			<argument name="emotion:happy" value="laugh" />
+		</response>
 		
 		<group id="##Spike_after_silence">
 			<member id="#Spike127" />
@@ -1775,7 +1780,7 @@ Used response-arguments:
 			<argument name="performative:agree" value="quite right to be" />
 		</response>
 		<response id="#Obadiah33" response="Why do you think so?" >
-			<argument name="pitchaccent:HplusLstar" value="Why?" />
+			<argument name="pitchaccent:HplusLstar" value="Why" />
 		</response>
 		<response id="#Obadiah34" response="Why do you feel angry?" >
 			<argument name="performative:disagree" value="angry" />

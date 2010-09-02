@@ -3,9 +3,9 @@
 	<template id="Spike_linking1" name="Linking to 'Is there anything else you want to say?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Spike" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Spike13" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.25">
@@ -35,9 +35,9 @@
 	<template id="Spike_linking2" name="Linking to 'Is there anything else you want to say?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Spike" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Spike13" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.33">
@@ -62,9 +62,9 @@
 	<template id="Spike_linking3" name="Linking to 'What's been going on?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Spike" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Spike29" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<behaviour class="ResponseActionProposer" quality="0.6">
 			<argument name="response" value="##Spike_tell_me_more" />
@@ -75,9 +75,9 @@
 	<template id="Spike_linking4" name="Linking to 'When was the last time you really said what you meant?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Spike" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Spike111" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<behaviour class="ResponseActionProposer" quality="0.6">
 			<argument name="response" value="##Spike_tell_me_more" />
@@ -88,9 +88,9 @@
 	<template id="Spike_linking5" name="Linking to 'When was the last time you got angry at something?'">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Spike" />
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Spike103" />
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<optional>
    			<option probability="0.33">
@@ -110,5 +110,314 @@
 			</option>
 		</optional>
 	</template>
+	
+	
+	<template id="Spike_linking6" name="Linking to 'Will you wise up?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike49" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="##Spike_insult" />
+			<argument name="response2" value="##Spike_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking7" name="Linking to 'Don't you ever get angry at the world?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike59" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike28" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike132" />
+					<c_argument name="response" value="##Spike_tell_me_more" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking8" name="Linking to 'Don't you ever get angry at the world?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike59" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike79" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike90" />
+				</c_behaviour>
+			</option>
+			<option probability="0.25">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike70" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking9" name="Linking to 'You're boring, don't you do anything exciting?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike64" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="#Spike73" />
+			<argument name="response2" value="#Spike87" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking10" name="Linking to 'You're boring, don't you do anything exciting?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike64" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="#Spike140" />
+			<argument name="response2" value="##Spike_tell_me_more" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking11" name="Linking to 'Do you think that you are wise?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike65" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="#Spike141" />
+			<argument name="response2" value="#Spike101" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking12" name="Linking to 'Do you think that you are wise?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike65" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike81" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike83" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking13" name="Linking to 'Are you some kind of doormat?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike79" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike73" />
+					<c_argument name="response" value="#Spike76" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike81" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking14" name="Linking to 'Are you some kind of doormat?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike79" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree short" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.6">
+			<argument name="response" value="#Spike102" />
+			<argument name="response2" value="#Spike103" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking15" name="Linking to 'Don't you think it'll all go wrong anyway?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike100" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike78" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike76" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike74" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking16" name="Linking to 'Don't you think it'll all go wrong anyway?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike100" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike94" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike87" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking17" name="Linking to 'And I suppose you're going to tell me nothing can possibly go wrong?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike118" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike94" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike87" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking18" name="Linking to 'So you just sit there and take everything?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike108" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Spike81" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_linking19" name="Linking to 'Do you think anybody cares what you think?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike119" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike94" />
+				</c_behaviour>
+			</option>
+			<option probability="0.5">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike47" />
+					<c_argument name="response2" value="#Spike101" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
+	
+	<template id="Spike_linking20" name="Linking to 'Do you think anybody cares what you think?'">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$ResponseHistory._last.id" value2="#Spike119" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike34" />
+				</c_behaviour>
+			</option>
+			<option probability="0.33">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike20" />
+				</c_behaviour>
+			</option>
+			<option probability="0.34">
+	   			<c_behaviour class="ResponseActionProposer" quality="0.6">
+					<c_argument name="response" value="#Spike19" />
+				</c_behaviour>
+			</option>
+		</optional>
+	</template>
+	
 
 </behaviourtemplates>

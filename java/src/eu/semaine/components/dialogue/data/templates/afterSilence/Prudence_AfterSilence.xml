@@ -2,8 +2,8 @@
 	
 	<template id="Prudence_After_Silence1" name="General response after silence">
 		<preconditions>
-			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
 			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="retake_turn" />
 		</preconditions>
 		
 		<behaviour class="ResponseActionProposer" quality="0.3">
@@ -13,9 +13,9 @@
 	
 	<template id="Prudence_After_Silence2" name="After silence elaboration 1">
 		<preconditions>
-			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence38" />
 			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="retake_turn" />
 		</preconditions>
 		
 		<behaviour class="ResponseActionProposer" quality="0.5">
@@ -25,9 +25,9 @@
 	
 	<template id="Prudence_After_Silence3" name="After silence elaboration 2">
 		<preconditions>
-			<compare value1="$Agent.speakingIntention" value2="retake_turn" />
 			<compare value1="$ResponseHistory._last.id" value2="#Prudence105" />
 			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="retake_turn" />
 		</preconditions>
 		
 		<behaviour class="ResponseActionProposer" quality="0.5">

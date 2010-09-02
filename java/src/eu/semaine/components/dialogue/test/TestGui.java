@@ -192,9 +192,9 @@ public class TestGui extends Component
 							if( currUtterance.length() != 0 ) {
 								outputText = outputText + "<br>" + currUtterance;
 							}
-							currUtterance = "";
-							currUtteranceTime = 0;
 							if( m.getTopicName().equals("semaine.data.action.selected.function") ) {
+								currUtterance = "";
+								currUtteranceTime = 0;
 								printLine( "+ " + speech.getAttribute(BML.E_TEXT) );
 							} else if( m.getTopicName().equals("semaine.data.action.prepare.function") ) {
 								preparedResponses.put(id, speech.getAttribute(BML.E_TEXT));
@@ -225,10 +225,12 @@ public class TestGui extends Component
 				if( stateInfo.hasInfo("userUtterance") && stateInfo.hasInfo("userUtteranceStartTime") ) {
 					String newUtterance = stateInfo.getInfo("userUtterance");
 					long newUtteranceTime = Long.parseLong(stateInfo.getInfo("userUtteranceStartTime"));
+					System.out.println("\r\n\r\n\r\n\r\n*********************************************************** "+newUtteranceTime+" ("+currUtteranceTime+")\r\n" + sm.getText());
 					if( Math.abs(newUtteranceTime-currUtteranceTime) < 10 ) {
 						currUtterance = newUtterance;
 						lines.set(lines.size()-1, currUtterance);
 					} else {
+						System.out.println("****** New Utterance");
 						if( currUtterance.length() != 0 ) {
 							outputText = outputText + "<br>" + currUtterance;
 							//lines.add(currUtterance);

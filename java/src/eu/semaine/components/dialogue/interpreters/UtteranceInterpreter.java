@@ -159,7 +159,7 @@ public class UtteranceInterpreter extends Component
 							starttime = wordSequence.getAttribute("offset-to-start");
 						}
 					}
-					detectedKeywords = detectedKeywords.trim();
+					detectedKeywords = detectedKeywords.replaceAll("<s>", "").replaceAll("</s>", "").trim();
 					detectedTimes = detectedTimes.trim();
 					DMLogger.getLogger().logWords( Long.parseLong( starttime ), detectedKeywords, detectedTimes, confidences );
 					if(starttime != null) {

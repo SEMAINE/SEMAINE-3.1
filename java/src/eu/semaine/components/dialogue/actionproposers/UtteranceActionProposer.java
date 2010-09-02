@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -116,6 +117,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	
 	/* The BehaviourClass-instance of this class */
 	private static UtteranceActionProposer myClass;
+	
+	private LinkedList<String> historyQueue = new LinkedList<String>();
 	
 	/**
 	 * Constructor of ResponseActionProposer
@@ -787,6 +790,13 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			}
 			output_counter++;
 		}
+		historyQueue.addLast(latestResponse.getResponse());
+		if( historyQueue.size() > 5 ) historyQueue.removeFirst();
+		String queueString = "";
+		for( String str : historyQueue ) {
+			queueString = queueString + str + " ";
+		}
+		DMLogger.getLogger().log(meta.getTime(), "Queue = " + queueString);
 	}
 	
 	/**
@@ -907,7 +917,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 						int endMarker = 0;
 						
 						if( matcher.find() ) {
-							System.out.println("General match");
+							//System.out.println("General match");
 							startIndex = matcher.start();
 							endIndex = matcher.end();
 							startMarker = responseString.substring(0,startIndex).split(" ").length + 1;
@@ -915,7 +925,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 						} else {
 							matcher = patternStart.matcher(responseString);
 							if( matcher.find() ) {
-								System.out.println("Start match");
+								//System.out.println("Start match");
 								startIndex = matcher.start();
 								endIndex = matcher.end();
 								startMarker = 1;
@@ -923,7 +933,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 							} else {
 								matcher = patternEnd.matcher(responseString);
 								if( matcher.find() ) {
-									System.out.println("End match");
+									//System.out.println("End match");
 									startIndex = matcher.start();
 									endIndex = matcher.end();
 									startMarker = responseString.substring(0,startIndex).split(" ").length + 1;
@@ -985,7 +995,13 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				System.out.println("Error, fitting Response ("+argValues.get(responseIndex)+") could not be found.");
 				return null;
 			} else {
+				int tries = 0;
 				response = responseGroup.get(random.nextInt(responseGroup.size()));
+				while( historyQueue.contains(response.getResponse()) && tries <= 5) {
+					response = responseGroup.get(random.nextInt(responseGroup.size()));
+					tries++;
+				}
+				
 			}
 		}
 		

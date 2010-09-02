@@ -184,6 +184,7 @@
 		<preconditions>
 		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="greater_equals" value2="-21.34" />
 		  <compare value1="$UserTurn.Valence.min" comparator="greater_equals" value2="-0.03" />
+		  <compare value1="$UserTurn.Valence.min" comparator="not_equals" value2="0" />
 		  <compare value1="$Agent.character" value2="Prudence" />
        	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
 	   </preconditions>

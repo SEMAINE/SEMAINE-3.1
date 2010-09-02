@@ -2,9 +2,9 @@
 
 	<template id="Prudence_HighArousal" name="Response after a detected high arousal">
 		<preconditions>
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Prudence" />
 			<compare value1="$UserTurn.Arousal.max" comparator="greater_equals" value2="0.7" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		
 		<behaviour class="ResponseActionProposer" quality="0.5">
@@ -15,9 +15,9 @@
 	
 	<template id="Prudence_LowArousal" name="Response after a detected low arousal">
 		<preconditions>
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Prudence" />
 			<compare value1="$UserTurn.Arousal.min" comparator="smaller_equals" value2="-0.7" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		
 		<behaviour class="ResponseActionProposer" quality="0.5">
@@ -28,9 +28,9 @@
 	
 	<template id="Obadiah_HighArousal" name="Response after a detected high arousal">
 		<preconditions>
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Obadiah" />
 			<compare value1="$UserTurn.Arousal.max" comparator="greater_equals" value2="0.7" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		
 		<behaviour class="ResponseActionProposer" quality="0.5">
@@ -41,9 +41,9 @@
 	
 	<template id="Obadiah_LowArousal" name="Response after a detected low arousal">
 		<preconditions>
-			<compare value1="$Agent.speakingIntention" value2="want_turn" />
 			<compare value1="$Agent.character" value2="Obadiah" />
 			<compare value1="$UserTurn.Arousal.min" comparator="smaller_equals" value2="-0.7" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		
 		<behaviour class="ResponseActionProposer" quality="0.5">
