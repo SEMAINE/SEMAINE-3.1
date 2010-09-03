@@ -38,7 +38,7 @@
          </jar>
 		<jar destfile="lib/semaine-dialogue.jar" basedir="bin"
 			includes="eu/semaine/components/dialogue/**/*.class
-					eu/semaine/components/dialogue/data/*">
+					eu/semaine/components/dialogue/data/**/*">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
 				<attribute name="Main-Class"
