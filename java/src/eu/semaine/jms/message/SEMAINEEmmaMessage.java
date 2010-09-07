@@ -41,12 +41,21 @@ public class SEMAINEEmmaMessage extends SEMAINEXMLMessage {
 		return XMLTool.getChildElementByLocalNameNS(doc.getDocumentElement(), EMMA.E_SEQUENCE, EMMA.namespaceURI);
 	}
 	
+	/**
+	 * Get the top-level interpretation in this EMMA document
+	 * @return the interpretation element, or null if there is no such element.
+	 */
 	public Element getTopLevelInterpretation()
 	{
 		return XMLTool.getChildElementByLocalNameNS(doc.getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);
 	}
 
 
+	/**
+	 * Get the emotion elements that are children of the given interpretation element.
+	 * @param interpretation an interpretation element
+	 * @return a list of emotion elements, or an empty element if there are no emotion children below interpretation.
+	 */
 	public List<Element> getEmotionElements(Element interpretation)
 	{
 		return XMLTool.getChildrenByLocalNameNS(interpretation, EmotionML.E_EMOTION, EmotionML.namespaceURI);

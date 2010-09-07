@@ -11,6 +11,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import eu.semaine.jms.JMSLogger;
+
 public class SEMAINEUtils 
 {
     public static String getStreamAsString(InputStream inputStream, String encoding) throws IOException
@@ -101,5 +103,24 @@ public class SEMAINEUtils
     	}
     	return m;
     }
+    
+    /**
+     * Convert the given string into a float value, if possible.
+     * @param valueString string to be converted into a float.
+     * @param defaultValue value to use if the string cannot be converted into a float.
+     * @return the best approximation that can be made for the float value given in valueString. If valueString
+     * cannot be converted into any float, returns defaultValue.
+     */
+    public static float parseFloat(String valueString, float defaultValue) {
+    	float value;
+    	try {
+    		value = Float.parseFloat(valueString);
+    	} catch (NumberFormatException nfe) {
+    		return defaultValue;
+    	}
+    	return value;
+    }
+    
+
     
 }

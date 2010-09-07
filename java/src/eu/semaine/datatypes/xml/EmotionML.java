@@ -57,6 +57,9 @@ public class EmotionML
 	
 	// Values
 	
+	public static final float V_VALUE_MIN = 0f;
+	public static final float V_VALUE_MAX = 1f;
+	
 	// Values of A_ROLE:
 	public static final String V_EXPRESSED_BY = "expressedBy";
 	public static final String V_EXPERIENCED_BY = "experiencedBy";
@@ -83,6 +86,49 @@ public class EmotionML
 	public static final String VOC_SEMAINE_INTEREST_CATEGORY_BORED = "bored";
 	public static final String VOC_SEMAINE_INTEREST_CATEGORY_NEUTRAL = "neutral";
 	public static final String VOC_SEMAINE_INTEREST_CATEGORY_INTERESTED = "interested";
+	
+	/**
+	 * Map from emotion description tag names to vocabulary attributes.
+	 * @param description one of {@link #E_CATEGORY}, {@link #E_DIMENSION}, {@link #E_APPRAISAL}, {@link #E_ACTION_TENDENCY}
+	 * @return one of {@link #A_CATEGORY_VOCABULARY}, {@link #A_DIMENSION_VOCABULARY}, {@link #A_APPRAISAL_VOCABULARY}, {@link #A_ACTION_TENDENCY_VOCABULARY}
+	 * or null if description is none of the known values.
+	 */
+	public static String getVocabularyAttributeForDescription(String description) {
+		if (E_CATEGORY.equals(description)) {
+			return A_CATEGORY_VOCABULARY;
+		}
+		if (E_DIMENSION.equals(description)) {
+			return A_DIMENSION_VOCABULARY;
+		}
+		if (E_APPRAISAL.equals(description)) {
+			return A_APPRAISAL_VOCABULARY;
+		}
+		if (E_ACTION_TENDENCY.equals(description)) {
+			return A_ACTION_TENDENCY_VOCABULARY;
+		}
+		return null;
+	}
+	
+	/**
+	 * Map from vocabulary attributes to the corresponding description tag names.
+	 * @param attribute one of {@link #A_CATEGORY_VOCABULARY}, {@link #A_DIMENSION_VOCABULARY}, {@link #A_APPRAISAL_VOCABULARY}, {@link #A_ACTION_TENDENCY_VOCABULARY}
+	 * @return one of {@link #E_CATEGORY}, {@link #E_DIMENSION}, {@link #E_APPRAISAL}, {@link #E_ACTION_TENDENCY} or null if attribute is none of the known values.
+	 */
+	public static String getDescriptionTagnameForVocabularyAttribute(String attribute) {
+		if (A_CATEGORY_VOCABULARY.equals(attribute)) {
+			return E_CATEGORY;
+		}
+		if (A_DIMENSION_VOCABULARY.equals(attribute)) {
+			return E_DIMENSION;
+		}
+		if (A_APPRAISAL_VOCABULARY.equals(attribute)) {
+			return E_APPRAISAL;
+		}
+		if (A_ACTION_TENDENCY_VOCABULARY.equals(attribute)) {
+			return E_ACTION_TENDENCY;
+		}
+		return null;
+	}
 	
 	/**
 	 * Convenience function to convert between the values as used in SEMAINE
