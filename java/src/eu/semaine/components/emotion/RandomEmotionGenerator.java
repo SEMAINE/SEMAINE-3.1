@@ -43,6 +43,10 @@ public class RandomEmotionGenerator extends Component {
 			Document doc = createRandomEmotionXML();
 			emmaSender.sendXML(doc, currentTime);
 			nextTime = currentTime + (long) (averageSendingPeriod * (1 + 0.5 * random.nextGaussian()));
+		} else if (nextTime - currentTime > 2*averageSendingPeriod) {
+			// system clock was reset since we last set nextTime -- reset it
+			nextTime = currentTime;
+			
 		}
 	}
 	

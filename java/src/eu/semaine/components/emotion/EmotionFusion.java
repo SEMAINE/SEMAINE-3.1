@@ -71,7 +71,7 @@ public class EmotionFusion extends Component {
 
 
 	@Override
-	protected void react(SEMAINEMessage m) {
+	protected void react(SEMAINEMessage m) throws JMSException {
 		if (!(m instanceof SEMAINEEmmaMessage)) {
 			return;
 		}
@@ -82,10 +82,10 @@ public class EmotionFusion extends Component {
 		}
 		List<Element> emotions = em.getEmotionElements(interpretation);
 		if (emotions.isEmpty()) {
-			log.debug("Ignoring EMMA without emotions");
+			log.debug("Ignoring EMMA without emotions from "+em.getTopicName());
 			return;
 		}
-		log.debug("EMMA element with EmotionML received");
+		log.debug("EMMA element with EmotionML received from "+em.getTopicName());
 		for (Element emotion : emotions) {
 			parseEmotion(emotion);
 		}
