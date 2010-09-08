@@ -82,7 +82,7 @@ public class TopicInfo extends Info
 		}
 	}
 
-	private void setActive()
+	private synchronized void setActive()
 	{
 		long time = System.currentTimeMillis();
 		if (currentStep == STEPS && nextStepDue > time) {
@@ -95,13 +95,13 @@ public class TopicInfo extends Info
 	}
 
 
-	public Color getColor()
+	public synchronized Color getColor()
 	{
 		Color passiveColor = TopicType.Callback.equals(type) ? PASSIVECOLOR_CALLBACK : PASSIVECOLOR_DATA;
 		if (currentStep == 0) return passiveColor;
 		if (currentStep == STEPS) return ACTIVECOLOR;
 		// interpolate
-		assert currentStep > 0 && currentStep < STEPS;
+		assert currentStep > 0 && currentStep < STEPS : "currentStep="+currentStep+" is out of expected range [0, "+STEPS+"]";
 		int red = passiveColor.getRed() + (ACTIVECOLOR.getRed()-passiveColor.getRed())*currentStep/STEPS;
 		int green = passiveColor.getGreen() + (ACTIVECOLOR.getGreen()-passiveColor.getGreen())*currentStep/STEPS;
 		int blue = passiveColor.getBlue() + (ACTIVECOLOR.getBlue()-passiveColor.getBlue())*currentStep/STEPS;
