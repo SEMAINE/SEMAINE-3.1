@@ -238,4 +238,22 @@
 		</behaviour>
 	</template>
 	
+<!-- +++++++++++++++++++++++ GOODBYE ++++++++++++++++++++++++++  -->	
+	<template id="UserLeaves" name="User leaves">
+		<preconditions>
+			<compare value1="$User.presentStateChanged" value2="1" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$User.present" value2="0" />
+		</preconditions>
+		<effects>
+			<update name="User.presentStateChanged" value="0" />
+			<update name="Agent.characterChanged" value="0" />
+			<update name="Dialogue.startupState" value="1" />
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="2">
+			<argument name="response" value="#goodbye" />
+		</behaviour>
+	</template>
+	
 </behaviourtemplates>

@@ -56,8 +56,8 @@ import opennlp.tools.postag.POSTaggerME;
 
 public class UtteranceInterpreter extends Component 
 {	
-	private static long SHORT_LENGTH = 2000;
-	private static long LONG_LENGTH = 15000;
+	public static long SHORT_LENGTH = 5000;
+	public static long LONG_LENGTH = 15000;
 	
 	/* Receivers */
 	private EmmaReceiver emmaReceiver;

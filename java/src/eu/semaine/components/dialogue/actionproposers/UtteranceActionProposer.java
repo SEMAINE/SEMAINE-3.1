@@ -118,6 +118,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	/* The BehaviourClass-instance of this class */
 	private static UtteranceActionProposer myClass;
 	
+	private HashMap<String,Long> facialExpressionTimes = new HashMap<String,Long>();
+	
 	private LinkedList<String> historyQueue = new LinkedList<String>();
 	
 	/**
@@ -293,6 +295,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					is.set("Agent.speakingState","listening");
 					is.set("Agent.speakingStateTime", (int)meta.getTime());
 					is.set("User.speakingState","waiting");
+					is.remove("UserTurn");
 					sendData("agentTurnState", "listening", "dialogstate");
 					for( String[] str : dataSendQueue ) {
 						if( str.length == 3 ) {
@@ -445,6 +448,28 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 						detectedDActs.add(act);
 					}
 					getCombinedUserDialogueAct();
+					
+					if( is.getString("User.speakingState") == null || !is.getString("User.speakingState").equals("speaking") ) {
+						is.set("User.speakingState", "speaking");
+						is.set("User.speakingStateTime", (int)meta.getTime());
+						if(!isStoringFeatures) isStoringFeatures = true;
+					}
+				}
+				
+				if( stateInfo.hasInfo("facialExpression") && stateInfo.hasInfo("facialExpressionStarted") && stateInfo.hasInfo("facialExpressionStopped") ) {
+					String facialExpression = stateInfo.getInfo("facialExpression");
+					Long starttime = Long.parseLong(stateInfo.getInfo("facialExpressionStarted"));
+					Long endtime = Long.parseLong(stateInfo.getInfo("facialExpressionStopped"));
+					//is.set("UserTurn", value)
+					Long l = facialExpressionTimes.get(facialExpression);
+					if( l == null || !l.equals(starttime) ) {
+						facialExpressionTimes.put(facialExpression, starttime);
+						Integer counter = is.getInteger("UserTurn.Face.nrOf"+facialExpression);
+						if( counter == null ) counter = new Integer(0);
+						counter = counter + 1;
+						is.set("UserTurn.Face.nrOf" + facialExpression, counter);
+					} else {
+					}
 				}
 
 				break;
@@ -462,11 +487,28 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 						is.set("User.presentStateChanged",1);
 						systemStarted = true;
 
-					} else if( stateInfo.getInfo("userPresent").equals("absent") && is.getInteger("User.present") == 0 ) {
+					} else if( stateInfo.getInfo("userPresent").equals("absent") && is.getInteger("User.present") == 1 ) {
 						DMLogger.getLogger().log(meta.getTime(), "System:SystemStopped" );
 						is.set("User.present", 0);
 						is.set("User.presentStateChanged",1);
 						systemStarted = false;
+						
+						is.set("currTime", (int)meta.getTime());
+						String context = is.toString();
+						TemplateState state = templateController.checkTemplates(is);
+						if( state != null ) {
+							DMLogger.getLogger().logUserTurn(meta.getTime(), latestResponse.getResponse() + "("+state.getTemplate().getId()+")", context);
+							detectedEmotions.clear();
+							dActIndex = detectedDActs.size();
+							
+							for( String featureName : detectedFeatures.keySet() ) {
+								is.remove("UserTurn.AudioFeatures."+featureName+"_min");
+								is.remove("UserTurn.AudioFeatures."+featureName+"_max");
+								is.remove("UserTurn.AudioFeatures."+featureName+"_avg");
+							}
+							
+							DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type="+state.getTemplate().getId()+", utterance="+latestResponse.getResponse());
+						}
 					}
 				}
 
@@ -474,6 +516,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				if( stateInfo.hasInfo("character") ) {
 					is.set("Agent.character", stateInfo.getInfo("character"));
 					is.set("Agent.characterChanged", 1);
+					preparedResponses.clear();
+					preparingResponses.clear();
 				}
 				break;
 			case AgentState:
@@ -762,6 +806,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		if( argValues == null ) argValues = new ArrayList<String>();
 		
 		Document doc = constructFMLDocument(argNames, argValues);
+		System.out.println(docToString(doc));
 		if( doc == null ) return;
 		
 		String id = preparedResponses.get(currHash);

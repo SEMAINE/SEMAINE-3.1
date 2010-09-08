@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 public class DialogueAct 
 {
+	public static long SHORT_LENGTH = 5000;
+	public static long LONG_LENGTH = 15000;
 	public enum Length {SHORT, NORMAL, LONG}
 	
 	private String utterance;
@@ -79,11 +81,9 @@ public class DialogueAct
 		event = (act1.isEvent() || act2.isEvent());
 		action = (act1.isAction() || act2.isAction());
 		laugh = (act1.isLaugh() || act2.isLaugh());
-		if( act1.getLength() == Length.LONG && act2.getLength() == Length.LONG ) {
-			length = Length.LONG;
-		} else {
-			length = Length.NORMAL;
-		}
+		if( endtime-starttime < SHORT_LENGTH ) length = Length.SHORT;
+		else if( endtime-starttime > LONG_LENGTH ) length = Length.LONG;
+		else length = Length.NORMAL;
 		change_speaker = (act1.isChangeSpeaker() || act2.isChangeSpeaker());
 		
 		target_character = act1.getTargetCharacter() + " " + act2.getTargetCharacter();
