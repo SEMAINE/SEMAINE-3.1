@@ -91,12 +91,35 @@ public class EmotionML
 	public static final String VOC_SEMAINE_INTEREST_DIMENSION_DEFINITION = "http://www.semaine-project.eu/emo/dimension/interest.xml";
 	public static final String VOC_SEMAINE_INTEREST_DIMENSION_INTEREST = "interest";
 	
+	// SEMAINE-specific communicative-function dimensions:
+	public static final String VOC_SEMAINE_COMMFUNC_DIMENSION_DEFINITION = "http://www.semaine-project.eu/emo/dimension/communicative-functions.xml";
+	public static final String VOC_SEMAINE_COMMFUNC_DIMENSION_AGREEMENT = "agreement";
+	public static final String VOC_SEMAINE_COMMFUNC_DIMENSION_ACCEPTANCE = "acceptance";
+	public static final String VOC_SEMAINE_COMMFUNC_DIMENSION_BELIEF = "belief";
+	public static final String VOC_SEMAINE_COMMFUNC_DIMENSION_LIKING = "liking";
+	public static final String VOC_SEMAINE_COMMFUNC_DIMENSION_UNDERSTANDING = "understanding";
+	public static final String VOC_SEMAINE_COMMFUNC_DIMENSION_INTEREST = "interest";
+	
+	// SEMAINE-specific listener-meanings dimensions:
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_DEFINITION = "http://www.semaine-project.eu/emo/dimension/listener-meanings.xml";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_ANGER = "anger";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_SADNESS = "sadness";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_AMUSEMENT = "amusement";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_HAPPINESS = "happiness";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_CONTEMPT = "contempt";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_ANTICIPATION = "anticipation";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_SOLIDARITY = "solidarity";
+	public static final String VOC_SEMAINE_LISTMEAN_DIMENSION_ANTAGONISM = "antagonism";
+
+
 	// SEMAINE-specific four emotion quadrants
 	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_DEFINITION = "http://www.semaine-project.eu/emo/category/four-quadrants.xml";
 	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_POSITIVE_ACTIVE = "positive-active";
 	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_NEGATIVE_ACTIVE = "negative-active";
 	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_NEGATIVE_PASSIVE ="negative-passive";
 	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_POSITIVE_PASSIVE = "positive-passive";
+	
+	
 	
 	/**
 	 * Map from emotion description tag names to vocabulary attributes.

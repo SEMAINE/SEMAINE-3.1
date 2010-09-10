@@ -14,6 +14,7 @@ import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
+import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -46,6 +47,26 @@ import eu.semaine.util.XMLTool;
 
 public class AgentMentalStateInterpreter extends Component
 {
+	private enum MentalState {agreement, acceptance, belief, liking, understanding, interest,
+		anger, sadness, amusement, happiness, contempt, anticipation, solidarity, antagonism};
+	private static Map<MentalState, String> state2VocabularyURI = setupVocabularyURIs();
+	
+	private static Map<MentalState, String> setupVocabularyURIs() {
+		Map<MentalState, String> m = new HashMap<MentalState, String>(MentalState.values().length);
+		// Communicative functions:
+		for (MentalState ms : new MentalState[] {MentalState.agreement, MentalState.acceptance, MentalState.belief,
+				MentalState.liking, MentalState.understanding, MentalState.interest}) {
+			m.put(ms, EmotionML.VOC_SEMAINE_COMMFUNC_DIMENSION_DEFINITION);
+		}
+		// Listener meanings:
+		for (MentalState ms : new MentalState[] {MentalState.anger, MentalState.sadness,
+				MentalState.amusement, MentalState.happiness, MentalState.contempt,
+				MentalState.anticipation, MentalState.solidarity, MentalState.antagonism}) {
+			m.put(ms, EmotionML.VOC_SEMAINE_LISTMEAN_DIMENSION_DEFINITION);
+		}
+		return m;
+	}
+		
 	private static int AGREEMENT = 0;
 	private static int DISAGREEMENT = 1;
 	private static int ACCEPTANCE = 2;

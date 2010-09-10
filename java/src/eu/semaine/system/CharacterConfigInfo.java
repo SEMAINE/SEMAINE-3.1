@@ -6,6 +6,7 @@ package eu.semaine.system;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,7 +16,9 @@ import java.util.TreeMap;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.datatypes.xml.SemaineML;
+import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;
 
@@ -56,24 +59,35 @@ public class CharacterConfigInfo {
 			for (Element character : XMLTool.getChildrenByLocalNameNS(doc.getDocumentElement(), "character", SemaineML.namespaceURI)) {
 				String characterName = character.getAttribute("name");
 				boolean isDefault = Boolean.parseBoolean(character.getAttribute("is-default"));
+				// Is there a voice definition for the character?
 				Element voice = XMLTool.getChildElementByLocalNameNS(character, "voice", SemaineML.namespaceURI);
+				String[] voiceNames = null;
+				String locale = null;
+				String effects = null;
 				if (voice != null) {
-					String voiceNames = voice.getAttribute("name");
-					String locale = voice.getAttribute("locale");
-					String effects = voice.getAttribute("effects");
+					String voiceNameAttribute = voice.getAttribute("name");
+					locale = voice.getAttribute("locale");
+					effects = voice.getAttribute("effects");
 					List<String> voices = new ArrayList<String>();
-					StringTokenizer st = new StringTokenizer(voiceNames);
+					StringTokenizer st = new StringTokenizer(voiceNameAttribute);
 					while (st.hasMoreTokens()) {
 						voices.add(st.nextToken());
 					}
-					CharacterConfigInfo cci = new CharacterConfigInfo(characterName, voices.toArray(new String[voices.size()]), locale, effects);
-					theMap.put(characterName, cci);
-					if (isDefault) {
-						if (defaultCharacter != null) {
-							throw new Error("More than one character marked as is-default=\"true\" in character config file '"+configFile.getPath()+"' -- aborting.");
-						}
-						defaultCharacter = cci;
+					voiceNames = voices.toArray(new String[voices.size()]);
+				}
+				// Is there a definition of emotional predispositions for the character?
+				Element predispositionElement = XMLTool.getChildElementByLocalNameNS(character, "predisposition", SemaineML.namespaceURI);
+				Map<String, Float> predispositions = null;
+				if (predispositionElement != null) {
+					predispositions = fillPredispositions(predispositionElement);
+				}
+				CharacterConfigInfo cci = new CharacterConfigInfo(characterName, voiceNames, locale, effects, predispositions);
+				theMap.put(characterName, cci);
+				if (isDefault) {
+					if (defaultCharacter != null) {
+						throw new Error("More than one character marked as is-default=\"true\" in character config file '"+configFile.getPath()+"' -- aborting.");
 					}
+					defaultCharacter = cci;
 				}
 			}
 			
@@ -86,6 +100,41 @@ public class CharacterConfigInfo {
 		}
 		return theMap;
 	}
+	
+	private static Map<String, Float> fillPredispositions(Element predispositionElement)
+	throws SystemConfigurationException {
+		Map<String, Float> predispositions = new HashMap<String, Float>();
+		List<Element> emotionElements = XMLTool.getChildrenByLocalNameNS(predispositionElement, EmotionML.E_EMOTION, EmotionML.namespaceURI);
+		for (Element emotion : emotionElements) {
+			String vocabularyURI = emotion.getAttribute(EmotionML.A_DIMENSION_VOCABULARY);
+			if ("".equals(vocabularyURI)) {
+				throw new SystemConfigurationException("Emotion definition does not have a valid vocabulary URI in attribute "+EmotionML.A_DIMENSION_VOCABULARY);
+			}
+			List<Element> dimensions = XMLTool.getChildrenByLocalNameNS(emotion, EmotionML.E_DIMENSION, EmotionML.namespaceURI);
+			for (Element dimension : dimensions) {
+				String name = dimension.getAttribute(EmotionML.A_NAME);
+				if ("".equals(name)) {
+					throw new SystemConfigurationException("Dimension has no name");
+				}
+				String valueString = dimension.getAttribute(EmotionML.A_VALUE);
+				// Fail-early strategy: insist that the value must be a valid float value in the range between 0 and 1.
+				// That avoids having errors go unnoticed.
+				try {
+					float value = Float.parseFloat(valueString);
+					if (value < 0 || value > 1) {
+						throw new SystemConfigurationException("Value '"+value+"' of dimension '"+name+"' is outside of the valid value range [0, 1]");
+					}
+					// Finally, we have a valid triplet of vocabulary URI, dimension name, and value -- remember it:
+					String key = vocabularyURI+"|"+name;
+					predispositions.put(key, value);
+				} catch (NumberFormatException nfe) {
+					throw new SystemConfigurationException("Value '"+valueString+"' of dimension '"+name+"' is not a float number", nfe);
+				}
+			}
+		}
+		return predispositions;
+	}
+	
 	
 	/**
 	 * The public entry point for getting access to character info by name.
@@ -114,12 +163,15 @@ public class CharacterConfigInfo {
 	private String[] voices;
 	private String localeString;
 	private String voiceEffects;
+	// predispositions has as keys "uri|name", and as values the emotion dimension's value.
+	private Map<String, Float> predispositions;
 	
-	private CharacterConfigInfo(String name, String[] voices, String voiceLocale, String voiceEffects) {
+	private CharacterConfigInfo(String name, String[] voices, String voiceLocale, String voiceEffects, Map<String, Float> predispositions) {
 		this.name = name;
 		this.voices = voices;
 		this.localeString = voiceLocale;
 		this.voiceEffects = voiceEffects;
+		this.predispositions = predispositions;
 	}
 	
 	public String getName() {
@@ -141,6 +193,39 @@ public class CharacterConfigInfo {
 	public String getVoiceEffects() {
 		return voiceEffects;
 	}
+	
+	/**
+	 * For the given emotion dimension, provide any predisposition that the character may have.
+	 * @param vocabularyURI the URI identifying the emotion dimension vocabulary being used
+	 * @param dimension the name of an emotion dimension, which must be part of the given vocabulary
+	 * @return a float value in the interval [0, 1] if the current character has such a predisposition,
+	 * or -1 if there is no such predisposition (i.e. the value is undefined).
+	 */
+	public float getEmotionalPredisposition(String vocabularyURI, String dimension) {
+		String key = vocabularyURI+"|"+dimension;
+		Float val = predispositions.get(key);
+		if (val != null) {
+			return val;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Get a complete list of the emotional predispositions defined for this character.
+	 * @return a list of two-item String arrays; for each array a, a[0] is the vocabularyURI,
+	 * and a[1] is the name of the dimension. Together these can be used to get the actual
+	 * value of the predisposition from {@link #getEmotionalPredisposition(String, String)}.
+	 */
+	public List<String[]> getEmotionalPredispositions() {
+		List<String[]> epList = new ArrayList<String[]>(predispositions.size());
+		for (String key : predispositions.keySet()) {
+			String[] uriAndName = key.split("\\|");
+			assert uriAndName.length == 2;
+			epList.add(uriAndName);
+		}
+		return epList;
+	}
+	
 	
         @Override
         public String toString() {
