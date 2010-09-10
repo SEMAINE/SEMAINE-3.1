@@ -24,6 +24,8 @@
         <e:dimension name="antagonism" value="0.25"/>
       </e:emotion>
     </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="60"/>
   </character>
   <character name="Prudence" is-default="true">
     <voice name="dfki-prudence dfki-prudence-hsmm" locale="en-GB"/>
@@ -50,6 +52,8 @@
         <e:dimension name="antagonism" value="0.25"/>
       </e:emotion>
     </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="70"/>
   </character>
   <character name="Obadiah">
     <voice name="dfki-obadiah dfki-obadiah-hsmm" locale="en-GB"/>
@@ -76,6 +80,8 @@
         <!--e:dimension name="antagonism" value=""/-->
       </e:emotion>
     </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="100"/>
   </character>
   <character name="Spike">
     <voice name="dfki-spike dfki-spike-hsmm" locale="en-GB"/>
@@ -102,6 +108,8 @@
         <e:dimension name="antagonism" value="0.75"/>
       </e:emotion>
     </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="40"/>
   </character>
   
 </character-config>

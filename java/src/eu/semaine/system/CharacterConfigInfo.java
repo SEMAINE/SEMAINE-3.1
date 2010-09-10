@@ -6,10 +6,13 @@ package eu.semaine.system;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -81,7 +84,26 @@ public class CharacterConfigInfo {
 				if (predispositionElement != null) {
 					predispositions = fillPredispositions(predispositionElement);
 				}
-				CharacterConfigInfo cci = new CharacterConfigInfo(characterName, voiceNames, locale, effects, predispositions);
+				// Are there any other features present?
+				List<Element> settingElements = XMLTool.getChildrenByLocalNameNS(character, "setting", SemaineML.namespaceURI);
+				assert settingElements != null;
+				Map<String, String> settings = null;
+				for (Element settingElement : settingElements) {
+					String name = settingElement.getAttribute("name");
+					if ("".equals(name)) {
+						throw new SystemConfigurationException("Found setting without a 'name' attribute for character '"+characterName+"'");
+					}
+					String value = settingElement.getAttribute("value");
+					if ("".equals(value)) {
+						throw new SystemConfigurationException("Found setting without a 'value' attribute for character '"+characterName+"'");
+					}
+					if (settings == null) {
+						settings = new HashMap<String, String>();
+					}
+					settings.put(name, value);
+				}
+				
+				CharacterConfigInfo cci = new CharacterConfigInfo(characterName, voiceNames, locale, effects, predispositions, settings);
 				theMap.put(characterName, cci);
 				if (isDefault) {
 					if (defaultCharacter != null) {
@@ -159,19 +181,22 @@ public class CharacterConfigInfo {
 	
 	///////////////////////////////////////////////////////////////////////
 	
-	private String name;
-	private String[] voices;
-	private String localeString;
-	private String voiceEffects;
+	private final String name;
+	private final String[] voices;
+	private final String localeString;
+	private final String voiceEffects;
 	// predispositions has as keys "uri|name", and as values the emotion dimension's value.
-	private Map<String, Float> predispositions;
+	private final Map<String, Float> predispositions;
+	// settings are generic String key-value pairs
+	private final Map<String, String> settings;
 	
-	private CharacterConfigInfo(String name, String[] voices, String voiceLocale, String voiceEffects, Map<String, Float> predispositions) {
+	private CharacterConfigInfo(String name, String[] voices, String voiceLocale, String voiceEffects, Map<String, Float> predispositions, Map<String, String> settings) {
 		this.name = name;
 		this.voices = voices;
 		this.localeString = voiceLocale;
 		this.voiceEffects = voiceEffects;
 		this.predispositions = predispositions;
+		this.settings = settings;
 	}
 	
 	public String getName() {
@@ -202,6 +227,9 @@ public class CharacterConfigInfo {
 	 * or -1 if there is no such predisposition (i.e. the value is undefined).
 	 */
 	public float getEmotionalPredisposition(String vocabularyURI, String dimension) {
+		if (predispositions == null) {
+			return -1;
+		}
 		String key = vocabularyURI+"|"+dimension;
 		Float val = predispositions.get(key);
 		if (val != null) {
@@ -212,11 +240,15 @@ public class CharacterConfigInfo {
 	
 	/**
 	 * Get a complete list of the emotional predispositions defined for this character.
-	 * @return a list of two-item String arrays; for each array a, a[0] is the vocabularyURI,
+	 * @return a list of two-item String arrays, or an empty list if there are no predispositions.
+	 * For each array a, a[0] is the vocabularyURI,
 	 * and a[1] is the name of the dimension. Together these can be used to get the actual
 	 * value of the predisposition from {@link #getEmotionalPredisposition(String, String)}.
 	 */
 	public List<String[]> getEmotionalPredispositions() {
+		if (predispositions == null) {
+			return new ArrayList<String[]>();
+		}
 		List<String[]> epList = new ArrayList<String[]>(predispositions.size());
 		for (String key : predispositions.keySet()) {
 			String[] uriAndName = key.split("\\|");
@@ -226,6 +258,30 @@ public class CharacterConfigInfo {
 		return epList;
 	}
 	
+	/**
+	 * Generic mechanism for providing String-valued key-value pairs from the config file, using
+	 * <code>&lt;setting name="..." value="..."/&gt;</code>. 
+	 * @param name the setting's name, which must match the <code>name</code> attribute in the config file. 
+	 * @return the corresponding String value, or null if there is no such setting.
+	 */
+	public String getSetting(String name) {
+		if (settings == null) {
+			return null;
+		}
+		return settings.get(name);
+	}
+	
+	/**
+	 * Provide the list of all setting names which are defined for this character.
+	 * The corresponding values can then be obtained using {@link #getSetting(String)}.
+	 * @return a set of Strings, or the empty set if there are no settings for this character.
+	 */
+	public Set<String> getSettings() {
+		if (settings == null) {
+			return new HashSet<String>();
+		}
+		return Collections.unmodifiableSet(settings.keySet());
+	}
 	
         @Override
         public String toString() {
