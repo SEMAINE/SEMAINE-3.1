@@ -87,6 +87,17 @@ public class EmotionML
 	public static final String VOC_SEMAINE_INTEREST_CATEGORY_NEUTRAL = "neutral";
 	public static final String VOC_SEMAINE_INTEREST_CATEGORY_INTERESTED = "interested";
 	
+	// SEMAINE-specific interest dimension:
+	public static final String VOC_SEMAINE_INTEREST_DIMENSION_DEFINITION = "http://www.semaine-project.eu/emo/dimension/interest.xml";
+	public static final String VOC_SEMAINE_INTEREST_DIMENSION_INTEREST = "interest";
+	
+	// SEMAINE-specific four emotion quadrants
+	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_DEFINITION = "http://www.semaine-project.eu/emo/category/four-quadrants.xml";
+	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_POSITIVE_ACTIVE = "positive-active";
+	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_NEGATIVE_ACTIVE = "negative-active";
+	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_NEGATIVE_PASSIVE ="negative-passive";
+	public static final String VOC_SEMAINE_QUADRANTS_CATEGORY_POSITIVE_PASSIVE = "positive-passive";
+	
 	/**
 	 * Map from emotion description tag names to vocabulary attributes.
 	 * @param description one of {@link #E_CATEGORY}, {@link #E_DIMENSION}, {@link #E_APPRAISAL}, {@link #E_ACTION_TENDENCY}

@@ -64,7 +64,7 @@ public class MessageLogComponent extends Component
 			StringBuilder buf = new StringBuilder();
 			buf.append("[").append(TIME_FORMAT.format(new Date(m.getUsertime()))).append("] ");
 			buf.append(m.getDatatype()).append(" ");
-			buf.append(m.getSource()).append("->").append(m.getMessage().getJMSDestination().toString()).append(" ");
+			buf.append(m.getSource()).append("->").append(m.getTopicName()).append(" ");
 			if (m.isEventBased()) {
 				buf.append(m.getEventType()).append(" event ");
 			} else {
