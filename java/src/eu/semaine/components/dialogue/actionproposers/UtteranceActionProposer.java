@@ -835,13 +835,14 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			}
 			output_counter++;
 		}
-		historyQueue.addLast(latestResponse.getResponse());
-		if( historyQueue.size() > 5 ) historyQueue.removeFirst();
+		
 		String queueString = "";
 		for( String str : historyQueue ) {
 			queueString = queueString + str + " ";
 		}
 		DMLogger.getLogger().log(meta.getTime(), "Queue = " + queueString);
+		historyQueue.addLast(latestResponse.getResponse());
+		if( historyQueue.size() > 5 ) historyQueue.removeFirst();
 	}
 	
 	/**
@@ -1042,7 +1043,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			} else {
 				int tries = 0;
 				response = responseGroup.get(random.nextInt(responseGroup.size()));
-				while( historyQueue.contains(response.getResponse()) && tries <= 5) {
+				while( historyQueue.contains(response.getResponse()) && tries <= 15) {
 					response = responseGroup.get(random.nextInt(responseGroup.size()));
 					tries++;
 				}

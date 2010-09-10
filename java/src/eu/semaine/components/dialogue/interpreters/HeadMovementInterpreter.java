@@ -37,7 +37,7 @@ public class HeadMovementInterpreter extends Component
 		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender); // so it can be started etc
 		
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.NodShake ", "datatype = 'EMMA'");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.NodShake", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
 	}
 	
