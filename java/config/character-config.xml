@@ -47,7 +47,7 @@
         <!--e:dimension name="happiness" value=""/-->
         <!--e:dimension name="contempt" value=""/-->
         <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
-        <e:dimension name="anticipation" value=""/>
+        <!--e:dimension name="anticipation" value=""/-->
         <e:dimension name="solidarity" value="0.75"/>
         <e:dimension name="antagonism" value="0.25"/>
       </e:emotion>
