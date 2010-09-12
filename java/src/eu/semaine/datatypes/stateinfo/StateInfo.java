@@ -141,6 +141,8 @@ public abstract class StateInfo
 				}
 				String shortName = parts[0].trim();
 				String xpathExpr = parts[1].trim();
+				// Fail-early strategy: we want to verify at load time whether all entries match our expected format:
+				splitXPathIntoParts(xpathExpr);
 				shortNames.put(shortName, xpathExpr);
 			}
 		}
@@ -215,6 +217,86 @@ public abstract class StateInfo
 			if (expr == null) {
 				throw new SystemConfigurationException("No info entry for '"+shortName+"' -- something seems to be out of sync");
 			}
+			String[][] parts = splitXPathIntoParts(expr);
+			for (int i=0; i<parts.length-1; i++) {
+				String[] part = parts[i];
+				assert part != null;
+				assert part.length == 4;
+				String prefix = part[0];
+				String localName = part[1];
+				String attName = part[2];
+				String attValue = part[3];
+				String namespaceURI = prefix != null ? namespaceContext.getNamespaceURI(prefix) : null;
+				// Now traverse to or create element defined by prefix, localName and namespaceURI
+				if (currentElt == null) { // at top level
+					if (doc == null) { // create a new document
+						try {
+							doc = XMLTool.newDocument(localName, namespaceURI);
+						} catch (DOMException de) {
+							throw new SystemConfigurationException("For info '"+shortName+"', cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'", de);
+						}
+						currentElt = doc.getDocumentElement();
+						currentElt.setPrefix(prefix);
+					} else {
+						currentElt = doc.getDocumentElement();
+						if (!currentElt.getLocalName().equals(localName)) {
+							throw new SystemConfigurationException("Incompatible root node specification: expression for '"+shortName+"' requests '"+
+									localName+"', but previous expressions have requested '"+currentElt.getLocalName()+"'!");
+						}
+						String currentNamespaceURI = currentElt.getNamespaceURI();
+						if (!(currentNamespaceURI == null && namespaceURI == null
+							 || currentNamespaceURI != null && currentNamespaceURI.equals(namespaceURI))) {
+							throw new SystemConfigurationException("Incompatible root namespace specification: expression for '"+shortName+"' requests '"+
+									namespaceURI+"', but previous expressions have requested '"+currentNamespaceURI+"'!");
+						}
+					}
+				} else { // somewhere in the tree
+					// First check if the requested child already exists
+					List<Element> sameNameChildren = XMLTool.getChildrenByLocalNameNS(currentElt, localName, namespaceURI);
+					boolean found = false;
+					if (attName == null) {
+						if (sameNameChildren.size() > 0) {
+							currentElt = sameNameChildren.get(0);
+							found = true;
+						}
+					} else {
+						for (Element c : sameNameChildren) {
+							if (c.hasAttribute(attName)) {
+								if (attValue == null || attValue.equals(c.getAttribute(attName))) {
+									currentElt = c;
+									found = true;
+									break;
+								}
+							}
+						}
+					}
+					if (!found) { // need to create it
+						currentElt = XMLTool.appendChildElement(currentElt, localName, namespaceURI);
+						if (prefix != null) currentElt.setPrefix(prefix);
+						if (attName != null) {
+							currentElt.setAttribute(attName, attValue != null ? attValue : "");
+						}
+					}
+				}
+
+
+			}
+			if (currentElt == null) {
+				throw new SystemConfigurationException("No elements or no final part created for info '"
+						+shortName+"' from XPath expression '"+expr+"'");
+			}
+			String[] lastPart = parts[parts.length-1];
+			assert lastPart.length <= 1;
+			if (lastPart.length == 0) { // text content of the given node
+				currentElt.setTextContent(value);
+			} else {
+				String attName = lastPart[0];
+				currentElt.setAttribute(attName, value);
+			}
+			
+
+			
+/*			
 			//System.out.println("shortname: "+shortName+", expr: "+expr);
 			String[] parts = expr.split("/"); 
 			// Now go through all parts except the last one:
@@ -222,9 +304,9 @@ public abstract class StateInfo
 				String part = parts[i];
 				// if there is more than one slash, indicating arbitrary substructures, we treat it like a single slash (direct child)
 				if (part.equals("")) continue;
-				String[] prefixAndName = part.split(Pattern.quote(":"));
-				if (prefixAndName.length > 2)
-					throw new SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
+				String[] prefixAndName = part.split(Pattern.quote(":"), 2); // right-hand side can contain colon, e.g. in attribute values
+//				if (prefixAndName.length > 2)
+//					throw new SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
 				String prefix = prefixAndName.length == 2 ? prefixAndName[0] : null;
 				String namespaceURI = prefix != null ? namespaceContext.getNamespaceURI(prefix) : null;
 				String localNameExpr = prefixAndName[prefixAndName.length - 1];
@@ -322,10 +404,111 @@ public abstract class StateInfo
 				throw new SystemConfigurationException("Do not know how to assign value for info '"+shortName+"' from last part of xpath expression '"
 						+lastPart+"' -- expected either 'text()' or '@attributeName'");
 			}
+			*/
 		}
 	}
 
 	
+	/**
+	 * The given string is interpreted as a limited subset of XPath expressions and split into parts.
+	 * Each part except the last one is expected to follow precisely the following form:
+	 * <code>"/" ( prefix ":" ) ? localname ( "[" "@" attName "=" "'" attValue "'" "]" ) ?</code>
+	 * The last part must be either
+	 * <code> "/" "text()"</code>
+	 * or
+	 * </code> "/" "@" attributeName </code>.
+	 * @param expr the string to be split as an xpath expression
+	 * @return an array of string arrays. All except the last entry in this array is guaranteed to have
+	 * four elements, with the meaning:
+	 * <ul>
+	 * <li>[0]: prefix (can be null)</li>
+	 * <li>[1]: localname (guaranteed not to be null)</li>
+	 * <li>[2]: attributeName (can be null)</li>
+	 * <li>[3]: attributeValue (is guaranteed to be null when attributeName is null; 
+	 *  when attributeName is non-null, and attributeValue is null,
+	 *  then the attribute must be present but there are no constraints about its value)</li>
+	 * </ul>
+	 * The last element in the returned array has either length 1 or length 0. If it is of length 0, then the XPath expression ended in "text()",
+	 * i.e. the value to be referenced is the text content of the enclosing Element; if it is of length 1, the String
+	 * contained is guaranteed to be non-null and represents the name of the attribute to be referenced on the enclosing Element.
+	 * 
+	 * @throws SystemConfigurationException if expr does not match the expected format.
+	 */
+	private static String[][] splitXPathIntoParts(String expr) throws SystemConfigurationException {
+		ArrayList<String[]> parts = new ArrayList<String[]>();
+		if (!expr.startsWith("/")) {
+			throw new SystemConfigurationException("XPath expression does not start with a slash: "+expr);
+		}
+		int pos = 1;
+		// Structure of each part except the last part:
+		// "/" ( prefix ":" ) ? localname ( "[" "@" attName "=" "'" attValue "'" "]" ) ?
+		// Avoid regular expression code so it is easier to port to C++.
+		// Strategy: 
+		// find first of ":[/"; 
+		// - if ":", detach prefix, find first of "[/", and continue in next line:
+		// - if "/", there is no attribute;
+		// - if "[", require "@", find "=" followed by "'", then find next "'", require "]" and "/".
+		while (true) { // We loop until we cannot match a '/' anymore, because last part is different
+			String prefix = null;
+			String localname = null;
+			String attName = null;
+			String attValue = null;
+			int nextColonPos = expr.indexOf(':', pos);
+			int nextSlashPos = expr.indexOf('/', pos);
+			int nextOpenSqB = expr.indexOf('[', pos);
+			if (nextSlashPos == -1) {
+				break; // pos is start of last part
+			}
+			if (nextColonPos != -1 && nextColonPos < nextSlashPos) {
+				prefix = expr.substring(pos, nextColonPos);
+				pos = nextColonPos + 1;
+			}
+			// Attributes?
+			if (nextOpenSqB != -1 && nextOpenSqB < nextSlashPos) {
+				if (nextOpenSqB <= pos) {
+					throw new SystemConfigurationException("Wrong square bracket location in XPath expression "+expr);
+				}
+				localname = expr.substring(pos, nextOpenSqB);
+				if (expr.charAt(nextOpenSqB+1)!='@') {
+					throw new SystemConfigurationException("Expected '@' character after '[' in XPath expression "+expr);
+				}
+				int equalPos = expr.indexOf('=', nextOpenSqB);
+				int nextCloseSqB = expr.indexOf(']', nextOpenSqB);
+				if (equalPos != -1 && equalPos+2<nextCloseSqB) {
+					// we have an attribute value
+					attName = expr.substring(nextOpenSqB+2, equalPos);
+					if (expr.charAt(equalPos+1) != '\'' || expr.charAt(nextCloseSqB-1) != '\'') {
+						throw new SystemConfigurationException("Attribute value for attribute '"+attName+"' must be in single quotes, in XPath expression "+expr);
+					}
+					attValue = expr.substring(equalPos+2, nextCloseSqB-1);
+				} else { // only attribute name, no value
+					attName = expr.substring(nextOpenSqB+2, nextCloseSqB);
+				}
+				nextSlashPos = nextCloseSqB+1;
+				if (nextSlashPos >= expr.length() || expr.charAt(nextSlashPos) != '/') {
+					throw new SystemConfigurationException("XPath expression seems malformed: no slash after closed square bracket: "+expr);
+				}
+			} else { // no attribute
+				localname = expr.substring(pos, nextSlashPos);
+				// attName and attValue stay null
+			}
+			parts.add(new String[] {prefix, localname, attName, attValue});
+			pos = nextSlashPos + 1;
+		}
+		// Last part: expect either 'text()' or '@attributeName'
+		if (pos >= expr.length()) {
+			throw new SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+		}
+		if (expr.charAt(pos) == '@') {
+			String attName = expr.substring(pos+1);
+			parts.add(new String[] {attName});
+		} else if (expr.substring(pos).equals("text()")) {
+			parts.add(new String[0]);
+		} else {
+			throw new SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+		}
+		return (String[][]) parts.toArray(new String[0][]);
+	}
 
 	
 	/**
