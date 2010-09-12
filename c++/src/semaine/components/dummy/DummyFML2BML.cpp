@@ -14,6 +14,10 @@
 #include <semaine/util/XMLTool.h>
 #include <semaine/datatypes/xml/BML.h>
 
+#include <semaine/datatypes/stateinfo/StateInfo.h>
+#include <semaine/datatypes/stateinfo/AgentStateInfo.h>
+#include <semaine/cms/message/SEMAINEStateMessage.h>
+
 #include <cstdlib>
 #include <sstream>
 #include <decaf/lang/System.h>
@@ -22,6 +26,7 @@ using namespace semaine::cms::exceptions;
 using namespace semaine::util;
 using namespace semaine::datatypes::xml;
 using namespace XERCES_CPP_NAMESPACE;
+using namespace semaine::datatypes::stateinfo;
 
 namespace semaine {
 namespace components {
@@ -36,6 +41,10 @@ DummyFML2BML::DummyFML2BML() throw(CMSException) :
 	receivers.push_back(bmlReceiver);  // to set up properly
 	bmlSender = new BMLSender("semaine.data.synthesis.plan", getName());
 	senders.push_back(bmlSender);
+	stateReceiver = new StateReceiver("semaine.data.state.user.behaviour", StateInfo::UserState);
+	receivers.push_back(stateReceiver);
+	stateSender = new StateSender("semaine.data.state.agent", StateInfo::AgentState, getName());
+	senders.push_back(stateSender);
 }
 
 DummyFML2BML::~DummyFML2BML()
@@ -48,6 +57,18 @@ DummyFML2BML::~DummyFML2BML()
 
 void DummyFML2BML::react(SEMAINEMessage * m) throw(CMSException)
 {
+	SEMAINEStateMessage * sm = dynamic_cast<SEMAINEStateMessage *>(m);
+	if (sm != NULL) {
+		StateInfo * info = sm->getState();
+		if (info->hasInfo("arousal")) {
+			std::map<std::string, std::string> agentInfo;
+			agentInfo["happiness"] = "0.8";
+			AgentStateInfo agentState(agentInfo);
+			stateSender->sendStateInfo(&agentState, meta.getTime());
+		}
+		return;
+	}
+
 	SEMAINEXMLMessage * xm = dynamic_cast<SEMAINEXMLMessage *>(m);
 	if (xm == NULL) {
 		throw MessageFormatException("expected XML message, gut "+std::string(typeid(*m).name()));

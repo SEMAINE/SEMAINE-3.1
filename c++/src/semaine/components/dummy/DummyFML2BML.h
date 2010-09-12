@@ -18,6 +18,8 @@
 #include <semaine/cms/sender/BMLSender.h>
 #include <semaine/cms/receiver/FMLReceiver.h>
 #include <semaine/cms/receiver/BMLReceiver.h>
+#include <semaine/cms/receiver/StateReceiver.h>
+#include <semaine/cms/sender/StateSender.h>
 
 
 using namespace cms;
@@ -42,6 +44,8 @@ private:
 	FMLReceiver * fmlReceiver;
 	BMLReceiver * bmlReceiver;
 	BMLSender * bmlSender;
+	StateReceiver * stateReceiver;
+	StateSender * stateSender;
 };
 
 } // namespace dummy

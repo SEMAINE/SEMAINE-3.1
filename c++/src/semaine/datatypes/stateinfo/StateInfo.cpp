@@ -31,6 +31,9 @@ const StateInfo::Type StateInfo::Types[] = { StateInfo::AgentState, StateInfo::D
 const int StateInfo::numTypes = 5;
 const std::string StateInfo::TypeNames[] = {"AgentState", "DialogState", "UserState", "ContextState", "SystemState" };
 
+
+//////////////// Helper functions ////////////////////
+
 void trim(std::string& str, const std::locale& loc = std::locale()) {
 #ifdef _MSC_VER
 #define MY_ISSPACE(a,b) isspace(a)
@@ -69,12 +72,126 @@ std::vector<std::string> tokenize(const std::string& str,
 }
 
 
+/**
+ * The given string is interpreted as a limited subset of XPath expressions and split into parts.
+ * Each part except the last one is expected to follow precisely the following form:
+ * <code>"/" ( prefix ":" ) ? localname ( "[" "@" attName "=" "'" attValue "'" "]" ) ?</code>
+ * The last part must be either
+ * <code> "/" "text()"</code>
+ * or
+ * </code> "/" "@" attributeName </code>.
+ * @param expr the string to be split as an xpath expression
+ * @return an array of string arrays. All except the last entry in this array is guaranteed to have
+ * four elements, with the meaning:
+ * <ul>
+ * <li>[0]: prefix (can be the empty string)</li>
+ * <li>[1]: localname (guaranteed not to be empty)</li>
+ * <li>[2]: attributeName (can be empty)</li>
+ * <li>[3]: attributeValue (is guaranteed to be empty when attributeName is empty;
+ *  when attributeName is non-empty, and attributeValue is empty,
+ *  then the attribute must be present but there are no constraints about its value)</li>
+ * </ul>
+ * The last element in the returned array has either length 1 or length 0. If it is of length 0, then the XPath expression ended in "text()",
+ * i.e. the value to be referenced is the text content of the enclosing Element; if it is of length 1, the String
+ * contained is guaranteed to be non-null and represents the name of the attribute to be referenced on the enclosing Element.
+ *
+ * @throws SystemConfigurationException if expr does not match the expected format.
+ */
+std::vector< std::vector<std::string> > splitXPathIntoParts(const std::string & expr)
+throw(SystemConfigurationException) {
+	std::vector< std::vector<std::string> > parts;
+	if (expr[0] != '/') {
+		throw SystemConfigurationException("XPath expression does not start with a slash: "+expr);
+	}
+	int pos = 1;
+	// Structure of each part except the last part:
+	// "/" ( prefix ":" ) ? localname ( "[" "@" attName "=" "'" attValue "'" "]" ) ?
+	// Avoid regular expression code so it is easier to port to C++.
+	// Strategy:
+	// find first of ":[/";
+	// - if ":", detach prefix, find first of "[/", and continue in next line:
+	// - if "/", there is no attribute;
+	// - if "[", require "@", find "=" followed by "'", then find next "'", require "]" and "/".
+	while (true) { // We loop until we cannot match a '/' anymore, because last part is different
+		std::string prefix = "";
+		std::string localname = "";
+		std::string attName = "";
+		std::string attValue = "";
+		int nextColonPos = expr.find(':', pos);
+		int nextSlashPos = expr.find('/', pos);
+		int nextOpenSqB = expr.find('[', pos);
+		if (nextSlashPos == std::string::npos) {
+			break; // pos is start of last part
+		}
+		if (nextColonPos != -1 && nextColonPos < nextSlashPos) {
+			prefix = expr.substr(pos, nextColonPos-pos);
+			pos = nextColonPos + 1;
+		}
+		// Attributes?
+		if (nextOpenSqB != std::string::npos && nextOpenSqB < nextSlashPos) {
+			if (nextOpenSqB <= pos) {
+				throw SystemConfigurationException("Wrong square bracket location in XPath expression "+expr);
+			}
+			localname = expr.substr(pos, nextOpenSqB-pos);
+			if (expr[nextOpenSqB+1] != '@') {
+				throw SystemConfigurationException("Expected '@' character after '[' in XPath expression "+expr);
+			}
+			int equalPos = expr.find('=', nextOpenSqB);
+			int nextCloseSqB = expr.find(']', nextOpenSqB);
+			if (equalPos != std::string::npos && equalPos+2<nextCloseSqB) {
+				// we have an attribute value
+				attName = expr.substr(nextOpenSqB+2, equalPos-(nextOpenSqB+2));
+				if (expr[equalPos+1] != '\'' || expr[nextCloseSqB-1] != '\'') {
+					throw SystemConfigurationException("Attribute value for attribute '"+attName+"' must be in single quotes, in XPath expression "+expr);
+				}
+				attValue = expr.substr(equalPos+2, nextCloseSqB-1-(equalPos+2));
+			} else { // only attribute name, no value
+				attName = expr.substr(nextOpenSqB+2, nextCloseSqB-(nextOpenSqB+2));
+			}
+			nextSlashPos = nextCloseSqB+1;
+			if (nextSlashPos >= expr.length() || expr[nextSlashPos] != '/') {
+				throw SystemConfigurationException("XPath expression seems malformed: no slash after closed square bracket: "+expr);
+			}
+		} else { // no attribute
+			localname = expr.substr(pos, nextSlashPos-pos);
+			// attName and attValue stay empty
+		}
+		std::vector<std::string> part;
+		part.push_back(prefix);
+		part.push_back(localname);
+		part.push_back(attName);
+		part.push_back(attValue);
+		parts.push_back(part);
+		pos = nextSlashPos + 1;
+	}
+	// Last part: expect either 'text()' or '@attributeName'
+	if (pos >= expr.length()) {
+		throw SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+	}
+	if (expr[pos] == '@') {
+		std::string attName = expr.substr(pos+1);
+		std::vector<std::string> part;
+		part.push_back(attName);
+		parts.push_back(part);
+	} else if (expr.substr(pos) == "text()") {
+		std::vector<std::string> part; // vector with 0 elements
+		parts.push_back(part);
+	} else {
+		throw SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+	}
+	return parts;
+}
+
+
+
 XPathInfoMapper * getXPathExpressions(StateInfo::Type & type, const std::list<std::string> & configSection)
 throw(SystemConfigurationException)
 {
 	const char * delims = "\t =:";
 	std::map<std::string, std::string> namespacePrefixes;
 	std::map<std::string, std::string> shortNames;
+	// Temporary map to make sure no two short names have the same expression:
+	std::map<std::string, std::string> expr2shortname;
 
 	bool readNamespacePrefixes = false;
 	bool readShortNames = false;
@@ -101,14 +218,24 @@ throw(SystemConfigurationException)
 			std::string::size_type sepStart = line.find_first_of(delims);
 			std::string::size_type secondStart = line.find_first_not_of(delims, sepStart);
 			if (sepStart == std::string::npos || secondStart == std::string::npos) {
-				throw new SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
+				throw SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
 			}
 			std::string shortName = line.substr(0, sepStart);
 			std::string xpathExpr = line.substr(secondStart);
+			// Fail-early strategy: we want to verify at load time whether all entries match our expected format:
+			splitXPathIntoParts(xpathExpr);
+			if (shortNames.find(shortName) != shortNames.end()) {
+				throw SystemConfigurationException("In section "+StateInfo::TypeNames[type]
+				    +", short name '"+shortName+"' occurs more than once");
+			}
+			if (expr2shortname.find(xpathExpr) != expr2shortname.end()) {
+				throw SystemConfigurationException("In section "+StateInfo::TypeNames[type]
+				    +", short names '"+shortName+"' and '"+expr2shortname[xpathExpr]+"' have the same XPath expression");
+			}
 			shortNames[shortName] = xpathExpr;
+			expr2shortname[xpathExpr] = shortName;
 		}
 	}
-
 	return new XPathInfoMapper(namespacePrefixes, shortNames);
 }
 
@@ -243,6 +370,86 @@ throw(SystemConfigurationException)
 			throw SystemConfigurationException("No info entry for '"+shortName+"' -- something seems to be out of sync");
 		}
 		std::string expr = xpathLookupIt->second;
+
+
+		std::vector< std::vector<std::string> > parts = splitXPathIntoParts(expr);
+		for (int i=0; i<parts.size()-1; i++) {
+			std::vector<std::string> part = parts[i];
+			std::string prefix = part[0];
+			std::string localName = part[1];
+			std::string attName = part[2];
+			std::string attValue = part[3];
+			std::string namespaceURI = prefix != "" ? namespaceContext->getNamespaceURI(prefix) : "";
+
+			// Now traverse to or create element defined by prefix, localName and namespaceURI
+			if (currentElt == NULL) { // at top level
+				if (doc == NULL) { // create a new document
+					try {
+						doc = XMLTool::newDocument(localName, namespaceURI);
+					} catch (DOMException de) {
+						throw SystemConfigurationException("For info '"+shortName+"', cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'");
+					}
+					currentElt = doc->getDocumentElement();
+					XMLTool::setPrefix(currentElt, prefix);
+				} else {
+					currentElt = doc->getDocumentElement();
+					if (XMLTool::getLocalName(currentElt) != localName) {
+						throw SystemConfigurationException("Incompatible root node specification: expression for '"+shortName+"' requests '"+
+								localName+"', but previous expressions have requested '"+XMLTool::getLocalName(currentElt)+"'!");
+					}
+					std::string currentNamespaceURI = XMLTool::getNamespaceURI(currentElt);
+					if (currentNamespaceURI != namespaceURI) {
+						throw SystemConfigurationException("Incompatible root namespace specification: expression for '"+shortName+"' requests '"+
+								namespaceURI+"', but previous expressions have requested '"+currentNamespaceURI+"'!");
+					}
+				}
+			} else { // somewhere in the tree
+				// First check if the requested child already exists
+				std::list<DOMElement *> * sameNameChildren = XMLTool::getChildrenByLocalNameNS(currentElt, localName, namespaceURI);
+				bool found = false;
+				if (attName.empty()) {
+					if (sameNameChildren->size() > 0) {
+						currentElt = sameNameChildren->front();
+						found = true;
+					}
+				} else {
+					for (std::list<DOMElement *>::iterator it = sameNameChildren->begin(); it != sameNameChildren->end(); ++it) {
+						DOMElement * c = *it;
+						if (XMLTool::hasAttribute(c, attName)) {
+							if (attValue.empty() || attValue == XMLTool::getAttribute(c, attName)) {
+								currentElt = c;
+								found = true;
+								break;
+							}
+						}
+					}
+				}
+				if (!found) { // need to create it
+					currentElt = XMLTool::appendChildElement(currentElt, localName, namespaceURI);
+					if (prefix != "") XMLTool::setPrefix(currentElt, prefix);
+					if (!attName.empty()) {
+						XMLTool::setAttribute(currentElt, attName, attValue);
+					}
+				}
+			}
+		} // for all parts except the last one
+
+		if (currentElt == NULL)
+			throw SystemConfigurationException("No elements or no final part created for info '"
+					+shortName+"' from XPath expression '"+expr+"'");
+		std::vector<std::string> lastPart = parts.back();
+
+		if (lastPart.empty()) { // textual content of currentElt
+			XMLTool::setTextContent(currentElt, value);
+		} else {
+			std::string attName = lastPart[0];
+			XMLTool::setAttribute(currentElt, attName, value);
+		}
+
+
+
+
+/*
 		std::vector<std::string> parts = tokenize(expr, "/");
 		// Now go through all parts except the last one:
 		for (std::string::size_type i=0, max=parts.size()-1; i<max; i++) {
@@ -355,6 +562,7 @@ throw(SystemConfigurationException)
 			throw new SystemConfigurationException("Do not know how to assign value for info '"+shortName+"' from last part of xpath expression '"
 					+lastPart+"' -- expected either 'text()' or '@attributeName'");
 		}
+		*/
 	}
 }
 
