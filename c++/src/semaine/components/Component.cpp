@@ -113,8 +113,10 @@ const std::string Component::STATE_STALLED = "stalled";
 			// Check at every loop that the total system is ready
 			bool exitFlag = false;
 			synchronized (&meta) {
-				while (!meta.isSystemReady()) {
+				if (!meta.isSystemReady()) {
 					log->info("waiting for system to become ready");
+				}
+				while (!meta.isSystemReady()) {
 					try {
 						meta.wait(1000);
 					} catch (decaf::lang::Exception & ie) {
