@@ -24,7 +24,7 @@ if not %CMS_URL%a==a (
   set JMS_URL_SETTING="-Djms.url=%CMS_URL%"
 )
 
-set ARGS=-Xmx400m %JMS_URL_SETTING% -classpath "%MYJAVADIR%\bin";"%JARDIR%\semaine.jar";"%JARDIR%\semaine-mary.jar";"%JARDIR%\semaine-dialogue.jar" -Dmary.base=%MARYDIR% eu.semaine.system.ComponentRunner %CONFIG%
+set ARGS=-Xmx1500m %JMS_URL_SETTING% -classpath "%MYJAVADIR%\bin";"%JARDIR%\semaine.jar";"%JARDIR%\semaine-mary.jar";"%JARDIR%\semaine-dialogue.jar" -Dmary.base=%MARYDIR% eu.semaine.system.ComponentRunner %CONFIG%
 
 echo.Starting SEMAINE system as: 'java %ARGS%'
 

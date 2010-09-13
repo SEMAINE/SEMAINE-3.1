@@ -6,7 +6,8 @@ BINDIR=`(cd "$BINDIR" ; pwd)`
 # Change the following to set any custom class path:
 MYCLASSPATH="$BINDIR/bin"
 
-SEMAINE_JAVA_DIR=`(cd "$BINDIR/../../SEMAINE-2.0" ; pwd)`
+#SEMAINE_JAVA_DIR=`(cd "$BINDIR/../../SEMAINE-2.0" ; pwd)`
+SEMAINE_JAVA_DIR=`(cd "$BINDIR/.." ; pwd)`
 MARYDIR="$SEMAINE_JAVA_DIR/MARY"
 if [ ! -e $MARYDIR ] ; then  echo "MARY directory not found in $MARYDIR. Cannot start."  exit 1
 fi
@@ -25,7 +26,7 @@ if [ -n "$CMS_URL" ] ; then
   JMS_URL_SETTING="-Djms.url=$CMS_URL"
 fi
 
-ARGS="-Xmx1g $JMS_URL_SETTING -classpath \"$MYCLASSPATH:$JARDIR/semaine.jar:$JARDIR/semaine-mary.jar:$JARDIR/semaine-dialogue.jar\" -Dmary.base=\"$MARYDIR\" eu.semaine.system.ComponentRunner \"$CONFIG\""
+ARGS="-Xmx1500m $JMS_URL_SETTING -classpath \"$MYCLASSPATH:$JARDIR/semaine.jar:$JARDIR/semaine-mary.jar:$JARDIR/semaine-dialogue.jar\" -Dmary.base=\"$MARYDIR\" eu.semaine.system.ComponentRunner \"$CONFIG\""
 
 echo "Starting SEMAINE system as:"
 echo "java $ARGS" 

@@ -27,9 +27,9 @@ if not %CMS_URL%a==a (
 )
 
 
-echo.Starting SEMAINE system as: 'java -Xmx1g %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base="%MARYDIR%" eu.semaine.system.ComponentRunner %CONFIG%'
+echo.Starting SEMAINE system as: 'java -Xmx1500m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base="%MARYDIR%" eu.semaine.system.ComponentRunner %CONFIG%'
 
-java -Xmx1g -Dlog.level=debug %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base=%MARYDIR% eu.semaine.system.ComponentRunner %CONFIG%
+java -Xmx1500m -Dlog.level=debug %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base=%MARYDIR% eu.semaine.system.ComponentRunner %CONFIG%
 
 :: goto target:
 
