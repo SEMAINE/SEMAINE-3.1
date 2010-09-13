@@ -7,32 +7,23 @@ package eu.semaine.components.dialogue.interpreters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.jms.JMSException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
-import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
 import eu.semaine.components.dialogue.datastructures.DMProperties;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
-import eu.semaine.datatypes.stateinfo.UserStateInfo;
-import eu.semaine.datatypes.xml.SemaineML;
-import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
-import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.StateReceiver;
-import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.StateSender;
-import eu.semaine.util.XMLTool;
+import eu.semaine.system.CharacterConfigInfo;
 
 /**
  * The TurnTakingInterpreter looks at the behaviour of the user and has to decide when is
@@ -139,10 +130,10 @@ public class TurnTakingInterpreter extends Component
 		dialogStateSender = new StateSender("semaine.data.state.dialog", StateInfo.Type.DialogState, getName());
 		senders.add(dialogStateSender);
 		
-		POPPY_TT_THRESHOLD = DMProperties.getTurnTakingThresholdPoppy();
-		PRUDENCE_TT_THRESHOLD = DMProperties.getTurnTakingThresholdPrudence();
-		SPIKE_TT_THRESHOLD = DMProperties.getTurnTakingThresholdSpike();
-		OBADIAH_TT_THRESHOLD = DMProperties.getTurnTakingThresholdObadiah();
+		POPPY_TT_THRESHOLD = Integer.parseInt(CharacterConfigInfo.getInfo("Poppy").getSetting("TurnTakingThreshold"));
+		PRUDENCE_TT_THRESHOLD = Integer.parseInt(CharacterConfigInfo.getInfo("Prudence").getSetting("TurnTakingThreshold"));
+		SPIKE_TT_THRESHOLD = Integer.parseInt(CharacterConfigInfo.getInfo("Spike").getSetting("TurnTakingThreshold"));
+		OBADIAH_TT_THRESHOLD = Integer.parseInt(CharacterConfigInfo.getInfo("Obadiah").getSetting("TurnTakingThreshold"));
 	}
 
 	
