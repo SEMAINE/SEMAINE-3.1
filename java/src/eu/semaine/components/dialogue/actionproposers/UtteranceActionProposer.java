@@ -54,6 +54,7 @@ import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.Sender;
 import eu.semaine.jms.sender.StateSender;
+import eu.semaine.system.CharacterConfigInfo;
 import eu.semaine.util.XMLTool;
 
 public class UtteranceActionProposer extends Component implements BehaviourClass
@@ -480,11 +481,14 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					if( is.getInteger("User.present") == null ) {
 						is.set("User.present", 0);
 					}
-					System.out.println("XXXXXX " + is.getInteger("User.present"));
 					if( stateInfo.getInfo("userPresent").equals("present") &&  is.getInteger("User.present") == 0 ) {
 						DMLogger.getLogger().log(meta.getTime(), "System:SystemStarted" );
 						is.set("User.present", 1);
 						is.set("User.presentStateChanged",1);
+						String agent = is.getString("Agent.character");
+						if( agent == null || agent.length() == 0 ) {
+							is.set("Agent.character", CharacterConfigInfo.getDefaultCharacter().getName());
+						}
 						systemStarted = true;
 
 					} else if( stateInfo.getInfo("userPresent").equals("absent") && is.getInteger("User.present") == 1 ) {
