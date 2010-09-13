@@ -34,5 +34,15 @@ public class BML
 	public static final String A_START = "start";
 	public static final String A_END = "end";
 	public static final String A_TYPE = "type";
+	
+	// Values
+	// Values of <head type="...">:
+	public static final String V_NOD = "NOD";
+	public static final String V_SHAKE = "SHAKE";
+	public static final String V_TILTRIGHT = "TILT-RIGHT";
+	public static final String V_TILTLEFT = "TILT-LEFT";
+	public static final String V_APPROACH = "APPROACH";
+	public static final String V_RETRACT = "RETRACT";
+	
 
 }

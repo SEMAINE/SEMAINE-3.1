@@ -36,6 +36,15 @@ const std::string BML::A_START = "start";
 const std::string BML::A_END = "end";
 const std::string BML::A_TYPE = "type";
 
+// Values
+// Values of <head type="...">:
+const std::string V_NOD = "NOD";
+const std::string V_SHAKE = "SHAKE";
+const std::string V_TILTRIGHT = "TILT-RIGHT";
+const std::string V_TILTLEFT = "TILT-LEFT";
+const std::string V_APPROACH = "APPROACH";
+const std::string V_RETRACT = "RETRACT";
+
 } // namespace xml
 } // namespace datatypes
 } // namespace semaine

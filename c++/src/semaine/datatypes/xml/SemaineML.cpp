@@ -37,6 +37,8 @@ const std::string SemaineML::E_CHARACTER = "character";
 const std::string SemaineML::E_SPEAKING = "speaking";
 const std::string SemaineML::E_GENDER = "gender";
 const std::string SemaineML::E_PITCH = "pitch";
+const std::string E_FACEPRESENT = "face-present";
+const std::string E_VOCALIZATION = "vocalization";
 
 	// Attributes
 const std::string SemaineML::A_WHO = "who";
@@ -54,7 +56,9 @@ const std::string SemaineML::A_STATUS_CHANGE = "statusChange";
 // For A_STATUS:
 const std::string SemaineML::V_PRESENT = "present";
 const std::string SemaineML::V_ABSENT = "absent";
-
+// For <vocalization name="...">:
+const std::string V_LAUGHTER = "(laughter)";
+const std::string V_SIGH = "(sigh)";
 
 } // namespace xml
 } // namespace datatypes

@@ -41,6 +41,16 @@ public:
 	static const std::string A_START;
 	static const std::string A_END;
 	static const std::string A_TYPE;
+
+	// Values
+	// Values of <head type="...">:
+	static const std::string V_NOD;
+	static const std::string V_SHAKE;
+	static const std::string V_TILTRIGHT;
+	static const std::string V_TILTLEFT;
+	static const std::string V_APPROACH;
+	static const std::string V_RETRACT;
+
 };
 
 } // namespace xml

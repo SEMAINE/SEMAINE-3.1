@@ -33,6 +33,8 @@ public class SemaineML
     public static final String E_CHARACTER = "character";
     public static final String E_SPEAKING = "speaking";
     public static final String E_PITCH = "pitch";
+    public static final String E_FACEPRESENT = "face-present";
+    public static final String E_VOCALIZATION = "vocalization";
     
     // Attributes
     public static final String A_WHO = "who";
@@ -58,5 +60,8 @@ public class SemaineML
     public static final String V_START = "start";
     public static final String V_STOPPED = "stopped";
     public static final String V_END = "end";
+    // For <vocalization name="...">:
+    public static final String V_LAUGHTER = "(laughter)";
+    public static final String V_SIGH = "(sigh)";
     
 }
