@@ -302,8 +302,9 @@ public class TurnTakingInterpreter extends Component
 	{
 		Map<String,String> agentInfoMap = agentInfo.getInfos();
 		
-		String newChar = agentInfoMap.get( "character" ).toLowerCase();
+		String newChar = agentInfoMap.get( "character" );
 		if( newChar != null ) {
+			newChar = newChar.toLowerCase();
 			if( newChar.equals("poppy") ) {
 				character = POPPY;
 				curr_TT_Threshold = POPPY_TT_THRESHOLD;
