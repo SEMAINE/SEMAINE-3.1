@@ -132,8 +132,10 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			meta.IamAlive();
 			// Check at every loop that the total system is ready
 			synchronized (meta) {
-				while (!meta.isSystemReady()) {
+				if (!meta.isSystemReady()) {
 					log.info(meta.getTime(), "waiting for system to become ready");
+				}
+				while (!meta.isSystemReady()) {
 					try {
 						meta.wait();
 					} catch (InterruptedException ie) {
