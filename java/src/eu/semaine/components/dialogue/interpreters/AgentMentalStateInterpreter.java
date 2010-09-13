@@ -91,7 +91,14 @@ public class AgentMentalStateInterpreter extends Component
 		senders.add(mentalStateSender);
 		
 		initializeBaseMentalStates();
-		updateBaseMentalStates();
+		
+		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		for( String str : baseMentalStates.keySet() ) {
+			System.out.println("******* "+str);
+			for( MentalState m : baseMentalStates.get(str).keySet() ) {
+				System.out.println( m.toString() + "	- " + baseMentalStates.get(str).get(m) );
+			}
+		}
 		
 //		charNumbers.put("poppy", UtteranceActionProposer.POPPY);
 //		charNumbers.put("prudence", UtteranceActionProposer.PRUDENCE);
@@ -100,81 +107,6 @@ public class AgentMentalStateInterpreter extends Component
 	}
 	
 	public void initializeBaseMentalStates()
-	{	
-		/* Poppy */
-		HashMap<MentalState,Float> values = new HashMap<MentalState,Float>();
-		values.put(MentalState.agreement, 0.6f);
-		values.put(MentalState.acceptance, 0.6f);
-		values.put(MentalState.belief, 0.7f);
-		values.put(MentalState.liking, 0.9f);
-		values.put(MentalState.understanding, 0.9f);
-		values.put(MentalState.interest, 0.9f);
-		values.put(MentalState.anticipation, 0.9f);
-		values.put(MentalState.solidarity, 0.5f);
-		values.put(MentalState.antagonism, 0.2f);
-		values.put(MentalState.anger, 0.0f);
-		values.put(MentalState.sadness, 0.0f);
-		values.put(MentalState.amusement, 0.7f);
-		values.put(MentalState.happiness, 0.9f);
-		values.put(MentalState.contempt, 0.0f);
-		baseMentalStates.put("Poppy", values);
-		
-		/* Prudence */
-		values = new HashMap<MentalState,Float>();
-		values.put(MentalState.agreement, 0.6f);
-		values.put(MentalState.acceptance, 0.6f);
-		values.put(MentalState.belief, 0.7f);
-		values.put(MentalState.liking, 0.9f);
-		values.put(MentalState.understanding, 0.9f);
-		values.put(MentalState.interest, 0.9f);
-		values.put(MentalState.anticipation, 0.5f);
-		values.put(MentalState.solidarity, 0.9f);
-		values.put(MentalState.antagonism, 0.1f);
-		values.put(MentalState.anger, 0.0f);
-		values.put(MentalState.sadness, 0.0f);
-		values.put(MentalState.amusement, 0.0f);
-		values.put(MentalState.happiness, 0.0f);
-		values.put(MentalState.contempt, 0.0f);
-		baseMentalStates.put("Prudence", values);
-		
-		/* Obadiah */
-		values = new HashMap<MentalState,Float>();
-		values.put(MentalState.agreement, 0.6f);
-		values.put(MentalState.acceptance, 0.6f);
-		values.put(MentalState.belief, 0.7f);
-		values.put(MentalState.liking, 0.5f);
-		values.put(MentalState.understanding, 0.9f);
-		values.put(MentalState.interest, 0.2f);
-		values.put(MentalState.anticipation, 0.2f);
-		values.put(MentalState.solidarity, 0.5f);
-		values.put(MentalState.antagonism, 0.5f);
-		values.put(MentalState.anger, 0.0f);
-		values.put(MentalState.sadness, 0.9f);
-		values.put(MentalState.amusement, 0.0f);
-		values.put(MentalState.happiness, 0.0f);
-		values.put(MentalState.contempt, 0.0f);
-		baseMentalStates.put("Obadiah", values);
-		
-		/* Spike */
-		values = new HashMap<MentalState,Float>();
-		values.put(MentalState.agreement, 0.1f);
-		values.put(MentalState.acceptance, 0.1f);
-		values.put(MentalState.belief, 0.1f);
-		values.put(MentalState.liking, 0.1f);
-		values.put(MentalState.understanding, 0.9f);
-		values.put(MentalState.interest, 0.1f);
-		values.put(MentalState.anticipation, 0.5f);
-		values.put(MentalState.solidarity, 0.1f);
-		values.put(MentalState.antagonism, 0.9f);
-		values.put(MentalState.anger, 0.9f);
-		values.put(MentalState.sadness, 0.0f);
-		values.put(MentalState.amusement, 0.0f);
-		values.put(MentalState.happiness, 0.0f);
-		values.put(MentalState.contempt, 0.7f);
-		baseMentalStates.put("Spike", values);
-	}
-	
-	public void updateBaseMentalStates()
 	{
 		String[] characters = {"Poppy","Prudence","Obadiah","Spike"};
 		for( String ch : characters ) {
@@ -186,7 +118,10 @@ public class AgentMentalStateInterpreter extends Component
 			    assert vocabularyURI != null;
 			    float predisposition = info.getEmotionalPredisposition(vocabularyURI, mental.toString());
 			    if (predisposition != -1) { // yes, present
-			        baseMentalStates.get(ch).put(mental, predisposition);
+			        HashMap<MentalState, Float> values = baseMentalStates.get(ch);
+			        if( values == null ) values = new HashMap<MentalState,Float>();
+			    	values.put(mental, predisposition);
+			    	baseMentalStates.put(ch,values);
 			    }
 			}
 		}
@@ -252,26 +187,26 @@ public class AgentMentalStateInterpreter extends Component
 			if( arousal > 0.5f ) {
 				// High Arousal
 				if( currChar.equals("Poppy") || currChar.equals("Spike") ) {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
+					if( mentalState.get(MentalState.liking) != null ) mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
 				} else {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
+					if( mentalState.get(MentalState.liking) != null )mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
 				}
 				changed = true;
 			}
 			if( arousal < -0.5f ) {
 				// High Arousal
 				if( currChar.equals("Poppy") || currChar.equals("Spike") ) {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
+					if( mentalState.get(MentalState.liking) != null )mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
 				} else {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
+					if( mentalState.get(MentalState.liking) != null )mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
 				}
 				changed = true;
 			}
@@ -281,26 +216,26 @@ public class AgentMentalStateInterpreter extends Component
 			if( valence > 0.5f ) {
 				// High Arousal
 				if( currChar.equals("Poppy") || currChar.equals("Prudence") ) {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
+					if( mentalState.get(MentalState.liking) != null )mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
 				} else {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
+					if( mentalState.get(MentalState.liking) != null )mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
 				}
 				changed = true;
 			}
 			if( valence < -0.5f ) {
 				// High Arousal
 				if( currChar.equals("Poppy") || currChar.equals("Prudence") ) {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)-0.05f);
+					if( mentalState.get(MentalState.liking) != null )mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)-0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)-0.05f);
 				} else {
-					mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
-					mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
-					mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
+					if( mentalState.get(MentalState.agreement) != null ) mentalState.put(MentalState.agreement, mentalState.get(MentalState.agreement)+0.05f);
+					if( mentalState.get(MentalState.liking) != null )mentalState.put(MentalState.liking, mentalState.get(MentalState.liking)+0.05f);
+					if( mentalState.get(MentalState.understanding) != null ) mentalState.put(MentalState.understanding, mentalState.get(MentalState.understanding)+0.05f);
 				}
 				changed = true;
 			}
