@@ -201,44 +201,57 @@ public class SpeechPreprocessor extends Component
 	 * the method tries to get a good approximation.
 	 * @param xm an FML-APML message
 	 * @param character a character name
-	 * @return a voice if possible, or null.
+	 * @return a voice object
+	 * @throws SystemConfigurationException if no voice can be found for the given character
 	 */
-	public static Voice getVoice(SEMAINEXMLMessage xm, String character) {
+	public static Voice getVoice(SEMAINEXMLMessage xm, String character) throws SystemConfigurationException {
 		Locale messageLocale = null;
 		Voice voice = null;
 		if (xm != null) {
 			messageLocale = getMessageLocale(xm);
-			voice = Voice.getDefaultVoice(messageLocale);
 		}
 		CharacterConfigInfo charInfo = CharacterConfigInfo.getInfo(character);
-		if (charInfo != null) {
-			Locale characterLocale = charInfo.getVoiceLocale();
-			if (messageLocale != null && !messageLocale.equals(characterLocale)) {
-				JMSLogger.getLog("SpeechPreprocessor").warn("Message locale '"+messageLocale+"' is different from current character locale '"
-						+characterLocale+"' -- will ignore character.");
-			} else {
-				String[] possibleVoices = charInfo.getVoices();
-				for (String v : possibleVoices) {
-					voice = Voice.getVoice(v);
-					if (voice != null) {
-						break;
-					}
+		if (charInfo == null) {
+			throw new SystemConfigurationException("No config information for character '"+character+"'");
+		}
+		Locale characterLocale = charInfo.getVoiceLocale();
+		if (messageLocale != null && !messageLocale.equals(characterLocale)) {
+			JMSLogger.getLog("SpeechPreprocessor").warn("Message locale '"+messageLocale+"' is different from current character locale '"
+					+characterLocale+"' -- will ignore character.");
+			voice = Voice.getDefaultVoice(messageLocale);
+			if (voice == null) {
+				throw new SystemConfigurationException("No voice available for locale '"+messageLocale+"'");
+			}
+		} else {
+			String[] possibleVoices = charInfo.getVoices();
+			for (String v : possibleVoices) {
+				voice = Voice.getVoice(v);
+				if (voice != null) {
+					break;
 				}
-				if (voice == null) {
-					Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
-					JMSLogger.getLog("SpeechPreprocessor").warn("None of the voices defined for character '"+charInfo.getName()
-							+"' is available in MARY TTS. "
-							+(fallbackVoice != null ? "Will fall back to voice '"+fallbackVoice.getName()+"'" : "No fallback available."));
+			}
+			if (voice == null) {
+				String message = "None of the voices defined for character '"+charInfo.getName()+"' is available in MARY TTS. ";
+				Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
+				if (fallbackVoice == null) {
+					throw new SystemConfigurationException(message+"No fallback available.");
+				} else {
+					JMSLogger.getLog("SpeechPreprocessor").warn(message+"Will fall back to voice '"+fallbackVoice.getName()+"'");
 					voice = fallbackVoice;
-				} else if (!voice.getLocale().equals(characterLocale)) {
-					Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
-					JMSLogger.getLog("SpeechPreprocessor").warn("Voice '"+voice.getName()+"' defined for character '"+charInfo.getName()
-							+"' has locale '"+voice.getLocale()+"' but character expects '"+characterLocale+"'. "
-							+(fallbackVoice != null ? "Will fall back to voice '"+fallbackVoice.getName()+"'" : "No fallback available."));
+				}
+			} else if (!voice.getLocale().equals(characterLocale)) {
+				String message = "Voice '"+voice.getName()+"' defined for character '"+charInfo.getName()
+					+"' has locale '"+voice.getLocale()+"' but character expects '"+characterLocale+"'. ";
+				Voice fallbackVoice = Voice.getDefaultVoice(characterLocale);
+				if (fallbackVoice == null) {
+					throw new SystemConfigurationException(message+"No fallback available.");
+				} else {
+					JMSLogger.getLog("SpeechPreprocessor").warn(message+"Will fall back to voice '"+fallbackVoice.getName()+"'");
 					voice = fallbackVoice;
 				}
 			}
 		}
+		assert voice != null;
 		return voice;
 	}
 	
