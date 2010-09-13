@@ -111,5 +111,7 @@
     <!-- patience when taking the turn, lower is more likely to interrupt -->
     <setting name="TurnTakingThreshold" value="40"/>
   </character>
-  
+  <character name="Moderator">
+    <voice name="cmu-slt-hsmm" locale="en-US"/>
+  </character>
 </character-config>
