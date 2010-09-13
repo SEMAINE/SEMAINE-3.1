@@ -203,7 +203,23 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\TumFeatureExtractor.h"
+				RelativePath="..\..\src\semaineEmotionSender.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineNonverbalSender.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineUserinfoSender.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineWordSender.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumOpenSMILE.h"
 				>
 			</File>
 		</Filter>
@@ -231,11 +247,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\semaineEmotionSender.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineNonverbalSender.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineUserinfoSender.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\semaineWordSender.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\SEMAINExtract.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\TumFeatureExtractor.cpp"
+				RelativePath="..\..\src\TumOpenSMILE.cpp"
 				>
 			</File>
 		</Filter>

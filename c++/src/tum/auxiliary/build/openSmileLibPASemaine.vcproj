@@ -474,6 +474,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\juliusSink.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\kwsjKresult.h"
 				>
 			</File>
@@ -1139,6 +1143,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\intensity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\juliusSink.cpp"
 				>
 			</File>
 			<File
