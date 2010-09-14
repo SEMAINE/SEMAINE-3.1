@@ -67,7 +67,7 @@ public class EmotionInterpreter extends Component
 	{
 		super( "EmotionInterpreter" );
 
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma", "datatype = 'EMMA'");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.emotion", "datatype = 'EMMA'");
 		receivers.add(emmaReceiver);
 
 		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
