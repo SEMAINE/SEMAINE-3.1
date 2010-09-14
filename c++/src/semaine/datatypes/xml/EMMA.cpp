@@ -24,14 +24,14 @@ const std::string EMMA::E_ONEOF = "one-of";
 const std::string EMMA::E_SEQUENCE = "sequence";
 
 	// Attributes
-const std::string EMMA::A_START = "start";
-const std::string EMMA::A_OFFSET_TO_START = "offset-to-start";
-const std::string EMMA::A_END = "end";
-const std::string EMMA::A_DURATION = "duration";
-const std::string EMMA::A_VERBAL = "verbal";
-const std::string EMMA::A_MODE = "mode";
-const std::string EMMA::A_CONFIDENCE = "confidence";
-const std::string EMMA::A_TOKENS = "tokens";
+const std::string EMMA::A_START = "emma:start";
+const std::string EMMA::A_OFFSET_TO_START = "emma:offset-to-start";
+const std::string EMMA::A_END = "emma:end";
+const std::string EMMA::A_DURATION = "emma:duration";
+const std::string EMMA::A_VERBAL = "emma:verbal";
+const std::string EMMA::A_MODE = "emma:mode";
+const std::string EMMA::A_CONFIDENCE = "emma:confidence";
+const std::string EMMA::A_TOKENS = "emma:tokens";
 
 
 
