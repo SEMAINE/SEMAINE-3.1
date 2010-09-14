@@ -74,6 +74,7 @@ public:
     // For <vocalization name="...">:
     static const std::string V_LAUGHTER;
     static const std::string V_SIGH;
+    static const std::string V_BREATH;
 
 
 };

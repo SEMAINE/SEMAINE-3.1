@@ -68,6 +68,7 @@ const std::string SemaineML::V_END = "end";
 // For <vocalization name="...">:
 const std::string SemaineML::V_LAUGHTER = "(laughter)";
 const std::string SemaineML::V_SIGH = "(sigh)";
+const std::string SemaineML::V_BREATH = "(breath)";
 
 } // namespace xml
 } // namespace datatypes
