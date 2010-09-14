@@ -168,7 +168,7 @@ public class DummyInterpreter extends Component
 			if (interpretation != null) {
 				List<Element> behaviours = em.getSpeakingElements(interpretation);
 				for (Element behaviour : behaviours) {
-					String fName = XMLTool.needAttribute(behaviour, SemaineML.A_STATUSCHANGE);
+					String fName = XMLTool.needAttribute(behaviour, SemaineML.A_STATUS_CHANGE);
 					if (fName.equals(SemaineML.V_STOP)) {
 						// when user stops speaking, the agent becomes the speaker
 						Map<String,String>dialogInfo = new HashMap<String,String>();
