@@ -22,14 +22,14 @@ public class EMMA
 	public static final String E_SEQUENCE = "sequence";
 	
 	// Attributes
-	public static final String A_START = "start";
-	public static final String A_OFFSET_TO_START = "offset-to-start";
-	public static final String A_END = "end";
-	public static final String A_DURATION = "duration";
-	public static final String A_VERBAL = "verbal";
-	public static final String A_MODE = "mode";
-	public static final String A_CONFIDENCE = "confidence";
-	public static final String A_TOKENS = "tokens";
+	public static final String A_START = "emma:start";
+	public static final String A_OFFSET_TO_START = "emma:offset-to-start";
+	public static final String A_END = "emma:end";
+	public static final String A_DURATION = "emma:duration";
+	public static final String A_VERBAL = "emma:verbal";
+	public static final String A_MODE = "emma:mode";
+	public static final String A_CONFIDENCE = "emma:confidence";
+	public static final String A_TOKENS = "emma:tokens";
 
 
 }

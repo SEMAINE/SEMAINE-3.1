@@ -67,10 +67,18 @@ public class NonverbalFusion extends Component {
 			confidence *= factor;
 		}
 		Document doc = XMLTool.newDocument(EMMA.ROOT_TAGNAME, EMMA.namespaceURI, EMMA.version);
+		doc.getDocumentElement().setPrefix("emma");
 		Element newInterpretation = XMLTool.appendChildElement(doc.getDocumentElement(), EMMA.E_INTERPRETATION);
+		newInterpretation.setPrefix("emma");
 		// Make sure confidence is in interval [0, 1]
 		confidence = Math.min(1, Math.max(0, confidence));
 		newInterpretation.setAttribute(EMMA.A_CONFIDENCE, String.valueOf(confidence));
+		String[] attributesToCopy = new String[] {EMMA.A_OFFSET_TO_START, EMMA.A_DURATION};
+		for (String attribute : attributesToCopy) {
+			if (interpretation.hasAttribute(attribute)) {
+				newInterpretation.setAttribute(attribute, interpretation.getAttribute(attribute));
+			}
+		}
 		for (Element nonverbal : nonverbals) {
 			Element newNonverbal = (Element) doc.adoptNode(nonverbal);
 			newInterpretation.appendChild(newNonverbal);
