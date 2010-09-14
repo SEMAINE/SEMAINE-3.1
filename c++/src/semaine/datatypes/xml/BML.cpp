@@ -38,12 +38,12 @@ const std::string BML::A_TYPE = "type";
 
 // Values
 // Values of <head type="...">:
-const std::string V_NOD = "NOD";
-const std::string V_SHAKE = "SHAKE";
-const std::string V_TILTRIGHT = "TILT-RIGHT";
-const std::string V_TILTLEFT = "TILT-LEFT";
-const std::string V_APPROACH = "APPROACH";
-const std::string V_RETRACT = "RETRACT";
+const std::string BML::V_NOD = "NOD";
+const std::string BML::V_SHAKE = "SHAKE";
+const std::string BML::V_TILTRIGHT = "TILT-RIGHT";
+const std::string BML::V_TILTLEFT = "TILT-LEFT";
+const std::string BML::V_APPROACH = "APPROACH";
+const std::string BML::V_RETRACT = "RETRACT";
 
 } // namespace xml
 } // namespace datatypes
