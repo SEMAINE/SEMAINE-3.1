@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import eu.semaine.components.Component;
 
@@ -198,7 +200,33 @@ public class ComponentInfo extends Info
 	{
 		if (receiveTopics == null) return false;
 		for (String receiveTopic : receiveTopics) {
-			if (receiveTopic.endsWith(".>")) { // prefix match
+			if (receiveTopic.contains("*")) {
+				// need to do piecewise matching
+				String[] recParts = receiveTopic.split(Pattern.quote("."));
+				String[] topicParts = topicName.split(Pattern.quote("."));
+				int numParts;
+				if (recParts[recParts.length-1].equals(">")) {
+					numParts = recParts.length - 1;
+					// need at least numParts parts in topicParts
+					if (topicParts.length < numParts) {
+						return false;
+					}
+				} else {
+					numParts = recParts.length;
+					// no final ">" wildcard: lengths must match:
+					if (recParts.length != topicParts.length) {
+						return false;
+					}
+				}
+				for (int i=0; i<numParts; i++) {
+					if (!(recParts[i].equals("*") // matches any topicParts[i]
+							|| recParts[i].equals(topicParts[i]))) {
+						// mismatch
+						return false;
+					}
+				}
+				return true;
+			} else if (receiveTopic.endsWith(".>")) { // prefix match
 				if (topicName.startsWith(receiveTopic.substring(0, receiveTopic.length()-2)))
 					return true;
 			} else { // exact match
