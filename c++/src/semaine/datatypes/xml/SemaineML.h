@@ -62,6 +62,15 @@ public:
 	// For A_STATUS:
 	static const std::string V_PRESENT;
 	static const std::string V_ABSENT;
+    // For A_STATUSCHANGE:
+    // V_START, see below
+    static const std::string V_STOP;
+    // For A_TYPE
+    static const std::string V_READY;
+    static const std::string V_DELETED;
+    static const std::string V_START;
+    static const std::string V_STOPPED;
+    static const std::string V_END;
     // For <vocalization name="...">:
     static const std::string V_LAUGHTER;
     static const std::string V_SIGH;

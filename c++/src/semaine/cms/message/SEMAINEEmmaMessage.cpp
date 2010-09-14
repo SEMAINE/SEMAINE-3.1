@@ -9,6 +9,8 @@
 #include <semaine/datatypes/xml/EMMA.h>
 #include <semaine/datatypes/xml/EmotionML.h>
 #include <semaine/datatypes/xml/SemaineML.h>
+#include <semaine/datatypes/xml/BML.h>
+
 
 using namespace cms;
 using namespace semaine::cms::exceptions;
@@ -49,29 +51,26 @@ std::list<DOMElement *> * SEMAINEEmmaMessage::getEmotionElements(DOMElement * in
 	return XMLTool::getChildrenByLocalNameNS(interpretation, EmotionML::E_EMOTION, EmotionML::namespaceURI);
 }
 
-std::list<DOMElement *> * SEMAINEEmmaMessage::getCategoryElements(DOMElement * interpretation)
+std::list<DOMElement *> * SEMAINEEmmaMessage::getNonverbalElements(DOMElement * interpretation)
 {
-	return XMLTool::getChildrenByLocalNameNS(interpretation, EmotionML::E_CATEGORY, EmotionML::namespaceURI);
+	std::list<DOMElement *> * nonverbals = new std::list<DOMElement *>();
+	nonverbals->splice(nonverbals->end(), * getGenderElements(interpretation));
+	nonverbals->splice(nonverbals->end(), * getSpeakingElements(interpretation));
+	nonverbals->splice(nonverbals->end(), * getPitchElements(interpretation));
+	nonverbals->splice(nonverbals->end(), * getVocalizationElements(interpretation));
+	nonverbals->splice(nonverbals->end(), * getFacePresentElements(interpretation));
+	nonverbals->splice(nonverbals->end(), * getBMLElements(interpretation));
+	return nonverbals;
+}
+
+std::list<DOMElement *> * SEMAINEEmmaMessage::getBMLElements(DOMElement * interpretation)
+{
+	return XMLTool::getChildrenByLocalNameNS(interpretation, BML::E_BML, BML::namespaceURI);
 }
 
 std::list<DOMElement *> * SEMAINEEmmaMessage::getGenderElements(DOMElement * interpretation)
 {
 	return XMLTool::getChildrenByLocalNameNS(interpretation, "gender", SemaineML::namespaceURI);
-}
-
-std::list<DOMElement *> * SEMAINEEmmaMessage::getFeatureElements(DOMElement * interpretation)
-{
-	return XMLTool::getChildrenByLocalNameNS(interpretation, SemaineML::E_FEATURE, SemaineML::namespaceURI);
-}
-
-std::list<DOMElement *> * SEMAINEEmmaMessage::getBehaviourElements(DOMElement * interpretation)
-{
-	return XMLTool::getChildrenByLocalNameNS(interpretation, SemaineML::E_BEHAVIOUR, SemaineML::namespaceURI);
-}
-
-std::list<DOMElement *> * SEMAINEEmmaMessage::getTextElements(DOMElement * interpretation)
-{
-	return XMLTool::getChildrenByLocalNameNS(interpretation, SemaineML::E_TEXT, SemaineML::namespaceURI);
 }
 
 std::list<DOMElement *> * SEMAINEEmmaMessage::getSpeakingElements(DOMElement * interpretation)
@@ -84,6 +83,15 @@ std::list<DOMElement *> * SEMAINEEmmaMessage::getPitchElements(DOMElement * inte
 	return XMLTool::getChildrenByLocalNameNS(interpretation, SemaineML::E_PITCH, SemaineML::namespaceURI);
 }
 
+std::list<DOMElement *> * SEMAINEEmmaMessage::getVocalizationElements(DOMElement * interpretation)
+{
+	return XMLTool::getChildrenByLocalNameNS(interpretation, SemaineML::E_VOCALIZATION, SemaineML::namespaceURI);
+}
+
+std::list<DOMElement *> * SEMAINEEmmaMessage::getFacePresentElements(DOMElement * interpretation)
+{
+	return XMLTool::getChildrenByLocalNameNS(interpretation, SemaineML::E_FACEPRESENT, SemaineML::namespaceURI);
+}
 
 
 

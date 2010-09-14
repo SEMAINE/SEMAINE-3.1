@@ -32,14 +32,38 @@ public:
 	XERCES_CPP_NAMESPACE::DOMElement * getSequence();
 	XERCES_CPP_NAMESPACE::DOMElement * getTopLevelInterpretation();
 
+	/**
+	 * Get the emotion elements that are children of the given interpretation element.
+	 * @param interpretation an interpretation element
+	 * @return a list of emotion elements, or an empty list if there are no emotion children below interpretation.
+	 */
 	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getEmotionElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
-	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getCategoryElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
+
+	/**
+	 * Get a list of any non-verbal elements which are direct children of the given interpretation.
+	 * @param interpretation
+	 * @return a list of non-verbal elements of various kinds, or an empty list if there are no such elements.
+	 * @see #getBMLElements(Element)
+	 * @see #getGenderElements(Element)
+	 * @see #getSpeakingElements(Element)
+	 * @see #getVocalizationElements(Element)
+	 * @see #getPitchElements(Element)
+	 * @see #getFacePresentElements(Element)
+	 */
+	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getNonverbalElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
+
+	/**
+	 * Get the BML (behaviour markup language) elements that are children of the given interpretation element.
+	 * @param interpretation
+	 * @return a list of BML elements, or an empty list if there are no such children below interpretation.
+	 */
+	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getBMLElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
+
 	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getGenderElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
-	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getFeatureElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
-	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getBehaviourElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
-	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getTextElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
 	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getSpeakingElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
 	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getPitchElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
+	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getVocalizationElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
+	std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getFacePresentElements(XERCES_CPP_NAMESPACE::DOMElement * interpretation);
 
 };
 

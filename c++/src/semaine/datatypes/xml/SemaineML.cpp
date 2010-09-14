@@ -56,6 +56,15 @@ const std::string SemaineML::A_STATUS_CHANGE = "statusChange";
 // For A_STATUS:
 const std::string SemaineML::V_PRESENT = "present";
 const std::string SemaineML::V_ABSENT = "absent";
+// For A_STATUSCHANGE:
+// V_START, see below
+const std::string V_STOP = "stop";
+// For A_TYPE
+const std::string V_READY = "ready";
+const std::string V_DELETED = "deleted";
+const std::string V_START = "start";
+const std::string V_STOPPED = "stopped";
+const std::string V_END = "end";
 // For <vocalization name="...">:
 const std::string V_LAUGHTER = "(laughter)";
 const std::string V_SIGH = "(sigh)";
