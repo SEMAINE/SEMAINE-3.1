@@ -92,14 +92,6 @@ public class AgentMentalStateInterpreter extends Component
 		
 		initializeBaseMentalStates();
 		
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		for( String str : baseMentalStates.keySet() ) {
-			System.out.println("******* "+str);
-			for( MentalState m : baseMentalStates.get(str).keySet() ) {
-				System.out.println( m.toString() + "	- " + baseMentalStates.get(str).get(m) );
-			}
-		}
-		
 //		charNumbers.put("poppy", UtteranceActionProposer.POPPY);
 //		charNumbers.put("prudence", UtteranceActionProposer.PRUDENCE);
 //		charNumbers.put("spike", UtteranceActionProposer.SPIKE);
@@ -152,23 +144,33 @@ public class AgentMentalStateInterpreter extends Component
 		}
 	}
 	
-	public void resetMentalState()
+	public boolean resetMentalState()
 	{
 		if( currChar != null ) {
 			try {
 				mentalState = (HashMap<MentalState,Float>) baseMentalStates.get(currChar).clone();
 			} catch( ClassCastException e ) {
 				System.out.println( "ClassCastException while resetting Mental State" );
+				return false;
+			} catch( Exception e ) {
+				System.out.println("Unknown character found, using empty hashmap");
+				mentalState = new HashMap<MentalState,Float>();
+				return false;
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	public boolean updateCharacter( StateInfo stateInfo ) throws JMSException
 	{
 		if( stateInfo.hasInfo("character") ) {
 			currChar = stateInfo.getInfo("character");
-			resetMentalState();
-			return true;
+			if(resetMentalState()) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
