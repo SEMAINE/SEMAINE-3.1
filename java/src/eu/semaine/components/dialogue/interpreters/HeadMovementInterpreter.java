@@ -62,7 +62,6 @@ public class HeadMovementInterpreter extends Component
 			
 			Element interpretation = em.getTopLevelInterpretation();
 			if (interpretation != null) {
-				List<Element> behaviours = em.getBehaviourElements(interpretation);
 				Element behaviourElem = XMLTool.getChildElementByTagNameNS(interpretation, "bml", BML.namespaceURI);
 				//for( Element behaviourElem : behaviours ) {
 				if( behaviourElem != null ) {

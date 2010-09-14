@@ -166,20 +166,21 @@ public class DummyInterpreter extends Component
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			Element interpretation = em.getTopLevelInterpretation();
 			if (interpretation != null) {
-				List<Element> behaviours = em.getBehaviourElements(interpretation);
+				List<Element> behaviours = em.getSpeakingElements(interpretation);
 				for (Element behaviour : behaviours) {
-					String fName = XMLTool.needAttribute(behaviour, SemaineML.A_NAME);
-					//String fIntensity = XMLTool.needAttribute(behaviour, SemaineML.INTENSITY);
-					if (fName.equals("gaze-away")) {
-						// when user gazes away, the agent becomes the speaker
+					String fName = XMLTool.needAttribute(behaviour, SemaineML.A_STATUSCHANGE);
+					if (fName.equals(SemaineML.V_STOP)) {
+						// when user stops speaking, the agent becomes the speaker
 						Map<String,String>dialogInfo = new HashMap<String,String>();
-						dialogInfo.put("speaker", "agent");
+						dialogInfo.put("userTurnState", "false");
+						dialogInfo.put("agentTurnState", "speaking");
 						DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
 						dialogStateSender.sendStateInfo(dsi, em.getUsertime());
-					} else if (fName.equals("gaze-at-agent")) {
-						// when user gazes at agent, user becomes the speaker
+					} else if (fName.equals(SemaineML.V_START)) {
+						// when user starts speaking, user becomes the speaker
 						Map<String,String>dialogInfo = new HashMap<String,String>();
-						dialogInfo.put("speaker", "user");
+						dialogInfo.put("userTurnState", "true");
+						dialogInfo.put("agentTurnState", "listening");
 						DialogStateInfo dsi = new DialogStateInfo(dialogInfo, null);
 						dialogStateSender.sendStateInfo(dsi, em.getUsertime());
 					}

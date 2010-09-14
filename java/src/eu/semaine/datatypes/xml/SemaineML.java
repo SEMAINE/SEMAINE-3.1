@@ -45,6 +45,7 @@ public class SemaineML
     public static final String A_TIME = "time";
     public static final String A_INTENSITY = "intensity";
     public static final String A_STATUS = "status";
+    public static final String A_STATUSCHANGE = "statusChange";
     public static final String A_DIRECTION = "direction";
     public static final String A_ID = "id";
     public static final String A_DATA = "data";
@@ -54,6 +55,9 @@ public class SemaineML
     // For A_STATUS:
     public static final String V_PRESENT = "present";
     public static final String V_ABSENT = "absent";
+    // For A_STATUSCHANGE:
+    // V_START, see below
+    public static final String V_STOP = "stop";
     // For A_TYPE
     public static final String V_READY = "ready";
     public static final String V_DELETED = "deleted";

@@ -209,19 +209,19 @@ public class UtteranceInterpreter extends Component
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			Element interpretation = em.getTopLevelInterpretation();
 			if (interpretation != null) {
-				List<Element> texts = em.getTextElements(interpretation);
-				for (Element text : texts) {
-
-					String utterance = text.getTextContent();
-					if( utterance != null ) {
-						return true;
-					}
-					/*
-					if( text.getAttribute("name") != null ) {
-						return true;
-					}
-					 */
-				}
+//				List<Element> texts = em.getTextElements(interpretation);
+//				for (Element text : texts) {
+//
+//					String utterance = text.getTextContent();
+//					if( utterance != null ) {
+//						return true;
+//					}
+//					/*
+//					if( text.getAttribute("name") != null ) {
+//						return true;
+//					}
+//					 */
+//				}
 			}
 		}
 		return false;
@@ -238,19 +238,19 @@ public class UtteranceInterpreter extends Component
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			Element interpretation = em.getTopLevelInterpretation();
 			if (interpretation != null) {
-				List<Element> texts = em.getTextElements(interpretation);
-				for (Element text : texts) {
-
-					String utterance = text.getTextContent();
-					if( utterance != null ) {
-						return utterance;
-					}
-					/*
-					if( text.getAttribute("name") != null ) {
-						return text.getAttribute("name");
-					}
-					 */
-				}
+//				List<Element> texts = em.getTextElements(interpretation);
+//				for (Element text : texts) {
+//
+//					String utterance = text.getTextContent();
+//					if( utterance != null ) {
+//						return utterance;
+//					}
+//					/*
+//					if( text.getAttribute("name") != null ) {
+//						return text.getAttribute("name");
+//					}
+//					 */
+//				}
 			}
 		}
 		return null;
