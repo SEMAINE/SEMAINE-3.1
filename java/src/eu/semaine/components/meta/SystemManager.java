@@ -59,22 +59,31 @@ public class SystemManager extends Component implements MessageListener
 	throws JMSException
 	{
 		super("SystemManager");
+		componentInfos = new TreeMap<String, ComponentInfo>();
 		iobase = new IOBase("semaine.meta");
 		consumer = iobase.getSession().createConsumer(iobase.getTopic(), MetaMessenger.COMPONENT_NAME + " IS NOT NULL");
 		producer = iobase.getSession().createProducer(iobase.getTopic());
 		consumer.setMessageListener(this);
+
+		ignoreStalledComponents = new HashSet<String>();
+		String isc = System.getProperty("semaine.systemmanager.ignorestalled");
+		if (isc != null) {
+			StringTokenizer st = new StringTokenizer(isc);
+			while (st.hasMoreElements()) {
+				ignoreStalledComponents.add(st.nextToken());
+			}
+		}
+		componentsToHide = new HashSet<String>();
+		componentsToHide.add("SystemManager");
+		componentsToHide.add("MessageLogComponent");
+
 		iobase.startConnection();
 		// need to send our own start again because when super() sent it,
 		// we weren't listening yet:
 		meta.reportState(State.starting);
 
-		componentInfos = new TreeMap<String, ComponentInfo>();
-
 		if (Boolean.getBoolean("semaine.systemmanager.gui")) {
 			// We hide components directly here (they never get to the GUI)
-			componentsToHide = new HashSet<String>();
-			componentsToHide.add("SystemManager");
-			componentsToHide.add("MessageLogComponent");
 			String cth = System.getProperty("semaine.systemmanager.hide.components");
 			if (cth != null) {
 				StringTokenizer st = new StringTokenizer(cth);
@@ -103,6 +112,8 @@ public class SystemManager extends Component implements MessageListener
 			}
 			ComponentInfo.setTopicsToIgnoreWhenSorting(topicsToIgnoreWhenSorting);
 
+			systemMonitor = new SystemMonitor(null, topicsToHide);
+			systemMonitor.start();
 			
 			MessageListener topicListener = new MessageListener() {
 				public void onMessage(Message m) {
@@ -123,17 +134,6 @@ public class SystemManager extends Component implements MessageListener
 			dataConsumer.setMessageListener(topicListener);
 			callbackConsumer = iobase.getSession().createConsumer(iobase.getSession().createTopic("semaine.callback.>"));
 			callbackConsumer.setMessageListener(topicListener);
-		
-			systemMonitor = new SystemMonitor(null, topicsToHide);
-			systemMonitor.start();
-		}
-		ignoreStalledComponents = new HashSet<String>();
-		String isc = System.getProperty("semaine.systemmanager.ignorestalled");
-		if (isc != null) {
-			StringTokenizer st = new StringTokenizer(isc);
-			while (st.hasMoreElements()) {
-				ignoreStalledComponents.add(st.nextToken());
-			}
 		}
 	}
 	
