@@ -4,11 +4,8 @@
  */
 package eu.semaine.components.nonverbal;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.PriorityBlockingQueue;
+
 
 import javax.jms.JMSException;
 
@@ -17,11 +14,9 @@ import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.EMMA;
-import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
-import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;
