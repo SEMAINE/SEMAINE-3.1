@@ -196,65 +196,7 @@ public class UtteranceInterpreter extends Component
 				sendDialogueAct(act);
 			}
 		}
-	}
-
-	/**
-	 * Checks if the Message is ASR output and if it contains a sentence.
-	 * @param m the message to check
-	 * @return true if the message says that the user is currently silent
-	 */
-	public boolean isSentence( SEMAINEMessage m ) throws JMSException
-	{
-		if( m instanceof SEMAINEEmmaMessage ) {
-			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
-			Element interpretation = em.getTopLevelInterpretation();
-			if (interpretation != null) {
-//				List<Element> texts = em.getTextElements(interpretation);
-//				for (Element text : texts) {
-//
-//					String utterance = text.getTextContent();
-//					if( utterance != null ) {
-//						return true;
-//					}
-//					/*
-//					if( text.getAttribute("name") != null ) {
-//						return true;
-//					}
-//					 */
-//				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Returns the detected sentence in the SEMAINEMessage m
-	 * @param m the message to detect the sentence in
-	 * @return the detected sentence
-	 */
-	public String getSentence( SEMAINEMessage m ) throws JMSException
-	{
-		if( m instanceof SEMAINEEmmaMessage ) {
-			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
-			Element interpretation = em.getTopLevelInterpretation();
-			if (interpretation != null) {
-//				List<Element> texts = em.getTextElements(interpretation);
-//				for (Element text : texts) {
-//
-//					String utterance = text.getTextContent();
-//					if( utterance != null ) {
-//						return utterance;
-//					}
-//					/*
-//					if( text.getAttribute("name") != null ) {
-//						return text.getAttribute("name");
-//					}
-//					 */
-//				}
-			}
-		}
-		return null;
-	}
+	}	
 	
 	public void sendDialogueAct( DialogueAct act ) throws JMSException
 	{
