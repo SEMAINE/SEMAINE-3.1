@@ -187,11 +187,11 @@ public class UtteranceInterpreter extends Component
 	{
 		if( stateInfo.hasInfo("headGesture") && stateInfo.hasInfo("headGestureStarted") && stateInfo.hasInfo("headGestureStopped") ) {
 			if( stateInfo.getInfo("headGesture").equals("NOD") ) {
-				DialogueAct act = new DialogueAct("*nod*", Long.parseLong( stateInfo.getInfo("headGestureStarted")) );
+				DialogueAct act = new DialogueAct("*nod*", ((long)(Double.parseDouble( stateInfo.getInfo("headGestureStarted"))*1000)) );
 				act.setAgree(true);
 				sendDialogueAct(act);
 			} else if( stateInfo.getInfo("headGesture").equals("SHAKE") ) {
-				DialogueAct act = new DialogueAct("*shake*", Long.parseLong( stateInfo.getInfo("headGestureStarted")) );
+				DialogueAct act = new DialogueAct("*shake*", ((long)(Double.parseDouble( stateInfo.getInfo("headGestureStarted"))*1000)) );
 				act.setDisagree(true);
 				sendDialogueAct(act);
 			}
