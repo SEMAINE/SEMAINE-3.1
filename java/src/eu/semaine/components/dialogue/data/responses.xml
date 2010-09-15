@@ -12,6 +12,16 @@ Used response-arguments:
 
 <responses>
 
+<!-- +++++++++++++++++++++++ MODERATOR ++++++++++++++++++++++++++  -->
+		<response id="#Moderator0" response="Hi." />
+		<response id="#Moderator1" response="You have reached SAL, the Sensitive Artificial Listeners." />
+		<response id="#ModeratorEval1" response="What did you think of this conversation?" />
+		<response id="#ModeratorPassToPoppy" response="I am going to pass you to Poppy." />
+		<response id="#ModeratorPassToPrudence" response="I am going to pass you to Prudence." />
+		<response id="#ModeratorPassToObadiah" response="I am going to pass you to Obadiah." />
+		<response id="#ModeratorPassToSpike" response="I am going to pass you to Spike." />
+
+<!-- +++++++++++++++++++++++ GENERAL ++++++++++++++++++++++++++  -->
 		<response id="#goodbye" response="Ok, goodbye!" />
 		<response id="#wantToPoppy" response="Do you want to talk to Poppy?" />
 		<response id="#wantToPrudence" response="Do you want to talk to Prudence?" />
@@ -19,8 +29,14 @@ Used response-arguments:
 		<response id="#wantToSpike" response="Do you want to talk to Spike?" />
 
 <!-- +++++++++++++++++++++++ POPPY ++++++++++++++++++++++++++  -->
-		<response id="#Poppy0" response="Hi, I'm Poppy." />
-		<response id="#Poppy1" response="Have you met me before?" />
+		<response id="#Poppy0" response="Hi, I'm Poppy." >
+			<argument name="performative:like" value="I'm Poppy." />
+			<argument name="performative:agree" value="I'm Poppy." />
+		</response>
+		<response id="#Poppy1" response="Have you met me before?" >
+			<argument name="performative:like" value="me before" />
+			<argument name="performative:agree" value="me before" />
+		</response>
 		<response id="#Poppy2" response="Well let me introduce myself." >
 			<argument name="pitchaccent:LplusHstar" value="myself." />
 		</response>
@@ -35,42 +51,67 @@ Used response-arguments:
 		<response id="#Poppy5" response="So tell me, how are you today?" >
 			<argument name="emotion:happy" value="tell me," />
 		</response>
-		<response id="#Poppy6" response="Is that so?" />
+		<response id="#Poppy6" response="Is that so?" >
+			<argument name="performative:like" value="that so" />
+			<argument name="emotion:small-surprise" value="that so" />
+		</response>
 		<response id="#Poppy7" response="Tell me about it." >
 			<argument name="performative:agree" value="Tell me" />
 		</response>
-		<response id="#Poppy8" response="Hi!" />
-		<response id="#Poppy9" response="I'm Poppy." />
-		<response id="#Poppy10" response="How are you?" />
+		<response id="#Poppy8" response="Hi!" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Poppy9" response="I'm Poppy." >
+			<argument name="emotion:small-surprise" value="Poppy" />
+			<argument name="performative:like" value="Poppy" />
+			<argument name="performative:agree" value="Poppy" />
+		</response>
+		<response id="#Poppy10" response="How are you?" >
+			<argument name="emotion:small-surprise" value="you" />
+			<argument name="performative:agree" value="you" />
+		</response>
 		<response id="#Poppy11" response="Sorry, could you say that again?" >
 			<argument name="performative:disagree" value="Sorry," />
 		</response>
 		<response id="#Poppy12" response="Maybe I misunderstood." >
 			<argument name="pitchaccent:HplusLstar" value="misunderstood." />
 		</response>
-		<response id="#Poppy13" response="Have I said something wrong?" />
+		<response id="#Poppy13" response="Have I said something wrong?" >
+			<argument name="emotion:small-surprise" value="something wrong" />
+			<argument name="certainty:uncertain" value="something wrong" />
+		</response>
 		<response id="#Poppy14" response="Are you still there?" >
 			<argument name="pitchaccent:HplusLstar" value="there?" />
 		</response>
 		<response id="#Poppy15" response="Is there anything else you want to say?" >
 			<argument name="pitchaccent:LplusHstar" value="anything else" />
 		</response>
-		<response id="#Poppy16" response="I think you asked me a question." />
-		<response id="#Poppy17" response="I can't answer questions." />
+		<response id="#Poppy16" response="I think you asked me a question." >
+			<argument name="emotion:small-surprise" value="a question" />
+		</response>
+		<response id="#Poppy17" response="I can't answer questions." >
+			<argument name="performative:disagree" value="I can't answer" />
+		</response>
 		<response id="#Poppy18" response="Just tell me things, and I'll respond." >
 			<argument name="pitchaccent:LplusHstar" value="things," />
 		</response>
 		<response id="#Poppy19" response="It'll all sort itself out." >
 			<argument name="pitchaccent:LplusHstar" value="all" />
 		</response>
-		<response id="#Poppy20" response="You need to take it easy." />
+		<response id="#Poppy20" response="You need to take it easy." >
+			<argument name="performative:like" value="take it easy" />
+			<argument name="performative:agree" value="take it easy" />
+		</response>
 		<response id="#Poppy21" response="The worst is over." >
 			<argument name="pitchaccent:HplusLstar" value="worst is over." />
 		</response>
 		<response id="#Poppy22" response="Things generally get better." >
 			<argument name="pitchaccent:LplusHstar" value="get better." />
 		</response>
-		<response id="#Poppy23" response="I understand, but it does no good to be angry." />
+		<response id="#Poppy23" response="I understand, but it does no good to be angry." >
+			<argument name="performative:agree" value="I understand" />
+			<argument name="performative:disagree" value="no good" />
+		</response>
 		<response id="#Poppy24" response="It'll all be better tomorrow." >
 			<argument name="performative:agree" value="better tomorrow." />
 		</response>
@@ -83,34 +124,75 @@ Used response-arguments:
 		<response id="#Poppy27" response="Can't you do anything about it?" >
 			<argument name="performative:agree" value="do" />
 		</response>
-		<response id="#Poppy28" response="Come on, calm down a bit and try to think of something happy and soothing." />
+		<response id="#Poppy28" response="Come on, calm down a bit and try to think of something happy and soothing." >
+			<argument name="performative:agree" value="calm down a bit" />
+			<argument name="performative:agree" value="something happy" />
+			<argument name="performative:like" value="something happy" />
+			<argument name="performative:agree" value="soothing" />
+			<argument name="performative:like" value="soothing" />
+		</response>
 		<response id="#Poppy29" response="Go on, give me one happy thought." >
 			<argument name="performative:agree" value="Go on" />
 		</response>
-		<response id="#Poppy30" response="How do you do it?" />
-		<response id="#Poppy31" response="How will you do that?" />
-		<response id="#Poppy32" response="Do you think it could be easier to change your reaction rather than other people?" />
-		<response id="#Poppy33" response="I'm not so sure that you should be so negative." />
+		<response id="#Poppy30" response="How do you do it?" >
+			<argument name="emotion:small-surprise" value="you do it" />
+		</response>
+		<response id="#Poppy31" response="How will you do that?" >
+			<argument name="emotion:small-surprise" value="you do that" />
+		</response>
+		<response id="#Poppy32" response="Do you think it could be easier to change your reaction rather than other people?" >
+			<argument name="emotion:small-surprise" value="easier" />
+			<argument name="performative:agree" value="your reaction" />
+			<argument name="performative:agree" value="other people" />
+		</response>
+		<response id="#Poppy33" response="I'm not so sure that you should be so negative." >
+			<argument name="performative:agree" value="so sure" />
+			<argument name="certainty:uncertain" value="so negative" />
+		</response>
 		<response id="#Poppy34" response="Perhaps you should stay out of arguments with others." >
 			<argument name="pitchaccent:HplusLstar" value="arguments" />
 		</response>
 		<response id="#Poppy35" response="Go on." >
 			<argument name="performative:agree" value="_all" />
 		</response>
-		<response id="#Poppy36" response="Why?" />
-		<response id="#Poppy37" response="How?" />
-		<response id="#Poppy38" response="Would you like to talk to someone else?" />
-		<response id="#Poppy39" response="Why don't you speak to Prudence?" />
-		<response id="#Poppy40" response="Why don't you speak to Spike?" />
-		<response id="#Poppy41" response="Why don't you speak to Obadiah?" />
+		<response id="#Poppy36" response="Why?" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Poppy37" response="How?" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Poppy38" response="Would you like to talk to someone else?" >
+			<argument name="performative:like" value="someone else" />
+			<argument name="performative:agree" value="someone else" />
+		</response>
+		<response id="#Poppy39" response="Why don't you speak to Prudence?" >
+			<argument name="performative:like" value="Prudence" />
+			<argument name="performative:agree" value="Prudence" />
+		</response>
+		<response id="#Poppy40" response="Why don't you speak to Spike?" >
+			<argument name="performative:like" value="Spike" />
+			<argument name="performative:agree" value="Spike" />
+		</response>
+		<response id="#Poppy41" response="Why don't you speak to Obadiah?" >
+			<argument name="performative:like" value="Obadiah" />
+			<argument name="performative:agree" value="Obadiah" />
+		</response>
 		<response id="#Poppy42" response="It's great to hear someone sound happy." >
 			<argument name="performative:agree" value="great to hear" />
 		</response>
-		<response id="#Poppy43" response="I'm so pleased for you." />
+		<response id="#Poppy43" response="I'm so pleased for you." >
+			<argument name="performative:like" value="so pleased for you" />
+			<argument name="performative:agree" value="so pleased for you" />
+			<argument name="emotion:small-surprise" value="so pleased for you" />
+		</response>
 		<response id="#Poppy44" response="Isn't that nice?" >
 			<argument name="performative:agree" value="_all" />
 		</response>
-		<response id="#Poppy45" response="That sounds lovely!" />
+		<response id="#Poppy45" response="That sounds lovely!" >
+			<argument name="performative:like" value="sounds lovely" />
+			<argument name="performative:agree" value="sounds lovely" />
+			<argument name="emotion:small-surprise" value="sounds lovely" />
+		</response>
 		<response id="#Poppy46" response="That sounds exciting!" >
 			<argument name="pitchaccent:Hstar" value="exciting" />
 		</response>
@@ -120,7 +202,11 @@ Used response-arguments:
 		<response id="#Poppy48" response="It doesn't get any better than that!" >
 			<argument name="performative:disagree" value="any better" />
 		</response>
-		<response id="#Poppy49" response="Happy days!" />
+		<response id="#Poppy49" response="Happy days!" >
+			<argument name="performative:like" value="_all" />
+			<argument name="performative:agree" value="_all" />
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
 		<response id="#Poppy50" response="That's wonderful, isn't it?" >
 			<argument name="emotion:happy" value="wonderful" />
 		</response>
@@ -152,7 +238,10 @@ Used response-arguments:
 		<response id="#Poppy59" response="What have you been doing?" >
 			<argument name="pitchaccent:Hstar" value="doing" />
 		</response>
-		<response id="#Poppy60" response="So, what's happening at the moment?" />
+		<response id="#Poppy60" response="So, what's happening at the moment?" >
+			<argument name="performative:like" value="what's happening" />
+			<argument name="emotion:small-surprise" value="what's happening" />
+		</response>
 		<response id="#Poppy61" response="So what else would make you happy?" >
 			<argument name="emotion:happy" value="happy" />
 		</response>
@@ -162,41 +251,66 @@ Used response-arguments:
 		<response id="#Poppy63" response="Do go on, I love hearing all this happiness." >
 			<argument name="performative:agree" value="Do go" />
 		</response>
-		<response id="#Poppy64" response="Who would you like to talk to?" />
-		<response id="#Poppy65" response="Worse things happen at sea." />
+		<response id="#Poppy64" response="Who would you like to talk to?" >
+			<argument name="emotion:small-surprise" value="talk to" />
+		</response>
+		<response id="#Poppy65" response="Worse things happen at sea." >
+			<argument name="emotion:small-surprise" value="Worse things" />
+			<argument name="emotion:certainty:uncertain" value="Worse things" />
+		</response>
 		<response id="#Poppy66" response="It's not that bad." >
 			<argument name="performative:disagree" value="that" />
 		</response>
 		<response id="#Poppy67" response="You need a good, long rest." >
 			<argument name="performative:agree" value="good" />
 		</response>
-		<response id="#Poppy68" response="Hold on a minute." />
+		<response id="#Poppy68" response="Hold on a minute." >
+			<argument name="emotion:small-surprise" value="Hold on" />
+		</response>
 		<response id="#Poppy69" response="Pull yourself together!" >
 			<argument name="pitchaccent:Lstar" value="together" />
 		</response>
-		<response id="#Poppy70" response="Every cloud has a silver lining." />
+		<response id="#Poppy70" response="Every cloud has a silver lining." >
+			<argument name="emotion:small-surprise" value="Every cloud" />
+			<argument name="performative:like" value="silver lining" />
+		</response>
 		<response id="#Poppy71" response="Look on the bright side!" >
 			<argument name="performative:agree" value="bright side" />
 			<argument name="pitchaccent:LplusHstar" value="bright side" />
 		</response>
-		<response id="#Poppy72" response="Everything will work out, you'll see!" />
-		<response id="#Poppy73" response="Give me just one happy thought and you'll feel better." />
+		<response id="#Poppy72" response="Everything will work out, you'll see!" >
+			<argument name="performative:like" value="Everything will work" />
+			<argument name="performative:agree" value="you'll see" />
+		</response>
+		<response id="#Poppy73" response="Give me just one happy thought and you'll feel better." >
+			<argument name="performative:like" value="one happy thought" />
+			<argument name="performative:agree" value="you'll feel better" />
+		</response>
 		<response id="#Poppy74" response="It's never that bad." >
 			<argument name="performative:disagree" value="never" />
 		</response>
 		<response id="#Poppy75" response="Things have a way of sorting themselves out." >
 			<argument name="pitchaccent:Hstar" value="a way of" />
 		</response>
-		<response id="#Poppy76" response="Don't feel bad." />
+		<response id="#Poppy76" response="Don't feel bad." >
+			<argument name="certainty:uncertain" value="feel bad" />
+		</response>
 		<response id="#Poppy77" response="Think about your best holiday ever, that'll make you feel good." >
 			<argument name="pitchaccent:LplusHstar" value="best holiday ever" />
 			<argument name="pitchaccent:LplusHstar" value="feel good" />
 		</response>
-		<response id="#Poppy78" response="I'd love to hear about it." />
+		<response id="#Poppy78" response="I'd love to hear about it." >
+			<argument name="performative:like" value="I'd love" />
+			<argument name="emotion:small-surprise" value="hear about it" />
+			<argument name="performative:agree" value="hear about it" />
+		</response>
 		<response id="#Poppy79" response="Don't worry, the whole world can't be bad, it's just the way you feel at the moment." >
 			<argument name="performative:disagree" value="Don't worry" />
 		</response>
-		<response id="#Poppy80" response="That will change." />
+		<response id="#Poppy80" response="That will change." >
+			<argument name="emotion:small-surprise" value="_all" />
+			<argument name="performative:agree" value="_all" />
+		</response>
 		<response id="#Poppy81" response="What would cheer you up?" >
 			<argument name="pitchaccent:LplusHstar" value="cheer you up" />
 		</response>
@@ -218,19 +332,32 @@ Used response-arguments:
 		<response id="#Poppy87" response="What would make you feel happy in the future?" >
 			<argument name="pitchaccent:LplusHstar" value="feel happy" />
 		</response>
-		<response id="#Poppy88" response="Tell me what makes you feel really happy." />
-		<response id="#Poppy89" response="Did things get better?" />
+		<response id="#Poppy88" response="Tell me what makes you feel really happy." >
+			<argument name="emotion:small-surprise" value="Tell me" />
+			<argument name="performative:like" value="you feel really happy" />
+			<argument name="performative:agree" value="you feel really happy" />
+		</response>
+		<response id="#Poppy89" response="Did things get better?" >
+			<argument name="emotion:small-surprise" value="get better" />
+		</response>
 		<response id="#Poppy90" response="Smile, it will make you feel so much better." >
 			<argument name="emotion:happy" value="Smile" />
 		</response>
 		<response id="#Poppy91" response="There must be good things that you remember!" >
 			<argument name="performative:agree" value="good things that you remember" />
 		</response>
-		<response id="#Poppy92" response="Cheer up." />
+		<response id="#Poppy92" response="Cheer up." >
+			<argument name="emotion:small-surprise" value="_all" />
+			<argument name="performative:like" value="_all" />
+		</response>
 		<response id="#Poppy93" response="Just have some fun." >
 			<argument name="performative:agree" value="some fun" />
 		</response>
-		<response id="#Poppy94" response="I think you should feel really happy today." />
+		<response id="#Poppy94" response="I think you should feel really happy today." >
+			<argument name="emotion:small-surprise" value="feel really happy" />
+			<argument name="performative:like" value="feel really happy" />
+			<argument name="performative:agree" value="feel really happy" />
+		</response>
 		<response id="#Poppy95" response="That sounds very positive." >
 			<argument name="performative:agree" value="very" />
 		</response>
@@ -238,7 +365,10 @@ Used response-arguments:
 			<argument name="emotion:happy" value="very happy" />
 			<argument name="performative:agree" value="very" />
 		</response>
-		<response id="#Poppy97" response="I think you've done really well." />
+		<response id="#Poppy97" response="I think you've done really well." >
+			<argument name="performative:like" value="done really well" />
+			<argument name="performative:agree" value="done really well" />
+		</response>
 		<response id="#Poppy98" response="There must be something that you're really looking forward to." >
 			<argument name="performative:agree" value="really looking forward to" />
 		</response>
@@ -263,7 +393,10 @@ Used response-arguments:
 		<response id="#Poppy105" response="Oh come on, let your hair down and be happy!" >
 			<argument name="performative:agree" value="be happy" />
 		</response>
-		<response id="#Poppy106" response="Come on, let go a bit." />
+		<response id="#Poppy106" response="Come on, let go a bit." >
+			<argument name="emotion:small-surprise" value="Come on" />
+			<argument name="performative:agree" value="let go a bit" />
+		</response>
 		<response id="#Poppy107" response="Tell me about the last time you were really happy." >
 			<argument name="performative:agree" value="really" />
 		</response>
@@ -276,21 +409,35 @@ Used response-arguments:
 		<response id="#Poppy110" response="What do you mean?" >
 			<argument name="pitchaccent:LplusHstar" value="you mean" />
 		</response>
-		<response id="#Poppy111" response="So what would you like to do?" />
+		<response id="#Poppy111" response="So what would you like to do?" >
+			<argument name="emotion:small-surprise" value="like to do" />
+			<argument name="performative:like" value="like to do" />
+		</response>
 		<response id="#Poppy112" response="That sounds interesting, tell me more." >
 			<argument name="emotion:happy" value="sounds interesting" />
 		</response>
 		<response id="#Poppy113" response="Why do you say that?" >
 			<argument name="pitchaccent:HplusLstar" value="Why" />
 		</response>
-		<response id="#Poppy114" response="How did we get on to this subject?" />
+		<response id="#Poppy114" response="How did we get on to this subject?" >
+			<argument name="emotion:small-surprise" value="to this subject" />
+		</response>
 		<response id="#Poppy115" response="You've certainly got your head screwed on." >
 			<argument name="pitchaccent:HplusLstar" value="certainly" />
 			<argument name="performative:agree" value="head screwed on" />
 		</response>
-		<response id="#Poppy116" response="You sure are Mr dependable." />
-		<response id="#Poppy117" response="You sure are Ms dependable." />
-		<response id="#Poppy118" response="You sure are very dependable." />
+		<response id="#Poppy116" response="You sure are Mr dependable." >
+			<argument name="performative:agree" value="You sure are" />
+			<argument name="emotion:small-surprise" value="Mr dependable" />
+		</response>
+		<response id="#Poppy117" response="You sure are Ms dependable." >
+			<argument name="performative:agree" value="You sure are" />
+			<argument name="emotion:small-surprise" value="Ms dependable" />
+		</response>
+		<response id="#Poppy118" response="You sure are very dependable." >
+			<argument name="performative:agree" value="You sure are" />
+			<argument name="emotion:small-surprise" value="very dependable" />
+		</response>
 		<response id="#Poppy119" response="You'll never let anyone down, that's for sure!" >
 			<argument name="performative:agree" value="that's for sure" />
 		</response>
@@ -303,23 +450,48 @@ Used response-arguments:
 		<response id="#Poppy122" response="What's the worst that can happen?" >
 			<argument name="pitchaccent:HplusLstar" value="the worst" />
 		</response>
-		<response id="#Poppy123" response="Tell me more." />
+		<response id="#Poppy123" response="Tell me more." >
+			<argument name="emotion:small-surprise" value="_all" />
+			<argument name="performative:agree" value="_all" />
+		</response>
 		<response id="#Poppy124" response="Hey, that sounds lovely!" >
 			<argument name="emotion:happy" value="lovely" />
 			<argument name="performative:agree" value="lovely" />
 		</response>
-		<response id="#Poppy125" response="I'd love to hear more." />
-		<response id="#Poppy126" response="Everything seems better when you can smile." />
-		<response id="#Poppy127" response="You did the right thing!" />
+		<response id="#Poppy125" response="I'd love to hear more." >
+			<argument name="performative:like" value="I'd love" />
+			<argument name="emotion:small-surprise" value="hear more" />
+			<argument name="performative:agree" value="hear more" />
+		</response>
+		<response id="#Poppy126" response="Everything seems better when you can smile." >
+			<argument name="emotion:small-surprise" value="Everything seems better" />
+			<argument name="performative:agree" value="Everything seems better" />
+			<argument name="performative:like" value="when you can smile" />
+		</response>
+		<response id="#Poppy127" response="You did the right thing!" >
+			<argument name="performative:like" value="right thing" />
+			<argument name="performative:agree" value="right thing" />
+		</response>
 		<response id="#Poppy128" response="You've lost me there." >
 			<argument name="pitchaccent:HplusLstar" value="there" />
 		</response>
-		<response id="#Poppy129" response="I'm glad to hear that." />
-		<response id="#Poppy130" response="Have you any interesting gossip then?" />
+		<response id="#Poppy129" response="I'm glad to hear that." >
+			<argument name="performative:like" value="I'm glad" />
+			<argument name="performative:agree" value="I'm glad" />
+		</response>
+		<response id="#Poppy130" response="Have you any interesting gossip then?" >
+			<argument name="emotion:small-surprise" value="any interesting gossip" />
+			<argument name="performative:agree" value="any interesting gossip" />
+		</response>
 		<response id="#Poppy131" response="Go on, tell me your news!" >
 			<argument name="performative:agree" value="Go on" />
 		</response>
-		<response id="#Poppy132" response="Fine, but can't you think of anything more exciting?" />
+		<response id="#Poppy132" response="Fine, but can't you think of anything more exciting?" >
+			<argument name="certainty:uncertain" value="Fine" />
+			<argument name="performative:like" value="more exciting" />
+			<argument name="emotion:small-surprise" value="more exciting" />
+			<argument name="performative:agree" value="more exciting" />
+		</response>
 		<response id="#Poppy133" response="It sounds as if everything is going right." >
 			<argument name="performative:agree" value="if everything is going right" />
 		</response>
@@ -329,9 +501,17 @@ Used response-arguments:
 		<response id="#Poppy135" response="Wow!" >
 			<argument name="emotion:happy" value="Wow" />
 		</response>
-		<response id="#Poppy136" response="Hey." />
-		<response id="#Poppy137" response="Oh my!" />
-		<response id="#Poppy138" response="I think there's light at the end of the tunnel." />
+		<response id="#Poppy136" response="Hey." >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Poppy137" response="Oh my!" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Poppy138" response="I think there's light at the end of the tunnel." >
+			<argument name="emotion:small-surprise" value="there's light at the" />
+			<argument name="performative:like" value="end of the tunnel" />
+			<argument name="performative:agree" value="end of the tunnel" />
+		</response>
 		<response id="#Poppy139" response="That's really interesting, go on!" >
 			<argument name="performative:agree" value="Go on" />
 		</response>
@@ -344,32 +524,62 @@ Used response-arguments:
 		<response id="#Poppy142" response="Tell me about places that make you happy." >
 			<argument name="emotion:happy" value="make you happy" />
 		</response>
-		<response id="#Poppy143" response="Tell me about issues that make you happy." />
+		<response id="#Poppy143" response="Tell me about issues that make you happy." >
+			<argument name="emotion:small-surprise" value="Tell me about issues" />
+			<argument name="performative:like" value="make you happy" />
+		</response>
 		<response id="#Poppy144" response="Keep going" >
 			<argument name="performative:agree" value="_all" />
 		</response>
 		<response id="#Poppy145" response="Come on, tell me more." >
 			<argument name="performative:agree" value="Come on" />
 		</response>
-		<response id="#Poppy146" response="Well?" />
-		<response id="#Poppy147" response="uh-huh" />
-		<response id="#Poppy148" response="Smile" />
+		<response id="#Poppy146" response="Well?" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Poppy147" response="uh-huh" >
+			<argument name="performative:agree" value="_all" />
+			<argument name="performative:like" value="_all" />
+		</response>
+		<response id="#Poppy148" response="Smile" >
+			<argument name="performative:like" value="Smile" />
+		</response>
 		<response id="#Poppy149" response="Absolutely fantastic!" >
 			<argument name="emotion:happy" value="_all" />
 		</response>
 		<response id="#Poppy150" response="That's great!" >
 			<argument name="emotion:happy" value="_all" />
 		</response>
-		<response id="#Poppy151" response="Hi, I'm Poppy. How are you today?" />
-		<response id="#Poppy152" response="Is that so? Tell me about it." />
-		<response id="#Poppy153" response="Anything good that happened?" />
-		<response id="#Poppy154" response="Anything that would make you happy?" />
-		<response id="#Poppy155" response="Or something that you're really looking forward to." />
-		<response id="#Poppy156" response="Please tell me!" />
-		<response id="#Poppy157" response="Ok." />
+		<response id="#Poppy151" response="Hi, I'm Poppy. How are you today?" >
+			<argument name="performative:like" value="I'm Poppy" />
+			<argument name="performative:agree" value="I'm Poppy" />
+			<argument name="performative:agree" value="you today" />
+			<argument name="emotion:small-surprise" value="you today" />
+		</response>
+		<response id="#Poppy152" response="Is that so? Tell me about it." >
+			<argument name="performative:like" value="that so" />
+			<argument name="emotion:small-surprise" value="that so" />
+			<argument name="performative:agree" value="Tell me" />
+		</response>
+		<response id="#Poppy153" response="Anything good that happened?" >
+			<argument name="emotion:small-surprise" value="Anything" />
+			<argument name="performative:like" value="good" />
+		</response>
+		<response id="#Poppy154" response="Anything that would make you happy?" >
+			<argument name="emotion:happy" value="happy" />
+		</response>
+		<response id="#Poppy155" response="Or something that you're really looking forward to." >
+			<argument name="performative:like" value="really looking forward to" />
+		</response>
+		<response id="#Poppy156" response="Please tell me!" >
+			<argument name="performative:agree" value="_all" />
+			<argument name="performative:like" value="_all" />
+		</response>
+		<response id="#Poppy157" response="Ok." >
+			<argument name="performative:agree" value="Ok." />
+		</response>
 		
 		<group id="##Poppy_after_silence">
-			<member id="#Poppy144" />
 			<member id="#Poppy131" />
 			<member id="#Poppy35" />
 			<member id="#Poppy145" />
@@ -628,10 +838,24 @@ Used response-arguments:
 	
 <!-- +++++++++++++++++++++++ PRUDENCE ++++++++++++++++++++++++++  -->
 
-		<response id="#Prudence0" response="Hi." />
-		<response id="#Prudence1" response="You have reached SAL, the Sensitive Artificial Listeners." />
-		<response id="#Prudence2" response="If you want to know about the system from scratch, go ahead and ask." />
-		<response id="#Prudence3" response="If you already know, go ahead and say which of us you want to talk to." />
+		<response id="#Prudence0" response="Hi." >
+			<argument name="emotion:small-surprise" value="Hi" />
+		</response>
+		<response id="#Prudence1" response="You have reached SAL, the Sensitive Artificial Listeners." >
+			<argument name="emotion:small-surprise" value="SAL" />
+			<argument name="performative:like" value="Sensitive Artificial Listeners" />
+		</response>
+		<response id="#Prudence2" response="If you want to know about the system from scratch, go ahead and ask." >
+			<argument name="emotion:small-surprise" value="know" />
+			<argument name="emotion:small-surprise" value="scratch" />
+			<argument name="certainty:uncertain" value="go ahead and ask" />
+		</response>
+		<response id="#Prudence3" response="If you already know, go ahead and say which of us you want to talk to." >
+			<argument name="performative:agree" value="you already know" />
+			<argument name="emotion:small-surprise" value="go ahead" />
+			<argument name="emotion:small-surprise" value="which of us" />
+			<argument name="performative:agree" value="talk to" />
+		</response>
 		<response id="#Prudence4" response="These are the listeners you can choose." >
 			<argument name="pitchaccent:LplusHstar" value="listeners" />
 		</response>
@@ -639,7 +863,10 @@ Used response-arguments:
 			<argument name="performative:agree" value="cheerful, optimistic" />
 			<argument name="pitchaccent:LplusHstar" value="on the bright side of life" />
 		</response>
-		<response id="#Prudence6" response="Spike is aggressive, confrontational and he enjoys an argument." />
+		<response id="#Prudence6" response="Spike is aggressive, confrontational and he enjoys an argument." >
+			<argument name="certainty:certainly-not" value="aggressive" />
+			<argument name="certainty:certainly-not" value="confrontational" />
+		</response>
 		<response id="#Prudence7" response="Obadiah is gloomy, and he has a pessimistic outlook." >
 			<argument name="pitchaccent:HplusLstar" value="pessimistic" />
 		</response>
@@ -653,12 +880,18 @@ Used response-arguments:
 		<response id="#Prudence10" response="The package contains four 'personalities' who listen to the user and respond to what he or she says." >
 			<argument name="pitchaccent:LplusHstar" value="four 'personalities'" />
 		</response>
-		<response id="#Prudence11" response="Each of the 'personalities' has different emotional characteristics." />
+		<response id="#Prudence11" response="Each of the 'personalities' has different emotional characteristics." >
+			<argument name="emotion:small-surprise" value="'personalities'" />
+			<argument name="performative:agree" value="emotional characteristics" />
+		</response>
 		<response id="#Prudence12" response="The user controls the emotional tone of the interaction by choosing which 'personality' he or she talks to." >
 			<argument name="pitchaccent:LplusHstar" value="emotional tone of" />
 			<argument name="pitchaccent:LplusHstar" value="'personality'" />
 		</response>
-		<response id="#Prudence13" response="He or she can change the tone at any time by choosing a different personality to talk to." />
+		<response id="#Prudence13" response="He or she can change the tone at any time by choosing a different personality to talk to." >
+			<argument name="emotion:small-surprise" value="the tone" />
+			<argument name="emotion:small-surprise" value="different personality" />
+		</response>
 		<response id="#Prudence14" response="Using SALAS." >
 			<argument name="performative:agree" value="SALAS" />
 		</response>
@@ -669,8 +902,13 @@ Used response-arguments:
 			<argument name="pitchaccent:LplusHstar" value="content" />
 			<argument name="pitchaccent:LplusHstar" value="tone" />
 		</response>
-		<response id="#Prudence17" response="That means it is up to the user to work within the system's limits." />
-		<response id="#Prudence18" response="In particular, there is no point asking it questions." />
+		<response id="#Prudence17" response="That means it is up to the user to work within the system's limits." >
+			<argument name="emotion:small-surprise" value="the user" />
+			<argument name="emotion:small-surprise" value="the system's limits" />
+		</response>
+		<response id="#Prudence18" response="In particular, there is no point asking it questions." >
+			<argument name="performative:disagree" value="no point" />
+		</response>
 		<response id="#Prudence19" response="There is no point trying to get into a serious discussion with it." >
 			<argument name="performative:disagree" value="There is no point" />
 			<argument name="pitchaccent:HplusLstar" value="a serious discussion with it" />
@@ -686,15 +924,23 @@ Used response-arguments:
 		<response id="#Prudence22" response="The trick is to make use of what the system does offer: a kind of sounding board, which will make the sorts of noises you ask for." >
 			<argument name="pitchaccent:LplusHstar" value="a kind of sounding bord" />
 		</response>
-		<response id="#Prudence23" response="That is a very limited function, but you might be surprised how much you can do with it." />
-		<response id="#Prudence24" response="Hello there, I'm Prudence." >
-			<!--<argument name="pitchaccent:Hstar" value="I'm" />-->
+		<response id="#Prudence23" response="That is a very limited function, but you might be surprised how much you can do with it." >
+			<argument name="emotion:small-surprise" value="very limited function" />
+			<argument name="performative:agree" value="might be surprised" />
+			<argument name="performative:like" value="you can do with it" />
 		</response>
-		<response id="#Prudence25" response="Have we met before?" />
+		<response id="#Prudence24" response="Hello there, I'm Prudence." >
+			<argument name="emotion:small-surprise" value="Prudence" />
+		</response>
+		<response id="#Prudence25" response="Have we met before?" >
+			<argument name="performative:agree" value="met" />
+		</response>
 		<response id="#Prudence26" response="Well, hallo then, lets get down to business, shall we?" >
 			<argument name="performative:agree" value="business" />
 		</response>
-		<response id="#Prudence27" response="That's what I thought." />
+		<response id="#Prudence27" response="That's what I thought." >
+			<argument name="performative:agree" value="I thought" />
+		</response>
 		<response id="#Prudence28" response="Well that's introductions out of the way." >
 			<argument name="pitchaccent:LplusHstar" value="introductions" />
 		</response>
@@ -704,24 +950,37 @@ Used response-arguments:
 		<response id="#Prudence30" response="So, tell me, how are you today?" >
 			<!--<argument name="pitchaccent:LplusHstar" value="how are you" />-->
 		</response>
-		<response id="#Prudence31" response="Is that so - tell me more about it." />
-		<response id="#Prudence32" response="Is that so?" />
-		<response id="#Prudence33" response="Hello, it's Prudence." />
+		<response id="#Prudence31" response="Is that so - tell me more about it." >
+			<argument name="emotion:small-surprise" value="Is that so" />
+			<argument name="performative:agree" value="tell me more about it" />
+		</response>
+		<response id="#Prudence32" response="Is that so?" >
+			<argument name="performative:agree" value="_all" />
+		</response>
+		<response id="#Prudence33" response="Hello, it's Prudence." >
+			<argument name="emotion:small-surprise" value="Prudence" />
+		</response>
 		<response id="#Prudence34" response="Sorry, could you say that again?" >
 			<argument name="performative:disagree" value="Sorry" />
 		</response>
 		<response id="#Prudence35" response="Maybe I misunderstood." >
 			<argument name="pitchaccent:HplusLstar" value="misunderstood" />
 		</response>
-		<response id="#Prudence36" response="Have I said something wrong?" />
+		<response id="#Prudence36" response="Have I said something wrong?" >
+			<argument name="certainty:certainly-not" value="something wrong" />
+		</response>
 		<response id="#Prudence37" response="Are you still there?" >
 			<argument name="pitchaccent:HplusLstar" value="there" />
 		</response>
 		<response id="#Prudence38" response="Is there anything else you want to say?" >
 			<argument name="pitchaccent:LplusHstar" value="anything else" />
 		</response>
-		<response id="#Prudence39" response="I think you asked me a question." />
-		<response id="#Prudence40" response="I can't answer questions." />
+		<response id="#Prudence39" response="I think you asked me a question." >
+			<argument name="certainty:uncertain" value="asked me a question" />
+		</response>
+		<response id="#Prudence40" response="I can't answer questions." >
+			<argument name="performative:disagree" value="I can't answer" />
+		</response>
 		<response id="#Prudence41" response="Just tell me things, and I'll respond." >
 			<argument name="pitchaccent:Hstar" value="things" />
 		</response>
@@ -731,26 +990,39 @@ Used response-arguments:
 		<response id="#Prudence43" response="It'll all sort itself out." >
 			<argument name="pitchaccent:Hstar" value="all" />
 		</response>
-		<response id="#Prudence44" response="I'm sure that you can solve the problem, whatever it is." />
+		<response id="#Prudence44" response="I'm sure that you can solve the problem, whatever it is." >
+			<argument name="performative:agree" value="I'm sure that" />
+			<argument name="emotion:small-surprise" value="problem" />
+			<argument name="performative:like" value="whatever it is" />
+		</response>
 		<response id="#Prudence45" response="You won't change things by getting angry!" >
 			<argument name="pitchaccent:LplusHstar" value="getting angry" />
 		</response>
 		<response id="#Prudence46" response="It will all seem better in a few days time." >
 			<argument name="pitchaccent:Hstar" value="pitchaccent:LplusHstar" />
 		</response>
-		<response id="#Prudence47" response="You won't feel like this forever." />
-		<response id="#Prudence48" response="Is there anyone who could help?" />
+		<response id="#Prudence47" response="You won't feel like this forever." >
+			<argument name="certainty:uncertain" value="like this" />
+		</response>
+		<response id="#Prudence48" response="Is there anyone who could help?" >
+			<argument name="emotion:small-surprise" value="anyone" />
+		</response>
 		<response id="#Prudence49" response="It can't be that bad, don't you think you're over-reacting?" >
 			<argument name="pitchaccent:LplusHstar" value="you're over-reacting" />
 		</response>
 		<response id="#Prudence50" response="Pull yourself together!" >
 			<argument name="pitchaccent:Hstar" value="together" />
 		</response>
-		<response id="#Prudence51" response="Get a grip!" />
+		<response id="#Prudence51" response="Get a grip!" >
+			<argument name="performative:agree" value="grip" />
+		</response>
 		<response id="#Prudence52" response="Maybe you should just go out and get drunk?" >
 			<argument name="performative:disagree" value="go out and get drunk" />
 		</response>
-		<response id="#Prudence53" response="Can you think of something positive?" />
+		<response id="#Prudence53" response="Can you think of something positive?" >
+			<argument name="performative:like" value="something positive" />
+			<argument name="performative:agree" value="something positive" />
+		</response>
 		<response id="#Prudence54" response="Perhaps you need to take it easy." >
 			<argument name="pitchaccent:LplusHstar" value="take it easy" />
 		</response>
@@ -760,19 +1032,41 @@ Used response-arguments:
 		<response id="#Prudence56" response="What will help you?" >
 			<argument name="pitchaccent:LplusHstar" value="help you" />
 		</response>
-		<response id="#Prudence57" response="Why?" />
-		<response id="#Prudence58" response="I'm not sure that you should be so negative." />
-		<response id="#Prudence59" response="Stay out of arguments with others!" />
-		<response id="#Prudence60" response="Do you think being angry makes people want to help you?" />
+		<response id="#Prudence57" response="Why?" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Prudence58" response="I'm not sure that you should be so negative." >
+			<argument name="performative:disagree" value="I'm not sure" />
+			<argument name="performative:disagree" value="so negative" />
+		</response>
+		<response id="#Prudence59" response="Stay out of arguments with others!" >
+			<argument name="emotion:small-surprise" value="Stay out" />
+		</response>
+		<response id="#Prudence60" response="Do you think being angry makes people want to help you?" >
+			<argument name="emotion:small-surprise" value="being angry" />
+			<argument name="certainty:certainly-not" value="to help you" />
+		</response>
 		<response id="#Prudence61" response="Go on." >
 			<argument name="performative:agree" value="_all" />
 		</response>
-		<response id="#Prudence62" response="Tell me more." />
-		<response id="#Prudence63" response="How?" />
-		<response id="#Prudence64" response="Would you like to talk to someone else?" />
-		<response id="#Prudence65" response="Why don't you talk to Poppy?" />
-		<response id="#Prudence66" response="Why don't you talk to Spike?" />
-		<response id="#Prudence67" response="Why don't you talk to Obadiah?" />
+		<response id="#Prudence62" response="Tell me more." >
+			<argument name="emotion:small-surprise" value="more" />
+		</response>
+		<response id="#Prudence63" response="How?" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
+		<response id="#Prudence64" response="Would you like to talk to someone else?" >
+			<argument name="emotion:small-surprise" value="someone else" />
+		</response>
+		<response id="#Prudence65" response="Why don't you talk to Poppy?" >
+			<argument name="emotion:small-surprise" value="Poppy" />
+		</response>
+		<response id="#Prudence66" response="Why don't you talk to Spike?" >
+			<argument name="emotion:small-surprise" value="Spike" />
+		</response>
+		<response id="#Prudence67" response="Why don't you talk to Obadiah?" >
+			<argument name="emotion:small-surprise" value="Obadiah" />
+		</response>
 		<response id="#Prudence68" response="Don't get carried away!" >
 			<argument name="performative:disagree" value="_all" />
 			<argument name="performative:disagree" value="_all" />
@@ -780,7 +1074,9 @@ Used response-arguments:
 		<response id="#Prudence69" response="Don't get too excited!" >
 			<argument name="pitchaccent:HplusLstar" value="_all" />
 		</response>
-		<response id="#Prudence70" response="Enjoy it while it lasts!" />
+		<response id="#Prudence70" response="Enjoy it while it lasts!" >
+			<argument name="performative:like" value="Enjoy it" />
+		</response>
 		<response id="#Prudence71" response="That's interesting!" >
 			<argument name="pitchaccent:LplusHstar" value="interesting" />
 		</response>
@@ -793,16 +1089,26 @@ Used response-arguments:
 		<response id="#Prudence74" response="Would you say that you're a little out of touch with reality?" >
 			<argument name="pitchaccent:HplusLstar" value="reality" />
 		</response>
-		<response id="#Prudence75" response="Why should I think that's so good?" />
-		<response id="#Prudence76" response="Why do you say that you are hopeful?" />
+		<response id="#Prudence75" response="Why should I think that's so good?" >
+			<argument name="emotion:small-surprise" value="that's so good" />
+		</response>
+		<response id="#Prudence76" response="Why do you say that you are hopeful?" >
+			<argument name="emotion:small-surprise" value="you are hopeful" />
+		</response>
 		<response id="#Prudence77" response="Really?" >
 			<argument name="pitchaccent:LplusHstar" value="_all" />
 		</response>
 		<response id="#Prudence78" response="What have you been doing?" >
 			<argument name="pitchaccent:LplusHstar" value="doing" />
 		</response>
-		<response id="#Prudence79" response="You should consider everything very carefully." />
-		<response id="#Prudence80" response="Have you ever regretted being so headstrong?" />
+		<response id="#Prudence79" response="You should consider everything very carefully." >
+			<argument name="performative:agree" value="everything" />
+			<argument name="certainty:uncertain" value="very carefully" />
+		</response>
+		<response id="#Prudence80" response="Have you ever regretted being so headstrong?" >
+			<argument name="certainty:certainly-not" value="regretted" />
+			<argument name="certainty:certainly-not" value="so headstrong" />
+		</response>
 		<response id="#Prudence81" response="When before have you been disappointed by expecting too much?" >
 			<argument name="pitchaccent:HplusLstar" value="disappointed" />
 		</response>
@@ -812,7 +1118,9 @@ Used response-arguments:
 		<response id="#Prudence83" response="What do you mean?" >
 			<argument name="pitchaccent:LplusHstar" value="you mean" />
 		</response>
-		<response id="#Prudence84" response="Do you think that you are wise?" />
+		<response id="#Prudence84" response="Do you think that you are wise?" >
+			<argument name="emotion:small-surprise" value="you are wise" />
+		</response>
 		<response id="#Prudence85" response="So where do you think your attitude to life comes from?" >
 			<argument name="pitchaccent:LplusHstar" value="where do you think" />
 		</response>
@@ -822,22 +1130,40 @@ Used response-arguments:
 		<response id="#Prudence87" response="Why do you want it?" >
 			<argument name="pitchaccent:HplusLstar" value="Why" />
 		</response>
-		<response id="#Prudence88" response="I'm not sure that you should be so enthusiastic." />
-		<response id="#Prudence89" response="Why not?" />
-		<response id="#Prudence90" response="You seem a bit flat." />
-		<response id="#Prudence91" response="That's the way it goes." />
-		<response id="#Prudence92" response="That's better." />
+		<response id="#Prudence88" response="I'm not sure that you should be so enthusiastic." >
+			<argument name="performative:disagree" value="I'm not sure" />
+			<argument name="certainty:certainly-not" value="so enthusiastic" />
+		</response>
+		<response id="#Prudence89" response="Why not?" >
+			<argument name="certainty:certainly-not" value="not" />
+		</response>
+		<response id="#Prudence90" response="You seem a bit flat." >
+			<argument name="emotion:small-surprise" value="bit flat" />
+			<argument name="performative:agree" value="bit flat" />
+		</response>
+		<response id="#Prudence91" response="That's the way it goes." >
+			<argument name="emotion:small-surprise" value="That's the way" />
+			<argument name="performative:agree" value="That's the way" />
+		</response>
+		<response id="#Prudence92" response="That's better." >
+			<argument name="performative:like" value="_all" />
+		</response>
 		<response id="#Prudence93" response="It will get better." >
 			<argument name="performative:agree" value="better" />
 		</response>
 		<response id="#Prudence94" response="It can't be all that bad." >
 			<argument name="performative:disagree" value="all that bad" />
 		</response>
-		<response id="#Prudence95" response="I'm sure everything will turn out fine." />
+		<response id="#Prudence95" response="I'm sure everything will turn out fine." >
+			<argument name="performative:agree" value="I'm sure" />
+			<argument name="performative:like" value="fine" />
+		</response>
 		<response id="#Prudence96" response="Never mind." >
 			<argument name="performative:disagree" value="_all" />
 		</response>
-		<response id="#Prudence97" response="Cheer up a bit!" />
+		<response id="#Prudence97" response="Cheer up a bit!" >
+			<argument name="performative:like" value="a bit" />
+		</response>
 		<response id="#Prudence98" response="Can't you do anything about it?" >
 			<argument name="performative:agree" value="do" />
 		</response>
@@ -853,23 +1179,35 @@ Used response-arguments:
 		<response id="#Prudence102" response="What are you planning to do?" >
 			<argument name="pitchaccent:LplusHstar" value="planning to do" />
 		</response>
-		<response id="#Prudence103" response="How do you view other people?" />
+		<response id="#Prudence103" response="How do you view other people?" >
+			<argument name="emotion:small-surprise" value="other people" />
+		</response>
 		<response id="#Prudence104" response="Why do you say that?" >
 			<argument name="pitchaccent:HplusLstar" value="Why" />
 		</response>
-		<response id="#Prudence105" response="Tell me what you would like to do?" />
+		<response id="#Prudence105" response="Tell me what you would like to do?" >
+			<argument name="emotion:small-surprise" value="like to do" />
+		</response>
 		<response id="#Prudence106" response="What would make you feel better?" >
 			<argument name="pitchaccent:LplusHstar" value="feel better" />
 		</response>
 		<response id="#Prudence107" response="Do you feel a little unsure?" >
 			<argument name="pitchaccent:HplusLstar" value="a little unsure" />
 		</response>
-		<response id="#Prudence108" response="Tell me about a time when you felt a bit better." />
-		<response id="#Prudence109" response="I'm sure you can solve your problems, whatever they are." />
+		<response id="#Prudence108" response="Tell me about a time when you felt a bit better." >
+			<argument name="emotion:small-surprise" value="a time" />
+			<argument name="performative:like" value="a bit better" />
+		</response>
+		<response id="#Prudence109" response="I'm sure you can solve your problems, whatever they are." >
+			<argument name="performative:agree" value="I'm sure" />
+			<argument name="emotion:small-surprise" value="your problems" />
+		</response>
 		<response id="#Prudence110" response="Is there anything else in your life?" >
 			<argument name="pitchaccent:LplusHstar" value="anything else" />
 		</response>
-		<response id="#Prudence111" response="How do you view people?" />
+		<response id="#Prudence111" response="How do you view people?" >
+			<argument name="emotion:small-surprise" value="people" />
+		</response>
 		<response id="#Prudence112" response="That sounds like a sensible attitude." >
 			<argument name="performative:agree" value="sensible" />
 		</response>
@@ -877,77 +1215,134 @@ Used response-arguments:
 			<argument name="performative:agree" value="always good" />
 			<argument name="pitchaccent:LplusHstar" value="always good" />
 		</response>
-		<response id="#Prudence114" response="I reckon we're on the same wavelength." />
-		<response id="#Prudence115" response="I couldn't have put it better myself." />
-		<response id="#Prudence116" response="You obviously have your head screwed on." />
+		<response id="#Prudence114" response="I reckon we're on the same wavelength." >
+			<argument name="performative:agree" value="I reckon" />
+			<argument name="performative:like" value="same wavelength" />
+		</response>
+		<response id="#Prudence115" response="I couldn't have put it better myself." >
+			<argument name="emotion:small-surprise" value="couldn't have put" />
+			<argument name="performative:like" value="better myself" />
+		</response>
+		<response id="#Prudence116" response="You obviously have your head screwed on." >
+			<argument name="emotion:small-surprise" value="obviously" />
+			<argument name="performative:agree" value="your head screwed on" />
+		</response>
 		<response id="#Prudence117" response="Keep going." >
 			<argument name="performative:agree" value="_all" />
 		</response>
 		<response id="#Prudence118" response="So tell me the details." >
 			<argument name="performative:agree" value="So" />
 		</response>
-		<response id="#Prudence119" response="So what are you doing at the moment?" />
-		<response id="#Prudence120" response="Can you enlarge on that?" />
-		<response id="#Prudence121" response="Tell me what is going on at the moment." />
-		<response id="#Prudence122" response="You should remain calm." />
-		<response id="#Prudence123" response="Would you say you have everything under control?" />
+		<response id="#Prudence119" response="So what are you doing at the moment?" >
+			<argument name="emotion:small-surprise" value="doing at the moment" />
+		</response>
+		<response id="#Prudence120" response="Can you enlarge on that?" >
+			<argument name="emotion:small-surprise" value="enlarge" />
+		</response>
+		<response id="#Prudence121" response="Tell me what is going on at the moment." >
+			<argument name="emotion:small-surprise" value="what is going on" />
+		</response>
+		<response id="#Prudence122" response="You should remain calm." >
+			<argument name="certainty:uncertain" value="remain calm" />
+		</response>
+		<response id="#Prudence123" response="Would you say you have everything under control?" >
+			<argument name="certainty:uncertain" value="Would you say" />
+			<argument name="emotion:small-surprise" value="under control" />
+		</response>
 		<response id="#Prudence124" response="What would you like to talk about?" >
 			<argument name="pitchaccent:LplusHstar" value="talk about" />
 		</response>
 		<response id="#Prudence125" response="What are you doing this week?" >
 			<argument name="pitchaccent:LplusHstar" value="this week" />
 		</response>
-		<response id="#Prudence126" response="Where do you think your attitude to life comes from?" />
+		<response id="#Prudence126" response="Where do you think your attitude to life comes from?" >
+			<argument name="emotion:small-surprise" value="your attitude to life" />
+		</response>
 		<response id="#Prudence127" response="When?" >
 			<argument name="pitchaccent:LplusHstar" value="_all" />
 		</response>
-		<response id="#Prudence128" response="So?" />
+		<response id="#Prudence128" response="So?" >
+			<argument name="emotion:small-surprise" value="_all" />
+		</response>
 		<response id="#Prudence129" response="So where are you going with all this?" >
 			<argument name="pitchaccent:LplusHstar" value="where are you" />
 		</response>
-		<response id="#Prudence130" response="Calm down and just talk me through it." />
+		<response id="#Prudence130" response="Calm down and just talk me through it." >
+			<argument name="certainty:uncertain" value="Calm down" />
+			<argument name="performative:agree" value="talk me through it" />
+		</response>
 		<response id="#Prudence131" response="It's always worth thinking these things through." >
 			<argument name="performative:agree" value="always worth thinking" />
 		</response>
 		<response id="#Prudence132" response="Tell me, would you call yourself a wise person?" >
 			<argument name="pitchaccent:LplusHstar" value="a wise" />
 		</response>
-		<response id="#Prudence133" response="You are a bit carried away." />
+		<response id="#Prudence133" response="You are a bit carried away." >
+			<argument name="emotion:small-surprise" value="carried away" />
+		</response>
 		<response id="#Prudence134" response="Try to give me a more balanced picture." >
 			<argument name="performative:agree" value="more balanced picture" />
 		</response>
-		<response id="#Prudence135" response="I admire that." />
-		<response id="#Prudence136" response="You need a change." />
+		<response id="#Prudence135" response="I admire that." >
+			<argument name="performative:like" value="admire that" />
+		</response>
+		<response id="#Prudence136" response="You need a change." >
+			<argument name="emotion:small-surprise" value="a change" />
+		</response>
 		<response id="#Prudence137" response="What haven't you talked about in this session?" >
 			<argument name="pitchaccent:LplusHstar" value="in this session" />
 		</response>
-		<response id="#Prudence138" response="So let's talk about something else." />
+		<response id="#Prudence138" response="So let's talk about something else." >
+			<argument name="emotion:small-surprise" value="something else" />
+			<argument name="certainty:uncertain" value="something else" />
+		</response>
 		<response id="#Prudence139" response="What are you looking forward to?" >
 			<argument name="pitchaccent:LplusHstar" value="forward to" />
 		</response>
-		<response id="#Prudence140" response="Tell me about something I haven't heard before." />
+		<response id="#Prudence140" response="Tell me about something I haven't heard before." >
+			<argument name="emotion:small-surprise" value="something" />
+			<argument name="certainty:uncertain" value="something" />
+		</response>
 		<response id="#Prudence141" response="Tell me what interests you." >
 			<argument name="emotion:happy" value="interests" />
 		</response>
-		<response id="#Prudence142" response="Tell me about people that interest you." />
+		<response id="#Prudence142" response="Tell me about people that interest you." >
+			<argument name="emotion:small-surprise" value="people" />
+			<argument name="certainty:uncertain" value="people" />
+		</response>
 		<response id="#Prudence143" response="Tell me about places that interest you." >
 			<argument name="emotion:happy" value="places that interest" />
 		</response>
-		<response id="#Prudence144" response="Tell me about issues that interest you." />
+		<response id="#Prudence144" response="Tell me about issues that interest you." >
+			<argument name="emotion:small-surprise" value="issues" />
+			<argument name="certainty:uncertain" value="issues" />
+		</response>
 		<response id="#Prudence145" response="Go on, tell me your news!" >
 			<argument name="performative:agree" value="Go on" />
 		</response>
-		<response id="#Prudence146" response="Well?" />
-		<response id="#Prudence147" response="Yeah." />
+		<response id="#Prudence146" response="Well?" >
+			<argument name="emotion:small-surprise" value="Well" />
+		</response>
+		<response id="#Prudence147" response="Yeah." >
+			<argument name="performative:agree" value="Yeah." />
+		</response>
 		<response id="#Prudence148" response="Come on, tell me more." >
 			<argument name="performative:agree" value="Come on" />
 		</response>
-		<response id="#Prudence149" response="Hello there, I'm Prudence. How are you today?" />
+		<response id="#Prudence149" response="Hello there, I'm Prudence. How are you today?" >
+			<argument name="performative:like" value="Prudence" />
+			<argument name="emotion:small-surprise" value="today" />
+		</response>
 		<response id="#Prudence150" response="Ok." >
 			<argument name="performative:agree" value="_all" />
 		</response>
-		<response id="#Prudence151" response="Who could help?" />
-		<response id="#Prudence152" response="Good." />
+		<response id="#Prudence151" response="Who could help?" >
+			<argument name="emotion:small-surprise" value="help" />
+		</response>
+		<response id="#Prudence152" response="Good." >
+			<argument name="performative:agree" value="Good." />
+			<argument name="performative:like" value="Good." />
+		</response>
 
 		
 		<group id="##Prudence_high_arousal">
@@ -965,7 +1360,6 @@ Used response-arguments:
 		</group>
 		
 		<group id="##Prudence_after_silence">
-			<member id="#Prudence117" />
 			<member id="#Prudence145" />
 			<member id="#Prudence61" />
 			<member id="#Prudence148" />
@@ -1503,7 +1897,6 @@ Used response-arguments:
 		</response>
 		
 		<group id="##Spike_after_silence">
-			<member id="#Spike127" />
 			<member id="#Spike128" />
 			<member id="#Spike37" />
 			<member id="#Spike129" />
@@ -2030,7 +2423,6 @@ Used response-arguments:
 		</group>
 		
 		<group id="##Obadiah_after_silence">
-			<member id="#Obadiah135" />
 			<member id="#Obadiah136" />
 			<member id="#Obadiah43" />
 			<member id="#Obadiah137" />

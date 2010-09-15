@@ -1,0 +1,869 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+	<template id="Prudence_SuggestChar" name="Prudence suggesting a next character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
+		<optional>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Poppy" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Prudence65" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Obadiah" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Prudence67" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Spike" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Prudence66" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.7">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="askChange" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Prudence64" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+	
+	<template id="Poppy_SuggestChar" name="Poppy suggesting a next character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Poppy" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
+		<optional>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Prudence" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Poppy39" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Obadiah" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Poppy41" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Spike" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Poppy40" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.7">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="askChange" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Poppy38" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+	
+	<template id="Obadiah_SuggestChar" name="Obadiah suggesting a next character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
+		<optional>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Prudence" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Obadiah47" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Poppy" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Obadiah45" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Spike" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Obadiah46" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.7">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="askChange" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Obadiah44" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+	
+	<template id="Spike_SuggestChar" name="Spike suggesting a next character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Spike" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="agentTurnState" />
+				<argument value="expectingAnswer" />
+				<argument value="dialogstate" />
+			</function>
+		</effects>
+		<optional>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Prudence" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Spike39" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Poppy" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Spike41" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.1">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="charSuggested" />
+   					<c_update name="DialogueState.suggestedChar" value="Obadiah" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Spike40" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.7">
+   				<c_effects>
+   					<c_update name="DialogueState.charChangeState" value="askChange" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#Spike38" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+	
+	<template id="ChangeToAgentSuggestedChar1" name="Change to the user-suggested character">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.targetCharacter" comparator="not_equals" value2="null" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="character" />
+				<argument value="Moderator" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="nextCharacter" />
+				<argument value="$UserTurn.targetCharacter" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="dialogContext" />
+				<argument value="Questions" />
+				<argument value="contextstate" />
+			</function>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#goodbye" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="ChangeToAgentSuggestedChar2" name="Change to the agent-suggested character">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="character" />
+				<argument value="Moderator" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="nextCharacter" />
+				<argument value="$DialogueState.suggestedChar" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="dialogContext" />
+				<argument value="Questions" />
+				<argument value="contextstate" />
+			</function>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#goodbye" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="ChangeToUserSuggestedChar" name="Change to the user-suggested character">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.targetCharacter" comparator="not_equals" value2="null" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="character" />
+				<argument value="Moderator" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="nextCharacter" />
+				<argument value="$UserTurn.targetCharacter" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="dialogContext" />
+				<argument value="Questions" />
+				<argument value="contextstate" />
+			</function>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.8">
+			<argument name="response" value="#goodbye" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="##Prudence_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Poppy_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Poppy" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="##Poppy_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="##Obadiah_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Spike" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="##Spike_change_subject" />
+		</behaviour>
+	</template>
+	
+	<!--
+	<template id="ChangeChar" name="Change character based on user's request">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="not_equals" value2="null" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="character" />
+				<argument value="Moderator" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="nextCharacter" />
+				<argument value="$UserTurn.targetCharacter" />
+				<argument value="contextstate" />
+			</function>
+			<function name="sendDataAtEndOfTurn">
+				<argument value="dialogContext" />
+				<argument value="Questions" />
+				<argument value="contextstate" />
+			</function>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#goodbye" />
+		</behaviour>
+	</template>
+	-->
+	
+	
+	<template id="VerifySuggestedCharChangePoppy" name="Verify user-suggested (Poppy) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Poppy" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToPoppy" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="VerifySuggestedCharChangePrudence" name="Verify user-suggested (Prudence) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToPrudence" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="VerifySuggestedCharChangeObadiah" name="Verify user-suggested (Obadiah) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Obadiah" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToObadiah" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="VerifySuggestedCharChangeSpike" name="Verify user-suggested (Spike) character">
+		<preconditions>
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
+			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Spike" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.charChangeState" value="charSuggested" />
+   			<update name="DialogueState.suggestedChar" value="$UserTurn.targetCharacter" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.9">
+			<argument name="response" value="#wantToSpike" />
+		</behaviour>
+	</template>
+	
+	
+	
+	<template id="Prudence_ChangeDisagreed_ChangeTopic" name="User disagreed with change, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.8">
+			<argument name="response" value="#Prudence150" />
+			<argument name="response2" value="##Prudence_change_subject" />
+		</behaviour>
+	</template>
+
+
+	<template id="Poppy_ChangeDisagreed_ChangeTopic" name="User disagreed with change, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Poppy" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.8">
+			<argument name="response" value="#Poppy157" />
+			<argument name="response2" value="##Poppy_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Obadiah_ChangeDisagreed_ChangeTopic" name="User disagreed with change, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.8">
+			<argument name="response" value="#Obadiah151" />
+			<argument name="response2" value="##Obadiah_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_ChangeDisagreed_ChangeTopic" name="User disagreed with change, start new topic">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Spike" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<effects>
+			<remove name="DialogueState.charChangeState" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="0.8">
+			<argument name="response" value="#Spike137" />
+			<argument name="response2" value="##Spike_change_subject" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_SuggestChar" name="Prudence suggesting a next character">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Poppy" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Obadiah" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.34">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Spike" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+	
+	<template id="Poppy_SuggestChar" name="Poppy suggesting a next character">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Poppy" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Prudence" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Spike" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.34">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Obadiah" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+	
+	<template id="Obadiah_SuggestChar" name="Obadiah suggesting a next character">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Poppy" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Prudence" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.34">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Spike" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+	
+	<template id="Spike_SuggestChar" name="Spike suggesting a next character">
+		<preconditions>
+			<compare value1="$DialogueState.charChangeState" value2="askChange" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_agree" />
+			<compare value1="$UserTurn.targetCharacter" value2="null" />
+			<compare value1="$Agent.character" value2="Spike" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		<optional>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Poppy" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.33">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Prudence" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.34">
+   				<c_effects>
+   					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Moderator" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="nextCharacter" />
+						<c_argument value="Obadiah" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="dialogContext" />
+						<c_argument value="Questions" />
+						<c_argument value="contextstate" />
+					</c_function>
+					<c_remove name="DialogueState.charChangeState" />
+   				</c_effects>
+   				<c_behaviour class="ResponseActionProposer" quality="0.9">
+					<c_argument name="response" value="#goodbye" />
+				</c_behaviour>
+   			</option>
+   		</optional>
+	</template>
+	
+</behaviourtemplates>

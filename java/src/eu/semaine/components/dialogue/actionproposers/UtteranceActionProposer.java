@@ -123,6 +123,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	
 	private LinkedList<String> historyQueue = new LinkedList<String>();
 	
+	private int queueWaitingCounter = 0;
+	
 	/**
 	 * Constructor of ResponseActionProposer
 	 * Initializes all Senders and Receivers, and initializes everything.
@@ -228,10 +230,11 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					sendData(str[0], str[1], str[2]);
 				}
 			}
+			queueWaitingCounter = 5;
 			dataSendQueue.clear();
 		}
 		
-		if( systemStarted && (speakingState == null || (speakingState != null && speakingState.equals("listening"))) ) {
+		if( queueWaitingCounter == 0 && systemStarted && (speakingState == null || (speakingState != null && speakingState.equals("listening"))) ) {
 			is.set("currTime", (int)meta.getTime());
 			String context = is.toString();
 			TemplateState state = templateController.checkTemplates(is);
@@ -249,6 +252,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type="+state.getTemplate().getId()+", utterance="+latestResponse.getResponse());
 			}
 		}
+		if( queueWaitingCounter > 0 ) queueWaitingCounter--;
 	}
 
 	/**
@@ -304,6 +308,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 						}
 					}
 					dataSendQueue.clear();
+					queueWaitingCounter = 5;
 				}
 			}
 
@@ -518,10 +523,19 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 
 				/* Update current character */
 				if( stateInfo.hasInfo("character") ) {
+					System.out.println("New Character: " + stateInfo.getInfo("character"));
 					is.set("Agent.character", stateInfo.getInfo("character"));
 					is.set("Agent.characterChanged", 1);
 					preparedResponses.clear();
 					preparingResponses.clear();
+				}
+				if( stateInfo.hasInfo("nextCharacter") ) {
+					String nextCharacter = stateInfo.getInfo("nextCharacter");
+					is.set("Agent.nextCharacter", nextCharacter);
+				}
+				if( stateInfo.hasInfo("dialogContext") ) {
+					String context = stateInfo.getInfo("dialogContext");
+					is.set("Agent.dialogContext", context);
 				}
 				break;
 			case AgentState:
