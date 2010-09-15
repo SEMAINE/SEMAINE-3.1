@@ -18,6 +18,7 @@ import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.jms.sender.StateSender;
+import eu.semaine.system.CharacterConfigInfo;
 
 /**
  * @author marc
@@ -30,7 +31,9 @@ public class ParticipantControl extends Component
 	private StateSender contextSender;
 	private StateReceiver contextReceiver;
     private boolean isUserPresent = false;
-    private String currentCharacter = ParticipantControlGUI.PRUDENCE;
+    private String currentCharacter = CharacterConfigInfo.getDefaultCharacter().getName();
+    private String nextCharacter = null;
+    private String currentDialogContext = null;
 
     /**
 	 * @param componentName
@@ -59,6 +62,12 @@ public class ParticipantControl extends Component
             if (state.hasInfo("character")) {
             	currentCharacter = state.getInfo("character");
             }
+            if (state.hasInfo("nextCharacter")) {
+            	nextCharacter = state.getInfo("nextCharacter");
+            }
+            if (state.hasInfo("currentDialogContext")) {
+            	currentDialogContext = state.getInfo("currentDialogContext");
+            }
             gui.updateWhoIsPresent();
         }
 
@@ -68,6 +77,12 @@ public class ParticipantControl extends Component
 		Map<String, String> info = new HashMap<String, String>();
 		info.put("userPresent", isUserPresent ? "present" : "absent");
 		info.put("character", currentCharacter);
+		if (nextCharacter != null) {
+			info.put("nextCharacter", nextCharacter);
+		}
+		if (currentDialogContext != null) {
+			info.put("dialogContext", currentDialogContext);
+		}
 		ContextStateInfo context = new ContextStateInfo(info);
 		contextSender.sendStateInfo(context, meta.getTime());
 	}
@@ -91,14 +106,29 @@ public class ParticipantControl extends Component
     {
         return currentCharacter;
     }
+
+    public String getNextCharacter() {
+    	return nextCharacter;
+    }
+    
+    public String getDialogContext() {
+    	return currentDialogContext;
+    }
     
     public void setCurrentCharacter(String name)
     {
-        this.currentCharacter = name;
+    	setCharacterInfo(name, null, null);
+    }
+    
+    public void setCharacterInfo(String name, String nextChar, String dialogContext) {
+    	this.currentCharacter = name;
+    	this.nextCharacter = nextChar;
+    	this.currentDialogContext = dialogContext;
         try {
             sendWhoIsPresent();
         } catch (JMSException e) {
             e.printStackTrace();
         }
     }
+    
 }

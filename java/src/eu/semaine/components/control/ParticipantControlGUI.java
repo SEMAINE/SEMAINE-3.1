@@ -16,10 +16,18 @@ import javax.swing.border.BevelBorder;
  * @author  marc
  */
 public class ParticipantControlGUI extends javax.swing.JFrame {
-    public static final String OBADIAH = "Obadiah";
+    // Characters
+	public static final String OBADIAH = "Obadiah";
     public static final String POPPY = "Poppy";
     public static final String PRUDENCE = "Prudence";
     public static final String SPIKE = "Spike";
+    public static final String MODERATOR = "Moderator";
+    // Dialog contexts
+    public static final String ANNOUNCE = "AnnounceNextCharacter";
+    public static final String INTRO = "Introduction";
+    public static final String QUESTIONS = "Questions";
+    
+    
     public static final String LABEL_USERPRESENT = "User is present.";
     public static final String LABEL_USERNOTPRESENT = "User is currently NOT present.";
     public static final String BUTTON_USERPRESENT = "User leaving";
@@ -41,6 +49,8 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
         bToggleUser = new javax.swing.JButton();
         lUserPresent = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -48,6 +58,15 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
         bPoppy = new javax.swing.JButton();
         bPrudence = new javax.swing.JButton();
         bObadiah = new javax.swing.JButton();
+        bIntro = new javax.swing.JButton();
+        bQuestions = new javax.swing.JButton();
+        bIntroSpike = new javax.swing.JButton();
+        bIntroPoppy = new javax.swing.JButton();
+        bIntroPrudence = new javax.swing.JButton();
+        bIntroObadiah = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Participant Control GUI");
@@ -58,7 +77,18 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
             }
         });
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(bToggleUser, gridBagConstraints);
+
         lUserPresent.setText("User is NOT present");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(lUserPresent, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dialogue Partner:", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         bSpike.setIcon(new javax.swing.ImageIcon(getClass().getResource("/eu/semaine/components/control/Spike-100.jpg")));
@@ -72,6 +102,11 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
             }
         });
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(bSpike, gridBagConstraints);
+
         bPoppy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/eu/semaine/components/control/Poppy-100.jpg")));
         bPoppy.setText("Poppy");
         bPoppy.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -82,6 +117,11 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
                 bPoppyActionPerformed(evt);
             }
         });
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(bPoppy, gridBagConstraints);
 
         bPrudence.setIcon(new javax.swing.ImageIcon(getClass().getResource("/eu/semaine/components/control/Prudence-100.jpg")));
         bPrudence.setText("Prudence");
@@ -94,6 +134,11 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
             }
         });
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        jPanel1.add(bPrudence, gridBagConstraints);
+
         bObadiah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/eu/semaine/components/control/Obadiah-100.jpg")));
         bObadiah.setText("Obadiah");
         bObadiah.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -105,65 +150,115 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup()
-                        .add(bObadiah)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(bPrudence))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup()
-                        .add(bSpike)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(bPoppy)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(bSpike)
-                    .add(bPoppy))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(bObadiah)
-                    .add(bPrudence))
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        jPanel1.add(bObadiah, gridBagConstraints);
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(92, 92, 92)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(lUserPresent)
-                            .add(bToggleUser))))
-                .addContainerGap(44, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(lUserPresent)
-                .add(5, 5, 5)
-                .add(bToggleUser)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
+        bIntro.setText("Introduction");
+        bIntro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bIntroActionPerformed(evt);
+            }
+        });
+
+        jPanel1.add(bIntro, new java.awt.GridBagConstraints());
+
+        bQuestions.setText("Evaluation");
+        bQuestions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bQuestionsActionPerformed(evt);
+            }
+        });
+
+        jPanel1.add(bQuestions, new java.awt.GridBagConstraints());
+
+        bIntroSpike.setText("Introduce Spike");
+        bIntroSpike.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bIntroSpikeActionPerformed(evt);
+            }
+        });
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        jPanel1.add(bIntroSpike, gridBagConstraints);
+
+        bIntroPoppy.setText("Introduce Poppy");
+        bIntroPoppy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bIntroPoppyActionPerformed(evt);
+            }
+        });
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        jPanel1.add(bIntroPoppy, gridBagConstraints);
+
+        bIntroPrudence.setText("Introduce Prudence");
+        bIntroPrudence.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bIntroPrudenceActionPerformed(evt);
+            }
+        });
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        jPanel1.add(bIntroPrudence, gridBagConstraints);
+
+        bIntroObadiah.setText("Introduce Obadiah");
+        bIntroObadiah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bIntroObadiahActionPerformed(evt);
+            }
+        });
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        jPanel1.add(bIntroObadiah, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(jSeparator1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        getContentPane().add(jPanel1, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bIntroPrudenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bIntroPrudenceActionPerformed
+    	component.setCharacterInfo(MODERATOR, PRUDENCE, ANNOUNCE);
+    }//GEN-LAST:event_bIntroPrudenceActionPerformed
+
+    private void bIntroObadiahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bIntroObadiahActionPerformed
+    	component.setCharacterInfo(MODERATOR, OBADIAH, ANNOUNCE);
+    }//GEN-LAST:event_bIntroObadiahActionPerformed
+
+    private void bIntroPoppyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bIntroPoppyActionPerformed
+    	component.setCharacterInfo(MODERATOR, POPPY, ANNOUNCE);
+    }//GEN-LAST:event_bIntroPoppyActionPerformed
+
+    private void bIntroSpikeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bIntroSpikeActionPerformed
+    	component.setCharacterInfo(MODERATOR, SPIKE, ANNOUNCE);
+    }//GEN-LAST:event_bIntroSpikeActionPerformed
+
+    private void bQuestionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bQuestionsActionPerformed
+    	component.setCharacterInfo(MODERATOR, null, QUESTIONS);
+    }//GEN-LAST:event_bQuestionsActionPerformed
+
+    private void bIntroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bIntroActionPerformed
+    	component.setCharacterInfo(MODERATOR, null, INTRO);
+    }//GEN-LAST:event_bIntroActionPerformed
 
     private void bObadiahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bObadiahActionPerformed
         component.setCurrentCharacter(OBADIAH);
@@ -200,43 +295,69 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
         String character = component.getCurrentCharacter();
         if (OBADIAH.equals(character)) {
             markCharacter(bObadiah);
-        } else {
-            unmarkCharacter(bObadiah);
-        }
-        if (POPPY.equals(character)) {
+        } else if (POPPY.equals(character)) {
             markCharacter(bPoppy);
-        } else {
-            unmarkCharacter(bPoppy);
-        }
-        if (PRUDENCE.equals(character)) {
+        } else if (PRUDENCE.equals(character)) {
             markCharacter(bPrudence);
-        } else {
-            unmarkCharacter(bPrudence);
-        }
-        if (SPIKE.equals(character)) {
+        } else if (SPIKE.equals(character)) {
             markCharacter(bSpike);
+        } else if (MODERATOR.equals(character)) {
+        	String dialogContext = component.getDialogContext();
+        	if (INTRO.equals(dialogContext)) {
+        		markCharacter(bIntro);
+        	} else if (QUESTIONS.equals(dialogContext)) {
+        		markCharacter(bQuestions);
+        	} else if (ANNOUNCE.equals(dialogContext)) {
+            	String nextCharacter = component.getNextCharacter();
+            	 if (OBADIAH.equals(nextCharacter)) {
+                     markCharacter(bIntroObadiah);
+                 } else if (POPPY.equals(nextCharacter)) {
+                     markCharacter(bIntroPoppy);
+                 } else if (PRUDENCE.equals(nextCharacter)) {
+                     markCharacter(bIntroPrudence);
+                 } else if (SPIKE.equals(nextCharacter)) {
+                     markCharacter(bIntroSpike);
+                 } else {
+                 	markCharacter(null); // unknown state, unmark all
+                 }
+        	} else {
+            	markCharacter(null); // unknown state, unmark all
+        	}
         } else {
-            unmarkCharacter(bSpike);
+        	markCharacter(null); // unknown state, unmark all
         }
     }
     
     private void markCharacter(JButton charButton)
     {
-        charButton.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-    }
-    
-    private void unmarkCharacter(JButton charButton)
-    {
-        charButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+    	JButton[] allButtons = new JButton[] {
+    		bIntro, bQuestions,
+    		bSpike, bIntroSpike, bPoppy, bIntroPoppy,
+    		bObadiah, bIntroObadiah, bPrudence, bIntroPrudence
+    	};
+    	for (JButton b : allButtons) {
+    		if (b.equals(charButton)) {
+    			b.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+    		} else {
+    			b.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+    		}
+    	}
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bIntro;
+    private javax.swing.JButton bIntroObadiah;
+    private javax.swing.JButton bIntroPoppy;
+    private javax.swing.JButton bIntroPrudence;
+    private javax.swing.JButton bIntroSpike;
     private javax.swing.JButton bObadiah;
     private javax.swing.JButton bPoppy;
     private javax.swing.JButton bPrudence;
+    private javax.swing.JButton bQuestions;
     private javax.swing.JButton bSpike;
     private javax.swing.JButton bToggleUser;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lUserPresent;
     // End of variables declaration//GEN-END:variables
     
