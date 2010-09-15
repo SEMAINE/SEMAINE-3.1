@@ -1,6 +1,7 @@
 package eu.semaine.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +16,35 @@ import eu.semaine.jms.JMSLogger;
 
 public class SEMAINEUtils 
 {
+	
+	/**
+	 * Get a config file as defined in the given system property. If the setting
+	 * in the system property is a relative path, then this path is interpreted as
+	 * relative to the location of the system config file.
+	 * @param configSystemProperty the name of a config setting containing the filename and path of the config file to load, e.g. "semaine.character-config".
+	 * @return a file object representing the requested config file, or null if the config file could not be found.
+	 */
+	public static File getConfigFile(String configSystemProperty) {
+		String filename = System.getProperty(configSystemProperty);
+		if (filename == null) {
+			return null;
+		}
+		File configFile = new File(filename);
+		if (!configFile.isAbsolute()) {
+			// relative filename is relative to the config folder
+			// (i.e., the same folder as the component runner config file)
+			String componentConfigFilename = System.getProperty("semaine.config-file");
+			assert componentConfigFilename != null;
+			File configFolder = new File(componentConfigFilename).getParentFile();
+			configFile = new File(configFolder, filename);
+		}
+		if (!configFile.exists()) {
+			return null;
+		}
+		return configFile;
+	}
+	
+	
     public static String getStreamAsString(InputStream inputStream, String encoding) throws IOException
     {
         return getReaderAsString(new InputStreamReader(inputStream, encoding));

@@ -44,17 +44,8 @@ public class CharacterConfigInfo {
 	
 	private static Map<String, CharacterConfigInfo> initialize() {
 		Map<String, CharacterConfigInfo> theMap = new TreeMap<String, CharacterConfigInfo>();
-		String filename = System.getProperty("semaine.character-config", "");
-		File configFile = new File(filename);
-		if (!configFile.isAbsolute()) {
-			// relative filename is relative to the config folder
-			// (i.e., the same folder as the component runner config file)
-			String componentConfigFilename = System.getProperty("semaine.config-file");
-			assert componentConfigFilename != null;
-			File configFolder = new File(componentConfigFilename).getParentFile();
-			configFile = new File(configFolder, filename);
-		}
-		if (!configFile.exists()) {
+		File configFile = SEMAINEUtils.getConfigFile("semaine.character-config");
+		if (configFile == null) {
 			throw new Error("No character config file given in property 'semaine.character-config' -- aborting.");
 		}
 		try {
@@ -122,6 +113,8 @@ public class CharacterConfigInfo {
 		}
 		return theMap;
 	}
+
+
 	
 	private static Map<String, Float> fillPredispositions(Element predispositionElement)
 	throws SystemConfigurationException {

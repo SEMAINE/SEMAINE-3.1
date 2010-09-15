@@ -5,6 +5,8 @@
 package eu.semaine.datatypes.stateinfo;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,6 +35,7 @@ import org.w3c.dom.Element;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.JMSLogger;
+import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -57,12 +60,12 @@ public abstract class StateInfo
 	private static Map<Type, XPathInfoMapper> getInfosByType()
 	{
 		Map<Type, List<String>> configSections = new HashMap<Type, List<String>>();
-		String path = System.getProperty("config.stateinfo");
-		URL config = null;
+		File configFile = SEMAINEUtils.getConfigFile("semaine.stateinfo-config");
+		if (configFile == null) {
+			throw new Error("No character config file given in property 'semaine.stateinfo-config' -- aborting.");
+		}
 		try {
-			if (path != null) config = new URL("file:"+path);
-			else config = StateInfo.class.getResource("stateinfo.config");
-			InputStream is = config.openStream();
+			FileInputStream is = new FileInputStream(configFile);
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			String line = null;
 			Type currentType = null;
@@ -90,7 +93,7 @@ public abstract class StateInfo
 				configSections.put(currentType, currentSection);
 			}
 		} catch (IOException ioe) {
-			throw new Error("Cannot load stateinfo config file from "+config.toString(), ioe);
+			throw new Error("Cannot load stateinfo config file from "+configFile.toString(), ioe);
 		}
 
 		Map<Type, XPathInfoMapper> t2m = new HashMap<Type, XPathInfoMapper>();
