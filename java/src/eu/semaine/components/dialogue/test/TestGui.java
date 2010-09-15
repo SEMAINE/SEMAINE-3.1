@@ -19,7 +19,6 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.jms.JMSException;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -121,7 +120,7 @@ public class TestGui extends Component
 		super("GUI");
 		userStateSender = new StateSender("semaine.data.state.user.behaviour", StateInfo.Type.UserState, getName());
 		senders.add(userStateSender);
-		emmaSender = new EmmaSender("semaine.data.state.user.emma", "GUI");
+		emmaSender = new EmmaSender("semaine.data.state.user.emma.words", "GUI");
 		senders.add(emmaSender); // so it can be started etc
 		//featureSender = new FeatureSender("semaine.data.analysis.features.voice", "", "GUI", 10);
 		//String[] featureNames = new String[2];
@@ -247,6 +246,11 @@ public class TestGui extends Component
 					} else if( stateInfo.getInfo("speaking").equals("false") ) {
 						userSpeakingState.setIcon(userListeningIcon);
 					}
+				}
+				if( stateInfo.hasInfo("vocalization") ) {
+					String voca = stateInfo.getInfo("vocalization");
+					lines.add("<i>"+voca+"</i>");
+					printLine();
 				}
 			}
 			if (stateInfo.getType() == StateInfo.Type.DialogState) {
@@ -469,13 +473,16 @@ public class TestGui extends Component
 		}
 		
 		String[] words = line.split(" ");
-		Document document = XMLTool.newDocument(EMMA.E_EMMA, EMMA.namespaceURI, EMMA.version);
+		Document document = XMLTool.newDocument(EMMA.ROOT_TAGNAME, EMMA.namespaceURI, EMMA.version);
+		document.getDocumentElement().setPrefix("emma");
 		Element sequence = XMLTool.appendChildElement(document.getDocumentElement(), EMMA.E_SEQUENCE );
-		sequence.setAttribute("offset-to-start", String.valueOf(meta.getTime()));
+		sequence.setAttribute(EMMA.A_OFFSET_TO_START, String.valueOf(meta.getTime()));
+		sequence.setPrefix("emma");
 		for( String word : words ) {
 			Element interpretation = XMLTool.appendChildElement(sequence, EMMA.E_INTERPRETATION);
-			interpretation.setAttribute("offset-to-start", String.valueOf(meta.getTime()));
-			interpretation.setAttribute("tokens", word);
+			interpretation.setPrefix("emma");
+			interpretation.setAttribute(EMMA.A_OFFSET_TO_START, String.valueOf(meta.getTime()));
+			interpretation.setAttribute(EMMA.A_TOKENS, word);
 			interpretation.setAttribute(EMMA.A_CONFIDENCE, "1");
 		}
 		try {
