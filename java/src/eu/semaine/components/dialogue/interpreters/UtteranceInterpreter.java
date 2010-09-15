@@ -88,7 +88,7 @@ public class UtteranceInterpreter extends Component
 	{
 		super("UtteranceInterpreter");
 
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.words");
 		receivers.add(emmaReceiver);
 		userStateReceiver = new StateReceiver( "semaine.data.state.user.behaviour", StateInfo.Type.UserState );
 		receivers.add(userStateReceiver);
