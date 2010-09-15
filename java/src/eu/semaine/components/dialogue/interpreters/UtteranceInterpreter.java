@@ -161,8 +161,8 @@ public class UtteranceInterpreter extends Component
 					}
 					detectedKeywords = detectedKeywords.replaceAll("<s>", "").replaceAll("</s>", "").trim();
 					detectedTimes = detectedTimes.trim();
-					DMLogger.getLogger().logWords( Long.parseLong( starttime ), detectedKeywords, detectedTimes, confidences );
 					if(starttime != null) {
+						DMLogger.getLogger().logWords( Long.parseLong( starttime ), detectedKeywords, detectedTimes, confidences );
 						DialogueAct act = analyseData( detectedKeywords, Long.parseLong( starttime ) );
 						sendDialogueAct( act );
 					}
