@@ -146,17 +146,17 @@ public class UtteranceInterpreter extends Component
 					String detectedTimes = "";
 					String confidences = "";
 					for( Element wordElem : wordElements ) {
-						if( wordElem.hasAttributeNS(EMMA.namespaceURI, EMMA.A_TOKENS) ) {
-							detectedKeywords = detectedKeywords + wordElem.getAttributeNS(EMMA.namespaceURI, EMMA.A_TOKENS) + " ";
+						if( wordElem.hasAttribute(EMMA.A_TOKENS) ) {
+							detectedKeywords = detectedKeywords + wordElem.getAttribute(EMMA.A_TOKENS) + " ";
 						}
-						if( wordElem.hasAttributeNS(EMMA.namespaceURI, EMMA.A_OFFSET_TO_START) ) {
-							detectedTimes = detectedTimes + wordElem.getAttributeNS(EMMA.namespaceURI, EMMA.A_OFFSET_TO_START) + " ";
+						if( wordElem.hasAttribute(EMMA.A_OFFSET_TO_START) ) {
+							detectedTimes = detectedTimes + wordElem.getAttribute(EMMA.A_OFFSET_TO_START) + " ";
 						}
-						if( wordElem.hasAttributeNS(EMMA.namespaceURI, EMMA.A_CONFIDENCE) ) {
-							confidences = confidences + wordElem.getAttributeNS(EMMA.namespaceURI, EMMA.A_CONFIDENCE) + " ";
+						if( wordElem.hasAttribute(EMMA.A_CONFIDENCE) ) {
+							confidences = confidences + wordElem.getAttribute(EMMA.A_CONFIDENCE) + " ";
 						}
-						if( starttime == null && wordSequence.hasAttributeNS(EMMA.namespaceURI, EMMA.A_OFFSET_TO_START) ) {
-							starttime = wordSequence.getAttributeNS(EMMA.namespaceURI, EMMA.A_OFFSET_TO_START);
+						if( starttime == null && wordSequence.hasAttribute(EMMA.A_OFFSET_TO_START) ) {
+							starttime = wordSequence.getAttribute(EMMA.A_OFFSET_TO_START);
 						}
 					}
 					detectedKeywords = detectedKeywords.replaceAll("<s>", "").replaceAll("</s>", "").trim();
