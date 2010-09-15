@@ -303,7 +303,7 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
             markCharacter(bSpike);
         } else if (MODERATOR.equals(character)) {
         	String dialogContext = component.getDialogContext();
-        	if (INTRO.equals(dialogContext)) {
+        	if (INTRO.equals(dialogContext) || dialogContext == null) {
         		markCharacter(bIntro);
         	} else if (QUESTIONS.equals(dialogContext)) {
         		markCharacter(bQuestions);
