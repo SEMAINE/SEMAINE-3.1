@@ -217,7 +217,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		
 		String speakingState = is.getString("Agent.speakingState");
 		Integer agentSpeakingStateTime = is.getInteger("Agent.speakingStateTime");
-		if( speakingState != null && agentSpeakingStateTime != null && speakingState.equals("speaking") && meta.getTime() >= agentSpeakingStateTime + 8000 ) {
+		if( speakingState != null && agentSpeakingStateTime != null && speakingState.equals("speaking") && (meta.getTime() >= agentSpeakingStateTime + 8000 || meta.getTime() < agentSpeakingStateTime) ) {
 			// Timeout
 			DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (timeout)" );
 			is.set("Agent.speakingState","listening");
