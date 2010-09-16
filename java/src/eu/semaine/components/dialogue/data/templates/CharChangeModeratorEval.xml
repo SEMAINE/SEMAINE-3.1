@@ -225,7 +225,7 @@
 		<effects>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
-				<argument value="Moderator" />
+				<argument value="Greta" />
 				<argument value="contextstate" />
 			</function>
 			<function name="sendDataAtEndOfTurn">
@@ -255,7 +255,7 @@
 		<effects>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
-				<argument value="Moderator" />
+				<argument value="Greta" />
 				<argument value="contextstate" />
 			</function>
 			<function name="sendDataAtEndOfTurn">
@@ -286,7 +286,7 @@
 		<effects>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
-				<argument value="Moderator" />
+				<argument value="Greta" />
 				<argument value="contextstate" />
 			</function>
 			<function name="sendDataAtEndOfTurn">
@@ -384,7 +384,7 @@
 		<effects>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
-				<argument value="Moderator" />
+				<argument value="Greta" />
 				<argument value="contextstate" />
 			</function>
 			<function name="sendDataAtEndOfTurn">
@@ -552,7 +552,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -575,7 +575,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -598,7 +598,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -634,7 +634,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -657,7 +657,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -680,7 +680,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -716,7 +716,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -739,7 +739,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -762,7 +762,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -798,7 +798,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -821,7 +821,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
@@ -844,7 +844,7 @@
    				<c_effects>
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
-						<c_argument value="Moderator" />
+						<c_argument value="Greta" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">

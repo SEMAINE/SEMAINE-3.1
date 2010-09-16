@@ -1,9 +1,9 @@
 <behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
 
 <!-- Introduction -->
-	<template id="Moderator_intro_1" name="Introduction after system-start">
+	<template id="Greta_intro_1" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.introState" comparator="not_exists" />
 			<indicator startvalue="0" comparator="equals" endvalue="1">
 				<icompare value1="$Agent.dialogContext" value2="Introduction" modifier="+1" />
@@ -16,13 +16,13 @@
 			<update name="DialogueState.introState" value="1" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#Moderator0" />
+			<argument name="response" value="#Greta0" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_intro_2" name="Introduction after system-start">
+	<template id="Greta_intro_2" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.introState" value2="1" />
 			<trigger value1="$Agent.speakingState" value2="listening" />
 		</preconditions>
@@ -30,13 +30,13 @@
 			<update name="DialogueState.introState" value="2" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#Moderator1" />
+			<argument name="response" value="#Greta1" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_intro_3" name="Introduction after system-start">
+	<template id="Greta_intro_3" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.introState" value2="2" />
 			<trigger value1="$Agent.speakingState" value2="listening" />
 		</preconditions>
@@ -49,14 +49,14 @@
 			</function>
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToPrudence" />
+			<argument name="response" value="#GretaPassToPrudence" />
 		</behaviour>
 	</template>
 	
 <!-- Evaluation -->
-	<template id="Moderator_eval_1" name="Introduction after system-start">
+	<template id="Greta_eval_1" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
 			<compare value1="$Agent.dialogContext" value2="Questions" />
 		</preconditions>
@@ -64,13 +64,13 @@
 			<update name="DialogueState.evalState" value="1" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#Moderator0" />
+			<argument name="response" value="#Greta0" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_eval_2" name="Introduction after system-start">
+	<template id="Greta_eval_2" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="1" />
 			<trigger value1="$Agent.speakingState" value2="listening" />
 		</preconditions>
@@ -78,13 +78,13 @@
 			<update name="DialogueState.evalState" value="2" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorEval1" />
+			<argument name="response" value="#GretaEval1" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_eval_3" name="Introduction after system-start">
+	<template id="Greta_eval_3" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="2" />
 			<compare value1="$Agent.nextCharacter" value2="Poppy" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -98,13 +98,13 @@
 			<remove name="DialogueState.evalState" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToPoppy" />
+			<argument name="response" value="#GretaPassToPoppy" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_eval_4" name="Introduction after system-start">
+	<template id="Greta_eval_4" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="2" />
 			<compare value1="$Agent.nextCharacter" value2="Prudence" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -118,13 +118,13 @@
 			<remove name="DialogueState.evalState" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToPrudence" />
+			<argument name="response" value="#GretaPassToPrudence" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_eval_5" name="Introduction after system-start">
+	<template id="Greta_eval_5" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="2" />
 			<compare value1="$Agent.nextCharacter" value2="Obadiah" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -138,13 +138,13 @@
 			<remove name="DialogueState.evalState" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToObadiah" />
+			<argument name="response" value="#GretaPassToObadiah" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_eval_6" name="Introduction after system-start">
+	<template id="Greta_eval_6" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="2" />
 			<compare value1="$Agent.nextCharacter" value2="Spike" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -158,14 +158,14 @@
 			<remove name="DialogueState.evalState" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToSpike" />
+			<argument name="response" value="#GretaPassToSpike" />
 		</behaviour>
 	</template>
 	
 <!-- Announcements -->
-	<template id="Moderator_Announce_1" name="Introduction after system-start">
+	<template id="Greta_Announce_1" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$Agent.nextCharacter" value2="Poppy" />
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
@@ -177,13 +177,13 @@
 			</function>
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToPoppy" />
+			<argument name="response" value="#GretaPassToPoppy" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_Announce_1" name="Introduction after system-start">
+	<template id="Greta_Announce_1" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$Agent.nextCharacter" value2="Prudence" />
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
@@ -195,13 +195,13 @@
 			</function>
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToPrudence" />
+			<argument name="response" value="#GretaPassToPrudence" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_Announce_1" name="Introduction after system-start">
+	<template id="Greta_Announce_1" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$Agent.nextCharacter" value2="Obadiah" />
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
@@ -213,13 +213,13 @@
 			</function>
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToObadiah" />
+			<argument name="response" value="#GretaPassToObadiah" />
 		</behaviour>
 	</template>
 	
-	<template id="Moderator_Announce_1" name="Introduction after system-start">
+	<template id="Greta_Announce_1" name="Introduction after system-start">
 		<preconditions>
-			<compare value1="$Agent.character" value2="Moderator" />
+			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$Agent.nextCharacter" value2="Spike" />
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
@@ -231,7 +231,7 @@
 			</function>
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#ModeratorPassToSpike" />
+			<argument name="response" value="#GretaPassToSpike" />
 		</behaviour>
 	</template>
 

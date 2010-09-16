@@ -12,14 +12,14 @@ Used response-arguments:
 
 <responses>
 
-<!-- +++++++++++++++++++++++ MODERATOR ++++++++++++++++++++++++++  -->
-		<response id="#Moderator0" response="Hi." />
-		<response id="#Moderator1" response="You have reached SAL, the Sensitive Artificial Listeners." />
-		<response id="#ModeratorEval1" response="What did you think of this conversation?" />
-		<response id="#ModeratorPassToPoppy" response="I am going to pass you to Poppy." />
-		<response id="#ModeratorPassToPrudence" response="I am going to pass you to Prudence." />
-		<response id="#ModeratorPassToObadiah" response="I am going to pass you to Obadiah." />
-		<response id="#ModeratorPassToSpike" response="I am going to pass you to Spike." />
+<!-- +++++++++++++++++++++++ Greta ++++++++++++++++++++++++++  -->
+		<response id="#Greta0" response="Hi." />
+		<response id="#Greta1" response="You have reached SAL, the Sensitive Artificial Listeners." />
+		<response id="#GretaEval1" response="What did you think of this conversation?" />
+		<response id="#GretaPassToPoppy" response="I am going to pass you to Poppy." />
+		<response id="#GretaPassToPrudence" response="I am going to pass you to Prudence." />
+		<response id="#GretaPassToObadiah" response="I am going to pass you to Obadiah." />
+		<response id="#GretaPassToSpike" response="I am going to pass you to Spike." />
 
 <!-- +++++++++++++++++++++++ GENERAL ++++++++++++++++++++++++++  -->
 		<response id="#goodbye" response="Ok, goodbye!" />
