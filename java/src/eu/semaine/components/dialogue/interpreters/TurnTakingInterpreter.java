@@ -99,6 +99,8 @@ public class TurnTakingInterpreter extends Component
 	
 	/* Most recent detected words */
 	private String currentDetectedKeywords = "";
+	
+	private long previousMetaTime;
 
 	/**
 	 * Constructor of TurnTakingInterpreter
@@ -115,6 +117,7 @@ public class TurnTakingInterpreter extends Component
 		charNumbers.put("obadiah", OBADIAH);
 		
 		waitingTime = 50;
+		previousMetaTime = meta.getTime();
 
 		userStateReceiver = new StateReceiver( "semaine.data.state.user.behaviour", StateInfo.Type.UserState);
 		receivers.add( userStateReceiver );
@@ -401,6 +404,13 @@ public class TurnTakingInterpreter extends Component
 	 */
 	public int getSpeakingIntentionValue()
 	{
+		if( meta.getTime() < previousMetaTime ) {
+			/* System clock reset */
+			userSpeakingStateTime = meta.getTime();
+			agentSpeakingStateTime = meta.getTime();
+		}
+		previousMetaTime = meta.getTime();
+		
 		int speakingIntention = 0;
 		
 		/* The components of the speaking intention value */
