@@ -4,6 +4,7 @@
  */
 package eu.semaine.components.nonverbal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,37 +52,64 @@ public class NonverbalFusion extends Component {
 			return;
 		}
 		SEMAINEEmmaMessage em = (SEMAINEEmmaMessage) m;
-		Element interpretation = em.getTopLevelInterpretation();
-		if (interpretation == null) {
-			return;
-		}
-		List<Element> nonverbals = em.getNonverbalElements(interpretation);
-		if (nonverbals.isEmpty()) {
-			log.debug("Ignoring EMMA without non-verbal information from "+em.getTopicName());
-			return;
-		}
-		log.debug("EMMA message with non-verbal info received from "+em.getTopicName());
-		float confidence = SEMAINEUtils.parseFloat(interpretation.getAttribute(EMMA.A_CONFIDENCE), 1);
-		for (Element nonverbal : nonverbals) {
-			float factor = verifyMultimodalConsistency(nonverbal);
-			confidence *= factor;
-		}
-		Document doc = XMLTool.newDocument(EMMA.ROOT_TAGNAME, EMMA.namespaceURI, EMMA.version);
-		doc.getDocumentElement().setPrefix("emma");
-		Element newInterpretation = XMLTool.appendChildElement(doc.getDocumentElement(), EMMA.E_INTERPRETATION);
-		newInterpretation.setPrefix("emma");
-		// Make sure confidence is in interval [0, 1]
-		confidence = Math.min(1, Math.max(0, confidence));
-		newInterpretation.setAttribute(EMMA.A_CONFIDENCE, String.valueOf(confidence));
-		String[] attributesToCopy = new String[] {EMMA.A_OFFSET_TO_START, EMMA.A_DURATION};
-		for (String attribute : attributesToCopy) {
-			if (interpretation.hasAttribute(attribute)) {
-				newInterpretation.setAttribute(attribute, interpretation.getAttribute(attribute));
+		// We currently preview only two types of structure for non-verbal EMMA messages:
+		// 1. a single top-level interpretation;
+		// 2. a top-level group containing a collection of interpretations.
+		// Sequences or one-of will be silently ignored.
+		List<Element> interpretations;
+		Element topInterpretation = em.getTopLevelInterpretation();
+		if (topInterpretation != null) {
+			interpretations = new ArrayList<Element>();
+			interpretations.add(topInterpretation);
+		} else {
+			Element group = em.getGroup();
+			if (group == null) {
+				return;
+			}
+			interpretations = XMLTool.getChildrenByLocalNameNS(group, EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+			if (interpretations.isEmpty()) {
+				return;
 			}
 		}
-		for (Element nonverbal : nonverbals) {
-			Element newNonverbal = (Element) doc.adoptNode(nonverbal);
-			newInterpretation.appendChild(newNonverbal);
+		log.debug("EMMA message with non-verbal info received from "+em.getTopicName());
+		Document doc = XMLTool.newDocument(EMMA.ROOT_TAGNAME, EMMA.namespaceURI, EMMA.version);
+		doc.getDocumentElement().setPrefix("emma");
+		Element parent = doc.getDocumentElement();
+		boolean hasNVInfo = false;
+		if (interpretations.size() > 1) {
+			parent = XMLTool.appendChildElement(parent, EMMA.E_GROUP);
+			parent.setPrefix("emma");
+		}
+		for (Element interpretation : interpretations) {
+			float confidence = SEMAINEUtils.parseFloat(interpretation.getAttribute(EMMA.A_CONFIDENCE), 1);
+			List<Element> nonverbals = em.getNonverbalElements(interpretation);
+			if (nonverbals.isEmpty()) {
+				continue;
+			}
+			hasNVInfo = true;
+			for (Element nonverbal : nonverbals) {
+				float factor = verifyMultimodalConsistency(nonverbal);
+				confidence *= factor;
+			}
+			Element newInterpretation = XMLTool.appendChildElement(parent, EMMA.E_INTERPRETATION);
+			newInterpretation.setPrefix("emma");
+			// Make sure confidence is in interval [0, 1]
+			confidence = Math.min(1, Math.max(0, confidence));
+			newInterpretation.setAttribute(EMMA.A_CONFIDENCE, String.valueOf(confidence));
+			String[] attributesToCopy = new String[] {EMMA.A_OFFSET_TO_START, EMMA.A_DURATION};
+			for (String attribute : attributesToCopy) {
+				if (interpretation.hasAttribute(attribute)) {
+					newInterpretation.setAttribute(attribute, interpretation.getAttribute(attribute));
+				}
+			}
+			for (Element nonverbal : nonverbals) {
+				Element newNonverbal = (Element) doc.adoptNode(nonverbal);
+				newInterpretation.appendChild(newNonverbal);
+			}
+		}
+		if (!hasNVInfo) {
+			log.debug("Ignoring EMMA without non-verbal information from "+em.getTopicName());
+			return;
 		}
 		emmaSender.sendXML(doc, em.getUsertime(), em.getEventType(), em.getContentID(), em.getContentCreationTime());
 	}

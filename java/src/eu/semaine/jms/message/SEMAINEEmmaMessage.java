@@ -52,6 +52,10 @@ public class SEMAINEEmmaMessage extends SEMAINEXMLMessage {
 		return XMLTool.getChildElementByLocalNameNS(doc.getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);
 	}
 
+	public Element getGroup()
+	{
+		return XMLTool.getChildElementByLocalNameNS(doc.getDocumentElement(), EMMA.E_GROUP, EMMA.namespaceURI);
+	}
 
 	/**
 	 * Get the emotion elements that are children of the given interpretation element.

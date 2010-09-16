@@ -20,6 +20,7 @@ public class EMMA
 	public static final String E_INTERPRETATION = "interpretation";
 	public static final String E_ONEOF = "one-of";
 	public static final String E_SEQUENCE = "sequence";
+	public static final String E_GROUP = "group";
 	
 	// Attributes
 	public static final String A_START = "emma:start";
