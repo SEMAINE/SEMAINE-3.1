@@ -216,7 +216,7 @@ public class SpeechPreprocessor extends Component
 		}
 		Locale characterLocale = charInfo.getVoiceLocale();
 		if (messageLocale != null && !messageLocale.equals(characterLocale)) {
-			JMSLogger.getLog("SpeechPreprocessor").warn("Message locale '"+messageLocale+"' is different from current character locale '"
+			JMSLogger.getLog("SpeechPreprocessor").warn("Message locale '"+messageLocale+"' is different from character '"+character+"' locale '"
 					+characterLocale+"' -- will ignore character.");
 			voice = Voice.getDefaultVoice(messageLocale);
 			if (voice == null) {
