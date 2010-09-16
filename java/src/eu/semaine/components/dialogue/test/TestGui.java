@@ -177,7 +177,7 @@ public class TestGui extends Component
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 			boolean isFML = "FML".equals(xm.getDatatype());
 			if (isFML) {
-				Element bml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
+				Element bml = XMLTool.getChildElementByLocalNameNS(xm.getDocument().getDocumentElement(), BML.E_BML, BML.namespaceURI);
 				if( bml != null ) {
 					String id;
 					if( bml.hasAttribute(BML.A_ID) ) {
@@ -185,7 +185,7 @@ public class TestGui extends Component
 					} else {
 						id = "Unknown";
 					}
-					Element speech = XMLTool.getChildElementByTagNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
+					Element speech = XMLTool.getChildElementByLocalNameNS(bml, BML.E_SPEECH, BML.namespaceURI);
 					if( speech != null ) {
 						try {
 							if( currUtterance.length() != 0 ) {
@@ -202,9 +202,9 @@ public class TestGui extends Component
 						//printLine( "+ " + speech.getTextContent() );
 					}
 				}
-				Element fml = XMLTool.getChildElementByTagNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
+				Element fml = XMLTool.getChildElementByLocalNameNS(xm.getDocument().getDocumentElement(), FML.E_FML, FML.namespaceURI);
 				if( fml != null ) {
-					Element backchannel = XMLTool.getChildElementByTagNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
+					Element backchannel = XMLTool.getChildElementByLocalNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
 //					if( backchannel != null ) {
 //						if( currUtterance.length() != 0 ) {
 //							outputText = outputText + "<br>" + currUtterance;
