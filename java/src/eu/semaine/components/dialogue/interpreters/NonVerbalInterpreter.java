@@ -5,7 +5,10 @@
 
 package eu.semaine.components.dialogue.interpreters;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +46,8 @@ public class NonVerbalInterpreter extends Component
 {
 	/* Threshold values */
 	private final static double THRESHOLD_HEADGESTURE = 0.3;
-	private final static double THRESHOLD_PITCH = 0.3;
-	private final static double THRESHOLD_VOCALIZATION = 0.3;
+	private final static double THRESHOLD_PITCH = 0.1;
+	private final static double THRESHOLD_VOCALIZATION = 0.1;
 	private final static double THRESHOLD_FACEPRESENCE = 0.3;
 	private final static double THRESHOLD_ACTIONUNITS = 0.3;
 	private final static double THRESHOLD_SPEAKING = 0.3;
@@ -52,6 +55,8 @@ public class NonVerbalInterpreter extends Component
 	/* Senders and Receivers */
 	private EmmaReceiver emmaReceiver;
 	private StateSender userStateSender;
+	
+	private HashSet<Integer> activeActionUnits = new HashSet<Integer>();
 	
 	/**
 	 * Constructor of NonVerBalInterpreter
@@ -76,91 +81,124 @@ public class NonVerbalInterpreter extends Component
 		if( m instanceof SEMAINEEmmaMessage ) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			Element interpretation = em.getTopLevelInterpretation();
-			double confidence;
-			if( interpretation.hasAttribute(EMMA.A_CONFIDENCE) ) {
-				confidence = Double.parseDouble(interpretation.getAttribute(EMMA.A_CONFIDENCE));
-			} else {
-				return;
-			}
+			if( interpretation != null ) {
 			
-			/* Process BML elements */
-			List<Element> bmlElements = em.getBMLElements(interpretation);
-			for( Element bmlElement : bmlElements ) {
-				Element headElement = XMLTool.getChildElementByTagNameNS(bmlElement, BML.E_HEAD, BML.namespaceURI);
+				double confidence;
+				if( interpretation.hasAttribute(EMMA.A_CONFIDENCE) ) {
+					confidence = Double.parseDouble(interpretation.getAttribute(EMMA.A_CONFIDENCE));
+				} else {
+					return;
+				}
 				
-				/* Process head movements */
-				if( headElement != null && headElement.hasAttribute(BML.A_TYPE) && headElement.hasAttribute(BML.A_START) && headElement.hasAttribute(BML.A_END) ) {
-					String moveType = headElement.getAttribute(BML.A_TYPE);
-					String moveStart = headElement.getAttribute(BML.A_START);
-					String moveEnd = headElement.getAttribute(BML.A_END);
-					String[] shortNames = {"headGesture","headGestureStarted","headGestureStopped"};
-					String[] values = {moveType, moveStart, moveEnd};
-					if( confidence >= THRESHOLD_HEADGESTURE ) {
-						sendUserStateChange(shortNames, values);
+				/* Process BML elements */
+				List<Element> bmlElements = em.getBMLElements(interpretation);
+				for( Element bmlElement : bmlElements ) {
+					Element headElement = XMLTool.getChildElementByTagNameNS(bmlElement, BML.E_HEAD, BML.namespaceURI);
+					
+					/* Process head movements */
+					if( headElement != null && headElement.hasAttribute(BML.A_TYPE) && headElement.hasAttribute(BML.A_START) && headElement.hasAttribute(BML.A_END) ) {
+						String moveType = headElement.getAttribute(BML.A_TYPE);
+						String moveStart = headElement.getAttribute(BML.A_START);
+						String moveEnd = headElement.getAttribute(BML.A_END);
+						String[] shortNames = {"headGesture","headGestureStarted","headGestureStopped"};
+						String[] values = {moveType, moveStart, moveEnd};
+						if( confidence >= THRESHOLD_HEADGESTURE ) {
+							sendUserStateChange(shortNames, values);
+						}
 					}
 				}
 				
-				Element faceElement = XMLTool.getChildElementByTagNameNS(bmlElement, BML.E_FACE, BML.namespaceURI);
-				
-				// TODO: the 'au' attribute should be part of the BML specification
-				/* Process Action Units */
-				if( faceElement != null && faceElement.hasAttribute("au") ) {
-					String auList = faceElement.getAttribute("au");
-					if( confidence >= THRESHOLD_ACTIONUNITS ) {
-						sendUserStateChange("facialActionUnits", auList);
+				/* Process Speech/Non-Speech */
+				List<Element> speakingElements = em.getSpeakingElements(interpretation);
+				for( Element speakingElement : speakingElements ) {
+					if( speakingElement.hasAttribute(SemaineML.A_STATUS_CHANGE) ) {
+						String speaking = speakingElement.getAttribute(SemaineML.A_STATUS_CHANGE);
+						if( confidence >= THRESHOLD_SPEAKING ) {
+							if( speaking.equals("start") ) {
+								sendUserStateChange("speaking", "true");
+							} else {
+								sendUserStateChange("speaking", "false");
+							}
+						}
 					}
 				}
-			}
-			
-			/* Process Speech/Non-Speech */
-			List<Element> speakingElements = em.getSpeakingElements(interpretation);
-			for( Element speakingElement : speakingElements ) {
-				if( speakingElement.hasAttribute(SemaineML.A_STATUS_CHANGE) ) {
-					String speaking = speakingElement.getAttribute(SemaineML.A_STATUS_CHANGE);
-					if( confidence >= THRESHOLD_SPEAKING ) {
-						if( speaking.equals("start") ) {
-							sendUserStateChange("speaking", "true");
-						} else {
-							sendUserStateChange("speaking", "false");
+				
+				/* Process Pitch elements */
+				List<Element> pitchElements = em.getPitchElements(interpretation);
+				for( Element pitchElement : pitchElements ) {
+					if( pitchElement.hasAttribute(SemaineML.A_DIRECTION) ) {
+						String pitchDirection = pitchElement.getAttribute(SemaineML.A_DIRECTION);
+						if( confidence >= THRESHOLD_PITCH ) {
+							sendUserStateChange("pitchDirection", pitchDirection);
+						}
+					}
+				}
+				
+				/* Process Non-verbal vocalisations */
+				List<Element> vocalizationElements = em.getVocalizationElements(interpretation);
+				for( Element vocalizationElement : vocalizationElements ) {
+					if( vocalizationElement.hasAttribute(SemaineML.A_NAME) ) {
+						String vocalization = vocalizationElement.getAttribute(SemaineML.A_NAME);
+						if( confidence >= THRESHOLD_VOCALIZATION ) {
+							sendUserStateChange("vocalization", vocalization);
+						}
+					}
+				}
+				
+				/* Process Face Presence */
+				List<Element> facePresenceElements = em.getFacePresentElements(interpretation);
+				for( Element facePresenceElement : facePresenceElements ) {
+					if( facePresenceElement.hasAttribute(SemaineML.A_STATUS_CHANGE) ) {
+						String facePresence = facePresenceElement.getAttribute(SemaineML.A_STATUS_CHANGE);
+						if( confidence >= THRESHOLD_FACEPRESENCE ) {
+							if( facePresence.equals("start") ) {
+								sendUserStateChange("facePresent", "true");
+							} else {
+								sendUserStateChange("facePresent", "false");
+							}
 						}
 					}
 				}
 			}
 			
-			/* Process Pitch elements */
-			List<Element> pitchElements = em.getPitchElements(interpretation);
-			for( Element pitchElement : pitchElements ) {
-				if( pitchElement.hasAttribute(SemaineML.A_DIRECTION) ) {
-					String pitchDirection = pitchElement.getAttribute(SemaineML.A_DIRECTION);
-					if( confidence >= THRESHOLD_PITCH ) {
-						sendUserStateChange("pitchDirection", pitchDirection);
+			/* Process Action Units */
+			Element group = em.getGroup();
+			if( group != null ) {
+				HashSet<Integer> auList = new HashSet<Integer>();
+				String time = ""+meta.getTime();
+				
+				List<Element> interpretationList = XMLTool.getChildrenByLocalNameNS(group, EMMA.E_INTERPRETATION, EMMA.namespaceURI);
+				for( Element inter : interpretationList ) {
+					double conf = 0;
+					if( inter.hasAttribute(EMMA.A_OFFSET_TO_START) ) {
+						time = inter.getAttribute(EMMA.A_OFFSET_TO_START);
 					}
-				}
-			}
-			
-			/* Process Non-verbal vocalisations */
-			List<Element> vocalizationElements = em.getVocalizationElements(interpretation);
-			for( Element vocalizationElement : vocalizationElements ) {
-				if( vocalizationElement.hasAttribute(SemaineML.A_NAME) ) {
-					String vocalization = vocalizationElement.getAttribute(SemaineML.A_NAME);
-					if( confidence >= THRESHOLD_VOCALIZATION ) {
-						sendUserStateChange("vocalization", vocalization);
+					if( inter.hasAttribute(EMMA.A_CONFIDENCE) ) {
+						conf = Double.parseDouble(inter.getAttribute(EMMA.A_CONFIDENCE));
 					}
-				}
-			}
-			
-			/* Process Face Presence */
-			List<Element> facePresenceElements = em.getFacePresentElements(interpretation);
-			for( Element facePresenceElement : facePresenceElements ) {
-				if( facePresenceElement.hasAttribute(SemaineML.A_STATUS_CHANGE) ) {
-					String facePresence = facePresenceElement.getAttribute(SemaineML.A_STATUS_CHANGE);
-					if( confidence >= THRESHOLD_FACEPRESENCE ) {
-						if( facePresence.equals("start") ) {
-							sendUserStateChange("facePresent", "true");
-						} else {
-							sendUserStateChange("facePresent", "false");
+					List<Element> bmlList = em.getBMLElements(inter);
+					for( Element bml : bmlList ) {
+						Element face = XMLTool.getChildElementByTagNameNS(bml, BML.E_FACE, BML.namespaceURI);
+						if( face != null && face.hasAttribute("au") ) {
+							if( conf >= THRESHOLD_ACTIONUNITS ) {
+								auList.add(Integer.parseInt(face.getAttribute("au").replaceAll("au", "")));
+							}
 						}
 					}
+				}
+				if( ! auList.equals(activeActionUnits) ) {
+					activeActionUnits = auList;
+					ArrayList<Integer> ausToSend = new ArrayList<Integer>();
+					ausToSend.addAll(activeActionUnits);
+					Collections.sort(ausToSend);
+					String aus = "";
+					for( Integer au : ausToSend ) {
+						aus = aus + au + " ";
+					}
+					aus = aus.trim();
+					String[] shortNames = {"facialActionUnits","facialActionUnitsStarted"};
+					String[] values = {aus, time};
+					sendUserStateChange(shortNames, values);
 				}
 			}
 		}

@@ -125,6 +125,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	
 	private int queueWaitingCounter = 0;
 	
+	private long prevTime;
+	
 	/**
 	 * Constructor of ResponseActionProposer
 	 * Initializes all Senders and Receivers, and initializes everything.
@@ -194,6 +196,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 
 		myClass = this;
 		waitingTime = 50;
+		prevTime = meta.getTime();
 		
 		summarizeEmotionEvents();
 	}
@@ -212,12 +215,22 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 */
 	public void act() throws JMSException
 	{
+		if( meta.getTime() < prevTime ) {
+			is.set("Agent.speakingState","listening");
+			is.set("Agent.speakingStateTime", (int)meta.getTime());
+			is.set("User.speakingState","waiting");
+			sendData("agentTurnState", "listening", "dialogstate");
+			preparedResponses.clear();
+			preparingResponses.clear();
+		}
+		prevTime = meta.getTime();
+		
 		/* Summarize all detected AudioFeatures and put this in the InformationState */
 		summarizeFeatures();
 		
 		String speakingState = is.getString("Agent.speakingState");
 		Integer agentSpeakingStateTime = is.getInteger("Agent.speakingStateTime");
-		if( speakingState != null && agentSpeakingStateTime != null && speakingState.equals("speaking") && (meta.getTime() >= agentSpeakingStateTime + 8000 || meta.getTime() < agentSpeakingStateTime) ) {
+		if( speakingState != null && agentSpeakingStateTime != null && (speakingState.equals("speaking") || speakingState.equals("preparing")) && (meta.getTime() >= agentSpeakingStateTime + 8000 || meta.getTime() < agentSpeakingStateTime) ) {
 			// Timeout
 			DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (timeout)" );
 			is.set("Agent.speakingState","listening");
