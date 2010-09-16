@@ -27,7 +27,7 @@
     <!-- patience when taking the turn, lower is more likely to interrupt -->
     <setting name="TurnTakingThreshold" value="60"/>
   </character>
-  <character name="Prudence" is-default="true">
+  <character name="Prudence">
     <voice name="dfki-prudence dfki-prudence-hsmm" locale="en-GB"/>
     <predisposition>
       <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/communicative-functions.xml">
@@ -111,7 +111,7 @@
     <!-- patience when taking the turn, lower is more likely to interrupt -->
     <setting name="TurnTakingThreshold" value="40"/>
   </character>
-  <character name="Moderator">
+  <character name="Greta" is-default="true">
     <voice name="cmu-slt-hsmm" locale="en-US"/>
   </character>
 </character-config>

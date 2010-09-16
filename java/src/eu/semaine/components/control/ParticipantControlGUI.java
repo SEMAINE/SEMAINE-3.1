@@ -21,7 +21,7 @@ public class ParticipantControlGUI extends javax.swing.JFrame {
     public static final String POPPY = "Poppy";
     public static final String PRUDENCE = "Prudence";
     public static final String SPIKE = "Spike";
-    public static final String MODERATOR = "Moderator";
+    public static final String MODERATOR = "Greta";
     // Dialog contexts
     public static final String ANNOUNCE = "AnnounceNextCharacter";
     public static final String INTRO = "Introduction";
