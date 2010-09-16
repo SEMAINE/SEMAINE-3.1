@@ -160,6 +160,7 @@ public class XMLTool
     /**
      * Create a child element with the given name and append it below node.
      * The new element will have the same namespace as node.
+     * If node has a namespace prefix, the new element will also use that namespace prefix.
      * @param node
      * @param childName
      * @return the child element
@@ -170,7 +171,12 @@ public class XMLTool
 			throw new NullPointerException("Received null node");
 		if (childName == null)
 			throw new NullPointerException("Received null childName");
-	    return (Element) node.appendChild(createElement(node.getOwnerDocument(), childName, node.getNamespaceURI()));
+	    Element child = (Element) node.appendChild(createElement(node.getOwnerDocument(), childName, node.getNamespaceURI()));
+	    String parentPrefix = node.getPrefix();
+	    if (parentPrefix != null) {
+	    	child.setPrefix(parentPrefix);
+	    }
+	    return child;
 	}
 
     /**

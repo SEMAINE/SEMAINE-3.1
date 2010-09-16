@@ -139,6 +139,9 @@ public class AgentMentalStateInterpreter extends Component
 				break;
 			}
 			if( stateChanged ) {
+				if (mentalState.isEmpty()) {
+					System.out.println("Gonna crash");
+				}
 				sendMentalState();
 			}
 		}

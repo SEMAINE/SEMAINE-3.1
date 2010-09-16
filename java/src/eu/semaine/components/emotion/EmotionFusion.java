@@ -248,6 +248,7 @@ public class EmotionFusion extends Component {
 	 */
 	private Document createEmotionXML(List<EmotionDataSet> emotions) {
 		Document doc = XMLTool.newDocument(EMMA.ROOT_TAGNAME, EMMA.namespaceURI, EMMA.version);
+		doc.getDocumentElement().setPrefix("emma");
 		Element interpretation = XMLTool.appendChildElement(doc.getDocumentElement(), EMMA.E_INTERPRETATION);
 		// Put all EmotionDataSets using the same vocabularyURI into the same <emotion>:
 		Map<String, Element> vocabularyURI2Emotion = new HashMap<String, Element>();
@@ -257,6 +258,7 @@ public class EmotionFusion extends Component {
 			Element emotion = vocabularyURI2Emotion.get(eds.getVocabularyURI());
 			if (emotion == null) {
 				emotion = XMLTool.appendChildElement(interpretation, EmotionML.E_EMOTION, EmotionML.namespaceURI);
+				emotion.setPrefix("emo");
 				// reuse the <emotion> for every descriptionType except EmotionML.E_CATEGORY:
 				if (!EmotionML.E_CATEGORY.equals(descriptionElementName)) {
 					vocabularyURI2Emotion.put(eds.getVocabularyURI(), emotion);
