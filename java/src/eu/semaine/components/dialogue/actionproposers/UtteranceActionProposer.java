@@ -945,8 +945,10 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		Element root = doc.getDocumentElement();
 
 		Element bml = XMLTool.appendChildElement(root, BML.E_BML, BML.namespaceURI);
+		bml.setPrefix("bml");
 		bml.setAttribute(BML.A_ID, "bml_uap_"+output_counter); 
 		Element fml = XMLTool.appendChildElement(root, FML.E_FML, FML.namespaceURI);
+		fml.setPrefix("fml");
 		fml.setAttribute(FML.A_ID, "fml_uap_"+output_counter);
 		
 		/* Speech Element */
@@ -961,12 +963,14 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		String[] words = responseString.split(" ");
 		for( String word : words ) {
 			Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
+			mark.setPrefix("ssml");
 			mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
 			Node text = doc.createTextNode(word);
 			speech.appendChild(text);
 			counter++;
 		}
 		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
+		mark.setPrefix("ssml");
 		mark.setAttribute(SSML.A_NAME, "speech_uap_"+output_counter+":tm"+counter);
 		
 		/* Add the arguments to the FML-document */

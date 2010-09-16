@@ -21,7 +21,7 @@ exclude-result-prefixes="bml mary #default"
 
 
   <xsl:template match="bml:bml/bml:speech">
-    <speech> 
+    <bml:speech> 
 	<xsl:copy-of select="@id"/>  
 	<xsl:copy-of select="@type"/> 
 	<xsl:copy-of select="@voice"/> 
@@ -39,7 +39,7 @@ exclude-result-prefixes="bml mary #default"
        	</xsl:if>
     </xsl:for-each> 
         
-    </speech>
+    </bml:speech>
   </xsl:template> 
 
 
