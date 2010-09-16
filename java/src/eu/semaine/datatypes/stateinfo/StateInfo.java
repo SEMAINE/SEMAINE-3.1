@@ -327,7 +327,11 @@ public abstract class StateInfo
 	protected void createDocumentFromInfo()
 	throws SystemConfigurationException
 	{
+		if (info.isEmpty()) {
+			throw new SystemConfigurationException("Cannot create document from empty info");
+		}
 		doc = null;
+		
 		XPathInfoMapper xpathInfos = infosByType.get(type);
 		NamespaceContext namespaceContext = xpathInfos.getNamespaceContext();
 		Map<String, String> infoNames = xpathInfos.getExpressionMap();
