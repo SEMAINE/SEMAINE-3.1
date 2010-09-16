@@ -154,7 +154,8 @@ public class CharacterConfigInfo {
 	/**
 	 * The public entry point for getting access to character info by name.
 	 * @param characterName the character's name.
-	 * @return a CharacterConfigInfo object describing the Character's properties.
+	 * @return a CharacterConfigInfo object describing the Character's properties,
+	 * or null if there is no character with that name.
 	 */
 	public static CharacterConfigInfo getInfo(String characterName) {
 		return allInfos.get(characterName);

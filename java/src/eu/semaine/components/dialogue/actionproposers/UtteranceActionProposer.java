@@ -55,6 +55,7 @@ import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.Sender;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.system.CharacterConfigInfo;
+import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;
 
 public class UtteranceActionProposer extends Component implements BehaviourClass
@@ -232,6 +233,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		Integer agentSpeakingStateTime = is.getInteger("Agent.speakingStateTime");
 		if( speakingState != null && agentSpeakingStateTime != null && (speakingState.equals("speaking") || speakingState.equals("preparing")) && (meta.getTime() >= agentSpeakingStateTime + 8000 || meta.getTime() < agentSpeakingStateTime) ) {
 			// Timeout
+			log.debug("Timeout -- going back to listening state");
 			DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (timeout)" );
 			is.set("Agent.speakingState","listening");
 			is.set("Agent.speakingStateTime", (int)meta.getTime());
@@ -263,6 +265,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				}
 				
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type="+state.getTemplate().getId()+", utterance="+latestResponse.getResponse());
+				log.debug("action type: "+state.getTemplate().getId());
 			}
 		}
 		if( queueWaitingCounter > 0 ) queueWaitingCounter--;
@@ -298,6 +301,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			/* Process Agent-animation updates */
 			if( !xm.getText().contains("fml_lip") ) {
 				if( speechStarted(xm) ) {
+					log.debug("Agent is currently speaking");
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
 					is.set("Agent.speakingState","speaking");
 					is.set("Agent.speakingStateTime", (int)meta.getTime());
@@ -309,6 +313,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				}
 
 				if( speechReady(xm) ) {
+					log.debug("Agent utterance has finished");
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (feedback)");
 					is.set("Agent.speakingState","listening");
 					is.set("Agent.speakingStateTime", (int)meta.getTime());
@@ -344,6 +349,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	    			String keyToRemove = null;
 	    			for( String key : preparingResponses.keySet() ) {
 	    				if( preparingResponses.get(key).equals(id) ) {
+	    					log.debug("Preparation complete: "+id);
 	    					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtterancePrepared");
 	    					preparedResponses.put(key, id);
 	    					keyToRemove = key;
@@ -848,6 +854,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				latestResponse = currResponse;
 				sendSpeaking();
 				DMLogger.getLogger().log(meta.getTime(), "Using Prepared Response " + id);
+				log.debug("Trigger prepared response "+id+" '"+currResponse.getResponse()+"'");
 				commandSender.sendTextMessage("STARTAT 0\nPRIORITY 0.5\nLIFETIME 5000\n", meta.getTime(), Event.single, id, meta.getTime());
 				preparedResponses.remove(currHash);
 			}catch( JMSException e ){
@@ -860,6 +867,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				latestResponse = currResponse;
 				sendSpeaking();
 				System.out.println(docToString(doc));
+				log.debug("Generating directly: '"+currResponse.getResponse()+"'");
 				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
 			}catch( JMSException e ) {
 				// Handle
@@ -901,9 +909,11 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				// TODO: Uncomment and test
 				System.out.println(docToString(doc));
 				queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
-				preparingResponses.put(hash, "bml_uap_"+output_counter);
+				String prepID = "bml_uap_"+output_counter;
+				preparingResponses.put(hash, prepID);
 				DMLogger.getLogger().log(meta.getTime(),"PreparationHash = " + hash);
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:PrepareUtterance, utterance=" + currResponse.getResponse() );
+				log.debug("Preparing response "+prepID+" '"+currResponse.getResponse()+"'");
 			}catch( JMSException e ){
 				// TODO Handle
 			}
@@ -943,7 +953,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		Element speech = XMLTool.appendChildElement(bml, BML.E_SPEECH);
 		speech.setAttribute(BML.A_ID, "speech_uap_"+output_counter);
 		speech.setAttribute(BML.E_TEXT, responseString);
-		speech.setAttribute(BML.E_LANGUAGE, "en-GB");
+		speech.setAttribute(BML.E_LANGUAGE, getCharacterLocale());
 		speech.setAttribute("voice", "activemary");
 		
 		/* Mark Elements */
@@ -1049,6 +1059,17 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			}
 		}
 		return doc;
+	}
+	
+	/**
+	 * Get a String representation of the current character's locale, suitable for entering into XML.
+	 * @return the current Character's locale, or "en-GB" as a default.
+	 */
+	private String getCharacterLocale() {
+		String charName = is.getString("Agent.character");
+		CharacterConfigInfo charInfo = CharacterConfigInfo.getInfo(charName);
+		String locale = charInfo != null ? SEMAINEUtils.locale2xmllang(charInfo.getVoiceLocale()) : "en-GB";
+		return locale;
 	}
 
 	/**
