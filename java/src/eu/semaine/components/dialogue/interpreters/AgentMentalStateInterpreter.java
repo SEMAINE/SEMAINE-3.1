@@ -259,8 +259,9 @@ public class AgentMentalStateInterpreter extends Component
 		for( MentalState key : mentalState.keySet() ) {
 			mentalStateInfo.put(key.toString(), ""+mentalState.get(key));
 		}
-		
-		AgentStateInfo asi = new AgentStateInfo(mentalStateInfo);	
-		mentalStateSender.sendStateInfo(asi, meta.getTime());
+		if( mentalState.size() > 0 ) {
+			AgentStateInfo asi = new AgentStateInfo(mentalStateInfo);	
+			mentalStateSender.sendStateInfo(asi, meta.getTime());
+		}
 	}
 }
