@@ -519,7 +519,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					List<String> aus = Arrays.asList(facialExpressions.split(" "));
 					for( String au : aus ) {
 						Boolean b = turnActionUnits.get(au);
-						if( b != null && b == false ) {
+						if( b == null || (b != null && b == false) ) {
 							turnActionUnits.put(au,true);
 							Integer counter = is.getInteger("UserTurn.AU.nrOfAU" + au);
 							if( counter == null ) counter = new Integer(0);

@@ -146,7 +146,7 @@ public class EmotionInterpreter extends Component
 		emotions[3] = 0;
 		boolean emotionsChanged = false;
 
-
+		//System.out.println(em.getText());
 		/* Reading valence and arousal */
 		Element interpretation = XMLTool.getChildElementByLocalNameNS(em.getDocument().getDocumentElement(), EMMA.E_INTERPRETATION, EMMA.namespaceURI);
 		if( interpretation != null ) {
@@ -157,14 +157,20 @@ public class EmotionInterpreter extends Component
 					String name = dim.getAttribute(EmotionML.A_NAME);
 					float value = Float.parseFloat(dim.getAttribute(EmotionML.A_VALUE));
 					if (name.equals(EmotionML.VOC_FSRE_DIMENSION_VALENCE)) {
-						emotions[0] = EmotionML.fsreArousal2SemaineArousal(value);
-						emotionsChanged = true;
+						if( Float.parseFloat(dim.getAttribute(EmotionML.A_CONFIDENCE)) >= VALENCE_THRESHOLD ) {
+							emotions[0] = EmotionML.fsreValence2SemaineValence(value);
+							emotionsChanged = true;
+						}
 					} else if (name.equals(EmotionML.VOC_FSRE_DIMENSION_AROUSAL)) {
-						emotions[1] = EmotionML.fsreValence2SemaineValence(value);
-						emotionsChanged = true;
+						if( Float.parseFloat(dim.getAttribute(EmotionML.A_CONFIDENCE)) >= AROUSAL_THRESHOLD ) {
+							emotions[1] = EmotionML.fsreArousal2SemaineArousal(value);
+							emotionsChanged = true;
+						}
 					}  else if (name.equals(EmotionML.VOC_FSRE_DIMENSION_POTENCY)) {
-						emotions[2] = EmotionML.fsreValence2SemaineValence(value);
-						emotionsChanged = true;
+						if( Float.parseFloat(dim.getAttribute(EmotionML.A_CONFIDENCE)) >= POTENCY_THRESHOLD ) {
+							emotions[2] = EmotionML.fsrePotency2SemainePower(value);
+							emotionsChanged = true;
+						}
 					}
 				}
 			}
@@ -210,7 +216,8 @@ public class EmotionInterpreter extends Component
 				emotionsChanged = true;
 			}
 		}
-
+		
+		//System.out.println("***** " + emotions[0] + " " + emotions[1] + " " + emotions[2] + " " + emotions[3]);
 		return emotions;
 	}
 
@@ -225,22 +232,22 @@ public class EmotionInterpreter extends Component
 	{	
 		boolean newValue = false;
 		Map<String,String> userStateInfo = new HashMap<String,String>();
-		if( valence > VALENCE_THRESHOLD || valence < -VALENCE_THRESHOLD ) {
+		if( valence != 0 ) {
 			DMLogger.getLogger().log(meta.getTime(), "UserAction:Valence value="+valence);
 			userStateInfo.put("valence",""+valence);
 			newValue = true;
 		}
-		if( arousal > AROUSAL_THRESHOLD || arousal < -AROUSAL_THRESHOLD ) {
+		if( arousal != 0 ) {
 			DMLogger.getLogger().log(meta.getTime(), "UserAction:Arousal value="+arousal);
 			userStateInfo.put("arousal",""+arousal);
 			newValue = true;
 		}
-		if( potency > POTENCY_THRESHOLD || potency < -POTENCY_THRESHOLD ) {
+		if( potency != 0 ) {
 			DMLogger.getLogger().log(meta.getTime(), "UserAction:Potency value="+potency);
 			userStateInfo.put("potency",""+potency);
 			newValue = true;
 		}
-		if( interest > INTEREST_THRESHOLD || interest < -INTEREST_THRESHOLD ) {
+		if( interest != 0 ) {
 			DMLogger.getLogger().log(meta.getTime(), "UserAction:Interest value="+interest);
 			userStateInfo.put("interest",""+interest);
 			newValue = true;
@@ -257,6 +264,10 @@ public class EmotionInterpreter extends Component
 		}
 		
 		if( newValue ) {
+//			System.out.println("++++++++++++++++++++++ Sending to User State");
+//			for( String key : userStateInfo.keySet() ) {
+//				System.out.println(key + ": " + userStateInfo.get(key));
+//			}
 			UserStateInfo usi = new UserStateInfo(userStateInfo	);
 			userStateSender.sendStateInfo(usi, meta.getTime());
 		}

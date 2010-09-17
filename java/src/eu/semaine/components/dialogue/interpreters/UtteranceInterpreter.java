@@ -893,7 +893,8 @@ public class UtteranceInterpreter extends Component
 		String pattern4 = ".*speak to ((\\S)+ +){0,2}(spike|poppy|obadiah|prudence).*";
 		String pattern5 = ".*switch to ((\\S)+ +){0,2}(spike|poppy|obadiah|prudence).*";
 		String pattern6 = ".*(speak|talk) to.*";
-		if( utterance.matches(pattern1) || utterance.matches(pattern2) || utterance.matches(pattern3) || utterance.matches(pattern4) || utterance.matches(pattern5) || utterance.matches(pattern6) ) {
+		String pattern7 = ".*(speak|talk).*(spike|poppy|obadiah|prudence).*";
+		if( utterance.matches(pattern1) || utterance.matches(pattern2) || utterance.matches(pattern3) || utterance.matches(pattern4) || utterance.matches(pattern5) || utterance.matches(pattern6) || utterance.matches(pattern7) ) {
 			return true;
 		} else {
 			return false;
