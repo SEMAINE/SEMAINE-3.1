@@ -1,0 +1,78 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+
+	<template id="Poppy_RespondToSmile1" name="Poppy Respond to Smile">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$UserState.AU.nrOfAU12" comparator="greater_than" value2="1" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Poppy126" />
+		</behaviour>
+	</template>
+	
+	<template id="Poppy_RespondToSmile2" name="Poppy Respond to Smile">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<compare value1="$UserState.AU.nrOfAU12" comparator="greater_than" value2="1" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Poppy42" />
+		</behaviour>
+	</template>
+	
+	<template id="Prudence_RespondToSmile2" name="Prudence Respond to Smile">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$UserState.AU.nrOfAU12" comparator="greater_than" value2="1" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence75" />
+		</behaviour>
+	</template>
+	
+	<template id="Prudence_RespondToSmile2" name="Prudence Respond to Smile">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<compare value1="$UserState.AU.nrOfAU12" comparator="greater_than" value2="1" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Prudence88" />
+		</behaviour>
+	</template>
+	
+	<template id="Obadiah_RespondToSmile2" name="Obadiah Respond to Smile">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<compare value1="$UserState.AU.nrOfAU12" comparator="greater_than" value2="1" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Obadiah50" />
+		</behaviour>
+	</template>
+	
+	<template id="Spike_RespondToSmile2" name="Spike Respond to Smile">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<compare value1="$UserState.AU.nrOfAU12" comparator="greater_than" value2="1" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.5">
+			<argument name="response" value="#Spike113" />
+		</behaviour>
+	</template>
+	
+	
+	
+
+</behaviourtemplates>
