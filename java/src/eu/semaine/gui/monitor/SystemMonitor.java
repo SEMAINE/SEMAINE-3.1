@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.jms.JMSException;
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -62,7 +63,10 @@ public class SystemMonitor extends Thread
 {
 	public static final String ALL_COMPONENTS = "all components";
 	private JFrame frame;
+	private JSplitPane splitPane;
 	private JGraph graph;
+	private boolean showingGraph = false;
+	
 	private JTextPane systemStatus;
 	private JTextPane logTextPane;
 	private Dimension frameSize = null;
@@ -98,20 +102,8 @@ public class SystemMonitor extends Thread
 		this.topicsToHide = topicsToHide;
 	}
 
-	private void setupGraphGUI() {
-		// Construct Model and Graph
-		GraphModel model = new DefaultGraphModel();
-		graph = new JGraph(model);
-		graph.setEditable(false);
-		graph.setMoveable(true);
-		graph.setConnectable(false);
-		graph.setDisconnectable(false);
-		graph.setSelectionEnabled(true);
+	private void setupGUI() {
 
-		graph.addGraphSelectionListener(new InfoGraphSelectionListener());
-
-		GraphLayoutCache view = graph.getGraphLayoutCache();
-		view.setFactory(new MyCellViewFactory());
 		
 		frame = new JFrame("SEMAINE System Monitor");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,20 +136,25 @@ public class SystemMonitor extends Thread
 		guiMenu.setMnemonic(KeyEvent.VK_G);
 		guiMenu.getAccessibleContext().setAccessibleDescription("GUI menu");
 		menuBar.add(guiMenu);
-		JMenuItem resetItem = new JMenuItem("Reset GUI", KeyEvent.VK_R);
-		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, magicKey));
-		resetItem.getAccessibleContext().setAccessibleDescription("Reset the GUI");
-		resetItem.addActionListener(new ActionListener() {
+		final JCheckBoxMenuItem toggleGraphItem = new JCheckBoxMenuItem("Show message flow graph", true);
+		toggleGraphItem.setMnemonic(KeyEvent.VK_M);
+		toggleGraphItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, magicKey));
+		toggleGraphItem.getAccessibleContext().setAccessibleDescription("Toggle message flow graph");
+		toggleGraphItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				//setMustUpdateCells(true);
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						graph.refresh();
-					}
-				});
-			}
-		});
-		guiMenu.add(resetItem);
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							if (toggleGraphItem.isSelected()) {
+								setupGraph();
+								redraw();
+							} else {
+								hideGraph();
+							}
+						}
+					});
+				}
+			});
+		guiMenu.add(toggleGraphItem);
 		frame.setJMenuBar(menuBar);
 		
 		JPanel rightSide = new JPanel();
@@ -201,20 +198,10 @@ public class SystemMonitor extends Thread
 		logPane.setBackground(systemStatus.getBackground());
 		rightSide.add(systemStatus, BorderLayout.PAGE_START);
 		rightSide.add(logPane, BorderLayout.CENTER);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-		                           graph, rightSide);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		                           null, rightSide);
 		splitPane.setOneTouchExpandable(true);
 		frame.getContentPane().add(splitPane);
-		// On some systems, maximise frame will have worked, on others not, so let's try to get a 
-		// reasonable estimate of our frame width:
-		int dividerLocation;
-		Dimension frameSize = frame.getSize();
-		if (frameSize.width > 0) {
-			dividerLocation = frameSize.width * 3/4;
-		} else {
-			dividerLocation = Toolkit.getDefaultToolkit().getScreenSize().width*3/4;
-		}	
-		splitPane.setDividerLocation(dividerLocation);
 
 		// Set up log reader:
 		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.Log4JLogger");
@@ -228,11 +215,53 @@ public class SystemMonitor extends Thread
 		setupLogReader();
 		
 		//updateCells();
+		setupGraph();
 				
 		frame.setVisible(true);
 		redraw();
 	}
 	
+	private synchronized void setupGraph() {
+		if (graph == null) {
+			// Construct Model and Graph
+			GraphModel model = new DefaultGraphModel();
+			graph = new JGraph(model);
+			graph.setEditable(false);
+			graph.setMoveable(true);
+			graph.setConnectable(false);
+			graph.setDisconnectable(false);
+			graph.setSelectionEnabled(true);
+
+			graph.addGraphSelectionListener(new InfoGraphSelectionListener());
+
+			GraphLayoutCache view = graph.getGraphLayoutCache();
+			view.setFactory(new MyCellViewFactory());
+		}
+
+		splitPane.setLeftComponent(graph);
+		// On some systems, maximise frame will have worked, on others not, so let's try to get a 
+		// reasonable estimate of our frame width:
+		int dividerLocation;
+		Dimension frameSize = frame.getSize();
+		if (frameSize.width > 0) {
+			dividerLocation = frameSize.width * 3/4;
+		} else {
+			dividerLocation = Toolkit.getDefaultToolkit().getScreenSize().width*3/4;
+		}	
+		splitPane.setDividerLocation(dividerLocation);
+
+		showingGraph = true;
+	}
+	
+	private synchronized void hideGraph() {
+		showingGraph = false;
+		splitPane.setLeftComponent(null);
+	}
+	
+	private synchronized boolean isShowingGraph() {
+		return showingGraph;
+	}
+
 	public synchronized void addComponentInfo(ComponentInfo ci)
 	{
 		sortedComponentList.add(ci);
@@ -301,6 +330,9 @@ public class SystemMonitor extends Thread
 	
 	private synchronized void redraw()
 	{
+		if (!isShowingGraph()) {
+			return;
+		}
 		assert cells != null;
 		final Map<DefaultGraphCell, Map<Object,Object>> allChanges = new HashMap<DefaultGraphCell, Map<Object,Object>>();
 		boolean mustLayoutCells = false;
@@ -802,7 +834,7 @@ public class SystemMonitor extends Thread
 	
 	public void run()
 	{
-		setupGraphGUI();
+		setupGUI();
 		// Give the GUI some time to set up properly before sending edit requests
 		//try {
 			//Thread.sleep(1000);
@@ -913,7 +945,7 @@ public class SystemMonitor extends Thread
 		};
 		SystemMonitor mon = new SystemMonitor(cis, null);
 		//mon.start();
-		mon.setupGraphGUI();
+		mon.setupGUI();
 		for (int i=0; i<cis.length; i++) {
 			try {
 				Thread.sleep(100);
