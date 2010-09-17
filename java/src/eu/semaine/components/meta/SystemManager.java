@@ -59,6 +59,8 @@ public class SystemManager extends Component implements MessageListener
 	throws JMSException
 	{
 		super("SystemManager");
+		systemZeroTime = System.currentTimeMillis();
+
 		componentInfos = new TreeMap<String, ComponentInfo>();
 		iobase = new IOBase("semaine.meta");
 		consumer = iobase.getSession().createConsumer(iobase.getTopic(), MetaMessenger.COMPONENT_NAME + " IS NOT NULL");
@@ -149,8 +151,7 @@ public class SystemManager extends Component implements MessageListener
 			// When we get ready, we set the system time to 0
 			// Alternatively, we could set it to System.currentTimeMillis(),
 			// which would set all clocks to this process's system clock.
-			m.setLongProperty(MetaMessenger.SYSTEM_READY_TIME, 0);
-			systemZeroTime = System.currentTimeMillis();
+			m.setLongProperty(MetaMessenger.SYSTEM_READY_TIME, getTime());
 		}
 		producer.send(m);
 		lastReportSystemReady = ready;
