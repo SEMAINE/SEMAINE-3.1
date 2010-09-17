@@ -7,9 +7,11 @@ package eu.semaine.components.dialogue.actionproposers;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -100,6 +102,8 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	/* A list of all detected audio-features of this UserTurn */
 	private HashMap<String,ArrayList<Float>> detectedFeatures = new HashMap<String,ArrayList<Float>>();
 	
+	private HashMap<String,Boolean> turnActionUnits = new HashMap<String,Boolean>();
+	
 	/* To generate random numbers */
 	private Random random = new Random();
 	
@@ -120,13 +124,13 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	/* The BehaviourClass-instance of this class */
 	private static UtteranceActionProposer myClass;
 	
-	private HashMap<String,Long> facialExpressionTimes = new HashMap<String,Long>();
-	
 	private LinkedList<String> historyQueue = new LinkedList<String>();
 	
 	private int queueWaitingCounter = 0;
 	
 	private long prevTime;
+	
+	private String feedbackId = "";
 	
 	/**
 	 * Constructor of ResponseActionProposer
@@ -250,6 +254,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		
 		if( queueWaitingCounter == 0 && systemStarted && (speakingState == null || (speakingState != null && speakingState.equals("listening"))) ) {
+			//System.out.println(is);
 			is.set("currTime", (int)meta.getTime());
 			String context = is.toString();
 			TemplateState state = templateController.checkTemplates(is);
@@ -312,13 +317,15 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					}
 				}
 
-				if( speechReady(xm) ) {
+				String speechReady = speechReady(xm);
+				if( speechReady != null && speechReady.equals(feedbackId) ) {
 					log.debug("Agent utterance has finished");
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStopped (feedback)");
 					is.set("Agent.speakingState","listening");
 					is.set("Agent.speakingStateTime", (int)meta.getTime());
 					is.set("User.speakingState","waiting");
 					is.remove("UserTurn");
+					turnActionUnits.clear();
 					sendData("agentTurnState", "listening", "dialogstate");
 					for( String[] str : dataSendQueue ) {
 						if( str.length == 3 ) {
@@ -481,19 +488,49 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					}
 				}
 				
-				if( stateInfo.hasInfo("facialExpression") && stateInfo.hasInfo("facialExpressionStarted") && stateInfo.hasInfo("facialExpressionStopped") ) {
-					String facialExpression = stateInfo.getInfo("facialExpression");
-					Long starttime = Long.parseLong(stateInfo.getInfo("facialExpressionStarted"));
-					Long endtime = Long.parseLong(stateInfo.getInfo("facialExpressionStopped"));
-					//is.set("UserTurn", value)
-					Long l = facialExpressionTimes.get(facialExpression);
-					if( l == null || !l.equals(starttime) ) {
-						facialExpressionTimes.put(facialExpression, starttime);
-						Integer counter = is.getInteger("UserTurn.Face.nrOf"+facialExpression);
-						if( counter == null ) counter = new Integer(0);
-						counter = counter + 1;
-						is.set("UserTurn.Face.nrOf" + facialExpression, counter);
-					} else {
+				if( stateInfo.hasInfo("headGesture") && stateInfo.hasInfo("headGestureStarted") && stateInfo.hasInfo("headGestureStopped") ) {
+					String gesture = stateInfo.getInfo("headGesture");
+					Integer counter = is.getInteger("UserTurn.Head.nrOf" + gesture);
+					if( counter == null ) counter = new Integer(0);
+					counter = counter + 1;
+					is.set("UserTurn.Head.nrOf" + gesture, counter);
+					is.set("UserTurn.Head.lastGesture", gesture);
+				}
+				
+				if( stateInfo.hasInfo("pitchDirection") ) {
+					String pitch = stateInfo.getInfo("pitchDirection");
+					Integer counter = is.getInteger("UserTurn.Pitch.nrOf" + pitch);
+					if( counter == null ) counter = new Integer(0);
+					counter = counter + 1;
+					is.set("UserTurn.Pitch.nrOf" + pitch, pitch);
+					is.set("UserTurn.Pitch.lastPitch", pitch);
+				}
+				
+				if( stateInfo.hasInfo("vocalization") ) {
+					String vocalization = stateInfo.getInfo("vocalization");
+					Integer counter = is.getInteger("UserTurn.Vocalization.nrOf" + vocalization);
+					if( counter == null ) counter = new Integer(0);
+					counter = counter + 1;
+					is.set("UserTurn.Vocalization.nrOf" + vocalization, vocalization);
+				}
+				
+				if( stateInfo.hasInfo("facialActionUnits") ) {
+					String facialExpressions = stateInfo.getInfo("facialActionUnits");
+					List<String> aus = Arrays.asList(facialExpressions.split(" "));
+					for( String au : aus ) {
+						Boolean b = turnActionUnits.get(au);
+						if( b != null && b == false ) {
+							turnActionUnits.put(au,true);
+							Integer counter = is.getInteger("UserTurn.AU.nrOfAU" + au);
+							if( counter == null ) counter = new Integer(0);
+							counter = counter + 1;
+							is.set("UserTurn.AU.nrOfAU" + au, counter);
+						}
+					}
+					for( String au : turnActionUnits.keySet() ) {
+						if( !aus.contains(au) ) {
+							turnActionUnits.put(au,false);
+						}
 					}
 				}
 
@@ -610,25 +647,30 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 * @param xm the message to check
 	 * @return true if the message contains the end signal, false if it does not.
 	 */
-	public boolean speechReady( SEMAINEXMLMessage xm ) throws JMSException
+	public String speechReady( SEMAINEXMLMessage xm ) throws JMSException
 	{
 		Element callbackElem = XMLTool.getChildElementByLocalNameNS(xm.getDocument(), "callback", SemaineML.namespaceURI);
 		if( callbackElem != null ) {
 			Element eventElem = XMLTool.getChildElementByLocalNameNS(callbackElem, "event", SemaineML.namespaceURI);
 			if( eventElem != null ) {
 				String agentSpeakingState = is.getString("Agent.speakingState");
+				DMLogger.getLogger().log(meta.getTime(), xm.getText());
 				if( agentSpeakingState != null ) {
 					if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") && (agentSpeakingState.equals("preparing") || agentSpeakingState.equals("speaking")) ) {
-						return true;
+						if( eventElem.hasAttribute("id") ) {
+							return eventElem.getAttribute("id");
+						}
 					}
 				} else {
 					if( eventElem.hasAttribute("type") && eventElem.getAttribute("type").equals("end") ) {
-						return true;
+						if( eventElem.hasAttribute("id") ) {
+							return eventElem.getAttribute("id");
+						}
 					}
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -793,6 +835,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	{
 		is.set("Agent.speakingState","preparing");
 		is.set("Agent.speakingIntention","null");
+		is.set("Agent.speakingStateTime", (int)meta.getTime());
 		is.set("ResponseHistory._addlast.id",latestResponse.getId());
 		is.set("ResponseHistory._last.response",latestResponse.getResponse());
 	}
@@ -857,6 +900,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				log.debug("Trigger prepared response "+id+" '"+currResponse.getResponse()+"'");
 				commandSender.sendTextMessage("STARTAT 0\nPRIORITY 0.5\nLIFETIME 5000\n", meta.getTime(), Event.single, id, meta.getTime());
 				preparedResponses.remove(currHash);
+				feedbackId = id;
 			}catch( JMSException e ){
 				// TODO: handle
 			}
@@ -869,6 +913,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				System.out.println(docToString(doc));
 				log.debug("Generating directly: '"+currResponse.getResponse()+"'");
 				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
+				feedbackId = "bml_uap_"+output_counter;
 			}catch( JMSException e ) {
 				// Handle
 			}
