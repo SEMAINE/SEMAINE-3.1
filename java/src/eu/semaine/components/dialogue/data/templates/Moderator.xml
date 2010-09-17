@@ -42,7 +42,6 @@
 		</preconditions>
 		<effects>
 			<update name="DialogueState.introState" value="3" />
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />
@@ -55,7 +54,7 @@
 	</template>
 	
 <!-- Evaluation -->
-	<template id="Greta_eval_1_Poppy" name="Introduction after system-start">
+	<template id="Greta_eval_1_Poppy" name="Start evaluation interaction">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
@@ -69,7 +68,7 @@
 			<argument name="response" value="#GretaPreviousPoppy" />
 		</behaviour>
 	</template>
-	<template id="Greta_eval_1_Prudence" name="Introduction after system-start">
+	<template id="Greta_eval_1_Prudence" name="Start evaluation interaction">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
@@ -83,7 +82,7 @@
 			<argument name="response" value="#GretaPreviousPrudence" />
 		</behaviour>
 	</template>
-	<template id="Greta_eval_1_Obadiah" name="Introduction after system-start">
+	<template id="Greta_eval_1_Obadiah" name="Start evaluation interaction">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
@@ -97,7 +96,7 @@
 			<argument name="response" value="#GretaPreviousObadiah" />
 		</behaviour>
 	</template>
-	<template id="Greta_eval_1_Spike" name="Introduction after system-start">
+	<template id="Greta_eval_1_Spike" name="Start evaluation interaction">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
@@ -111,7 +110,7 @@
 			<argument name="response" value="#GretaPreviousSpike" />
 		</behaviour>
 	</template>
-	<template id="Greta_eval_1_None" name="Introduction after system-start">
+	<template id="Greta_eval_1_None" name="Start evaluation interaction">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
@@ -122,10 +121,12 @@
 			<update name="DialogueState.evalState" value="1" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#Greta0" />
+			<argument name="response" value="#GretaEval0" />
 		</behaviour>
 	</template>
-	
+
+
+	<!-- 
 	<template id="Greta_eval_2" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
@@ -139,16 +140,123 @@
 			<argument name="response" value="#GretaEval1" />
 		</behaviour>
 	</template>
+	-->
+		<template id="Greta_eval_felt_0" name="Question how you felt">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="1" />
+			<trigger value1="$Agent.speakingState" value2="listening" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="2" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalFelt0" />
+		</behaviour>
+	</template>
+	
+		<template id="Greta_eval_felt_1" name="Question how you felt">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="2" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="3" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalFelt1" />
+		</behaviour>
+	</template>
+	
+			<template id="Greta_eval_natural_0" name="Question how natural">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="3" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" /> 
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="4" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalNatural0" />
+		</behaviour>
+	</template>
+	
+		<template id="Greta_eval_natural_1" name="Question how natural">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="4" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="5" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalNatural1" />
+		</behaviour>
+	</template>
+
+			<template id="Greta_eval_out_0" name="Question how much out of place">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="5" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" /> 
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="6" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalOut0" />
+		</behaviour>
+	</template>
+	
+		<template id="Greta_eval_out_1" name="Question how much out of place">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="6" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="7" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalOut1" />
+		</behaviour>
+	</template>
+
+			<template id="Greta_eval_involved_0" name="Question how involved">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="7" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" /> 
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="8" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalInvolved0" />
+		</behaviour>
+	</template>
+	
+		<template id="Greta_eval_involved_1" name="Question how involved">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" value2="8" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="10" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaEvalInvolved1" />
+		</behaviour>
+	</template>
 	
 	<template id="Greta_eval_3" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
-			<compare value1="$DialogueState.evalState" value2="2" />
+			<compare value1="$DialogueState.evalState" value2="10" />
 			<compare value1="$Agent.nextCharacter" value2="Poppy" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Poppy" />
@@ -164,12 +272,11 @@
 	<template id="Greta_eval_4" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
-			<compare value1="$DialogueState.evalState" value2="2" />
+			<compare value1="$DialogueState.evalState" value2="10" />
 			<compare value1="$Agent.nextCharacter" value2="Prudence" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />
@@ -185,12 +292,11 @@
 	<template id="Greta_eval_5" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
-			<compare value1="$DialogueState.evalState" value2="2" />
+			<compare value1="$DialogueState.evalState" value2="10" />
 			<compare value1="$Agent.nextCharacter" value2="Obadiah" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Obadiah" />
@@ -206,12 +312,11 @@
 	<template id="Greta_eval_6" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
-			<compare value1="$DialogueState.evalState" value2="2" />
+			<compare value1="$DialogueState.evalState" value2="10" />
 			<compare value1="$Agent.nextCharacter" value2="Spike" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Spike" />
@@ -232,7 +337,6 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Poppy" />
@@ -251,7 +355,6 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />
@@ -270,7 +373,6 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Obadiah" />
@@ -289,7 +391,6 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
-			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Spike" />

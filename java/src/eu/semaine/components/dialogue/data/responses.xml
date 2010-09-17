@@ -24,7 +24,21 @@ Used response-arguments:
 		<response id="#GretaPreviousPrudence" response="You have just talked to Prudence." />
 		<response id="#GretaPreviousObadiah" response="You have just talked to Obadiah." />
 		<response id="#GretaPreviousSpike" response="You have just talked to Spike." />
-		
+
+		<response id="#GretaEval0" response="You have just talked to a SAL character." />		
+		<response id="#GretaEvalFelt0" response="Could you state the way you felt, about the conversation?" />
+		<response id="#GretaEvalFelt1" response="You don't have to make any comments but feel free to comment if you want to." />
+		<response id="#GretaEvalNatural0" response="First of all, how naturally do you feel the conversation flowed?" />
+		<response id="#GretaEvalNatural1" response="Zero, means not at all, ten, means totally natural." />
+		<response id="#GretaEvalOut0" response="Did you feel the Avatar, said things completely out of place? If yes how often?" />
+		<response id="#GretaEvalOut1" response="Never, a few times, quite often, most of the time, all the time." />
+		<response id="#GretaEvalInvolved0" response="How much did you feel you were involved in the conversation?" />
+		<response id="#GretaEvalInvolved1" response="Zero, means not at all, Ten, means completely involved." />
+		<response id="#GretaEvalEnd" response="Okay, thanks, I'll pass you on now." />
+
+
+
+
 
 <!-- +++++++++++++++++++++++ GENERAL ++++++++++++++++++++++++++  -->
 		<response id="#goodbye" response="Ok, goodbye!" />
