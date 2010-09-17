@@ -45,10 +45,10 @@ import eu.semaine.util.XMLTool;
 public class NonVerbalInterpreter extends Component
 {
 	/* Threshold values */
-	private final static double THRESHOLD_HEADGESTURE = 0.3;
+	private final static double THRESHOLD_HEADGESTURE = 0.2;
 	private final static double THRESHOLD_PITCH = 0.1;
 	private final static double THRESHOLD_VOCALIZATION = 0.1;
-	private final static double THRESHOLD_FACEPRESENCE = 0.3;
+	private final static double THRESHOLD_FACEPRESENCE = 0.33;
 	private final static double THRESHOLD_ACTIONUNITS = 0.3;
 	private final static double THRESHOLD_SPEAKING = 0.3;
 	
