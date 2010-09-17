@@ -42,6 +42,7 @@
 		</preconditions>
 		<effects>
 			<update name="DialogueState.introState" value="3" />
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />
@@ -54,10 +55,67 @@
 	</template>
 	
 <!-- Evaluation -->
-	<template id="Greta_eval_1" name="Introduction after system-start">
+	<template id="Greta_eval_1_Poppy" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
+			<compare value1="$Agent.previousCharacter" value2="Poppy" />
+			<compare value1="$Agent.dialogContext" value2="Questions" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="1" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaPreviousPoppy" />
+		</behaviour>
+	</template>
+	<template id="Greta_eval_1_Prudence" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" comparator="not_exists" />
+			<compare value1="$Agent.previousCharacter" value2="Prudence" />
+			<compare value1="$Agent.dialogContext" value2="Questions" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="1" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaPreviousPrudence" />
+		</behaviour>
+	</template>
+	<template id="Greta_eval_1_Obadiah" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" comparator="not_exists" />
+			<compare value1="$Agent.previousCharacter" value2="Obadiah" />
+			<compare value1="$Agent.dialogContext" value2="Questions" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="1" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaPreviousObadiah" />
+		</behaviour>
+	</template>
+	<template id="Greta_eval_1_Spike" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" comparator="not_exists" />
+			<compare value1="$Agent.previousCharacter" value2="Spike" />
+			<compare value1="$Agent.dialogContext" value2="Questions" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.evalState" value="1" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#GretaPreviousSpike" />
+		</behaviour>
+	</template>
+	<template id="Greta_eval_1_None" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.evalState" comparator="not_exists" />
+			<compare value1="$Agent.previousCharacter" comparator="not_exists" />
 			<compare value1="$Agent.dialogContext" value2="Questions" />
 		</preconditions>
 		<effects>
@@ -90,6 +148,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Poppy" />
@@ -110,6 +169,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />
@@ -130,6 +190,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Obadiah" />
@@ -150,6 +211,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Spike" />
@@ -170,6 +232,7 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Poppy" />
@@ -188,6 +251,7 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />
@@ -206,6 +270,7 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Obadiah" />
@@ -224,6 +289,7 @@
 			<compare value1="$Agent.dialogContext" value2="AnnounceNextCharacter" />
 		</preconditions>
 		<effects>
+			<update name="Agent.previousCharacter" value="Greta" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Spike" />

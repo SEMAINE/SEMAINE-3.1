@@ -20,6 +20,11 @@ Used response-arguments:
 		<response id="#GretaPassToPrudence" response="I am going to pass you to Prudence." />
 		<response id="#GretaPassToObadiah" response="I am going to pass you to Obadiah." />
 		<response id="#GretaPassToSpike" response="I am going to pass you to Spike." />
+		<response id="#GretaPreviousPoppy" response="You have just talked to Poppy." />
+		<response id="#GretaPreviousPrudence" response="You have just talked to Prudence." />
+		<response id="#GretaPreviousObadiah" response="You have just talked to Obadiah." />
+		<response id="#GretaPreviousSpike" response="You have just talked to Spike." />
+		
 
 <!-- +++++++++++++++++++++++ GENERAL ++++++++++++++++++++++++++  -->
 		<response id="#goodbye" response="Ok, goodbye!" />

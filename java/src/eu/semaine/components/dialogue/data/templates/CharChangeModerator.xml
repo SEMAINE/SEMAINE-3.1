@@ -224,6 +224,7 @@
 		</preconditions>
 		<effects>
 			<update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Greta" />
@@ -255,6 +256,7 @@
 		</preconditions>
 		<effects>
 			<update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Greta" />
@@ -287,6 +289,7 @@
 		</preconditions>
 		<effects>
 			<update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Greta" />
@@ -386,6 +389,7 @@
 		</preconditions>
 		<effects>
 			<update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Greta" />
@@ -555,6 +559,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -579,6 +584,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -603,6 +609,7 @@
    			<option probability="0.34">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -640,6 +647,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -664,6 +672,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -688,6 +697,7 @@
    			<option probability="0.34">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -725,6 +735,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -749,6 +760,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -773,6 +785,7 @@
    			<option probability="0.34">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -810,6 +823,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -834,6 +848,7 @@
    			<option probability="0.33">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />
@@ -858,6 +873,7 @@
    			<option probability="0.34">
    				<c_effects>
    					<c_update name="Agent.dialogContext" value="AnnounceNextCharacter" />
+   					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
 						<c_argument value="Greta" />

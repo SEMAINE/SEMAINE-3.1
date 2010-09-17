@@ -12,6 +12,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Prudence" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
@@ -37,6 +38,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Prudence" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
@@ -78,6 +80,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Poppy" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
@@ -101,6 +104,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Poppy" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
@@ -142,6 +146,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Obadiah" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
@@ -165,6 +170,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Obadiah" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
@@ -206,6 +212,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Spike" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
@@ -229,6 +236,7 @@
 			<update name="Agent.characterChanged" value="0" />
 			<update name="Dialogue.startupState" value="1" />
 			<update name="Agent.nrTimesRandom" value="0" />
+			<update name="Agent.previousCharacter" value="Spike" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="agentTurnState" />
 				<argument value="expectingAnswer" />
