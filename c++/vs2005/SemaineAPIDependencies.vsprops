@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="SemaineAPIDependencies"
+	BuildLogFile="$(IntDir)\$(ProjectName)-BuildLog.htm"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\src;depends\include\apache2;depends\include"
+		ProgramDataBaseFileName="$(IntDir)\$(ProjectName)-vc80.pdb"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="xerces-c_3.lib xqilla22.lib libactivemq-cpp.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
+		AdditionalLibraryDirectories="depends\lib"
+	/>
+</VisualStudioPropertySheet>

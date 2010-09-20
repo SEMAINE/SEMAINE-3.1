@@ -20,7 +20,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets=".\semaineProperties.vsprops;.\SemaineLibsDebug.vsprops"
+			InheritedPropertySheets=".\SemaineAPIDependencies.vsprops"
 			CharacterSet="1"
 			BuildLogFile="$(IntDir)\dummyanalyser-BuildLog.htm"
 			>
@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\..\XQilla-2.2.0\include&quot;;&quot;..\..\..\xerces-c-src\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\..\activemq-cpp-2.2.1\src\main&quot;"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -65,7 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="Debug;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Lib&quot;;&quot;..\..\..\XQilla-2.2.0\build\windows\VC8\Win32\Debug&quot;;&quot;..\..\..\xerces-c-src\lib&quot;;&quot;..\..\..\activemq-cpp-2.2.1\vs2005-build\Debug&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\lib&quot;"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -100,7 +100,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets=".\semaineProperties.vsprops;.\SemaineLibs.vsprops"
+			InheritedPropertySheets=".\semaineProperties.vsprops;.\SemaineLibs.vsprops;.\SemaineAPIDependencies.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\src;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Include&quot;;&quot;..\..\..\XQilla-2.2.0\include&quot;;&quot;..\..\..\xerces-c-src\include&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\include&quot;;&quot;..\..\..\activemq-cpp-2.2.1\src\main&quot;"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -140,9 +140,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="semaineapi.lib xerces-c_3.lib xqilla22.lib libactivemq-cpp.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="Release;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.1\Lib&quot;;&quot;..\..\..\XQilla-2.2.0\build\windows\VC8\Win32\Release&quot;;&quot;..\..\..\xerces-c-src\lib&quot;;&quot;..\..\..\activemq-cpp-2.2.1\vs2005-build\Release&quot;;&quot;C:\Program Files\Apache Software Foundation\Apache2.2\lib&quot;"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -184,6 +183,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\src\semaine\components\dummy\DummyAnalyser.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\semaine\executables\dummyanalyser.cpp"
 				>
 				<FileConfiguration
@@ -204,10 +207,6 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\semaine\components\dummy\DummyAnalyser.cpp"
-				>
 			</File>
 		</Filter>
 		<Filter
