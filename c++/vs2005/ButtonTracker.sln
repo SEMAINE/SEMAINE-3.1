@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MouseHook", "MouseHook.vcproj", "{3E6E2388-32FD-4AD4-9D6D-69BE65909471}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ButtonTracker", "ButtonTracker.vcproj", "{C0019D07-D0E0-4216-899F-188398CED934}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3E6E2388-32FD-4AD4-9D6D-69BE65909471} = {3E6E2388-32FD-4AD4-9D6D-69BE65909471}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E6E2388-32FD-4AD4-9D6D-69BE65909471}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3E6E2388-32FD-4AD4-9D6D-69BE65909471}.Debug|Win32.Build.0 = Debug|Win32
+		{3E6E2388-32FD-4AD4-9D6D-69BE65909471}.Release|Win32.ActiveCfg = Release|Win32
+		{3E6E2388-32FD-4AD4-9D6D-69BE65909471}.Release|Win32.Build.0 = Release|Win32
+		{C0019D07-D0E0-4216-899F-188398CED934}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C0019D07-D0E0-4216-899F-188398CED934}.Debug|Win32.Build.0 = Debug|Win32
+		{C0019D07-D0E0-4216-899F-188398CED934}.Release|Win32.ActiveCfg = Release|Win32
+		{C0019D07-D0E0-4216-899F-188398CED934}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

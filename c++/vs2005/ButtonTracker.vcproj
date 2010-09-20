@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="jimandjohn"
-	ProjectGUID="{DD8CBA18-C1D4-49B8-891F-7790070DC992}"
-	RootNamespace="jimandjohn"
+	Name="ButtonTracker"
+	ProjectGUID="{C0019D07-D0E0-4216-899F-188398CED934}"
+	RootNamespace="ButtonTracker"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -22,7 +22,6 @@
 			ConfigurationType="1"
 			InheritedPropertySheets=".\SemaineAPIDependenciesDebug.vsprops"
 			CharacterSet="1"
-			BuildLogFile="$(IntDir)\jimandjohn-BuildLog.htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -42,13 +41,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(IntDir)\jimandjohn-vc80.pdb"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
@@ -64,8 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="semaineapid.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="Debug"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -121,7 +119,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -140,8 +137,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="semaineapi.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="Release"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -183,11 +181,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\semaine\components\dummy\GenericTestComponent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\semaine\executables\jimandjohn.cpp"
+				RelativePath=".\src\ButtonTracker.cpp"
 				>
 			</File>
 		</Filter>
@@ -196,6 +190,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\src\MouseHook.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
