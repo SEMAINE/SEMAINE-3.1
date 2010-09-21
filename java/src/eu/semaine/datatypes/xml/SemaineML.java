@@ -67,5 +67,6 @@ public class SemaineML
     // For <vocalization name="...">:
     public static final String V_LAUGHTER = "(laughter)";
     public static final String V_SIGH = "(sigh)";
+    public static final String V_BREATH = "(breath)";
     
 }
