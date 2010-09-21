@@ -7,12 +7,28 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\src;depends\include\apache2;depends\include"
+		AdditionalIncludeDirectories="&quot;$(SemaineApiVS)..\src&quot;;&quot;$(SemaineApiVS)depends\include\apache2&quot;;&quot;$(SemaineApiVS)depends\include&quot;"
 		ProgramDataBaseFileName="$(IntDir)\$(ProjectName)-vc80.pdb"
 	/>
 	<Tool
 		Name="VCLinkerTool"
 		AdditionalDependencies="xerces-c_3.lib xqilla22.lib libactivemq-cpp.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
-		AdditionalLibraryDirectories="depends\lib"
+		AdditionalLibraryDirectories="&quot;$(SemaineApiVS)depends\lib&quot;;&quot;$(SemaineLibs)&quot;"
+	/>
+	<UserMacro
+		Name="SemaineApiVS"
+		Value="$(SolutionDir)"
+	/>
+	<UserMacro
+		Name="SemaineLibs"
+		Value="&quot;$(SemaineApiVS)$(ConfigurationName)&quot;"
+	/>
+	<UserMacro
+		Name="SemaineIncludes"
+		Value="&quot;$(SemaineApiVS)..\src&quot;"
+	/>
+	<UserMacro
+		Name="Thirdparty"
+		Value="$(SemaineApiVS)..\..\thirdparty\build"
 	/>
 </VisualStudioPropertySheet>
