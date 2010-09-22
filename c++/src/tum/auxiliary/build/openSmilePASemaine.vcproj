@@ -20,7 +20,7 @@
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\..\..\vs2005\semaineProperties.vsprops;.\openSmileSemaine.vsprops;..\..\..\..\..\vs2005\SemaineLibsDebug.vsprops;..\..\..\auxiliary\build\semaineProperties.vsprops"
+			InheritedPropertySheets="..\..\..\..\..\vs2005\SemaineAPIDependenciesDebug.vsprops;.\openSmileSemaine.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -99,7 +99,7 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			InheritedPropertySheets=".\openSmileSemaine.vsprops;..\..\..\..\..\vs2005\SemaineAPIDependencies.vsprops"
+			InheritedPropertySheets="..\..\..\..\..\vs2005\SemaineAPIDependencies.vsprops;.\openSmileSemaine.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
