@@ -20,7 +20,7 @@
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\..\..\vs2005\semaineProperties.vsprops;.\openSmileSemaine.vsprops;..\..\..\..\..\vs2005\SemaineLibsDebug.vsprops"
+			InheritedPropertySheets="..\..\..\..\..\vs2005\semaineProperties.vsprops;.\openSmileSemaine.vsprops;..\..\..\..\..\vs2005\SemaineLibsDebug.vsprops;..\..\..\auxiliary\build\semaineProperties.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -99,7 +99,7 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\..\..\vs2005\semaineProperties.vsprops;.\openSmileSemaine.vsprops;..\..\..\..\..\vs2005\SemaineLibs.vsprops"
+			InheritedPropertySheets=".\openSmileSemaine.vsprops;..\..\..\..\..\vs2005\SemaineAPIDependencies.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -119,7 +119,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;../../src&quot;;&quot;../..&quot;;&quot;../../svm&quot;"
+				AdditionalIncludeDirectories="../../src;../..;../../svm"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;__WINDOWS;_CRT_SECURE_NO_DEPRECATE;__VISTA"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -141,8 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/LTCG"
-				AdditionalDependencies="..\..\openSmileLibSemaine$(ConfigurationName).lib"
+				AdditionalDependencies="openSmileLibSemaine$(ConfigurationName).lib semaineapi.lib"
 				OutputFile="..\..\SEMAINExtract.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\.."
@@ -219,6 +218,26 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\TumAudioFeatureExtractor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumEmotionAnalyser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumInterestDetector.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumKeywordSpotter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumNonverbalFeatureExtractor.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\TumOpenSMILE.h"
 				>
 			</File>
@@ -267,8 +286,36 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\TumAudioFeatureExtractor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumEmotionAnalyser.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumInterestDetector.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumKeywordSpotter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\TumNonverbalFeatureExtractor.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\TumOpenSMILE.cpp"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter

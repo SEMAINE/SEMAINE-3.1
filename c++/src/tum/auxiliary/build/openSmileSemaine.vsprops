@@ -12,7 +12,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="portaudio_x86$(ConfigurationName).lib libsent$(ConfigurationName).lib libjulius$(ConfigurationName).lib"
+		AdditionalDependencies="portaudio_x86$(ConfigurationName).lib libsent$(ConfigurationName).lib libjulius$(ConfigurationName).lib WS2_32.lib"
 		AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib&quot;;&quot;$(Thirdparty)\portaudio-win&quot;;&quot;$(Julius)\vs05\$(ConfigurationName)&quot;"
 	/>
 	<UserMacro
