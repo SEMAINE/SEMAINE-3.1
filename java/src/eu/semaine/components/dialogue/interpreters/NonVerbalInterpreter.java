@@ -159,9 +159,24 @@ public class NonVerbalInterpreter extends Component
 						}
 					}
 				}
+				
+				/* Process single Action Unit */
+				List<Element> bmlList = em.getBMLElements(interpretation);
+				if( bmlList.size() > 0 ) {
+					HashSet<Integer> auList = new HashSet<Integer>();
+					for( Element bml : bmlList ) {
+						Element face = XMLTool.getChildElementByTagNameNS(bml, BML.E_FACE, BML.namespaceURI);
+						if( face != null && face.hasAttribute("au") ) {
+							if( confidence >= THRESHOLD_ACTIONUNITS ) {
+								auList.add(Integer.parseInt(face.getAttribute("au").replaceAll("au", "")));
+							}
+						}
+					}
+					checkNewAUList(auList);
+				}
 			}
 			
-			/* Process Action Units */
+			/* Process Group of Action Units */
 			Element group = em.getGroup();
 			if( group != null ) {
 				HashSet<Integer> auList = new HashSet<Integer>();
@@ -186,21 +201,27 @@ public class NonVerbalInterpreter extends Component
 						}
 					}
 				}
-				if( ! auList.equals(activeActionUnits) ) {
-					activeActionUnits = auList;
-					ArrayList<Integer> ausToSend = new ArrayList<Integer>();
-					ausToSend.addAll(activeActionUnits);
-					Collections.sort(ausToSend);
-					String aus = "";
-					for( Integer au : ausToSend ) {
-						aus = aus + au + " ";
-					}
-					aus = aus.trim();
-					String[] shortNames = {"facialActionUnits","facialActionUnitsStarted"};
-					String[] values = {aus, time};
-					sendUserStateChange(shortNames, values);
-				}
+				checkNewAUList(auList);
 			}
+		}
+	}
+	
+	public void checkNewAUList( HashSet<Integer> auList ) throws JMSException
+	{
+		String time = ""+meta.getTime();
+		if( ! auList.equals(activeActionUnits) ) {
+			activeActionUnits = auList;
+			ArrayList<Integer> ausToSend = new ArrayList<Integer>();
+			ausToSend.addAll(activeActionUnits);
+			Collections.sort(ausToSend);
+			String aus = "";
+			for( Integer au : ausToSend ) {
+				aus = aus + au + " ";
+			}
+			aus = aus.trim();
+			String[] shortNames = {"facialActionUnits","facialActionUnitsStarted"};
+			String[] values = {aus, time};
+			sendUserStateChange(shortNames, values);
 		}
 	}
 	
