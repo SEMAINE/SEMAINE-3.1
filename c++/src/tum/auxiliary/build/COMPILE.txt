@@ -34,7 +34,7 @@ While building, you can perform the following steps in parallel:
 
 7.) Now open thirdparty/build/julius-win/vs05/julius.sln and build it. (Be sure to select the Release configuration!)
     (Build the Debug configuration too, if you are a developer)
-    If you get an error that "strings.h" is not found (referenced in stddefs.h), then simply comment out this line in stddefs.h, and rebuild.
+    NOTE: If you get an error that "strings.h" is not found (referenced in libsent/include/sent/stddefs.h), then simply comment out this line in stddefs.h, and rebuild.
 
 8.) Get the latest Portaudio SVN snapshot, 
     from http://www.portaudio.com
