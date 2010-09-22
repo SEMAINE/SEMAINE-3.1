@@ -18,31 +18,15 @@ Now you are ready to follow these steps to build the Semaine system and the open
     If should create a directory C:\Program Files\Microsoft SDKs\Windows\v6.0A
     with Lib\ and Include\ directories in it.
 
-1.) Obtain (windows - where available -) sources for:
-      activemq-cpp version 2.2.1
-      xerces-c     version 3.0.1
-      xqilla       version 2.2.0
 
-    Unpack activemq-cpp, xerces-c, and xqilla  to the directories
-     thirdparty/build/activemq-cpp
-     thirdparty/build/xerces-c-src
-     thirdparty/build/xqilla
-
-2.) Download the Apache Webserver Windows Installer (Version 2.2.x) and install the webserver to the default path (C:\Program Files\Apache Software Foundation\Apache2.2). Be sure to use the "Custom" installation option and check the feature "install build headers and libraries".
-
-3a.) Build thirdparty/activemq-cpp/vs2005-build/vs2005-activemq.vcproj  (Release config!)
-3b.) Build thirdparty/xerces-c-src/projects/Win32/VC8/xerces-all/xerces-all.sln  (Release config!)
-3c.) Build thirdparty/xqilla/Win32Projects/VC8/XQilla.sln  (Release config!)
 
 4a.) Open the Visual Studio 2005 solution c++/vs2005/semaine.sln
-    Apply the property sheet "c++/vs2005/semaineProperties.vsprops" to Debug and Release configurations of the "vs2005-activemq" project.
-    (Click on Property Sheets Tab, then select the activemq project and right click on the Release and Debug configurations and choose 
-     "Add existing property sheet") 
 
 4b.) Now, build the semaine solution (semaine.sln). Be sure to build the "Release" configuration. If you are a developer, also build the "Debug" configuration.
 
 While building, you can perform the following steps in parallel:
-5.) Get the Julius LVCSR engine (Version 4.1.2 !), 
+5.) Get the Julius LVCSR engine (Version 4.1.2 !),
+    from http://www.mmk.ei.tum.de/~eyb/semaine/julius-4.1.2.tar.gz 
     unpack it to thirdparty/build/julius-win
 
 6.) Run c++/src/tum/julius4.mod/winpatch.bat 
@@ -53,6 +37,7 @@ While building, you can perform the following steps in parallel:
     If you get an error that "strings.h" is not found (referenced in stddefs.h), then simply comment out this line in stddefs.h, and rebuild.
 
 8.) Get the latest Portaudio SVN snapshot, 
+    from http://www.portaudio.com
     unpack it to thirdparty/build/portaudio-win
 
 9.) Copy the files "portaudio.vcproj" and "portaudio.def" 
@@ -64,11 +49,13 @@ While building, you can perform the following steps in parallel:
     (thirdparty/build/portaudio-win/build/msvc/portaudio.sln)
     (Be sure to select the "Release" configuration. Build the Debug configuration too, if you are a developer)
 
+[ This is no longer required:! 
 11.) Copy openSmile*.vcproj, *.vsprops, and openSmile*.sln 
      from c++/src/tum/auxiliary/build/vs05 
      to c++/src/tum/opensmile/ide/vs05/ 
+]
 
-== Now, please wait until the build of semaineF.sln has finished, before proceeding ! ==
+== Now, please wait until the build of semaine.sln has finished, before proceeding ! ==
 
 12.) Build the "openSmileSemaineComponent.sln" solution
      (in c++/src/tum/opensmile/ide/vs05/)
@@ -92,19 +79,14 @@ Note: If you get errors concerning unresolved symbols to some openSMILE componen
 
      Copy these files from thirdparty\build:
        portaudio-win\portaudio_x86Release.dll
-       xerces-c-src\Build\Win32\VC8\Release\xerces-c_3_0.dll
-       xqilla\build\windows\VC8\Win32\Release\xqilla22.dll
        (portaudio-win\portaudio_x86Debug.dll)
-       (xerces-c-src\Build\Win32\VC8\Debug\xerces-c_3_0D.dll)
-       (xqilla\build\windows\VC8\Win32\Debug\xqilla22d.dll)
-
-     Copy these files from your Apache installation (if required):
-       C:\Program Files\Apache Software Foundation\Apache2.2\bin\libapr-1.dll
-       C:\Program Files\Apache Software Foundation\Apache2.2\bin\libapriconv-1.dll
-       C:\Program Files\Apache Software Foundation\Apache2.2\bin\libaprutil-1.dll
+     and the dlls from vs2005/depends/dll/*.dll
 
 
+[ OUTDATED: the .bat must be updated!
      You can also use the batch script "c++/src/tum/auxiliary/build/copy_libs.bat" to copy the dll files to the correct path
+]
+
 
 14.) Now start the openSMILE Semaine component using "bin/semaine-openSMILE-run.bat"
 
