@@ -62,7 +62,6 @@ semaine_api_sources_h = \
 	semaine/cms/receiver/FMLReceiver.h \
 	semaine/cms/receiver/BMLReceiver.h \
 	semaine/cms/receiver/EmmaReceiver.h \
-	semaine/cms/message/SEMAINEXMLMessage.h \
 	semaine/cms/message/SEMAINEEmmaMessage.h \
 	semaine/cms/message/SEMAINEStateMessage.h \
 	semaine/cms/sender/XMLSender.h \
