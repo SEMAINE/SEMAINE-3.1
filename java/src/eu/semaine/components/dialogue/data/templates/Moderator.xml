@@ -263,6 +263,7 @@
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.evalState" />
+			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToPoppy" />
@@ -283,6 +284,7 @@
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.evalState" />
+			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToPrudence" />
@@ -303,6 +305,7 @@
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.evalState" />
+			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToObadiah" />
@@ -323,6 +326,7 @@
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.evalState" />
+			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToSpike" />
