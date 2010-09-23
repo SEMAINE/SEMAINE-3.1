@@ -11,13 +11,19 @@ and change to this directory and then type:
   svn co https://opensmile.svn.sourceforge.net/svnroot/opensmile/trunk .
 (or perform this checkout with a client like TortoiseSVN, etc. Thereby it is important to select the trunk directory. You should have the opensmile files directly in the opensmile directory after the checkout, you may not have a trunk, tags and branches directory there!)
 
+Next, get the emotion models from 
+  http://www.mmk.ei.tum.de/~eyb/semaine/emoModelsSVM_SetBCling.zip
+and
+  http://www.mmk.ei.tum.de/~eyb/semaine/emoModelsSVM_SetBCsmall.zip
+and unpack these files in the folder
+  c++/src/tum/auxiliary/models/emo
+
 Now you are ready to follow these steps to build the Semaine system and the openSMILE component:
 
 0.) If you don't already have it, download and install the
     "Microsoft® Windows® Software Development Kit Update for Windows Vista™"
     If should create a directory C:\Program Files\Microsoft SDKs\Windows\v6.0A
     with Lib\ and Include\ directories in it.
-
 
 
 4a.) Open the Visual Studio 2005 solution c++/vs2005/semaine.sln
