@@ -12,12 +12,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
@@ -56,6 +58,24 @@ public abstract class StateInfo
 	public static final String APIVersion = "0.2";
 	
 	public static final Map<Type, XPathInfoMapper> infosByType = getInfosByType();
+	
+	/**
+	 * Get the short names that are defined for the given state info type.
+	 * @param stateInfoType
+	 * @return a set of Strings containing the short names. The iterator of this set
+	 * returns the Strings in the order in which they were defined in the stateinfo.config file.
+	 */
+	public static Set<String> getShortNames(Type stateInfoType) {
+		if (infosByType == null) return null;
+		XPathInfoMapper m = infosByType.get(stateInfoType);
+		if (m == null) return null;
+		Map<String, String> expr = m.getExpressionMap();
+		if (expr == null) return null;
+		Set<String> shortNames = expr.keySet();
+		if (shortNames == null) return null;
+		return Collections.unmodifiableSet(expr.keySet());
+	}
+	
 	
 	private static Map<Type, XPathInfoMapper> getInfosByType()
 	{
@@ -246,7 +266,7 @@ public abstract class StateInfo
 				String namespaceURI = parts[1].trim();
 				namespacePrefixes.put(prefix, namespaceURI);
 			} else if (readShortNames) {
-				String[] parts = line.split("[ =:]+", 2);
+				String[] parts = line.split("[\t =:]+", 2);
 				if (parts.length < 2) {
 					throw new SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
 				}
@@ -577,10 +597,9 @@ public abstract class StateInfo
 
 	/**
 	 * Provide a read-only access to the information in this message.
-	 * The map contains as keys all information that can be known according
-	 * to the API version, and as non-null values the values taken from the message.
-	 * Values for information items not contained in the message will be null. 
+	 * The map contains all information that is part of the message.
 	 * @return a map with string keys and string values.
+	 * @see StateInfo#getShortNames(Type) for a list of short names that can be used as keys for the information.
 	 */
 	public Map<String, String> getInfos()
 	{
