@@ -257,13 +257,12 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="DialogueState.evalState" value="11" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Poppy" />
 				<argument value="contextstate" />
 			</function>
-			<remove name="DialogueState.evalState" />
-			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToPoppy" />
@@ -278,13 +277,12 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="DialogueState.evalState" value="11" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />
 				<argument value="contextstate" />
 			</function>
-			<remove name="DialogueState.evalState" />
-			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToPrudence" />
@@ -299,13 +297,12 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="DialogueState.evalState" value="11" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Obadiah" />
 				<argument value="contextstate" />
 			</function>
-			<remove name="DialogueState.evalState" />
-			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToObadiah" />
@@ -320,13 +317,12 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
+			<update name="DialogueState.evalState" value="11" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Spike" />
 				<argument value="contextstate" />
 			</function>
-			<remove name="DialogueState.evalState" />
-			<remove name="Agent.dialogContext" />
 		</effects>
 		<behaviour class="ResponseActionProposer" quality="1">
 			<argument name="response" value="#GretaPassToSpike" />
