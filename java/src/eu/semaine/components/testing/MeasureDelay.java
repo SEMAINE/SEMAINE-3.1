@@ -56,10 +56,16 @@ public class MeasureDelay extends Component {
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
 			assert xm.getTopicName().equals(callbackTopic);
 			Element root = xm.getDocument().getDocumentElement();
-			assert root.getLocalName().equals(SemaineML.E_CALLBACK);
-			assert root.getNamespaceURI().equals(SemaineML.namespaceURI);
+			if(!root.getLocalName().equals(SemaineML.E_CALLBACK)) {
+				return;
+			}
+			if (!root.getNamespaceURI().equals(SemaineML.namespaceURI)) {
+				return;
+			}
 			Element event = XMLTool.getChildElementByLocalNameNS(root, SemaineML.E_EVENT, SemaineML.namespaceURI);
-			assert event != null;
+			if (event == null) {
+				return;
+			}
 			String type = event.getAttribute(SemaineML.A_TYPE);
 			// We are only interested in start messages:
 			if (!type.equals(SemaineML.V_START)) {
@@ -79,12 +85,17 @@ public class MeasureDelay extends Component {
 		if (m.getTopicName().equals(directTopic)) {
 			r.direct = true;
 		} else {
-			assert m.getTopicName().equals(prepareTopic);
+			if (!m.getTopicName().equals(prepareTopic)) {
+				return;
+			}
 			r.direct = false;
 		}
 		r.id = m.getContentID();
-		assert !records.containsKey(r.id);
 		r.creationTime = m.getUsertime();
+		if (records.containsKey(r.id)) {
+			log.debug("ignoring duplicate entry '"+r.id+"' (previous creationTime was "+records.get(r.id).creationTime+", new would have been "+r.creationTime+")");
+			return;
+		}
 		records.put(r.id, r);
 	}
 	
@@ -97,7 +108,7 @@ public class MeasureDelay extends Component {
 			if (r.startTime == 0) { // not started yet
 				continue;
 			}
-			log.debug("Record "+r.id+" dur = "+(r.startTime - r.creationTime) + "(created at "+r.creationTime+", started at "+r.startTime+")");
+			//log.debug("Record "+r.id+" dur = "+(r.startTime - r.creationTime) + "(created at "+r.creationTime+", started at "+r.startTime+")");
 			if (r.direct) {
 				nDirect++;
 			} else {
