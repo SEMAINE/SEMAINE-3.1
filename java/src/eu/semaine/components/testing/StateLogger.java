@@ -37,6 +37,11 @@ public class StateLogger extends Component {
 	private static final String dialogStateTopic = "semaine.data.state.dialog";
 	private static final String contextStateTopic = "semaine.data.state.context";
 	
+	private static final String userStatePrefix = "u:";
+	private static final String agentStatePrefix = "a:";
+	private static final String dialogStatePrefix = "d:";
+	private static final String contextStatePrefix = "c:";
+	
 	private static final String FIELD_SEPARATOR = ",";
 	private static final String FIELD_QUOTE = "\"";
 	
@@ -85,16 +90,16 @@ public class StateLogger extends Component {
 		StringBuilder buf = new StringBuilder();
 		buf.append("time");
 		for (String s : userStates) {
-			buf.append(FIELD_SEPARATOR).append(s);
+			buf.append(FIELD_SEPARATOR).append(userStatePrefix).append(s);
 		}
 		for (String s : agentStates) {
-			buf.append(FIELD_SEPARATOR).append(s);
+			buf.append(FIELD_SEPARATOR).append(agentStatePrefix).append(s);
 		}
 		for (String s : dialogStates) {
-			buf.append(FIELD_SEPARATOR).append(s);
+			buf.append(FIELD_SEPARATOR).append(dialogStatePrefix).append(s);
 		}
 		for (String s : contextStates) {
-			buf.append(FIELD_SEPARATOR).append(s);
+			buf.append(FIELD_SEPARATOR).append(contextStatePrefix).append(s);
 		}
 		out.println(buf.toString());
 	}
