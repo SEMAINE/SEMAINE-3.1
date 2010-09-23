@@ -37,10 +37,10 @@ public class StateLogger extends Component {
 	private static final String dialogStateTopic = "semaine.data.state.dialog";
 	private static final String contextStateTopic = "semaine.data.state.context";
 	
-	private static final String userStatePrefix = "u:";
-	private static final String agentStatePrefix = "a:";
-	private static final String dialogStatePrefix = "d:";
-	private static final String contextStatePrefix = "c:";
+	private static final String userStatePrefix = "u.";
+	private static final String agentStatePrefix = "a.";
+	private static final String dialogStatePrefix = "d.";
+	private static final String contextStatePrefix = "c.";
 	
 	private static final String FIELD_SEPARATOR = ",";
 	private static final String FIELD_QUOTE = "\"";
