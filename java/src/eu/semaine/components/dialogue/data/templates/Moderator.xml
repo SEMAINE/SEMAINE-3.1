@@ -1,7 +1,7 @@
 <behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
 
 <!-- Introduction -->
-	<template id="Greta_intro_1" name="Introduction after system-start">
+	<template id="Greta_intro_0" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.introState" comparator="not_exists" />
@@ -20,11 +20,10 @@
 		</behaviour>
 	</template>
 	
-	<template id="Greta_intro_2" name="Introduction after system-start">
+	<template id="Greta_intro_1" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.introState" value2="1" />
-			<trigger value1="$Agent.speakingState" value2="listening" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.introState" value="2" />
@@ -34,14 +33,443 @@
 		</behaviour>
 	</template>
 	
-	<template id="Greta_intro_3" name="Introduction after system-start">
+	<template id="Greta_intro_2" name="Introduction after system-start">
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.introState" value2="2" />
-			<trigger value1="$Agent.speakingState" value2="listening" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.introState" value="3" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta2" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_3" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="3" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="4" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta3" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_4" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="4" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="5" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta4" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_5" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="5" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="6" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta5" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_6" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="6" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="7" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta6" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_7" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="7" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="8" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta7" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_8" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="8" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="9" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta8" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_9" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="9" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="10" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta9" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_10" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="10" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="11" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta10" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_11" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="11" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="12" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta11" />
+		</behaviour>
+	</template>
+	
+	<template id="Greta_intro_12" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="12" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="13" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta12" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_13" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="13" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="14" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta13" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_14" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="14" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="15" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta14" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_15" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="15" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="16" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta15" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_16" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="16" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="17" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta16" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_17" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="17" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="18" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta17" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_18" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="18" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="19" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta18" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_19" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="19" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="20" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta19" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_20" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="20" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="21" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta20" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_21" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="21" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="22" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta21" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_22" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="22" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="23" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta22" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_23" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="23" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="24" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta23" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_24" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="24" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="25" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta24" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_25" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="25" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="26" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta25" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_26" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="26" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="27" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta26" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_27" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="27" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="28" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta27" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_28" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="28" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="29" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta28" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_29" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="29" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="30" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta29" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_30" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="30" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="31" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta30" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_31" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="31" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="32" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta31" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_32" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="32" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="33" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta32" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_33" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="33" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="34" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta33" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_34" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="34" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="35" />
+		</effects>
+		<behaviour class="ResponseActionProposer" quality="1">
+			<argument name="response" value="#Greta34" />
+		</behaviour>
+	</template>
+
+	<template id="Greta_intro_35" name="Introduction after system-start">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Greta" />
+			<compare value1="$DialogueState.introState" value2="35" />
+			<trigger value1="$Agent.speakingState" value2="listening" />
+		</preconditions>
+		<effects>
+			<update name="DialogueState.introState" value="36" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
 				<argument value="Prudence" />

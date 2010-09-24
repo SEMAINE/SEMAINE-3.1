@@ -13,9 +13,47 @@ Used response-arguments:
 <responses>
 
 <!-- +++++++++++++++++++++++ Greta ++++++++++++++++++++++++++  -->
-		<response id="#Greta0" response="Hi." />
-		<response id="#Greta1" response="You have reached SAL, the Sensitive Artificial Listeners." />
-		<response id="#GretaEval1" response="What did you think of this conversation?" />
+		<response id="#Greta0" response="Hi. You have reached SAL, the Sensitive Artificial Listeners." />
+
+		<response id="#Greta1" response="My name is Greta and I am responsible for some computer characters that call themselves sensitive artificial listeners."/>
+		<response id="#Greta2" response="We will talk to them in a minute, but first I am going to tell you a bit about how the system operates."/>
+		<response id="#Greta3" response="The first thing you have to understand is that talking to the listeners is a bit like hitting a tennis ball against the wall."/>
+		<response id="#Greta4" response="You have to supply all the ideas and the effort, the listeners just bounce things back at you."/>
+		<response id="#Greta5" response="The fun is that the ball can come back at some very odd angles."/>
+		<response id="#Greta6" response="Sometimes they'll just go along with you for a bit, nice and predictable. Then they'll say something absolutely wild."/>
+		<response id="#Greta7" response="That is just part of the interaction."/>
+		<response id="#Greta8" response="You might ask why you would want to do this. Well, I'll tell you."/>
+		<response id="#Greta9" response="Tennis is about exercising your body."/>
+		<response id="#Greta10" response="This is about exercising your emotions."/>
+		<response id="#Greta11" response="The listeners pick up on your emotions, and try to move you around the emotional court."/>
+		<response id="#Greta12" response="Because they are just bits of program, they can sometimes say things that you wouldn't take from a real human."/>
+		<response id="#Greta13" response="Think of those occasions as a kind of invitation to respond in a way you wouldn't if it wad a real human."/>
+		<response id="#Greta14" response="They let rip at you, and you let rip at them."/>
+		<response id="#Greta15" response="And if you play the game, you can come out feeling you've has a real good workout."/>
+		<response id="#Greta16" response="That's the gist of it."/>
+		<response id="#Greta17" response="Now there are just two more things before I let you loose on the listeners."/>
+		<response id="#Greta18" response="First, remember that the listeners are just a complicated wall."/>
+		<response id="#Greta19" response="You have to speak at them."/>
+		<response id="#Greta20" response="There's no point asking them questions, or trying to outwit them, or anything like that."/>
+		<response id="#Greta21" response="Just go for it."/>
+		<response id="#Greta22" response="Second, let me tell you their names."/>
+		<response id="#Greta23" response="I'll start with Spike."/>
+		<response id="#Greta24" response="He's a nasty, angry creature, and his mission in life is to make you angry too."/>
+		<response id="#Greta25" response="Then there's Poppy."/>
+		<response id="#Greta26" response="She's a happy dippy party girl, and her mission in life is to make you as happy as she is."/>
+		<response id="#Greta27" response="Then there's Prudence."/>
+		<response id="#Greta28" response="She's sensible about everything, and she expects you to be sensible too."/>
+		<response id="#Greta29" response="Then last of all, there's Obadiah."/>
+		<response id="#Greta30" response="Obadiah is the soul of misery, and he thinks everybody should be miserable, including you."/>
+		<response id="#Greta31" response="So there you are. Spike, Poppy, Prudence, Obadiah."/>
+		<response id="#Greta32" response="It's up to you which you start with; and when you've had enough, you can ask to speak to the next one; and the next one; and so on."/>
+		<response id="#Greta33" response="It's all easy enough."/>
+		<response id="#Greta34" response="Just answer their questions, talk to them and let the conversation flow from there, see if you can get a rally going?"/>
+		<!-- not used for now: -->
+		<response id="#Greta35" response="So who would you like to talk to first?"/>
+
+
+
 		<response id="#GretaPassToPoppy" response="I am going to pass you to Poppy." />
 		<response id="#GretaPassToPrudence" response="I am going to pass you to Prudence." />
 		<response id="#GretaPassToObadiah" response="I am going to pass you to Obadiah." />
