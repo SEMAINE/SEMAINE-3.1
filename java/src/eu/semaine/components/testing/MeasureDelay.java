@@ -77,7 +77,8 @@ public class MeasureDelay extends Component {
 			}
 			Record r = records.get(id);
 			String timeString = event.getAttribute(SemaineML.A_TIME);
-			r.startTime = Long.parseLong(timeString);
+			//r.startTime = Long.parseLong(timeString);
+			r.startTime = meta.getTime();
 			return;
 		}
 		// We are seeing the creation of the new play request
@@ -91,7 +92,8 @@ public class MeasureDelay extends Component {
 			r.direct = false;
 		}
 		r.id = m.getContentID();
-		r.creationTime = m.getUsertime();
+		//r.creationTime = m.getUsertime();
+		r.creationTime = meta.getTime();
 		if (records.containsKey(r.id)) {
 			log.debug("ignoring duplicate entry '"+r.id+"' (previous creationTime was "+records.get(r.id).creationTime+", new would have been "+r.creationTime+")");
 			return;
