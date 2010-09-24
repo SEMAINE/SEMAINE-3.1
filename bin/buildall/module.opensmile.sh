@@ -5,7 +5,7 @@
 USE_SVN="true"
  ####################
 
-OPENSMILEMODELS="models-21-12-2009.zip"
+OPENSMILEMODELS="emoModelsSVM_SetBCsmall.zip"
 OPENSMILEMODELS_URL="http://www.mmk.ei.tum.de/~eyb/semaine/$OPENSMILEMODELS"
 # use this line in combination with USE_SVN="true" for the bleeding edge development version:
 OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile/trunk"
@@ -55,9 +55,10 @@ function func_build_opensmile {
 
     # install models if present in download directory
     if test -f $DOWNLOAD_PREFIX/$OPENSMILEMODELS ; then
-      if test ! -f models/emo/salaroc/allft.model.bin || test "x$1" = "xclean" ; then
+      mkdir ../auxiliary/models/emo 2> /dev/null
+      if test ! -f ../auxiliary/models/emo/emo_svmBsel || test "x$1" = "xclean" ; then
         echo "unzipping openSMILE SEMAINE models to $PWD/models"
-        unzip -o $DOWNLOAD_PREFIX/$OPENSMILEMODELS -d .
+        unzip -o $DOWNLOAD_PREFIX/$OPENSMILEMODELS -d ../auxiliary/models/emo/
         if test "x$?" != "x0" ; then
           echo "Error extracting models.... !!!"
           return 1;
@@ -155,10 +156,10 @@ function func_build_opensmile {
     # changes to the build directory of the component
     # and runs the command specified as first parameter
     # the script will be in located in bin/run_components
-    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine3a.conf" prefix "$INSTALL_PREFIX/bin/"
+    createRunScript "SEMAINExtract -C ../auxiliary/conf/opensmileSemaine3a.conf" prefix "$INSTALL_PREFIX/bin/"
 
     # create a second version, for debugging the component with gdb
-    createRunScript "SEMAINExtract -C ../auxiliary/opensmileSemaine3a.conf -l 3 -d" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
+    createRunScript "SEMAINExtract -C ../auxiliary/conf/opensmileSemaine3a.conf -l 3 -d" prefix "gdb --args $INSTALL_PREFIX/bin/" debug
 
     return 0;
 }
