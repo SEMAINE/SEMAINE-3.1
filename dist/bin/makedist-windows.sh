@@ -24,6 +24,13 @@ fi
 # Prepare the actual list of files from $FILELIST:
 # prepend $INST_ROOTDIR in front of each file, 
 # and expand directories.
+
+# In argument of for loop, split at newline only,
+# in order to allow file names including spaces:
+OLDIFS="$IFS"
+IFS='
+'
+
 (cd "$TMPDIR" 
 for f in `cat "$FILELIST"` ; do
   if [ -d "$INST_ROOTDIR/$f" ] ; then
@@ -34,6 +41,8 @@ for f in `cat "$FILELIST"` ; do
     echo "Warning: $ROOTDIR/$f does not exist."
   fi
 done
+
+IFS="$OLDIFS"
 
 cat "$DISTFILELIST" | zip -q "$DISTFILE" -@
  
