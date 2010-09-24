@@ -47,7 +47,7 @@ function func_build_opensmile {
       fi
     fi
 
-    if test ! -f ../auxiliary/models/emo/emo_svmBsel ; then
+    if test ! -d ../auxiliary/models/emo/emo_svmBling ; then
 
     # download the SMILE models
     # the nc version of the download function is used here, 
@@ -60,7 +60,7 @@ function func_build_opensmile {
     # install models if present in download directory
     if test -f $DOWNLOAD_PREFIX/$OPENSMILEMODELS ; then
       mkdir ../auxiliary/models/emo 2> /dev/null
-      if test ! -f ../auxiliary/models/emo/emo_svmBsel || test "x$1" = "xclean" ; then
+      if test ! -f ../auxiliary/models/emo/emo_svmBling || test "x$1" = "xclean" ; then
         echo "unzipping openSMILE SEMAINE models to $PWD/models"
         unzip -o $DOWNLOAD_PREFIX/$OPENSMILEMODELS -d ../auxiliary/models/emo/
         if test "x$?" != "x0" ; then
@@ -70,6 +70,10 @@ function func_build_opensmile {
      fi
     fi
 
+    else
+      echo ""
+      echo "WARNING: Directory ../auxiliary/models/emo/emo_svmBling exists, assuming the models have already been unpacked. If not, then you must edit the build script bin/buildall/module.opensmile.sh and remove this if statement!"
+      echo ""
     fi
 
     if test "$USE_SVN" = "true" ; then
