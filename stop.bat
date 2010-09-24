@@ -13,8 +13,8 @@ taskkill /f /im Active_BehaviorRealizer.exe
 taskkill /f /im Active_ListenerIntentPlanner.exe
 taskkill /f /im Active_Player.exe
 
-FOR /F "tokens=2" %%n IN ('TASKLIST /NH /FI "WINDOWTITLE eq OpenSMILE - start_openSMILE.bat"' ) DO SET PID=%%n
-taskkill /PID %PID%
+
+taskkill /f /im SEMAINExtract.exe
 
 taskkill /f /im VideoFeatureExtractorConsole.exe
 
