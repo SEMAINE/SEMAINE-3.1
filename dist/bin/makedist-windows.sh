@@ -42,10 +42,11 @@ for f in `cat "$FILELIST"` ; do
   fi
 done
 
-IFS="$OLDIFS"
-
 cat "$DISTFILELIST" | zip -q "$DISTFILE" -@
  
- )
- echo "Created $DISTFILE"
+)
+
+IFS="$OLDIFS"
+
+echo "Created $DISTFILE"
 
