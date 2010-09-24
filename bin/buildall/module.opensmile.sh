@@ -2,23 +2,25 @@
 #################### Package Configuration    #########################
 
  ## set this to "true" to enable building of opensmile from the latest svn revision
-USE_SVN="true"
+USE_SVN="false"
  ####################
 
-OPENSMILEMODELS="emoModelsSVM_SetBCsmall.zip"
+OPENSMILEMODELS="emoModelsSVM_SetBCling.zip"
 OPENSMILEMODELS_URL="http://www.mmk.ei.tum.de/~eyb/semaine/$OPENSMILEMODELS"
 # use this line in combination with USE_SVN="true" for the bleeding edge development version:
 OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile/trunk"
 # enable this to get the semaine-2.0-fixes only
 #OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile/branches/semaine-2.0-fixes"
+#OPENSMILE_SVN="https://opensmile.svn.sourceforge.net/svnroot/opensmile/branches/semaine-3.0-fixes"
 
-### this i the openSMILE svn revision used in the 2.0 release
-#OPENSMILE_SVN_20="https://opensmile.svn.sourceforge.net/svnroot/opensmile"
+### this i the openSMILE svn revision used in the 2.0 / 3.0 releases
+#OPENSMILE_SVN_20="https://opensmile.svn.sourceforge.net/svnroot/opensmile/trunk"
 #OPENSMILE_REV_20="238"
+#OPENSMILE_REV_30="381"
 
 ### the tarball should be included in the release, 
 ### in case it is not, we include the download here
-OPENSMILE_TARBALL="openSMILE_SEMAINE_2.0.tar.gz"
+OPENSMILE_TARBALL="openSMILE_SEMAINE_3.0.tar.gz"
 OPENSMILE_TARBALL_URL="http://www.mmk.ei.tum.de/~eyb/semaine/$OPENSMILE_TARBALL"
 
 
@@ -45,6 +47,8 @@ function func_build_opensmile {
       fi
     fi
 
+    if test ! -f ../auxiliary/models/emo/emo_svmBsel ; then
+
     # download the SMILE models
     # the nc version of the download function is used here, 
     # since smile runs without models (feature extractor only)
@@ -64,6 +68,8 @@ function func_build_opensmile {
           return 1;
         fi
      fi
+    fi
+
     fi
 
     if test "$USE_SVN" = "true" ; then
