@@ -22,6 +22,7 @@ const std::string EMMA::E_ROOT_TAGNAME = "emma";
 const std::string EMMA::E_INTERPRETATION = "interpretation";
 const std::string EMMA::E_ONEOF = "one-of";
 const std::string EMMA::E_SEQUENCE = "sequence";
+const std::string EMMA::E_GROUP = "group";
 
 	// Attributes
 const std::string EMMA::A_START = "emma:start";

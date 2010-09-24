@@ -1,9 +1,9 @@
 
 #################### Package Configuration    #########################
-APR_BASE="apr-1.3.6"
+APR_BASE="apr-1.3.12"
 
-#APR_URL="http://apache.linux-mirror.org/apr/$APR_BASE.tar.gz"
-APR_URL="http://apache.autinity.de/apr/$APR_BASE.tar.gz"
+APR_URL="http://apache.linux-mirror.org/apr/$APR_BASE.tar.gz"
+#APR_URL="http://apache.autinity.de/apr/$APR_BASE.tar.gz"
 
 register_build "apr" "$APR_URL" "$APR_BASE" "func_build_apr" $1
 

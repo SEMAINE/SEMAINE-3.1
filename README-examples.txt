@@ -8,11 +8,6 @@ To run the example systems, proceed as follows.
 
 This example should run on any system with Java.
 
-Make sure you have installed the package 
-	SEMAINE-java
-from http://sourceforge.net/projects/semaine
-and installed it as documented at http://semaine.opendfki.de/wiki/SEMAINE-1.0.
-
 Make sure an activemq server is running.
 
 Then start the Hello example as follows:
@@ -23,21 +18,16 @@ java -jar java/lib/semaine-examples.jar java/config/example-hello.config
 
 * Emotion Mirror
 
-This example requires Linux or Mac OS X.
-
-Make sure you have installed the packages 
-	SEMAINE-java
-	SEMAINE-linux
-from http://sourceforge.net/projects/semaine
-and installed them as documented at http://semaine.opendfki.de/wiki/SEMAINE-1.0.
+This example requires the native component OpenSMILE.
 
 Make sure an activemq server is running.
 
 Then start the Emotion mirror example as follows:
 
-(in a first shell, on a linux or mac system)
 cd SEMAINE-x.x.x
-bin/run_components/start_component_tum.smile
+bin/run_components/start_component_tum.opensmile (on linux/mac)
+or
+Opensmile\start_openSMILE.bat (on windows)
 
 (in a second shell)
 cd SEMAINE-x.x.x
@@ -46,31 +36,20 @@ java -jar java/lib/semaine-examples.jar java/config/example-mirror.config
 
 * Swimmer's game
 
-This example requires Linux or Mac OS X.
-
-Make sure you have installed the packages 
-	SEMAINE-java
-	SEMAINE-linux
-from http://sourceforge.net/projects/semaine
-and installed them as documented at http://semaine.opendfki.de/wiki/SEMAINE-1.0.
-
 Make sure an activemq server is running.
 
 Then start the Swimmer's game example as follows:
 
-(in a first shell, on a linux or mac system)
+(in a first shell)
 cd SEMAINE-x.x.x
-bin/run_components/start_component_tum.smile
+bin/run_components/start_component_tum.opensmile (on linux/mac)
+or
+Opensmile\start_openSMILE.bat (on windows)
 
 (in a second shell)
 cd SEMAINE-x.x.x
 bin/example-swimmer.sh (on linux/mac)
 bin\example-swimmer.bat (on Windows)
-
-Note that if you run the second shell on Windows, you will need to take into account
-the notes on "Running a distributed system" at 
-http://semaine.opendfki.de/wiki/SEMAINE-1.0-DistributedSystem
-
 
 
 The source code of the example components can be found below java/src/eu/semaine/examples.

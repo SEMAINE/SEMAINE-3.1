@@ -2,9 +2,8 @@
 #################### Package Configuration    #########################
 CPPUNIT_BASE="cppunit-1.12.1"
 #-libs
-#UUID_URL="http://surfnet.dl.sourceforge.net/sourceforge/e2fsprogs/e2fsprogs-libs-1.41.3.tar.gz"
-CPPUNIT_URL="http://dfn.dl.sourceforge.net/sourceforge/cppunit/$CPPUNIT_BASE.tar.gz"
-
+#CPPUNIT_URL="http://dfn.dl.sourceforge.net/sourceforge/cppunit/$CPPUNIT_BASE.tar.gz"
+CPPUNIT_URL="http://puzzle.dl.sourceforge.net/project/cppunit/cppunit/1.12.1/cppunit-1.12.1.tar.gz"
 register_build "cppunit" "$CPPUNIT_URL" "$CPPUNIT_BASE" "func_build_cppunit" $1
 
 #######################################################################

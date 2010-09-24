@@ -28,6 +28,7 @@ public:
 	static const std::string E_INTERPRETATION;
 	static const std::string E_ONEOF;
 	static const std::string E_SEQUENCE;
+	static const std::string E_GROUP;
 
 	// Attributes
 	static const std::string A_START;

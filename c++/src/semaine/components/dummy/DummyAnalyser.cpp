@@ -60,7 +60,9 @@ void DummyAnalyser::react(SEMAINEMessage * m) throw(CMSException)
 			// Simulate a turn-yielding event
 			// Create and fill a simple EMMA document
 			DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
+			XMLTool::setPrefix(document->getDocumentElement(), "emma");
 			DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
+			XMLTool::setPrefix(interpretation, "emma");
 			DOMElement * behaviour = XMLTool::appendChildElement(interpretation, SemaineML::E_BEHAVIOUR, SemaineML::namespaceURI);
 			XMLTool::setAttribute(interpretation, EMMA::A_START, usertimeString);
 			XMLTool::setAttribute(behaviour, SemaineML::A_NAME, "gaze-away");

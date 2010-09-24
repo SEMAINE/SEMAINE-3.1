@@ -2,8 +2,8 @@
 #################### Package Configuration    #########################
 XERCES_BASE="xerces-c-3.0.1"
 
-XERCES_URL="http://apache.linux-mirror.org/xerces/c/3/sources/$XERCES_BASE.tar.gz"
-
+#XERCES_URL="http://apache.linux-mirror.org/xerces/c/3/sources/$XERCES_BASE.tar.gz"
+XERCES_URL="http://archive.apache.org/dist/xml/xerces-c/Xerces-C_3_0_1/sources/$XERCES_BASE.tar.gz"
 register_build "xerces-c" "$XERCES_URL" "$XERCES_BASE" "func_build_xerces" $1
 
 #######################################################################

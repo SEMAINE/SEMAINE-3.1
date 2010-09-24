@@ -2,8 +2,8 @@
 #################### Package Configuration    #########################
 XQILLA_BASE="XQilla-2.2.2"
 
-XQILLA_URL="http://downloads.sourceforge.net/project/xqilla/xqilla/2.2.2/$XQILLA_BASE.tar.gz"
-
+#XQILLA_URL="http://downloads.sourceforge.net/project/xqilla/xqilla/2.2.2/$XQILLA_BASE.tar.gz"
+XQILLA_URL="http://puzzle.dl.sourceforge.net/project/xqilla/xqilla/2.2.2/XQilla-2.2.2.tar.gz"
 register_build "xqilla" "$XQILLA_URL" "$XQILLA_BASE" "func_build_xqilla" $1
 
 #######################################################################
