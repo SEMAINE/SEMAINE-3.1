@@ -17,6 +17,9 @@ java/config/speech2speech.config
 java/config/example-hello.config
 java/config/example-mirror.config
 java/config/example-swimmer.config
+java/config/character-config.xml
+java/config/stateinfo.config
+java/config/DM.config
 java/lib/activemq-all-5.1.0.jar
 java/lib/commons-logging-1.1.1.jar
 java/lib/hsqldb.jar

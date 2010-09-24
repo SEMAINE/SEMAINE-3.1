@@ -1,4 +1,4 @@
-rem Start all installed SEMAINE-2.0 components with one script
+rem Start all installed SEMAINE-3.0 components with one script
 @echo off
 
 rem Which ActiveMQ to connect to:
