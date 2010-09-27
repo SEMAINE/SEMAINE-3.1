@@ -2,6 +2,8 @@ package eu.semaine.components.dialogue.behaviourselection;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -61,8 +63,12 @@ public class TemplateParser
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		factory.setValidating(true);
+		
+		//URL schemaUrl = new URL("file:bin/eu/semaine/components/dialogue/data/templates/template.xsd");
+		URL xsdURL = this.getClass().getResource("/eu/semaine/components/dialogue/data/templates/template.xsd");
+		
 		factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
-		factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaSource", "file:bin/eu/semaine/components/dialogue/data/templates/template.xsd");
+		factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaSource", xsdURL.toString());
 		DocumentBuilder docBuilder = factory.newDocumentBuilder();
 		docBuilder.setErrorHandler( new XSDErrorHandler() );
 		Document doc = docBuilder.parse(inStream);
