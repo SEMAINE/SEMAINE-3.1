@@ -1312,9 +1312,6 @@ Used response-arguments:
 		<response id="#Prudence125" response="What are you doing this week?" >
 			<argument name="pitchaccent:LplusHstar" value="this week" />
 		</response>
-		<response id="#Prudence126" response="Where do you think your attitude to life comes from?" >
-			<argument name="emotion:small-surprise" value="your attitude to life" />
-		</response>
 		<response id="#Prudence127" response="When?" >
 			<argument name="pitchaccent:LplusHstar" value="_all" />
 		</response>
@@ -1455,7 +1452,6 @@ Used response-arguments:
 			<member id="#Prudence71" />
 			<member id="#Prudence91" />
 			<member id="#Prudence86" />
-			<member id="#Prudence126" />
 			<member id="#Prudence104" />
 			<member id="#Prudence57" />
 			<member id="#Prudence123" />
@@ -1601,7 +1597,6 @@ Used response-arguments:
 			<member id="#Prudence123" />
 			<member id="#Prudence124" />
 			<member id="#Prudence125" />
-			<member id="#Prudence126" />
 			<member id="#Prudence127" />
 			<member id="#Prudence128" />
 			<member id="#Prudence129" />
