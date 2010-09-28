@@ -255,7 +255,7 @@ public class TestGui extends Component
 			}
 			if (stateInfo.getType() == StateInfo.Type.DialogState) {
 				if( stateInfo.hasInfo("agentTurnState") ) {
-					if( stateInfo.getInfo("agentTurnState").equals("true") ) {
+					if( stateInfo.getInfo("agentTurnState").equals("speaking") ) {
 						agentSpeakingState.setIcon(agentSpeakingIcon);
 					} else {
 						agentSpeakingState.setIcon(agentListeningIcon);
