@@ -1064,6 +1064,7 @@ Opensmile/bin-win6/SEMAINExtract.exe
 Opensmile/bin-win6/openSmileLibSemaineRelease.dll
 Opensmile/bin-win6/xerces-c_3_0.dll
 Opensmile/bin-win6/libaprutil-1.dll
+Opensmile/bin-win6/libapriconv-1.dll
 Opensmile/bin-win6/xqilla22.dll
 Opensmile/bin-win6/libapr-1.dll
 Opensmile/semaine-openSMILE-win5-run.bat
@@ -1072,6 +1073,7 @@ Opensmile/bin-win5/SEMAINExtract.exe
 Opensmile/bin-win5/openSmileLibSemaineRelease.dll
 Opensmile/bin-win5/xerces-c_3_0.dll
 Opensmile/bin-win5/libaprutil-1.dll
+Opensmile/bin-win5/libapriconv-1.dll
 Opensmile/bin-win5/xqilla22.dll
 Opensmile/bin-win5/libapr-1.dll
 Opensmile/semaine-openSMILE-win6-run.bat
