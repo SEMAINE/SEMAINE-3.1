@@ -96,7 +96,7 @@ public class ComponentRunner
 				throw new SystemConfigurationException("Error in config file '"+configFile+"', property 'semaine.components':\n"
 						+"The following entry represents a class which is not a subclass of eu.semaine.components.Component:\n"
 						+"'"+d+"'", e);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				throw new SystemConfigurationException("Error in config file '"+configFile+"', property 'semaine.components':\n"
 						+"The following entry cannot be instantiated:\n"
 						+"'"+d+"'", e);
