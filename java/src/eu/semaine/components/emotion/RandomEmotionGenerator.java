@@ -53,6 +53,7 @@ public class RandomEmotionGenerator extends Component {
 	
 	private Document createRandomEmotionXML() {
 		Document doc = XMLTool.newDocument(EMMA.ROOT_TAGNAME, EMMA.namespaceURI, EMMA.version);
+		doc.getDocumentElement().setPrefix("emma");
 		Element interpretation = XMLTool.appendChildElement(doc.getDocumentElement(), EMMA.E_INTERPRETATION);
 		Element emotion = XMLTool.appendChildElement(interpretation, EmotionML.E_EMOTION, EmotionML.namespaceURI);
 		
