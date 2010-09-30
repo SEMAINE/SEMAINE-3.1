@@ -35,7 +35,7 @@ public class AgentStateInfo extends StateInfo
 	 * @throws JMSException
 	 */
 	public AgentStateInfo(Map<String, String> infoItems)
-	throws JMSException
+	throws IllegalArgumentException
 	{
 		super(infoItems, "AgentStateInfo", Type.AgentState);
 	}
