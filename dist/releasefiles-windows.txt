@@ -402,6 +402,7 @@ Greta/logs/face_engine_log.txt
 Greta/logs/gesture_engine_log.txt
 Greta/mmsystem/baseline_default.xml
 Greta/mmsystem/behaviorqualifiers.xml
+Greta/mmsystem/behaviorqualifiers_zero.xml
 Greta/mmsystem/GRETA.xml
 Greta/mmsystem/lexicon.xml
 Greta/mmsystem/lexicon_Greta.xml
