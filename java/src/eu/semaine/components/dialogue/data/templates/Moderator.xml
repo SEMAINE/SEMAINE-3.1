@@ -771,7 +771,7 @@
 				<argument value="contextstate" />
 			</function>
 		</effects>
-		<behaviour class="ResponseActionProposer" quality="1">
+		<behaviour class="ResponseActionProposer" quality="10">
 			<argument name="response" value="#GretaPassToPoppy" />
 		</behaviour>
 	</template>
@@ -789,7 +789,7 @@
 				<argument value="contextstate" />
 			</function>
 		</effects>
-		<behaviour class="ResponseActionProposer" quality="1">
+		<behaviour class="ResponseActionProposer" quality="10">
 			<argument name="response" value="#GretaPassToPrudence" />
 		</behaviour>
 	</template>
@@ -807,7 +807,7 @@
 				<argument value="contextstate" />
 			</function>
 		</effects>
-		<behaviour class="ResponseActionProposer" quality="1">
+		<behaviour class="ResponseActionProposer" quality="10">
 			<argument name="response" value="#GretaPassToObadiah" />
 		</behaviour>
 	</template>
@@ -825,7 +825,7 @@
 				<argument value="contextstate" />
 			</function>
 		</effects>
-		<behaviour class="ResponseActionProposer" quality="1">
+		<behaviour class="ResponseActionProposer" quality="10">
 			<argument name="response" value="#GretaPassToSpike" />
 		</behaviour>
 	</template>
