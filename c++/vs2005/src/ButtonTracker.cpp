@@ -10,9 +10,9 @@
 #include <semaine/util/XMLTool.h>
 #include <semaine/components/Component.h>
 #include <semaine/system/ComponentRunner.h>
-#include <semaine/cms/sender/EmmaSender.h>
-#include <semaine/datatypes/xml/EMMA.h>
-#include <semaine/datatypes/xml/SemaineML.h>
+#include <semaine/cms/sender/StateSender.h>
+#include <semaine/datatypes/stateinfo/StateInfo.h>
+#include <semaine/datatypes/stateinfo/UserStateInfo.h>
 
 #include "MouseHook.h"
 
@@ -51,7 +51,6 @@ DWORD CALLBACK MouseShovelThread(LPVOID pVoid)
 
 
 using namespace semaine::util;
-using namespace semaine::datatypes::xml;
 
 namespace ButtonTracker {
 
@@ -67,7 +66,7 @@ protected:
 	virtual void customStopIO() throw(std::exception);
 
 private:
-	semaine::cms::sender::EmmaSender * emmaSender;
+	semaine::cms::sender::StateSender * stateSender;
 	DWORD threadId;
 	bool listenToLeftButton;
 	bool listenToMidButton;
@@ -84,14 +83,15 @@ ButtonTracker::ButtonTracker() throw(cms::CMSException) :
 		listenToMidButton(true),
 		listenToRightButton(false)
 {
-	emmaSender = new semaine::cms::sender::EmmaSender("semaine.data.context.button", getName());
-	senders.push_back(emmaSender);
+	stateSender = new semaine::cms::sender::StateSender("semaine.data.state.user.behaviour",
+		semaine::datatypes::stateinfo::StateInfo::UserState, getName());
+	senders.push_back(stateSender);
 	waitingTime = 10; // call act() every 10 ms
 }
 
 ButtonTracker::~ButtonTracker()
 {
-	delete emmaSender;
+	delete stateSender;
 }
 
 void ButtonTracker::customStartIO() throw(std::exception)
@@ -161,14 +161,13 @@ void ButtonTracker::sendMouseEvent(MouseHook::MouseHookEvent mhe) {
 	buf << usertime;
 	std::string usertimeString = buf.str();
 
+	std::map<std::string, std::string> info;
+	info["buttonEvent"] = activity;
+	info["buttonEventTime"] = usertimeString;
 
-	// Create and fill a simple EMMA document
-	XERCES_CPP_NAMESPACE::DOMDocument * document = XMLTool::newDocument(EMMA::E_EMMA, EMMA::namespaceURI, EMMA::version);
-	XERCES_CPP_NAMESPACE::DOMElement * interpretation = XMLTool::appendChildElement(document->getDocumentElement(), EMMA::E_INTERPRETATION);
-	XERCES_CPP_NAMESPACE::DOMElement * behaviour = XMLTool::appendChildElement(interpretation, SemaineML::E_BEHAVIOUR, SemaineML::namespaceURI);
-	XMLTool::setAttribute(interpretation, EMMA::A_OFFSET_TO_START, usertimeString);
-	XMLTool::setAttribute(behaviour, SemaineML::A_NAME, activity);
-	emmaSender->sendXML(document, usertime);
+	semaine::datatypes::stateinfo::UserStateInfo si(info);
+
+	stateSender->sendStateInfo(&si, usertime);
 }
 
 } // namespace ButtonTracker
