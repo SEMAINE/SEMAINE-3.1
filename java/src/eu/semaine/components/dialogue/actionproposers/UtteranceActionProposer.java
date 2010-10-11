@@ -220,6 +220,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 */
 	public void act() throws JMSException
 	{
+		//System.out.println(is);
 		if( meta.getTime() < prevTime ) {
 			is.set("Agent.speakingState","listening");
 			is.set("Agent.speakingStateTime", (int)meta.getTime());
@@ -926,7 +927,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		DMLogger.getLogger().log(meta.getTime(), "Queue = " + queueString);
 		historyQueue.addLast(latestResponse.getResponse());
-		if( historyQueue.size() > 5 ) historyQueue.removeFirst();
+		if( historyQueue.size() > 10 ) historyQueue.removeFirst();
 	}
 	
 	/**

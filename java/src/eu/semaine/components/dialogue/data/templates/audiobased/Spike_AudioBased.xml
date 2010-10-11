@@ -142,7 +142,7 @@
        	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
 	  </preconditions>
 	   
-	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	<behaviour class="ResponseActionProposer" quality="0.3">
 	   	 	<argument name="response" value="##Spike_insult_2" />
 	   	</behaviour>
 	</template>
@@ -171,7 +171,7 @@
        	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
 	  </preconditions>
 	   
-	   	<behaviour class="ResponseActionProposer" quality="0.6">
+	   	<behaviour class="ResponseActionProposer" quality="0.3">
 	   	 	<argument name="response" value="##Spike_insult_2" />
 	   	</behaviour>
 	</template>

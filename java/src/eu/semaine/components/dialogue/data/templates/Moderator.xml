@@ -468,17 +468,60 @@
 			<compare value1="$DialogueState.introState" value2="35" />
 			<trigger value1="$Agent.speakingState" value2="listening" />
 		</preconditions>
-		<effects>
-			<update name="DialogueState.introState" value="36" />
-			<function name="sendDataAtEndOfTurn">
-				<argument value="character" />
-				<argument value="Prudence" />
-				<argument value="contextstate" />
-			</function>
-		</effects>
-		<behaviour class="ResponseActionProposer" quality="1">
-			<argument name="response" value="#GretaPassToPrudence" />
-		</behaviour>
+		<optional>
+   			<option probability="0.25">
+   				<c_effects>
+					<c_update name="DialogueState.introState" value="36" />
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Prudence" />
+						<c_argument value="contextstate" />
+					</c_function>
+				</c_effects>
+				<c_behaviour class="ResponseActionProposer" quality="1">
+					<c_argument name="response" value="#GretaPassToPrudence" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.25">
+   				<c_effects>
+					<c_update name="DialogueState.introState" value="36" />
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Poppy" />
+						<c_argument value="contextstate" />
+					</c_function>
+				</c_effects>
+				<c_behaviour class="ResponseActionProposer" quality="1">
+					<c_argument name="response" value="#GretaPassToPoppy" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.25">
+   				<c_effects>
+					<c_update name="DialogueState.introState" value="36" />
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Spike" />
+						<c_argument value="contextstate" />
+					</c_function>
+				</c_effects>
+				<c_behaviour class="ResponseActionProposer" quality="1">
+					<c_argument name="response" value="#GretaPassToSpike" />
+				</c_behaviour>
+   			</option>
+   			<option probability="0.25">
+   				<c_effects>
+					<c_update name="DialogueState.introState" value="36" />
+					<c_function name="sendDataAtEndOfTurn">
+						<c_argument value="character" />
+						<c_argument value="Obadiah" />
+						<c_argument value="contextstate" />
+					</c_function>
+				</c_effects>
+				<c_behaviour class="ResponseActionProposer" quality="1">
+					<c_argument name="response" value="#GretaPassToObadiah" />
+				</c_behaviour>
+   			</option>
+   		</optional>
 	</template>
 	
 <!-- Evaluation -->
