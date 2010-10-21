@@ -530,7 +530,7 @@
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
 			<compare value1="$Agent.previousCharacter" value2="Poppy" />
-			<compare value1="$Agent.dialogContext" value2="Questions" />
+			<compare value1="$Agent.dialogContext" value2="Questions1" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="1" />
@@ -544,7 +544,7 @@
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
 			<compare value1="$Agent.previousCharacter" value2="Prudence" />
-			<compare value1="$Agent.dialogContext" value2="Questions" />
+			<compare value1="$Agent.dialogContext" value2="Questions1" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="1" />
@@ -558,7 +558,7 @@
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
 			<compare value1="$Agent.previousCharacter" value2="Obadiah" />
-			<compare value1="$Agent.dialogContext" value2="Questions" />
+			<compare value1="$Agent.dialogContext" value2="Questions1" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="1" />
@@ -572,7 +572,7 @@
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
 			<compare value1="$Agent.previousCharacter" value2="Spike" />
-			<compare value1="$Agent.dialogContext" value2="Questions" />
+			<compare value1="$Agent.dialogContext" value2="Questions1" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="1" />
@@ -586,7 +586,7 @@
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" comparator="not_exists" />
 			<compare value1="$Agent.previousCharacter" comparator="not_exists" />
-			<compare value1="$Agent.dialogContext" value2="Questions" />
+			<compare value1="$Agent.dialogContext" value2="Questions1" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="1" />
@@ -643,7 +643,7 @@
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="3" />
-			<trigger value1="$Agent.speakingIntention" value2="want_turn" /> 
+			<trigger value1="$Agent.dialogContext" value2="Questions2" /> 
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="4" />
@@ -670,7 +670,7 @@
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="5" />
-			<trigger value1="$Agent.speakingIntention" value2="want_turn" /> 
+			<trigger value1="$Agent.dialogContext" value2="Questions3" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="6" />
@@ -697,7 +697,7 @@
 		<preconditions>
 			<compare value1="$Agent.character" value2="Greta" />
 			<compare value1="$DialogueState.evalState" value2="7" />
-			<trigger value1="$Agent.speakingIntention" value2="want_turn" /> 
+			<trigger value1="$Agent.dialogContext" value2="Questions4" />
 		</preconditions>
 		<effects>
 			<update name="DialogueState.evalState" value="8" />
