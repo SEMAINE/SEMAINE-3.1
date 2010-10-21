@@ -94,6 +94,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	/* All possible responses and response-groups, with their ID as the key */
 	private HashMap<String,Response> responses;
 	private HashMap<String,ArrayList<Response>> responseGroups;
+	private HashMap<String,ArrayList<Response>> responseGroupHistory = new HashMap<String,ArrayList<Response>>();
 	
 	/* A list of responses that is prepared or being prepared, with the hashvalue of that response as key */
 	private HashMap<String,String> preparedResponses = new HashMap<String,String>();
@@ -124,6 +125,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	/* The BehaviourClass-instance of this class */
 	private static UtteranceActionProposer myClass;
 	
+	private ArrayList<Response> history = new ArrayList<Response>();
 	private LinkedList<String> historyQueue = new LinkedList<String>();
 	
 	private int queueWaitingCounter = 0;
@@ -187,6 +189,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		responses = reader.getResponses();
 		responseGroups = reader.getResponseGroups();
 		for( String group : responseGroups.keySet() ) {
+			responseGroupHistory.put(group, new ArrayList<Response>());
 			for( Response r : responseGroups.get(group) ) {
 				is.set("Responses." + group + "._addlast", r.getId());
 			}
@@ -896,6 +899,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			/* The Response has been prepared before, so it only has to be started. */
 			try {
 				latestResponse = currResponse;
+				history.add(latestResponse);
 				sendSpeaking();
 				DMLogger.getLogger().log(meta.getTime(), "Using Prepared Response " + id);
 				log.debug("Trigger prepared response "+id+" '"+currResponse.getResponse()+"'");
@@ -910,6 +914,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			String contentID = "fml_uap_"+output_counter;
 			try {
 				latestResponse = currResponse;
+				history.add(latestResponse);
 				sendSpeaking();
 				System.out.println(docToString(doc));
 				log.debug("Generating directly: '"+currResponse.getResponse()+"'");
@@ -1138,18 +1143,10 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		Response response = responses.get(argValues.get(responseIndex));
 		if( response == null ) {
-			ArrayList<Response> responseGroup = responseGroups.get(argValues.get(responseIndex));
-			if( responseGroup == null ) {
+			response = getResponseFromGroup(argValues.get(responseIndex));
+			if( response == null ) {
 				System.out.println("Error, fitting Response ("+argValues.get(responseIndex)+") could not be found.");
 				return null;
-			} else {
-				int tries = 0;
-				response = responseGroup.get(random.nextInt(responseGroup.size()));
-				while( historyQueue.contains(response.getResponse()) && tries <= 15) {
-					response = responseGroup.get(random.nextInt(responseGroup.size()));
-					tries++;
-				}
-				
 			}
 		}
 		
@@ -1159,16 +1156,56 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		Response response2 = responses.get(argValues.get(responseIndex2));
 		if( response2 == null ) {
-			ArrayList<Response> responseGroup = responseGroups.get(argValues.get(responseIndex2));
-			if( responseGroup == null ) {
+			response2 = getResponseFromGroup(argValues.get(responseIndex2));
+			if( response2 == null ) {
 				System.out.println("Error, fitting Response ("+argValues.get(responseIndex2)+") could not be found.");
 				return response;
-			} else {
-				response2 = responseGroup.get(random.nextInt(responseGroup.size()));
 			}
 		}
 		Response combinedResponse = new Response( response, response2 );
 		return combinedResponse;
+	}
+	
+	public Response getResponseFromGroup( String group )
+	{
+		ArrayList<Response> responses = responseGroups.get(group);
+		if( responses == null ) {
+			return null;
+		}
+		ArrayList<Response> nonUsedResponses = new ArrayList<Response>();
+		for( Response r : responses ) {
+			if( !history.contains(r) ) {
+				nonUsedResponses.add(r);
+			}
+		}
+		if( nonUsedResponses.size() > 0 ) {
+			return nonUsedResponses.get(random.nextInt(nonUsedResponses.size()));
+		} else {
+			Response[] pastResponses = new Response[3];
+			int[] lastIndex = new int[3];
+			lastIndex[0] = 9999; lastIndex[1] = 9999; lastIndex[2] = 9999;  
+			int minIndex = 9999;
+			int minIndexPlace = 0;
+			
+			for( Response r : responses ) {
+				int i = history.lastIndexOf(r);
+				if( i < minIndex ) {
+					pastResponses[minIndexPlace] = r;
+					lastIndex[minIndexPlace] = i;
+					minIndex = Math.max(lastIndex[0], Math.max(lastIndex[1],lastIndex[2]));
+					if( lastIndex[0] == minIndex ) minIndexPlace = 0;
+					if( lastIndex[1] == minIndex ) minIndexPlace = 1;
+					if( lastIndex[2] == minIndex ) minIndexPlace = 2;
+				}
+			}
+			if( pastResponses[0] != null && pastResponses[1] != null && pastResponses[2] != null ) {
+				return pastResponses[random.nextInt(3)];
+			} else if( pastResponses[0] != null && pastResponses[1] != null ) {
+				return pastResponses[random.nextInt(2)];
+			} else {
+				return pastResponses[0];
+			} 
+		}
 	}
 	
 	/**
