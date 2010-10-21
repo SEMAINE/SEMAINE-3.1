@@ -110,7 +110,7 @@ public class Behaviour
 	 * @param is - the current InformationState
 	 * @throws TemplateRunException
 	 */
-	public boolean prepare( InformationState is ) throws TemplateRunException
+	public void prepare( InformationState is ) throws TemplateRunException
 	{
 		ArrayList<String> values = new ArrayList<String>();
 		for( AbstractValue av : argValues) {
@@ -118,7 +118,7 @@ public class Behaviour
 			values.add(v.toString());
 		}
 		if( behaviour == null ) behaviour = getBehaviourClass(behaviourClassName);
-		return behaviour.prepare(is,(ArrayList<String>)argNames.clone(), (ArrayList<String>)values.clone());
+		behaviour.prepare(is,(ArrayList<String>)argNames.clone(), (ArrayList<String>)values.clone());
 	}
 	
 	/**

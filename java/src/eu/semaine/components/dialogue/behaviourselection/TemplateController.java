@@ -36,23 +36,23 @@ public class TemplateController
 {
 	/* The TemplateParser to parse Template-files */
 	private TemplateParser templateParser = new TemplateParser();
-
+	
 	/* A list of classes which contain user-specified functions */
 	private ArrayList<Object> functionClasses = new ArrayList<Object>();
-
+	
 	/* A list with all Templates it knows */
 	private ArrayList<Template> templates = new ArrayList<Template>();
-
+	
 	/* A list with recently executed Templates with Behaviour */
 	private ArrayList<String> recentRunTemplates = new ArrayList<String>();
-
+	
 	/**
 	 * Creates a new TemplateController
 	 */
 	public TemplateController()
 	{
 	}
-
+	
 	/**
 	 * Processes the given TemplateFile, asks the parser to Parse it, and adds the returned list of Templates to its own list.
 	 * 
@@ -74,7 +74,7 @@ public class TemplateController
 			// TODO: Handle exception
 		}
 	}
-
+	
 	/**
 	 * Given an InformationState, check all known Templates and select 0, 1, or more to execute.
 	 * If no Templates are found with all Preconditions fulfilled, none will be executed.
@@ -83,17 +83,16 @@ public class TemplateController
 	 * Templates without a Behaviour (IS-updates) are always executed.
 	 * 
 	 * @param is - the current InformationState.
-	 * @param execute - true if any behaviour has to be executed too, false if behaviours have to be prepared only
 	 * @return True if a certain Behaviour was executed, False if not. 
 	 */
-	public TemplateState checkTemplates( InformationState is, boolean execute )
+	public TemplateState checkTemplates( InformationState is )
 	{
 		TemplateState executedTemplateState = null;
 		/* Lists of Templates which are only IS-updates, templates that should be prepared, and templates that could be executed */
 		ArrayList<TemplateState> ISUpdates = new ArrayList<TemplateState>();
 		ArrayList<TemplateState> templatesToPrepare = new ArrayList<TemplateState>();
 		ArrayList<TemplateState> templatesToRun = new ArrayList<TemplateState>();
-
+		
 		/* Check all Templates */
 		for( Template template : templates ) {
 			TemplateState state = template.checkTemplate(is);
@@ -110,17 +109,12 @@ public class TemplateController
 			}
 		}
 		
-		if( !execute ) {
-			templatesToPrepare.addAll(templatesToRun);
-			templatesToRun.clear();
-		}
-
 		if( templatesToRun.size() > 0 ) {
 			if( templatesToRun.size() == 1 ) {
 				/* If there is only 1 Template to run, check for conflicting Effects, apply the Effects, and run the Behaviour */
 				TemplateState state = templatesToRun.get(0);
 				checkConflictingEffects(state.getEffects(),ISUpdates);
-
+				
 				for( Effect effect : state.getEffects() ) {
 					try {
 						effect.apply(is, this);
@@ -129,7 +123,7 @@ public class TemplateController
 						e.printStackTrace();
 					}
 				}
-
+				
 				try {
 					state.getBehaviour().execute(is);
 					executedTemplateState = state;
@@ -145,7 +139,7 @@ public class TemplateController
 				/* Select the Behaviour with the highest quality-value */
 				TemplateState state = getBestTemplate( templatesToRun );
 				checkConflictingEffects(state.getEffects(),ISUpdates);
-
+				
 				for( Effect effect : state.getEffects() ) {
 					try {
 						effect.apply(is, this);
@@ -154,7 +148,7 @@ public class TemplateController
 						e.printStackTrace();
 					}
 				}
-
+				
 				try {
 					state.getBehaviour().execute(is);
 					executedTemplateState = state;
@@ -168,28 +162,24 @@ public class TemplateController
 			/* If there are no Behaviours to execute, check for conflicting Effects, apply the Effects, and prepare the Behaviours that can be prepared */
 			// Semaine-fix: Only prepare the best one
 			if( templatesToPrepare.size() > 0 ) {
-				boolean succes = false;
-				while( !succes && templatesToPrepare.size() > 0 ) {
-					TemplateState bestState = templatesToPrepare.get(0);
-					double highestQuality = -1;
-					for( TemplateState state : templatesToPrepare ) {
-						if( state.getBehaviour().getQuality() > highestQuality ) {
-							bestState = state;
-							highestQuality = state.getBehaviour().getQuality();
-						}
+				TemplateState bestState = templatesToPrepare.get(0);
+				double highestQuality = -1;
+				for( TemplateState state : templatesToPrepare ) {
+					if( state.getBehaviour().getQuality() > highestQuality ) {
+						bestState = state;
+						highestQuality = state.getBehaviour().getQuality();
 					}
-					try {
-						succes = bestState.getBehaviour().prepare(is);
-						templatesToPrepare.remove(bestState);
-					}catch( TemplateRunException e ) {
-						System.out.println("Error while preparing behaviour of Template  "+bestState.getTemplate().getId()+"("+bestState.getTemplate().getName()+")");
-						e.printStackTrace();
-					}
+				}
+				try {
+					bestState.getBehaviour().prepare(is);
+				}catch( TemplateRunException e ) {
+					System.out.println("Error while preparing behaviour of Template  "+bestState.getTemplate().getId()+"("+bestState.getTemplate().getName()+")");
+					e.printStackTrace();
 				}
 			}
 			checkConflictingEffects(new ArrayList<Effect>(),ISUpdates);
 		}
-
+		
 		/* Apply all Effects of the IS-update Templates */
 		for( TemplateState state : ISUpdates ) {
 			for( Effect effect : state.getEffects() ) {
@@ -203,7 +193,7 @@ public class TemplateController
 		}
 		return executedTemplateState;
 	}
-
+	
 	/**
 	 * Update the list of recently executed Behaviours, based on the given TemplateState
 	 * @param state
@@ -215,7 +205,7 @@ public class TemplateController
 			recentRunTemplates.remove(0);
 		}
 	}
-
+	
 	/**
 	 * Searches all given Effects for conflicting Effects, that is, Effects that modify the exact same variable in the InformationState
 	 * 
@@ -250,7 +240,7 @@ public class TemplateController
 			}
 		}
 	}
-
+	
 	/**
 	 * Modifies the quality-value of the given TemplateStates based on the behaviour history.
 	 * The more recent a certain Behaviour was executed, the more its quality-value will be decreased.
@@ -269,7 +259,7 @@ public class TemplateController
 		}
 		return states;
 	}
-
+	
 	/**
 	 * Returns the TemplateState which includes the Behaviour with the highest quality-value
 	 * @param states
@@ -287,7 +277,7 @@ public class TemplateController
 		}
 		return bestState;
 	}
-
+	
 	/**
 	 * Adds the given Object to the list of classes that contains user-specified functions.
 	 * @param obj
@@ -296,7 +286,7 @@ public class TemplateController
 	{
 		functionClasses.add(obj);
 	}
-
+	
 	/**
 	 * @return the list of classes tha contain user-specified functions.
 	 */
@@ -304,7 +294,7 @@ public class TemplateController
 	{
 		return functionClasses;
 	}
-
+	
 	/**
 	 * FOR TESTING PURPOSES
 	 * @param args
@@ -322,7 +312,7 @@ public class TemplateController
 //		is.getRecord("Record_Test").set("Record_Double_Test", 123.456);
 //		is.set("List_Test",new List());
 //		is.getList("List_Test").addItemEnd(123.4567);
-
+//		
 //		/* Testing Strings */
 //		Compare c1 = new CompareExists("Test123");
 //		System.out.println("Testing C1: " + c1.isValid(is));

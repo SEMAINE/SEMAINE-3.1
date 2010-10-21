@@ -94,7 +94,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	/* All possible responses and response-groups, with their ID as the key */
 	private HashMap<String,Response> responses;
 	private HashMap<String,ArrayList<Response>> responseGroups;
-	private HashMap<String,ArrayList<Response>> responseGroupHistory = new HashMap<String,ArrayList<Response>>();
 	
 	/* A list of responses that is prepared or being prepared, with the hashvalue of that response as key */
 	private HashMap<String,String> preparedResponses = new HashMap<String,String>();
@@ -125,7 +124,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	/* The BehaviourClass-instance of this class */
 	private static UtteranceActionProposer myClass;
 	
-	private ArrayList<Response> history = new ArrayList<Response>();
 	private LinkedList<String> historyQueue = new LinkedList<String>();
 	
 	private int queueWaitingCounter = 0;
@@ -189,7 +187,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		responses = reader.getResponses();
 		responseGroups = reader.getResponseGroups();
 		for( String group : responseGroups.keySet() ) {
-			responseGroupHistory.put(group, new ArrayList<Response>());
 			for( Response r : responseGroups.get(group) ) {
 				is.set("Responses." + group + "._addlast", r.getId());
 			}
@@ -261,7 +258,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			//System.out.println(is);
 			is.set("currTime", (int)meta.getTime());
 			String context = is.toString();
-			TemplateState state = templateController.checkTemplates(is, true);
+			TemplateState state = templateController.checkTemplates(is);
 			if( state != null ) {
 				DMLogger.getLogger().logUserTurn(meta.getTime(), latestResponse.getResponse() + "("+state.getTemplate().getId()+")", context);
 				detectedEmotions.clear();
@@ -276,9 +273,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:SendUtterance, type="+state.getTemplate().getId()+", utterance="+latestResponse.getResponse());
 				log.debug("action type: "+state.getTemplate().getId());
 			}
-		} else {
-			is.set("currTime", (int)meta.getTime());
-			templateController.checkTemplates(is, false);
 		}
 		if( queueWaitingCounter > 0 ) queueWaitingCounter--;
 	}
@@ -567,7 +561,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 						
 						is.set("currTime", (int)meta.getTime());
 						String context = is.toString();
-						TemplateState state = templateController.checkTemplates(is, true);
+						TemplateState state = templateController.checkTemplates(is);
 						if( state != null ) {
 							DMLogger.getLogger().logUserTurn(meta.getTime(), latestResponse.getResponse() + "("+state.getTemplate().getId()+")", context);
 							detectedEmotions.clear();
@@ -889,10 +883,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 */
 	public void execute( InformationState is, ArrayList<String> argNames, ArrayList<String> argValues )
 	{
-		String speakingState = is.getString("Agent.speakingState");
-		if( speakingState != null && (speakingState.equals("speaking") || speakingState.equals("preparing")) ) {
-			return;
-		}
 		if( argNames == null ) argNames = new ArrayList<String>();
 		if( argValues == null ) argValues = new ArrayList<String>();
 		
@@ -906,7 +896,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			/* The Response has been prepared before, so it only has to be started. */
 			try {
 				latestResponse = currResponse;
-				history.add(latestResponse);
 				sendSpeaking();
 				DMLogger.getLogger().log(meta.getTime(), "Using Prepared Response " + id);
 				log.debug("Trigger prepared response "+id+" '"+currResponse.getResponse()+"'");
@@ -921,7 +910,6 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			String contentID = "fml_uap_"+output_counter;
 			try {
 				latestResponse = currResponse;
-				history.add(latestResponse);
 				sendSpeaking();
 				System.out.println(docToString(doc));
 				log.debug("Generating directly: '"+currResponse.getResponse()+"'");
@@ -949,20 +937,18 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	 * @param argNames - the list of names of the given arguments
 	 * @param argValues - the list of values of the given arguments
 	 */
-	public boolean prepare( InformationState is, ArrayList<String> argNames, ArrayList<String> argValues ) 
+	public void prepare( InformationState is, ArrayList<String> argNames, ArrayList<String> argValues ) 
 	{
 		if( preparingResponses.size() == 0 ) {
 			if( argNames == null ) argNames = new ArrayList<String>();
 			if( argValues == null ) argValues = new ArrayList<String>();
 			
 			Document doc = constructFMLDocument(argNames, argValues);
-			if( doc == null ) {
-				return false;
-			}
+			if( doc == null ) return;
 			
 			String hash = currHash;
 			if( preparingResponses.get(hash) != null || preparedResponses.get(hash) != null ) {
-				return false;
+				return;
 			}
 			
 			try {
@@ -975,13 +961,11 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				DMLogger.getLogger().log(meta.getTime(), "AgentAction:PrepareUtterance, utterance=" + currResponse.getResponse() );
 				log.debug("Preparing response "+prepID+" '"+currResponse.getResponse()+"'");
 			}catch( JMSException e ){
-				return false;
 				// TODO Handle
 			}
 			
 			output_counter++;
 		}
-		return true;
 	}
 	
 	/**
@@ -1154,10 +1138,18 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		Response response = responses.get(argValues.get(responseIndex));
 		if( response == null ) {
-			response = getResponseFromGroup(argValues.get(responseIndex));
-			if( response == null ) {
+			ArrayList<Response> responseGroup = responseGroups.get(argValues.get(responseIndex));
+			if( responseGroup == null ) {
 				System.out.println("Error, fitting Response ("+argValues.get(responseIndex)+") could not be found.");
 				return null;
+			} else {
+				int tries = 0;
+				response = responseGroup.get(random.nextInt(responseGroup.size()));
+				while( historyQueue.contains(response.getResponse()) && tries <= 15) {
+					response = responseGroup.get(random.nextInt(responseGroup.size()));
+					tries++;
+				}
+				
 			}
 		}
 		
@@ -1167,56 +1159,16 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		}
 		Response response2 = responses.get(argValues.get(responseIndex2));
 		if( response2 == null ) {
-			response2 = getResponseFromGroup(argValues.get(responseIndex2));
-			if( response2 == null ) {
+			ArrayList<Response> responseGroup = responseGroups.get(argValues.get(responseIndex2));
+			if( responseGroup == null ) {
 				System.out.println("Error, fitting Response ("+argValues.get(responseIndex2)+") could not be found.");
 				return response;
+			} else {
+				response2 = responseGroup.get(random.nextInt(responseGroup.size()));
 			}
 		}
 		Response combinedResponse = new Response( response, response2 );
 		return combinedResponse;
-	}
-	
-	public Response getResponseFromGroup( String group )
-	{
-		ArrayList<Response> responses = responseGroups.get(group);
-		if( responses == null ) {
-			return null;
-		}
-		ArrayList<Response> nonUsedResponses = new ArrayList<Response>();
-		for( Response r : responses ) {
-			if( !history.contains(r) ) {
-				nonUsedResponses.add(r);
-			}
-		}
-		if( nonUsedResponses.size() > 0 ) {
-			return nonUsedResponses.get(random.nextInt(nonUsedResponses.size()));
-		} else {
-			Response[] pastResponses = new Response[3];
-			int[] lastIndex = new int[3];
-			lastIndex[0] = 9999; lastIndex[1] = 9999; lastIndex[2] = 9999;  
-			int minIndex = 9999;
-			int minIndexPlace = 0;
-			
-			for( Response r : responses ) {
-				int i = history.lastIndexOf(r);
-				if( i < minIndex ) {
-					pastResponses[minIndexPlace] = r;
-					lastIndex[minIndexPlace] = i;
-					minIndex = Math.max(lastIndex[0], Math.max(lastIndex[1],lastIndex[2]));
-					if( lastIndex[0] == minIndex ) minIndexPlace = 0;
-					if( lastIndex[1] == minIndex ) minIndexPlace = 1;
-					if( lastIndex[2] == minIndex ) minIndexPlace = 2;
-				}
-			}
-			if( pastResponses[0] != null && pastResponses[1] != null && pastResponses[2] != null ) {
-				return pastResponses[random.nextInt(3)];
-			} else if( pastResponses[0] != null && pastResponses[1] != null ) {
-				return pastResponses[random.nextInt(2)];
-			} else {
-				return pastResponses[0];
-			} 
-		}
 	}
 	
 	/**
