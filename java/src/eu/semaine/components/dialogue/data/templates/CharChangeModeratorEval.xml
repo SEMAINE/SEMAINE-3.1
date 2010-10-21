@@ -223,7 +223,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.dialogContext" value="Questions" />
+			<update name="Agent.dialogContext" value="Questions1" />
 			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
@@ -237,7 +237,7 @@
 			</function>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="dialogContext" />
-				<argument value="Questions" />
+				<argument value="Questions1" />
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.charChangeState" />
@@ -255,7 +255,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.dialogContext" value="Questions" />
+			<update name="Agent.dialogContext" value="Questions1" />
 			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
@@ -269,7 +269,7 @@
 			</function>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="dialogContext" />
-				<argument value="Questions" />
+				<argument value="Questions1" />
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.charChangeState" />
@@ -288,7 +288,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.dialogContext" value="Questions" />
+			<update name="Agent.dialogContext" value="Questions1" />
 			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
@@ -302,7 +302,7 @@
 			</function>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="dialogContext" />
-				<argument value="Questions" />
+				<argument value="Questions1" />
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.charChangeState" />
@@ -388,7 +388,7 @@
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
-			<update name="Agent.dialogContext" value="Questions" />
+			<update name="Agent.dialogContext" value="Questions1" />
 			<update name="Agent.previousCharacter" value="$Agent.character" />
 			<function name="sendDataAtEndOfTurn">
 				<argument value="character" />
@@ -402,7 +402,7 @@
 			</function>
 			<function name="sendDataAtEndOfTurn">
 				<argument value="dialogContext" />
-				<argument value="Questions" />
+				<argument value="Questions1" />
 				<argument value="contextstate" />
 			</function>
 			<remove name="DialogueState.charChangeState" />
@@ -558,7 +558,7 @@
 		<optional>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -572,7 +572,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -583,7 +583,7 @@
    			</option>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -597,7 +597,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -608,7 +608,7 @@
    			</option>
    			<option probability="0.34">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -622,7 +622,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -646,7 +646,7 @@
 		<optional>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -660,7 +660,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -671,7 +671,7 @@
    			</option>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -685,7 +685,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -696,7 +696,7 @@
    			</option>
    			<option probability="0.34">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -710,7 +710,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -734,7 +734,7 @@
 		<optional>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -748,7 +748,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -759,7 +759,7 @@
    			</option>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -773,7 +773,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -784,7 +784,7 @@
    			</option>
    			<option probability="0.34">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -798,7 +798,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -822,7 +822,7 @@
 		<optional>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -836,7 +836,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -847,7 +847,7 @@
    			</option>
    			<option probability="0.33">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -861,7 +861,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />
@@ -872,7 +872,7 @@
    			</option>
    			<option probability="0.34">
    				<c_effects>
-   					<c_update name="Agent.dialogContext" value="Questions" />
+   					<c_update name="Agent.dialogContext" value="Questions1" />
    					<c_update name="Agent.previousCharacter" value="$Agent.character" />
    					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="character" />
@@ -886,7 +886,7 @@
 					</c_function>
 					<c_function name="sendDataAtEndOfTurn">
 						<c_argument value="dialogContext" />
-						<c_argument value="Questions" />
+						<c_argument value="Questions1" />
 						<c_argument value="contextstate" />
 					</c_function>
 					<c_remove name="DialogueState.charChangeState" />

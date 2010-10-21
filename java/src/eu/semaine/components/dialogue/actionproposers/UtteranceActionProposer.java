@@ -308,7 +308,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			SEMAINEXMLMessage xm = ((SEMAINEXMLMessage)m);
 			
 			/* Process Agent-animation updates */
-			if( !xm.getText().contains("fml_lip") ) {
+			if( !xm.getText().contains("fml_lip") && !xm.getText().contains("bml_lip") ) {
 				if( speechStarted(xm) ) {
 					log.debug("Agent is currently speaking");
 					DMLogger.getLogger().log(meta.getTime(), "AgentAction:UtteranceStarted" );
