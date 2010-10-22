@@ -200,10 +200,13 @@ public class TurnTakingInterpreter extends Component
 	public void processHeadMovements( StateInfo stateInfo ) throws JMSException
 	{
 		if( stateInfo.hasInfo("headGesture") && stateInfo.hasInfo("headGestureStarted") && stateInfo.hasInfo("headGestureStopped") ) {
+			DMLogger.getLogger().log(meta.getTime(), "UserAction:HeadMovement type=" + stateInfo.getInfo("headGesture") );
 			if( stateInfo.getInfo("headGesture").equals("NOD") ) {
 				userSpeakingState = SILENT;
+				userSpeakingStateTime = meta.getTime();
 			} else if( stateInfo.getInfo("headGesture").equals("SHAKE") ) {
 				userSpeakingState = SILENT;
+				userSpeakingStateTime = meta.getTime();
 			}
 		}
 	}
@@ -427,13 +430,20 @@ public class TurnTakingInterpreter extends Component
 				time = time - 1;
 			}
 			//double value = Math.max( Math.min( -(Math.sqrt(time))+1, 100 ), 0 );
+			
 			double value;
 			if( time >= 0 ) {
+				double a = 100;
+				double b1 = 10;
+				double r;
 				if( convState.equals("listening") ) {
-					time /= 6;
-					// time /= 6;
+					r = 2;
+				} else {
+					r = 0.7;
 				}
-				value = Math.max( Math.min( Math.pow(time+0.3,2), 1 ), 0 );
+				double b = (b1/r);
+				value = a /(1+Math.exp(-b*(time-(r/2))));
+				//value = Math.max( Math.min( Math.pow(time+0.3,2), 1 ), 0 );
 			} else {
 				value = 0;
 			}
