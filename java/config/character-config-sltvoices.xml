@@ -1,0 +1,117 @@
+<character-config xmlns="http://www.semaine-project.eu/semaineml" xmlns:e="http://www.w3.org/2009/10/emotionml">
+  <character name="Poppy">
+    <voice  name="cmu-slt-hsmm" locale="en-US" effects="F0Scale(f0Scale:0.1;)+F0Add(f0Add:50.0;)"/>
+    <predisposition>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/communicative-functions.xml">
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <e:dimension name="agreement" value="0.65"/>
+        <e:dimension name="acceptance" value="0.65"/>
+        <e:dimension name="belief" value="0.75"/>
+        <e:dimension name="liking" value="0.9"/>
+        <e:dimension name="understanding" value="0.9"/>
+        <e:dimension name="interest" value="0.9"/>
+      </e:emotion>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/listener-meanings.xml">
+        <!-- The following are unipolar scales, i.e. the unmarked value is 0 (not present) -->
+        <!--e:dimension name="anger" value=""/-->
+        <!--e:dimension name="sadness" value=""/-->
+        <e:dimension name="amusement" value="0.5"/>
+        <e:dimension name="happiness" value="0.5"/>
+        <!--e:dimension name="contempt" value=""/-->
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <e:dimension name="anticipation" value="0.75"/>
+        <!--e:dimension name="solidarity" value=""/-->
+        <e:dimension name="antagonism" value="0.25"/>
+      </e:emotion>
+    </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="60"/>
+  </character>
+  <character name="Prudence" >
+    <voice  name="cmu-slt-hsmm" locale="en-US" effects="F0Scale(f0Scale:0.1;)+F0Add(f0Add:50.0;)"/>
+    <predisposition>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/communicative-functions.xml">
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <e:dimension name="agreement" value="0.65"/>
+        <e:dimension name="acceptance" value="0.65"/>
+        <e:dimension name="belief" value="0.75"/>
+        <e:dimension name="liking" value="0.9"/>
+        <e:dimension name="understanding" value="0.9"/>
+        <e:dimension name="interest" value="0.9"/>
+      </e:emotion>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/listener-meanings.xml">
+        <!-- The following are unipolar scales, i.e. the unmarked value is 0 (not present) -->
+        <!--e:dimension name="anger" value=""/-->
+        <!--e:dimension name="sadness" value=""/-->
+        <!--e:dimension name="amusement" value=""/-->
+        <!--e:dimension name="happiness" value=""/-->
+        <!--e:dimension name="contempt" value=""/-->
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <!--e:dimension name="anticipation" value=""/-->
+        <e:dimension name="solidarity" value="0.75"/>
+        <e:dimension name="antagonism" value="0.25"/>
+      </e:emotion>
+    </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="70"/>
+  </character>
+  <character name="Obadiah">
+    <voice  name="cmu-slt-hsmm" locale="en-US" effects="TractScaler(amount:0.7;)+F0Scale(f0Scale:0.1;)+F0Add(f0Add:-50.0;)"/>
+    <predisposition>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/communicative-functions.xml">
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <e:dimension name="agreement" value="0.65"/>
+        <e:dimension name="acceptance" value="0.65"/>
+        <e:dimension name="belief" value="0.75"/>
+        <e:dimension name="liking" value="0.5"/>
+        <e:dimension name="understanding" value="0.9"/>
+        <e:dimension name="interest" value="0.15"/>
+      </e:emotion>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/listener-meanings.xml">
+        <!-- The following are unipolar scales, i.e. the unmarked value is 0 (not present) -->
+        <!--e:dimension name="anger" value=""/-->
+        <e:dimension name="sadness" value="0.5"/>
+        <!--e:dimension name="amusement" value=""/-->
+        <!--e:dimension name="happiness" value=""/-->
+        <!--e:dimension name="contempt" value=""/-->
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <!--e:dimension name="anticipation" value=""/-->
+        <!--e:dimension name="solidarity" value=""/-->
+        <!--e:dimension name="antagonism" value=""/-->
+      </e:emotion>
+    </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="80"/>
+  </character>
+  <character name="Spike">
+    <voice  name="cmu-slt-hsmm" locale="en-US" effects="TractScaler(amount:0.7;)+F0Scale(f0Scale:0.1;)+F0Add(f0Add:-50.0;)"/>
+    <predisposition>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/communicative-functions.xml">
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <e:dimension name="agreement" value="0.1"/>
+        <e:dimension name="acceptance" value="0.1"/>
+        <e:dimension name="belief" value="0.1"/>
+        <e:dimension name="liking" value="0.1"/>
+        <e:dimension name="understanding" value="0.9"/>
+        <e:dimension name="interest" value="0.1"/>
+      </e:emotion>
+      <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/listener-meanings.xml">
+        <!-- The following are unipolar scales, i.e. the unmarked value is 0 (not present) -->
+        <e:dimension name="anger" value="0.5"/>
+        <!--e:dimension name="sadness" value=""/-->
+        <!--e:dimension name="amusement" value=""/-->
+        <!--e:dimension name="happiness" value=""/-->
+        <e:dimension name="contempt" value="0.5"/>
+        <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
+        <!--e:dimension name="anticipation" value=""/-->
+        <e:dimension name="solidarity" value="0.25"/>
+        <e:dimension name="antagonism" value="0.75"/>
+      </e:emotion>
+    </predisposition>
+    <!-- patience when taking the turn, lower is more likely to interrupt -->
+    <setting name="TurnTakingThreshold" value="40"/>
+  </character>
+  <character name="Greta" is-default="true" >
+    <voice name="cmu-slt-hsmm" locale="en-US"/>
+  </character>
+</character-config>
