@@ -433,6 +433,7 @@ public class TurnTakingInterpreter extends Component
 			
 			double value;
 			if( time >= 0 ) {
+				//System.out.println("time: "+time);
 				double a = 100;
 				double b1 = 10;
 				double r;
@@ -447,7 +448,8 @@ public class TurnTakingInterpreter extends Component
 			} else {
 				value = 0;
 			}
-			user_silence_time_value = (int)(value * 100);
+			user_silence_time_value = (int)(value);
+			//user_silence_time_value = (int)(value * 100);
 		}
 		
 		/* emotion_value */
