@@ -347,29 +347,7 @@
 		</behaviour>
 	</template>
 	
-	<!--
-	<template id="ChangeChar" name="Change character based on user's request">
-		<preconditions>
-			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
-			<compare value1="$UserTurn.targetCharacter" comparator="not_equals" value2="null" />
-			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
-		</preconditions>
-		<effects>
-			<update name="Agent.previousCharacter" value="$Agent.character" />
-			<function name="sendDataAtEndOfTurn">
-				<argument value="character" />
-				<argument value="$UserTurn.targetCharacter" />
-				<argument value="contextstate" />
-			</function>
-			<remove name="DialogueState.charChangeState" />
-		</effects>
-		<behaviour class="ResponseActionProposer" quality="0.9">
-			<argument name="response" value="#goodbye" />
-		</behaviour>
-	</template>
-	-->
-	
-	
+		
 	<template id="VerifySuggestedCharChangePoppy" name="Verify user-suggested (Poppy) character">
 		<preconditions>
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />

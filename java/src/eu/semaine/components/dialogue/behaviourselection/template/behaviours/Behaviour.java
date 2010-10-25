@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 import eu.semaine.components.dialogue.exceptions.TemplateParseException;
 import eu.semaine.components.dialogue.exceptions.TemplateRunException;
 
+import eu.semaine.components.dialogue.actionproposers.RandomUtteranceActionProposer;
 import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
 import eu.semaine.components.dialogue.behaviourselection.behaviours.BehaviourClass;
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
@@ -79,7 +80,17 @@ public class Behaviour
 	public BehaviourClass getBehaviourClass( String name )
 	{
 		if( name.equals("ResponseActionProposer") ) {
-			return UtteranceActionProposer.getMyClass();
+			BehaviourClass c = UtteranceActionProposer.getMyClass();
+			if( c != null ) {
+				return c;
+			} else {
+				c = RandomUtteranceActionProposer.getMyClass();
+				if( c != null ) {
+					return c;
+				} else {
+					return null;
+				}
+			}
 		} else {
 			return null;
 		}

@@ -70,4 +70,14 @@ public class DMProperties
 		}
 		return b;
 	}
+	
+	public static int getAvgWaitTime()
+	{
+		Integer i = Integer.parseInt(getProperty("average_wait_time"));
+		if( i == null ) {
+			return 15;
+		} else {
+			return i;
+		}
+	}
 }

@@ -1,0 +1,50 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+	
+	<template id="Poppy_Random_ChangeSubject" name="Random ChangeSubject of Poppy">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Poppy" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Poppy_All" />
+		</behaviour>
+	</template>
+	
+		
+	<template id="Prudence_Random_ChangeSubject" name="Random ChangeSubject of Prudence">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Prudence" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Prudence_All" />
+		</behaviour>
+	</template>
+	
+		
+	<template id="Obadiah_Random_ChangeSubject" name="Random ChangeSubject of Obadiah">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Obadiah" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Obadiah_All" />
+		</behaviour>
+	</template>
+	
+	
+	<template id="Spike_Random_ChangeSubject" name="Random ChangeSubject of Spike">
+		<preconditions>
+			<compare value1="$Agent.character" value2="Spike" />
+			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
+		</preconditions>
+		
+		<behaviour class="ResponseActionProposer" quality="0.1">
+			<argument name="response" value="##Spike_All" />
+		</behaviour>
+	</template>
+	
+</behaviourtemplates>
