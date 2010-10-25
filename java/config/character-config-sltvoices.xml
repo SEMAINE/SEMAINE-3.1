@@ -84,7 +84,7 @@
     <setting name="TurnTakingThreshold" value="80"/>
   </character>
   <character name="Spike">
-    <voice  name="cmu-slt-hsmm" locale="en-US" effects="TractScaler(amount:0.7;)+F0Scale(f0Scale:0.1;)+F0Add(f0Add:-50.0;)"/>
+    <voice  name="cmu-slt-hsmm" locale="en-US" effects="TractScaler(amount:0.7;)+F0Scale(f0Scale:0.1;)+F0Add(f0Add:-80.0;)"/>
     <predisposition>
       <e:emotion dimension-set="http://www.semaine-project.eu/emo/dimension/communicative-functions.xml">
         <!-- The following are bipolar scales, i.e. the unmarked value is 0.5 (neither one nor the other extreme) -->
