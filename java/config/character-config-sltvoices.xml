@@ -25,7 +25,7 @@
       </e:emotion>
     </predisposition>
     <!-- patience when taking the turn, lower is more likely to interrupt -->
-    <setting name="TurnTakingThreshold" value="60"/>
+    <setting name="TurnTakingThreshold" value="70"/>
   </character>
   <character name="Prudence" >
     <voice  name="cmu-slt-hsmm" locale="en-US" effects="F0Scale(f0Scale:0.1;)+F0Add(f0Add:50.0;)"/>
@@ -81,7 +81,7 @@
       </e:emotion>
     </predisposition>
     <!-- patience when taking the turn, lower is more likely to interrupt -->
-    <setting name="TurnTakingThreshold" value="80"/>
+    <setting name="TurnTakingThreshold" value="85"/>
   </character>
   <character name="Spike">
     <voice  name="cmu-slt-hsmm" locale="en-US" effects="TractScaler(amount:0.7;)+F0Scale(f0Scale:0.1;)+F0Add(f0Add:-80.0;)"/>
@@ -109,7 +109,7 @@
       </e:emotion>
     </predisposition>
     <!-- patience when taking the turn, lower is more likely to interrupt -->
-    <setting name="TurnTakingThreshold" value="40"/>
+    <setting name="TurnTakingThreshold" value="60"/>
   </character>
   <character name="Greta" is-default="true" >
     <voice name="cmu-slt-hsmm" locale="en-US"/>
