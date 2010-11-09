@@ -6,10 +6,12 @@ package eu.semaine.jms;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import javax.jms.Session;
 import javax.jms.Topic;
 
+import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 /**
@@ -31,6 +33,7 @@ public class IOBase
 	protected Topic topic;
 	protected String topicName;
 	protected boolean isConnectionStarted = false;
+	protected JMSException exception = null;
 	
 	/**
 	 * Create a new JMS IOBase connection with the given topic on the default JMS server.
@@ -80,6 +83,26 @@ public class IOBase
 			throw new NullPointerException("Need JMS server url to connect to, got null");
 		ConnectionFactory factory = new ActiveMQConnectionFactory(jmsUser, jmsPassword, jmsUrl);
 		this.connection = factory.createConnection();
+		// Send asynchronously, so that even in the case of a flooded broker, the send() returns,
+		// and we can detect the error condition (ExceptionListener sets exception, detected at next send())
+		((ActiveMQConnection)connection).setUseAsyncSend(true);
+		connection.setExceptionListener(new ExceptionListener() {
+			@Override
+			public void onException(JMSException e) {
+				JMSLogger.getLog("Connection").error("Exception Listener: ", e);
+				IOBase.this.setException(e);
+			}
+		});
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override public void run() { 
+				try {
+					connection.close();
+				} catch (JMSException e) {
+					System.err.println("Problem during shutdown: cannot close connection");
+					e.printStackTrace();
+				}
+			}
+		});
 		this.session = connection.createSession(false /*not transacted*/, Session.AUTO_ACKNOWLEDGE);
 		this.topic = session.createTopic(topicName);
 		this.topicName = topicName;
@@ -126,4 +149,13 @@ public class IOBase
 		isConnectionStarted = true;
 		
 	}
+	
+	/**
+	 * Method called by the ExceptionListener to inform us of the fact that an exception occurred.
+	 * @param e
+	 */
+	private void setException(JMSException e) {
+		this.exception = e;
+	}
+	
 }

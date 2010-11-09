@@ -90,8 +90,8 @@ public class Sender extends IOBase
 		this.datatype = datatype;
 		this.source = source;
 		this.producer = session.createProducer(topic);
-		// Do not allow for messages to be lost:
-		this.producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+		// There is no point for us to remember any messages for when the broker is restarted:
+		this.producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 	}
 	
 	/**
@@ -211,6 +211,7 @@ public class Sender extends IOBase
 	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since the system started.
 	 * @throws IllegalStateException if the connection is not started or the sender is in event-based mode.
+	 * @throws JMSException if there was a problem on the connection such as a broker run out of memory
 	 */
 	public void sendTextMessage(String text, long usertime)
 	throws JMSException
@@ -242,12 +243,16 @@ public class Sender extends IOBase
 	 * @param contentCreationTime the time when the content in this message was created.
 	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
 	 * @throws IllegalStateException if the connection is not started or the sender is in event-based mode.
+	 * @throws JMSException if there was a problem on the connection such as a broker run out of memory
 	 */
 	public void sendTextMessage(String text, long usertime, String contentID, long contentCreationTime)
 	throws JMSException
 	{
 		if (!isConnectionStarted)
 			throw new IllegalStateException("Connection is not started!");
+		if (exception != null) {
+			throw (JMSException) new JMSException("Exception Listener has received an exception, will not try to send").initCause(exception);
+		}
 		TextMessage message = session.createTextMessage(text);
 		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		if (isPeriodic())
@@ -277,6 +282,7 @@ public class Sender extends IOBase
 	 * in milliseconds since system startup.
 	 * @param event the type of event represented by this message.
 	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
+	 * @throws JMSException if there was a problem on the connection such as a broker run out of memory
 	 */
 	public void sendTextMessage(String text, long usertime, Event eventType)
 	throws JMSException
@@ -307,6 +313,7 @@ public class Sender extends IOBase
 	 * @param contentCreationTime the time when the content in this message was created.
 	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
 	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
+	 * @throws JMSException if there was a problem on the connection such as a broker run out of memory
 	 */
 	public void sendTextMessage(String text, long usertime, Event eventType, String contentID, long contentCreationTime)
 	throws JMSException
@@ -315,6 +322,9 @@ public class Sender extends IOBase
 			throw new IllegalStateException("Connection is not started!");
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
+		if (exception != null) {
+			throw (JMSException) new JMSException("Exception Listener has received an exception, will not try to send").initCause(exception);
+		}
 		TextMessage message = session.createTextMessage(text);
 		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		message.setStringProperty(SEMAINEMessage.EVENT, eventType.toString());

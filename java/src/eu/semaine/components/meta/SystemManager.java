@@ -18,12 +18,16 @@ import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
 import javax.jms.Topic;
 
+import org.apache.activemq.command.ActiveMQMessage;
+import org.apache.activemq.command.ConsumerInfo;
+
 import eu.semaine.components.Component;
 import eu.semaine.components.MessageLogComponent;
 import eu.semaine.gui.monitor.ComponentInfo;
 import eu.semaine.gui.monitor.SystemMonitor;
 import eu.semaine.gui.monitor.TopicInfo;
 import eu.semaine.jms.IOBase;
+import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.message.SEMAINEMessage;
 
 /**
@@ -83,6 +87,9 @@ public class SystemManager extends Component implements MessageListener
 		// need to send our own start again because when super() sent it,
 		// we weren't listening yet:
 		meta.reportState(State.starting);
+		
+		
+		setupAdvisoryListener();
 
 		if (Boolean.getBoolean("semaine.systemmanager.gui")) {
 			// We hide components directly here (they never get to the GUI)
@@ -137,6 +144,27 @@ public class SystemManager extends Component implements MessageListener
 			callbackConsumer = iobase.getSession().createConsumer(iobase.getSession().createTopic("semaine.callback.>"));
 			callbackConsumer.setMessageListener(topicListener);
 		}
+	}
+	
+	private void setupAdvisoryListener() throws JMSException {
+		IOBase iob = new IOBase("ActiveMQ.Advisory.SlowConsumer.Topic.>");
+		MessageConsumer mc = iob.getSession().createConsumer(iob.getTopic());
+		mc.setMessageListener(new MessageListener() {
+			@Override
+			public void onMessage(Message msg) {
+			    if (msg instanceof ActiveMQMessage) {
+		             ActiveMQMessage aMsg =  (ActiveMQMessage)msg;
+		             ConsumerInfo info = (ConsumerInfo) aMsg.getDataStructure();
+		             String topic = info.getDestination().toString();
+		             String name = info.getConsumerId().getConnectionId();
+		             int limit = info.getPrefetchSize();
+		             int current = info.getCurrentPrefetchSize();
+		             String logMsg = "Slow consumer on "+topic+": "+name+" has "+current+" out of "+limit+" messages prefetched";
+		             JMSLogger.getLog("ActiveMQ Advisory").warn(logMsg);
+		         }
+			}
+		});
+		iob.startConnection();
 	}
 	
 	
