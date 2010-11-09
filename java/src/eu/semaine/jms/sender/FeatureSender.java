@@ -228,6 +228,9 @@ public class FeatureSender extends Sender
 		if (!isPeriodic()) {
 			throw new IllegalStateException("This method is for periodic feature messages only");
 		}
+		if (exception != null) {
+			throw (JMSException) new JMSException("Exception Listener has received an exception, will not try to send").initCause(exception);
+		}
 		BytesMessage message = session.createBytesMessage();
 		message.writeInt(features.length);
 		for (int i=0; i<features.length; i++) {

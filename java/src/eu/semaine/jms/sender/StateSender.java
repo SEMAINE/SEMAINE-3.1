@@ -99,6 +99,9 @@ public class StateSender extends XMLSender
 			throw new IllegalStateException("Connection is not started!");
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
+		if (exception != null) {
+			throw (JMSException) new JMSException("Exception Listener has received an exception, will not try to send").initCause(exception);
+		}
 		TextMessage message = session.createTextMessage(XMLTool.document2String(document));
 		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		message.setStringProperty(s.toString()+"APIVersion", s.getAPIVersion());
