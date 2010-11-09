@@ -32,6 +32,41 @@
         The <broker> element is used to configure the ActiveMQ broker. 
     -->
     <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.base}/data">
+ 
+        <!--
+			For better performances use VM cursor and small memory limit.
+			For more information, see:
+            
+            http://activemq.apache.org/message-cursors.html
+            
+            Also, if your producer is "hanging", it's probably due to producer flow control.
+            For more information, see:
+            http://activemq.apache.org/producer-flow-control.html
+        -->
+              
+        <destinationPolicy>
+            <policyMap>
+              <policyEntries>
+                <!-- To verify in our unit tests that we can fail properly: -->
+                <policyEntry topic="semaine.test.topic" producerFlowControl="true" memoryLimit="1kb" topicPrefetch="1" advisoryForSlowConsumers="true"/>
+
+                <policyEntry topic=">" producerFlowControl="true" memoryLimit="20mb" advisoryForSlowConsumers="true" topicPrefetch="32766">
+
+                  <!-- force old messages to be discarded for slow consumers -->
+                  <pendingMessageLimitStrategy>
+                    <constantPendingMessageLimitStrategy limit="1000"/>
+                  </pendingMessageLimitStrategy>
+
+                  <pendingSubscriberPolicy>
+                    <vmCursor />
+                  </pendingSubscriberPolicy>
+                  
+
+                </policyEntry>
+              </policyEntries>
+            </policyMap>
+        </destinationPolicy> 
+ 
         
         <!-- 
             The managementContext is used to configure how ActiveMQ is exposed in 
@@ -56,60 +91,25 @@
         </persistenceAdapter>
         
         
-        <!--
-			For better performances use VM cursor and small memory limit.
-			For more information, see:
-            
-            http://activemq.apache.org/message-cursors.html
-            
-            Also, if your producer is "hanging", it's probably due to producer flow control.
-            For more information, see:
-            http://activemq.apache.org/producer-flow-control.html
-        -->
-              
-        <destinationPolicy>
-            <policyMap>
-              <policyEntries>
-                <policyEntry topic=">" producerFlowControl="true" memoryLimit="1mb">
-                  <pendingSubscriberPolicy>
-                    <vmCursor />
-                  </pendingSubscriberPolicy>
-                </policyEntry>
-                <policyEntry queue=">" producerFlowControl="true" memoryLimit="1mb">
-                  <!-- Use VM cursor for better latency
-                       For more information, see:
-                       
-                       http://activemq.apache.org/message-cursors.html
-                       
-                  <pendingQueuePolicy>
-                    <vmQueueCursor/>
-                  </pendingQueuePolicy>
-                  -->
-                </policyEntry>
-              </policyEntries>
-            </policyMap>
-        </destinationPolicy> 
- 
          <!--
             The systemUsage controls the maximum amount of space the broker will 
             use before slowing down producers. For more information, see:
             
             http://activemq.apache.org/producer-flow-control.html
-             
+          -->   
         <systemUsage>
-            <systemUsage>
+            <systemUsage sendFailIfNoSpace="true">
                 <memoryUsage>
-                    <memoryUsage limit="20 mb"/>
+                    <memoryUsage limit="200 mb"/>
                 </memoryUsage>
                 <storeUsage>
-                    <storeUsage limit="1 gb" name="foo"/>
+                    <storeUsage limit="10 mb" name="foo"/>
                 </storeUsage>
                 <tempUsage>
-                    <tempUsage limit="100 mb"/>
+                    <tempUsage limit="1 gb"/>
                 </tempUsage>
             </systemUsage>
         </systemUsage>
-		-->
 		  
         <!-- 
             The transport connectors expose ActiveMQ over a given protocol to
@@ -124,15 +124,10 @@
     </broker>
 
     <!-- 
-        Uncomment to enable Camel
-        Take a look at activemq-camel.xml for more details
-         
-    <import resource="camel.xml"/>
-    -->
-
-    <!-- 
         Enable web consoles, REST and Ajax APIs and demos
-        Take a look at activemq-jetty.xml for more details 
+        It also includes Camel (with its web console), see ${ACTIVEMQ_HOME}/conf/camel.xml for more info
+        
+        Take a look at ${ACTIVEMQ_HOME}/conf/jetty.xml for more details 
     -->
     <import resource="jetty.xml"/>
     
