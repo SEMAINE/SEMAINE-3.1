@@ -15,6 +15,10 @@
 	<classpathentry kind="lib" path="lib/swing-layout-1.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/activemq-all-5.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/activemq-all-5.4.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.oracle.com/docs/cd/E17802_01/products/products/jms/javadoc-102a/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
