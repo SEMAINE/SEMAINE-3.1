@@ -77,6 +77,10 @@ throw(CMSException)
 {
 	if (!isConnectionStarted)
 		throw SystemConfigurationException("Connection is not started!");
+    if (exception != NULL) {
+    	exception->printStackTrace();
+    	throw SystemConfigurationException("Exception Listener has received an exception, will not try to send");
+    }
 	BytesMessage * message = session->createBytesMessage();
 	message->writeInt((int)features.size());
 	for (size_t i=0, len=features.size(); i<len; i++) {

@@ -34,6 +34,10 @@ throw(CMSException, SystemConfigurationException)
 		throw SystemConfigurationException("state sender is expected to be event-based, not periodic");
 	if (!isConnectionStarted)
 		throw SystemConfigurationException("Connection is not started!");
+    if (exception != NULL) {
+    	exception->printStackTrace();
+    	throw SystemConfigurationException("Exception Listener has received an exception, will not try to send");
+    }
 	TextMessage * message = session->createTextMessage(XMLTool::dom2string(document));
 	Sender::fillMessageProperties(message, usertime, contentID, contentCreationTime);
 	message->setStringProperty(s->toString()+"APIVersion", s->getAPIVersion());

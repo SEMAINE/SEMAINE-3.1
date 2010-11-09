@@ -18,16 +18,24 @@
 #include <cms/BytesMessage.h>
 #include <cms/MapMessage.h>
 #include <cms/CMSException.h>
+#include <cms/ExceptionListener.h>
 #include <cms/MessageListener.h>
 #include <stdlib.h>
 #include <iostream>
 
 #include <semaine/cms/event.h>
 
+#include "CMSLogger.h"
+
 using namespace cms;
 
 namespace semaine { 
 	namespace cms {
+
+    class ExcListener;
+
+	//////////////////// IOBase //////////////////////
+
 		
 		/**
 		 * This class handles the low-level interaction with the JMS provider for
@@ -45,6 +53,7 @@ namespace semaine {
 			Session * session;
 			Topic * topic;
 			bool isConnectionStarted;
+			const CMSException * exception;
 			
 		public:
 			/**
@@ -111,15 +120,31 @@ namespace semaine {
 			
 			
 			
-			
+		friend class ExcListener;
+
 		private:
-			void initialise(const std::string & topicName)
-			throw (CMSException);
-			
-			
+			void initialise(const std::string & topicName) throw (CMSException);
+			void setException(const CMSException & ex);
+			ExcListener * excListener;
+
 		}; // class IOBase
 		
-		
+		//////////////// Exception listener ///////////////
+
+		class ExcListener : public ExceptionListener {
+		public:
+			ExcListener(IOBase * iobase) :
+				iobase(iobase)
+			{}
+			virtual void onException(const CMSException & ex) {
+			 	CMSLogger::getLog("Connection")->error(std::string("Exception Listener: "), &ex);
+		        iobase->setException(ex);
+			}
+		private:
+			IOBase * iobase;
+		};
+
+
 		
 	} // namespace cms
 } // namespace semaine

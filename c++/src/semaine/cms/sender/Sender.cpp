@@ -40,8 +40,8 @@ namespace sender {
 	throw (CMSException)
 	{
 		producer = session->createProducer(topic);
-		producer->setDeliveryMode(DeliveryMode::PERSISTENT);
-	}
+		// There is no point for us to remember any messages for when the broker is restarted:
+		producer->setDeliveryMode(DeliveryMode::NON_PERSISTENT); 	}
 
 
 	void Sender::sendTextMessage(const std::string & text, long long usertime)
@@ -55,6 +55,10 @@ namespace sender {
 	{
 		if (!isConnectionStarted)
 			throw SystemConfigurationException("Connection is not started!");
+        if (exception != NULL) {
+        	exception->printStackTrace();
+        	throw SystemConfigurationException("Exception Listener has received an exception, will not try to send");
+        }
 		TextMessage * message = session->createTextMessage(text);
 		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		if (isPeriodic())
@@ -78,6 +82,10 @@ namespace sender {
 			throw SystemConfigurationException("Connection is not started!");
 		if (isPeriodic())
 			throw SystemConfigurationException("This method is for event-based messages, but sender is in periodic mode.");
+        if (exception != NULL) {
+        	exception->printStackTrace();
+        	throw SystemConfigurationException("Exception Listener has received an exception, will not try to send");
+        }
 		TextMessage * message = session->createTextMessage(text);
 		fillMessageProperties(message, usertime, contentID, contentCreationTime);
 		message->setStringProperty(SEMAINEMessage::EVENT, eventType);
