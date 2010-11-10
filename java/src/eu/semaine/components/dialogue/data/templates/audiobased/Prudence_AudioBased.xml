@@ -180,17 +180,42 @@
 	</template>
 	
 	
-	<template id="Prudence_AudioBased_TellMeMore_2" name="Audio-based TellMeMore Rule 2">
+	<template id="Prudence_AudioBased_TellMeMore_2" name="Audio-based TellMeMore Rule 2a">
 		<preconditions>
 		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="greater_equals" value2="-21.34" />
 		  <compare value1="$UserTurn.Valence.min" comparator="greater_equals" value2="-0.03" />
 		  <compare value1="$UserTurn.Valence.min" comparator="not_equals" value2="0" />
+		  <compare value1="$Agent.nrTimesRandom" comparator="smaller_equals" value2="4" />
 		  <compare value1="$Agent.character" value2="Prudence" />
        	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
-	   </preconditions>
+	   	</preconditions>
+	   
+	   	<effects>
+			<update name="Agent.nrTimesRandom" value="$Agent.nrTimesRandom + 1" />
+		</effects>
 	   
 	   	<behaviour class="ResponseActionProposer" quality="0.3">
 	   	 	<argument name="response" value="##Prudence_tell_me_more_2" />
+	   	</behaviour>
+	</template>
+	
+	
+	<template id="Prudence_AudioBased_TellMeMore_2" name="Audio-based TellMeMore Rule 2b">
+		<preconditions>
+		  <compare value1="$UserTurn.AudioFeatures.LOGenergy_min" comparator="greater_equals" value2="-21.34" />
+		  <compare value1="$UserTurn.Valence.min" comparator="greater_equals" value2="-0.03" />
+		  <compare value1="$UserTurn.Valence.min" comparator="not_equals" value2="0" />
+		  <compare value1="$Agent.nrTimesRandom" comparator="greater_than" value2="4" />
+		  <compare value1="$Agent.character" value2="Prudence" />
+       	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
+	   	</preconditions>
+	   
+	   	<effects>
+			<update name="Agent.nrTimesRandom" value="0" />
+		</effects>
+	   
+	   	<behaviour class="ResponseActionProposer" quality="0.3">
+	   	 	<argument name="response" value="##Prudence_change_subject" />
 	   	</behaviour>
 	</template>
 	

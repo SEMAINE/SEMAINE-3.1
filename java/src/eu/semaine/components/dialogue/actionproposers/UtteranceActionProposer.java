@@ -162,7 +162,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		senders.add(dialogStateSender);
 		contextSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(contextSender);
-		fmlSender = new FMLSender("semaine.data.action.selected.function", getName());
+		fmlSender = new FMLSender("semaine.data.action.candidate.function", getName());
 		senders.add(fmlSender);
 		queuingFMLSender = new FMLSender("semaine.data.action.prepare.function", getName());
 		senders.add(queuingFMLSender);

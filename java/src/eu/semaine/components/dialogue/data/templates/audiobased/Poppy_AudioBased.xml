@@ -116,7 +116,7 @@
        	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
 	  </preconditions>
 	   
-	   	<behaviour class="ResponseActionProposer" quality="0.9">
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
 	   	 	<argument name="response" value="##Poppy_user_happy" />
 	   	</behaviour>
 	</template>
@@ -132,7 +132,7 @@
        	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
 	  </preconditions>
 	   
-	   	<behaviour class="ResponseActionProposer" quality="0.9">
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
 	   	 	<argument name="response" value="##Poppy_user_happy" />
 	   	</behaviour>
 	</template>
@@ -150,7 +150,7 @@
        	  <trigger value1="$Agent.speakingIntention" value2="want_turn" />
 	  </preconditions>
 	   
-	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	<behaviour class="ResponseActionProposer" quality="0.5">
 	   	 	<argument name="response" value="##Poppy_user_happy" />
 	   	</behaviour>
 	</template>
