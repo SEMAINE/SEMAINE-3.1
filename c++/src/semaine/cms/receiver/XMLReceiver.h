@@ -20,7 +20,6 @@
 
 
 using namespace cms;
-using namespace semaine::cms::exceptions;
 using namespace semaine::cms::message;
 
 namespace semaine {
@@ -104,7 +103,7 @@ public:
 
 protected:
 	virtual SEMAINEMessage * createSEMAINEMessage(const Message * message)
-	throw(MessageFormatException)
+	throw(semaine::cms::exceptions::MessageFormatException)
 	{
 		return new SEMAINEXMLMessage(message);
 	}

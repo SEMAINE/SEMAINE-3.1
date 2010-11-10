@@ -25,7 +25,6 @@
 
 
 using namespace cms;
-using namespace semaine::cms::exceptions;
 using namespace semaine::util;
 
 namespace semaine {
@@ -38,7 +37,7 @@ public:
 	const static std::string IS_XML;
 
 	SEMAINEXMLMessage(const Message * message)
-	throw(MessageFormatException, SystemConfigurationException);
+	throw(semaine::cms::exceptions::MessageFormatException, semaine::cms::exceptions::SystemConfigurationException);
 	virtual ~SEMAINEXMLMessage();
 	XERCES_CPP_NAMESPACE::DOMDocument * getDocument()
 	{
@@ -48,7 +47,7 @@ public:
 
 protected:
 	XERCES_CPP_NAMESPACE::DOMDocument * document;
-	void parseDocument() throw(MessageFormatException, SystemConfigurationException);
+	void parseDocument() throw(semaine::cms::exceptions::MessageFormatException, semaine::cms::exceptions::SystemConfigurationException);
 
 
 

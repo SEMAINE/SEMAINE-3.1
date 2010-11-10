@@ -13,7 +13,6 @@
 
 using namespace XERCES_CPP_NAMESPACE;
 using namespace semaine::util;
-using namespace semaine::cms::exceptions;
 
 namespace semaine {
 
@@ -98,10 +97,10 @@ std::vector<std::string> tokenize(const std::string& str,
  * @throws SystemConfigurationException if expr does not match the expected format.
  */
 std::vector< std::vector<std::string> > splitXPathIntoParts(const std::string & expr)
-throw(SystemConfigurationException) {
+throw(semaine::cms::exceptions::SystemConfigurationException) {
 	std::vector< std::vector<std::string> > parts;
 	if (expr[0] != '/') {
-		throw SystemConfigurationException("XPath expression does not start with a slash: "+expr);
+		throw semaine::cms::exceptions::SystemConfigurationException("XPath expression does not start with a slash: "+expr);
 	}
 	int pos = 1;
 	// Structure of each part except the last part:
@@ -130,11 +129,11 @@ throw(SystemConfigurationException) {
 		// Attributes?
 		if (nextOpenSqB != std::string::npos && nextOpenSqB < nextSlashPos) {
 			if (nextOpenSqB <= pos) {
-				throw SystemConfigurationException("Wrong square bracket location in XPath expression "+expr);
+				throw semaine::cms::exceptions::SystemConfigurationException("Wrong square bracket location in XPath expression "+expr);
 			}
 			localname = expr.substr(pos, nextOpenSqB-pos);
 			if (expr[nextOpenSqB+1] != '@') {
-				throw SystemConfigurationException("Expected '@' character after '[' in XPath expression "+expr);
+				throw semaine::cms::exceptions::SystemConfigurationException("Expected '@' character after '[' in XPath expression "+expr);
 			}
 			int equalPos = expr.find('=', nextOpenSqB);
 			int nextCloseSqB = expr.find(']', nextOpenSqB);
@@ -142,7 +141,7 @@ throw(SystemConfigurationException) {
 				// we have an attribute value
 				attName = expr.substr(nextOpenSqB+2, equalPos-(nextOpenSqB+2));
 				if (expr[equalPos+1] != '\'' || expr[nextCloseSqB-1] != '\'') {
-					throw SystemConfigurationException("Attribute value for attribute '"+attName+"' must be in single quotes, in XPath expression "+expr);
+					throw semaine::cms::exceptions::SystemConfigurationException("Attribute value for attribute '"+attName+"' must be in single quotes, in XPath expression "+expr);
 				}
 				attValue = expr.substr(equalPos+2, nextCloseSqB-1-(equalPos+2));
 			} else { // only attribute name, no value
@@ -150,7 +149,7 @@ throw(SystemConfigurationException) {
 			}
 			nextSlashPos = nextCloseSqB+1;
 			if (nextSlashPos >= expr.length() || expr[nextSlashPos] != '/') {
-				throw SystemConfigurationException("XPath expression seems malformed: no slash after closed square bracket: "+expr);
+				throw semaine::cms::exceptions::SystemConfigurationException("XPath expression seems malformed: no slash after closed square bracket: "+expr);
 			}
 		} else { // no attribute
 			localname = expr.substr(pos, nextSlashPos-pos);
@@ -166,7 +165,7 @@ throw(SystemConfigurationException) {
 	}
 	// Last part: expect either 'text()' or '@attributeName'
 	if (pos >= expr.length()) {
-		throw SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+		throw semaine::cms::exceptions::SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
 	}
 	if (expr[pos] == '@') {
 		std::string attName = expr.substr(pos+1);
@@ -177,7 +176,7 @@ throw(SystemConfigurationException) {
 		std::vector<std::string> part; // vector with 0 elements
 		parts.push_back(part);
 	} else {
-		throw SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+		throw semaine::cms::exceptions::SystemConfigurationException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
 	}
 	return parts;
 }
@@ -185,7 +184,7 @@ throw(SystemConfigurationException) {
 
 
 XPathInfoMapper * getXPathExpressions(StateInfo::Type & type, const std::list<std::string> & configSection)
-throw(SystemConfigurationException)
+throw(semaine::cms::exceptions::SystemConfigurationException)
 {
 	const char * delims = "\t =:";
 	std::map<std::string, std::string> namespacePrefixes;
@@ -203,13 +202,13 @@ throw(SystemConfigurationException)
 			readShortNames = true;
 			readNamespacePrefixes = false;
 			if (namespacePrefixes.empty()) {
-				throw SystemConfigurationException("Namespace prefixes must be defined before short names");
+				throw semaine::cms::exceptions::SystemConfigurationException("Namespace prefixes must be defined before short names");
 			}
 		} else if (readNamespacePrefixes) {
 			std::string::size_type sepStart = line.find_first_of(delims);
 			std::string::size_type secondStart = line.find_first_not_of(delims, sepStart);
 			if (sepStart == std::string::npos || secondStart == std::string::npos) {
-				throw SystemConfigurationException("Expected namespace prefix definition, got '"+line+"'");
+				throw semaine::cms::exceptions::SystemConfigurationException("Expected namespace prefix definition, got '"+line+"'");
 			}
 			const std::string prefix = line.substr(0, sepStart);
 			const std::string namespaceURI = line.substr(secondStart);
@@ -218,18 +217,18 @@ throw(SystemConfigurationException)
 			std::string::size_type sepStart = line.find_first_of(delims);
 			std::string::size_type secondStart = line.find_first_not_of(delims, sepStart);
 			if (sepStart == std::string::npos || secondStart == std::string::npos) {
-				throw SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
+				throw semaine::cms::exceptions::SystemConfigurationException("Expected short name to XPath definition, got '"+line+"'");
 			}
 			std::string shortName = line.substr(0, sepStart);
 			std::string xpathExpr = line.substr(secondStart);
 			// Fail-early strategy: we want to verify at load time whether all entries match our expected format:
 			splitXPathIntoParts(xpathExpr);
 			if (shortNames.find(shortName) != shortNames.end()) {
-				throw SystemConfigurationException("In section "+StateInfo::TypeNames[type]
+				throw semaine::cms::exceptions::SystemConfigurationException("In section "+StateInfo::TypeNames[type]
 				    +", short name '"+shortName+"' occurs more than once");
 			}
 			if (expr2shortname.find(xpathExpr) != expr2shortname.end()) {
-				throw SystemConfigurationException("In section "+StateInfo::TypeNames[type]
+				throw semaine::cms::exceptions::SystemConfigurationException("In section "+StateInfo::TypeNames[type]
 				    +", short names '"+shortName+"' and '"+expr2shortname[xpathExpr]+"' have the same XPath expression");
 			}
 			shortNames[shortName] = xpathExpr;
@@ -246,7 +245,7 @@ const std::map<StateInfo::Type, XPathInfoMapper *> getInfosByType()
 
 		std::ifstream configFile(CONFIG_STATEINFO.c_str());
 		if (configFile.fail())
-			throw SystemConfigurationException("Problem opening stateinfo config file "+CONFIG_STATEINFO);
+			throw semaine::cms::exceptions::SystemConfigurationException("Problem opening stateinfo config file "+CONFIG_STATEINFO);
 		std::string line;
 		std::list<std::string> currentSection;
 		const StateInfo::Type * currentType = NULL;
@@ -280,12 +279,12 @@ const std::map<StateInfo::Type, XPathInfoMapper *> getInfosByType()
 			StateInfo::Type t = StateInfo::Types[i];
 			std::list<std::string> configSection = configSections[t];
 			if (configSection.size() == 0)
-				throw SystemConfigurationException("No config section for "+StateInfo::TypeNames[t]);
+				throw semaine::cms::exceptions::SystemConfigurationException("No config section for "+StateInfo::TypeNames[t]);
 			t2m[t] = getXPathExpressions(t, configSection);
 		}
 		return t2m;
 
-	} catch (SystemConfigurationException & exc) {
+	} catch (semaine::cms::exceptions::SystemConfigurationException & exc) {
 		std::cerr << "SystemConfigurationException: Cannot initialise state info configuration: " << std::endl
 			<< exc.what() << std::endl;
 		throw exc;
@@ -301,7 +300,7 @@ const std::map<StateInfo::Type, XPathInfoMapper *> StateInfo::infosByType = getI
 
 
 StateInfo::StateInfo(const std::map<std::string, std::string> & infoItems, const std::string & whatState, Type type)
-throw(SystemConfigurationException)
+throw(semaine::cms::exceptions::SystemConfigurationException)
 : stateName(whatState), type(type), info(infoItems), doc(NULL)
 {
     log = semaine::cms::CMSLogger::getLog(stateName);
@@ -310,14 +309,14 @@ throw(SystemConfigurationException)
 	for (std::map<std::string, std::string>::const_iterator it = infoItems.begin(); it != infoItems.end(); ++it) {
 		std::string key = it->first;
 		if (info2expr.find(key) == info2expr.end()) {
-			throw SystemConfigurationException("Don't know how to handle info item '"+key+"' -- something seems to be out of sync");
+			throw semaine::cms::exceptions::SystemConfigurationException("Don't know how to handle info item '"+key+"' -- something seems to be out of sync");
 		}
 	}
 }
 
 
 StateInfo::StateInfo(DOMDocument * doc, const std::string & whatState, const std::string & rootName, const std::string & rootNamespace, Type type)
-throw(MessageFormatException, SystemConfigurationException)
+throw(semaine::cms::exceptions::MessageFormatException, semaine::cms::exceptions::SystemConfigurationException)
 	: doc(doc), stateName(whatState), type(type)
 {
     log = semaine::cms::CMSLogger::getLog(stateName);
@@ -330,19 +329,19 @@ StateInfo::~StateInfo()
 }
 
 void StateInfo::setInfo(const std::string & name, const std::string & value)
-throw(SystemConfigurationException)
+throw(semaine::cms::exceptions::SystemConfigurationException)
 {
 	// Verify that we can handle these info items:
 	const std::map<std::string, std::string> info2expr = infosByType.find(type)->second->getExpressionMap();
 	if (info2expr.find(name) == info2expr.end()) {
-		throw SystemConfigurationException("Don't know how to handle info item '"+name+"' -- something seems to be out of sync");
+		throw semaine::cms::exceptions::SystemConfigurationException("Don't know how to handle info item '"+name+"' -- something seems to be out of sync");
 	}
 	info[name] = value;
 	doc = NULL; // if it was there, it's now out of date
 }
 
 DOMDocument * StateInfo::getDocument()
-throw(SystemConfigurationException)
+throw(semaine::cms::exceptions::SystemConfigurationException)
 {
 	if (doc == NULL) {
 		createDocumentFromInfo();
@@ -353,7 +352,7 @@ throw(SystemConfigurationException)
 
 
 void StateInfo::createDocumentFromInfo()
-throw(SystemConfigurationException)
+throw(semaine::cms::exceptions::SystemConfigurationException)
 {
 	doc = NULL;
 	XPathInfoMapper * xpathInfoMapper = infosByType.find(type)->second;
@@ -367,7 +366,7 @@ throw(SystemConfigurationException)
 		DOMElement * currentElt = NULL;
 		std::map<std::string, std::string>::const_iterator xpathLookupIt = infoNames.find(shortName);
 		if (xpathLookupIt == infoNames.end()) {
-			throw SystemConfigurationException("No info entry for '"+shortName+"' -- something seems to be out of sync");
+			throw semaine::cms::exceptions::SystemConfigurationException("No info entry for '"+shortName+"' -- something seems to be out of sync");
 		}
 		std::string expr = xpathLookupIt->second;
 
@@ -387,19 +386,19 @@ throw(SystemConfigurationException)
 					try {
 						doc = XMLTool::newDocument(localName, namespaceURI);
 					} catch (DOMException de) {
-						throw SystemConfigurationException("For info '"+shortName+"', cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'");
+						throw semaine::cms::exceptions::SystemConfigurationException("For info '"+shortName+"', cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'");
 					}
 					currentElt = doc->getDocumentElement();
 					XMLTool::setPrefix(currentElt, prefix);
 				} else {
 					currentElt = doc->getDocumentElement();
 					if (XMLTool::getLocalName(currentElt) != localName) {
-						throw SystemConfigurationException("Incompatible root node specification: expression for '"+shortName+"' requests '"+
+						throw semaine::cms::exceptions::SystemConfigurationException("Incompatible root node specification: expression for '"+shortName+"' requests '"+
 								localName+"', but previous expressions have requested '"+XMLTool::getLocalName(currentElt)+"'!");
 					}
 					std::string currentNamespaceURI = XMLTool::getNamespaceURI(currentElt);
 					if (currentNamespaceURI != namespaceURI) {
-						throw SystemConfigurationException("Incompatible root namespace specification: expression for '"+shortName+"' requests '"+
+						throw semaine::cms::exceptions::SystemConfigurationException("Incompatible root namespace specification: expression for '"+shortName+"' requests '"+
 								namespaceURI+"', but previous expressions have requested '"+currentNamespaceURI+"'!");
 					}
 				}
@@ -435,7 +434,7 @@ throw(SystemConfigurationException)
 		} // for all parts except the last one
 
 		if (currentElt == NULL)
-			throw SystemConfigurationException("No elements or no final part created for info '"
+			throw semaine::cms::exceptions::SystemConfigurationException("No elements or no final part created for info '"
 					+shortName+"' from XPath expression '"+expr+"'");
 		std::vector<std::string> lastPart = parts.back();
 
@@ -458,7 +457,7 @@ throw(SystemConfigurationException)
 			if (part == "") continue;
 			std::vector<std::string> prefixAndName = tokenize(part, ":");
 			if (prefixAndName.size() > 2)
-				throw SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
+				throw semaine::cms::exceptions::SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
 			std::string prefix = prefixAndName.size() == 2 ? prefixAndName[0] : "";
 			std::string namespaceURI = prefix != "" ? namespaceContext->getNamespaceURI(prefix) : "";
 			std::string localNameExpr = prefixAndName.back();
@@ -471,11 +470,11 @@ throw(SystemConfigurationException)
 				std::string::size_type openB = localNameExpr.find("[");
 				std::string::size_type closeB = localNameExpr.find("]");
 				if (closeB < openB)
-					throw SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
+					throw semaine::cms::exceptions::SystemConfigurationException("Erroneous XPath expression for info '"+shortName+"': part '"+part+"'");
 				localName = localNameExpr.substr(0, openB);
 				std::string attValPair = localNameExpr.substr(openB+1, closeB-openB-1);
 				if (attValPair[0] != '@') {
-					throw SystemConfigurationException("Cannot generate document from XPath expression for info '"+shortName+"': part '"+part+"'");
+					throw semaine::cms::exceptions::SystemConfigurationException("Cannot generate document from XPath expression for info '"+shortName+"': part '"+part+"'");
 				}
 				std::string::size_type iEqualSign = attValPair.find("=");
 				if (iEqualSign != std::string::npos) {
@@ -485,7 +484,7 @@ throw(SystemConfigurationException)
 					haveAttValue = true;
 					if (!(attValue[0] == '\'' && attValue[attValue.length()-1] == '\'')
 							|| (attValue[0] == '"' && attValue[attValue.length()-1] == '"')) {
-						throw SystemConfigurationException("For info '"+shortName+"', unexpected attribute value "+attValue+" found in part '"+part+"' -- not quoted?");
+						throw semaine::cms::exceptions::SystemConfigurationException("For info '"+shortName+"', unexpected attribute value "+attValue+" found in part '"+part+"' -- not quoted?");
 					}
 					attValue = attValue.substr(1, attValue.length()-2);
 				} else {
@@ -502,19 +501,19 @@ throw(SystemConfigurationException)
 					try {
 						doc = XMLTool::newDocument(localName, namespaceURI);
 					} catch (DOMException de) {
-						throw SystemConfigurationException("For info '"+shortName+"', cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'");
+						throw semaine::cms::exceptions::SystemConfigurationException("For info '"+shortName+"', cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'");
 					}
 					currentElt = doc->getDocumentElement();
 					XMLTool::setPrefix(currentElt, prefix);
 				} else {
 					currentElt = doc->getDocumentElement();
 					if (XMLTool::getLocalName(currentElt) != localName) {
-						throw SystemConfigurationException("Incompatible root node specification: expression for '"+shortName+"' requests '"+
+						throw semaine::cms::exceptions::SystemConfigurationException("Incompatible root node specification: expression for '"+shortName+"' requests '"+
 								localName+"', but previous expressions have requested '"+XMLTool::getLocalName(currentElt)+"'!");
 					}
 					std::string currentNamespaceURI = XMLTool::getNamespaceURI(currentElt);
 					if (currentNamespaceURI != namespaceURI) {
-						throw SystemConfigurationException("Incompatible root namespace specification: expression for '"+shortName+"' requests '"+
+						throw semaine::cms::exceptions::SystemConfigurationException("Incompatible root namespace specification: expression for '"+shortName+"' requests '"+
 								namespaceURI+"', but previous expressions have requested '"+currentNamespaceURI+"'!");
 					}
 				}
@@ -549,7 +548,7 @@ throw(SystemConfigurationException)
 			}
 		} // for all parts except the last one
 		if (currentElt == NULL)
-			throw SystemConfigurationException("No elements or no final part created for info '"
+			throw semaine::cms::exceptions::SystemConfigurationException("No elements or no final part created for info '"
 					+shortName+"' from XPath expression '"+expr+"'");
 		std::string lastPart = parts.back();
 		trim(lastPart);
@@ -559,7 +558,7 @@ throw(SystemConfigurationException)
 			std::string attName = lastPart.substr(1);
 			XMLTool::setAttribute(currentElt, attName, value);
 		} else {
-			throw new SystemConfigurationException("Do not know how to assign value for info '"+shortName+"' from last part of xpath expression '"
+			throw semaine::cms::exceptions::SystemConfigurationException("Do not know how to assign value for info '"+shortName+"' from last part of xpath expression '"
 					+lastPart+"' -- expected either 'text()' or '@attributeName'");
 		}
 		*/
@@ -567,18 +566,18 @@ throw(SystemConfigurationException)
 }
 
 void StateInfo::analyseDocument(const std::string & rootName, const std::string & rootNamespace)
-throw(MessageFormatException, SystemConfigurationException)
+throw(semaine::cms::exceptions::MessageFormatException, semaine::cms::exceptions::SystemConfigurationException)
 {
 	if (doc == NULL) {
-		throw SystemConfigurationException("Received NULL document");
+		throw semaine::cms::exceptions::SystemConfigurationException("Received NULL document");
 	}
 	DOMElement * root = doc->getDocumentElement();
 	if (XMLTool::getLocalName(root) != rootName) {
-		throw MessageFormatException("XML document should have root node '"+
+		throw semaine::cms::exceptions::MessageFormatException("XML document should have root node '"+
 							rootName+"', but has '"+XMLTool::getLocalName(root)+"'!");
 	}
 	if (XMLTool::getNamespaceURI(root) != rootNamespace) {
-		throw MessageFormatException("root node should have namespace '"+
+		throw semaine::cms::exceptions::MessageFormatException("root node should have namespace '"+
 				rootNamespace+"' but has '"+XMLTool::getNamespaceURI(root)+"'!");
 	}
 
@@ -602,11 +601,11 @@ throw(MessageFormatException, SystemConfigurationException)
 		} catch (DOMXPathException & xee) {
 			char * err = XMLString::transcode(xee.msg);
 			std::cerr << err << std::endl;
-			throw MessageFormatException("Problem analysing value of '"+shortName+"': "+err);
+			throw semaine::cms::exceptions::MessageFormatException("Problem analysing value of '"+shortName+"': "+err);
 		} catch (DOMException & xe) {
 			char * err = XMLString::transcode(xe.getMessage());
 			std::cerr << err << std::endl;
-			throw MessageFormatException("Problem analysing value of '"+shortName+"': "+err);
+			throw semaine::cms::exceptions::MessageFormatException("Problem analysing value of '"+shortName+"': "+err);
 		}
 	}
 

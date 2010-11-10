@@ -110,7 +110,7 @@ public:
 
 protected:
 	virtual semaine::cms::message::SEMAINEMessage * createSEMAINEMessage(const Message * message)
-	throw(MessageFormatException)
+	throw(semaine::cms::exceptions::MessageFormatException)
 	{
 		return new semaine::cms::message::SEMAINEStateMessage(message, stateInfoType);
 	}

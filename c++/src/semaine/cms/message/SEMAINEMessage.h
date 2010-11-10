@@ -15,17 +15,15 @@
 
 #include <semaine/config.h>
 
+#include <semaine/cms/exceptions/MessageFormatException.h>
+
 #include <cms/Message.h>
 #include <cms/TextMessage.h>
 #include <cms/BytesMessage.h>
 #include <cms/Destination.h>
 #include <cms/Topic.h>
 
-#include <semaine/cms/exceptions/MessageFormatException.h>
-
-
 using namespace cms;
-using namespace semaine::cms::exceptions;
 
 namespace semaine {
 namespace cms {
@@ -86,7 +84,7 @@ public:
 	 * @throws NullPointerException if message is null.
 	 * @throws MessageFormatException if the message does not have the proper format
 	 */
-	SEMAINEMessage(const Message * message) throw(MessageFormatException);
+	SEMAINEMessage(const Message * message) throw(semaine::cms::exceptions::MessageFormatException);
 
 	virtual ~SEMAINEMessage();
 
@@ -151,10 +149,10 @@ public:
 	 * @throws MessageFormatException if the message contains an <code>event</code> property, but the value is not known,
 	 * or if the message is not event-based.
 	 */
-	std::string getEventType() throw (CMSException, MessageFormatException)
+	std::string getEventType() throw (CMSException, semaine::cms::exceptions::MessageFormatException)
 	{
 		if (!message->propertyExists(EVENT))
-			throw MessageFormatException("Message is not event-based, cannot provide event type");
+			throw semaine::cms::exceptions::MessageFormatException("Message is not event-based, cannot provide event type");
 		std::string eventString = message->getStringProperty(EVENT);
 		return eventString;
 	}
@@ -165,10 +163,10 @@ public:
 	 * @throws CMSException if the JMS provider fails to get the property value due to some internal error.
 	 * @throws MessageFormatException if the message is not periodic.
 	 */
-	int getPeriod() throw (CMSException, MessageFormatException)
+	int getPeriod() throw (CMSException, semaine::cms::exceptions::MessageFormatException)
 	{
 		if (!message->propertyExists(PERIOD))
-			throw MessageFormatException("Message is not periodic, cannot provide period length");
+			throw semaine::cms::exceptions::MessageFormatException("Message is not periodic, cannot provide period length");
 		return message->getIntProperty(PERIOD);
 	}
 
@@ -222,11 +220,11 @@ public:
 	 * @throws CMSException if the JMS provider fails to get the property value due to some internal error.
 	 * @throws MessageFormatException if the message is not a text message.
 	 */
-	std::string getText() throw(CMSException, MessageFormatException)
+	std::string getText() throw(CMSException, semaine::cms::exceptions::MessageFormatException)
 	{
 		const TextMessage * tm = dynamic_cast<const TextMessage*>(message);
 		if (tm == NULL) {
-			throw MessageFormatException(std::string("Cannot get text for a message of type ")+typeid(*message).name());
+			throw semaine::cms::exceptions::MessageFormatException(std::string("Cannot get text for a message of type ")+typeid(*message).name());
 		}
 		return tm->getText();
 	}
@@ -263,7 +261,7 @@ private:
 	 * would not be visible from our constructor.
 	 * @throws MessageFormatException if a problem with the properties is found.
 	 */
-	void verifyProperties() throw(MessageFormatException);
+	void verifyProperties() throw(semaine::cms::exceptions::MessageFormatException);
 
 
 

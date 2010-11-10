@@ -43,7 +43,7 @@ const XMLCh * NamespaceContext::lookupNamespaceURI(const XMLCh * prefix) const
 
 const XMLCh * NamespaceContext::lookupPrefix(const XMLCh *URI) const
 {
-	throw SystemConfigurationException("Not implemented");
+	throw semaine::cms::exceptions::SystemConfigurationException("Not implemented");
 }
 
 void NamespaceContext::addNamespaceBinding(const XMLCh* prefix, const XMLCh* namespaceURI)

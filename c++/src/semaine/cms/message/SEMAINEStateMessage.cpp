@@ -15,7 +15,6 @@
 
 using namespace cms;
 using namespace semaine::datatypes::stateinfo;
-using namespace semaine::cms::exceptions;
 using namespace XERCES_CPP_NAMESPACE;
 
 namespace semaine {
@@ -25,7 +24,7 @@ namespace cms {
 namespace message {
 
 SEMAINEStateMessage::SEMAINEStateMessage(const Message * message, StateInfo::Type stateInfoType)
-throw(SystemConfigurationException, MessageFormatException)
+throw(semaine::cms::exceptions::SystemConfigurationException, semaine::cms::exceptions::MessageFormatException)
 : SEMAINEXMLMessage(message), stateInfoType(stateInfoType), state(NULL)
 {
 	try {
@@ -39,7 +38,7 @@ throw(SystemConfigurationException, MessageFormatException)
 		}
 	} catch (CMSException &e) {
 		e.printStackTrace();
-		throw MessageFormatException("Problem reading message");
+		throw semaine::cms::exceptions::MessageFormatException("Problem reading message");
 	}
 }
 
@@ -51,7 +50,7 @@ SEMAINEStateMessage::~SEMAINEStateMessage() {
 }
 
 StateInfo * SEMAINEStateMessage::createState(DOMDocument * doc)
-throw(MessageFormatException)
+throw(semaine::cms::exceptions::MessageFormatException)
 {
 	switch (stateInfoType) {
 	case StateInfo::AgentState: return new AgentStateInfo(doc);
@@ -60,7 +59,7 @@ throw(MessageFormatException)
 	case StateInfo::ContextState: return new ContextStateInfo(doc);
 	case StateInfo::SystemState: return new SystemStateInfo(doc);
 	}
-	throw MessageFormatException("Unknown state info type: "+stateInfoType);
+	throw semaine::cms::exceptions::MessageFormatException("Unknown state info type: "+stateInfoType);
 }
 
 

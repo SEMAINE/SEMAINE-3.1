@@ -22,7 +22,6 @@
 #include <sstream>
 #include <decaf/lang/System.h>
 
-using namespace semaine::cms::exceptions;
 using namespace semaine::util;
 using namespace semaine::datatypes::xml;
 using namespace XERCES_CPP_NAMESPACE;
@@ -71,7 +70,7 @@ void DummyFML2BML::react(SEMAINEMessage * m) throw(CMSException)
 
 	SEMAINEXMLMessage * xm = dynamic_cast<SEMAINEXMLMessage *>(m);
 	if (xm == NULL) {
-		throw MessageFormatException("expected XML message, gut "+std::string(typeid(*m).name()));
+		throw semaine::cms::exceptions::MessageFormatException("expected XML message, gut "+std::string(typeid(*m).name()));
 	}
 	bool isFML = xm->getDatatype() == "FML";
 	if (isFML) {

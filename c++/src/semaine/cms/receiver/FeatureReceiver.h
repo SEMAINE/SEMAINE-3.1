@@ -20,7 +20,6 @@
 
 
 using namespace cms;
-using namespace semaine::cms::exceptions;
 using namespace semaine::cms::message;
 
 namespace semaine {
@@ -103,7 +102,7 @@ public:
 
 protected:
 	virtual SEMAINEMessage * createSEMAINEMessage(const Message * message)
-	throw(MessageFormatException)
+	throw(semaine::cms::exceptions::MessageFormatException)
 	{
 		SEMAINEFeatureMessage * fm = new SEMAINEFeatureMessage(message);
 		try {
@@ -116,7 +115,7 @@ protected:
 			std::stringstream buf;
 			buf << "Problem accessing feature names: ";
 			e.printStackTrace(buf);
-			throw MessageFormatException(buf.str());
+			throw semaine::cms::exceptions::MessageFormatException(buf.str());
 		}
 		return fm;
 	}

@@ -9,6 +9,8 @@
 
 #include "SEMAINEMessage.h"
 
+using namespace cms;
+
 namespace semaine {
 namespace cms {
 namespace message {
@@ -23,10 +25,10 @@ const std::string SEMAINEMessage::CONTENT_CREATION_TIME = "content-creation-time
 
 
 	SEMAINEMessage::SEMAINEMessage(const Message * message)
-	throw(MessageFormatException)
+	throw(semaine::cms::exceptions::MessageFormatException)
 	{
 		if (message == NULL)
-			throw MessageFormatException("Message is null");
+			throw semaine::cms::exceptions::MessageFormatException("Message is null");
 		this->message = message->clone();
 		verifyProperties();
 	}
@@ -36,28 +38,28 @@ const std::string SEMAINEMessage::CONTENT_CREATION_TIME = "content-creation-time
 		delete message;
 	}
 
-	void SEMAINEMessage::verifyProperties() throw(MessageFormatException)
+	void SEMAINEMessage::verifyProperties() throw(semaine::cms::exceptions::MessageFormatException)
 	{
 		try {
 			getUsertime();
 		} catch (CMSException & e) {
-			throw MessageFormatException("Problem with message property '"+USERTIME+"': "+e.getStackTraceString());
+			throw semaine::cms::exceptions::MessageFormatException("Problem with message property '"+USERTIME+"': "+e.getStackTraceString());
 		}
 		try {
 			getDatatype();
 		} catch (CMSException & e) {
-			throw MessageFormatException("Problem with message property '"+DATATYPE+"': "+e.getStackTraceString());
+			throw semaine::cms::exceptions::MessageFormatException("Problem with message property '"+DATATYPE+"': "+e.getStackTraceString());
 		}
 		try {
 			getSource();
 		} catch (CMSException & e) {
-			throw new MessageFormatException("Problem with message property '"+SOURCE+"': "+e.getStackTraceString());
+			throw semaine::cms::exceptions::MessageFormatException("Problem with message property '"+SOURCE+"': "+e.getStackTraceString());
 		}
 		try {
 			if (!isPeriodic() && !isEventBased())
-				throw MessageFormatException("Message contains neither periodic nor event-based header properties.");
+				throw semaine::cms::exceptions::MessageFormatException("Message contains neither periodic nor event-based header properties.");
 		} catch (CMSException & e) {
-			throw MessageFormatException("Problem determining whether properties '"+PERIOD+"' or '"+EVENT+"' exist: "+e.getMessage());
+			throw semaine::cms::exceptions::MessageFormatException("Problem determining whether properties '"+PERIOD+"' or '"+EVENT+"' exist: "+e.getMessage());
 		}
 	}
 

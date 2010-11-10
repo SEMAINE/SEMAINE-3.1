@@ -38,12 +38,12 @@ namespace message {
 
 
 SEMAINEBytesMessage::SEMAINEBytesMessage(const Message * message)
-throw(MessageFormatException,SystemConfigurationException) :
+throw(semaine::cms::exceptions::MessageFormatException,semaine::cms::exceptions::SystemConfigurationException) :
 	SEMAINEMessage(message)
 {
 	const BytesMessage * bm = dynamic_cast<const BytesMessage *>(message);
 	if (bm == NULL) {
-		throw MessageFormatException(std::string("Expected a bytes message, but got a ")+typeid(*message).name());
+		throw semaine::cms::exceptions::MessageFormatException(std::string("Expected a bytes message, but got a ")+typeid(*message).name());
 	}
 	
 	try {
@@ -53,11 +53,11 @@ throw(MessageFormatException,SystemConfigurationException) :
 		if (actualLength != len) {
 			std::stringstream buf;
 			buf << "Message has " << len << " bytes, but could read only " << actualLength;
-			throw MessageFormatException(buf.str());
+			throw semaine::cms::exceptions::MessageFormatException(buf.str());
 		}
 	} catch (const CMSException & ce) {
 		ce.printStackTrace();
-		throw MessageFormatException(std::string("Cannot read message"));
+		throw semaine::cms::exceptions::MessageFormatException(std::string("Cannot read message"));
 	}
 }
 

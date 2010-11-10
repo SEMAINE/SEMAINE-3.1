@@ -13,7 +13,6 @@
 
 
 using namespace cms;
-using namespace semaine::cms::exceptions;
 using namespace XERCES_CPP_NAMESPACE;
 using namespace semaine::datatypes::xml;
 
@@ -24,7 +23,7 @@ namespace cms {
 namespace message {
 
 SEMAINEEmmaMessage::SEMAINEEmmaMessage(const Message * message)
-throw(SystemConfigurationException, MessageFormatException)
+throw(semaine::cms::exceptions::SystemConfigurationException, semaine::cms::exceptions::MessageFormatException)
 : SEMAINEXMLMessage(message)
 {
 }

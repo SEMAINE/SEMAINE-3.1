@@ -37,7 +37,6 @@
 
 #include <semaine/util/ParseErrorHandler.h>
 
-using namespace semaine::cms::exceptions;
 
 namespace semaine {
 namespace util {
@@ -58,7 +57,7 @@ public:
 	 * This needs to be called once before any of the methods here can be used.
 	 */
 	static void startupXMLTools()
-	throw (SystemConfigurationException);
+	throw (semaine::cms::exceptions::SystemConfigurationException);
 
 	/**
 	 * This should be called to clean up after the code is done.
@@ -77,10 +76,10 @@ public:
 	static const std::string transcode(const XMLCh * xmlString);
 
 	static XERCES_CPP_NAMESPACE::DOMDocument * parse(const std::string & xmlAsText)
-	throw (MessageFormatException);
+	throw (semaine::cms::exceptions::MessageFormatException);
 
 	static XERCES_CPP_NAMESPACE::DOMDocument * parseFile(const std::string & filename)
-	throw (MessageFormatException);
+	throw (semaine::cms::exceptions::MessageFormatException);
 
     /**
      * Create a new document with the given name and namespace for the root element.
@@ -185,7 +184,7 @@ public:
 	 * @throws MessageFormatException if the attribute doesn't exist.
 	 */
 	 static const std::string needAttribute(XERCES_CPP_NAMESPACE::DOMElement * e, const std::string & attributeName)
-	 throw(MessageFormatException);
+	 throw(semaine::cms::exceptions::MessageFormatException);
 
 	/**
 	 * For the given element, set the attribute to the value.
@@ -264,7 +263,7 @@ public:
 	 * i.e. when getChildElementByTagNameNS() would return NULL.
 	 */
 	static XERCES_CPP_NAMESPACE::DOMElement * needChildElementByTagNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
-	throw(MessageFormatException);
+	throw(semaine::cms::exceptions::MessageFormatException);
 
 	/**
 	 * Same as {@link #getChildElementByLocalNameNS(Node, String, String)}, but
@@ -277,7 +276,7 @@ public:
 	 * i.e. when getChildElementByTagNameNS() would return NULL.
 	 */
 	static XERCES_CPP_NAMESPACE::DOMElement * needChildElementByLocalNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
-	throw(MessageFormatException);
+	throw(semaine::cms::exceptions::MessageFormatException);
 
 	/**
 	 * Get a list of all direct children with the given tag name and namespace.
@@ -291,7 +290,7 @@ public:
 	 * @throws MessageFormatException
 	 */
 	static std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getChildrenByTagNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
-	 throw(MessageFormatException);
+	 throw(semaine::cms::exceptions::MessageFormatException);
 
 	/**
 	 * Get a list of all direct children with the given local name and namespace.
@@ -305,7 +304,7 @@ public:
 	 * @throws MessageFormatException
 	 */
 	static std::list<XERCES_CPP_NAMESPACE::DOMElement *> * getChildrenByLocalNameNS(XERCES_CPP_NAMESPACE::DOMNode * node, const std::string & childName, const std::string & childNamespace)
-	 throw(MessageFormatException);
+	 throw(semaine::cms::exceptions::MessageFormatException);
 
 
 	 /**

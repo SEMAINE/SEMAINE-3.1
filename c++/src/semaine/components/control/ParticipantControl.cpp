@@ -78,7 +78,7 @@ ParticipantControl::~ParticipantControl() {
 void ParticipantControl::react(SEMAINEMessage * message) throw (std::exception)
 {
 	SEMAINEStateMessage * sm = dynamic_cast<SEMAINEStateMessage *>(message);
-	if (sm == NULL) throw MessageFormatException(std::string("Expected state message, got a ")+typeid(*message).name());
+	if (sm == NULL) throw semaine::cms::exceptions::MessageFormatException(std::string("Expected state message, got a ")+typeid(*message).name());
 	StateInfo * state = sm->getState();
 	// Either like this:
 	//std::string userPresent = state->getInfo("userPresent");

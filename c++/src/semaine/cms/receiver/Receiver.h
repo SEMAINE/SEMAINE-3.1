@@ -29,7 +29,7 @@
 using namespace cms;
 using namespace semaine::cms;
 using namespace semaine::cms::message;
-using namespace semaine::cms::exceptions;
+
 
 using namespace decaf;
 
@@ -142,7 +142,7 @@ namespace semaine {
 				 * @throws CMSException if the CMS provider fails to receive the next message due to some internal error.
 				 * @throws SystemConfigurationException if the connection was not started before calling this method.
 				 */
-				SEMAINEMessage * receive() throw(CMSException, SystemConfigurationException);
+				SEMAINEMessage * receive() throw(CMSException, semaine::cms::exceptions::SystemConfigurationException);
 
 				/**
 				 * Receives the next message that arrives within the specified timeout interval.
@@ -152,7 +152,7 @@ namespace semaine {
 				 * @throws CMSException if the CMS provider fails to receive the next message due to some internal error.
 				 * @throws SystemConfigurationException if the connection was not started before calling this method.
 				 */
-				SEMAINEMessage * receive(int timeout) throw(CMSException, SystemConfigurationException);
+				SEMAINEMessage * receive(int timeout) throw(CMSException, semaine::cms::exceptions::SystemConfigurationException);
 
 				/**
 				 * Receives the next message if one is immediately available.
@@ -160,7 +160,7 @@ namespace semaine {
 				 * @throws CMSException if the CMS provider fails to receive the next message due to some internal error.
 				 * @throws SystemConfigurationException if the connection was not started before calling this method.
 				 */
-				SEMAINEMessage * receiveNoWait() throw(CMSException, SystemConfigurationException);
+				SEMAINEMessage * receiveNoWait() throw(CMSException, semaine::cms::exceptions::SystemConfigurationException);
 
 
 				////////////////// Asynchronous message consumption ////////////////
@@ -201,7 +201,7 @@ namespace semaine {
 				 * @throws NullPointerException if message is null.
 				 */
 				virtual SEMAINEMessage * createSEMAINEMessage(const Message * message)
-				throw(MessageFormatException);
+				throw(semaine::cms::exceptions::MessageFormatException);
 
 
 

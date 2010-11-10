@@ -27,14 +27,14 @@ DOMImplementationLS * XMLTool::impl;
 
 
 void XMLTool::startupXMLTools()
-throw (SystemConfigurationException)
+throw (semaine::cms::exceptions::SystemConfigurationException)
 {
     XQillaPlatformUtils::initialize(); // this also initialises Xerces.
 
     DOMImplementation* xqillaImplementation = DOMImplementationRegistry::getDOMImplementation(X("XPath2 3.0"));
 	impl = dynamic_cast<DOMImplementationLS *>(xqillaImplementation);
 	if (impl == NULL) {
-		throw SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*xqillaImplementation).name());
+		throw semaine::cms::exceptions::SystemConfigurationException(std::string("DOM impl is not a DOMImplementationLS, but a ")+typeid(*xqillaImplementation).name());
 	}
 
 
@@ -71,7 +71,7 @@ DOMImplementation * XMLTool::getDOMImplementation()
 
 
 DOMDocument * XMLTool::parse(const std::string & xmlAsText)
-throw (MessageFormatException)
+throw (semaine::cms::exceptions::MessageFormatException)
 {
 	synchronized (&parserMutex) {
 		ParseErrorHandler errorHandler;
@@ -83,7 +83,7 @@ throw (MessageFormatException)
 		DOMDocument * document = parser->parse(in);
 		parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler, (const void *)NULL);
 		if (errorHandler.hasErrors()) {
-			throw MessageFormatException(errorHandler.getErrors());
+			throw semaine::cms::exceptions::MessageFormatException(errorHandler.getErrors());
 		}
 		return document;
 	}
@@ -92,7 +92,7 @@ throw (MessageFormatException)
 
 
 DOMDocument * XMLTool::parseFile(const std::string & filename)
-throw (MessageFormatException)
+throw (semaine::cms::exceptions::MessageFormatException)
 {
 	synchronized (&parserMutex) {
 		ParseErrorHandler errorHandler;
@@ -104,7 +104,7 @@ throw (MessageFormatException)
 		DOMDocument * document = parser->parse(in);
 		parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler, (const void *)NULL);
 		if (errorHandler.hasErrors()) {
-			throw MessageFormatException(errorHandler.getErrors());
+			throw semaine::cms::exceptions::MessageFormatException(errorHandler.getErrors());
 		}
 		return document;
 	}
@@ -241,13 +241,13 @@ DOMElement * XMLTool::getChildElementByLocalNameNS(DOMNode * node, const std::st
 }
 
 DOMElement * XMLTool::needChildElementByTagNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
-throw(MessageFormatException)
+throw(semaine::cms::exceptions::MessageFormatException)
 {
 	DOMElement * e = getChildElementByTagNameNS(node, childName, childNamespace);
 	if (e == NULL) {
 		const std::string nodeNamespace = getNamespaceURI(node);
 		bool sameNamespace = nodeNamespace == childNamespace;
-		throw MessageFormatException("Node '"+getNodeName(node)+"' in namespace '"+
+		throw semaine::cms::exceptions::MessageFormatException("Node '"+getNodeName(node)+"' in namespace '"+
 					nodeNamespace+" needs to have a child '"+childName+"' in "+
 					(sameNamespace ? "the same namespace" : "namespace '"+childNamespace+"'"));
 	}
@@ -255,13 +255,13 @@ throw(MessageFormatException)
 }
 
 DOMElement * XMLTool::needChildElementByLocalNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
-throw(MessageFormatException)
+throw(semaine::cms::exceptions::MessageFormatException)
 {
 	DOMElement * e = getChildElementByLocalNameNS(node, childName, childNamespace);
 	if (e == NULL) {
 		const std::string nodeNamespace = getNamespaceURI(node);
 		bool sameNamespace = nodeNamespace == childNamespace;
-		throw MessageFormatException("Node '"+getLocalName(e)+"' in namespace '"+
+		throw semaine::cms::exceptions::MessageFormatException("Node '"+getLocalName(e)+"' in namespace '"+
 					nodeNamespace+" needs to have a child '"+childName+"' in "+
 					(sameNamespace ? "the same namespace" : "namespace '"+childNamespace+"'"));
 	}
@@ -269,7 +269,7 @@ throw(MessageFormatException)
 }
 
 std::list<DOMElement *> * XMLTool::getChildrenByTagNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
-throw(MessageFormatException)
+throw(semaine::cms::exceptions::MessageFormatException)
 {
 	std::list<DOMElement *> * children = new std::list<DOMElement *>();
 	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
@@ -289,7 +289,7 @@ throw(MessageFormatException)
 }
 
 std::list<DOMElement *> * XMLTool::getChildrenByLocalNameNS(DOMNode * node, const std::string & childName, const std::string & childNamespace)
-throw(MessageFormatException)
+throw(semaine::cms::exceptions::MessageFormatException)
 {
 	std::list<DOMElement *> * children = new std::list<DOMElement *>();
 	XMLCh * xmlChildName = XMLString::transcode(childName.c_str());
@@ -357,11 +357,11 @@ const std::string XMLTool::getAttribute(DOMElement * e, const std::string & attr
 }
 
 const std::string XMLTool::needAttribute(DOMElement * e, const std::string & attributeName)
-throw(MessageFormatException)
+throw(semaine::cms::exceptions::MessageFormatException)
 {
 	XMLCh * xmlAttributeName = XMLString::transcode(attributeName.c_str());
 	if (!e->hasAttribute(xmlAttributeName)) {
-		throw MessageFormatException("Element '"+getTagName(e)+"' in namespace '"+
+		throw semaine::cms::exceptions::MessageFormatException("Element '"+getTagName(e)+"' in namespace '"+
 					getNamespaceURI(e)+"' needs an attribute '"+attributeName+"'");
 	}
 	std::string s = transcode(e->getAttribute(xmlAttributeName));
@@ -428,12 +428,12 @@ const std::string XMLTool::dom2string(const DOMDocument * doc)
 		char * err = XMLString::transcode(xe.getMessage());
 		std::cerr << err << std::endl;
 		XMLString::release(&err);
-		throw SystemConfigurationException("Cannot initialise XML system");
+		throw semaine::cms::exceptions::SystemConfigurationException("Cannot initialise XML system");
 	} catch (DOMException &de) {
 		char * err = XMLString::transcode(de.getMessage());
 		std::cerr << err << std::endl;
 		XMLString::release(&err);
-		throw SystemConfigurationException("Cannot initialise XML system");
+		throw semaine::cms::exceptions::SystemConfigurationException("Cannot initialise XML system");
 	}
 
 }

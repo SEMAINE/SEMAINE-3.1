@@ -25,7 +25,6 @@
 
 
 using namespace cms;
-using namespace semaine::cms::exceptions;
 
 namespace semaine {
 namespace cms {
@@ -35,7 +34,7 @@ class SEMAINEBytesMessage : public SEMAINEMessage
 {
 public:
 	SEMAINEBytesMessage(const Message * message)
-	throw(MessageFormatException, SystemConfigurationException);
+	throw(semaine::cms::exceptions::MessageFormatException, semaine::cms::exceptions::SystemConfigurationException);
 	virtual ~SEMAINEBytesMessage();
 	std::size_t getBytes(unsigned char *&bytes);
 

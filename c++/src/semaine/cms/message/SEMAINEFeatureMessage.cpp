@@ -21,13 +21,13 @@ namespace cms {
 namespace message {
 
 	SEMAINEFeatureMessage::SEMAINEFeatureMessage(const Message * message)
-	throw(MessageFormatException) :
+	throw(semaine::cms::exceptions::MessageFormatException) :
 		SEMAINEMessage(message)
 	{
 		const TextMessage * tm = dynamic_cast<const TextMessage *>(message);
 		const BytesMessage * bm = dynamic_cast<const BytesMessage *>(message);
 		if (tm == NULL && bm == NULL) {
-			throw MessageFormatException(std::string("Expected either a text message or a bytes message, but got a ")+typeid(*message).name());
+			throw semaine::cms::exceptions::MessageFormatException(std::string("Expected either a text message or a bytes message, but got a ")+typeid(*message).name());
 		}
 	}
 
@@ -37,7 +37,7 @@ namespace message {
 	}
 
 	std::vector<float> SEMAINEFeatureMessage::getFeatureVector()
-	throw(CMSException, MessageFormatException)
+	throw(CMSException, semaine::cms::exceptions::MessageFormatException)
 	{
 		if (features.empty()) {
 			const TextMessage * tm = dynamic_cast<const TextMessage *>(message);
@@ -68,9 +68,9 @@ namespace message {
 	
 
 	void SEMAINEFeatureMessage::readFromBytesMessage(const BytesMessage * bm)
-	throw(CMSException, MessageFormatException)
+	throw(CMSException, semaine::cms::exceptions::MessageFormatException)
 	{
-		throw MessageFormatException("byte message not yet implemented");
+		throw semaine::cms::exceptions::MessageFormatException("byte message not yet implemented");
 	}
 
 	

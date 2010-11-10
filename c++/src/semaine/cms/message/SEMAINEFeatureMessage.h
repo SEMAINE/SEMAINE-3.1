@@ -23,7 +23,6 @@
 #include <sstream>
 
 using namespace cms;
-using namespace semaine::cms::exceptions;
 
 namespace semaine {
 namespace cms {
@@ -32,7 +31,7 @@ namespace message {
 class SEMAINEFeatureMessage : public SEMAINEMessage
 {
 public:
-	SEMAINEFeatureMessage(const Message * message) throw(MessageFormatException);
+	SEMAINEFeatureMessage(const Message * message) throw(semaine::cms::exceptions::MessageFormatException);
 	virtual ~SEMAINEFeatureMessage();
 
 	/**
@@ -42,7 +41,7 @@ public:
 	 * @throws MessageFormatException
 	 */
 	std::vector<float> getFeatureVector()
-	throw(CMSException, MessageFormatException);
+	throw(CMSException, semaine::cms::exceptions::MessageFormatException);
 
 	/**
 	 * Get the list of feature names if available.
@@ -67,13 +66,13 @@ public:
 	 *
 	 */
 	void setFeatureNames(std::vector<std::string> const & names)
-	throw (MessageFormatException)
+	throw (semaine::cms::exceptions::MessageFormatException)
 	{
 		if (names.size() != features.size())
 		{
 			std::stringstream buf;
 			buf << "There are " << features.size() << " features but " << names.size() << " feature names";
-			throw MessageFormatException(buf.str());
+			throw semaine::cms::exceptions::MessageFormatException(buf.str());
 		}
 		featureNames = names;
 	}
@@ -84,7 +83,7 @@ protected:
 
 
 	void readFromBytesMessage(const BytesMessage * bm)
-	throw(CMSException, MessageFormatException);
+	throw(CMSException, semaine::cms::exceptions::MessageFormatException);
 
 
 	void readFromTextMessage(const TextMessage * tm)

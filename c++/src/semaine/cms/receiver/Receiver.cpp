@@ -65,36 +65,36 @@ Receiver::~Receiver()
 
 
 SEMAINEMessage * Receiver::createSEMAINEMessage(const Message * message)
-throw(MessageFormatException)
+throw(semaine::cms::exceptions::MessageFormatException)
 {
 	if (message == NULL)
-		throw MessageFormatException("cannot create semaine message from null");
+		throw semaine::cms::exceptions::MessageFormatException("cannot create semaine message from null");
 	return new SEMAINEMessage(message);
 }
 
 
-SEMAINEMessage * Receiver::receive() throw(CMSException, SystemConfigurationException)
+SEMAINEMessage * Receiver::receive() throw(CMSException, semaine::cms::exceptions::SystemConfigurationException)
 {
 		if (!isConnectionStarted)
-			throw SystemConfigurationException("Connection is not started!");
+			throw semaine::cms::exceptions::SystemConfigurationException("Connection is not started!");
 		Message * m = consumer->receive();
 		if (m == NULL) return NULL;
 		return createSEMAINEMessage(m);
 }
 
-	SEMAINEMessage * Receiver::receive(int timeout) throw(CMSException, SystemConfigurationException)
+	SEMAINEMessage * Receiver::receive(int timeout) throw(CMSException, semaine::cms::exceptions::SystemConfigurationException)
 	{
 		if (!isConnectionStarted)
-			throw SystemConfigurationException("Connection is not started!");
+			throw semaine::cms::exceptions::SystemConfigurationException("Connection is not started!");
 		Message * m = consumer->receive(timeout);
 		if (m == NULL) return NULL;
 		return createSEMAINEMessage(m);
 	}
 
-	SEMAINEMessage * Receiver::receiveNoWait() throw(CMSException, SystemConfigurationException)
+	SEMAINEMessage * Receiver::receiveNoWait() throw(CMSException, semaine::cms::exceptions::SystemConfigurationException)
 	{
 		if (!isConnectionStarted)
-			throw SystemConfigurationException("Connection is not started!");
+			throw semaine::cms::exceptions::SystemConfigurationException("Connection is not started!");
 		Message * m = consumer->receiveNoWait();
 		if (m == NULL) return NULL;
 		return createSEMAINEMessage(m);
@@ -128,7 +128,7 @@ SEMAINEMessage * Receiver::receive() throw(CMSException, SystemConfigurationExce
 						}
 					}
 				}
-			} catch (MessageFormatException & mfe) {
+			} catch (semaine::cms::exceptions::MessageFormatException & mfe) {
 				log->warn("Problem creating SEMAINE message: ", &mfe);
 			}
 		}

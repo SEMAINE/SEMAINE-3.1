@@ -32,7 +32,7 @@ void StateReceiver::onMessage(const Message * m)
 					}
 				}
 			}
-		} catch (MessageFormatException & mfe) {
+		} catch (semaine::cms::exceptions::MessageFormatException & mfe) {
 			log->warn("Problem creating SEMAINE message: ", &mfe);
 		}
 	}

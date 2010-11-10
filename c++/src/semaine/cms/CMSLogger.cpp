@@ -135,7 +135,7 @@ std::string CMSLogger::message2logString(SEMAINEMessage * m)
 		std::stringstream buf;
 		buf << "[" << m->getUsertime() << "] ";
 		buf << m->getDatatype() << " ";
-		buf << m->getSource() << "->" << m->getMessage()->getCMSDestination()->toProviderString() << " ";
+		buf << m->getSource() << "->" << m->getTopicName() << " ";
 		if (m->isEventBased()) {
 			buf << m->getEventType() << " event ";
 		} else {
