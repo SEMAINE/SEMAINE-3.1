@@ -1,8 +1,8 @@
 
 #################### Package Configuration    #########################
-AMQCPP_BASE="activemq-cpp-2.2.1"
+AMQCPP_BASE="activemq-cpp-library-3.1.3"
 
-AMQCPP_URL="http://apache.osuosl.org/activemq/activemq-cpp/source/activemq-cpp-2.2.1-src.tar.gz"
+AMQCPP_URL="http://apache.linux-mirror.org//activemq/activemq-cpp/source/activemq-cpp-library-3.1.3-src.tar.gz"
 
 register_build "activemqcpp" "$AMQCPP_URL" "$AMQCPP_BASE" "func_build_activemqcpp" $1
 
@@ -25,7 +25,7 @@ function func_build_activemqcpp {
     #./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --prefix=$INSTALL_PREFIX 
     export LDFLAGS="-L$INSTALL_PREFIX/lib" 
     export CPPFLAGS="-I$INSTALL_PREFIX/include" 
-    ./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --with-cppunit=$INSTALL_PREFIX --prefix=$INSTALL_PREFIX 
+    ./configure --with-apr=$INSTALL_PREFIX --with-apr-util=$INSTALL_PREFIX --with-cppunit-prefix=$INSTALL_PREFIX --prefix=$INSTALL_PREFIX 
     if test "x$?" != "x0" ; then
       return 1;
     fi

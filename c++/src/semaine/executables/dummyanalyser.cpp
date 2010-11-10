@@ -10,8 +10,12 @@
 
 #include <semaine/components/dummy/DummyAnalyser.h>
 
+#include <activemq/library/ActiveMQCPP.h>
+
+
 int main () {
 	try {
+		activemq::library::ActiveMQCPP::initializeLibrary();
 		semaine::util::XMLTool::startupXMLTools();
 
 		std::list<semaine::components::Component *> comps;
@@ -23,6 +27,7 @@ int main () {
 		cr.waitUntilCompleted();
 		
 		semaine::util::XMLTool::shutdownXMLTools();
+	    activemq::library::ActiveMQCPP::shutdownLibrary();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();
 	} catch (std::exception & e) {

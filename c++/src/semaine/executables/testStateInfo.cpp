@@ -17,6 +17,7 @@
 #include <xqilla/xqilla-dom3.hpp>
 #include <xercesc/framework/StdOutFormatTarget.hpp>
 
+#include <activemq/library/ActiveMQCPP.h>
 
 using namespace XERCES_CPP_NAMESPACE;
 using namespace std;
@@ -25,7 +26,7 @@ using namespace std;
 int main (int argc, char *argv[]) {
 	try {
 
-
+		activemq::library::ActiveMQCPP::initializeLibrary();
 		semaine::util::XMLTool::startupXMLTools();
 /*
 		// From info map to document:
@@ -55,6 +56,7 @@ int main (int argc, char *argv[]) {
 		}
 
 		semaine::util::XMLTool::shutdownXMLTools();
+	    activemq::library::ActiveMQCPP::shutdownLibrary();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();
 	} catch (XQillaException & xqe) {

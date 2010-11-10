@@ -16,6 +16,8 @@
 #include <semaine/system/ComponentRunner.h>
 #include <semaine/util/XMLTool.h>
 
+#include <activemq/library/ActiveMQCPP.h>
+
 using namespace XERCES_CPP_NAMESPACE;
 using namespace semaine::util;
 
@@ -82,12 +84,14 @@ void testXML()
 
 int main () {
 	try {
+		activemq::library::ActiveMQCPP::initializeLibrary();
 		semaine::util::XMLTool::startupXMLTools();
 		testXML();
 		testCMSLogger();
 		testReceiver();
 		testSender();
 		semaine::util::XMLTool::shutdownXMLTools();
+	    activemq::library::ActiveMQCPP::shutdownLibrary();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();
 	} catch (std::exception & e) {
