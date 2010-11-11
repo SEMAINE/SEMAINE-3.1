@@ -62,7 +62,7 @@
                 <attribute name="Main-Class"
                     value="eu.semaine.system.ComponentRunner"/>
                 <attribute name="Class-Path" 
-                  value="commons-logging-1.1.1.jar activemq-all-5.1.0.jar log4j-1.2.15.jar xml-apis.jar xercesImpl.jar serializer.jar jgraph.jar swing-layout-1.0.jar"/>
+                  value="commons-logging-1.1.1.jar activemq-all-5.4.1.jar log4j-1.2.15.jar xml-apis.jar xercesImpl.jar serializer.jar jgraph.jar swing-layout-1.0.jar"/>
             </manifest>
          </jar>
 		<jar destfile="lib/semaine-dialogue.jar" basedir="bin"
