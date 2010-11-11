@@ -100,7 +100,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets=".\semaineProperties.vsprops;.\SemaineLibs.vsprops;.\SemaineAPIDependencies.vsprops"
+			InheritedPropertySheets=".\SemaineAPIDependencies.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -183,10 +183,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\semaine\executables\dummyfml2bml.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\semaine\components\dummy\DummyFML2BML.cpp"
 				>
 				<FileConfiguration
@@ -207,6 +203,10 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\semaine\executables\dummyfml2bml.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter

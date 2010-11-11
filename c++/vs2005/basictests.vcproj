@@ -100,7 +100,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets=".\semaineProperties.vsprops;.\SemaineLibs.vsprops;.\SemaineAPIDependencies.vsprops"
+			InheritedPropertySheets=".\SemaineAPIDependencies.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>

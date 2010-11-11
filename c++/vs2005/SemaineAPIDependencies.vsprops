@@ -12,7 +12,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="xerces-c_3.lib xqilla22.lib libactivemq-cpp.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
+		AdditionalDependencies="xerces-c_3.lib xqilla22.lib activemq-cpp.lib apr-1.lib aprutil-1.lib WS2_32.Lib"
 		AdditionalLibraryDirectories="&quot;$(SemaineApiVS)depends\lib&quot;;&quot;$(SemaineLibs)&quot;"
 	/>
 	<UserMacro

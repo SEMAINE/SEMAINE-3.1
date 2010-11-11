@@ -12,7 +12,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="xerces-c_3d.lib xqilla22d.lib libactivemq-cppd.lib libapr-1.lib libaprutil-1.lib WS2_32.Lib"
+		AdditionalDependencies="xerces-c_3d.lib xqilla22d.lib activemq-cppd.lib apr-1.lib aprutil-1.lib WS2_32.Lib"
 		AdditionalLibraryDirectories="depends\lib"
 	/>
 </VisualStudioPropertySheet>
