@@ -1,9 +1,15 @@
+#include <activemq/library/ActiveMQCPP.h>
+
 // exceptions
 #include <windows.h>
 #include <conio.h>
 #include <iostream>
 #include <list>
 #include <queue>
+
+// Whoever defines these, decaf::lang::Thread doesn't like them.
+#undef MIN_PRIORITY
+#undef MAX_PRIORITY
 
 #include <semaine/config.h>
 
@@ -13,6 +19,7 @@
 #include <semaine/cms/sender/StateSender.h>
 #include <semaine/datatypes/stateinfo/StateInfo.h>
 #include <semaine/datatypes/stateinfo/UserStateInfo.h>
+
 
 #include "MouseHook.h"
 
@@ -174,6 +181,7 @@ void ButtonTracker::sendMouseEvent(MouseHook::MouseHookEvent mhe) {
 
 int main () {
 	try {
+		activemq::library::ActiveMQCPP::initializeLibrary();
 		semaine::util::XMLTool::startupXMLTools();
 
 		std::list<semaine::components::Component *> comps;
@@ -185,6 +193,7 @@ int main () {
 		cr.waitUntilCompleted();
 		
 		semaine::util::XMLTool::shutdownXMLTools();
+		activemq::library::ActiveMQCPP::shutdownLibrary();
 	} catch (cms::CMSException & ce) {
 		ce.printStackTrace();
 	} catch (std::exception & e) {
