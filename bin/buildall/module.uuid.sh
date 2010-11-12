@@ -1,10 +1,9 @@
 
 #################### Package Configuration    #########################
-UUID_BASE="e2fsprogs-libs-1.41.2"
+UUID_BASE="e2fsprogs-libs-1.41.12"
 #-libs
-#UUID_URL="http://surfnet.dl.sourceforge.net/sourceforge/e2fsprogs/e2fsprogs-libs-1.41.3.tar.gz"
-#UUID_URL="http://heanet.dl.sourceforge.net/sourceforge/e2fsprogs/$UUID_BASE.tar.gz"
-UUID_URL="http://puzzle.dl.sourceforge.net/project/e2fsprogs/e2fsprogs/1.41.2/e2fsprogs-libs-1.41.2.tar.gz"
+#UUID_URL="http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/1.41.12/$UUID_BASE.tar.gz"
+UUID_URL="http://puzzle.dl.sourceforge.net/project/e2fsprogs/e2fsprogs/1.41.12/$UUID_BASE.tar.gz"
 register_build "libuuid" "$UUID_URL" "$UUID_BASE" "func_build_uuid" $1
 
 #######################################################################
