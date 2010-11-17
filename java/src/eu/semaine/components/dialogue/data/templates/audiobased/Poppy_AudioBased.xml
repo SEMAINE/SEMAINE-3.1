@@ -217,7 +217,7 @@
 			<update name="Agent.nrTimesRandom" value="0" />
 	  </effects>
 	   
-	   	<behaviour class="ResponseActionProposer" quality="0.5">
+	   	<behaviour class="ResponseActionProposer" quality="0.7">
 	   	 	<argument name="response" value="##Poppy_new_subject_2" />
 	   	</behaviour>
 	</template>

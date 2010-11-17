@@ -54,7 +54,7 @@
 			<update name="Agent.nrTimesRandom" value="0" />
 		</effects>
 	   
-	   	<behaviour class="ResponseActionProposer" quality="0.8">
+	   	<behaviour class="ResponseActionProposer" quality="0.4">
 	   	 	<argument name="response" value="##Prudence_new_subject_2" />
 	   	</behaviour>
 	</template>
