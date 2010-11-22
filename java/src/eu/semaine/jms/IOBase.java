@@ -4,6 +4,11 @@
  */
 package eu.semaine.jms;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.ExceptionListener;
@@ -23,7 +28,139 @@ import org.apache.activemq.ActiveMQConnectionFactory;
  */
 public class IOBase
 {
+	/**
+	 * An exception listener which will react in the following way when an exception occurs:
+	 * 1. it will log an error on the JMS logger;
+	 * 2. it will call {@link IOBase#setException(JMSException)} on each IOBase object
+	 * that has been registered using {@link #addCustomer(IOBase)}.
+	 * @author marc
+	 *
+	 */
+	private static final class IOBaseExceptionListener implements ExceptionListener {
+		private Set<IOBase> myCustomers = new HashSet<IOBase>();
+		
+		/**
+		 * Add an IOBase to the list of IOBase objects to be notified when an exception occurs.
+		 * @param iob an IOBase, must not be null
+		 */
+		private void addCustomer(IOBase iob) {
+			assert iob != null;
+			myCustomers.add(iob);
+		}
+		
+		@Override
+		public void onException(JMSException e) {
+			JMSLogger.getLog("Connection").error("Exception Listener: ", e);
+			for (IOBase iob : myCustomers) {
+				iob.setException(e);
+			}
+		}
+	}
+
 	public static enum Event { start, end, single };
+	
+	
+	///////////////////////////// Static stuff ///////////////////////////////////
+	
+	private static Map<String,Connection> theConnections = new HashMap<String, Connection>();
+	
+	/**
+	 * Get a Connection to a JMS server. This will reuse an existing connection if possible,
+	 * and only create a new Connection if no connection to the given server coordinates exists yet.
+	 * @param serverUrl the server url, e.g. "tcp://localhost:61616"
+	 * @param serverUser the user name, or null
+	 * @param serverPassword the password, or null
+	 * @param iobase an iobase object that wants to be notified if an exception occurs, or null.
+	 * @return a valid connection object. It is undetermined whether the connection is already started.
+	 * @throws JMSException if the connection cannot be created for some reason.
+	 */
+	protected static Connection getConnection(String serverUrl, String serverUser, String serverPassword, IOBase iobase) throws JMSException {
+		String key = serverUrl+serverUser+serverPassword;
+		assert theConnections != null;
+		Connection c = theConnections.get(key);
+		if (c == null || getConnectionStatus(c) == ConnectionStatus.closed) {
+			c = createConnection(serverUrl, serverUser, serverPassword);
+			assert c != null;
+			theConnections.put(key, c);
+		}
+		if (iobase != null) {
+			((IOBaseExceptionListener)c.getExceptionListener()).addCustomer(iobase);
+		}
+		assert c != null;
+		return c;
+	}
+	
+	/**
+	 * Create a new Connection to a JMS server. This should not normally be called from user code,
+	 * since a Connection is a resource-intensive / heavyweight object. Use {@link #getConnection(String, String, String)}
+	 * instead to re-use an existing connection if possible. 
+	 * 
+	 * @param serverUrl the server url, e.g. "tcp://localhost:61616"
+	 * @param serverUser the user name, or null
+	 * @param serverPassword the password, or null
+	 * @return a valid connection object which is not yet started.
+	 * @throws JMSException if the connection cannot be created for some reason.
+	 */
+	protected static Connection createConnection(String serverUrl, String serverUser, String serverPassword) throws JMSException {
+		ConnectionFactory factory = new ActiveMQConnectionFactory(serverUser, serverPassword, serverUrl);
+		final Connection c = factory.createConnection();
+		
+		// Some configuration settings to improve performance:
+		if (c instanceof ActiveMQConnection) {
+			ActiveMQConnection amc = (ActiveMQConnection) c;
+			// Send asynchronously, so that even in the case of a flooded broker, the send() returns,
+			// and we can detect the error condition (ExceptionListener sets exception, detected at next send())
+			amc.setUseAsyncSend(true);
+			// No need to copy the messaage when sending, since we always discard the message object after sending:
+			amc.setCopyMessageOnSend(false);
+			// acknowledge in batches:
+			amc.setOptimizeAcknowledge(true);
+			
+		}
+		c.setExceptionListener(new IOBaseExceptionListener());
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override public void run() { 
+				try {
+					c.close();
+				} catch (JMSException e) {
+					System.err.println("Problem during shutdown: cannot close connection");
+					e.printStackTrace();
+				}
+			}
+		});
+		assert c != null;
+		return c;
+	}
+	
+	public enum ConnectionStatus {unknown, started, stopped, closed};
+	/**
+	 * Try to determine the status of the connection.
+	 * @param c a connection.
+	 * @return one of the following ConnectionStatus values:
+	 * <ul>
+	 * <li>unknown if we cannot determine the status;</li>
+	 * <li>started if the connection has been started and not stopped or closed;</li>
+	 * <li>closed if the connection is closing or has been closed;</li>
+	 * <li>stopped if the connection has not yet been started or has been stopped.</li>
+	 * </ul>
+	 * 
+	 */
+	public static ConnectionStatus getConnectionStatus(Connection c) {
+		if (!(c instanceof ActiveMQConnection)) {
+			return ConnectionStatus.unknown;
+		}
+		ActiveMQConnection amc = (ActiveMQConnection) c;
+		if (amc.isStarted()) {
+			return ConnectionStatus.started;
+		} else if (amc.isClosed() || amc.isClosing()) {
+			return ConnectionStatus.closed;
+		}
+		return ConnectionStatus.stopped;
+	}
+	
+	
+	/////////////////////////// Non-static stuff /////////////////////////////////
+	
 	
 	protected String jmsUrl;
 	protected String jmsUser;
@@ -81,29 +218,10 @@ public class IOBase
 			throw new NullPointerException("Topic must be given, cannot be null");
 		if (jmsUrl == null)
 			throw new NullPointerException("Need JMS server url to connect to, got null");
-		ConnectionFactory factory = new ActiveMQConnectionFactory(jmsUser, jmsPassword, jmsUrl);
-		this.connection = factory.createConnection();
-		// Send asynchronously, so that even in the case of a flooded broker, the send() returns,
-		// and we can detect the error condition (ExceptionListener sets exception, detected at next send())
-		((ActiveMQConnection)connection).setUseAsyncSend(true);
-		connection.setExceptionListener(new ExceptionListener() {
-			@Override
-			public void onException(JMSException e) {
-				JMSLogger.getLog("Connection").error("Exception Listener: ", e);
-				IOBase.this.setException(e);
-			}
-		});
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override public void run() { 
-				try {
-					connection.close();
-				} catch (JMSException e) {
-					System.err.println("Problem during shutdown: cannot close connection");
-					e.printStackTrace();
-				}
-			}
-		});
-		this.session = connection.createSession(false /*not transacted*/, Session.AUTO_ACKNOWLEDGE);
+		this.connection = getConnection(jmsUrl, jmsUser, jmsPassword, this);
+		assert connection != null;
+		//this.session = connection.createSession(false /*not transacted*/, Session.AUTO_ACKNOWLEDGE);
+		this.session = connection.createSession(false /*not transacted*/, Session.DUPS_OK_ACKNOWLEDGE);
 		this.topic = session.createTopic(topicName);
 		this.topicName = topicName;
 	}
@@ -126,7 +244,23 @@ public class IOBase
 	{
 		return jmsUrl;
 	}
-		
+	
+	/**
+	 * Get the user name used when connecting to the JMS server.
+	 * @return the user name as a string, or null if no user name was given.
+	 */
+	public String getJMSUser() {
+		return jmsUser;
+	}
+
+	/**
+	 * Get the password used when connecting to the JMS server.
+	 * @return the password as a string, or null if no password was given.
+	 */
+	public String getJMSPassword() {
+		return jmsPassword;
+	}
+
 	public Connection getConnection()
 	{
 		return connection;

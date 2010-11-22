@@ -61,7 +61,7 @@ public class JMSTest {
 		Logger.getLogger("org.apache.activemq").setLevel(Level.INFO);
 	}
 	
-
+	
 	@Test
 	public void canEstablishLink() throws JMSException {
 		Sender s = getTestSender();
@@ -89,13 +89,13 @@ public class JMSTest {
 			fail("Expected to throw a JMSException -- check that activemq.xml defines low memory limits and producer flow control on test topic");
 		} catch (JMSException e) {
 			// OK, expected
+			// Verify that we get an advisory message for slow consumer:
+			Message m = mc.receive(1000);
+			assertTrue("No advisory message received for slow consumer", m != null);
 		} finally {
 			s.getConnection().close();
 			r.getConnection().close();
 		}
-		// Verify that we get an advisory message for slow consumer:
-		Message m = mc.receive(1000);
-		assertTrue("No advisory message received for slow consumer", m != null);
 	}
 	
 	
