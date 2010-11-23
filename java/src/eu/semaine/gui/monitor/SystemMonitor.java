@@ -83,6 +83,7 @@ public class SystemMonitor extends Thread
 	private Map<String, TopicInfo> topics;
 	private List<DefaultGraphCell> cells;
 	private List<DefaultEdge> edges;
+	private List<DefaultEdge> edgesWithUpdates;
 	private JMSLogReader logReader;
 	private String currentLogComponent;
 	private String currentLogLevel;
@@ -383,8 +384,8 @@ public class SystemMonitor extends Thread
 			//}
 			layoutCells(allChanges);
 		}
-		if (edges != null) {
-			for (DefaultEdge edge : edges) {
+		if (edgesWithUpdates != null) {
+			for (DefaultEdge edge : edgesWithUpdates) {
 				Object userObject = edge.getUserObject();
 				if (userObject == null) continue;
 				assert userObject instanceof ConnectionInfo;
@@ -530,7 +531,8 @@ public class SystemMonitor extends Thread
 	
 	private void createAllArrows()
 	{
-		final List<DefaultEdge> newEdges = new ArrayList<DefaultEdge>();
+		final List<DefaultEdge> constantEdges = new ArrayList<DefaultEdge>();
+		final List<DefaultEdge> updateableEdges = new ArrayList<DefaultEdge>();
 		// Create cells for arrows
 		for (ComponentInfo ci : sortedComponentList) {
 			String[] sendTopics = ci.sendTopics();
@@ -543,7 +545,7 @@ public class SystemMonitor extends Thread
 					TopicInfo ti = topics.get(topicName);
 					if (ti != null) {
 						assert ti.getCell() != null;
-						ConnectionInfo arrow = addArrow(newEdges, ci.getCell(), ti.getCell());
+						ConnectionInfo arrow = addArrow(constantEdges, updateableEdges, ci.getCell(), ti.getCell());
 						ti.sendingComponents().put(ci.toString(), arrow);
 					}
 				}
@@ -558,29 +560,48 @@ public class SystemMonitor extends Thread
 					if (ci.canReceive(topicName)) {
 						TopicInfo ti = topics.get(topicName);
 						assert ti != null;
-						ConnectionInfo arrow = addArrow(newEdges, ti.getCell(), ci.getCell());
+						ConnectionInfo arrow = addArrow(constantEdges, updateableEdges, ti.getCell(), ci.getCell());
 						ti.receivingComponents().put(ci.toString(), arrow);
 					}
 				}
 			}
 		}
+		final Object[] removeEdges = edges != null ? edges.toArray() : null;
+		// Edges to render:
+		if (edges != null) {
+			edges.clear();
+		} else {
+			edges = new ArrayList<DefaultEdge>(constantEdges.size()+updateableEdges.size());
+		}
+		edges.addAll(updateableEdges);
+		edges.addAll(constantEdges);
+		
+		// Only some of the edges may have updates:
+		if (edgesWithUpdates != null) {
+			edgesWithUpdates.clear();
+		} else {
+			edgesWithUpdates = new ArrayList<DefaultEdge>(updateableEdges.size());
+		}
+		edgesWithUpdates.addAll(updateableEdges);
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				graph.getGraphLayoutCache().insert(newEdges.toArray());
+				if (removeEdges != null) {
+					graph.getGraphLayoutCache().remove(removeEdges);
+				}
+				graph.getGraphLayoutCache().insert(updateableEdges.toArray());
+				graph.getGraphLayoutCache().insert(constantEdges.toArray());
 			}
 		});
-		if (edges != null) {
-			edges.addAll(newEdges);
-		} else {
-			edges = newEdges;
-		}
 
 	}
 	
-	private ConnectionInfo addArrow(List<DefaultEdge> someEdges, DefaultGraphCell source, DefaultGraphCell target)
+	private ConnectionInfo addArrow(List<DefaultEdge> constantEdges, List<DefaultEdge> updateableEdges, DefaultGraphCell source, DefaultGraphCell target)
 	{
-		if (someEdges == null || source == null || target == null)
-			throw new NullPointerException("Cannot add arrow for null parameters");
+		assert constantEdges != null;
+		assert updateableEdges != null;
+		assert source != null;
+		assert target != null;
 		DefaultEdge blackArrow = new DefaultEdge();
 		blackArrow.setSource(source.getChildAt(0));
 		blackArrow.setTarget(target.getChildAt(0));
@@ -588,6 +609,7 @@ public class SystemMonitor extends Thread
 		GraphConstants.setLineEnd(blackArrow.getAttributes(), arrow);
 		GraphConstants.setEndFill(blackArrow.getAttributes(), true);
 		GraphConstants.setSelectable(blackArrow.getAttributes(), false);
+		constantEdges.add(blackArrow);
 		
 		ConnectionInfo arrowInfo = new ConnectionInfo();
 		DefaultEdge blueArrow = new DefaultEdge(arrowInfo);
@@ -597,8 +619,7 @@ public class SystemMonitor extends Thread
 		GraphConstants.setEndFill(blueArrow.getAttributes(), true);
 		GraphConstants.setLineColor(blueArrow.getAttributes(), new Color(150, 150, 255));
 		GraphConstants.setSelectable(blueArrow.getAttributes(), false);
-		someEdges.add(blueArrow);
-		someEdges.add(blackArrow);
+		updateableEdges.add(blueArrow);
 		arrowInfo.setCell(blueArrow);
 		
 		return arrowInfo;

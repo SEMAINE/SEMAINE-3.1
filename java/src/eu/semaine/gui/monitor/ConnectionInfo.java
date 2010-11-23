@@ -10,10 +10,12 @@ public class ConnectionInfo extends Info
 {
 	private static final int MAXWIDTH = 4;
 	private static final int MINWIDTH = 0;
-	private static final int STEPTIME = 100; // in ms
+	private static final int STEPSIZE = 2;
+	private static final int STEPTIME = 200; // in ms
 
 	private int width;
 	private long nextStepDue;
+	private boolean isShowingActive = false;
 	
 	public ConnectionInfo()
 	{
@@ -24,7 +26,7 @@ public class ConnectionInfo extends Info
 	public void setActive()
 	{
 		long time = System.currentTimeMillis();
-		if (width == MAXWIDTH && nextStepDue > time) {
+		if (isShowingActive) {
 			// this one is already showing, push back next one:
 			nextStepDue = time+STEPTIME;
 		} else {
@@ -36,6 +38,11 @@ public class ConnectionInfo extends Info
 
 	public int getLineWidth()
 	{
+		if (width == MAXWIDTH) {
+			isShowingActive = true;
+		} else {
+			isShowingActive = false;
+		}
 		return width;
 	}
 
@@ -46,7 +53,7 @@ public class ConnectionInfo extends Info
 			long currentTime = System.currentTimeMillis();
 			if (currentTime >= nextStepDue) {
 				nextStepDue += STEPTIME;
-				width--;
+				width-= STEPSIZE;
 				return true;
 			}
 		}

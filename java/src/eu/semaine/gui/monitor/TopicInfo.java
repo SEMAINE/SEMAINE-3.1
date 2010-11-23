@@ -18,7 +18,7 @@ public class TopicInfo extends Info
 	private static final Color ACTIVECOLOR = new Color(255, 255, 100);
 	private static final Color PASSIVECOLOR_DATA = new Color(180, 180, 180);
 	private static final Color PASSIVECOLOR_CALLBACK = new Color(90, 180, 255);
-	private static final int STEPS = 6;
+	private static final int STEPS = 2;
 	private static final int STEPTIME = 500; // in ms
 	
 	private String name;
@@ -121,7 +121,6 @@ public class TopicInfo extends Info
 		if (currentStep > 0) {
 			long currentTime = System.currentTimeMillis();
 			if (currentTime >= nextStepDue) {
-				System.out.println("For topic "+toString()+", next step is due");
 				nextStepDue += STEPTIME;
 				currentStep--;
 				return true;
