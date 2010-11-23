@@ -149,7 +149,8 @@ public:
 	 */
 	void setTimeToLive(long long aTimeToLive) throw(CMSException)
 	{
-		producer->setTimeToLive(aTimeToLive);
+		CMSLogger::getLog(getTopicName()+" Sender")->warn("Ignoring deprecated call to setTimeToLive");
+		//producer->setTimeToLive(aTimeToLive);
 	}
 
 	/**
