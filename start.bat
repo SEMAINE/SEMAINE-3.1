@@ -9,17 +9,32 @@ echo.Components will contact ActiveMQ server at %CMS_URL%
 rem Locations of installed software:
 rem %~dp0 is expanded pathname of the current script
 set SEMAINEDIR=%~dp0%
-set ACTIVEMQDIR="%SEMAINEDIR%apache-activemq-5.3.0"
 set JAVADIR="%SEMAINEDIR%java"
 set GRETADIR="%SEMAINEDIR%Greta"
 set OPENSMILEDIR="%SEMAINEDIR%Opensmile"
 set IMPERIALDIR="C:\Program Files\iBUG\Semaine Video Components"
 
-rem ACTIVEMQ: start and wait for it to be started
-if exist %ACTIVEMQDIR% (
-  echo.Trying to start ActiveMQ from %ACTIVEMQDIR%...
-  set SUNJMX=-Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
-  start "activemq" /MIN /D %ACTIVEMQDIR%\bin activemq-admin.bat start
+rem Standalone ACTIVEMQ: start and wait for it to be started
+rem set ACTIVEMQDIR="%SEMAINEDIR%apache-activemq-5.3.0"
+rem if exist %ACTIVEMQDIR% (
+rem  echo.Trying to start ActiveMQ from %ACTIVEMQDIR%...
+rem  set SUNJMX=-Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
+rem  start "activemq" /MIN /D %ACTIVEMQDIR%\bin activemq-admin.bat start
+rem  :loop
+rem  %GRETADIR%\utils\WAIT.exe 1
+rem  for /f "delims=" %%a in ('netstat -an ^| findstr "61616"') do @set ACTIVEMQ_READY=%%a 
+rem  if "%ACTIVEMQ_READY%"=="" (
+rem    echo.Waiting for ActiveMQ...
+rem    goto loop
+rem  ) else (
+rem    echo.ActiveMQ seems to be ready.
+rem  )
+rem )
+
+rem Java components (now with embedded ActiveMQ)
+if exist %JAVADIR% (
+  echo.Starting Java components
+  start "speech2face" /MIN /D "%SEMAINEDIR%" bin\semaine-speech2face.bat
   :loop
   %GRETADIR%\utils\WAIT.exe 1
   for /f "delims=" %%a in ('netstat -an ^| findstr "61616"') do @set ACTIVEMQ_READY=%%a 
@@ -29,12 +44,6 @@ if exist %ACTIVEMQDIR% (
   ) else (
     echo.ActiveMQ seems to be ready.
   )
-)
-
-rem Java components
-if exist %JAVADIR% (
-  echo.Starting Java components
-  start "speech2face" /MIN /D "%SEMAINEDIR%" bin\semaine-speech2face.bat
 )
 
 rem GRETA components
