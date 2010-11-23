@@ -48,12 +48,21 @@ public class IOBaseTest {
 		return IOBase.getConnection(jmsUrl, jmsUser, jmsPassword, null);
 	}
 	
+	private void assertIsVMConnection(Connection c) throws AssertionError {
+		ActiveMQConnection amc = (ActiveMQConnection) c;
+		if (!amc.getTransport().toString().startsWith("vm:")) {
+			throw new AssertionError("Not a VM connection: "+amc.getTransport().toString());
+		}
+	}
+	
 	//////////////// Tests /////////////////
 	
 	@BeforeClass
 	public static void getStarted() throws Exception {
 		BasicConfigurator.configure();
-		Logger.getLogger("org.apache.activemq").setLevel(Level.INFO);
+		Logger.getLogger("org.apache").setLevel(Level.WARN);
+		Logger.getLogger("org.springframework").setLevel(Level.WARN);
+		IOBase.useEmbeddedBroker();
 	}
 	
 	
@@ -140,4 +149,32 @@ public class IOBaseTest {
 		// verify
 		assertEquals("connection should be in closed state", IOBase.getConnectionStatus(c), IOBase.ConnectionStatus.closed);
 	}
+	
+	@Test
+	public void canCreateEmbeddedBroker() throws Exception {
+		// Setup
+		IOBase.useEmbeddedBroker();
+		// verify
+		assertTrue("cannot switch to embedded broker", IOBase.isEmbeddedBroker());
+	}
+	
+	@Test
+	public void secondStartEmbeddedBrokerIsHarmless() throws Exception {
+		// setup
+		IOBase.useEmbeddedBroker();
+		// exercise
+		IOBase.useEmbeddedBroker();
+		// no exception = success
+	}
+	
+	@Test
+	public void embeddedBrokerCreatesVMConnections() throws Exception {
+		// Setup
+		IOBase.useEmbeddedBroker();
+		// exercise
+		Connection c = createFreshDefaultConnection();
+		// verify
+		assertIsVMConnection(c);
+	}
+	
 }

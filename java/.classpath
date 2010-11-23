@@ -14,6 +14,12 @@
 	<classpathentry kind="lib" path="lib/jgraph.jar" sourcepath="/Users/marc/src/jgraph/src"/>
 	<classpathentry kind="lib" path="lib/swing-layout-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.7.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/xbean-spring-3.7.jar"/>
+	<classpathentry kind="lib" path="lib/spring-asm-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-3.0.3.RELEASE.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/activemq-all-5.4.1.jar">

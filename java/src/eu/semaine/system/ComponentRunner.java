@@ -22,6 +22,7 @@ import org.apache.log4j.PatternLayout;
 
 import eu.semaine.components.Component;
 import eu.semaine.exceptions.SystemConfigurationException;
+import eu.semaine.jms.IOBase;
 
 /**
  * @author marc
@@ -46,6 +47,18 @@ public class ComponentRunner
 		System.getProperties().putAll(p);
 		// Also remember the config file itself:
 		System.getProperties().setProperty("semaine.config-file", configFile);
+		
+		// Start embedded ActiveMQ broker?
+		// This is on by default, and can be switched off by setting the config entry to "false":
+		if (Boolean.parseBoolean(System.getProperty("semaine.use.embedded.broker", "true"))) {
+			try {
+				IOBase.useEmbeddedBroker();
+			} catch (Exception e) {
+				throw new SystemConfigurationException("Cannot start embedded ActiveMQ broker: ", e);
+			}
+		}
+		
+		
 		String[] componentClassDescriptions = p.getProperty("semaine.components").split("\\|");
 		for (String d : componentClassDescriptions) {
 			// component class descriptions are expected to have one of the following formats:

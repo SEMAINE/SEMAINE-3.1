@@ -20,6 +20,13 @@
         <pathelement location="lib/jgraph.jar"/>
     	<pathelement location="lib/swing-layout-1.0.jar"/>
     	<pathelement location="lib/junit-4.7.jar"/>
+    	<!-- needed to start embedded broker: -->
+    	<pathelement location="spring-asm-3.0.3.RELEASE.jar"/>
+    	<pathelement location="spring-beans-3.0.3.RELEASE.jar"/>
+        <pathelement location="spring-context-3.0.3.RELEASE.jar"/>
+        <pathelement location="spring-core-3.0.3.RELEASE.jar"/>
+        <pathelement location="spring-expression-3.0.3.RELEASE.jar"/>
+    	<pathelement location="xbean-spring-3.7.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -53,7 +60,7 @@
                     eu/semaine/components/control/*.jpg
                     eu/semaine/components/dummy/example2.fap
       	            eu/semaine/components/dummy/example3.fap
-                    eu/semaine/datatypes/stateinfo/stateinfo.config"
+                    eu/semaine/jms/activemq.xml"
         	excludes="eu/semaine/components/dialogue/**/*.*
         	          eu/semaine/components/mary/**/*.*
                           eu/semaine/examples/**/*.*">
@@ -62,7 +69,20 @@
                 <attribute name="Main-Class"
                     value="eu.semaine.system.ComponentRunner"/>
                 <attribute name="Class-Path" 
-                  value="commons-logging-1.1.1.jar activemq-all-5.4.1.jar log4j-1.2.15.jar xml-apis.jar xercesImpl.jar serializer.jar jgraph.jar swing-layout-1.0.jar"/>
+                  value="commons-logging-1.1.1.jar 
+                	activemq-all-5.4.1.jar
+                	log4j-1.2.15.jar
+                	xml-apis.jar
+                	xercesImpl.jar
+                	serializer.jar
+                	jgraph.jar
+                	swing-layout-1.0.jar
+                	spring-asm-3.0.3.RELEASE.jar
+                	spring-beans-3.0.3.RELEASE.jar
+                	spring-context-3.0.3.RELEASE.jar
+                	spring-core-3.0.3.RELEASE.jar
+                	spring-expression-3.0.3.RELEASE.jar
+                	xbean-spring-3.7.jar"/>
             </manifest>
          </jar>
 		<jar destfile="lib/semaine-dialogue.jar" basedir="bin"

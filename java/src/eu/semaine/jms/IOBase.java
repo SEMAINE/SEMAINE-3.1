@@ -18,6 +18,9 @@ import javax.jms.Topic;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.broker.Broker;
+import org.apache.activemq.broker.BrokerFactory;
+import org.apache.activemq.broker.BrokerService;
 
 /**
  * This class handles the low-level interaction with the JMS provider for
@@ -62,11 +65,27 @@ public class IOBase
 	
 	///////////////////////////// Static stuff ///////////////////////////////////
 	
+	private static BrokerService embeddedBroker = null;
 	private static Map<String,Connection> theConnections = new HashMap<String, Connection>();
+	
+	public static synchronized void useEmbeddedBroker() throws Exception {
+		if (embeddedBroker != null) {
+			return;
+		}
+		embeddedBroker = BrokerFactory.createBroker("xbean:/eu/semaine/jms/activemq.xml", true /* start broker */);
+	}
+	
+	
+	public static boolean isEmbeddedBroker() {
+		return embeddedBroker != null;
+	}
+	
+	
 	
 	/**
 	 * Get a Connection to a JMS server. This will reuse an existing connection if possible,
 	 * and only create a new Connection if no connection to the given server coordinates exists yet.
+	 * If this process is using an embedded broker, this will use a local VM connection, ignoring the connection info given as parameters.
 	 * @param serverUrl the server url, e.g. "tcp://localhost:61616"
 	 * @param serverUser the user name, or null
 	 * @param serverPassword the password, or null
@@ -74,7 +93,7 @@ public class IOBase
 	 * @return a valid connection object. It is undetermined whether the connection is already started.
 	 * @throws JMSException if the connection cannot be created for some reason.
 	 */
-	protected static Connection getConnection(String serverUrl, String serverUser, String serverPassword, IOBase iobase) throws JMSException {
+	protected static synchronized Connection getConnection(String serverUrl, String serverUser, String serverPassword, IOBase iobase) throws JMSException {
 		String key = serverUrl+serverUser+serverPassword;
 		assert theConnections != null;
 		Connection c = theConnections.get(key);
@@ -92,7 +111,10 @@ public class IOBase
 	
 	/**
 	 * Create a new Connection to a JMS server. This should not normally be called from user code,
-	 * since a Connection is a resource-intensive / heavyweight object. Use {@link #getConnection(String, String, String)}
+	 * since a Connection is a resource-intensive / heavyweight object. 
+	 * If this process is using an embedded broker, this will create a local VM connection, ignoring the connection info given as parameters.
+	 * 
+	 * Use {@link #getConnection(String, String, String)}
 	 * instead to re-use an existing connection if possible. 
 	 * 
 	 * @param serverUrl the server url, e.g. "tcp://localhost:61616"
@@ -101,8 +123,13 @@ public class IOBase
 	 * @return a valid connection object which is not yet started.
 	 * @throws JMSException if the connection cannot be created for some reason.
 	 */
-	protected static Connection createConnection(String serverUrl, String serverUser, String serverPassword) throws JMSException {
-		ConnectionFactory factory = new ActiveMQConnectionFactory(serverUser, serverPassword, serverUrl);
+	protected static synchronized Connection createConnection(String serverUrl, String serverUser, String serverPassword) throws JMSException {
+		ConnectionFactory factory;
+		if (isEmbeddedBroker()) {
+			factory = new ActiveMQConnectionFactory("vm://localhost?create=false");
+		} else {
+			factory = new ActiveMQConnectionFactory(serverUser, serverPassword, serverUrl);
+		}
 		final Connection c = factory.createConnection();
 		
 		// Some configuration settings to improve performance:

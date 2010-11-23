@@ -28,6 +28,7 @@ public class TopicInfo extends Info
 	private LinkedList<String> messages;
 	private int currentStep;
 	private long nextStepDue;
+	private boolean isShowingActive = false;
 	
 	public TopicInfo(String name, TopicType type)
 	{
@@ -85,7 +86,7 @@ public class TopicInfo extends Info
 	private synchronized void setActive()
 	{
 		long time = System.currentTimeMillis();
-		if (currentStep == STEPS && nextStepDue > time) {
+		if (isShowingActive) {
 			// this one is already showing, push back next one:
 			nextStepDue = time+STEPTIME;
 		} else {
@@ -98,8 +99,14 @@ public class TopicInfo extends Info
 	public synchronized Color getColor()
 	{
 		Color passiveColor = TopicType.Callback.equals(type) ? PASSIVECOLOR_CALLBACK : PASSIVECOLOR_DATA;
-		if (currentStep == 0) return passiveColor;
-		if (currentStep == STEPS) return ACTIVECOLOR;
+		if (currentStep == STEPS) {
+			isShowingActive = true;
+			return ACTIVECOLOR;
+		}
+		isShowingActive = false;
+		if (currentStep == 0) {
+			return passiveColor;
+		}
 		// interpolate
 		assert currentStep > 0 && currentStep < STEPS : "currentStep="+currentStep+" is out of expected range [0, "+STEPS+"]";
 		int red = passiveColor.getRed() + (ACTIVECOLOR.getRed()-passiveColor.getRed())*currentStep/STEPS;
@@ -114,6 +121,7 @@ public class TopicInfo extends Info
 		if (currentStep > 0) {
 			long currentTime = System.currentTimeMillis();
 			if (currentTime >= nextStepDue) {
+				System.out.println("For topic "+toString()+", next step is due");
 				nextStepDue += STEPTIME;
 				currentStep--;
 				return true;
