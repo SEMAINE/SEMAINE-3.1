@@ -39,11 +39,8 @@ public class NonverbalFusion extends Component {
 	 */
 	public NonverbalFusion() throws JMSException {
 		super("NonverbalFusion");
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.nonverbal.*.>");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.nonverbal.*");
 		receivers.add(emmaReceiver);
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.nonverbal.voice"));
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.nonverbal.face"));
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.nonverbal.head"));
 		emmaSender = new EmmaSender("semaine.data.state.user.emma.nonverbal", getName());
 		senders.add(emmaSender);
 	}

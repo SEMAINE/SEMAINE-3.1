@@ -55,15 +55,8 @@ public class EmotionFusion extends Component {
 	 */
 	public EmotionFusion() throws JMSException {
 		super("EmotionFusion");
-		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.emotion.*.>");
+		emmaReceiver = new EmmaReceiver("semaine.data.state.user.emma.emotion.*");
 		receivers.add(emmaReceiver);
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.emotion.voice"));
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.emotion.face"));
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.emotion.head"));
-		// TODO: Remove this once TUM have updated their code:
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma"));
-		// TODO: Remove this once Imperial have updated their code:
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.Head5DEmotion"));
 		emmaSender = new EmmaSender("semaine.data.state.user.emma.emotion", getName());
 		senders.add(emmaSender);
 		emotionDataSetQueue = new PriorityBlockingQueue<EmotionDataSet>();

@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.sender.Sender;
+import eu.semaine.util.SEMAINEUtils;
 
 
 /**
@@ -59,9 +60,7 @@ public class IOBaseTest {
 	
 	@BeforeClass
 	public static void getStarted() throws Exception {
-		BasicConfigurator.configure();
-		Logger.getLogger("org.apache").setLevel(Level.WARN);
-		Logger.getLogger("org.springframework").setLevel(Level.WARN);
+		SEMAINEUtils.setupLog4j();
 		IOBase.useEmbeddedBroker();
 	}
 	

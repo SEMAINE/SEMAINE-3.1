@@ -12,10 +12,22 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import eu.semaine.jms.JMSLogger;
 
 public class SEMAINEUtils 
 {
+	/**
+	 * Set up the log4j logging system using a default configuration.
+	 */
+	public static void setupLog4j() {
+		BasicConfigurator.configure();
+		Logger.getLogger("org.apache").setLevel(Level.WARN);
+		Logger.getLogger("org.springframework").setLevel(Level.WARN);
+	}
 	
 	/**
 	 * Get a config file as defined in the given system property. If the setting
