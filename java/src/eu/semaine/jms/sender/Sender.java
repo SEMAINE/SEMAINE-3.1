@@ -13,6 +13,7 @@ import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 
 import eu.semaine.jms.IOBase;
+import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.message.SEMAINEMessage;
 
 
@@ -171,10 +172,12 @@ public class Sender extends IOBase
 	 * @param aTimeToLive time to live, in milliseconds.
 	 * A value of 0 means unlimited time, i.e. the messages will not expire.
 	 */
+	@Deprecated
 	public void setTimeToLive(long aTimeToLive)
 	throws JMSException
 	{
-		producer.setTimeToLive(aTimeToLive);
+		JMSLogger.getLog(topicName+" Sender").warn("Ignoring deprecated call to setTimeToLive");
+		//producer.setTimeToLive(aTimeToLive);
 	}
 	
 	/**
