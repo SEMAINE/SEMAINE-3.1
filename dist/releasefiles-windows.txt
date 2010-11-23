@@ -38,6 +38,12 @@ java/lib/serializer.jar
 java/lib/swing-layout-1.0.jar
 java/lib/xercesImpl.jar
 java/lib/xml-apis.jar
+java/lib/spring-asm-3.0.3.RELEASE.jar
+java/lib/spring-beans-3.0.3.RELEASE.jar
+java/lib/spring-context-3.0.3.RELEASE.jar
+java/lib/spring-core-3.0.3.RELEASE.jar
+java/lib/spring-expression-3.0.3.RELEASE.jar
+java/lib/xbean-spring-3.7.jar
 Greta/Active_ActionSelection.exe
 Greta/Active_BehaviorPlanner.exe
 Greta/Active_BehaviorRealizer.exe
