@@ -42,7 +42,6 @@ public class DummyFeatureExtractor extends Component
 			dummyFeatureNames[i] = "feature.name.of.feature"+i;
 		}
 		featureSender.setFeatureNames(dummyFeatureNames);
-		featureSender.setTimeToLive(100); // discard messages after 100 ms
 	}
 
 	@Override
