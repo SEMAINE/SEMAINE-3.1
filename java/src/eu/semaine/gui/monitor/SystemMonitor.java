@@ -7,6 +7,7 @@ package eu.semaine.gui.monitor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,6 +39,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
@@ -61,7 +63,30 @@ import eu.semaine.util.FuzzySort.FuzzySortable;
 import eu.semaine.util.FuzzySort.FuzzySortableRelation;
 
 public class SystemMonitor extends Thread {
+	//// Static stuff
 	public static final String ALL_COMPONENTS = "all components";
+	private static int componentWidth = 120;
+	private static int componentHeight = 30;
+	
+	/**
+	 * Get the width of a component
+	 * @return the width of a component, in pixels
+	 */
+	public static int getComponentWidth() {
+		return componentWidth;
+	}
+	
+	/**
+	 * Get the font used to label the components and topics
+	 * @return a font object as will be used for labelling the vertices.
+	 */
+	public static Font getLabelFont() {
+		Font defaultFont = UIManager.getDefaults().getFont("Label.font");
+		Font font = defaultFont.deriveFont(11f);
+		return font;
+	}
+
+	// Non-static stuff
 	private JFrame frame;
 	private JSplitPane splitPane;
 	private JGraph graph;
@@ -70,8 +95,8 @@ public class SystemMonitor extends Thread {
 	private JTextPane systemStatus;
 	private JTextPane logTextPane;
 	private Dimension frameSize = null;
-	private static int componentWidth = 120;
-	private static int componentHeight = 30;
+	
+	
 	private boolean mustUpdateCells = true;
 
 	private List<ComponentInfo> sortedComponentList;
@@ -471,6 +496,7 @@ public class SystemMonitor extends Thread {
 			GraphConstants.setOpaque(cell.getAttributes(), true);
 			GraphConstants.setBackground(cell.getAttributes(), ci.getColor());
 			GraphConstants.setBorderColor(cell.getAttributes(), Color.black);
+			GraphConstants.setFont(cell.getAttributes(), getLabelFont());
 			cell.addPort();
 			newCells.add(cell);
 			ci.setCell(cell);
@@ -480,21 +506,21 @@ public class SystemMonitor extends Thread {
 			if (ti.getCell() != null)
 				continue;
 			DefaultGraphCell cell = new DefaultGraphCell(ti);
-			GraphConstants.setBorder(cell.getAttributes(), BorderFactory
-					.createRaisedBevelBorder());
+			GraphConstants.setBorder(cell.getAttributes(), BorderFactory.createRaisedBevelBorder());
 			GraphConstants.setBackground(cell.getAttributes(), ti.getColor());
 			GraphConstants.setOpaque(cell.getAttributes(), true);
+			GraphConstants.setFont(cell.getAttributes(), getLabelFont());
 			cell.addPort();
 			newCells.add(cell);
 			ti.setCell(cell);
 		}
 		cells.addAll(newCells);
-		if (newCells.size() > 0) {
-			System.out.println("Adding new cells:");
-			for (DefaultGraphCell c : newCells) {
-				System.out.println("    " + c.toString());
-			}
-		}
+//		if (newCells.size() > 0) {
+//			System.out.println("Adding new cells:");
+//			for (DefaultGraphCell c : newCells) {
+//				System.out.println("    " + c.toString());
+//			}
+//		}
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				graph.getGraphLayoutCache().insert(newCells.toArray());
@@ -606,8 +632,8 @@ public class SystemMonitor extends Thread {
 				}
 			}
 		}
-		System.out.println("For " + comps.size() + " components, registered "
-				+ relations.size() + " ordering relations");
+//		System.out.println("For " + comps.size() + " components, registered "
+//				+ relations.size() + " ordering relations");
 		List<List<Info>> result = new ArrayList<List<Info>>();
 		if (relations.isEmpty()) { // no relations? all in one!
 			List<Info> allInOne = new ArrayList<Info>(comps.size());

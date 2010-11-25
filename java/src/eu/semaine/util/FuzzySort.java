@@ -194,7 +194,7 @@ public class FuzzySort {
 		FuzzySortable prevSortable = null;
 		for (int k=0; k<numItems; k++) {
 			FuzzySortable currentSortable = sortedItems[k];
-        	System.out.println("Position of item "+currentSortable.toString()+" is "+rawPositions[items2index.get(currentSortable)]);
+//        	System.out.println("Position of item "+currentSortable.toString()+" is "+rawPositions[items2index.get(currentSortable)]);
 			if (currentSet == null) {
 				currentSet = new HashSet<FuzzySortable>();
 				result.add(currentSet);

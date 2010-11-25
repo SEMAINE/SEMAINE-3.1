@@ -19,6 +19,7 @@ public class ConnectionInfo extends Info
 	
 	public ConnectionInfo()
 	{
+		super(null);
 		width = MINWIDTH;
 		nextStepDue = 0;
 	}
@@ -60,6 +61,4 @@ public class ConnectionInfo extends Info
 		return false;
 	}
 
-
-	public String toString() { return null; }
 }

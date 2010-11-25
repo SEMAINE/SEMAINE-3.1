@@ -5,9 +5,16 @@
 package eu.semaine.gui.monitor;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
+import java.awt.font.TextLayout;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.regex.Pattern;
+
+import javax.swing.UIManager;
 
 
 public class TopicInfo extends Info
@@ -21,7 +28,6 @@ public class TopicInfo extends Info
 	private static final int STEPS = 2;
 	private static final int STEPTIME = 500; // in ms
 	
-	private String name;
 	private TopicType type;
 	private Map<String,ConnectionInfo> sendingComponents;
 	private Map<String,ConnectionInfo> receivingComponents;
@@ -32,7 +38,7 @@ public class TopicInfo extends Info
 	
 	public TopicInfo(String name, TopicType type)
 	{
-		this.name = name;
+		super(name);
 		this.type = type;
 		sendingComponents = new HashMap<String, ConnectionInfo>();
 		receivingComponents = new HashMap<String, ConnectionInfo>();
@@ -41,9 +47,7 @@ public class TopicInfo extends Info
 		nextStepDue = 0;
 	}
 	
-	public String getName() {
-		return name;
-	}
+
 	
 	public TopicType getType() {
 		return type;
@@ -53,18 +57,86 @@ public class TopicInfo extends Info
 
 	public Map<String,ConnectionInfo> receivingComponents() { return receivingComponents; }
 
-	public String toString()
+	/**
+	 * Compute how to display the name in the message flow graph. We shorten it to gain readability.
+	 */
+	@Override
+	protected String computeLabel(String name)
 	{
 		String[] prefixes = new String[] {
 				"semaine.data.",
 				"semaine.callback."
 		};
+		String shortname = name;
 		for (String prefix : prefixes) {
 			if (name.startsWith(prefix)) {
-				return name.substring(prefix.length());
+				shortname = name.substring(prefix.length());
 			}
 		}
-		return name; 
+		// Now measure if we will fit into the space available:
+		Font font = SystemMonitor.getLabelFont();
+		FontRenderContext frc = new FontRenderContext(null, true, true);
+		TextLayout tl = new TextLayout(shortname, font, frc);
+		float width = tl.getVisibleAdvance();
+		int allowedWidth = SystemMonitor.getComponentWidth() - 4; // leave two pixels at each end
+		if (width > allowedWidth) {
+//			System.out.println("Topic label '"+shortname+"' is too wide: "+width+" is more than "+allowedWidth);
+			shortname = shortenLabel(shortname, allowedWidth, font, frc, true);
+		}
+		return shortname; 
+	}
+
+
+
+	/**
+	 * Shorten the given text so that it fits within the allowed width.
+	 * The idea is to take the final part preceded by two dots preceded by whatever fits, e.g.
+	 * 'state.user.emma.emotion.voice' -> 'state.user.e..voice'. 
+	 * If shortname contains no dot, use the prefix that fits if followed by two dots.
+	 * @param longLabel
+	 * @param font
+	 * @param frc
+	 * @return the shortened label
+	 */
+	private String shortenLabel(String longLabel, float allowedWidth, Font font, FontRenderContext frc, boolean splitAtDot) {
+		float longWidth = new TextLayout(longLabel, font, frc).getVisibleAdvance();
+//		System.out.println("Now trying to shorten '"+longLabel+"' from "+((int)longWidth)+" to "+((int)allowedWidth));
+		if (longWidth < allowedWidth) {
+			return longLabel;
+		}
+		float twodotWidth = new TextLayout("..", font, frc).getVisibleAdvance();
+		if (twodotWidth >= allowedWidth) {
+			// well, we can't do anything
+			return "..";
+		}
+		int lastDotPos = longLabel.lastIndexOf('.');
+		if (splitAtDot && lastDotPos > -1) {
+			String finalPart = longLabel.substring(lastDotPos+1);
+			float finalPartWidth = new TextLayout(finalPart, font, frc).getVisibleAdvance();
+			if (twodotWidth+finalPartWidth > allowedWidth) { // cannot even show the full final part
+				String finalPartShortened = shortenLabel(finalPart, allowedWidth - twodotWidth, font, frc, false);
+				return ".."+finalPartShortened;
+			}
+			// Now for the other parts
+			String prefix = longLabel.substring(0, lastDotPos);
+			prefix = shortenLabel(prefix, allowedWidth - finalPartWidth, font, frc, false);
+			return prefix+finalPart;
+		}
+		// no dot -- just shorten
+		// Use longest possible prefix that fits
+		// Estimate:
+		int len = (int) ((float)longLabel.length() * (allowedWidth - twodotWidth) / longWidth);
+		assert len >= 0;
+		if (len == 0) { // no space except for the dots
+			return "..";
+		}
+		String prefix = longLabel.substring(0, len);
+		float prefixWidth = new TextLayout(prefix, font, frc).getVisibleAdvance();
+		while (prefix.length() > 0 && prefixWidth > allowedWidth - twodotWidth) {
+			prefix = prefix.substring(0, prefix.length() - 1);
+			prefixWidth = new TextLayout(prefix, font, frc).getVisibleAdvance();
+		}
+		return prefix+"..";
 	}
 	
 	public void addMessage(String message, String sender)

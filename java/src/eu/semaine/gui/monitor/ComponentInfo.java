@@ -45,7 +45,6 @@ public class ComponentInfo extends Info
 		return topicsToIgnoreWhenSorting.contains(topicName);
 	}
 	
-	private String name;
 	private String[] receiveTopics;
 	private String[] sendTopics;
 	private boolean isInput;
@@ -62,7 +61,7 @@ public class ComponentInfo extends Info
 	public ComponentInfo(String name, String[] receiveTopics, String[] sendTopics,
 			boolean isInput, boolean isOutput)
 	{
-		this.name = name;
+		super(name);
 		this.receiveTopics = receiveTopics != null ? receiveTopics.clone() : null;
 		this.sendTopics = sendTopics != null ? sendTopics.clone() : null;
 		this.isInput = isInput;
@@ -70,6 +69,10 @@ public class ComponentInfo extends Info
 		this.state = null;
 		this.stateDetails = null;
 		this.lastSeenAlive = 0;
+	}
+	
+	protected String computeLabel(String name) {
+		return name;
 	}
 	
 	public boolean isInput()
@@ -326,12 +329,11 @@ public class ComponentInfo extends Info
 		return messagesReceived;
 	}
 
-	public String toString() { return name; }
 
 	public String getInfo()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("Component name: ").append(name).append("\n");
+		sb.append("Component name: ").append(getName()).append("\n");
 		sb.append("State: ").append(state);
 		if (stateDetails != null)
 			sb.append(" (").append(stateDetails).append(")");
@@ -653,7 +655,7 @@ public class ComponentInfo extends Info
 			
 			System.out.println("Starting with components in the following order:");
 			for (int i=0; i<components.length; i++) {
-				System.out.println(i+" "+components[i].name);
+				System.out.println(i+" "+components[i].getName());
 				componentIndices.put(components[i], i); // for faster lookup in compare()
 				if (components[i].isInput()) {
 					positions[i] = 0;
@@ -705,29 +707,29 @@ public class ComponentInfo extends Info
 						continue;
 					}
 					if (positions[i] + 1 == positions[j]) {
-						System.out.println(components[i].name+" and "+components[j].name+" are in right order");
+						System.out.println(components[i].getName()+" and "+components[j].getName()+" are in right order");
 						if (isFixed[i]) {
-							System.out.println(components[i].name+" votes for "+components[j].name+" to stay in place");
+							System.out.println(components[i].getName()+" votes for "+components[j].getName()+" to stay in place");
 							// vote to stay in place
 							votes[j][0] += votesForFixedComponents;
 						} else if (isFixed[j]) {
-							System.out.println(components[j].name+" votes for "+components[i].name+" to stay in place");
+							System.out.println(components[j].getName()+" votes for "+components[i].getName()+" to stay in place");
 							// vote to stay in place on both
 							votes[i][0] += votesForFixedComponents;
 						}
 					} else if (positions[i] < positions[j]) {
-						System.out.print("POR "+components[i].name+"->"+components[j].name+" votes for ");
+						System.out.print("POR "+components[i].getName()+"->"+components[j].getName()+" votes for ");
 						// vote to move component i right and component j left
 						if (isFixed[i]) {
-							System.out.println(components[j].name+" left by "+votesForFixedComponents);
+							System.out.println(components[j].getName()+" left by "+votesForFixedComponents);
 							votes[j][1] -= votesForFixedComponents;
 						} else if (isFixed[j]) {
-							System.out.println(components[i].name+" right by "+votesForFixedComponents);
+							System.out.println(components[i].getName()+" right by "+votesForFixedComponents);
 							votes[i][1] += votesForFixedComponents;
 						} else {
-							System.out.println(components[i].name+" right");
+							System.out.println(components[i].getName()+" right");
 							votes[i][1]++;
-							System.out.println(components[j].name+" left");
+							System.out.println(components[j].getName()+" left");
 							votes[j][1]--;
 /*							// flip a coin
 							if (random.nextBoolean()) {
@@ -739,11 +741,11 @@ public class ComponentInfo extends Info
 							}
 	*/					}
 					} else { // positions[i] >= positions[j]
-						System.out.print("POR "+components[i].name+"->"+components[j].name+" votes for ");
+						System.out.print("POR "+components[i].getName()+"->"+components[j].getName()+" votes for ");
 						// vote to move component i left and component j right
-						System.out.println(components[i].name+" left");
+						System.out.println(components[i].getName()+" left");
 						votes[i][1]--;
-						System.out.println(components[j].name+" right");
+						System.out.println(components[j].getName()+" right");
 						votes[j][1]++;
 /*						// flip a coin
 						if (random.nextBoolean()) {
@@ -758,7 +760,7 @@ public class ComponentInfo extends Info
 				System.out.println("Iteration "+iteration);
 				// Now, move only the mobile components:
 				for (int i=0; i<components.length; i++) {
-					System.out.println("Component "+i+" ("+components[i].name+"):"+(isFixed[i]?" fixed":"")+" position="+positions[i]+", stay="+votes[i][0]+", move="+votes[i][1]);
+					System.out.println("Component "+i+" ("+components[i].getName()+"):"+(isFixed[i]?" fixed":"")+" position="+positions[i]+", stay="+votes[i][0]+", move="+votes[i][1]);
 					if (isFixed[i]) {
 						continue;
 					}
