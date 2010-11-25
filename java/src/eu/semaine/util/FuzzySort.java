@@ -4,12 +4,12 @@
  */
 package eu.semaine.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,12 +31,64 @@ import Jama.Matrix;
 public class FuzzySort {
 	
 	
-	public static List<Set<FuzzySortable>> sort(Set<FuzzySortableRelation> relations) {
+	/**
+	 * For a set of relations between fuzzy sortables, attempt to come up with a reasonable ordering despite circular orderings etc.
+	 * A heuristic will be used to determine the threshold below which two items will be considered to be "equal" with respect to sorting.
+	 * @param relations a non-null, non-empty set of relations
+	 * @param enforceInitialFinal whether to interpret the initial/final requests by FuzzySortable as a soft or a hard constraint.
+	 * If set to true, we guarantee that the first set in the returned list contains all initial items, and the last set in the list contains all final items. 
+	 * @return a non-null, non-empty set of non-null, non-empty sets of sortables.
+	 * @throws NullPointerException, IllegalArgumentException if relations is null or empty
+	 */
+	public static List<Set<FuzzySortable>> sort(Set<FuzzySortableRelation> relations, boolean enforceInitialFinal) {
+		return sort(relations, enforceInitialFinal, Double.NaN);
+	}
+
+	/**
+	 * For a set of relations between fuzzy sortables, attempt to come up with a reasonable ordering despite circular orderings etc.
+	 * @param relations a non-null, non-empty set of relations
+	 * @param enforceInitialFinal whether to interpret the initial/final requests by FuzzySortable as a soft or a hard constraint.
+	 * If set to true, we guarantee that the first set in the returned list contains all initial items, and the last set in the list contains all final items.
+	 * @param threshold the threshold below which two sortables are considered equal, given that each relation represents a requested distance of 1.
+	 * This must be a non-negative value, or Float.NaN. If a value of 0 is given, a very small threshold is used; if NaN is given, a heuristic threshold is computed. 
+	 * @return a non-null, non-empty set of non-null, non-empty sets of sortables.
+	 * @throws NullPointerException, IllegalArgumentException if relations is null or empty, or if threshold is invalid
+	 */
+	public static List<Set<FuzzySortable>> sort(Set<FuzzySortableRelation> relations, boolean enforceInitialFinal, double threshold) {
+		if (relations == null) {
+			throw new NullPointerException("null argument");
+		}
+		if (relations.isEmpty()) {
+			throw new IllegalArgumentException("empty argument");
+		}
+		if (threshold < 0) {
+			throw new IllegalArgumentException("negative threshold");
+		}
 		// Identify the items to sort
 		Set<FuzzySortable> itemSet = new HashSet<FuzzySortable>();
+		Set<FuzzySortable> initialSet = enforceInitialFinal ? new HashSet<FuzzySortable>() : null;
+		Set<FuzzySortable> finalSet = enforceInitialFinal ? new HashSet<FuzzySortable>() : null;
 		for (FuzzySortableRelation r : relations) {
-			itemSet.add(r.getFirst());
-			itemSet.add(r.getSecond());
+			FuzzySortable first = r.getFirst();
+			if (enforceInitialFinal && first.isInitial()) {
+				// keep item out of the itemset, its position is not to be computed but fixed
+				initialSet.add(first);
+			} else if (enforceInitialFinal && first.isFinal()) {
+				// keep item out of the itemset, its position is not to be computed but fixed
+				finalSet.add(first);
+			} else {
+				itemSet.add(first);
+			}
+			FuzzySortable second = r.getSecond();
+			if (enforceInitialFinal && second.isInitial()) {
+				// keep item out of the itemset, its position is not to be computed but fixed
+				initialSet.add(second);
+			} else if (enforceInitialFinal && second.isFinal()) {
+				// keep item out of the itemset, its position is not to be computed but fixed
+				finalSet.add(second);
+			} else {
+				itemSet.add(second);
+			}
 		}
 //		System.out.println("Found "+itemSet.size()+" items");
 		// Build up a numbering scheme for the matrix
@@ -49,6 +101,22 @@ public class FuzzySort {
 			items2index.put(item, i);
 			i++;
 		}
+		
+		// Positions of initial / final items:
+		// (these are fixed if enforceInitialFinal is true, otherwise they are target positions)
+		double posInitial = 0;
+		double posFinal = numItems + (enforceInitialFinal ? initialSet.size() + finalSet.size() : 0);
+		double posOthers = posFinal / 2.;
+		
+		final double equalityThreshold;
+		if (threshold == 0) {
+			equalityThreshold = 1.e-9;
+		} else if (Double.isNaN(threshold)) {
+			equalityThreshold = posFinal / 50.;
+		} else {
+			equalityThreshold = threshold;
+		}
+		
 		// Fill the matrix of constraints
 		int numAbsolute = numItems;
 		int numRelations = relations.size();
@@ -63,11 +131,11 @@ public class FuzzySort {
 			FuzzySortable item = index2items[j]; 
 			double targetPos;
 			if (item.isInitial()) {
-				targetPos = 0;
+				targetPos = posInitial;
 			} else if (item.isFinal()) {
-				targetPos = numItems;
+				targetPos = posFinal;
 			} else {
-				targetPos = numItems / 2.;
+				targetPos = posOthers;
 			}
 			A[j][j] = 1;
 			b[j][0] = targetPos;
@@ -76,12 +144,32 @@ public class FuzzySort {
 		for (int j=numAbsolute; j<numAbsolute+numRelations; j++) {
 			// for each relation, we state that the position of the two items in the relation differs by one:
 			FuzzySortableRelation r = relationIterator.next();
-			int kFirst = items2index.get(r.getFirst());
-			int kSecond = items2index.get(r.getSecond());
-			// position of second - position of first = 1
-			A[j][kFirst] = -1;
-			A[j][kSecond] = 1;
-			b[j][0] = 1;
+			FuzzySortable first = r.getFirst();
+			FuzzySortable second = r.getSecond();
+			if (enforceInitialFinal && (first.isInitial() || first.isFinal() || second.isInitial() || second.isFinal())) { 
+				// one of both is not part of the optimisation:
+				if ((first.isInitial() || first.isFinal()) && (second.isInitial() || second.isFinal())) {
+					continue; // no constraints here
+				} else if (first.isInitial() || first.isFinal()) {
+					// constaint on second to follow posInitial / posFinal (?)
+					int kSecond = items2index.get(second);
+					A[j][kSecond] = 1;
+					b[j][0] = (first.isInitial() ? posInitial : posFinal) + 1;
+				} else if (second.isInitial() || second.isFinal) {
+					// constraint on first to precede posInitial (?) / posFinal
+					int kFirst = items2index.get(first);
+					A[j][kFirst] = 1;
+					b[j][0] = (second.isInitial() ? posInitial : posFinal) - 1;
+				}
+			} else {
+				// Both sortables are part of the optimisation:
+				int kFirst = items2index.get(first);
+				int kSecond = items2index.get(second);
+				// position of second - position of first = 1
+				A[j][kFirst] = -1;
+				A[j][kSecond] = 1;
+				b[j][0] = 1;
+			}
 		}
 		
 //		new Matrix(A).print(3, 0);
@@ -92,29 +180,27 @@ public class FuzzySort {
         final double[] rawPositions = new double[numItems];
         for (int k=0; k<numItems; k++) {
         	rawPositions[k] = x.get(k, 0);
-//        	System.out.println("Position of item "+k+"("+index2items[k].toString()+") is "+rawPositions[k]);
         }
 		// Condense solution into an order relation
 		FuzzySortable[] sortedItems = index2items.clone();
 		Arrays.sort(sortedItems, new Comparator<FuzzySortable>() {
 			@Override
 			public int compare(FuzzySortable o1, FuzzySortable o2) {
-				return FuzzySort.compare(o1, o2, rawPositions, items2index);
+				return FuzzySort.compare(o1, o2, rawPositions, items2index, equalityThreshold);
 			}
-
-
 		});
-		List<Set<FuzzySortable>> result = new ArrayList<Set<FuzzySortable>>();
+		LinkedList<Set<FuzzySortable>> result = new LinkedList<Set<FuzzySortable>>();
 		Set<FuzzySortable> currentSet = null;
 		FuzzySortable prevSortable = null;
 		for (int k=0; k<numItems; k++) {
 			FuzzySortable currentSortable = sortedItems[k];
+        	System.out.println("Position of item "+currentSortable.toString()+" is "+rawPositions[items2index.get(currentSortable)]);
 			if (currentSet == null) {
 				currentSet = new HashSet<FuzzySortable>();
 				result.add(currentSet);
 			} else {
 				assert prevSortable != null;
-				int cmp = compare(prevSortable, currentSortable, rawPositions, items2index);
+				int cmp = compare(prevSortable, currentSortable, rawPositions, items2index, equalityThreshold);
 				assert cmp <= 0;
 				if (cmp < 0) { // not equal
 					currentSet = new HashSet<FuzzySortable>();
@@ -124,6 +210,16 @@ public class FuzzySort {
 			currentSet.add(currentSortable);
 			prevSortable = currentSortable;
 		}
+		// And finally, if requested, move all initial/final ones to the two ends
+		if (enforceInitialFinal) {
+			if (!initialSet.isEmpty()) {
+				result.addFirst(initialSet);
+			}
+			if (!finalSet.isEmpty()) {
+				result.addLast(finalSet);
+			}
+		}
+		
 //		System.out.println("Sorted items into "+result.size()+" sets");
 //		System.out.println("Sorted result: ");
 //		System.out.println(toString(result));
@@ -140,16 +236,15 @@ public class FuzzySort {
 	 * Note that o1 and o2 are compared equal if their rawPositions are less than EPSILON apart.
 	 */
 	private static int compare(FuzzySortable o1, FuzzySortable o2,
-			final double[] rawPositions, final Map<FuzzySortable, Integer> items2index) {
+			final double[] rawPositions, final Map<FuzzySortable, Integer> items2index, double threshold) {
 		int index1 = items2index.get(o1);
 		int index2 = items2index.get(o2);
-		if (Math.abs(rawPositions[index1]-rawPositions[index2]) < EPSILON) {
+		if (Math.abs(rawPositions[index1]-rawPositions[index2]) < threshold) {
 			return 0;
 		}
 		return Double.compare(rawPositions[index1], rawPositions[index2]);
 	}	
 	
-	private static final double EPSILON = 1.e-9;
 	
 	/**
 	 * Convert the sorted results into a human-readable string. Each line contains one set of sortables;
@@ -245,6 +340,20 @@ public class FuzzySort {
 		@Override
 		public String toString() {
 			return payload.toString();
+		}
+		
+		@Override
+		public int hashCode() {
+			return payload.hashCode();
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FuzzySortable)) {
+				return false;
+			}
+			FuzzySortable other = (FuzzySortable) obj;
+			return other.getPayload().equals(payload);
 		}
 	}
 	

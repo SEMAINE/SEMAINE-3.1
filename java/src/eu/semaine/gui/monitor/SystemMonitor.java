@@ -17,8 +17,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -58,6 +56,9 @@ import org.jgraph.graph.GraphModel;
 
 import eu.semaine.components.Component;
 import eu.semaine.jms.JMSLogReader;
+import eu.semaine.util.FuzzySort;
+import eu.semaine.util.FuzzySort.FuzzySortable;
+import eu.semaine.util.FuzzySort.FuzzySortableRelation;
 
 public class SystemMonitor extends Thread
 {
@@ -324,11 +325,6 @@ public class SystemMonitor extends Thread
 		}
 	}
 	
-	private synchronized void setMustUpdateCells(boolean value)
-	{
-		mustUpdateCells = value;
-	}
-	
 	private synchronized void redraw()
 	{
 		if (!isShowingGraph()) {
@@ -417,19 +413,16 @@ public class SystemMonitor extends Thread
 	}
 	
 
-	private void updateCells()
+	private synchronized void updateCells()
 	{
 		assert cells != null;
 		if (sortedComponentList.isEmpty()) return;
 		// each time we get here, we expect to know about new topics,
 		// so we need to sort again the components:
-/*		Comparator<ComponentInfo> ciComparator = new ComponentInfo.SimpleComparator(
-			new HashSet<ComponentInfo>(sortedComponentList));
-*/		Comparator<ComponentInfo> ciComparator = new ComponentInfo.CountingComparator(
+		
+		// Sort by counting comparator:
+/*		Comparator<ComponentInfo> ciComparator = new ComponentInfo.CountingComparator(
 				new HashSet<ComponentInfo>(sortedComponentList));
-/*		Comparator<ComponentInfo> ciComparator = new ComponentInfo.VoteComparator(
-				new HashSet<ComponentInfo>(sortedComponentList), topicsToHide);
-*/
 		Collections.sort(sortedComponentList, ciComparator);
 		updateLogComponents();
 		// Group components:
@@ -449,46 +442,17 @@ public class SystemMonitor extends Thread
 				infoGroups.add(currentGroup);
 			}
 		}
-		// add Topics to infoGroups
-		Set<TopicInfo> topicsInGraph = new HashSet<TopicInfo>();
-		for (int i=0; i<infoGroups.size(); i++) {
-			if (! (infoGroups.get(i).get(0) instanceof ComponentInfo))
-				continue;
-			List<Info> groupTopics = new LinkedList<Info>();
-			for (Info inf : infoGroups.get(i)) {
-				ComponentInfo ci = (ComponentInfo) inf;
-				String[] sendTopics = ci.sendTopics();
-				if (sendTopics == null) continue;
-				for (String topicName : sendTopics) {
-					if (topicsToHide.contains(topicName)) {
-						continue;
-					}
-					TopicInfo ti = topics.get(topicName);
-					if (ti == null) {
-						// a new topic
-						ti = ci.getTopicInfo(topicName);
-						topics.put(topicName, ti);
-					}
-					if (!topicsInGraph.contains(ti)) {
-						topicsInGraph.add(ti);
-						switch (ti.getType()) {
-						case Data: 
-							groupTopics.add(ti);
-							break;
-						case Callback:
-							callbackTopics.add(ti);
-							break;
-						default:
-							// shouldn't occur	
-						}
-					}
-				}
-			}
-			if (!groupTopics.isEmpty()) {
-				infoGroups.add(i+1, groupTopics);
-				i++; // skip the newly added group
-			}
-		}
+		addTopicsToInfoGroups();
+*/
+		
+		// Sort components by fuzzy sort algorithm:
+		List<List<Info>> compGroups = sortComponents(sortedComponentList);
+		updateLogComponents();
+		infoGroups.clear();
+		callbackTopics.clear();
+		infoGroups.addAll(compGroups);
+		addTopicsToInfoGroups();
+
 
 		// Create cells for components
 		final List<DefaultGraphCell> newCells = new ArrayList<DefaultGraphCell>();
@@ -528,8 +492,124 @@ public class SystemMonitor extends Thread
 		createAllArrows();
 
 	}
+
+	/**
+	 * 
+	 */
+	private void addTopicsToInfoGroups() {
+		// add Topics to infoGroups
+		Set<TopicInfo> topicsInGraph = new HashSet<TopicInfo>();
+		for (int i=0; i<infoGroups.size(); i++) {
+			if (! (infoGroups.get(i).get(0) instanceof ComponentInfo))
+				continue;
+			List<Info> groupTopics = new LinkedList<Info>();
+			for (Info inf : infoGroups.get(i)) {
+				assert inf instanceof ComponentInfo : "Only component infos expected in info groups at this stage!";
+				ComponentInfo ci = (ComponentInfo) inf;
+				String[] sendTopics = ci.sendTopics();
+				if (sendTopics == null) continue;
+				for (String topicName : sendTopics) {
+					if (topicsToHide.contains(topicName)) {
+						continue;
+					}
+					TopicInfo ti = topics.get(topicName);
+					if (ti == null) {
+						// a new topic
+						ti = ci.getTopicInfo(topicName);
+						topics.put(topicName, ti);
+					}
+					if (!topicsInGraph.contains(ti)) {
+						topicsInGraph.add(ti);
+						switch (ti.getType()) {
+						case Data: 
+							groupTopics.add(ti);
+							break;
+						case Callback:
+							callbackTopics.add(ti);
+							break;
+						default:
+							// shouldn't occur	
+						}
+					}
+				}
+			}
+			if (!groupTopics.isEmpty()) {
+				infoGroups.add(i+1, groupTopics);
+				i++; // skip the newly added group
+			}
+		}
+	}
 	
-	private void createAllArrows()
+	/**
+	 * Sort the given list of component infos into an ordered list of groups of components, based on the initial/final status of components and on their send/receive topics.
+	 * @param comps the list of topics to sort. Must not be null and must not be empty. This will also be sorted in place, to reflect the iterator of iterators of the return value.
+	 * @return a non-empty list of non-empty sets of component infos. the list is ordered as best we can from input to output components.
+	 */
+	private synchronized List<List<Info>> sortComponents(List<ComponentInfo> comps) {
+		assert comps != null;
+		assert !comps.isEmpty();
+		// Strategy: for each component, create a FuzzySortable; for any direct connections of components, create a relation for the FuzzySort algorithm.
+		Map<ComponentInfo, FuzzySortable> items = new HashMap<ComponentInfo, FuzzySortable>();
+		Set<FuzzySortableRelation> relations = new HashSet<FuzzySortableRelation>();
+		for (ComponentInfo ci : comps) {
+			FuzzySortable f = new FuzzySortable(ci, ci.isInput(), ci.isOutput());
+			items.put(ci, f);
+		}
+		
+		for (ComponentInfo a : comps) {
+			for (ComponentInfo b : comps) {
+				if (a == b) {
+					continue;
+				}
+				if (a.sendTopics() == null) {
+					continue;
+				}
+				boolean bFollowsA = false;
+				for (String sendTopic : a.sendTopics()) {
+					// ignore it if it's not a data topic or if user requested to hide or ignore it:
+					if (!a.isDataTopic(sendTopic) || ComponentInfo.isIgnoreTopicWhenSorting(sendTopic)) {
+						continue;
+					}
+					if (b.canReceive(sendTopic)) {
+						bFollowsA = true;
+						break;
+					}
+				}
+				if (bFollowsA) {
+					relations.add(new FuzzySortableRelation(items.get(a), items.get(b)));
+				}
+			}
+		}
+		System.out.println("For "+comps.size()+" components, registered "+relations.size()+" ordering relations");
+		List<List<Info>> result = new ArrayList<List<Info>>();
+		if (relations.isEmpty()) { // no relations? all in one!
+			List<Info> allInOne = new ArrayList<Info>(comps.size());
+			allInOne.addAll(comps);
+		} else { // can do a meaningful sort
+			List<Set<FuzzySortable>> sortedOrder = FuzzySort.sort(relations, true);
+			for (Set<FuzzySortable> sfs : sortedOrder) {
+				List<Info> sci = new ArrayList<Info>(sfs.size());
+				for (FuzzySortable fs : sfs) {
+					sci.add((ComponentInfo)fs.getPayload());
+				}
+				result.add(sci);
+			}
+			// Only if we actually sorted, update comps:
+			// There may be components in comps which are not part of any relation -- these will not be in result,
+			// so careful with comps.clear();
+			for (List<Info> l : result) {
+				for (Info inf : l) {
+					ComponentInfo ci = (ComponentInfo) inf;
+					comps.remove(ci);
+					comps.add(ci);
+				}
+			}
+		}
+		return result;
+	}
+
+	
+	private synchronized void createAllArrows()
 	{
 		final List<DefaultEdge> constantEdges = new ArrayList<DefaultEdge>();
 		final List<DefaultEdge> updateableEdges = new ArrayList<DefaultEdge>();
@@ -873,7 +953,7 @@ public class SystemMonitor extends Thread
 	}
 	
 	
-	public ComponentInfo getComponentInfo(String componentName)
+	public synchronized ComponentInfo getComponentInfo(String componentName)
 	{
 		for(ComponentInfo ci : sortedComponentList) {
 			if (ci.toString().equals(componentName)) {

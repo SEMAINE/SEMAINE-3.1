@@ -5,7 +5,6 @@
 package eu.semaine.util;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +27,6 @@ public class FuzzySortTest {
 	private final FuzzySortable d = new FuzzySortable("d");
 	private final FuzzySortable e = new FuzzySortable("e");
 	private final FuzzySortable initial1 = new FuzzySortable("i1", true, false);
-	private final FuzzySortable initial2 = new FuzzySortable("i2", true, false);
 	private final FuzzySortable final1 = new FuzzySortable("f1", false, true);
 	private final FuzzySortable final2 = new FuzzySortable("f2", false, true);
 	
@@ -63,6 +61,21 @@ public class FuzzySortTest {
 		return r;
 	}
 	
+	private Set<FuzzySortableRelation> getConstrainsContradictingInitialFinalForLinearSolution() {
+		// Intended order: initial1 a b c d e final2
+		Set<FuzzySortableRelation> r = new HashSet<FuzzySortableRelation>();
+		r.add(new FuzzySortableRelation(final2, initial1)); // !!
+		r.add(new FuzzySortableRelation(a, b));
+		r.add(new FuzzySortableRelation(b, c));
+		r.add(new FuzzySortableRelation(c, d));
+		r.add(new FuzzySortableRelation(d, e));
+		r.add(new FuzzySortableRelation(a, initial1));
+		r.add(new FuzzySortableRelation(b, initial1));
+		r.add(new FuzzySortableRelation(c, initial1));
+		r.add(new FuzzySortableRelation(d, initial1));
+		r.add(new FuzzySortableRelation(e, initial1));
+		return r;
+	}
 	
 	private Set<FuzzySortableRelation> getConflictingConstraintsForLinearSolution() {
 		// Intended order: a b c d e
@@ -74,6 +87,8 @@ public class FuzzySortTest {
 		r.add(new FuzzySortableRelation(d, e));
 		return r;
 	}
+	
+	
 	
 
 	private final FuzzySortable[][] parallelSolution1 = new FuzzySortable[][] {
@@ -106,15 +121,24 @@ public class FuzzySortTest {
 		return r;
 	}
 	
+	private void assertLinearSolutionWrong(List<Set<FuzzySortable>> candidate, FuzzySortable[] solution) throws AssertionError {
+		try {
+			assertLinearSolutionCorrect(candidate, solution);
+			fail("Expected solution to be wrong, but was right");
+		} catch (AssertionError ae) {
+			// OK, expected
+		}
+	}
 	
 	private void assertLinearSolutionCorrect(List<Set<FuzzySortable>> candidate, FuzzySortable[] solution) throws AssertionError {
+		String errorMessage = "Unexpected result:\n"+FuzzySort.toString(candidate);
 		if (candidate.size() != solution.length) {
-			throw new AssertionError("length does not match");
+			throw new AssertionError(errorMessage);
 		}
 		for (int i=0; i<solution.length; i++) {
 			Set<FuzzySortable> oneItem = candidate.get(i);
-			assertEquals(1, oneItem.size());
-			assertEquals(solution[i], oneItem.iterator().next());
+			assertEquals(errorMessage, 1, oneItem.size());
+			assertEquals(errorMessage, solution[i], oneItem.iterator().next());
 		}
 	}
 	
@@ -126,7 +150,6 @@ public class FuzzySortTest {
 			Set<FuzzySortable> oneCandidate = candidate.get(i);
 			FuzzySortable[] oneSolution = solution[i];
 			assertEquals(oneSolution.length, oneCandidate.size());
-			Iterator<FuzzySortable> it = oneCandidate.iterator();
 			for (int j=0; j<oneSolution.length; j++) {
 				assertTrue(oneCandidate.contains(oneSolution[j]));
 			}
@@ -194,6 +217,22 @@ public class FuzzySortTest {
 		FuzzySortable f = new FuzzySortable(payload);
 		// verify
 		assertTrue(f.getPayload() == payload); // identical object
+	}
+	
+	@Test
+	public void sortableHashcode() {
+		// setup
+		Object payload1 = new Object();
+		Object payload2 = new Object();
+		FuzzySortable f1 = new FuzzySortable(payload1);
+		// exercise
+		FuzzySortable f2 = new FuzzySortable(payload1);
+		FuzzySortable f3 = new FuzzySortable(payload2);
+		// verify
+		assertEquals(f1, f2);
+		assertNotSame(f1, f3);
+		assertTrue(f1.hashCode() == f2.hashCode());
+		assertTrue(f1.hashCode() != f3.hashCode());
 	}
 
 	/**
@@ -283,7 +322,7 @@ public class FuzzySortTest {
 		// Setup
 		Set<FuzzySortableRelation> constraints = getSimpleConstraintsForLinearSolution();
 		// exercise
-		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints);
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints, false);
 		// verify result
 		assertLinearSolutionCorrect(solution, linearSolution);
 	}
@@ -293,7 +332,7 @@ public class FuzzySortTest {
 		// Setup
 		Set<FuzzySortableRelation> constraints = getInitFinalConstrainsForLinearSolution();
 		// exercise
-		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints);
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints, false);
 		// verify result
 		assertLinearSolutionCorrect(solution, linearInitFinalSolution);
 	}
@@ -303,18 +342,37 @@ public class FuzzySortTest {
 		// Setup
 		Set<FuzzySortableRelation> constraints = getConflictingConstraintsForLinearSolution();
 		// exercise
-		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints);
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints, false);
 		// verify result
 		assertLinearSolutionCorrect(solution, linearSolution);
 	}
 	
-	
+	@Test
+	public void canSortLinear4a() {
+		// Setup
+		Set<FuzzySortableRelation> constraints = getConstrainsContradictingInitialFinalForLinearSolution();
+		// exercise
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints, false);
+		// verify result
+		assertLinearSolutionWrong(solution, linearInitFinalSolution);
+	}
+
+	@Test
+	public void canSortLinear4b() {
+		// Setup
+		Set<FuzzySortableRelation> constraints = getConstrainsContradictingInitialFinalForLinearSolution();
+		// exercise
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints, true, 0.000001);
+		// verify result
+		assertLinearSolutionCorrect(solution, linearInitFinalSolution);
+	}
+
 	@Test
 	public void canSortParallel1() {
 		// setup
 		Set<FuzzySortableRelation> constraints = getSimpleConstraintsForParallelSolution();
 		// exercise
-		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints);
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints, false);
 		// verify result
 		assertParallelSolutionCorrect(solution, parallelSolution1);
 	}
@@ -324,9 +382,22 @@ public class FuzzySortTest {
 		// setup
 		Set<FuzzySortableRelation> constraints = getConflictingConstraintsForParallelSolution();
 		// exercise
-		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints);
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(constraints, false);
 		// verify result
 		assertParallelSolutionCorrect(solution, parallelSolution1);
 	}
 
+	/**
+	 * Check whether the algorithm can deal with the boundary condition of getting only initial and final states with enforce == true, i.e. having nothing to sort.
+	 */
+	@Test
+	public void canDealWithOnlyInitialFinal() {
+		// setup
+		Set<FuzzySortableRelation> onlyInitFinal = new HashSet<FuzzySortableRelation>();
+		onlyInitFinal.add(new FuzzySortableRelation(initial1, final1));
+		// exercise
+		List<Set<FuzzySortable>> solution = FuzzySort.sort(onlyInitFinal, true);
+		// verify
+		assertLinearSolutionCorrect(solution, new FuzzySortable[] {initial1, final1});
+	}
 }

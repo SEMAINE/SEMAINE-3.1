@@ -29,6 +29,21 @@ public class ComponentInfo extends Info
 		topicsToIgnoreWhenSorting = topics;
 	}
 	
+	/**
+	 * Inform whether the given topic is to be ignored when sorting.
+	 * @param topicName a non-null string containing a topic name.
+	 * @return true if the topic is to be ignored, false otherwise
+	 * @throws NullPointerException if topicName is null
+	 */
+	public static boolean isIgnoreTopicWhenSorting(String topicName) throws NullPointerException {
+		if (topicName == null) {
+			throw new NullPointerException("received null argument");
+		}
+		if (topicsToIgnoreWhenSorting == null) {
+			return false; // no need to ignore anything
+		}
+		return topicsToIgnoreWhenSorting.contains(topicName);
+	}
 	
 	private String name;
 	private String[] receiveTopics;
