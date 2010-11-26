@@ -40,8 +40,10 @@ public class InfoGraphSelectionListener implements GraphSelectionListener
 				if (userObject != null && userObject instanceof Info) {
 					Info inf = (Info) userObject;
 					InfoDialog dialog = inf.getDialog();
-					if (dialog != null)
+					if (dialog != null) {
+						inf.setDialog(null);
 						dialog.setVisible(false);
+					}
 				}
 			}
 		}

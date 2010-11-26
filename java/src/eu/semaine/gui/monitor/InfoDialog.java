@@ -7,6 +7,7 @@ package eu.semaine.gui.monitor;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
@@ -26,14 +27,26 @@ public class InfoDialog extends JFrame
 		getContentPane().add(new JScrollPane(textPane));
 	}
 
-	public void setText(String text)
+	public void setText(final String text)
 	{
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override public void run() { setText(text); }
+			});
+			return;
+		}
 		textPane.setText(text);
 		textPane.setCaretPosition(textPane.getDocument().getLength());
 	}
 	
-	public void appendText(String text)
+	public void appendText(final String text)
 	{
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override public void run() { appendText(text); }
+			});
+			return;
+		}
 		Document doc = textPane.getDocument();
 		boolean doScrollToEnd = false; // should we scroll to the (new) end?
 		if (textPane.getCaretPosition() == doc.getLength()) {
