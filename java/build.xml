@@ -20,6 +20,7 @@
         <pathelement location="lib/jgraph.jar"/>
     	<pathelement location="lib/swing-layout-1.0.jar"/>
     	<pathelement location="lib/junit-4.7.jar"/>
+        <pathelement location="lib/Jama-1.0.2.jar"/>
     	<!-- needed to start embedded broker: -->
     	<pathelement location="spring-asm-3.0.3.RELEASE.jar"/>
     	<pathelement location="spring-beans-3.0.3.RELEASE.jar"/>
@@ -77,6 +78,7 @@
                 	serializer.jar
                 	jgraph.jar
                 	swing-layout-1.0.jar
+                        Jama-1.0.2.jar
                 	spring-asm-3.0.3.RELEASE.jar
                 	spring-beans-3.0.3.RELEASE.jar
                 	spring-context-3.0.3.RELEASE.jar
