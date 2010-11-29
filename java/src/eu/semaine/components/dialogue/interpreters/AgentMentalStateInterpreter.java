@@ -156,7 +156,7 @@ public class AgentMentalStateInterpreter extends Component
 				System.out.println( "ClassCastException while resetting Mental State" );
 				return false;
 			} catch( Exception e ) {
-				System.out.println("Unknown character found, using empty hashmap");
+				log.info("Unknown character found, using empty hashmap");
 				mentalState = new HashMap<MentalState,Float>();
 				return false;
 			}

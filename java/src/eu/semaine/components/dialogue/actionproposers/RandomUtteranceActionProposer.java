@@ -176,7 +176,7 @@ public class RandomUtteranceActionProposer extends Component implements Behaviou
 		/* Create TemplateController */
 		templateController = new TemplateController();
 		for( String templateFile : DMProperties.getTemplateFiles() ) {
-			System.out.println("Loading TemplateFile: " + templateFile);
+			log.debug("Loading TemplateFile: " + templateFile);
 			templateController.processTemplateFile(templateFile.trim());
 		}
 		templateController.addFunction(this);

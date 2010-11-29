@@ -283,7 +283,7 @@ public class TurnTakingInterpreter extends Component
 			if( userInfo.getInfo("speaking").equals("true") ) {
 				if( userSpeakingState != SPEAKING ) {
 					DMLogger.getLogger().log(meta.getTime(), "UserAction:UserStartedSpeaking" );
-					System.out.println("Detected user speaking");
+					log.debug("Detected user speaking");
 					backchannel_given = false;
 					userSpeakingState = SPEAKING;
 					userSpeakingStateTime = meta.getTime();
@@ -291,7 +291,7 @@ public class TurnTakingInterpreter extends Component
 			} else if( userInfo.getInfo("speaking").equals("false") ) {
 				if( userSpeakingState != SILENT ) {
 					DMLogger.getLogger().log(meta.getTime(), "UserAction:UserStoppedSpeaking words=" + currentDetectedKeywords );
-					System.out.println("Detected user silent");
+					log.debug("Detected user silent");
 					latestUtteranceLength = meta.getTime() - userSpeakingStateTime;
 					userSpeakingState = SILENT;
 					userSpeakingStateTime = meta.getTime();

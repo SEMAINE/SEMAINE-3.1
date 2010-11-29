@@ -67,6 +67,11 @@ public class JMSLogReader extends Receiver
 	}
 	
 
+	public void stopLogging() throws JMSException {
+		if (consumer.getMessageListener() == this) {
+			consumer.setMessageListener(null);
+		}
+	}
 
 	/**
 	 * @param args

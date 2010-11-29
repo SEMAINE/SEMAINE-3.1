@@ -1,34 +1,101 @@
 package eu.semaine.util;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.PropertyConfigurator;
 
-import eu.semaine.jms.JMSLogger;
 
 public class SEMAINEUtils 
 {
+    public static final String LOGPREFIX = "semaine";
+
+    /**
+     * Returns true if it appears that log4j have been previously configured. This code
+     * checks to see if there are any appenders defined for log4j which is the
+     * definitive way to tell if log4j is already initialized
+     */
+    @SuppressWarnings("unchecked")
+	public static boolean isLog4jConfigured() {
+        Enumeration appenders = LogManager.getRootLogger().getAllAppenders();
+    if (appenders.hasMoreElements()) {
+        return true;
+    }
+    return false;
+}
+    
 	/**
 	 * Set up the log4j logging system using a default configuration.
 	 */
 	public static void setupLog4j() {
-		BasicConfigurator.configure();
-		Logger.getLogger("org.apache").setLevel(Level.WARN);
-		Logger.getLogger("org.springframework").setLevel(Level.WARN);
+		if (isLog4jConfigured()) {
+			return;
+		}
+		// Tell apache commons logging to use log4j:
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.Log4JLogger");
+		try {
+	        Properties logprops = new Properties();
+	        InputStream propIS = new BufferedInputStream(new FileInputStream(getConfigFile("semaine.log", "log4j.properties")));
+	        logprops.load(propIS);
+	        propIS.close();
+	        // And allow Properties file (and thus System properties) to overwrite the single entry
+	        // log4j.logger.eu.semaine:
+	        // (e.g., -Dlog4j.logger.eu.semaine=DEBUG,stderr will log debug level output to stderr)
+	        String loggerSemaineKey = "log4j.logger."+LOGPREFIX;
+	        String loggerSemaineValue = System.getProperty(loggerSemaineKey);
+	        if (loggerSemaineValue != null) {
+	            logprops.setProperty(loggerSemaineKey, loggerSemaineValue);
+	        }
+	        PropertyConfigurator.configure(logprops);
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
+			System.err.println("Cannot read log4j configuration from "+System.getProperty("semaine.log", "log4j.properties")+" -- will log to stderr");
+			PatternLayout layout = new PatternLayout("%d [%t] %-5p %-10c %m\n");
+			BasicConfigurator.configure(new ConsoleAppender(layout));
+			Logger.getRootLogger().setLevel(Level.DEBUG);
+			Logger.getLogger("org.apache").setLevel(Level.WARN);
+			Logger.getLogger("org.springframework").setLevel(Level.WARN);
+		}
 	}
 	
+    /**
+     * Provide a Logger object whose name is built from SEMAINEUtils.LOGPREFIX and the given nameSuffix.
+     * @param nameSuffix the suffix to use for the logger name.
+     * @return
+     */
+    public static Logger getLogger(String nameSuffix) {
+        return Logger.getLogger(LOGPREFIX+"."+nameSuffix);
+    }
+
+    /**
+     * Provide a Logger object whose name is built from SEMAINEUtils.LOGPREFIX and the name of the given class as a suffix.
+     * @param the class whose simple name to use asthe suffix for the logger name.
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	public static Logger getLogger(Class clazz) {
+        return getLogger(clazz.getSimpleName());
+    }
+
 	/**
 	 * Get a config file as defined in the given system property. If the setting
 	 * in the system property is a relative path, then this path is interpreted as
@@ -37,7 +104,18 @@ public class SEMAINEUtils
 	 * @return a file object representing the requested config file, or null if the config file could not be found.
 	 */
 	public static File getConfigFile(String configSystemProperty) {
-		String filename = System.getProperty(configSystemProperty);
+		return getConfigFile(configSystemProperty, null);
+	}
+
+	/**
+	 * Get a config file as defined in the given system property, using the given default value if the property is not set. If the setting
+	 * in the system property is a relative path, then this path is interpreted as
+	 * relative to the location of the system config file.
+	 * @param configSystemProperty the name of a config setting containing the filename and path of the config file to load, e.g. "semaine.character-config".
+	 * @return a file object representing the requested config file, or null if the config file could not be found.
+	 */
+	public static File getConfigFile(String configSystemProperty, String defaultValue) {
+		String filename = System.getProperty(configSystemProperty, defaultValue);
 		if (filename == null) {
 			return null;
 		}

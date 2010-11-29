@@ -12,17 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+
 
 import eu.semaine.components.Component;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.IOBase;
+import eu.semaine.util.SEMAINEUtils;
 
 /**
  * @author marc
@@ -30,7 +26,7 @@ import eu.semaine.jms.IOBase;
  */
 public class ComponentRunner 
 {
-	private Log log;
+	private Logger log;
 	private List<Component> components;
 	
 	@SuppressWarnings("unchecked")
@@ -39,14 +35,20 @@ public class ComponentRunner
 		ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 		InstantiationException, InvocationTargetException
 	{
-		log = LogFactory.getLog(ComponentRunner.class);
+
 		components = new ArrayList<Component>();
 		Properties p = new Properties();
 		p.load(new FileInputStream(configFile));
 		// make config settings available in the entire system, as system properties:
+		// 1) allow any relevant system properties to override the content of the file:
+		p.putAll(System.getProperties());
+		// 2) now make them available as system properties:
 		System.getProperties().putAll(p);
 		// Also remember the config file itself:
 		System.getProperties().setProperty("semaine.config-file", configFile);
+	
+		SEMAINEUtils.setupLog4j();
+		log = SEMAINEUtils.getLogger(this.getClass());
 		
 		// Start embedded ActiveMQ broker?
 		// This is on by default, and can be switched off by setting the config entry to "false":
@@ -175,10 +177,6 @@ public class ComponentRunner
 			System.err.println();
 			System.err.println("where configfile defines which components to start");
 		}
-		PatternLayout layout = new PatternLayout("%d [%t] %-5p %-10c %m\n");
-		BasicConfigurator.configure(new ConsoleAppender(layout));
-		Logger.getRootLogger().setLevel(Level.DEBUG);
-		Logger.getLogger("org.apache").setLevel(Level.INFO);
 		try {
 			ComponentRunner runner = new ComponentRunner(args[0]);
 			runner.go();

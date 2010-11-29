@@ -172,7 +172,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		/* Create TemplateController */
 		templateController = new TemplateController();
 		for( String templateFile : DMProperties.getTemplateFiles() ) {
-			System.out.println("Loading TemplateFile: " + templateFile);
+			log.debug("Loading TemplateFile: " + templateFile);
 			templateController.processTemplateFile(templateFile.trim());
 		}
 		templateController.addFunction(this);
@@ -184,7 +184,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		String responseFile = DMProperties.getResponseFile();
 		ResponseReader reader = new ResponseReader( responseFile );
 		if( !reader.readData() ) {
-			System.out.println( "Error, could not load Responses." );
+			log.error( "Error, could not load Responses." );
 		}
 		responses = reader.getResponses();
 		responseGroups = reader.getResponseGroups();
@@ -194,7 +194,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				is.set("Responses." + group + "._addlast", r.getId());
 			}
 		}
-		System.out.println("Loading Responses --- " + responses.size() + " SAL-Responses loaded.");
+		log.debug("Loading Responses --- " + responses.size() + " SAL-Responses loaded.");
 		
 		/* Initializes detected AudioFeatures */
 		detectedFeatures.put("F0", new ArrayList<Float>());
@@ -369,7 +369,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	    			}
 	    			if( keyToRemove != null ) preparingResponses.remove(keyToRemove);
 	    		} else if (type.equals(SemaineML.V_DELETED)) {
-	    			System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//	    			System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	    			String keyToRemove = null;
 	    			for( String key : preparingResponses.keySet() ) {
 	    				if( preparingResponses.get(key).equals(id) ) {
@@ -583,7 +583,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 
 				/* Update current character */
 				if( stateInfo.hasInfo("character") ) {
-					System.out.println("New Character: " + stateInfo.getInfo("character"));
+					log.debug("New Character: " + stateInfo.getInfo("character"));
 					is.set("Agent.character", stateInfo.getInfo("character"));
 					is.set("Agent.characterChanged", 1);
 					preparedResponses.clear();
@@ -890,7 +890,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		if( argValues == null ) argValues = new ArrayList<String>();
 		
 		Document doc = constructFMLDocument(argNames, argValues);
-		System.out.println(docToString(doc));
+		log.debug("Constructed FML document:\n"+docToString(doc));
 		if( doc == null ) return;
 		
 		String id = preparedResponses.get(currHash);
@@ -916,7 +916,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 				latestResponse = currResponse;
 				history.add(latestResponse);
 				sendSpeaking();
-				System.out.println(docToString(doc));
+				log.debug(docToString(doc));
 				log.debug("Generating directly: '"+currResponse.getResponse()+"'");
 				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
 				feedbackId = "bml_uap_"+output_counter;
@@ -958,7 +958,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 			
 			try {
 				// TODO: Uncomment and test
-				System.out.println(docToString(doc));
+				log.debug(docToString(doc));
 				queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
 				String prepID = "bml_uap_"+output_counter;
 				preparingResponses.put(hash, prepID);
@@ -1035,7 +1035,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 					String starttime = null;
 					String endtime = null;
 					if( i >= argValues.size() ) {
-						System.out.println("Something is wrong in the Parameters of Response " + response.getId());
+						log.error("Something is wrong in the Parameters of Response " + response.getId());
 						continue;
 					}
 					String argValue = argValues.get(i);
@@ -1138,14 +1138,14 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 	{
 		int responseIndex = argNames.indexOf("response");
 		if( responseIndex == -1 ) {
-			System.out.println("Error, no response given.");
+			log.error("Error, no response given.");
 			return null;
 		}
 		Response response = responses.get(argValues.get(responseIndex));
 		if( response == null ) {
 			response = getResponseFromGroup(argValues.get(responseIndex));
 			if( response == null ) {
-				System.out.println("Error, fitting Response ("+argValues.get(responseIndex)+") could not be found.");
+				log.error("Error, fitting Response ("+argValues.get(responseIndex)+") could not be found.");
 				return null;
 			}
 		}
@@ -1158,7 +1158,7 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 		if( response2 == null ) {
 			response2 = getResponseFromGroup(argValues.get(responseIndex2));
 			if( response2 == null ) {
-				System.out.println("Error, fitting Response ("+argValues.get(responseIndex2)+") could not be found.");
+				log.error("Error, fitting Response ("+argValues.get(responseIndex2)+") could not be found.");
 				return response;
 			}
 		}

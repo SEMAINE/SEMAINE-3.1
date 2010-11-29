@@ -44,7 +44,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
@@ -134,11 +133,8 @@ public class SystemMonitor extends Thread {
 		frame = new JFrame("SEMAINE System Monitor");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setSize(new Dimension(screenSize.width * 9 / 10,
-				screenSize.height * 9 / 10));
-		frame
-				.setExtendedState(frame.getExtendedState()
-						| JFrame.MAXIMIZED_BOTH);
+		frame.setSize(new Dimension(screenSize.width * 9 / 10, screenSize.height * 9 / 10));
+		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
 		// Menu
 		// Use CTRL key on most platforms
@@ -236,15 +232,8 @@ public class SystemMonitor extends Thread {
 		frame.getContentPane().add(splitPane);
 
 		// Set up log reader:
-		System.setProperty("org.apache.commons.logging.Log",
-				"org.apache.commons.logging.impl.Log4JLogger");
-		// Configure log4j
-		Logger.getRootLogger().setLevel(Level.DEBUG);
-		Logger.getLogger("org.apache").setLevel(Level.INFO);
 		PatternLayout layout = new PatternLayout("%-5p %-10c %m\n");
-		BasicConfigurator.configure();
-		Logger.getLogger("semaine.log").addAppender(
-				new TextPaneAppender(layout, "log-appender", logTextPane));
+		Logger.getLogger("semaine.log").addAppender(new TextPaneAppender(layout, "log-appender", logTextPane));
 		Logger.getLogger("semaine.log").setLevel(Level.DEBUG);
 		setupLogReader();
 
@@ -335,23 +324,26 @@ public class SystemMonitor extends Thread {
 				&& level.equals(currentLogLevel)) {
 			return; // nothing changed
 		}
-		try {
-			// empty the log text pane
-			logTextPane.getDocument().remove(0,
-					logTextPane.getDocument().getLength());
-		} catch (BadLocationException ble) {
-			ble.printStackTrace();
-		}
-		System.out
-				.println("Looking for log messages in topic 'semaine.log."
-						+ component + ".*', showing log level " + level
-						+ " and higher");
-		String loggerName = (component.equals("*")) ? "semaine.log"
-				: "semaine.log." + component;
+
+		// empty the log text pane
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override public void run() {
+				try {
+					logTextPane.getDocument().remove(0,	logTextPane.getDocument().getLength());
+				} catch (BadLocationException ble) {
+					ble.printStackTrace();
+				}
+			}
+		});
+			
+//		System.out.println("Looking for log messages in topic 'semaine.log."
+//						+ component + ".*', showing log level " + level
+//						+ " and higher");
+		String loggerName = (component.equals("*")) ? "semaine.log" : "semaine.log." + component;
 		Logger.getLogger(loggerName).setLevel(Level.toLevel(level));
 		try {
 			if (logReader != null) {
-				logReader.getConnection().stop();
+				logReader.stopLogging();
 			}
 			logReader = new JMSLogReader("semaine.log." + component + ".*");
 			currentLogComponent = component;
