@@ -1051,9 +1051,13 @@ public class SystemMonitor extends Thread {
 		return topics.get(topicName);
 	}
 
-	public void setSystemStatus(String text) {
-		if (systemStatus != null)
-			systemStatus.setText(text);
+	public void setSystemStatus(final String text) {
+		if (systemStatus != null) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() { systemStatus.setText(text); };
+			});
+						
+		}
 	}
 
 	/**
