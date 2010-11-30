@@ -6,6 +6,7 @@ package eu.semaine.jms;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -166,7 +167,7 @@ public class JMSLogger
 	public static String toLogMessageText(long usertime, Object... objects) {
 		StringBuilder builder = new StringBuilder();
 		if (usertime >= 0) {
-			builder.append("[").append(MessageLogComponent.TIME_FORMAT.format(new Date(usertime))).append("]");
+			builder.append("[").append(new SimpleDateFormat(MessageLogComponent.TIME_FORMAT).format(new Date(usertime))).append("]");
 
 		}
 		for (Object o : objects) {

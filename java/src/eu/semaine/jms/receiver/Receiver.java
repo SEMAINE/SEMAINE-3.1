@@ -225,7 +225,7 @@ public class Receiver extends IOBase implements MessageListener
 		return listener;
 	}
 	
-	public void onMessage(Message m)
+	public synchronized void onMessage(Message m)
 	{
 		assert listener != null : "asynchronous mode, but no SEMAINE message listener registered!";
 		if (m != null) {

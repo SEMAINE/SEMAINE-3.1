@@ -29,7 +29,10 @@ public class MessageLogComponent extends Component
 {
 	private Receiver receiver;
 	
-	public static final DateFormat TIME_FORMAT = new SimpleDateFormat("mm:ss.SSS");
+	/**
+	 * Use this in new SimpleDateFormat(TIME_FORMAT) to format a date object.
+	 */
+	public static final String TIME_FORMAT = "mm:ss.SSS";
 
 
 	/**
@@ -62,7 +65,7 @@ public class MessageLogComponent extends Component
 	{
 		try {
 			StringBuilder buf = new StringBuilder();
-			buf.append("[").append(TIME_FORMAT.format(new Date(m.getUsertime()))).append("] ");
+			buf.append("[").append(new SimpleDateFormat(TIME_FORMAT).format(new Date(m.getUsertime()))).append("] ");
 			buf.append(m.getDatatype()).append(" ");
 			buf.append(m.getSource()).append("->").append(m.getTopicName()).append(" ");
 			if (m.isEventBased()) {

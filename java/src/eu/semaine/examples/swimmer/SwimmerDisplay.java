@@ -53,7 +53,7 @@ public class SwimmerDisplay extends Component {
 		yMid = (height-swimmerHeight) / 2;
 		availableWidth = width - 50 - swimmerWidth;
 		swimmer.setBounds(availableWidth / 2, yMid, swimmerWidth, swimmerHeight);
-		layeredPane.add(swimmer, new Integer(1));
+		layeredPane.add(swimmer, 1);
 		frame.pack();
 		frame.setVisible(true);
 	}

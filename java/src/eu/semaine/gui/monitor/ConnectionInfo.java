@@ -23,7 +23,7 @@ public class ConnectionInfo extends Info
 		nextStepDue = 0;
 	}
 	
-	public void setActive()
+	public synchronized void setActive()
 	{
 		long time = System.currentTimeMillis();
 		if (isShowingActive) {
@@ -36,7 +36,7 @@ public class ConnectionInfo extends Info
 	}
 
 
-	public int getLineWidth()
+	public synchronized int getLineWidth()
 	{
 		if (width == MAXWIDTH) {
 			isShowingActive = true;

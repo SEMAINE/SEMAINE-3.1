@@ -148,7 +148,7 @@ public class MetaMessenger extends IOBase implements MessageListener
 				Message reply = session.createMessage();
 				reply.setStringProperty(COMPONENT_NAME, componentName);
 				// Do some sensibility checks to see if the component really seems alive
-				if (lastSeenState == State.ready && systemReady) {
+				if (lastSeenState == State.ready && isSystemReady()) {
 					long time = getTime();
 					if (lastSeenAlive > time // maybe an outdated value after a clock reset?
 							|| time - lastSeenAlive > TIMEOUT_PERIOD) {

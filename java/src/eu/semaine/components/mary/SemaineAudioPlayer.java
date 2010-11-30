@@ -57,6 +57,7 @@ public class SemaineAudioPlayer extends Component
 	public void react(SEMAINEMessage m) throws JMSException
 	{
 		if(m.isBytesMessage()){
+			assert m instanceof SEMAINEBytesMessage;
 			SEMAINEBytesMessage bm = (SEMAINEBytesMessage)m;
 			try {
 				inputWaiting.put(bm);
@@ -67,7 +68,7 @@ public class SemaineAudioPlayer extends Component
 		
 	}
 	
-	public class Playloop extends Thread{
+	public final class Playloop extends Thread{
 		
 		protected BlockingQueue<SEMAINEBytesMessage> inputWaiting;
 		protected boolean playing = false;

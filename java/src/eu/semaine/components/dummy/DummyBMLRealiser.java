@@ -67,7 +67,7 @@ public class DummyBMLRealiser extends Component
 		this.doSendPlayCommand = doSendPlayCommand;
 		
 		try {
-			dummyFAPData = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example2.fap"), "ASCII");
+			dummyFAPData = SEMAINEUtils.getStreamAsString(DummyBMLRealiser.class.getResourceAsStream("example2.fap"), "ASCII");
 			//dummyFAPData2 = SEMAINEUtils.getStreamAsString(this.getClass().getResourceAsStream("example3.fap"), "ASCII");
 		} catch (IOException ioe) {
 			throw new SystemConfigurationException("Cannot get FAP example", ioe);

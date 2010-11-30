@@ -394,7 +394,7 @@ public class SpeechBMLRealiser extends Component
      */
     private void dummyTestRun()
     throws IOException, SAXException, TransformerConfigurationException, TransformerException, Exception {
-    	Document testBml = XMLTool.parse(this.getClass().getResourceAsStream("bml-example.xml"));
+    	Document testBml = XMLTool.parse(SpeechBMLRealiser.class.getResourceAsStream("bml-example.xml"));
 		Transformer transformer = bmlSpeechTimingRemoverStylesheet.newTransformer();
 		DOMResult bmlDR = new DOMResult();
 		transformer.transform(new DOMSource(testBml), bmlDR);

@@ -365,7 +365,7 @@ public class SpeechPreprocessor extends Component
 			long durMerge = t6 - t5;
 			fmlbmlSender.sendXML(finalData, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
 			long t7 = System.currentTimeMillis();
-			long durSend = t7 - t7;
+			long durSend = t7 - t6;
 			log.debug("Times needed:\n"+durExtractSSML+" extract SSML\n"+durReplace1+" replace1\n"+durToString+" to string\n"+durMary+" MARY\n"
 					+durReplace2+" replace2\n"+durMerge+" merge\n"+durSend+" send\n");
 		}

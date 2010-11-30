@@ -80,9 +80,9 @@ public abstract class StateInfo
 		if (configFile == null) {
 			throw new Error("No character config file given in property 'semaine.stateinfo-config' -- aborting.");
 		}
+		BufferedReader br = null;
 		try {
-			FileInputStream is = new FileInputStream(configFile);
-			BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), "UTF-8"));
 			String line = null;
 			Type currentType = null;
 			List<String> currentSection = new ArrayList<String>();
@@ -110,6 +110,14 @@ public abstract class StateInfo
 			}
 		} catch (IOException ioe) {
 			throw new Error("Cannot load stateinfo config file from "+configFile.toString(), ioe);
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} catch (IOException ioe) {
+				throw new Error("Cannot close stateinfo config file");
+			}
 		}
 
 		Map<Type, XPathInfoMapper> t2m = new HashMap<Type, XPathInfoMapper>();

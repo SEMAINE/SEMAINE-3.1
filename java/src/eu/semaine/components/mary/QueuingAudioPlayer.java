@@ -175,7 +175,7 @@ public class QueuingAudioPlayer extends Component
 	 * @author marc
 	 *
 	 */
-	public class Playloop extends Thread {
+	public final class Playloop extends Thread {
 		
 		protected BlockingQueue<Animation> inputWaiting;
 		protected boolean playing = false;
@@ -235,7 +235,7 @@ public class QueuingAudioPlayer extends Component
 	}
 
 	
-	private class Animation {
+	private static class Animation {
 		private String contentID;
 		private long contentCreationTime;
 		// Play command params:

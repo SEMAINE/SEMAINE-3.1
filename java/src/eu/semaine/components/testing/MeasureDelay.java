@@ -165,7 +165,7 @@ public class MeasureDelay extends Component {
 	
 	
 	
-	private class Record {
+	private static class Record {
 		String id;
 		boolean direct;
 		long creationTime;

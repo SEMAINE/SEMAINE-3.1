@@ -29,7 +29,7 @@ import javax.swing.table.DefaultTableModel;
  * @author  marc
  */
 public class MessageLogInspectorGUI extends javax.swing.JFrame {
-    class LogEntry {
+    static class LogEntry {
         LogEntry(String topic, String text) {
             this.topic = topic;
             this.text = text;
@@ -49,40 +49,47 @@ public class MessageLogInspectorGUI extends javax.swing.JFrame {
     }
     
     private void parseLogFile(File logfile) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logfile), "UTF-8"));
-        String line = null;
-        String topic = null;
-        StringBuilder buf = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            if (line.startsWith("DEBUG semaine.log.")
-                || line.startsWith("INFO  semaine.log.")
-                || line.startsWith("WARN  semaine.log.")
-                || line.startsWith("ERROR semaine.log.")) {
-                // New section starts
-                if (topic != null && buf.length() > 0) {
-                    topicNames.add(topic);
-                    logEntries.add(new LogEntry(topic, buf.toString()));
-                }
-                topic = null;
-                buf.setLength(0);
-                
-                if (line.startsWith("DEBUG semaine.log.MessageLog")) {
-                    // It is a message
-                    int topicStart = line.indexOf("topic://") + "topic://".length();
-                    if (line.startsWith("semaine.data.", topicStart)) {
-                        topicStart += "semaine.data.".length();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(logfile), "UTF-8"));
+            String line = null;
+            String topic = null;
+            StringBuilder buf = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("DEBUG semaine.log.")
+                    || line.startsWith("INFO  semaine.log.")
+                    || line.startsWith("WARN  semaine.log.")
+                    || line.startsWith("ERROR semaine.log.")) {
+                    // New section starts
+                    if (topic != null && buf.length() > 0) {
+                        topicNames.add(topic);
+                        logEntries.add(new LogEntry(topic, buf.toString()));
                     }
-                    int topicEnd = line.indexOf(' ', topicStart);
-                    topic = line.substring(topicStart, topicEnd);
+                    topic = null;
+                    buf.setLength(0);
+                    
+                    if (line.startsWith("DEBUG semaine.log.MessageLog")) {
+                        // It is a message
+                        int topicStart = line.indexOf("topic://") + "topic://".length();
+                        if (line.startsWith("semaine.data.", topicStart)) {
+                            topicStart += "semaine.data.".length();
+                        }
+                        int topicEnd = line.indexOf(' ', topicStart);
+                        topic = line.substring(topicStart, topicEnd);
+                        buf.append(line).append("\n");
+                    }
+                } else {
                     buf.append(line).append("\n");
                 }
-            } else {
-                buf.append(line).append("\n");
             }
-        }
-        if (topic != null && buf.length() > 0) {
-            topicNames.add(topic);
-            logEntries.add(new LogEntry(topic, buf.toString()));
+            if (topic != null && buf.length() > 0) {
+                topicNames.add(topic);
+                logEntries.add(new LogEntry(topic, buf.toString()));
+            }
+        } finally {
+        	if (br != null) {
+        		br.close();
+        	}
         }
     }
     

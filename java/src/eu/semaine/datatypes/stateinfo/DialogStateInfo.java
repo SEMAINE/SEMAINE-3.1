@@ -150,11 +150,25 @@ public class DialogStateInfo extends StateInfo
 		/**
 		 * Method used for sorting Dialog acts by their time, newest first.
 		 */
+		@Override
 		public int compareTo(DialogAct other)
 		{
 			if (time == other.time) return 0;
 			if (time < other.time) return 1;
 			return -1;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof DialogAct)) {
+				return false;
+			}
+			return compareTo((DialogAct)obj) == 0;
+		}
+		
+		@Override
+		public int hashCode() {
+			return (int) (time & 0xFFFFFFFF);
 		}
 		
 		public String getText()

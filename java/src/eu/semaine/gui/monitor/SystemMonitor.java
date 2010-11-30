@@ -128,7 +128,7 @@ public class SystemMonitor extends Thread {
 		this.topicsToHide = topicsToHide;
 	}
 
-	private void setupGUI() {
+	private synchronized void setupGUI() {
 
 		frame = new JFrame("SEMAINE System Monitor");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -782,8 +782,8 @@ public class SystemMonitor extends Thread {
 						allChanges.put(cell, attributes);
 					}
 					Rectangle2D.Double bounds = new Rectangle2D.Double(
-							coords[i][j].getX() - componentWidth / 2,
-							coords[i][j].getY() - componentHeight / 2,
+							coords[i][j].getX() - componentWidth / 2.,
+							coords[i][j].getY() - componentHeight / 2.,
 							componentWidth, componentHeight);
 					GraphConstants.setBounds(attributes, bounds);
 				}
@@ -806,8 +806,8 @@ public class SystemMonitor extends Thread {
 				}
 				Rectangle2D.Double bounds = new Rectangle2D.Double(cbCoords[i]
 						.getX()
-						- componentWidth / 2, cbCoords[i].getY()
-						- componentHeight / 2, componentWidth, componentHeight);
+						- componentWidth / 2., cbCoords[i].getY()
+						- componentHeight / 2., componentWidth, componentHeight);
 				GraphConstants.setBounds(attributes, bounds);
 			}
 		}
@@ -876,7 +876,7 @@ public class SystemMonitor extends Thread {
 				// in crowded conditions, make more space by shifting some of the items:
 				double shift = 0;
 				double unitShift = componentHeight * 0.8;
-				if (crowdingFactor > 1 && outerY == innerY /* only if otherwise flat */) {
+				if (crowdingFactor > 1 && Math.abs(outerY - innerY) < 1.e-9 /* only if otherwise flat */) {
 					for (int k=1; k<crowdingFactor; k++) {
 						if ((j-k)%crowdingFactor == 0) {
 							shift = k * unitShift;
@@ -932,7 +932,7 @@ public class SystemMonitor extends Thread {
 				// in crowded conditions, make more space by shifting some of the items:
 				double shift = 0;
 				double unitShift = componentHeight * 0.8;
-				if (crowdingFactor > 1 && outerY == innerY /* only if otherwise flat */) {
+				if (crowdingFactor > 1 && Math.abs(outerY - innerY) < 1.e-9 /* only if otherwise flat */) {
 					for (int k=1; k<crowdingFactor; k++) {
 						if ((j-k)%crowdingFactor == 0) {
 							shift = k * unitShift;
@@ -960,8 +960,7 @@ public class SystemMonitor extends Thread {
 		double radiusY = maxY * 0.8;
 		double spanX = maxX * 0.2;
 		double spanY = maxY * 0.3;
-		Point2D center = new Point2D.Double(maxX / 2, maxY - componentHeight
-				/ 2);
+		Point2D center = new Point2D.Double(maxX / 2., maxY - componentHeight / 2.);
 		for (int i = 0; i < infoGroups.size(); i++) {
 			List<Info> group = infoGroups.get(i);
 			double angle = i * angleDelta;
@@ -977,8 +976,8 @@ public class SystemMonitor extends Thread {
 				Point2D compCenter = toLocation(angle, outerRadiusX - j
 						* deltaX, outerRadiusY - j * deltaY, center);
 				coords[i][j] = new Rectangle2D.Double(compCenter.getX()
-						- componentWidth / 2, compCenter.getY()
-						- componentHeight / 2, componentWidth, componentHeight);
+						- componentWidth / 2., compCenter.getY()
+						- componentHeight / 2., componentWidth, componentHeight);
 			}
 		}
 	}

@@ -130,7 +130,8 @@ public class IOBase
 			factory = new ActiveMQConnectionFactory(serverUser, serverPassword, serverUrl);
 		}
 		final Connection c = factory.createConnection();
-		
+		assert c != null;
+
 		// Some configuration settings to improve performance:
 		if (c instanceof ActiveMQConnection) {
 			ActiveMQConnection amc = (ActiveMQConnection) c;
@@ -154,7 +155,6 @@ public class IOBase
 				}
 			}
 		});
-		assert c != null;
 		return c;
 	}
 	

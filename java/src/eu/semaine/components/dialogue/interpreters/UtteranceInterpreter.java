@@ -302,9 +302,7 @@ public class UtteranceInterpreter extends Component
 			feature.setAttribute("target", act.getTargetCharacter());
 		}
 
-		try {
-			userStateSender.sendXML(document, meta.getTime());
-		}catch( JMSException e ){}
+		userStateSender.sendXML(document, meta.getTime());
 	}
 
 	/**

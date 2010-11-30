@@ -232,7 +232,7 @@ public class AgentBehaviourObserver extends Component {
 	}
 	
 	
-	private class AgentBehaviour {
+	private static class AgentBehaviour {
 		String text;
 		String head;
 		String face;

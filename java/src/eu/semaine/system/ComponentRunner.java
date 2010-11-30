@@ -37,7 +37,15 @@ public class ComponentRunner
 
 		components = new ArrayList<Component>();
 		Properties p = new Properties();
-		p.load(new FileInputStream(configFile));
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(configFile);
+			p.load(fis);
+		} finally {
+			if (fis != null) {
+				fis.close();
+			}
+		}
 		// make config settings available in the entire system, as system properties:
 		// 1) allow any relevant system properties to override the content of the file:
 		p.putAll(System.getProperties());

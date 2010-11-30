@@ -63,16 +63,16 @@ public class TextPaneAppender extends AppenderSkeleton {
 
 	private boolean fancy;
 
-	final String LABEL_OPTION = "Label";
-	final String COLOR_OPTION_FATAL = "Color.Emerg";
-	final String COLOR_OPTION_ERROR = "Color.Error";
-	final String COLOR_OPTION_WARN = "Color.Warn";
-	final String COLOR_OPTION_INFO = "Color.Info";
-	final String COLOR_OPTION_DEBUG = "Color.Debug";
-	final String COLOR_OPTION_BACKGROUND = "Color.Background";
-	final String FANCY_OPTION = "Fancy";
-	final String FONT_NAME_OPTION = "Font.Name";
-	final String FONT_SIZE_OPTION = "Font.Size";
+//	final String LABEL_OPTION = "Label";
+//	final String COLOR_OPTION_FATAL = "Color.Emerg";
+//	final String COLOR_OPTION_ERROR = "Color.Error";
+//	final String COLOR_OPTION_WARN = "Color.Warn";
+//	final String COLOR_OPTION_INFO = "Color.Info";
+//	final String COLOR_OPTION_DEBUG = "Color.Debug";
+//	final String COLOR_OPTION_BACKGROUND = "Color.Background";
+//	final String FANCY_OPTION = "Fancy";
+//	final String FONT_NAME_OPTION = "Font.Name";
+//	final String FONT_SIZE_OPTION = "Font.Size";
 
 	public static Image loadIcon ( String path ) {
 		Image img = null;

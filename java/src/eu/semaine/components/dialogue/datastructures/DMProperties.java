@@ -22,12 +22,21 @@ public class DMProperties
 		if (configFile == null) {
 			throw new Error("No character config file given in property 'semaine.DM-config' -- aborting.");
 		}
+		FileInputStream is = null;
 		try {
-			FileInputStream is = new FileInputStream(configFile);
+			is = new FileInputStream(configFile);
 			props.load(is);
 
 		} catch (IOException ioe) {
-			throw new Error("Cannot load stateinfo config file from "+configFile.toString(), ioe);
+			throw new Error("Cannot load DM config file from "+configFile.toString(), ioe);
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException ioe) {
+					throw new Error("Cannot load DM config file", ioe);
+				}
+			}
 		}
 	}
 

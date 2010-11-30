@@ -180,14 +180,14 @@ public class NonVerbalInterpreter extends Component
 			Element group = em.getGroup();
 			if( group != null ) {
 				HashSet<Integer> auList = new HashSet<Integer>();
-				String time = ""+meta.getTime();
+//				String time = ""+meta.getTime();
 				
 				List<Element> interpretationList = XMLTool.getChildrenByLocalNameNS(group, EMMA.E_INTERPRETATION, EMMA.namespaceURI);
 				for( Element inter : interpretationList ) {
 					double conf = 0;
-					if( inter.hasAttribute(EMMA.A_OFFSET_TO_START) ) {
-						time = inter.getAttribute(EMMA.A_OFFSET_TO_START);
-					}
+//					if( inter.hasAttribute(EMMA.A_OFFSET_TO_START) ) {
+//						time = inter.getAttribute(EMMA.A_OFFSET_TO_START);
+//					}
 					if( inter.hasAttribute(EMMA.A_CONFIDENCE) ) {
 						conf = Double.parseDouble(inter.getAttribute(EMMA.A_CONFIDENCE));
 					}
@@ -214,13 +214,12 @@ public class NonVerbalInterpreter extends Component
 			ArrayList<Integer> ausToSend = new ArrayList<Integer>();
 			ausToSend.addAll(activeActionUnits);
 			Collections.sort(ausToSend);
-			String aus = "";
+			StringBuilder aus = new StringBuilder();
 			for( Integer au : ausToSend ) {
-				aus = aus + au + " ";
+				aus.append(au).append(" ");
 			}
-			aus = aus.trim();
 			String[] shortNames = {"facialActionUnits","facialActionUnitsStarted"};
-			String[] values = {aus, time};
+			String[] values = {aus.toString().trim(), time};
 			sendUserStateChange(shortNames, values);
 		}
 	}

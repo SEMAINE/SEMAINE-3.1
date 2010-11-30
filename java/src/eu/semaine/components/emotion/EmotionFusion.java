@@ -417,6 +417,18 @@ public class EmotionFusion extends Component {
 				: creationTime > o.creationTime ? 1
 				: 0;
 		}
+	
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof EmotionDataSet)) {
+				return false;
+			}
+			return compareTo((EmotionDataSet)obj) == 0;
+		}
 		
+		@Override
+		public int hashCode() {
+			return (int) (creationTime & 0xFFFFFFFF);
+		}
 	}
 }

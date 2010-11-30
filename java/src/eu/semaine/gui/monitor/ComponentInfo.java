@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -256,8 +255,9 @@ public class ComponentInfo extends Info
 	
 	public Color getColor()
 	{
-		if (state == null) return Color.gray;
-		switch (state) {
+		Component.State theState = getState();
+		if (theState == null) return Color.gray;
+		switch (theState) {
 		case failure: return Color.red;
 		case starting: return new Color(255, 200, 100);
 		case ready: return new Color(50, 255, 50);
@@ -271,7 +271,7 @@ public class ComponentInfo extends Info
 	public synchronized void setChanged(boolean newChanged)
 	{
 		super.setChanged(newChanged);
-		if (newChanged = false) {
+		if (newChanged == false) {
 			setTopicsChanged(false);
 		}
 	}
@@ -333,7 +333,7 @@ public class ComponentInfo extends Info
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("Component name: ").append(getName()).append("\n");
-		sb.append("State: ").append(state);
+		sb.append("State: ").append(getState());
 		if (stateDetails != null)
 			sb.append(" (").append(stateDetails).append(")");
 		sb.append("\n");
@@ -809,8 +809,8 @@ public class ComponentInfo extends Info
 			// Find index position of a and b:
 			int ia = componentIndices.get(a);
 			int ib = componentIndices.get(b);
-			Integer pa = new Integer(positions[ia]);
-			Integer pb = new Integer(positions[ib]);
+			Integer pa = positions[ia];
+			Integer pb = positions[ib];
 			return pa.compareTo(pb);
 		}
 

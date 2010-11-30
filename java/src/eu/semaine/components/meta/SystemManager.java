@@ -41,7 +41,7 @@ import eu.semaine.jms.message.SEMAINEMessage;
  * @author marc
  *
  */
-public class SystemManager extends Component implements MessageListener
+public final class SystemManager extends Component implements MessageListener
 {
 	private static long PING_PERIOD = 1000; // in ms 
 
