@@ -84,6 +84,7 @@
         <jar destfile="lib/semaine.jar" basedir="bin"
         	 includes="eu/**/*.class
                     eu/semaine/components/control/*.jpg
+                    eu/semaine/components/visualisation/*.png
                     eu/semaine/components/dummy/example2.fap
       	            eu/semaine/components/dummy/example3.fap
                     eu/semaine/jms/activemq.xml"
