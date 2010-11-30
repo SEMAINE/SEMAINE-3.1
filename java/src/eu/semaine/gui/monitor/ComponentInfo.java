@@ -695,7 +695,6 @@ public class ComponentInfo extends Info
 			int maxIterations = 20; // just to make sure we don't ever loop infinitely
 			int iteration = 0;
 			int votesForFixedComponents = 10;
-			Random random = new Random();
 			while (isChanged && iteration++ < maxIterations) {
 				isChanged = false;
 				int[][] votes = new int[components.length][2]; // 0: votes to stay in place; 1: votes to move left (<0) or right (>0)

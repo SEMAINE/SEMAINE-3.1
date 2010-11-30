@@ -76,7 +76,7 @@ public class MeasureDelay extends Component {
 				return;
 			}
 			Record r = records.get(id);
-			String timeString = event.getAttribute(SemaineML.A_TIME);
+			//String timeString = event.getAttribute(SemaineML.A_TIME);
 			//r.startTime = Long.parseLong(timeString);
 			r.startTime = meta.getTime();
 			return;

@@ -103,9 +103,11 @@ public class DummyBMLActionProposer extends Component
 				smiling = false;
 			}
 		} else if (m instanceof SEMAINEEmmaMessage) {
+			@SuppressWarnings("unused")
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage)m;
 			// do nothing for now
 		} else if (m instanceof SEMAINEStateMessage) {
+			@SuppressWarnings("unused")
 			StateInfo dsi = ((SEMAINEStateMessage)m).getState();
 			// do nothing for now
 		} else {
