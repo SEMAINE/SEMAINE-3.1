@@ -91,6 +91,26 @@ public class XMLSender extends Sender
 	{
 		sendXML(document, usertime, Event.single, contentID, contentCreationTime);
 	}
+	
+	/**
+	 * Send an XML document as a "single" event.
+	 * @param document the document to send.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage.CONTENT_TYPE_UTTERANCE, SEMAINEMessage.CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage.CONTENT_TYPE_VISUALONLY, or any other string. Can be null, in which case no content type will be sent.
+	 * @throws JMSException
+	 */
+	public void sendXML(Document document, long usertime, String contentID, long contentCreationTime, String contentType)
+	throws JMSException
+	{
+		sendXML(document, usertime, Event.single, contentID, contentCreationTime, contentType);
+	}
 
 	/**
 	 * Send an XML document with the given event tag.
@@ -125,6 +145,29 @@ public class XMLSender extends Sender
 	public void sendXML(Document document, long usertime, Event event, String contentID, long contentCreationTime)
 	throws JMSException
 	{
+		sendXML(document, usertime, event, contentID, contentCreationTime, null);
+	}
+	
+	/**
+	 * Send an XML document with the given event tag.
+	 * @param document the document to send.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
+	 * @param event the kind of event represented by this message
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage.CONTENT_TYPE_UTTERANCE, SEMAINEMessage.CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage.CONTENT_TYPE_VISUALONLY, or any other string. Can be null, in which case no content type will be sent.
+	 * @throws JMSException
+	 * @throws NullPointerException if document or event is null
+	 * @throws IllegalStateException if the sender is set to periodic mode.
+	 */
+	public void sendXML(Document document, long usertime, Event event, String contentID, long contentCreationTime, String contentType)
+	throws JMSException
+	{
 		if (document == null)
 			throw new NullPointerException("document passed as argument is null");
 		if (event == null)
@@ -133,7 +176,7 @@ public class XMLSender extends Sender
 			throw new IllegalStateException("Connection is not started!");
 		if (isPeriodic())
 			throw new IllegalStateException("This method is for event-based messages, but sender is in periodic mode.");
-		sendTextMessage(XMLTool.document2String(document), usertime, event, contentID, contentCreationTime);
+		sendTextMessage(XMLTool.document2String(document), usertime, event, contentID, contentCreationTime, contentType);
 	}
 	
 	@Override

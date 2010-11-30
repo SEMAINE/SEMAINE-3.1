@@ -46,7 +46,8 @@ throw(CMSException)
 	message->setBooleanProperty(SEMAINEXMLMessage::IS_XML, true);
 }
 
-void XMLSender::sendXML(const DOMDocument * document, long long usertime, const std::string & event, const std::string & contentID, long long contentCreationTime)
+void XMLSender::sendXML(const DOMDocument * document, long long usertime, const std::string & event, const std::string & contentID,
+		long long contentCreationTime, const std::string & contentType)
 throw(CMSException, SystemConfigurationException)
 {
 	if (isPeriodic())
@@ -54,7 +55,7 @@ throw(CMSException, SystemConfigurationException)
 	if (!isConnectionStarted)
 		throw SystemConfigurationException("Connection is not started!");
 	const std::string xmlString = XMLTool::dom2string(document);
-	sendTextMessage(xmlString, usertime, event, contentID, contentCreationTime);
+	sendTextMessage(xmlString, usertime, event, contentID, contentCreationTime, contentType);
 }
 
 

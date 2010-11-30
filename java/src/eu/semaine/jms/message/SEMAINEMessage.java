@@ -62,6 +62,26 @@ public class SEMAINEMessage
 	 */
 	public static final String CONTENT_CREATION_TIME = "content-creation-time";
 
+	/**
+	 * The name of the property used for the content's type, if any.
+	 */
+	public static final String CONTENT_TYPE = "content-type";
+
+	/**
+	 * A possible value of the CONTENT_TYPE property, representing a speaker utterance.
+	 */
+	public static final String CONTENT_TYPE_UTTERANCE = "utterance";
+
+	/**
+	 * A possible value of the CONTENT_TYPE property, representing a listener vocalisation.
+	 */
+	public static final String CONTENT_TYPE_LISTENERVOCALISATION = "listener-vocalisation";
+
+	/**
+	 * A possible value of the CONTENT_TYPE property, representing a visual-only agent behaviour.
+	 */
+	public static final String CONTENT_TYPE_VISUALONLY = "visual-only";
+
 	
 	protected Message message;
 
@@ -223,6 +243,26 @@ public class SEMAINEMessage
 		}
 		return -1;
 	}
+	
+	/**
+	 * Get the unique ID of the content in the message, if any. 
+	 * @return the content ID as a string, or null if the message doesn't have a content ID.
+	 * @throws JMSException
+	 */
+	/**
+	 * Get the type of the content in the message, if any.
+	 * @return the content type as a string, or the empty string if the message doesn't have a content type.
+	 * The value may be one of CONTENT_TYPE_UTTERANCE, CONTENT_TYPE_LISTENERVOCALISATION, CONTENT_TYPE_VISUALONLY, or any other string,
+	 * or null if the message doesn't have a content ID.
+	 * @throws JMSException if the JMS provider fails to get the property value due to some internal error.
+	 */
+	public String getContentType() throws JMSException {
+		if (message.propertyExists(CONTENT_TYPE)) {
+			return message.getStringProperty(CONTENT_TYPE);
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Determine whether the message is a text message.

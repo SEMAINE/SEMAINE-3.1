@@ -79,6 +79,26 @@ public:
 	static const std::string CONTENT_CREATION_TIME;
 
 	/**
+	 * The name of the property used for the content's type, if any.
+	 */
+	static const std::string CONTENT_TYPE;
+
+	/**
+	 * A possible value of the CONTENT_TYPE property, representing a speaker utterance.
+	 */
+	static const std::string CONTENT_TYPE_UTTERANCE;
+
+	/**
+	 * A possible value of the CONTENT_TYPE property, representing a listener vocalisation.
+	 */
+	static const std::string CONTENT_TYPE_LISTENERVOCALISATION;
+
+	/**
+	 * A possible value of the CONTENT_TYPE property, representing a visual-only agent behaviour.
+	 */
+	static const std::string CONTENT_TYPE_VISUALONLY;
+
+	/**
 	 * Create a SEMAINE specific abstraction from the given message.
 	 * @param message a message containing SEMAINE-specific properties.
 	 * @throws NullPointerException if message is null.
@@ -179,6 +199,21 @@ public:
 	{
 		if (message->propertyExists(CONTENT_ID)) {
 			return message->getStringProperty(CONTENT_ID);
+		}
+		return "";
+	}
+
+	/**
+	 * Get the type of the content in the message, if any.
+	 * @return the content type as a string, or the empty string if the message doesn't have a content type.
+	 * The value may be one of CONTENT_TYPE_UTTERANCE, CONTENT_TYPE_LISTENERVOCALISATION, CONTENT_TYPE_VISUALONLY, or any other string,
+	 * or the empty string if the message does not have this field.
+	 * @throws CMSException if the CMS provider fails to get the property value due to some internal error.
+	 */
+	std::string getContentType() throw (CMSException)
+	{
+		if (message->propertyExists(CONTENT_TYPE)) {
+			return message->getStringProperty(CONTENT_TYPE);
 		}
 		return "";
 	}

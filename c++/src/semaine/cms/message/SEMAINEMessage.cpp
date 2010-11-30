@@ -22,6 +22,10 @@ const std::string SEMAINEMessage::EVENT = "event";
 const std::string SEMAINEMessage::PERIOD = "period";
 const std::string SEMAINEMessage::CONTENT_ID = "content-id";
 const std::string SEMAINEMessage::CONTENT_CREATION_TIME = "content-creation-time";
+const std::string SEMAINEMessage::CONTENT_TYPE = "content-type";
+const std::string SEMAINEMessage::CONTENT_TYPE_UTTERANCE = "utterance";
+const std::string SEMAINEMessage::CONTENT_TYPE_LISTENERVOCALISATION = "listener-vocalisation";
+const std::string SEMAINEMessage::CONTENT_TYPE_VISUALONLY = "visual-only";
 
 
 	SEMAINEMessage::SEMAINEMessage(const Message * message)

@@ -87,9 +87,14 @@ public:
 	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
 	 * @param contentCreationTime the time when the content in this message was created.
 	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage::CONTENT_TYPE_UTTERANCE, SEMAINEMessage::CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage::CONTENT_TYPE_VISUALONLY, or any other string.
+	 * If this is not the empty string, it will cause the addition of the String property <code>content-type</code> in the message.
 	 * @throws SystemConfigurationException if the connection is not started or the sender is in periodic mode.
 	 */
-	void sendXML(const XERCES_CPP_NAMESPACE::DOMDocument * document, long long usertime, const std::string & event = SEMAINE_CMS_EVENT_SINGLE, const std::string & contentID = "", long long contentCreationTime = -1)
+	void sendXML(const XERCES_CPP_NAMESPACE::DOMDocument * document, long long usertime, const std::string & event = SEMAINE_CMS_EVENT_SINGLE, const std::string & contentID = "",
+			long long contentCreationTime = -1, const std::string & contentType = "")
 	throw(CMSException, SystemConfigurationException);
 
 

@@ -47,10 +47,11 @@ namespace sender {
 	void Sender::sendTextMessage(const std::string & text, long long usertime)
 	throw(CMSException, SystemConfigurationException)
 	{
-		sendTextMessage(text, usertime, "", -1);
+		sendTextMessage(text, usertime, "", -1, "");
 	}
 
-	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & contentID, long long contentCreationTime)
+	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & contentID,
+			long long contentCreationTime, const std::string & contentType)
 	throw(CMSException, SystemConfigurationException)
 	{
 		if (!isConnectionStarted)
@@ -60,7 +61,7 @@ namespace sender {
         	throw SystemConfigurationException("Exception Listener has received an exception, will not try to send");
         }
 		TextMessage * message = session->createTextMessage(text);
-		fillMessageProperties(message, usertime, contentID, contentCreationTime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime, contentType);
 		if (isPeriodic())
 			message->setIntProperty(SEMAINEMessage::PERIOD, getPeriod());
 		else // event-based
@@ -72,10 +73,11 @@ namespace sender {
 	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & eventType)
 	throw(CMSException, SystemConfigurationException)
 	{
-		sendTextMessage(text, usertime, eventType, "", -1);
+		sendTextMessage(text, usertime, eventType, "", -1, "");
 	}
 
-	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & eventType, const std::string & contentID, long long contentCreationTime)
+	void Sender::sendTextMessage(const std::string & text, long long usertime, const std::string & eventType, const std::string & contentID,
+			long long contentCreationTime, const std::string & contentType)
 	throw(CMSException, SystemConfigurationException)
 	{
 		if (!isConnectionStarted)
@@ -87,7 +89,7 @@ namespace sender {
         	throw SystemConfigurationException("Exception Listener has received an exception, will not try to send");
         }
 		TextMessage * message = session->createTextMessage(text);
-		fillMessageProperties(message, usertime, contentID, contentCreationTime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime, contentType);
 		message->setStringProperty(SEMAINEMessage::EVENT, eventType);
 		producer->send(message);
 		delete message;

@@ -213,9 +213,14 @@ public:
 	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
 	 * @param contentCreationTime the time when the content in this message was created.
 	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage::CONTENT_TYPE_UTTERANCE, SEMAINEMessage::CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage::CONTENT_TYPE_VISUALONLY, or any other string.
+	 * If this is not the empty string, it will cause the addition of the String property <code>content-type</code> in the message.
 	 * @throws SystemConfigurationException if the connection is not started or the sender is in event-based mode.
 	 */
-	void sendTextMessage(const std::string & text, long long usertime, const std::string & contentID, long long contentCreationTime)
+	void sendTextMessage(const std::string & text, long long usertime, const std::string & contentID,
+			long long contentCreationTime, const std::string & contentType = "")
 	throw(CMSException, SystemConfigurationException);
 
 	/**
@@ -263,9 +268,13 @@ public:
 	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
 	 * @param contentCreationTime the time when the content in this message was created.
 	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage::CONTENT_TYPE_UTTERANCE, SEMAINEMessage::CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage::CONTENT_TYPE_VISUALONLY, or any other string.
 	 * @throws SystemConfigurationException if the connection is not started or the sender is in periodic mode.
 	 */
-	void sendTextMessage(const std::string & text, long long usertime, const std::string & eventType, const std::string & contentID, long long contentCreationTime)
+	void sendTextMessage(const std::string & text, long long usertime, const std::string & eventType, const std::string & contentID,
+			long long contentCreationTime, const std::string & contentType = "")
 	throw(CMSException, SystemConfigurationException);
 
 
@@ -305,7 +314,8 @@ protected:
 		message->setLongProperty(SEMAINEMessage::USERTIME, usertime);
 	}
 
-	void fillMessageProperties(Message * message, long long usertime, const std::string & contentID, long long contentCreationTime)
+	void fillMessageProperties(Message * message, long long usertime, const std::string & contentID,
+			long long contentCreationTime, const std::string & contentType = "")
 	throw(CMSException)
 	{
 		fillMessageProperties(message, usertime);
@@ -315,6 +325,9 @@ protected:
 		}
 		if (contentCreationTime >= 0) {
 			message->setLongProperty(SEMAINEMessage::CONTENT_CREATION_TIME, contentCreationTime);
+		}
+		if (contentType != "") {
+			message->setStringProperty(SEMAINEMessage::CONTENT_TYPE, contentType);
 		}
 
 	}

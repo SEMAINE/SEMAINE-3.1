@@ -221,7 +221,7 @@ public class Sender extends IOBase
 	{
 		sendTextMessage(text, usertime, null, -1);
 	}
-	
+
 	/**
 	 * Send a text message via this sender.
 	 * This will send a message to the registered topic 
@@ -251,13 +251,48 @@ public class Sender extends IOBase
 	public void sendTextMessage(String text, long usertime, String contentID, long contentCreationTime)
 	throws JMSException
 	{
+		sendTextMessage(text, usertime, contentID, contentCreationTime, null);
+	}
+
+	/**
+	 * Send a text message via this sender.
+	 * This will send a message to the registered topic 
+	 * with the following message properties:
+	 * <ul>
+	 *   <li><code>datatype</code> is a String property containing the value produced by {@link #getDatatype()};</li>
+	 *   <li><code>source</code> is a String property containing the value produced by {@link #getSource()};</li>
+	 *   <li><code>usertime</code> is a long property containing the value of parameter <code>usertime</code>;</li>
+	 *   <li>if the message is periodic ({@link #isPeriodic()} returns <code>true</code>),
+	 *   <code>period</code> is an int property containing the value returned by {@link #getPeriod()};</li>
+	 *   <li>else, the message is event-based. <code>event</code> is a String property; as
+	 *   this method does not specify an event type, the default value <code>single</code> is assumed.</li>
+	 * </ul>
+	 * Furthermore, if {@link #getTimeToLive()} returns a non-zero value, the message will
+	 * contain a header field <code>JMSExpiration</code> containing the time when the message
+	 * will expire.
+	 * @param text the message text.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since the system started.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage.CONTENT_TYPE_UTTERANCE, SEMAINEMessage.CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage.CONTENT_TYPE_VISUALONLY, or any other string. Can be null, in which case no content type will be sent.
+	 * @throws IllegalStateException if the connection is not started or the sender is in event-based mode.
+	 * @throws JMSException if there was a problem on the connection such as a broker run out of memory
+	 */
+	public void sendTextMessage(String text, long usertime, String contentID, long contentCreationTime, String contentType)
+	throws JMSException
+	{
 		if (!isConnectionStarted)
 			throw new IllegalStateException("Connection is not started!");
 		if (exception != null) {
 			throw (JMSException) new JMSException("Exception Listener has received an exception, will not try to send").initCause(exception);
 		}
 		TextMessage message = session.createTextMessage(text);
-		fillMessageProperties(message, usertime, contentID, contentCreationTime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime, contentType);
 		if (isPeriodic())
 			message.setIntProperty(SEMAINEMessage.PERIOD, getPeriod());
 		else // event-based
@@ -315,10 +350,13 @@ public class Sender extends IOBase
 	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
 	 * @param contentCreationTime the time when the content in this message was created.
 	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage.CONTENT_TYPE_UTTERANCE, SEMAINEMessage.CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage.CONTENT_TYPE_VISUALONLY, or any other string. Can be null, in which case no content type will be sent.
 	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
 	 * @throws JMSException if there was a problem on the connection such as a broker run out of memory
 	 */
-	public void sendTextMessage(String text, long usertime, Event eventType, String contentID, long contentCreationTime)
+	public void sendTextMessage(String text, long usertime, Event eventType, String contentID, long contentCreationTime, String contentType)
 	throws JMSException
 	{
 		if (!isConnectionStarted)
@@ -329,9 +367,39 @@ public class Sender extends IOBase
 			throw (JMSException) new JMSException("Exception Listener has received an exception, will not try to send").initCause(exception);
 		}
 		TextMessage message = session.createTextMessage(text);
-		fillMessageProperties(message, usertime, contentID, contentCreationTime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime, contentType);
 		message.setStringProperty(SEMAINEMessage.EVENT, eventType.toString());
 		producer.send(message);
+	}
+
+	/**
+	 * Send a text message via this sender, for event-based messages.
+	 * This will send a message to the registered topic 
+	 * with the following message properties:
+	 * <ul>
+	 *   <li><code>datatype</code> is a String property containing the value produced by {@link #getDatatype()};</li>
+	 *   <li><code>source</code> is a String property containing the value produced by {@link #getSource()};</li>
+	 *   <li><code>usertime</code> is a long property containing the value of parameter <code>usertime</code>;</li>
+	 *   <li><code>event</code> is a String property containing
+	 *   the String representation of the event parameter to this method.</li>
+	 * </ul>
+	 * Furthermore, if {@link #getTimeToLive()} returns a non-zero value, the message will
+	 * contain a header field <code>JMSExpiration</code> containing the time when the message
+	 * will expire.
+	 * @param text the message text.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
+	 * @param event the type of event represented by this message.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @throws IllegalStateException if the connection is not started or the sender is in periodic mode.
+	 * @throws JMSException if there was a problem on the connection such as a broker run out of memory
+	 */
+	public void sendTextMessage(String text, long usertime, Event eventType, String contentID, long contentCreationTime)
+	throws JMSException {
+		sendTextMessage(text, usertime, eventType, contentID, contentCreationTime, null);
 	}
 
 	
@@ -354,12 +422,21 @@ public class Sender extends IOBase
 	protected void fillMessageProperties(Message message, long usertime, String contentID, long contentCreationTime)
 	throws JMSException
 	{
+		fillMessageProperties(message, usertime, contentID, contentCreationTime, null);
+	}
+	
+	protected void fillMessageProperties(Message message, long usertime, String contentID, long contentCreationTime, String contentType)
+	throws JMSException
+	{
 		fillMessageProperties(message, usertime);
 		if (contentID != null) {
 			message.setStringProperty(SEMAINEMessage.CONTENT_ID, contentID);
 		}
 		if (contentCreationTime >= 0) {
 			message.setLongProperty(SEMAINEMessage.CONTENT_CREATION_TIME, contentCreationTime);
+		}
+		if (contentType != null) {
+			message.setStringProperty(SEMAINEMessage.CONTENT_TYPE, contentType);
 		}
 	}
 	
