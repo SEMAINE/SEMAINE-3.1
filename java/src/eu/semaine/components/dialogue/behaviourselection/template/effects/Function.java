@@ -1,7 +1,5 @@
 package eu.semaine.components.dialogue.behaviourselection.template.effects;
 
-import eu.semaine.components.dialogue.informationstate.InformationState;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,13 +7,13 @@ import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import eu.semaine.components.dialogue.exceptions.TemplateParseException;
-import eu.semaine.components.dialogue.exceptions.TemplateRunException;
-
 import eu.semaine.components.dialogue.behaviourselection.TemplateController;
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
 import eu.semaine.components.dialogue.behaviourselection.template.value.AbstractValue;
 import eu.semaine.components.dialogue.behaviourselection.template.value.Value;
+import eu.semaine.components.dialogue.exceptions.TemplateParseException;
+import eu.semaine.components.dialogue.exceptions.TemplateRunException;
+import eu.semaine.components.dialogue.informationstate.InformationState;
 
 /**
  * A Function is a type of Effect. When applied, it will search for a method with the correct name and number of arguments and execute this.

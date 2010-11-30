@@ -35,8 +35,10 @@ import org.w3c.dom.Node;
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
+import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.datatypes.xml.FML;
+import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -49,8 +51,6 @@ import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
-import eu.semaine.datatypes.xml.BML;
-import eu.semaine.datatypes.xml.SSML;
 
 /**
  * This class creates a GUI to test the Dialogue Management.

@@ -11,9 +11,7 @@ import java.util.Map;
 
 import javax.jms.JMSException;
 
-
 import eu.semaine.components.Component;
-import eu.semaine.components.dialogue.datastructures.DMProperties;
 import eu.semaine.components.dialogue.datastructures.EmotionEvent;
 import eu.semaine.components.dialogue.test.DMLogger;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;

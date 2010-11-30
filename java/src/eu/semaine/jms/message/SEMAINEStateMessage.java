@@ -9,7 +9,6 @@ import javax.jms.Message;
 
 import org.w3c.dom.Document;
 
-
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.DialogStateInfo;

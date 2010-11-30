@@ -20,6 +20,11 @@ import java.util.zip.GZIPInputStream;
 
 import javax.jms.JMSException;
 
+import opennlp.maxent.io.BinaryGISModelReader;
+import opennlp.tools.postag.DefaultPOSContextGenerator;
+import opennlp.tools.postag.POSDictionary;
+import opennlp.tools.postag.POSTaggerME;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,24 +32,17 @@ import org.w3c.dom.Node;
 import eu.semaine.components.Component;
 import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.components.dialogue.test.DMLogger;
-import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.datatypes.xml.SemaineML;
-import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.receiver.StateReceiver;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.StateSender;
-import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.util.XMLTool;
-
-import opennlp.maxent.io.BinaryGISModelReader;
-import opennlp.tools.postag.DefaultPOSContextGenerator;
-import opennlp.tools.postag.POSDictionary;
-import opennlp.tools.postag.POSTaggerME;
 
 /**
  * This class interprets the dialog and extends it with detected semantic features

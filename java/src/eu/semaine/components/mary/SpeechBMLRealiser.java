@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.jms.JMSException;
@@ -37,7 +36,6 @@ import org.w3c.dom.traversal.NodeIterator;
 import org.xml.sax.SAXException;
 
 import eu.semaine.components.Component;
-import eu.semaine.components.control.ParticipantControlGUI;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.SSML;

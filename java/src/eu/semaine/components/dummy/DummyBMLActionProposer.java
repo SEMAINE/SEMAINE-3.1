@@ -11,15 +11,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
-import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.IOBase.Event;
-import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.FeatureReceiver;
 import eu.semaine.jms.receiver.StateReceiver;

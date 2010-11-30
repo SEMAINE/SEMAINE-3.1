@@ -1,14 +1,9 @@
 package eu.semaine.components.dialogue.behaviourselection.template.behaviours;
 
-import eu.semaine.components.dialogue.informationstate.InformationState;
-
 import java.util.ArrayList;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import eu.semaine.components.dialogue.exceptions.TemplateParseException;
-import eu.semaine.components.dialogue.exceptions.TemplateRunException;
 
 import eu.semaine.components.dialogue.actionproposers.RandomUtteranceActionProposer;
 import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
@@ -16,6 +11,9 @@ import eu.semaine.components.dialogue.behaviourselection.behaviours.BehaviourCla
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
 import eu.semaine.components.dialogue.behaviourselection.template.value.AbstractValue;
 import eu.semaine.components.dialogue.behaviourselection.template.value.Value;
+import eu.semaine.components.dialogue.exceptions.TemplateParseException;
+import eu.semaine.components.dialogue.exceptions.TemplateRunException;
+import eu.semaine.components.dialogue.informationstate.InformationState;
 
 /**
  * This class contains information about a Behaviour.

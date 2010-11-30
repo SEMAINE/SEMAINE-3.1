@@ -15,6 +15,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jms.JMSException;
+
+import marytts.util.Pair;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import eu.semaine.components.Component;
 import eu.semaine.components.mary.QueuingAudioPlayer.PlayerFeatures;
 import eu.semaine.datatypes.xml.BML;
@@ -28,13 +35,6 @@ import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.Sender;
 import eu.semaine.util.XMLTool;
-
-import javax.jms.JMSException;
-
-import marytts.util.Pair;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  *

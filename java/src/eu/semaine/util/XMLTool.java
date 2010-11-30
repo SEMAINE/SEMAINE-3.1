@@ -44,7 +44,6 @@ import org.w3c.dom.traversal.NodeIterator;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import eu.semaine.datatypes.xml.SSML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 

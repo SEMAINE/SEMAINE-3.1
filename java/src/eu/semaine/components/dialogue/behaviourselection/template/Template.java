@@ -1,17 +1,11 @@
 package eu.semaine.components.dialogue.behaviourselection.template;
 
-import eu.semaine.components.dialogue.informationstate.InformationState;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import eu.semaine.components.dialogue.exceptions.TemplateParseException;
-
-import eu.semaine.components.dialogue.behaviourselection.TemplateController;
 import eu.semaine.components.dialogue.behaviourselection.template.behaviours.Behaviour;
 import eu.semaine.components.dialogue.behaviourselection.template.effects.Effect;
 import eu.semaine.components.dialogue.behaviourselection.template.effects.Function;
@@ -19,6 +13,8 @@ import eu.semaine.components.dialogue.behaviourselection.template.effects.Update
 import eu.semaine.components.dialogue.behaviourselection.template.preconditions.Compare;
 import eu.semaine.components.dialogue.behaviourselection.template.preconditions.Indicator;
 import eu.semaine.components.dialogue.behaviourselection.template.preconditions.Precondition;
+import eu.semaine.components.dialogue.exceptions.TemplateParseException;
+import eu.semaine.components.dialogue.informationstate.InformationState;
 
 /**
  * A Template contains all data of a template, and is responsible for checking its preconditions and executing

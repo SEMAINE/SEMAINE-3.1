@@ -8,7 +8,6 @@ import org.w3c.dom.NodeList;
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
 import eu.semaine.components.dialogue.behaviourselection.template.value.AbstractValue;
 import eu.semaine.components.dialogue.behaviourselection.template.value.Value;
-
 import eu.semaine.components.dialogue.exceptions.TemplateParseException;
 import eu.semaine.components.dialogue.exceptions.TemplateRunException;
 import eu.semaine.components.dialogue.informationstate.InformationState;

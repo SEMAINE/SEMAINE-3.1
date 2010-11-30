@@ -17,9 +17,10 @@
 
 package eu.semaine.components.dialogue.woz;
 
-import java.nio.*;
-import java.nio.charset.*;
-import java.util.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>An XML writer facilitates the generation of an XML document. It contains

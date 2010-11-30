@@ -21,7 +21,6 @@ import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
-import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;

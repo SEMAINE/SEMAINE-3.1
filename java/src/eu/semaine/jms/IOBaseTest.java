@@ -4,25 +4,16 @@
  */
 package eu.semaine.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import javax.jms.Connection;
 import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
 
 import org.apache.activemq.ActiveMQConnection;
-import org.apache.activemq.command.ActiveMQMessage;
-import org.apache.activemq.command.ConsumerInfo;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.receiver.Receiver;
-import eu.semaine.jms.sender.Sender;
 import eu.semaine.util.SEMAINEUtils;
 
 
@@ -105,7 +96,7 @@ public class IOBaseTest {
 		// exercise
 		iob1.getConnection().close();
 		// verify
-		IOBase iob2 = new IOBase("dummy1");
+		new IOBase("dummy1");
 		// test passes if no exception is thrown
 	}
 	

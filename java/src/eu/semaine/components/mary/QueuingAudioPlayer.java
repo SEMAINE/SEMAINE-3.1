@@ -24,10 +24,8 @@ import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEBytesMessage;
-import eu.semaine.jms.message.SEMAINEFeatureMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.BytesReceiver;
-import eu.semaine.jms.receiver.FeatureReceiver;
 import eu.semaine.jms.receiver.Receiver;
 import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.util.SEMAINEUtils;
@@ -302,14 +300,17 @@ public class QueuingAudioPlayer extends Component
 			return contentCreationTime;
 		}
 		
+		@SuppressWarnings("unused")
 		public int getStartAt() {
 			return startAt;
 		}
 		
+		@SuppressWarnings("unused")
 		public float getPriority() {
 			return priority;
 		}
 		
+		@SuppressWarnings("unused")
 		public int getLifetime() {
 			return lifetime;
 		}
@@ -318,10 +319,12 @@ public class QueuingAudioPlayer extends Component
 			return audioData;
 		}
 		
+		@SuppressWarnings("unused")
 		public Object getFAPData() {
 			return fapData;
 		}
 
+		@SuppressWarnings("unused")
 		public Object getBAPData() {
 			return bapData;
 		}

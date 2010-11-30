@@ -3,7 +3,7 @@ package eu.semaine.components.dialogue.behaviourselection.template;
 import java.util.ArrayList;
 
 import eu.semaine.components.dialogue.behaviourselection.template.behaviours.Behaviour;
-import eu.semaine.components.dialogue. behaviourselection.template.effects.Effect;
+import eu.semaine.components.dialogue.behaviourselection.template.effects.Effect;
 
 /**
  * A TemplateState stores the current State of a Template.

@@ -14,7 +14,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-
 import eu.semaine.components.Component;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.IOBase;

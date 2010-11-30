@@ -9,7 +9,6 @@ import javax.jms.JMSException;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
-import eu.semaine.components.dialogue.datastructures.DialogueAct;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.datatypes.xml.EMMA;
@@ -18,7 +17,6 @@ import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.StateSender;
-import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.util.XMLTool;
 
 public class LoebnerUtteranceInterpreter extends Component

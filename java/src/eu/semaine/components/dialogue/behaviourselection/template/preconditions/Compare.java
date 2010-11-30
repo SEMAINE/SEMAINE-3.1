@@ -2,8 +2,6 @@ package eu.semaine.components.dialogue.behaviourselection.template.preconditions
 
 import org.w3c.dom.Element;
 
-import eu.semaine.components.dialogue.exceptions.TemplateParseException;
-
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
 import eu.semaine.components.dialogue.behaviourselection.template.preconditions.compares.CompareContains;
 import eu.semaine.components.dialogue.behaviourselection.template.preconditions.compares.CompareEquals;
@@ -16,6 +14,7 @@ import eu.semaine.components.dialogue.behaviourselection.template.preconditions.
 import eu.semaine.components.dialogue.behaviourselection.template.preconditions.compares.CompareNotEquals;
 import eu.semaine.components.dialogue.behaviourselection.template.preconditions.compares.CompareNotExists;
 import eu.semaine.components.dialogue.behaviourselection.template.value.AbstractValue;
+import eu.semaine.components.dialogue.exceptions.TemplateParseException;
 import eu.semaine.components.dialogue.informationstate.InformationState;
 
 /**

@@ -1,7 +1,6 @@
 package eu.semaine.components.dialogue.datastructures;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Response
 {

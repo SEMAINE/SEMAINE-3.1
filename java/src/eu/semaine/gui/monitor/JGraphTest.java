@@ -31,6 +31,7 @@ public class JGraphTest {
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception 
 	{
 		// Construct Model and Graph

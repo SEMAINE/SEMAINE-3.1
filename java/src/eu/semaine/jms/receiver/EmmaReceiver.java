@@ -7,7 +7,6 @@ package eu.semaine.jms.receiver;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
-
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;

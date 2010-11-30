@@ -7,6 +7,7 @@
 package eu.semaine.components.control;
 
 import java.awt.Color;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;

@@ -4,7 +4,6 @@
  */
 package eu.semaine.gui.monitor;
 
-import java.awt.Color;
 
 public class ConnectionInfo extends Info
 {

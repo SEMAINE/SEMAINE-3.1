@@ -17,7 +17,8 @@
 
 package eu.semaine.components.dialogue.woz;
 
-import org.xml.sax.*;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXParseException;
 
 /**
  * <p>This class implements a generic XML error handler for SAX parse

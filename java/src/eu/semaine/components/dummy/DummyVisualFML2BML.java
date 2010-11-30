@@ -15,7 +15,6 @@ import eu.semaine.datatypes.xml.FML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
-import eu.semaine.jms.receiver.BMLReceiver;
 import eu.semaine.jms.receiver.FMLReceiver;
 import eu.semaine.jms.sender.BMLSender;
 import eu.semaine.util.XMLTool;

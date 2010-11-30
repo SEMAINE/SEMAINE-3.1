@@ -29,14 +29,24 @@
 
 package eu.semaine.components.dialogue.woz;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.xml.*;
-import javax.xml.parsers.*;
-import javax.xml.validation.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * <p>A SAL project, identified by a name ({@link #getName() getName()}),

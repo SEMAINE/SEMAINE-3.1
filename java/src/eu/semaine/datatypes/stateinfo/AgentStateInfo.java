@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.jms.JMSException;
 
 import org.w3c.dom.Document;
+
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 

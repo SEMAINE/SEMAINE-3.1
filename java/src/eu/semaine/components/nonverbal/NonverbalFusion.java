@@ -7,7 +7,6 @@ package eu.semaine.components.nonverbal;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import javax.jms.JMSException;
 
 import org.w3c.dom.Document;

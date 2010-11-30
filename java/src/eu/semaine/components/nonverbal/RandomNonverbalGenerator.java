@@ -16,7 +16,6 @@ import org.w3c.dom.Element;
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.EMMA;
-import eu.semaine.datatypes.xml.EmotionML;
 import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.jms.sender.EmmaSender;
 import eu.semaine.util.XMLTool;

@@ -1,8 +1,5 @@
 package eu.semaine.components.dialogue.behaviourselection;
 
-import eu.semaine.components.dialogue.informationstate.InformationState;
-import eu.semaine.components.dialogue.test.DMLogger;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,13 +8,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import eu.semaine.components.dialogue.exceptions.TemplateRunException;
-
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
 import eu.semaine.components.dialogue.behaviourselection.template.TemplateState;
-import eu.semaine.components.dialogue.behaviourselection.template.behaviours.Behaviour;
 import eu.semaine.components.dialogue.behaviourselection.template.effects.Effect;
 import eu.semaine.components.dialogue.behaviourselection.template.effects.Update;
+import eu.semaine.components.dialogue.exceptions.TemplateRunException;
+import eu.semaine.components.dialogue.informationstate.InformationState;
 
 /**
  * The TemplateController, as the name suggests, controlls Templates.

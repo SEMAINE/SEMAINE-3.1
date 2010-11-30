@@ -2,7 +2,6 @@ package eu.semaine.components.dialogue.behaviourselection.template.effects;
 
 import eu.semaine.components.dialogue.behaviourselection.TemplateController;
 import eu.semaine.components.dialogue.exceptions.TemplateRunException;
-
 import eu.semaine.components.dialogue.informationstate.InformationState;
 
 /**

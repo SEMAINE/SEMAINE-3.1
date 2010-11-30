@@ -1,32 +1,19 @@
 package eu.semaine.components.dialogue.interpreters;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.jms.JMSException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import eu.semaine.components.Component;
-import eu.semaine.components.dialogue.actionproposers.UtteranceActionProposer;
 import eu.semaine.datatypes.stateinfo.AgentStateInfo;
-import eu.semaine.datatypes.stateinfo.DialogStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.EmotionML;
-import eu.semaine.datatypes.xml.SemaineML;
-import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEStateMessage;
-import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.StateReceiver;
-import eu.semaine.jms.receiver.XMLReceiver;
-import eu.semaine.jms.sender.Sender;
 import eu.semaine.jms.sender.StateSender;
-import eu.semaine.jms.sender.XMLSender;
 import eu.semaine.system.CharacterConfigInfo;
-import eu.semaine.util.XMLTool;
 
 /**
  * disagreement -> Spike: high, rest: low

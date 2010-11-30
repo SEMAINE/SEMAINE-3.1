@@ -4,21 +4,17 @@
  */
 package eu.semaine.jms;
 
-import javax.jms.Connection;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
 
-import org.apache.activemq.ActiveMQConnection;
-import org.apache.activemq.command.ActiveMQMessage;
-import org.apache.activemq.command.ConsumerInfo;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.receiver.Receiver;

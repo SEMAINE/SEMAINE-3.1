@@ -7,14 +7,10 @@ package eu.semaine.gui.monitor;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
 import java.awt.font.TextLayout;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.swing.UIManager;
 
 
 public class TopicInfo extends Info

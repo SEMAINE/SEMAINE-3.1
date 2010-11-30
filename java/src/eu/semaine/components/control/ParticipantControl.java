@@ -4,11 +4,6 @@
  */
 package eu.semaine.components.control;
 
-import eu.semaine.components.control.ParticipantControlGUI;
-import eu.semaine.jms.message.SEMAINEMessage;
-import eu.semaine.jms.message.SEMAINEStateMessage;
-import eu.semaine.jms.receiver.StateReceiver;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +12,9 @@ import javax.jms.JMSException;
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
+import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.system.CharacterConfigInfo;
 

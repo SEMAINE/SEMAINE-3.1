@@ -14,10 +14,23 @@
 
 package eu.semaine.components.dialogue.woz;
 
-import java.awt.*;
-import java.util.Map;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.util.HashMap;
-import javax.swing.*;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.Scrollable;
 
 public class BoxPanel extends JPanel {
 	private static final long serialVersionUID = 0;

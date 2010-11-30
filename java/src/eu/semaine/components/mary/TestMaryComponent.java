@@ -25,10 +25,8 @@ import marytts.server.Mary;
 import marytts.server.Request;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import eu.semaine.datatypes.xml.BML;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.util.XMLTool;
 

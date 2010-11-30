@@ -2,10 +2,8 @@ package eu.semaine.components.dialogue.behaviourselection.template.preconditions
 
 import org.w3c.dom.Element;
 
-import eu.semaine.components.dialogue.exceptions.TemplateParseException;
-
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
-
+import eu.semaine.components.dialogue.exceptions.TemplateParseException;
 import eu.semaine.components.dialogue.informationstate.InformationState;
 
 /**

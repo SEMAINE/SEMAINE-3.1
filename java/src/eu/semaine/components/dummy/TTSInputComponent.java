@@ -12,6 +12,11 @@ package eu.semaine.components.dummy;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jms.JMSException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import eu.semaine.components.Component;
 import eu.semaine.datatypes.stateinfo.ContextStateInfo;
 import eu.semaine.datatypes.stateinfo.StateInfo;
@@ -24,11 +29,6 @@ import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.sender.FMLSender;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.XMLTool;
-
-import javax.jms.JMSException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  *

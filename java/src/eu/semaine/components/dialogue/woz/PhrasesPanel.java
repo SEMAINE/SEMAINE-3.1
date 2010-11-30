@@ -22,8 +22,15 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JViewport;
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
 
 public class PhrasesPanel extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 0;

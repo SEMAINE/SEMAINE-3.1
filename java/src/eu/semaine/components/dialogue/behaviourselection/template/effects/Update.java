@@ -2,14 +2,14 @@ package eu.semaine.components.dialogue.behaviourselection.template.effects;
 
 import org.w3c.dom.Element;
 
-import eu.semaine.components.dialogue.informationstate.InformationState;
-import eu.semaine.components.dialogue.informationstate.Item;
-import eu.semaine.components.dialogue.exceptions.TemplateParseException;
-import eu.semaine.components.dialogue.exceptions.TemplateRunException;
 import eu.semaine.components.dialogue.behaviourselection.TemplateController;
 import eu.semaine.components.dialogue.behaviourselection.template.Template;
 import eu.semaine.components.dialogue.behaviourselection.template.value.AbstractValue;
 import eu.semaine.components.dialogue.behaviourselection.template.value.Value;
+import eu.semaine.components.dialogue.exceptions.TemplateParseException;
+import eu.semaine.components.dialogue.exceptions.TemplateRunException;
+import eu.semaine.components.dialogue.informationstate.InformationState;
+import eu.semaine.components.dialogue.informationstate.Item;
 
 /**
  * An Update is a type of Effect. When applied, it will modify the a value in InformationState.

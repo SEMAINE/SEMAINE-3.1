@@ -15,7 +15,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>A column layout can layout groups of components in one or more columns.
