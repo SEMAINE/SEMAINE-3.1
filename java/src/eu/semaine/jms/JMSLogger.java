@@ -43,8 +43,7 @@ public class JMSLogger
 			String jmsUrl = System.getProperty("jms.url", "tcp://localhost:61616");
 			String jmsUser = System.getProperty("jms.user", null);
 			String jmsPassword = System.getProperty("jms.password", null);
-			ConnectionFactory factory = new ActiveMQConnectionFactory(jmsUser, jmsPassword, jmsUrl);
-			connection = factory.createConnection();
+			connection = IOBase.getConnection(jmsUrl, jmsUser, jmsPassword, null);
 			session = connection.createSession(false /*not transacted*/, Session.AUTO_ACKNOWLEDGE);
 			connection.start();
 		} catch (JMSException e) {
