@@ -46,6 +46,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	protected BlockingQueue<Receiver> inputWaiting;
 	protected JMSLogger log;
 	private boolean exitRequested = false;
+	private boolean hasSystemJustBecomeReady = false;
 	protected State state = State.stopped;
 	protected MetaMessenger meta;
 	protected int waitingTime = 100;
@@ -130,6 +131,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			// (in case we were stalled due to a long act() or react() this
 			// means we "report back" to the rest of the system)
 			meta.IamAlive();
+			hasSystemJustBecomeReady = false;
 			// Check at every loop that the total system is ready
 			synchronized (meta) {
 				if (!meta.isSystemReady()) {
@@ -142,6 +144,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 					}
 					if (meta.isSystemReady()) {
 						log.info(meta.getTime(), "system ready - let's go");
+						hasSystemJustBecomeReady = true;
 					}
 				}
 			}
@@ -215,6 +218,15 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	{
 		exitRequested = true;
 		notify();
+	}
+	
+	/**
+	 * Method that informs subclasses that the system has just become ready. This is true the first time act() is called after the system has become ready, and false otherwise.
+	 * The recommended place to check this, if necessary, is therefore {@link Component#act()}.
+	 * @return true if the system has just become ready, and false otherwise.
+	 */
+	protected boolean hasSystemJustBecomeReady() {
+		return hasSystemJustBecomeReady;
 	}
 	
 	//////////////////////// Methods to override ////////////////////

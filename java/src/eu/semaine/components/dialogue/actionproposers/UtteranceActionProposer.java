@@ -583,11 +583,16 @@ public class UtteranceActionProposer extends Component implements BehaviourClass
 
 				/* Update current character */
 				if( stateInfo.hasInfo("character") ) {
-					log.debug("New Character: " + stateInfo.getInfo("character"));
-					is.set("Agent.character", stateInfo.getInfo("character"));
-					is.set("Agent.characterChanged", 1);
-					preparedResponses.clear();
-					preparingResponses.clear();
+					String charInMsg = stateInfo.getInfo("character");
+					assert charInMsg != null; // since hasInfo() returned true
+					if (!charInMsg.equals(is.getString("Agent.character"))) {
+						// there is a character, and it is not the same as we currently have
+						log.debug("New Character: " + charInMsg);
+						is.set("Agent.character", charInMsg);
+						is.set("Agent.characterChanged", 1);
+						preparedResponses.clear();
+						preparingResponses.clear();
+					}
 				}
 				if( stateInfo.hasInfo("nextCharacter") ) {
 					String nextCharacter = stateInfo.getInfo("nextCharacter");

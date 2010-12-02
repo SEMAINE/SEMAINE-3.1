@@ -47,6 +47,13 @@ public class ParticipantControl extends Component
         gui = new ParticipantControlGUI(this);
         gui.setVisible(true);
 	}
+	
+	@Override
+	protected void act() throws JMSException {
+		if (hasSystemJustBecomeReady()) {
+			sendWhoIsPresent();
+		}
+	}
 
         @Override
         protected void react(SEMAINEMessage m)
