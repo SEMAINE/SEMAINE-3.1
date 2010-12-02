@@ -598,6 +598,8 @@ throw(semaine::cms::exceptions::MessageFormatException, semaine::cms::exceptions
 					log->debug("Read info: "+shortName+" = "+resultString);
 				}
 			}
+			result->release();
+			result = NULL;
 		} catch (DOMXPathException & xee) {
 			char * err = XMLString::transcode(xee.msg);
 			std::cerr << err << std::endl;
