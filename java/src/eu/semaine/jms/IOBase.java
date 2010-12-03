@@ -71,7 +71,18 @@ public class IOBase
 		if (embeddedBroker != null) {
 			return;
 		}
-		embeddedBroker = BrokerFactory.createBroker("xbean:/eu/semaine/jms/activemq.xml", true /* start broker */);
+		embeddedBroker = BrokerFactory.createBroker("xbean:/eu/semaine/jms/activemq.xml", false /* don't start broker yet */);
+		//embeddedBroker = new BrokerService();
+		String jmsUrl = System.getProperty("jms.url", "tcp://0.0.0.0:61616");
+		jmsUrl = jmsUrl.replaceAll("localhost", "0.0.0.0");
+		String configSetting = "transport.reuseAddress=true";
+		if (jmsUrl.contains("?")) {
+			jmsUrl += "&" + configSetting;
+		} else {
+			jmsUrl += "?" + configSetting;
+		}
+		embeddedBroker.addConnector(jmsUrl);
+		embeddedBroker.start();
 	}
 	
 	

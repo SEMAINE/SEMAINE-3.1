@@ -31,7 +31,7 @@
     <!-- 
         The <broker> element is used to configure the ActiveMQ broker. 
     -->
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="tmp/activemq/data" useJmx="true" schedulerSupport="false">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="tmp/activemq/data" useJmx="true" schedulerSupport="false" start="false">
  
         <!--
 			For better performances use VM cursor and small memory limit.
@@ -117,9 +117,9 @@
             
             http://activemq.apache.org/configuring-transports.html 
         -->
-        <transportConnectors>
+        <!-- transportConnectors>
             <transportConnector name="openwire" uri="tcp://0.0.0.0:61616"/>
-        </transportConnectors>
+        </transportConnectors-->
 
     </broker>
 
