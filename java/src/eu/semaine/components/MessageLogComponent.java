@@ -81,6 +81,10 @@ public class MessageLogComponent extends Component
 			if (contentCreationTime >= 0) {
 				buf.append("(created ").append(contentCreationTime).append(") ");
 			}
+			String contentType = m.getContentType();
+			if (contentType != null) {
+				buf.append("(content-type=").append(contentType).append(") ");
+			}
 			if (m.getMessage() instanceof TextMessage) {
 				buf.append("\n");
 				buf.append(m.getText());
