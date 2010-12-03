@@ -11,8 +11,13 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,6 +34,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.DOMConfiguration;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,6 +50,9 @@ import org.w3c.dom.traversal.NodeIterator;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import eu.semaine.datatypes.xml.EMMA;
+import eu.semaine.datatypes.xml.EmotionML;
+import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.exceptions.SystemConfigurationException;
 
@@ -525,6 +534,258 @@ public class XMLTool
 					}
 		}, false);
 		return ni;
+	}
+	
+	/**
+	 * Create an XML document from the given XPath expression.
+	 * The given string is interpreted as a limited subset of XPath expressions and split into parts.
+	 * Each part except the last one is expected to follow precisely the following form:
+	 * <code>"/" ( prefix ":" ) ? localname ( "[" "@" attName "=" "'" attValue "'" "]" ) ?</code>
+	 * The last part must be either
+	 * <code> "/" "text()"</code>
+	 * or
+	 * </code> "/" "@" attributeName </code>.
+	 * @param xpathExpression an xpath expression from which the given document can be created. must not be null.
+	 * @param value the value to insert at the location identified by the xpath expression. if this is null, the empty string is added.
+	 * @param namespaceContext the namespace context to use for resolving namespace prefixes.
+	 *  If this is null, the namespace context returned by {@link #getDefaultNamespaceContext()} will be used.
+	 * @param document if not null, the xpath expression + value pair will be added to the document. 
+	 * If null, a new document will be created from the xpathExpression and value pair.
+	 * @return a document containing the given information
+	 * @throws NullPointerException if xpathExpression is null.
+	 * @throws IllegalArgumentException if the xpath expression is not valid, or if the xpath expression is incompatible with the given document (e.g., different root node) 
+	 */
+	public static Document xpath2doc(String xpathExpression, String value, NamespaceContext namespaceContext, Document document)  throws NullPointerException, IllegalArgumentException {
+		if (xpathExpression == null) {
+			throw new NullPointerException("null argument");
+		}
+		if (value == null) {
+			value = "";
+		}
+		if (namespaceContext == null) {
+			namespaceContext = getDefaultNamespaceContext();
+		}
+		String[][] parts = splitXPathIntoParts(xpathExpression);
+		Element currentElt = null;
+
+		for (int i=0; i<parts.length-1; i++) {
+			String[] part = parts[i];
+			assert part != null;
+			assert part.length == 4;
+			String prefix = part[0];
+			String localName = part[1];
+			String attName = part[2];
+			String attValue = part[3];
+			String namespaceURI = prefix != null ? namespaceContext.getNamespaceURI(prefix) : null;
+			if (prefix != null && namespaceURI.equals("")) {
+				throw new IllegalArgumentException("Unknown prefix: "+prefix);
+			}
+			// Now traverse to or create element defined by prefix, localName and namespaceURI
+			if (currentElt == null) { // at top level
+				if (document == null) { // create a new document
+					try {
+						document = XMLTool.newDocument(localName, namespaceURI);
+					} catch (DOMException de) {
+						throw new IllegalArgumentException("Cannot create document for localname '"+localName+"' and namespaceURI '"+namespaceURI+"'", de);
+					}
+					currentElt = document.getDocumentElement();
+					currentElt.setPrefix(prefix);
+				} else {
+					currentElt = document.getDocumentElement();
+					if (!currentElt.getLocalName().equals(localName)) {
+						throw new IllegalArgumentException("Incompatible root node specification: expression requests '"+
+								localName+"', but document already has '"+currentElt.getLocalName()+"'!");
+					}
+					String currentNamespaceURI = currentElt.getNamespaceURI();
+					if (!(currentNamespaceURI == null && namespaceURI == null
+						 || currentNamespaceURI != null && currentNamespaceURI.equals(namespaceURI))) {
+						throw new IllegalArgumentException("Incompatible root namespace specification: expression requests '"+
+								namespaceURI+"', but document already has '"+currentNamespaceURI+"'!");
+					}
+				}
+			} else { // somewhere in the tree
+				// First check if the requested child already exists
+				List<Element> sameNameChildren = XMLTool.getChildrenByLocalNameNS(currentElt, localName, namespaceURI);
+				boolean found = false;
+				if (attName == null) {
+					if (sameNameChildren.size() > 0) {
+						currentElt = sameNameChildren.get(0);
+						found = true;
+					}
+				} else {
+					for (Element c : sameNameChildren) {
+						if (c.hasAttribute(attName)) {
+							if (attValue == null || attValue.equals(c.getAttribute(attName))) {
+								currentElt = c;
+								found = true;
+								break;
+							}
+						}
+					}
+				}
+				if (!found) { // need to create it
+					currentElt = XMLTool.appendChildElement(currentElt, localName, namespaceURI);
+					if (prefix != null) currentElt.setPrefix(prefix);
+					if (attName != null) {
+						currentElt.setAttribute(attName, attValue != null ? attValue : "");
+					}
+				}
+			}
+
+
+		}
+		if (currentElt == null) {
+			throw new IllegalArgumentException("No elements or no final part created from XPath expression '"+xpathExpression+"'");
+		}
+		String[] lastPart = parts[parts.length-1];
+		assert lastPart.length <= 1;
+		if (lastPart.length == 0) { // text content of the given node
+			currentElt.setTextContent(value);
+		} else {
+			String attName = lastPart[0];
+			currentElt.setAttribute(attName, value);
+		}
+		return document;
+	}
+
+	/**
+	 * The given string is interpreted as a limited subset of XPath expressions and split into parts.
+	 * Each part except the last one is expected to follow precisely the following form:
+	 * <code>"/" ( prefix ":" ) ? localname ( "[" "@" attName "=" "'" attValue "'" "]" ) ?</code>
+	 * The last part must be either
+	 * <code> "/" "text()"</code>
+	 * or
+	 * </code> "/" "@" attributeName </code>.
+	 * @param expr the string to be split as an xpath expression
+	 * @return an array of string arrays. All except the last entry in this array is guaranteed to have
+	 * four elements, with the meaning:
+	 * <ul>
+	 * <li>[0]: prefix (can be null)</li>
+	 * <li>[1]: localname (guaranteed not to be null)</li>
+	 * <li>[2]: attributeName (can be null)</li>
+	 * <li>[3]: attributeValue (is guaranteed to be null when attributeName is null; 
+	 *  when attributeName is non-null, and attributeValue is null,
+	 *  then the attribute must be present but there are no constraints about its value)</li>
+	 * </ul>
+	 * The last element in the returned array has either length 1 or length 0. If it is of length 0, then the XPath expression ended in "text()",
+	 * i.e. the value to be referenced is the text content of the enclosing Element; if it is of length 1, the String
+	 * contained is guaranteed to be non-null and represents the name of the attribute to be referenced on the enclosing Element.
+	 * 
+	 * @throws IllegalArgumentException if expr does not match the expected format.
+	 */
+	public static String[][] splitXPathIntoParts(String expr) throws IllegalArgumentException {
+		ArrayList<String[]> parts = new ArrayList<String[]>();
+		if (!expr.startsWith("/")) {
+			throw new IllegalArgumentException("XPath expression does not start with a slash: "+expr);
+		}
+		int pos = 1;
+		// Structure of each part except the last part:
+		// "/" ( prefix ":" ) ? localname ( "[" "@" attName "=" "'" attValue "'" "]" ) ?
+		// Avoid regular expression code so it is easier to port to C++.
+		// Strategy: 
+		// find first of ":[/"; 
+		// - if ":", detach prefix, find first of "[/", and continue in next line:
+		// - if "/", there is no attribute;
+		// - if "[", require "@", find "=" followed by "'", then find next "'", require "]" and "/".
+		while (true) { // We loop until we cannot match a '/' anymore, because last part is different
+			String prefix = null;
+			String localname = null;
+			String attName = null;
+			String attValue = null;
+			int nextColonPos = expr.indexOf(':', pos);
+			int nextSlashPos = expr.indexOf('/', pos);
+			int nextOpenSqB = expr.indexOf('[', pos);
+			if (nextSlashPos == -1) {
+				break; // pos is start of last part
+			}
+			if (nextColonPos != -1 && nextColonPos < nextSlashPos) {
+				prefix = expr.substring(pos, nextColonPos);
+				pos = nextColonPos + 1;
+			}
+			// Attributes?
+			if (nextOpenSqB != -1 && nextOpenSqB < nextSlashPos) {
+				if (nextOpenSqB <= pos) {
+					throw new IllegalArgumentException("Wrong square bracket location in XPath expression "+expr);
+				}
+				localname = expr.substring(pos, nextOpenSqB);
+				if (expr.charAt(nextOpenSqB+1)!='@') {
+					throw new IllegalArgumentException("Expected '@' character after '[' in XPath expression "+expr);
+				}
+				int equalPos = expr.indexOf('=', nextOpenSqB);
+				int nextCloseSqB = expr.indexOf(']', nextOpenSqB);
+				if (equalPos != -1 && equalPos+2<nextCloseSqB) {
+					// we have an attribute value
+					attName = expr.substring(nextOpenSqB+2, equalPos);
+					if (expr.charAt(equalPos+1) != '\'' || expr.charAt(nextCloseSqB-1) != '\'') {
+						throw new IllegalArgumentException("Attribute value for attribute '"+attName+"' must be in single quotes, in XPath expression "+expr);
+					}
+					attValue = expr.substring(equalPos+2, nextCloseSqB-1);
+				} else { // only attribute name, no value
+					attName = expr.substring(nextOpenSqB+2, nextCloseSqB);
+				}
+				nextSlashPos = nextCloseSqB+1;
+				if (nextSlashPos >= expr.length() || expr.charAt(nextSlashPos) != '/') {
+					throw new IllegalArgumentException("XPath expression seems malformed: no slash after closed square bracket: "+expr);
+				}
+			} else { // no attribute
+				localname = expr.substring(pos, nextSlashPos);
+				// attName and attValue stay null
+			}
+			if (localname.isEmpty()) {
+				throw new IllegalArgumentException("Found empty localname in expression: "+expr);
+			}
+			parts.add(new String[] {prefix, localname, attName, attValue});
+			pos = nextSlashPos + 1;
+		}
+		// Last part: expect either 'text()' or '@attributeName'
+		if (pos >= expr.length()) {
+			throw new IllegalArgumentException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+		}
+		if (expr.charAt(pos) == '@') {
+			String attName = expr.substring(pos+1);
+			parts.add(new String[] {attName});
+		} else if (expr.substring(pos).equals("text()")) {
+			parts.add(new String[0]);
+		} else {
+			throw new IllegalArgumentException("XPath expression is expected to contain as final part either 'text()' or '@attributeName': "+expr);
+		}
+		return (String[][]) parts.toArray(new String[0][]);
+	}
+	
+	/**
+	 * Create a namespace context from the given mapping bewteen prefixes and namespace uris.
+	 * @param prefixes2NamespaceURIs
+	 * @return a namespace context
+	 */
+	public static NamespaceContext createNamespaceContext(final Map<String, String> prefixes2NamespaceURIs) {
+		return new NamespaceContext() {
+		    public String getNamespaceURI(String prefix) {
+		        if (prefix == null) throw new NullPointerException("Null prefix");
+		        else if (prefixes2NamespaceURIs.containsKey(prefix)) return prefixes2NamespaceURIs.get(prefix);
+		        else if ("xml".equals(prefix)) return XMLConstants.XML_NS_URI;
+		        return XMLConstants.NULL_NS_URI;
+		    }
+		    // This method isn't necessary for XPath processing.
+		    public String getPrefix(String uri) {
+		        throw new UnsupportedOperationException();
+		    }
+		    // This method isn't necessary for XPath processing either.
+		    public Iterator<Object> getPrefixes(String uri) {
+		        throw new UnsupportedOperationException();
+		    }
+		};
+	}
+	
+	/**
+	 * Get a default namespace context. Its namespace definitions include at least the prefixes "semaine", "emma" and "emotion". 
+	 * @return
+	 */
+	public static NamespaceContext getDefaultNamespaceContext() {
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("semaine", SemaineML.namespaceURI);
+		m.put("emma", EMMA.namespaceURI);
+		m.put("emotion", EmotionML.namespaceURI);
+		return createNamespaceContext(m);
 	}
 	
 }

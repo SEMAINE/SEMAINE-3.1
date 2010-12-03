@@ -103,7 +103,7 @@ public class IOBase
 	 * @return a valid connection object. It is undetermined whether the connection is already started.
 	 * @throws JMSException if the connection cannot be created for some reason.
 	 */
-	protected static synchronized Connection getConnection(String serverUrl, String serverUser, String serverPassword, IOBase iobase) throws JMSException {
+	public static synchronized Connection getConnection(String serverUrl, String serverUser, String serverPassword, IOBase iobase) throws JMSException {
 		String key = serverUrl+serverUser+serverPassword;
 		assert theConnections != null;
 		Connection c = theConnections.get(key);

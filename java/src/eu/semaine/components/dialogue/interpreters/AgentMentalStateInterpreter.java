@@ -127,7 +127,7 @@ public class AgentMentalStateInterpreter extends Component
 			}
 			if( stateChanged ) {
 				if (mentalState.isEmpty()) {
-					System.out.println("Gonna crash");
+					log.warn("Empty mental state -- gonna crash");
 				}
 				sendMentalState();
 			}

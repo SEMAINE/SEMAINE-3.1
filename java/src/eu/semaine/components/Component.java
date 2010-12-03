@@ -72,6 +72,13 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		meta.reportState(state);
 	}
 	
+	/**
+	 * Provide access to this component's meta messenger, e.g. to query the component for its time.
+	 * @return the meta messenger used by this component.
+	 */
+	public MetaMessenger getMeta() {
+		return meta;
+	}
 	
 	/**
 	 * Method called from the corresponding receiver thread, to notify us
