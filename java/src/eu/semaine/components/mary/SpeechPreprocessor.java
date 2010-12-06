@@ -363,17 +363,17 @@ public class SpeechPreprocessor extends Component
 			Document finalData = XMLTool.mergeTwoXMLFiles(inputDoc, maryDoc, mergingStylesheet, "semaine.mary.realised.acoustics");
 			long t6 = System.currentTimeMillis();
 			long durMerge = t6 - t5;
-			fmlbmlSender.sendXML(finalData, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			fmlbmlSender.sendXML(finalData, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 			long t7 = System.currentTimeMillis();
 			long durSend = t7 - t6;
 			log.debug("Times needed:\n"+durExtractSSML+" extract SSML\n"+durReplace1+" replace1\n"+durToString+" to string\n"+durMary+" MARY\n"
 					+durReplace2+" replace2\n"+durMerge+" merge\n"+durSend+" send\n");
 		}
 		else if ( localName.equals(FML.E_FML) && namespaceURI.equals(FML.namespaceURI)) {
-			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 		}
 		else if ( localName.equals(BML.E_BML) && namespaceURI.equals(BML.namespaceURI) ) {
-			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			fmlbmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 		}
 		else {
 			Element backchannel = null;
@@ -382,7 +382,7 @@ public class SpeechPreprocessor extends Component
 				backchannel = XMLTool.getChildElementByLocalNameNS(fml, FML.E_BACKCHANNEL, FML.namespaceURI);
 			}
 			if (backchannel != null) {
-				fmlbmlSender.sendXML(inputDoc, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+				fmlbmlSender.sendXML(inputDoc, meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 			}
 			else{
 				log.debug("Received fml document without bml or backchannel content -- ignoring.");

@@ -201,7 +201,7 @@ public class SpeechBMLRealiser extends Component
 			// Back-channel synthesis
 			Element bmlSpeech = XMLTool.getChildElementByLocalNameNS(input.getDocumentElement(), BML.E_SPEECH, BML.namespaceURI);
 			if(bmlSpeech == null) {
-				bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+				bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 				return;
 			}
 			
@@ -223,7 +223,7 @@ public class SpeechBMLRealiser extends Component
 			request.readInputData(reader);
 			request.process();
 			request.writeOutputData(audioos);
-			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime(), xm.getContentID(), xm.getContentCreationTime());
+			audioSender.sendBytesMessage(audioos.toByteArray(),  xm.getUsertime(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 			
 			request = new Request(MaryDataType.WORDS, MaryDataType.REALISED_ACOUSTPARAMS, voice.getLocale(),
 					voice, voiceEffects, "", 1, aff);
@@ -235,10 +235,10 @@ public class SpeechBMLRealiser extends Component
 			//System.out.println("MARY OUT: " + realisedOS.toString());
 			String finalData = XMLTool.mergeTwoXMLFiles(inputText, realisedOS.toString(), SpeechBMLRealiser.class.getResourceAsStream("Backchannel-Realised-Merge.xsl"), "semaine.mary.realised.acoustics");
 			//System.out.println("Final data : " + finalData);
-			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			bmlSender.sendTextMessage(finalData,  xm.getUsertime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 		} else if(input.getDocumentElement().getElementsByTagNameNS(BML.namespaceURI, BML.E_SPEECH).getLength() == 0) {
 			// plain bml -- forward unprocessed
-			bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 		} else {
 			// TTS processing mode
 			long t0 = System.currentTimeMillis();
@@ -342,7 +342,7 @@ public class SpeechBMLRealiser extends Component
 			long t9 = System.currentTimeMillis();
 			long durToString2 = t9 - t8;
 			
-			bmlSender.sendXML(finalData,  meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			bmlSender.sendXML(finalData,  meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 			long t10 = System.currentTimeMillis();
 			long durSendXML = t10 - t9;
 			
@@ -361,7 +361,7 @@ public class SpeechBMLRealiser extends Component
 			}
 			long t11 = System.currentTimeMillis();
 			long durAudio = t11 - t10;
-			audioSender.sendBytesMessage(audioos.toByteArray(),  meta.getTime(), xm.getContentID(), xm.getContentCreationTime());
+			audioSender.sendBytesMessage(audioos.toByteArray(),  meta.getTime(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 			long t12 = System.currentTimeMillis();
 			long durSendAudio = t12 - t11;
 			log.debug("Times needed:\n"+durCreateTransformer+" create transformer\n"+durExtractBML+" extract BML\n"+durExtractSSML+" extract SSML\n"

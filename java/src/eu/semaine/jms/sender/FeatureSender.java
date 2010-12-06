@@ -140,7 +140,7 @@ public class FeatureSender extends Sender
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
 	 * @param usertime the "user" time at which this message is being sent,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
 	 * @throws JMSException
 	 */
 	public void sendFeatureVector(float[] features, long usertime)
@@ -155,7 +155,8 @@ public class FeatureSender extends Sender
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
 	 * @param usertime the "user" time at which this message is being sent,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
+	 * @param sendBinary if true, send as binary feature vector, else send as textual feature vector
 	 * @throws JMSException
 	 */
 	public void sendFeatureVector(float[] features, long usertime, boolean sendBinary)
@@ -180,13 +181,42 @@ public class FeatureSender extends Sender
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
 	 * @param usertime the "user" time at which this message is being sent,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
+	 * @param eventType the type of event represented by this message.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
 	 * @throws JMSException
 	 */
 	public void sendFeatureVector(float[] features, long usertime, Event eventType, String contentID, long contentCreationTime)
 	throws JMSException
 	{
-		sendFeatureVector(features, usertime, false, eventType, contentID, contentCreationTime);
+		sendFeatureVector(features, usertime, eventType, contentID, contentCreationTime, null);
+	}
+	
+	/**
+	 * Send a vector of float features as a text message. This is for event-based feature vectors.
+	 * Before sending features,
+	 * {@link #setFeatureNames(String[]) must be called, and the
+	 * names must correspond to the features passed in the argument.
+	 * @param features the features to send.
+	 * @param usertime the "user" time at which this message is being sent,
+	 * in milliseconds since system startup.
+	 * @param eventType the type of event represented by this message.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage.CONTENT_TYPE_UTTERANCE, SEMAINEMessage.CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage.CONTENT_TYPE_VISUALONLY, or any other string. Can be null, in which case no content type will be sent.
+	 * @throws JMSException
+	 */
+	public void sendFeatureVector(float[] features, long usertime, Event eventType, String contentID, long contentCreationTime, String contentType)
+	throws JMSException
+	{
+		sendFeatureVector(features, usertime, false, eventType, contentID, contentCreationTime, contentType);
 	}
 	
 	/**
@@ -195,10 +225,41 @@ public class FeatureSender extends Sender
 	 * names must correspond to the features passed in the argument.
 	 * @param features the features to send.
 	 * @param usertime the "user" time at which this message is being sent,
-	 * in milliseconds since 1970.
+	 * in milliseconds since system startup.
+	 * @param sendBinary if true, send as binary feature vector, else send as textual feature vector
+	 * @param eventType the type of event represented by this message.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
 	 * @throws JMSException
 	 */
 	public void sendFeatureVector(float[] features, long usertime, boolean sendBinary, Event eventType, String contentID, long contentCreationTime)
+	throws JMSException
+	{
+		sendFeatureVector(features, usertime, sendBinary, eventType, contentID, contentCreationTime, null);
+	}
+	
+	/**
+	 * Send a vector of float features. This is for event-based feature vectors. Before sending features,
+	 * {@link #setFeatureNames(String[]) must be called, and the
+	 * names must correspond to the features passed in the argument.
+	 * @param features the features to send.
+	 * @param usertime the "user" time that this message refers to,
+	 * in milliseconds since system startup.
+	 * @param sendBinary if true, send as binary feature vector, else send as textual feature vector
+	 * @param eventType the type of event represented by this message.
+	 * @param contentID a unique identifier for the message's content.
+	 * If this is not null, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created.
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content;
+	 * The value may be one of SEMAINEMessage.CONTENT_TYPE_UTTERANCE, SEMAINEMessage.CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage.CONTENT_TYPE_VISUALONLY, or any other string. Can be null, in which case no content type will be sent.
+	 * @throws JMSException
+	 */
+	public void sendFeatureVector(float[] features, long usertime, boolean sendBinary, Event eventType, String contentID,
+			long contentCreationTime, String contentType)
 	throws JMSException
 	{
 		if (featureNames == null)
@@ -208,9 +269,9 @@ public class FeatureSender extends Sender
 		if (featureNames.length != features.length)
 			throw new IllegalArgumentException("vectors are not of equal length: names="+featureNames.length+", features="+features.length);
 		if (sendBinary)
-			sendBinaryFeatureVector(features, usertime, eventType, contentID, contentCreationTime);
+			sendBinaryFeatureVector(features, usertime, eventType, contentID, contentCreationTime, contentType);
 		else
-			sendTextFeatureVector(features, usertime, eventType, contentID, contentCreationTime);
+			sendTextFeatureVector(features, usertime, eventType, contentID, contentCreationTime, contentType);
 	}
 
 	
@@ -247,7 +308,7 @@ public class FeatureSender extends Sender
 	 * @param usertime
 	 * @throws JMSException
 	 */
-	protected void sendBinaryFeatureVector(float[] features, long usertime, Event eventType, String contentID, long contentCreationTime)
+	protected void sendBinaryFeatureVector(float[] features, long usertime, Event eventType, String contentID, long contentCreationTime, String contentType)
 	throws JMSException
 	{
 		if (!isConnectionStarted)
@@ -260,7 +321,7 @@ public class FeatureSender extends Sender
 		for (int i=0; i<features.length; i++) {
 			message.writeFloat(features[i]);
 		}
-		fillMessageProperties(message, usertime, contentID, contentCreationTime);
+		fillMessageProperties(message, usertime, contentID, contentCreationTime, contentType);
 		message.setStringProperty(SEMAINEMessage.EVENT, eventType.toString());
 		producer.send(message);
 	}
@@ -293,7 +354,7 @@ public class FeatureSender extends Sender
 	 * @param contentCreationTime
 	 * @throws JMSException
 	 */
-	protected void sendTextFeatureVector(float[] features, long usertime, Event eventType, String contentID, long contentCreationTime)
+	protected void sendTextFeatureVector(float[] features, long usertime, Event eventType, String contentID, long contentCreationTime, String contentType)
 	throws JMSException
 	{
 		if (isPeriodic()) {
@@ -303,7 +364,7 @@ public class FeatureSender extends Sender
 		for (int i=0; i<features.length; i++) {
 			buf.append(features[i]).append(" ").append(featureNames[i]).append("\n");
 		}
-		sendTextMessage(buf.toString(), usertime, eventType, contentID, contentCreationTime);
+		sendTextMessage(buf.toString(), usertime, eventType, contentID, contentCreationTime, contentType);
 	}
 }
 
