@@ -263,7 +263,7 @@ public:
 	 * @param text the message text.
 	 * @param usertime the "user" time at which this message is being sent,
 	 * in milliseconds since system startup.
-	 * @param event the type of event represented by this message.
+	 * @param eventType the type of event represented by this message.
 	 * @param contentID a unique identifier for the message's content.
 	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
 	 * @param contentCreationTime the time when the content in this message was created.

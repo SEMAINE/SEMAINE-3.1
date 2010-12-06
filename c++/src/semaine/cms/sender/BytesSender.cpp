@@ -36,14 +36,15 @@ BytesSender::~BytesSender()
 }
 
 
-void BytesSender::sendBytesMessage(const unsigned char * bytes, std::size_t numBytes, long long usertime, const std::string & event, const std::string & contentID, long long contentCreationTime)
+void BytesSender::sendBytesMessage(const unsigned char * bytes, std::size_t numBytes, long long usertime,
+		const std::string & event, const std::string & contentID, long long contentCreationTime, const std::string & contentType)
 throw(CMSException, SystemConfigurationException)
 {
 	if (!isConnectionStarted)
 		throw SystemConfigurationException("Connection is not started!");
 	BytesMessage * message = session->createBytesMessage();
 	message->setBodyBytes(bytes, numBytes);
-	Sender::fillMessageProperties(message, usertime, contentID, contentCreationTime);
+	Sender::fillMessageProperties(message, usertime, contentID, contentCreationTime, contentType);
 	if (isPeriodic())
 		message->setIntProperty(SEMAINEMessage::PERIOD, getPeriod());
 	else // event-based

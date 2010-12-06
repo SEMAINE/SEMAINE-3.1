@@ -98,21 +98,34 @@ public:
 	 * in milliseconds since system startup.
 	 * @param sendBinary whether to send the message as a binary message
 	 * (defaults to false)
+	 * @param contentID a unique identifier for the message's content. (optional, defaults to empty string)
+	 * If this is not the empty string, it will cause the addition of the String property <code>content-id</code> in the message.
+	 * @param contentCreationTime the time when the content in this message was created. (optional, defaults to -1)
+	 * If this is not negative, it will cause the addition of the Long property <code>content-creation-time</code> in the message.
+	 * @param contentType an optional content type for the message's content; (optional, defaults to empty string)
+	 * The value may be one of SEMAINEMessage::CONTENT_TYPE_UTTERANCE, SEMAINEMessage::CONTENT_TYPE_LISTENERVOCALISATION,
+	 * SEMAINEMessage::CONTENT_TYPE_VISUALONLY, or any other string.
+	 * If this is not the empty string, it will cause the addition of the String property <code>content-type</code> in the message.
 	 * @throws CMSException
 	 * @throws SystemConfigurationException if the feature names have not been set,
 	 * or if the number of features is not the same as the number of feature names
 	 */
 	void sendFeatureVector(const std::vector<float> & features, long long usertime,
-			bool sendBinary = false)
+			bool sendBinary = false, const std::string & contentID = "",
+			long long contentCreationTime = -1, const std::string & contentType = "")
 	throw(CMSException, SystemConfigurationException);
+
+
 
 protected:
 	std::vector<std::string> featureNames;
 
-	void sendBinaryFeatureVector(const std::vector<float> & features, long long usertime)
+	void sendBinaryFeatureVector(const std::vector<float> & features, long long usertime, const std::string & contentID,
+			long long contentCreationTime, const std::string & contentType)
 	throw(CMSException);
 
-	void sendTextFeatureVector(const std::vector<float> & features, long long usertime)
+	void sendTextFeatureVector(const std::vector<float> & features, long long usertime, const std::string & contentID,
+			long long contentCreationTime, const std::string & contentType)
 	throw(CMSException);
 
 };

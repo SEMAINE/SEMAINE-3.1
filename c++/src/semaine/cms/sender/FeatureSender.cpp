@@ -45,7 +45,8 @@ bool FeatureSender::areFeatureNamesSet()
 }
 
 void FeatureSender::sendFeatureVector(const std::vector<float> & features, long long usertime,
-		bool sendBinary)
+		bool sendBinary, const std::string & contentID,
+		long long contentCreationTime, const std::string & contentType)
 throw(CMSException, SystemConfigurationException)
 {
 	if (featureNames.empty())
@@ -56,23 +57,25 @@ throw(CMSException, SystemConfigurationException)
 		throw SystemConfigurationException(oss.str());
 	}
 	if (sendBinary)
-		sendBinaryFeatureVector(features, usertime);
+		sendBinaryFeatureVector(features, usertime, contentID, contentCreationTime, contentType);
 	else
-		sendTextFeatureVector(features, usertime);
+		sendTextFeatureVector(features, usertime, contentID, contentCreationTime, contentType);
 }
 
 
-void FeatureSender::sendTextFeatureVector(const std::vector<float> & features, long long usertime)
+void FeatureSender::sendTextFeatureVector(const std::vector<float> & features, long long usertime,
+		const std::string & contentID, long long contentCreationTime, const std::string & contentType)
 throw(CMSException)
 {
 	std::stringstream buf;
 	for (size_t i=0; i<features.size(); i++) {
 		buf << features[i] << " " << featureNames[i] << std::endl;
 	}
-	sendTextMessage(buf.str(), usertime);
+	sendTextMessage(buf.str(), usertime, contentID, contentCreationTime, contentType);
 }
 
-void FeatureSender::sendBinaryFeatureVector(const std::vector<float> & features, long long usertime)
+void FeatureSender::sendBinaryFeatureVector(const std::vector<float> & features, long long usertime,
+		const std::string & contentID, long long contentCreationTime, const std::string & contentType)
 throw(CMSException)
 {
 	if (!isConnectionStarted)
@@ -86,7 +89,7 @@ throw(CMSException)
 	for (size_t i=0, len=features.size(); i<len; i++) {
 		message->writeFloat(features[i]);
 	}
-	fillMessageProperties(message, usertime);
+	fillMessageProperties(message, usertime, contentID, contentCreationTime, contentType);
 	if (isPeriodic())
 		message->setIntProperty(SEMAINEMessage::PERIOD, getPeriod());
 	else // event-based
