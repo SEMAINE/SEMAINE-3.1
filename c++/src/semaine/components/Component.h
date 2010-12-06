@@ -90,7 +90,45 @@ protected:
 	bool isOutput;
 	decaf::util::concurrent::Mutex mutex;
 
-	Component(const std::string & componentName, bool isInput=false, bool isOutput=false) throw (CMSException);
+	/**
+	 * Create a component with the given name.
+	 * The component communicates with the default CMS server (see {@link IOBase#IOBase()}).
+	 * @param componentName the component name as it is to be used throughout the system.
+	 * @param isInput whether the component is an input component (optional, defaults to false)
+	 * @param isOutput whether the component is an output component (optional, defaults to false)
+	 * @throws JMSException if the connection to the middleware cannot be established
+	 */
+	Component(const std::string & componentName, bool isInput=false, bool isOutput=false)
+	throw (CMSException);
+
+	/**
+	 * Create a component with the given name.
+	 * The component is neither an input nor an output component,
+	 * communicates with the CMS server given in the arguments.
+	 * @param componentName the component name as it is to be used throughout the system.
+	 * @param cmsUrl the url where to contact the CMS server.
+	 * @param cmsUser the username to use (optional)
+	 * @param cmsPassword the password to use (optional)
+	 * @throws JMSException if the connection to the middleware cannot be established
+	 */
+	Component(const std::string & componentName,
+			const std::string & cmsUrl, const std::string & cmsUser = "", const std::string & cmsPassword = "")
+	throw (CMSException);
+
+	/**
+	 * Create a component with the given name.
+	 * The component communicates with the CMS server given in the arguments.
+	 * @param componentName the component name as it is to be used throughout the system.
+	 * @param isInput whether the component is an input component
+	 * @param isOutput whether the component is an output component
+	 * @param cmsUrl the url where to contact the CMS server.
+	 * @param cmsUser the username to use (can be the empty string)
+	 * @param cmsPassword the password to use (can be the empty string)
+	 * @throws JMSException if the connection to the middleware cannot be established
+	 */
+	Component(const std::string & componentName, bool isInput, bool isOutput,
+			const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword)
+	throw (CMSException);
 
 	bool exitRequested();
 

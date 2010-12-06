@@ -63,6 +63,12 @@ public class MetaMessenger extends IOBase implements MessageListener
 	private boolean isOutput;
 	private Statistics statistics;
 	
+	/**
+	 * Create a meta messenger for the component with the given name,
+	 * which is to communicate with the global default JMS server.
+	 * @param componentName the name of the component that this meta messenger belongs to.
+	 * @throws JMSException if the communication with the middleware cannot be established
+	 */
 	public MetaMessenger(String componentName)
 	throws JMSException
 	{
@@ -74,7 +80,28 @@ public class MetaMessenger extends IOBase implements MessageListener
 		startConnection();
 		statistics = new Statistics(30);
 	}
-	
+
+	/**
+	 * Create a meta messenger for the component with the given name, which is to
+	 * communicate with the JMS server given in the arguments.
+	 * @param jmsUrl the url where to contact the JMS server
+	 * @param jmsUser the username to use (can be null)
+	 * @param jmsPassword the password to use (can be null)
+	 * @param componentName the name of the component that this meta messenger belongs to.
+	 * @throws JMSException if the communication with the middleware cannot be established
+	 */
+	public MetaMessenger(String jmsUrl, String jmsUser, String jmsPassword, String componentName)
+	throws JMSException
+	{
+		super(jmsUrl, jmsUser, jmsPassword, "semaine.meta");
+		this.componentName = componentName;
+		consumer = session.createConsumer(topic, SEMAINEMessage.SOURCE+" = 'SystemManager'");
+		producer = session.createProducer(topic);
+		consumer.setMessageListener(this);
+		startConnection();
+		statistics = new Statistics(30);
+	}
+
 	public void IamAlive()
 	{
 		if (timeDelta != 0) { // only set time when we have a meaningful system time

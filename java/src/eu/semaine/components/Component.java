@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import javax.jms.JMSException;
 
 import eu.semaine.components.meta.MetaMessenger;
+import eu.semaine.jms.IOBase;
 import eu.semaine.jms.JMSLogger;
 import eu.semaine.jms.SEMAINEMessageAvailableListener;
 import eu.semaine.jms.message.SEMAINEMessage;
@@ -51,13 +52,61 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 	protected MetaMessenger meta;
 	protected int waitingTime = 100;
 	
+	/**
+	 * Create a component with the given name.
+	 * The component is neither an input nor an output component,
+	 * and communicates with the default JMS server (see {@link IOBase#IOBase(String)}.
+	 * @param componentName the component name as it is to be used throughout the system.
+	 * @throws JMSException if the connection to the middleware cannot be established
+	 */
 	protected Component(String componentName)
 	throws JMSException
 	{
 		this(componentName, false, false);
 	}
 	
+	/**
+	 * Create a component with the given name.
+	 * The component communicates with the default JMS server (see {@link IOBase#IOBase(String)}.
+	 * @param componentName the component name as it is to be used throughout the system.
+	 * @param isInput whether the component is an input component
+	 * @param isOutput whether the component is an output component
+	 * @throws JMSException if the connection to the middleware cannot be established
+	 */
 	protected Component(String componentName, boolean isInput, boolean isOutput)
+	throws JMSException
+	{
+		this(componentName, isInput, isOutput, null, null, null);
+	}
+	
+	/**
+	 * Create a component with the given name.
+	 * The component is neither an input nor an output component,
+	 * and communicates with the JMS server given in the arguments.
+	 * @param componentName the component name as it is to be used throughout the system.
+	 * @param jmsUrl the url where to contact the JMS server
+	 * @param jmsUser the username to use (can be null)
+	 * @param jmsPassword the password to use (can be null)
+	 * @throws JMSException if the connection to the middleware cannot be established
+	 */
+	protected Component(String componentName, String jmsUrl, String jmsUser, String jmsPassword)
+	throws JMSException
+	{
+		this(componentName, false, false, jmsUrl, jmsUser, jmsPassword);
+	}
+	
+	/**
+	 * Create a component with the given name.
+	 * The component communicates with the JMS server given in the arguments.
+	 * @param componentName the component name as it is to be used throughout the system.
+	 * @param isInput whether the component is an input component
+	 * @param isOutput whether the component is an output component
+	 * @param jmsUrl the url where to contact the JMS server
+	 * @param jmsUser the username to use (can be null)
+	 * @param jmsPassword the password to use (can be null)
+	 * @throws JMSException if the connection to the middleware cannot be established
+	 */
+	protected Component(String componentName, boolean isInput, boolean isOutput, String jmsUrl, String jmsUser, String jmsPassword)
 	throws JMSException
 	{
 		super(componentName);
@@ -67,7 +116,11 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 		senders = new LinkedList<Sender>();
 		inputWaiting = new LinkedBlockingQueue<Receiver>();
 		log = JMSLogger.getLog(getName());
-		meta = new MetaMessenger(getName());
+		if (jmsUrl == null) {
+			meta = new MetaMessenger(getName());
+		} else {
+			meta = new MetaMessenger(jmsUrl, jmsUser, jmsPassword, getName());
+		}
 		state = State.starting;
 		meta.reportState(state);
 	}

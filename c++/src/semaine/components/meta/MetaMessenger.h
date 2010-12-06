@@ -61,6 +61,8 @@ public:
 
 	MetaMessenger(const std::string & componentName) throw(CMSException);
 
+	MetaMessenger(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword, const std::string & componentName) throw(CMSException);
+
 	void reportState(const std::string & state, const std::string & message = "", const std::exception * exc = NULL)
 	throw(CMSException);
 

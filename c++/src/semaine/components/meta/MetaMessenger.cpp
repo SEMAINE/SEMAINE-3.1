@@ -49,7 +49,23 @@ namespace meta {
 		systemReady(false),
 		lastSeenAlive(0),
 		lastSeenState(""),
-                timeDelta(0)
+		timeDelta(0)
+	{
+		consumer = session->createConsumer(topic, semaine::cms::message::SEMAINEMessage::SOURCE + " = 'SystemManager'");
+		producer = session->createProducer(topic);
+		consumer->setMessageListener(this);
+		startConnection();
+		_statistics = new Statistics(30);
+	}
+
+	MetaMessenger::MetaMessenger(const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword,
+			const std::string & aComponentName) throw(CMSException) :
+		IOBase(cmsUrl, cmsUser, cmsPassword, "semaine.meta"),
+		componentName(aComponentName),
+		systemReady(false),
+		lastSeenAlive(0),
+		lastSeenState(""),
+		timeDelta(0)
 	{
 		consumer = session->createConsumer(topic, semaine::cms::message::SEMAINEMessage::SOURCE + " = 'SystemManager'");
 		producer = session->createProducer(topic);

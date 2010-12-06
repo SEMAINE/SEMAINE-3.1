@@ -35,6 +35,35 @@ const std::string Component::STATE_STALLED = "stalled";
 		meta.reportState(state);
 	}
 
+	Component::Component(const std::string & componentName,
+			const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword) throw (CMSException) :
+		name(componentName),
+		isInput(false),
+		isOutput(false),
+		_exitRequested(false),
+		waitingTime(100),
+		state(STATE_STOPPED),
+		meta(cmsUrl, cmsUser, cmsPassword, componentName)
+	{
+		log = CMSLogger::getLog(name);
+		state = STATE_STARTING;
+		meta.reportState(state);
+	}
+
+	Component::Component(const std::string & componentName, bool isInput, bool isOutput,
+			const std::string & cmsUrl, const std::string & cmsUser, const std::string & cmsPassword) throw (CMSException) :
+		name(componentName),
+		isInput(isInput),
+		isOutput(isOutput),
+		_exitRequested(false),
+		waitingTime(100),
+		state(STATE_STOPPED),
+		meta(cmsUrl, cmsUser, cmsPassword, componentName)
+	{
+		log = CMSLogger::getLog(name);
+		state = STATE_STARTING;
+		meta.reportState(state);
+	}
 
 
 	Component::~Component()
