@@ -13,6 +13,7 @@ import javax.jms.TextMessage;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.w3c.dom.Document;
 
+import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.util.XMLTool;
 
@@ -52,6 +53,37 @@ public class SEMAINEMessageTestUtils {
 	 * @see {@link XMLTool#xpath2doc(String, String, javax.xml.namespace.NamespaceContext, Document)}
 	 */
 	public static SEMAINEEmmaMessage createEMMAMessage(String... xpathValuePairs) throws JMSException {
+		TextMessage m = createActiveMQMessageFromXPath(xpathValuePairs);
+		SEMAINEEmmaMessage em = new SEMAINEEmmaMessage(m);
+		return em;
+	}
+
+	/**
+	 * Create an XML message from the XPath string/value pairs given as parameters
+	 * @param xpathValuePairs an even number of Strings, representing pairs of xpath strings
+	 *  used for generating the document and the values to store at the given location.
+	 * @return an XML message containing a document with the given data.
+	 * @throws JMSException if the underlying message object cannot be created
+	 * @throws IllegalArgumentException if the number of strings provided as parameters is not an even number,
+	 * or if they cannot be interpreted
+	 * @see {@link XMLTool#xpath2doc(String, String, javax.xml.namespace.NamespaceContext, Document)}
+	 */
+	public static SEMAINEXMLMessage createXMLMessage(String... xpathValuePairs) throws JMSException {
+		TextMessage m = createActiveMQMessageFromXPath(xpathValuePairs);
+		SEMAINEXMLMessage xm = new SEMAINEXMLMessage(m);
+		return xm;
+	}
+
+	/**
+	 * @param xpathValuePairs
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws NullPointerException
+	 * @throws JMSException
+	 * @throws SystemConfigurationException
+	 */
+	private static TextMessage createActiveMQMessageFromXPath(String... xpathValuePairs)
+	throws IllegalArgumentException, NullPointerException, JMSException, SystemConfigurationException {
 		if (xpathValuePairs.length == 0 || xpathValuePairs.length % 2 != 0) {
 			throw new IllegalArgumentException("Not an even number of strings");
 		}
@@ -63,8 +95,8 @@ public class SEMAINEMessageTestUtils {
 		}
 		TextMessage m = createActiveMQTextMessage();
 		m.setText(XMLTool.document2String(doc));
-		SEMAINEEmmaMessage em = new SEMAINEEmmaMessage(m);
-		return em;
+		return m;
 	}
+	
 
 }

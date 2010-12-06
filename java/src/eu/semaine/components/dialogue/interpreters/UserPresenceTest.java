@@ -11,9 +11,12 @@ import javax.jms.JMSException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.IOBase;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
+import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEMessageTestUtils;
+import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.util.SEMAINEUtils;
 
 
@@ -27,7 +30,11 @@ public class UserPresenceTest {
 	private static final String XPATH_FACE_TIME = "/emma:emma/emma:interpretation/semaine:face-present/@start";
 	private static final String XPATH_VOICE_PRESENCE = "/emma:emma/emma:interpretation/semaine:speaking/@statusChange";
 	private static final String XPATH_VOICE_TIME = "/emma:emma/emma:interpretation/@emma:offset-to-start";
-
+	private static final String XPATH_CALLBACK_ID = "/semaine:callback/semaine:event/@id";
+	private static final String XPATH_CALLBACK_TIME = "/semaine:callback/semaine:event/@time";
+	private static final String XPATH_CALLBACK_TYPE = "/semaine:callback/semaine:event/@type";
+	private static final String XPATH_CALLBACK_CONTENTTYPE = "/semaine:callback/semaine:event/@contentType";
+	
 	
 	SEMAINEEmmaMessage getFacePresenceMessage(String statusChange) throws JMSException {
 		return SEMAINEMessageTestUtils.createEMMAMessage(XPATH_FACE_PRESENCE, statusChange);
@@ -46,7 +53,12 @@ public class UserPresenceTest {
 		return SEMAINEMessageTestUtils.createEMMAMessage(XPATH_VOICE_PRESENCE, statusChange, XPATH_VOICE_TIME, String.valueOf(time));
 	}
 	
-	
+	SEMAINEXMLMessage getCallbackMessage(String contentType, String callbackType, long time) throws JMSException {
+		return SEMAINEMessageTestUtils.createXMLMessage(XPATH_CALLBACK_ID, "dummy123",
+				XPATH_CALLBACK_TIME, String.valueOf(time),
+				XPATH_CALLBACK_TYPE, callbackType,
+				XPATH_CALLBACK_CONTENTTYPE, contentType);
+	}
 	
 	
 	
@@ -427,4 +439,133 @@ public class UserPresenceTest {
 		assertFalse(upi.updateUserPresence());
 		assertFalse(upi.isUserPresent());
 	}
+	
+	
+	@Test
+	public void isSystemSpeaking_shouldBeTrue() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		long currentTime = upi.getMeta().getTime();
+		SEMAINEXMLMessage m = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "start", currentTime);
+		// exercise & verify
+		assertTrue(upi.isSystemStartsSpeaking(m));
+	}
+	
+	@Test
+	public void isSystemSpeaking_shouldBeFalse1() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		long currentTime = upi.getMeta().getTime();
+		SEMAINEXMLMessage m = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "stop", currentTime);
+		// exercise & verify
+		assertFalse(upi.isSystemStartsSpeaking(m));
+	}
+
+	@Test
+	public void isSystemSpeaking_shouldBeFalse2() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		long currentTime = upi.getMeta().getTime();
+		SEMAINEXMLMessage m = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_LISTENERVOCALISATION, "start", currentTime);
+		// exercise & verify
+		assertFalse(upi.isSystemStartsSpeaking(m));
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void isSystemSpeaking_shouldThrowNPE() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// exercise & verify
+		upi.isSystemStartsSpeaking(null);
+	}
+
+	@Test(expected = MessageFormatException.class)
+	public void isSystemSpeaking_shouldThrowMFE() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		long currentTime = upi.getMeta().getTime();
+		SEMAINEEmmaMessage message = getFacePresenceMessage("stop", currentTime);
+		// exercise & verify
+		upi.isSystemStartsSpeaking(message);
+	}
+
+	@Test
+	public void isSystemStopSpeaking_shouldBeTrue() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		long currentTime = upi.getMeta().getTime();
+		SEMAINEXMLMessage m = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "end", currentTime);
+		// exercise & verify
+		assertTrue(upi.isSystemStopsSpeaking(m));
+	}
+
+	
+	@Test
+	public void checkUserPresentWhileSystemIsSpeaking() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// set fixture state to voice present
+		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_APPEARED - 1;
+		SEMAINEEmmaMessage message = getVoicePresenceMessage("start", currentTime); 
+		upi.react(message);
+		upi.updateUserPresence();
+		// exercise: system starts speaking, then a voice stop is received with a timeout that would normally trigger user not present
+		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "start", currentTime);
+		upi.react(callbackMessage);
+		long currentTime2 = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_DISAPPEARED - 1;
+		SEMAINEEmmaMessage message2 = getVoicePresenceMessage("stop", currentTime2); 
+		upi.react(message2);
+		upi.updateUserPresence();
+		// verify
+		assertTrue(upi.isUserPresent());
+	}
+	
+	@Test
+	public void checkSystemSpeaking_shouldBeTrue1() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// exercise
+		long currentTime = upi.getMeta().getTime();
+		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "start", currentTime);
+		upi.react(callbackMessage);
+		// verify
+		assertTrue(upi.isSystemSpeaking());
+	}
+
+	@Test
+	public void checkSystemSpeaking_shouldBeTrue2() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// exercise: immediately after stopped speaking
+		long currentTime = upi.getMeta().getTime();
+		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "end", currentTime);
+		upi.react(callbackMessage);
+		// verify
+		assertTrue(upi.isSystemSpeaking());
+	}
+
+	@Test
+	public void checkSystemSpeaking_shouldBeFalse() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// exercise: timeout after stopped speaking exceeded
+		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_SYSTEM_STOPPED_SPEAKING - 1;
+		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "end", currentTime);
+		upi.react(callbackMessage);
+		// verify
+		assertFalse(upi.isSystemSpeaking());
+	}
+	
+	@Test
+	public void checkSystemSpeakingTime() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// exercise
+		long currentTime = 123;
+		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "end", currentTime);
+		// verify
+		assertEquals(currentTime, upi.getSystemSpeakingEventTime(callbackMessage));
+		
+	}
+
 }

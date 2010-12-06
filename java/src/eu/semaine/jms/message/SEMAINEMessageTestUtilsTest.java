@@ -62,4 +62,16 @@ public class SEMAINEMessageTestUtilsTest {
 		// verify
 		assertNotNull(m);
 	}
+	
+	
+	@Test
+	public void createXMLMessage_shouldSucceed() throws JMSException {
+		SEMAINEXMLMessage m = SEMAINEMessageTestUtils.createXMLMessage(XPATHEXAMPLE_VALID, "start");
+		assertNotNull(m.getDocument());
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void createXMLMessage_shouldThrowNPE() throws JMSException {
+		SEMAINEMessageTestUtils.createXMLMessage(null, "start");
+	}
 }

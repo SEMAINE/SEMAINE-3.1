@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.jms.JMSException;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.semaine.components.Component;
@@ -18,10 +19,14 @@ import eu.semaine.datatypes.stateinfo.StateInfo;
 import eu.semaine.datatypes.xml.BML;
 import eu.semaine.datatypes.xml.EMMA;
 import eu.semaine.datatypes.xml.SemaineML;
+import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
+import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.StateSender;
+import eu.semaine.util.XMLTool;
 
 /**
  * @author marc
@@ -33,6 +38,7 @@ public class UserPresenceInterpreter extends Component
 	public static final long TIME_THRESHOLD_VOICE_DISAPPEARED = 10000;
 	public static final long TIME_THRESHOLD_FACE_APPEARED = 0;
 	public static final long TIME_THRESHOLD_FACE_DISAPPEARED = 3000;
+	public static final long TIME_THRESHOLD_SYSTEM_STOPPED_SPEAKING = 10000;
 	
 	private boolean isFacePresent = false;
 	private long timeFaceAppeared = -1;
@@ -40,24 +46,15 @@ public class UserPresenceInterpreter extends Component
 	private boolean isVoicePresent = false;
 	private long timeVoiceAppeared = -1;
 	private long timeVoiceDisappeared = -1;
+	private boolean isSystemSpeaking = false;
+	private long timeSystemStoppedSpeaking = -1;
 	private boolean userPresent = false;
 	
-	
-	
-	/**
-	 * 	Limit that no life sign is detected, in ms
-	 */
-	public static final long SEMAINE_LIFESIGNLIMIT = 10000;
 
-	
-	private long lastFaceTime = -9999999; // last time we've seen a face
-	private long faceElapsed = 0; // Estimation of time elapsed since seeing a face
-	private long lastVoiceTime = -9999999; // last time we've heard a voice
-	private long voiceElapsed = 0; // Estimation of time elapsed since hearing a voice
-	private long lifeElapsed = 0; // Estimation of time elapsed since sensing life
 	
 	private EmmaReceiver facedetReceiver;
 	private EmmaReceiver speakingReceiver;
+	private XMLReceiver callbackReceiver;
 	private StateSender userPresenceSender;
 	
 	
@@ -76,6 +73,9 @@ public class UserPresenceInterpreter extends Component
 		
 		speakingReceiver = new EmmaReceiver("semaine.data.state.user.emma.nonverbal.voice");
 		receivers.add(speakingReceiver);
+		
+		callbackReceiver = new XMLReceiver("semaine.callback.output.Animation");
+		receivers.add(callbackReceiver);
 		
 		userPresenceSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(userPresenceSender);
@@ -138,16 +138,7 @@ public class UserPresenceInterpreter extends Component
 		Element facePresentElement = facePresentElements.get(0);
 		assert facePresentElement.getLocalName().equals(SemaineML.E_FACEPRESENT);
 		String faceTimeString = facePresentElement.getAttribute(BML.A_START);
-		if (faceTimeString.equals("")) {
-			return -1;
-		}
-		try {
-			long t = Long.parseLong(faceTimeString);
-			return t;
-		} catch (NumberFormatException nfe) {
-			log.warn("Unexpected long number: "+faceTimeString, nfe);
-			return -1;
-		}
+		return string2long(faceTimeString);
 	}
 	
 	/**
@@ -207,38 +198,98 @@ public class UserPresenceInterpreter extends Component
 		Element voicePresentElement = voicePresentElements.get(0);
 		assert voicePresentElement.getLocalName().equals(SemaineML.E_SPEAKING);
 		String voiceTimeString = tli.getAttribute(EMMA.A_OFFSET_TO_START);
-		if (voiceTimeString.equals("")) {
+		return string2long(voiceTimeString);
+	}
+	
+	protected boolean isSystemStartsSpeaking(SEMAINEXMLMessage callbackMessage) throws MessageFormatException, NullPointerException {
+		Element event = getEventElement(callbackMessage);
+		String contentType = event.getAttribute(SemaineML.A_CONTENTTYPE);
+		String type = event.getAttribute(SemaineML.A_TYPE);
+		return contentType.equals(SEMAINEMessage.CONTENT_TYPE_UTTERANCE) && type.equals(SemaineML.V_START);
+	}
+
+	protected boolean isSystemStopsSpeaking(SEMAINEXMLMessage callbackMessage) throws MessageFormatException, NullPointerException {
+		Element event = getEventElement(callbackMessage);
+		String contentType = event.getAttribute(SemaineML.A_CONTENTTYPE);
+		String type = event.getAttribute(SemaineML.A_TYPE);
+		return contentType.equals(SEMAINEMessage.CONTENT_TYPE_UTTERANCE) && type.equals(SemaineML.V_END);
+	}
+	
+	protected long getSystemSpeakingEventTime(SEMAINEXMLMessage callbackMessage) throws MessageFormatException, NullPointerException {
+		Element event = getEventElement(callbackMessage);
+		String timeString = event.getAttribute(SemaineML.A_TIME);
+		return string2long(timeString);
+	}
+
+
+	/**
+	 * @param callbackMessage
+	 * @return
+	 * @throws NullPointerException
+	 * @throws MessageFormatException
+	 */
+	private Element getEventElement(SEMAINEXMLMessage callbackMessage)
+			throws NullPointerException, MessageFormatException {
+		if (callbackMessage == null) {
+			throw new NullPointerException("null argument");
+		}
+		Document doc = callbackMessage.getDocument();
+		if (doc == null) {
+			throw new NullPointerException("null document");
+		}
+		Element root = doc.getDocumentElement();
+		if (root == null || !(root.getLocalName().equals(SemaineML.E_CALLBACK) && root.getNamespaceURI().equals(SemaineML.namespaceURI))) {
+			throw new MessageFormatException("Expected root element '"+SemaineML.E_CALLBACK+"' in namespace '"+SemaineML.namespaceURI+"' but got '"
+					+root.getLocalName()+"' in namespace '"+root.getNamespaceURI()+"'");
+		}
+		Element event = XMLTool.needChildElementByLocalNameNS(doc.getDocumentElement(), SemaineML.E_EVENT, SemaineML.namespaceURI);
+		return event;
+	}
+	
+	private long string2long(String s) {
+		if (s.equals("")) {
 			return -1;
 		}
 		try {
-			long t = Long.parseLong(voiceTimeString);
+			long t = Long.parseLong(s);
 			return t;
 		} catch (NumberFormatException nfe) {
-			log.warn("Unexpected long number: "+voiceTimeString, nfe);
+			log.warn("Unexpected long number: "+s, nfe);
 			return -1;
 		}
 	}
 	
 	
+	
+	
 	@Override
 	protected void react(SEMAINEMessage m)
 	throws JMSException {
-		assert m instanceof SEMAINEEmmaMessage;
-		SEMAINEEmmaMessage em = (SEMAINEEmmaMessage) m;
-		if (isFaceDetected(em)) {
-			isFacePresent = true;
-			timeFaceAppeared = getFaceChangeTime(em);
-		} else if (isFaceDisappeared(em)) {
-			isFacePresent = false;
-			timeFaceDisappeared = getFaceChangeTime(em);
-		}
-		if (isVoiceDetected(em)) {
-			isVoicePresent = true;
-			timeVoiceAppeared = getVoiceChangeTime(em);
-		} else if (isVoiceDisappeared(em)) {
-			isVoicePresent = false;
-			timeVoiceDisappeared = getVoiceChangeTime(em);
-		}
+		if (m instanceof SEMAINEEmmaMessage) {
+			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage) m;
+			if (isFaceDetected(em)) {
+				isFacePresent = true;
+				timeFaceAppeared = getFaceChangeTime(em);
+			} else if (isFaceDisappeared(em)) {
+				isFacePresent = false;
+				timeFaceDisappeared = getFaceChangeTime(em);
+			}
+			if (isVoiceDetected(em)) {
+				isVoicePresent = true;
+				timeVoiceAppeared = getVoiceChangeTime(em);
+			} else if (isVoiceDisappeared(em)) {
+				isVoicePresent = false;
+				timeVoiceDisappeared = getVoiceChangeTime(em);
+			}
+		} else if (m instanceof SEMAINEXMLMessage) {
+			SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
+			if (isSystemStartsSpeaking(xm)) {
+				isSystemSpeaking = true;
+			} else if (isSystemStopsSpeaking(xm)) {
+				isSystemSpeaking = false;
+				timeSystemStoppedSpeaking = getSystemSpeakingEventTime(xm);
+			}
+		} // else ignore
 	}
 
 	
@@ -264,6 +315,17 @@ public class UserPresenceInterpreter extends Component
 			|| currentTime - timeFaceDisappeared <= TIME_THRESHOLD_FACE_DISAPPEARED;
 	}
 	
+	/**
+	 * Determine whether the system is currently speaking,
+	 * or stopped speaking so recently that we still consider the system to be speaking.
+	 * @return
+	 */
+	protected boolean isSystemSpeaking() {
+		long currentTime = meta.getTime();
+		return isSystemSpeaking 
+			|| currentTime - timeSystemStoppedSpeaking <= TIME_THRESHOLD_SYSTEM_STOPPED_SPEAKING;
+	}
+	
 	
 	/**
 	 * Determine based on the observed evidence (face, voice) whether the user is currently present, 
@@ -282,7 +344,8 @@ public class UserPresenceInterpreter extends Component
 	 * @return true if user presence has changed during the update, false otherwise
 	 */
 	protected boolean updateUserPresence() {
-		if (userPresent && !(isFacePresent() || isVoicePresent())) {
+		// system speaking prevents the user from disappearing, but does not make him/her appear.
+		if (userPresent && !(isFacePresent() || isVoicePresent() || isSystemSpeaking())) {
 			// user has disappeared
 			userPresent = false;
 			return true; // changed
