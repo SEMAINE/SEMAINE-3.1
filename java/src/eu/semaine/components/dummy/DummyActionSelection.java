@@ -58,9 +58,9 @@ public class DummyActionSelection extends Component
 		SEMAINEXMLMessage xm = (SEMAINEXMLMessage)m;
 		boolean isFML = "FML".equals(xm.getDatatype());
 		if (isFML) {
-			fmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			fmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 		} else {
-			bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime());
+			bmlSender.sendXML(xm.getDocument(), meta.getTime(), xm.getEventType(), xm.getContentID(), xm.getContentCreationTime(), xm.getContentType());
 		}
 	}
 }

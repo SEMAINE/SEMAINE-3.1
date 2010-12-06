@@ -947,7 +947,7 @@ public class RandomUtteranceActionProposer extends Component implements Behaviou
 				sendSpeaking();
 				System.out.println(docToString(doc));
 				log.debug("Generating directly: '"+currResponse.getResponse()+"'");
-				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
+				fmlSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime(), SEMAINEMessage.CONTENT_TYPE_UTTERANCE);
 				feedbackId = "bml_uap_"+output_counter;
 			}catch( JMSException e ) {
 				// Handle
@@ -988,7 +988,7 @@ public class RandomUtteranceActionProposer extends Component implements Behaviou
 			try {
 				// TODO: Uncomment and test
 				System.out.println(docToString(doc));
-				queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime());
+				queuingFMLSender.sendXML(doc, meta.getTime(), "bml_uap_"+output_counter, meta.getTime(), SEMAINEMessage.CONTENT_TYPE_UTTERANCE);
 				String prepID = "bml_uap_"+output_counter;
 				preparingResponses.put(hash, prepID);
 				DMLogger.getLogger().log(meta.getTime(),"PreparationHash = " + hash);

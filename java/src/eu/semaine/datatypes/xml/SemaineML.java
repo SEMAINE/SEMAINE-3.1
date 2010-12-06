@@ -51,6 +51,7 @@ public class SemaineML
     public static final String A_ID = "id";
     public static final String A_DATA = "data";
     public static final String A_TYPE = "type";
+    public static final String A_CONTENTTYPE = "contentType";
     
     // Attribute values
     // For A_STATUS:

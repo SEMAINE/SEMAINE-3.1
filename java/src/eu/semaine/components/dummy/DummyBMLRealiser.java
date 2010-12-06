@@ -85,7 +85,7 @@ public class DummyBMLRealiser extends Component
 		if (!isBML)
 			throw new MessageFormatException("Expected BML message, got "+xm.getDatatype());
 	    
-		fapSender.sendTextMessage(dummyFAPData, meta.getTime(), m.getEventType(), m.getContentID(), m.getContentCreationTime());
+		fapSender.sendTextMessage(dummyFAPData, meta.getTime(), m.getEventType(), m.getContentID(), m.getContentCreationTime(), m.getContentType());
 		
 		String dataInfoString = "HASAUDIO 1\nHASFAP 1\nHASBAP 0\n";
 		dataInfoSender.sendTextMessage(dataInfoString, meta.getTime(), Event.single, m.getContentID(), m.getContentCreationTime());
