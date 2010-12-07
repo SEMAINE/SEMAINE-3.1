@@ -42,6 +42,7 @@ public class UserPresenceInterpreter extends Component
 	public static final String PROPERTY_FACE_START_THRESHOLD = "semaine.UserPresence.threshold.faceAppeared";
 	public static final String PROPERTY_FACE_END_THRESHOLD = "semaine.UserPresence.threshold.faceDisappeared";
 	public static final String PROPERTY_SYSTEM_END_THRESHOLD = "semaine.UserPresence.threshold.systemStoppedSpeaking";
+	public static final String PROPERTY_EXTERNAL_USERPRESENCE_THRESHOLD = "semaine.UserPresence.threshold.externalUserPresence";
 	
 	private boolean isFacePresent = false;
 	private long timeFaceAppeared = -1;
@@ -51,6 +52,7 @@ public class UserPresenceInterpreter extends Component
 	private long timeVoiceDisappeared = -1;
 	private boolean isSystemSpeaking = false;
 	private long timeSystemStoppedSpeaking = -1;
+	private long timeExternalUserPresence = -1;
 	private boolean userPresent = false;
 	
 	private long thresholdFaceAppeared;
@@ -58,6 +60,7 @@ public class UserPresenceInterpreter extends Component
 	private long thresholdVoiceAppeared;
 	private long thresholdVoiceDisappeared;
 	private long thresholdSystemStoppedSpeaking;
+	private long thresholdExternalUserPresence;
 	
 
 	
@@ -87,7 +90,7 @@ public class UserPresenceInterpreter extends Component
 		callbackReceiver = new XMLReceiver("semaine.callback.output.Animation");
 		receivers.add(callbackReceiver);
 		
-		userPresenceReceiver = new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState);
+		userPresenceReceiver = new StateReceiver("semaine.data.state.context", SEMAINEMessage.SOURCE+" <> '"+getName()+"'", StateInfo.Type.ContextState);
 		receivers.add(userPresenceReceiver);
 		
 		userPresenceSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
@@ -98,6 +101,7 @@ public class UserPresenceInterpreter extends Component
 		thresholdVoiceAppeared = SEMAINEUtils.getLongProperty(PROPERTY_VOICE_START_THRESHOLD, 1000);
 		thresholdVoiceDisappeared = SEMAINEUtils.getLongProperty(PROPERTY_VOICE_END_THRESHOLD, 10000);
 		thresholdSystemStoppedSpeaking = SEMAINEUtils.getLongProperty(PROPERTY_SYSTEM_END_THRESHOLD, 5000);
+		thresholdExternalUserPresence = SEMAINEUtils.getLongProperty(PROPERTY_EXTERNAL_USERPRESENCE_THRESHOLD, 60000); // one minute
 	}
 	
 	
@@ -312,8 +316,10 @@ public class UserPresenceInterpreter extends Component
 			SEMAINEStateMessage sm = (SEMAINEStateMessage) m;
 			StateInfo info = sm.getState();
 			if (info.hasInfo("userPresent")) {
+				timeExternalUserPresence = meta.getTime();
 				userPresent = "present".equals(info.getInfo("userPresent"));
-				log.debug("Received message that user is now "+(userPresent ? "present" : "absent"));
+				log.debug("Received message that user is now "+(userPresent ? "present" : "absent")
+						+" -- will respect this for "+(thresholdExternalUserPresence/1000)+ " seconds");
 			}
 		} else if (m instanceof SEMAINEEmmaMessage) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage) m;
@@ -393,6 +399,14 @@ public class UserPresenceInterpreter extends Component
 		return userPresent;
 	}
 	
+	/**
+	 * Whether there is an externally specified user presence
+	 * which has been set less than threshold time ago.
+	 * @return
+	 */
+	protected boolean isExternalUserPresenceInForce() {
+		return meta.getTime() - timeExternalUserPresence <= thresholdExternalUserPresence;
+	}
 	
 	/**
 	 * Update the internal state of the component reflecting the user presence,
@@ -400,6 +414,9 @@ public class UserPresenceInterpreter extends Component
 	 * @return true if user presence has changed during the update, false otherwise
 	 */
 	protected boolean updateUserPresence() {
+		if (isExternalUserPresenceInForce()) {
+			return false;
+		}
 		// system speaking prevents the user from disappearing, but does not make him/her appear.
 		if (userPresent && !(isFacePresent() || isVoicePresent() || isSystemSpeaking())) {
 			// user has disappeared

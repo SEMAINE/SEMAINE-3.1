@@ -91,14 +91,6 @@ public abstract class StateInfo
 				is = new FileInputStream(configFile);
 			} catch (IOException ioe) {
 				throw new Error("Cannot open stateinfo config file "+configFile.toString(), ioe);
-			} finally {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException ioe) {
-						throw new Error("Cannot close stateinfo config file "+configFile.toString(), ioe);
-					}
-				}
 			}
 		}
 		BufferedReader br = null;

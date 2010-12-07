@@ -633,6 +633,7 @@ public class UserPresenceTest {
 		// exercise
 		upi.react(ssm);
 		// verify
+		assertTrue(upi.isExternalUserPresenceInForce());
 		assertTrue(upi.isUserPresent());
 	}
 
@@ -644,6 +645,7 @@ public class UserPresenceTest {
 		// exercise
 		upi.react(ssm);
 		// verify
+		assertTrue(upi.isExternalUserPresenceInForce());
 		assertFalse(upi.isUserPresent());
 	}
 }
