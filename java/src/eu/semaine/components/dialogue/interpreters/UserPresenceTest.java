@@ -11,11 +11,13 @@ import javax.jms.JMSException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import eu.semaine.datatypes.stateinfo.StateInfo.Type;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.IOBase;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
 import eu.semaine.jms.message.SEMAINEMessageTestUtils;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.util.SEMAINEUtils;
 
@@ -61,9 +63,10 @@ public class UserPresenceTest {
 	}
 	
 	
-	
 	@BeforeClass
 	public static void beforeClass() throws Exception {
+		// For StateInfo.class:
+		System.setProperty("semaine.stateinfo-config.resource", "eu/semaine/jms/message/stateinfo-for-tests.config");
 		SEMAINEUtils.setupLog4j();
 		IOBase.useEmbeddedBroker();
 	}
@@ -621,5 +624,26 @@ public class UserPresenceTest {
 		// verify
 		assertEquals(expected, upi.getThresholdSystemStoppedSpeaking());
 	}
+	
+	@Test
+	public void externalUserPresence_userAppears() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		SEMAINEStateMessage ssm = SEMAINEMessageTestUtils.createStateMessage(Type.ContextState, "userPresent", "present");
+		// exercise
+		upi.react(ssm);
+		// verify
+		assertTrue(upi.isUserPresent());
+	}
 
+	@Test
+	public void externalUserPresence_userDisappears() throws JMSException {
+		// setup
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		SEMAINEStateMessage ssm = SEMAINEMessageTestUtils.createStateMessage(Type.ContextState, "userPresent", "absent");
+		// exercise
+		upi.react(ssm);
+		// verify
+		assertFalse(upi.isUserPresent());
+	}
 }

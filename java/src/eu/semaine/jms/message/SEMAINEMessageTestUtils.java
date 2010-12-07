@@ -5,6 +5,9 @@
 package eu.semaine.jms.message;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
@@ -13,6 +16,12 @@ import javax.jms.TextMessage;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.w3c.dom.Document;
 
+import eu.semaine.datatypes.stateinfo.AgentStateInfo;
+import eu.semaine.datatypes.stateinfo.ContextStateInfo;
+import eu.semaine.datatypes.stateinfo.DialogStateInfo;
+import eu.semaine.datatypes.stateinfo.StateInfo;
+import eu.semaine.datatypes.stateinfo.SystemStateInfo;
+import eu.semaine.datatypes.stateinfo.UserStateInfo;
 import eu.semaine.exceptions.SystemConfigurationException;
 import eu.semaine.jms.IOBase.Event;
 import eu.semaine.util.XMLTool;
@@ -94,9 +103,47 @@ public class SEMAINEMessageTestUtils {
 			doc = XMLTool.xpath2doc(xpathExpression, value, null, doc);
 		}
 		TextMessage m = createActiveMQTextMessage();
+		fillXMLProperty(m);
 		m.setText(XMLTool.document2String(doc));
 		return m;
 	}
 	
+	public static SEMAINEStateMessage createStateMessage(StateInfo.Type type, String... shortnamesAndValues) throws JMSException {
+		if (shortnamesAndValues.length == 0 || shortnamesAndValues.length % 2 != 0) {
+			throw new IllegalArgumentException("Not an even number of strings");
+		}
+		Map<String, String> infoMap = new HashMap<String, String>();
+		for (int i=0; i<shortnamesAndValues.length; i+=2) {
+			infoMap.put(shortnamesAndValues[i], shortnamesAndValues[i+1]);
+		}
+		StateInfo info;
+		switch (type) {
+		case AgentState:
+			info = new AgentStateInfo(infoMap);
+			break;
+		case ContextState:
+			info = new ContextStateInfo(infoMap);
+			break;
+		case DialogState:
+			info = new DialogStateInfo(infoMap, null);
+			break;
+		case SystemState:
+			info = new SystemStateInfo(infoMap);
+			break;
+		case UserState:
+			info = new UserStateInfo(infoMap);
+			break;
+		default:
+			throw new UnsupportedOperationException("Unknown type "+type);
+		}
+		return createStateMessage(info);
+	}
+	
+	public static SEMAINEStateMessage createStateMessage(StateInfo info) throws JMSException {
+		TextMessage m = createActiveMQTextMessage();
+		fillXMLProperty(m);
+		m.setText(XMLTool.document2String(info.getDocument()));
+		return new SEMAINEStateMessage(m, info.getType());
+	}
 
 }

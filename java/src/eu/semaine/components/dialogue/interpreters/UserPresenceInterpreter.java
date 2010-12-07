@@ -22,8 +22,10 @@ import eu.semaine.datatypes.xml.SemaineML;
 import eu.semaine.exceptions.MessageFormatException;
 import eu.semaine.jms.message.SEMAINEEmmaMessage;
 import eu.semaine.jms.message.SEMAINEMessage;
+import eu.semaine.jms.message.SEMAINEStateMessage;
 import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
+import eu.semaine.jms.receiver.StateReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.StateSender;
 import eu.semaine.util.SEMAINEUtils;
@@ -62,6 +64,7 @@ public class UserPresenceInterpreter extends Component
 	private EmmaReceiver facedetReceiver;
 	private EmmaReceiver speakingReceiver;
 	private XMLReceiver callbackReceiver;
+	private StateReceiver userPresenceReceiver;
 	private StateSender userPresenceSender;
 	
 	
@@ -83,6 +86,9 @@ public class UserPresenceInterpreter extends Component
 		
 		callbackReceiver = new XMLReceiver("semaine.callback.output.Animation");
 		receivers.add(callbackReceiver);
+		
+		userPresenceReceiver = new StateReceiver("semaine.data.state.context", StateInfo.Type.ContextState);
+		receivers.add(userPresenceReceiver);
 		
 		userPresenceSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(userPresenceSender);
@@ -302,7 +308,14 @@ public class UserPresenceInterpreter extends Component
 	@Override
 	protected void react(SEMAINEMessage m)
 	throws JMSException {
-		if (m instanceof SEMAINEEmmaMessage) {
+		if (m instanceof SEMAINEStateMessage) {
+			SEMAINEStateMessage sm = (SEMAINEStateMessage) m;
+			StateInfo info = sm.getState();
+			if (info.hasInfo("userPresent")) {
+				userPresent = "present".equals(info.getInfo("userPresent"));
+				log.debug("Received message that user is now "+(userPresent ? "present" : "absent"));
+			}
+		} else if (m instanceof SEMAINEEmmaMessage) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage) m;
 			if (isFaceDetected(em)) {
 				log.debug("face appeared");

@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,13 +74,36 @@ public abstract class StateInfo
 	private static Map<Type, XPathInfoMapper> getInfosByType()
 	{
 		Map<Type, List<String>> configSections = new HashMap<Type, List<String>>();
-		File configFile = SEMAINEUtils.getConfigFile("semaine.stateinfo-config");
-		if (configFile == null) {
-			throw new Error("No character config file given in property 'semaine.stateinfo-config' -- aborting.");
+		InputStream is = null;
+		// check if we are to read from a resource first, and try config file second:
+		String resourcePath = System.getProperty("semaine.stateinfo-config.resource");
+		if (resourcePath != null) {
+			is = ClassLoader.getSystemResourceAsStream(resourcePath);
+			if (is == null) {
+				throw new Error("Resource '"+resourcePath+"' is requested but does not exist");
+			}
+		} else {
+			File configFile = SEMAINEUtils.getConfigFile("semaine.stateinfo-config");
+			if (configFile == null) {
+				throw new Error("No character config file given in property 'semaine.stateinfo-config' -- aborting.");
+			}
+			try {
+				is = new FileInputStream(configFile);
+			} catch (IOException ioe) {
+				throw new Error("Cannot open stateinfo config file "+configFile.toString(), ioe);
+			} finally {
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException ioe) {
+						throw new Error("Cannot close stateinfo config file "+configFile.toString(), ioe);
+					}
+				}
+			}
 		}
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), "UTF-8"));
+			br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			String line = null;
 			Type currentType = null;
 			List<String> currentSection = new ArrayList<String>();
@@ -106,7 +130,7 @@ public abstract class StateInfo
 				configSections.put(currentType, currentSection);
 			}
 		} catch (IOException ioe) {
-			throw new Error("Cannot load stateinfo config file from "+configFile.toString(), ioe);
+			throw new Error("Cannot load stateinfo config", ioe);
 		} finally {
 			try {
 				if (br != null) {
@@ -214,7 +238,7 @@ public abstract class StateInfo
 		analyseDocument(rootName, rootNamespace);
 	}
 
-	public StateInfo(Map<String,String> infoItems, String whatState, Type type)
+	protected StateInfo(Map<String,String> infoItems, String whatState, Type type)
 	throws IllegalArgumentException
 	{
 		this.stateName = whatState;
