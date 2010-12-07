@@ -241,6 +241,38 @@ public class SEMAINEUtils
     	return value;
     }
     
+    /**
+     * Convert the given string into a long value, if possible.
+     * @param valueString string to be converted into a long.
+     * @param defaultValue value to use if the string cannot be converted into a long.
+     * @return the best approximation that can be made for the long value given in valueString. If valueString
+     * cannot be converted into any long, returns defaultValue.
+     */
+    public static long parseLong(String valueString, long defaultValue) {
+    	long value;
+    	try {
+    		value = Long.parseLong(valueString);
+    	} catch (NumberFormatException nfe) {
+    		return defaultValue;
+    	}
+    	return value;
+    }
+
+    /**
+     * Try to get the system property with the given name as a long value.
+     * If the system property is not defined, or cannot be interpreted as a long,
+     * return defaultvalue.
+     * @param propertyName
+     * @param defaultValue
+     * @return the property as a long or the default value
+     */
+    public static long getLongProperty(String propertyName, long defaultValue) {
+    	String value = System.getProperty(propertyName);
+    	if (value == null) {
+    		return defaultValue;
+    	}
+    	return parseLong(value, defaultValue);
+    }
 
     
 }

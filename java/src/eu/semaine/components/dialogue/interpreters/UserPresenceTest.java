@@ -189,7 +189,7 @@ public class UserPresenceTest {
 	public void isVoicePresent_shouldBePresent2() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceAppeared() - 1;
 		SEMAINEEmmaMessage message = getVoicePresenceMessage("start", currentTime); 
 		// exercise
 		upi.react(message);
@@ -225,7 +225,7 @@ public class UserPresenceTest {
 	public void isVoicePresent_shouldNotBePresent2() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_DISAPPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceDisappeared() - 1;
 		SEMAINEEmmaMessage message = getVoicePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -248,7 +248,7 @@ public class UserPresenceTest {
 	public void isFacePresent_shouldBePresent2() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceAppeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("start", currentTime);
 		// exercise
 		upi.react(message);
@@ -272,7 +272,7 @@ public class UserPresenceTest {
 	public void isFacePresent_shouldNotBePresent() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_DISAPPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceDisappeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -297,7 +297,7 @@ public class UserPresenceTest {
 	public void isUserPresent_shouldBePresent2() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceAppeared() - 1;
 		SEMAINEEmmaMessage message = getVoicePresenceMessage("start", currentTime); 
 		// exercise
 		upi.react(message);
@@ -310,9 +310,9 @@ public class UserPresenceTest {
 	public void isUserPresent_shouldBePresent3() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceAppeared() - 1;
 		SEMAINEEmmaMessage message = getVoicePresenceMessage("start", currentTime);
-		currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_DISAPPEARED - 1;
+		currentTime = upi.getMeta().getTime() - upi.getThresholdFaceDisappeared() - 1;
 		SEMAINEEmmaMessage message2 = getFacePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -326,9 +326,9 @@ public class UserPresenceTest {
 	public void isUserPresent_shouldBePresent4() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceAppeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("start", currentTime);
-		currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_DISAPPEARED - 1;
+		currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceDisappeared() - 1;
 		SEMAINEEmmaMessage message2 = getVoicePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -342,7 +342,7 @@ public class UserPresenceTest {
 	public void isUserPresent_shouldNotBePresent1() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_DISAPPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceDisappeared() - 1;
 		SEMAINEEmmaMessage message = getVoicePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -355,7 +355,7 @@ public class UserPresenceTest {
 	public void isUserPresent_shouldNotBePresent2() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_DISAPPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceDisappeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -368,9 +368,9 @@ public class UserPresenceTest {
 	public void isUserPresent_shouldNotBePresent3() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceAppeared() - 1;
 		SEMAINEEmmaMessage message = getVoicePresenceMessage("start", currentTime);
-		currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_DISAPPEARED - 1;
+		currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceDisappeared() - 1;
 		SEMAINEEmmaMessage message2 = getVoicePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -384,9 +384,9 @@ public class UserPresenceTest {
 	public void isUserPresent_shouldNotBePresent4() throws JMSException {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceAppeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("start", currentTime);
-		currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_DISAPPEARED - 1;
+		currentTime = upi.getMeta().getTime() - upi.getThresholdFaceDisappeared() - 1;
 		SEMAINEEmmaMessage message2 = getFacePresenceMessage("stop", currentTime); 
 		// exercise
 		upi.react(message);
@@ -402,7 +402,7 @@ public class UserPresenceTest {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
 		// user appears:
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceAppeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("start", currentTime);
 		upi.react(message);
 		// verify:
@@ -415,9 +415,9 @@ public class UserPresenceTest {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
 		// user appears:
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceAppeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("start", currentTime);
-		currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_DISAPPEARED - 1;
+		currentTime = upi.getMeta().getTime() - upi.getThresholdFaceDisappeared() - 1;
 		SEMAINEEmmaMessage message2 = getFacePresenceMessage("stop", currentTime);
 		upi.react(message);
 		upi.updateUserPresence();
@@ -432,7 +432,7 @@ public class UserPresenceTest {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
 		// user disappears (but was not there):
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_FACE_DISAPPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdFaceDisappeared() - 1;
 		SEMAINEEmmaMessage message = getFacePresenceMessage("stop", currentTime);
 		upi.react(message);
 		// verify:
@@ -505,14 +505,14 @@ public class UserPresenceTest {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
 		// set fixture state to voice present
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_APPEARED - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdVoiceAppeared() - 1;
 		SEMAINEEmmaMessage message = getVoicePresenceMessage("start", currentTime); 
 		upi.react(message);
 		upi.updateUserPresence();
 		// exercise: system starts speaking, then a voice stop is received with a timeout that would normally trigger user not present
 		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "start", currentTime);
 		upi.react(callbackMessage);
-		long currentTime2 = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_VOICE_DISAPPEARED - 1;
+		long currentTime2 = upi.getMeta().getTime() - upi.getThresholdVoiceDisappeared() - 1;
 		SEMAINEEmmaMessage message2 = getVoicePresenceMessage("stop", currentTime2); 
 		upi.react(message2);
 		upi.updateUserPresence();
@@ -549,7 +549,7 @@ public class UserPresenceTest {
 		// setup
 		UserPresenceInterpreter upi = new UserPresenceInterpreter();
 		// exercise: timeout after stopped speaking exceeded
-		long currentTime = upi.getMeta().getTime() - UserPresenceInterpreter.TIME_THRESHOLD_SYSTEM_STOPPED_SPEAKING - 1;
+		long currentTime = upi.getMeta().getTime() - upi.getThresholdSystemStoppedSpeaking() - 1;
 		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "end", currentTime);
 		upi.react(callbackMessage);
 		// verify
@@ -565,7 +565,61 @@ public class UserPresenceTest {
 		SEMAINEXMLMessage callbackMessage = getCallbackMessage(SEMAINEMessage.CONTENT_TYPE_UTTERANCE, "end", currentTime);
 		// verify
 		assertEquals(currentTime, upi.getSystemSpeakingEventTime(callbackMessage));
-		
+	}
+	
+	@Test
+	public void configSettings_voiceStart() throws JMSException {
+		// setup
+		long expected = 12345;
+		System.setProperty(UserPresenceInterpreter.PROPERTY_VOICE_START_THRESHOLD, String.valueOf(expected));
+		// exercise
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// verify
+		assertEquals(expected, upi.getThresholdVoiceAppeared());
+	}
+
+	@Test
+	public void configSettings_voiceEnd() throws JMSException {
+		// setup
+		long expected = 12345;
+		System.setProperty(UserPresenceInterpreter.PROPERTY_VOICE_END_THRESHOLD, String.valueOf(expected));
+		// exercise
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// verify
+		assertEquals(expected, upi.getThresholdVoiceDisappeared());
+	}
+
+	@Test
+	public void configSettings_faceStart() throws JMSException {
+		// setup
+		long expected = 12345;
+		System.setProperty(UserPresenceInterpreter.PROPERTY_FACE_START_THRESHOLD, String.valueOf(expected));
+		// exercise
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// verify
+		assertEquals(expected, upi.getThresholdFaceAppeared());
+	}
+
+	@Test
+	public void configSettings_faceEnd() throws JMSException {
+		// setup
+		long expected = 12345;
+		System.setProperty(UserPresenceInterpreter.PROPERTY_FACE_END_THRESHOLD, String.valueOf(expected));
+		// exercise
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// verify
+		assertEquals(expected, upi.getThresholdFaceDisappeared());
+	}
+
+	@Test
+	public void configSettings_systemEnd() throws JMSException {
+		// setup
+		long expected = 12345;
+		System.setProperty(UserPresenceInterpreter.PROPERTY_SYSTEM_END_THRESHOLD, String.valueOf(expected));
+		// exercise
+		UserPresenceInterpreter upi = new UserPresenceInterpreter();
+		// verify
+		assertEquals(expected, upi.getThresholdSystemStoppedSpeaking());
 	}
 
 }

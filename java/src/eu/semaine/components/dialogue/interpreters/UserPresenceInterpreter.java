@@ -26,6 +26,7 @@ import eu.semaine.jms.message.SEMAINEXMLMessage;
 import eu.semaine.jms.receiver.EmmaReceiver;
 import eu.semaine.jms.receiver.XMLReceiver;
 import eu.semaine.jms.sender.StateSender;
+import eu.semaine.util.SEMAINEUtils;
 import eu.semaine.util.XMLTool;
 
 /**
@@ -34,11 +35,11 @@ import eu.semaine.util.XMLTool;
  */
 public class UserPresenceInterpreter extends Component
 {
-	public static final long TIME_THRESHOLD_VOICE_APPEARED = 1000;
-	public static final long TIME_THRESHOLD_VOICE_DISAPPEARED = 10000;
-	public static final long TIME_THRESHOLD_FACE_APPEARED = 0;
-	public static final long TIME_THRESHOLD_FACE_DISAPPEARED = 3000;
-	public static final long TIME_THRESHOLD_SYSTEM_STOPPED_SPEAKING = 10000;
+	public static final String PROPERTY_VOICE_START_THRESHOLD = "semaine.UserPresence.threshold.voiceAppeared";
+	public static final String PROPERTY_VOICE_END_THRESHOLD = "semaine.UserPresence.threshold.voiceDisappeared";
+	public static final String PROPERTY_FACE_START_THRESHOLD = "semaine.UserPresence.threshold.faceAppeared";
+	public static final String PROPERTY_FACE_END_THRESHOLD = "semaine.UserPresence.threshold.faceDisappeared";
+	public static final String PROPERTY_SYSTEM_END_THRESHOLD = "semaine.UserPresence.threshold.systemStoppedSpeaking";
 	
 	private boolean isFacePresent = false;
 	private long timeFaceAppeared = -1;
@@ -49,6 +50,12 @@ public class UserPresenceInterpreter extends Component
 	private boolean isSystemSpeaking = false;
 	private long timeSystemStoppedSpeaking = -1;
 	private boolean userPresent = false;
+	
+	private long thresholdFaceAppeared;
+	private long thresholdFaceDisappeared;
+	private long thresholdVoiceAppeared;
+	private long thresholdVoiceDisappeared;
+	private long thresholdSystemStoppedSpeaking;
 	
 
 	
@@ -79,6 +86,33 @@ public class UserPresenceInterpreter extends Component
 		
 		userPresenceSender = new StateSender("semaine.data.state.context", StateInfo.Type.ContextState, getName());
 		senders.add(userPresenceSender);
+		
+		thresholdFaceAppeared = SEMAINEUtils.getLongProperty(PROPERTY_FACE_START_THRESHOLD, 0);
+		thresholdFaceDisappeared = SEMAINEUtils.getLongProperty(PROPERTY_FACE_END_THRESHOLD, 3000);
+		thresholdVoiceAppeared = SEMAINEUtils.getLongProperty(PROPERTY_VOICE_START_THRESHOLD, 1000);
+		thresholdVoiceDisappeared = SEMAINEUtils.getLongProperty(PROPERTY_VOICE_END_THRESHOLD, 10000);
+		thresholdSystemStoppedSpeaking = SEMAINEUtils.getLongProperty(PROPERTY_SYSTEM_END_THRESHOLD, 5000);
+	}
+	
+	
+	public long getThresholdVoiceAppeared() {
+		return thresholdVoiceAppeared;
+	}
+	
+	public long getThresholdVoiceDisappeared() {
+		return thresholdVoiceDisappeared;
+	}
+	
+	public long getThresholdFaceAppeared() {
+		return thresholdFaceAppeared;
+	}
+	
+	public long getThresholdFaceDisappeared() {
+		return thresholdFaceDisappeared;
+	}
+	
+	public long getThresholdSystemStoppedSpeaking() {
+		return thresholdSystemStoppedSpeaking;
 	}
 	
 	/**
@@ -238,7 +272,10 @@ public class UserPresenceInterpreter extends Component
 			throw new NullPointerException("null document");
 		}
 		Element root = doc.getDocumentElement();
-		if (root == null || !(root.getLocalName().equals(SemaineML.E_CALLBACK) && root.getNamespaceURI().equals(SemaineML.namespaceURI))) {
+		if (root == null) {
+			throw new NullPointerException("Expected root element '"+SemaineML.E_CALLBACK+"' in namespace '"+SemaineML.namespaceURI+"' but got null");
+		}
+		if (!(root.getLocalName().equals(SemaineML.E_CALLBACK) && root.getNamespaceURI().equals(SemaineML.namespaceURI))) {
 			throw new MessageFormatException("Expected root element '"+SemaineML.E_CALLBACK+"' in namespace '"+SemaineML.namespaceURI+"' but got '"
 					+root.getLocalName()+"' in namespace '"+root.getNamespaceURI()+"'");
 		}
@@ -268,24 +305,30 @@ public class UserPresenceInterpreter extends Component
 		if (m instanceof SEMAINEEmmaMessage) {
 			SEMAINEEmmaMessage em = (SEMAINEEmmaMessage) m;
 			if (isFaceDetected(em)) {
+				log.debug("face appeared");
 				isFacePresent = true;
 				timeFaceAppeared = getFaceChangeTime(em);
 			} else if (isFaceDisappeared(em)) {
+				log.debug("face disappeared");
 				isFacePresent = false;
 				timeFaceDisappeared = getFaceChangeTime(em);
 			}
 			if (isVoiceDetected(em)) {
+				log.debug("voice appeared");
 				isVoicePresent = true;
 				timeVoiceAppeared = getVoiceChangeTime(em);
 			} else if (isVoiceDisappeared(em)) {
+				log.debug("voice disappeared");
 				isVoicePresent = false;
 				timeVoiceDisappeared = getVoiceChangeTime(em);
 			}
 		} else if (m instanceof SEMAINEXMLMessage) {
 			SEMAINEXMLMessage xm = (SEMAINEXMLMessage) m;
 			if (isSystemStartsSpeaking(xm)) {
+				log.debug("system started speaking");
 				isSystemSpeaking = true;
 			} else if (isSystemStopsSpeaking(xm)) {
+				log.debug("system stopped speaking");
 				isSystemSpeaking = false;
 				timeSystemStoppedSpeaking = getSystemSpeakingEventTime(xm);
 			}
@@ -300,8 +343,8 @@ public class UserPresenceInterpreter extends Component
 	 */
 	protected boolean isVoicePresent() {
 		long currentTime = meta.getTime();
-		return isVoicePresent && currentTime - timeVoiceAppeared >= TIME_THRESHOLD_VOICE_APPEARED
-			|| currentTime - timeVoiceDisappeared <= TIME_THRESHOLD_VOICE_DISAPPEARED;
+		return isVoicePresent && currentTime - timeVoiceAppeared >= thresholdVoiceAppeared
+			|| currentTime - timeVoiceDisappeared <= thresholdVoiceDisappeared;
 	}
 	
 	/**
@@ -311,8 +354,8 @@ public class UserPresenceInterpreter extends Component
 	 */
 	protected boolean isFacePresent() {
 		long currentTime = meta.getTime();
-		return isFacePresent && currentTime - timeFaceAppeared >= TIME_THRESHOLD_FACE_APPEARED
-			|| currentTime - timeFaceDisappeared <= TIME_THRESHOLD_FACE_DISAPPEARED;
+		return isFacePresent && currentTime - timeFaceAppeared >= thresholdFaceAppeared
+			|| currentTime - timeFaceDisappeared <= thresholdFaceDisappeared;
 	}
 	
 	/**
@@ -323,7 +366,7 @@ public class UserPresenceInterpreter extends Component
 	protected boolean isSystemSpeaking() {
 		long currentTime = meta.getTime();
 		return isSystemSpeaking 
-			|| currentTime - timeSystemStoppedSpeaking <= TIME_THRESHOLD_SYSTEM_STOPPED_SPEAKING;
+			|| currentTime - timeSystemStoppedSpeaking <= thresholdSystemStoppedSpeaking;
 	}
 	
 	
