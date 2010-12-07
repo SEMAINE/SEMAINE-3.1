@@ -261,7 +261,7 @@
 	<template id="ChangeToUserSuggestedChar" name="Change to the user-suggested character">
 		<preconditions>
 			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
-			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_agree" />
 			<compare value1="$UserTurn.targetCharacter" comparator="not_equals" value2="null" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
@@ -283,7 +283,7 @@
 	<template id="Prudence_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
 		<preconditions>
 			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
-			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_agree" />
 			<compare value1="$UserTurn.targetCharacter" value2="null" />
 			<compare value1="$Agent.character" value2="Prudence" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -300,7 +300,7 @@
 	<template id="Poppy_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
 		<preconditions>
 			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
-			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_agree" />
 			<compare value1="$UserTurn.targetCharacter" value2="null" />
 			<compare value1="$Agent.character" value2="Poppy" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -317,7 +317,7 @@
 	<template id="Obadiah_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
 		<preconditions>
 			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
-			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_agree" />
 			<compare value1="$UserTurn.targetCharacter" value2="null" />
 			<compare value1="$Agent.character" value2="Obadiah" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -334,7 +334,7 @@
 	<template id="Spike_SuggestionDisagreed_ChangeTopic" name="User disagreed with suggestion, start new topic">
 		<preconditions>
 			<compare value1="$DialogueState.charChangeState" value2="charSuggested" />
-			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="is_disagree" />
+			<compare value1="$UserTurn.SemanticFeatures" comparator="not_contains" value2="is_agree" />
 			<compare value1="$UserTurn.targetCharacter" value2="null" />
 			<compare value1="$Agent.character" value2="Spike" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
@@ -352,6 +352,7 @@
 		<preconditions>
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
 			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Poppy" />
+			<compare value1="$Agent.character" comparator="not_equals" value2="Poppy" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
@@ -368,6 +369,7 @@
 		<preconditions>
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
 			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Prudence" />
+			<compare value1="$Agent.character" comparator="not_equals" value2="Prudence" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
@@ -384,6 +386,7 @@
 		<preconditions>
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
 			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Obadiah" />
+			<compare value1="$Agent.character" comparator="not_equals" value2="Obadiah" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
@@ -400,6 +403,7 @@
 		<preconditions>
 			<compare value1="$UserTurn.SemanticFeatures" comparator="contains" value2="change_speaker" />
 			<compare value1="$UserTurn.targetCharacter" comparator="equals" value2="Spike" />
+			<compare value1="$Agent.character" comparator="not_equals" value2="Spike" />
 			<trigger value1="$Agent.speakingIntention" value2="want_turn" />
 		</preconditions>
 		<effects>
