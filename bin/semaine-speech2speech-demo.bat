@@ -1,7 +1,7 @@
 @echo off
 set BINDIR=%~dp0%
 
-set MARYDIR="%BINDIR%\..\MARY400alpha"
+set MARYDIR="%BINDIR%\..\MARY"
 
 if not exist %MARYDIR% (
   echo.MARY directory not found in %MARYDIR%. Cannot start.
@@ -28,9 +28,9 @@ if not %CMS_URL%a==a (
 
 
 
-echo.Starting SEMAINE system as: 'java -Xmx400m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base="%MARYDIR%" eu.semaine.system.ComponentRunner %CONFIG%'
+echo.Starting SEMAINE system as: 'java -Xmx1500m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base="%MARYDIR%" eu.semaine.system.ComponentRunner %CONFIG%'
 
-java -Xmx400m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base=%MARYDIR% eu.semaine.system.ComponentRunner %CONFIG%
+java -Xmx1500m %JMS_URL_SETTING% -classpath %JARDIR%\semaine.jar;%JARDIR%\semaine-mary.jar;%JARDIR%\semaine-dialogue.jar -Dmary.base=%MARYDIR% eu.semaine.system.ComponentRunner %CONFIG%
 
 :: goto target:
 

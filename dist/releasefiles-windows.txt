@@ -8,16 +8,12 @@ bin/semaine-speech2speech.bat
 bin/semaine-log-reader.bat
 bin/semaine-log-inspector.bat
 bin/example-swimmer.bat
-bin/semaine-speech2face-demo.bat
-bin/semaine-speech2speech-demo.bat
 java/license.txt
 java/lgpl-3.0.txt
 java/gpl-3.0.txt
 java/config/log4j.properties
 java/config/speech2face.config
-java/config/speech2face-demo.config
 java/config/speech2speech.config
-java/config/speech2speech-demo.config
 java/config/example-hello.config
 java/config/example-mirror.config
 java/config/example-swimmer.config
