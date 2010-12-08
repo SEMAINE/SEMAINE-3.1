@@ -13,6 +13,7 @@ bin/semaine-speech2speech-demo.bat
 java/license.txt
 java/lgpl-3.0.txt
 java/gpl-3.0.txt
+java/config/log4j.properties
 java/config/speech2face.config
 java/config/speech2face-demo.config
 java/config/speech2speech.config
@@ -1122,7 +1123,6 @@ MARY/doc/licenses/freetts-license.txt
 MARY/doc/licenses/jsresources-license.txt
 MARY/doc/licenses/LGPL.txt
 MARY/doc/licenses/README.txt
-MARY/download/.DS_Store
 MARY/download/http___mary.dfki.de_download_by-nd-3.0.html
 MARY/download/http___mary.dfki.de_download_voices_arctic-license.html
 MARY/download/http___www.gnu.org_licenses_lgpl-3.0-standalone.html
@@ -1269,8 +1269,10 @@ MARY/lib/voices/dfki-obadiah/joinCostWeights.txt
 MARY/lib/voices/dfki-obadiah/phoneUnitFeatureDefinition.txt
 MARY/lib/voices/dfki-obadiah/timeline_basenames.mry
 MARY/lib/voices/dfki-obadiah/timeline_waveforms.mry
+MARY/lib/voices/dfki-obadiah/vocalization_f0_feature_definition.txt
 MARY/lib/voices/dfki-obadiah/vocalization_feature_definition.txt
 MARY/lib/voices/dfki-obadiah/vocalization_features.mry
+MARY/lib/voices/dfki-obadiah/vocalization_hnm_analysis.mry
 MARY/lib/voices/dfki-obadiah/vocalization_intonation.mry
 MARY/lib/voices/dfki-obadiah/vocalization_units.mry
 MARY/lib/voices/dfki-obadiah/vocalization_wave_timeline.mry
@@ -1308,8 +1310,10 @@ MARY/lib/voices/dfki-poppy/joinCostWeights.txt
 MARY/lib/voices/dfki-poppy/phoneUnitFeatureDefinition.txt
 MARY/lib/voices/dfki-poppy/timeline_basenames.mry
 MARY/lib/voices/dfki-poppy/timeline_waveforms.mry
+MARY/lib/voices/dfki-poppy/vocalization_f0_feature_definition.txt
 MARY/lib/voices/dfki-poppy/vocalization_feature_definition.txt
 MARY/lib/voices/dfki-poppy/vocalization_features.mry
+MARY/lib/voices/dfki-poppy/vocalization_hnm_analysis.mry
 MARY/lib/voices/dfki-poppy/vocalization_intonation.mry
 MARY/lib/voices/dfki-poppy/vocalization_units.mry
 MARY/lib/voices/dfki-poppy/vocalization_wave_timeline.mry
@@ -1347,8 +1351,10 @@ MARY/lib/voices/dfki-prudence/joinCostWeights.txt
 MARY/lib/voices/dfki-prudence/phoneUnitFeatureDefinition.txt
 MARY/lib/voices/dfki-prudence/timeline_basenames.mry
 MARY/lib/voices/dfki-prudence/timeline_waveforms.mry
+MARY/lib/voices/dfki-prudence/vocalization_f0_feature_definition.txt
 MARY/lib/voices/dfki-prudence/vocalization_feature_definition.txt
 MARY/lib/voices/dfki-prudence/vocalization_features.mry
+MARY/lib/voices/dfki-prudence/vocalization_hnm_analysis.mry
 MARY/lib/voices/dfki-prudence/vocalization_intonation.mry
 MARY/lib/voices/dfki-prudence/vocalization_units.mry
 MARY/lib/voices/dfki-prudence/vocalization_wave_timeline.mry
@@ -1386,8 +1392,10 @@ MARY/lib/voices/dfki-spike/joinCostWeights.txt
 MARY/lib/voices/dfki-spike/phoneUnitFeatureDefinition.txt
 MARY/lib/voices/dfki-spike/timeline_basenames.mry
 MARY/lib/voices/dfki-spike/timeline_waveforms.mry
+MARY/lib/voices/dfki-spike/vocalization_f0_feature_definition.txt
 MARY/lib/voices/dfki-spike/vocalization_feature_definition.txt
 MARY/lib/voices/dfki-spike/vocalization_features.mry
+MARY/lib/voices/dfki-spike/vocalization_hnm_analysis.mry
 MARY/lib/voices/dfki-spike/vocalization_intonation.mry
 MARY/lib/voices/dfki-spike/vocalization_units.mry
 MARY/lib/voices/dfki-spike/vocalization_wave_timeline.mry
