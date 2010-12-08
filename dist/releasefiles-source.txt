@@ -14,13 +14,13 @@ bin/semaine-speech2speech.bat
 bin/semaine-log-reader.bat
 bin/semaine-log-inspector.bat
 bin/example-swimmer.bat
-java/license.txt
-java/lgpl-3.0.txt
-java/gpl-3.0.txt
 bin/semaine-speech2face-demo.bat
 bin/semaine-speech2face-demo.sh
 bin/semaine-speech2speech-demo.bat
 bin/semaine-speech2speech-demo.sh
+java/license.txt
+java/lgpl-3.0.txt
+java/gpl-3.0.txt
 java/config/speech2face.config
 java/config/speech2face-demo.config
 java/config/speech2speech.config
