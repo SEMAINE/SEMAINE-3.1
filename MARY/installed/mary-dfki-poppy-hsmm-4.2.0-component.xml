@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<marytts-install xmlns="http://mary.dfki.de/installer">
+<voice gender="female" locale="en-GB" name="dfki-poppy-hsmm" type="hsmm" version="4.1.0">
+<description>
+A female, British English expressive Hidden semi-Markov model voice: Cheerful Poppy.
+</description>
+<license href="http://mary.dfki.de/download/by-nd-3.0.html"/>
+<package filename="mary-dfki-poppy-hsmm-4.1.0.zip" md5sum="42c4f8473b8f6104743ae05dc92bccca" size="1017015">
+<location href="http://mary.dfki.de/download/4.1.0/"/>
+</package>
+<files>
+conf/en_GB-dfki-poppy-hsmm.config, lib/voices/dfki-poppy-hsmm/str.pdf, lib/voices/dfki-poppy-hsmm/tree-str.inf, lib/voices/dfki-poppy-hsmm/tree-lf0.inf, lib/voices/dfki-poppy-hsmm/gv-str-littend.pdf, lib/voices/dfki-poppy-hsmm/tree-mgc.inf, lib/voices/dfki-poppy-hsmm/gv-mgc-littend.pdf, lib/voices/dfki-poppy-hsmm/lf0.pdf, lib/voices/dfki-poppy-hsmm/dur.pdf, lib/voices/dfki-poppy-hsmm/gv-lf0-littend.pdf, lib/voices/dfki-poppy-hsmm/mix_excitation_filters.txt, lib/voices/dfki-poppy-hsmm/w0145.pfeats, lib/voices/dfki-poppy-hsmm/trickyPhones.txt, lib/voices/dfki-poppy-hsmm/mgc.pdf, lib/voices/dfki-poppy-hsmm/tree-dur.inf
+</files>
+<depends language="en-GB" version="4.1.0"/>
+</voice>
+</marytts-install>
