@@ -1023,8 +1023,8 @@ c++/src/tum/opensmile/src/portaudioSinkS.hpp
 c++/src/tum/opensmile/src/functionalOnset.cpp
 c++/src/tum/opensmile/src/csvSource.hpp
 c++/src/tum/opensmile/src/configManager.hpp
-src/rnnVad2.hpp
-src/rnnVad2.cpp
+c++/src/tum/opensmile/src/rnnVad2.hpp
+c++/src/tum/opensmile/src/rnnVad2.cpp
 c++/src/tum/opensmile/stateinfo.config
 c++/src/tum/opensmile/CREDITS
 c++/src/tum/opensmile/scripts/util/compile.sh
