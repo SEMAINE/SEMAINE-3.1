@@ -56,6 +56,7 @@ Greta/Active_BehaviorPlanner.exe
 Greta/Active_BehaviorRealizer.exe
 Greta/Active_ListenerIntentPlanner.exe
 Greta/Active_Player.exe
+Greta/activemq-cpp.dll
 Greta/apr_dbd_odbc-1.dll
 Greta/apr_ldap-1.dll
 Greta/bn/new_gaze
@@ -804,7 +805,7 @@ Greta/torso/poses/turn23.txt
 Greta/torso/poses/turn3.txt
 Greta/torso/poses/turn4.txt
 Greta/utils/WAIT.exe
-Greta/xerces-c_3_0.dll
+Greta/xerces-c_3_1.dll
 Greta/xqilla22.dll
 Greta/zlib1.dll
 Opensmile/work/README.txt
