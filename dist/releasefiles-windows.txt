@@ -1294,6 +1294,7 @@ MARY/lib/voices/dfki-obadiah-hsmm/vocalization_features.mry
 MARY/lib/voices/dfki-obadiah-hsmm/vocalization_intonation.mry
 MARY/lib/voices/dfki-obadiah-hsmm/vocalization_mlsa_features.mry
 MARY/lib/voices/dfki-obadiah-hsmm/vocalization_units.mry
+MARY/lib/voices/dfki-obadiah-hsmm/oba001.pfeats
 MARY/lib/voices/dfki-poppy/cart.mry
 MARY/lib/voices/dfki-poppy/dur.tree
 MARY/lib/voices/dfki-poppy/examples.text
@@ -1335,6 +1336,7 @@ MARY/lib/voices/dfki-poppy-hsmm/vocalization_features.mry
 MARY/lib/voices/dfki-poppy-hsmm/vocalization_intonation.mry
 MARY/lib/voices/dfki-poppy-hsmm/vocalization_mlsa_features.mry
 MARY/lib/voices/dfki-poppy-hsmm/vocalization_units.mry
+MARY/lib/voices/dfki-poppy-hsmm/pop001.pfeats
 MARY/lib/voices/dfki-prudence/cart.mry
 MARY/lib/voices/dfki-prudence/dur.tree
 MARY/lib/voices/dfki-prudence/examples.text
@@ -1376,6 +1378,7 @@ MARY/lib/voices/dfki-prudence-hsmm/vocalization_features.mry
 MARY/lib/voices/dfki-prudence-hsmm/vocalization_intonation.mry
 MARY/lib/voices/dfki-prudence-hsmm/vocalization_mlsa_features.mry
 MARY/lib/voices/dfki-prudence-hsmm/vocalization_units.mry
+MARY/lib/voices/dfki-prudence-hsmm/pru001.pfeats
 MARY/lib/voices/dfki-spike/cart.mry
 MARY/lib/voices/dfki-spike/dur.tree
 MARY/lib/voices/dfki-spike/examples.text
@@ -1417,6 +1420,7 @@ MARY/lib/voices/dfki-spike-hsmm/vocalization_features.mry
 MARY/lib/voices/dfki-spike-hsmm/vocalization_intonation.mry
 MARY/lib/voices/dfki-spike-hsmm/vocalization_mlsa_features.mry
 MARY/lib/voices/dfki-spike-hsmm/vocalization_units.mry
+MARY/lib/voices/dfki-spike-hsmm/spi001.pfeats
 MARY/lib/xml.xsd
 MARY/MARY_software_user_agreement.txt
 MARY/tmp/README.txt
