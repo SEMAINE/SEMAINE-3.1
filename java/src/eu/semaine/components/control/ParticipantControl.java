@@ -51,7 +51,7 @@ public class ParticipantControl extends Component
 	@Override
 	protected void act() throws JMSException {
 		if (hasSystemJustBecomeReady()) {
-			sendWhoIsPresent();
+			sendWhoIsPresent(false);
 		}
 	}
 
@@ -76,11 +76,13 @@ public class ParticipantControl extends Component
             gui.updateWhoIsPresent();
         }
 
-	private void sendWhoIsPresent()
+	private void sendWhoIsPresent(boolean reportUserPresence)
 	throws JMSException
 	{
 		Map<String, String> info = new HashMap<String, String>();
-		info.put("userPresent", isUserPresent ? "present" : "absent");
+		if (reportUserPresence) {
+			info.put("userPresent", isUserPresent ? "present" : "absent");
+		}
 		info.put("character", currentCharacter);
 		if (nextCharacter != null) {
 			info.put("nextCharacter", nextCharacter);
@@ -92,6 +94,7 @@ public class ParticipantControl extends Component
 		contextSender.sendStateInfo(context, meta.getTime());
 	}
 
+	
     public boolean isUserPresent()
     {
         return isUserPresent;
@@ -101,7 +104,7 @@ public class ParticipantControl extends Component
     {
         this.isUserPresent = userPresent;
         try {
-            sendWhoIsPresent();
+            sendWhoIsPresent(true);
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -130,7 +133,7 @@ public class ParticipantControl extends Component
     	this.nextCharacter = nextChar;
     	this.currentDialogContext = dialogContext;
         try {
-            sendWhoIsPresent();
+            sendWhoIsPresent(false);
         } catch (JMSException e) {
             e.printStackTrace();
         }

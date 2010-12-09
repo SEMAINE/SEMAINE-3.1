@@ -405,7 +405,8 @@ public class UserPresenceInterpreter extends Component
 	 * @return
 	 */
 	protected boolean isExternalUserPresenceInForce() {
-		return meta.getTime() - timeExternalUserPresence <= thresholdExternalUserPresence;
+		return timeExternalUserPresence >= 0 
+			&& meta.getTime() - timeExternalUserPresence <= thresholdExternalUserPresence;
 	}
 	
 	/**
