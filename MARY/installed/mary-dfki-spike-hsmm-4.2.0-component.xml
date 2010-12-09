@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <marytts-install xmlns="http://mary.dfki.de/installer">
-<voice gender="male" locale="en-GB" name="dfki-spike-hsmm" type="hsmm" version="4.1.0">
-<description>
-A male, British English expressive Hidden semi-Markov model voice: Aggressive Spike.
-</description>
-<license href="http://mary.dfki.de/download/by-nd-3.0.html"/>
-<package filename="mary-dfki-spike-hsmm-4.1.0.zip" md5sum="f1d853f028d978c8a854304959f53daa" size="1085398">
-<location href="http://mary.dfki.de/download/4.1.0/"/>
-</package>
-<files>
-conf/en_GB-dfki-spike-hsmm.config, lib/voices/dfki-spike-hsmm/str.pdf, lib/voices/dfki-spike-hsmm/tree-str.inf, lib/voices/dfki-spike-hsmm/tree-lf0.inf, lib/voices/dfki-spike-hsmm/gv-str-littend.pdf, lib/voices/dfki-spike-hsmm/tree-mgc.inf, lib/voices/dfki-spike-hsmm/gv-mgc-littend.pdf, lib/voices/dfki-spike-hsmm/lf0.pdf, lib/voices/dfki-spike-hsmm/dur.pdf, lib/voices/dfki-spike-hsmm/gv-lf0-littend.pdf, lib/voices/dfki-spike-hsmm/mix_excitation_filters.txt, lib/voices/dfki-spike-hsmm/w0857.pfeats, lib/voices/dfki-spike-hsmm/trickyPhones.txt, lib/voices/dfki-spike-hsmm/mgc.pdf, lib/voices/dfki-spike-hsmm/tree-dur.inf
-</files>
-<depends language="en-GB" version="4.1.0"/>
-</voice>
+    <voice gender="male" locale="en-GB" name="dfki-spike-hsmm"
+        type="hsmm" version="4.2.0">
+        <description>A male en_GB Hidden semi-Markov model voice</description>
+        <license href="http://mary.dfki.de/download/by-nd-3.0.html"/>
+        <package filename="mary-dfki-spike-hsmm-4.2.0.zip"
+            md5sum="7d84610498ef79a05610cab98e6c8755" size="2711078">
+            <location href="http://mary.dfki.de/download/4.2.0/"/>
+        </package>
+        <files>conf/en_GB-dfki-spike-hsmm.config, lib/voices/dfki-spike-hsmm/str.pdf, lib/voices/dfki-spike-hsmm/vocalization_features.mry, lib/voices/dfki-spike-hsmm/tree-str.inf, lib/voices/dfki-spike-hsmm/vocalization_units.mry, lib/voices/dfki-spike-hsmm/tree-lf0.inf, lib/voices/dfki-spike-hsmm/gv-str-littend.pdf, lib/voices/dfki-spike-hsmm/tree-mgc.inf, lib/voices/dfki-spike-hsmm/vocalization_intonation.mry, lib/voices/dfki-spike-hsmm/gv-mgc-littend.pdf, lib/voices/dfki-spike-hsmm/lf0.pdf, lib/voices/dfki-spike-hsmm/dur.pdf, lib/voices/dfki-spike-hsmm/gv-lf0-littend.pdf, lib/voices/dfki-spike-hsmm/mix_excitation_filters.txt, lib/voices/dfki-spike-hsmm/vocalization_feature_definition.txt, lib/voices/dfki-spike-hsmm/vocalization_f0_feature_definition.txt, lib/voices/dfki-spike-hsmm/spi001.pfeats, lib/voices/dfki-spike-hsmm/trickyPhones.txt, lib/voices/dfki-spike-hsmm/mgc.pdf, lib/voices/dfki-spike-hsmm/tree-dur.inf, lib/voices/dfki-spike-hsmm/vocalization_mlsa_features.mry</files>
+        <depends language="en-GB" version="4.2.0"/>
+    </voice>
 </marytts-install>

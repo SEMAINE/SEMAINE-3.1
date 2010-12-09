@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <marytts-install xmlns="http://mary.dfki.de/installer">
-<language locale="en-GB" name="en-GB" version="4.2.0">
-<description>
-British English language component
-</description>
-<license href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"/>
-<package filename="mary-en-GB-4.2.0.zip" md5sum="3df84e2b16e41458ad5fed4cb8e9a811" size="7563352">
-<location href="http://mary.dfki.de/download/4.2.0/"/>
-</package>
-<files>
-lib/, lib/modules/, lib/modules/en/, lib/modules/en/gb/, lib/modules/en/gb/lexicon/, conf/, conf/en_GB.config, java/, java/freetts-en_us.jar, java/mary-en.jar, java/mary-freetts.jar, lib/modules/en/cap/, lib/modules/en/cap/clunitsPhoneset_en.txt, lib/modules/en/cap/dur.tree, lib/modules/en/cap/f0.left.tree, lib/modules/en/cap/f0.mid.tree, lib/modules/en/cap/f0.right.tree, lib/modules/en/cap/freetts-phoneset.txt, lib/modules/en/cap/freetts-pos.txt, lib/modules/en/cap/klattrule-params-en.properties, lib/modules/en/cap/phoneUnitFeatureDefinition.txt, lib/modules/en/cap/phoneme-list-en.xml, lib/modules/en/cap/phoneme-list-en_gb.xml, lib/modules/en/cap/phoneset_en_gb.txt, lib/modules/en/cap/tobirule-params-en.xml, lib/modules/en/gb/lexicon/allophones.en_GB.xml, lib/modules/en/gb/lexicon/en_GB.lts, lib/modules/en/gb/lexicon/en_GB_lexicon.fst, lib/modules/en/gb/lexicon/userdict.txt, lib/modules/en/prosody/, lib/modules/en/prosody/POSAccentPriorities.en.properties, lib/modules/en/prosody/tobipredparams_english.xml, lib/modules/en/prosody/wordFrequencies-en.fst, lib/modules/en/tagger/, lib/modules/en/tagger/tag.bin.gz, lib/modules/en/tagger/tagdict, lib/modules/en/tagger/tagset.txt
-</files>
-</language>
+    <language locale="en-GB" name="en-GB" version="4.2.0">
+        <description>British English language component</description>
+        <license href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"/>
+        <package filename="mary-en-GB-4.2.0.zip"
+            md5sum="95e7b3ab3d6a48309d7dd088a64b0f8a" size="7563361">
+            <location href="http://mary.dfki.de/download/4.2.0/"/>
+        </package>
+        <files>lib/, lib/modules/, lib/modules/en/, lib/modules/en/gb/, lib/modules/en/gb/lexicon/, conf/, conf/en_GB.config, java/, java/freetts-en_us.jar, java/mary-en.jar, java/mary-freetts.jar, lib/modules/en/cap/, lib/modules/en/cap/clunitsPhoneset_en.txt, lib/modules/en/cap/dur.tree, lib/modules/en/cap/f0.left.tree, lib/modules/en/cap/f0.mid.tree, lib/modules/en/cap/f0.right.tree, lib/modules/en/cap/freetts-phoneset.txt, lib/modules/en/cap/freetts-pos.txt, lib/modules/en/cap/klattrule-params-en.properties, lib/modules/en/cap/phoneUnitFeatureDefinition.txt, lib/modules/en/cap/phoneme-list-en.xml, lib/modules/en/cap/phoneme-list-en_gb.xml, lib/modules/en/cap/phoneset_en_gb.txt, lib/modules/en/cap/tobirule-params-en.xml, lib/modules/en/gb/lexicon/allophones.en_GB.xml, lib/modules/en/gb/lexicon/en_GB.lts, lib/modules/en/gb/lexicon/en_GB_lexicon.fst, lib/modules/en/gb/lexicon/userdict.txt, lib/modules/en/prosody/, lib/modules/en/prosody/POSAccentPriorities.en.properties, lib/modules/en/prosody/tobipredparams_english.xml, lib/modules/en/prosody/wordFrequencies-en.fst, lib/modules/en/tagger/, lib/modules/en/tagger/tag.bin.gz, lib/modules/en/tagger/tagdict, lib/modules/en/tagger/tagset.txt</files>
+    </language>
 </marytts-install>

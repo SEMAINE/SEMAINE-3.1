@@ -1,7 +1,7 @@
 ByteValuedFeatureProcessors
-50 | name 0 (laughter) (laughter)_I_see (laughter)_my_god (laughter)_oh_my_god_(laughter) (laughter)_well (laughter)_well_(laughter) (snort) (snort)_well I_see absolutely ah ah_I_see aha aha,_go_on_tell_me_more alright alright_see great hm hm_god mh(snort) mhm oh oh_cool oh_god_(gasp) oh_yeah_(laughter) right so sounds_interesting well wow ya yeah yeah_(gasp) yeah_absolutely yeah_well yeah_well_you_know yes
-10 | voicequality 0 whispery lax creaky tense modal breathy
-0 | intonation 0 rising falling low mid high
+100 | name 0 (laughter) (laughter)_I_see (laughter)_my_god (laughter)_oh_my_god_(laughter) (laughter)_well (laughter)_well_(laughter) (snort) (snort)_well I_see absolutely ah ah_I_see aha aha,_go_on_tell_me_more alright alright_see great hm hm_god mh(snort) mhm oh oh_cool oh_god_(gasp) oh_yeah_(laughter) right so sounds_interesting well wow ya yeah yeah_(gasp) yeah_absolutely yeah_well yeah_well_you_know yes
+15 | voicequality 0 whispery lax creaky tense modal breathy
+5 | intonation 0 rising falling low mid high
 ShortValuedFeatureProcessors
 ContinuousFeatureProcessors
 15 linear | anger

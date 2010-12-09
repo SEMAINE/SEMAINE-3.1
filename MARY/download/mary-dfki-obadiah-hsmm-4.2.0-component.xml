@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <marytts-install xmlns="http://mary.dfki.de/installer">
-<voice gender="male" locale="en-GB" name="dfki-obadiah-hsmm" type="hsmm" version="4.1.0">
-<description>
-A male, British English expressive Hidden semi-Markov model voice: Gloomy Obadiah.
-</description>
-<license href="http://mary.dfki.de/download/by-nd-3.0.html"/>
-<package filename="mary-dfki-obadiah-hsmm-4.1.0.zip" md5sum="160ff8cc526f95a6db557bd0feeaef90" size="1216063">
-<location href="http://mary.dfki.de/download/4.1.0/"/>
-</package>
-<files>
-conf/en_GB-dfki-obadiah-hsmm.config, lib/voices/dfki-obadiah-hsmm/str.pdf, lib/voices/dfki-obadiah-hsmm/tree-str.inf, lib/voices/dfki-obadiah-hsmm/tree-lf0.inf, lib/voices/dfki-obadiah-hsmm/gv-str-littend.pdf, lib/voices/dfki-obadiah-hsmm/tree-mgc.inf, lib/voices/dfki-obadiah-hsmm/gv-mgc-littend.pdf, lib/voices/dfki-obadiah-hsmm/lf0.pdf, lib/voices/dfki-obadiah-hsmm/dur.pdf, lib/voices/dfki-obadiah-hsmm/gv-lf0-littend.pdf, lib/voices/dfki-obadiah-hsmm/mix_excitation_filters.txt, lib/voices/dfki-obadiah-hsmm/oba038.pfeats, lib/voices/dfki-obadiah-hsmm/trickyPhones.txt, lib/voices/dfki-obadiah-hsmm/mgc.pdf, lib/voices/dfki-obadiah-hsmm/tree-dur.inf
-</files>
-<depends language="en-GB" version="4.1.0"/>
-</voice>
+    <voice gender="male" locale="en-GB" name="dfki-obadiah-hsmm"
+        type="hsmm" version="4.2.0">
+        <description>A male en_GB Hidden semi-Markov model voice</description>
+        <license href="http://mary.dfki.de/download/by-nd-3.0.html"/>
+        <package filename="mary-dfki-obadiah-hsmm-4.2.0.zip"
+            md5sum="4af89c80f41022bbe0a99c28c0eaa9f3" size="2289447">
+            <location href="http://mary.dfki.de/download/4.2.0/"/>
+        </package>
+        <depends language="en-GB" version="4.2.0"/>
+    </voice>
 </marytts-install>
