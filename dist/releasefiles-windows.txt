@@ -1,4 +1,3 @@
-MARY/lib/external/vocalizations/filters/mix_excitation_filters.txt
 README.txt
 README-examples.txt
 start.bat
