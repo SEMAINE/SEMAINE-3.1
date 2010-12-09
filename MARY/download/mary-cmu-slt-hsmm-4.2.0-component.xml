@@ -3,7 +3,7 @@
   <voice gender="female" locale="en-US" name="cmu-slt-hsmm" type="hsmm" version="4.2.0">
     <description>A female US English Hidden semi-Markov model voice, built from voice recordings provided by Carnegie Mellon University.</description>
     <license href="http://mary.dfki.de/download/voices/arctic-license.html" />
-    <package filename="mary-cmu-slt-hsmm-4.2.0.zip" md5sum="2c2210c01b714667daeddf9dc8816844" size="1004630">
+    <package filename="mary-cmu-slt-hsmm-4.2.0.zip" md5sum="670db3cc8d962fd796f56722ce361b15" size="1004630">
       <location href="http://mary.dfki.de/download/4.2.0/" />
     </package>
     <depends language="en-US" version="4.2.0" />

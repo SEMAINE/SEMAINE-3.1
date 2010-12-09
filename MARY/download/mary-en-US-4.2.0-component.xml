@@ -3,7 +3,7 @@
   <language locale="en-US" name="en-US" version="4.2.0">
     <description>US English language component</description>
     <license href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html" />
-    <package filename="mary-en-US-4.2.0.zip" md5sum="031d0953412e28015a6ecb2c114aa7a8" size="8325296">
+    <package filename="mary-en-US-4.2.0.zip" md5sum="6d85cec7af5c33ed05b8770f5339a7d5" size="8325325">
       <location href="http://mary.dfki.de/download/4.2.0/" />
     </package>
   </language>
