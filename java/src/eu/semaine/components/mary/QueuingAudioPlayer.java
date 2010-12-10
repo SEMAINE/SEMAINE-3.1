@@ -98,6 +98,10 @@ public class QueuingAudioPlayer extends Component
 					availableAnimations.put(contentID, anim);
 					animationStates.put(contentID, AnimationState.CREATED);
 				}
+			} else {
+				if (anim.getContentType() == null && contentType != null) {
+					anim.setContentType(contentType);
+				}
 			}
 		}
 		assert anim != null;
@@ -298,7 +302,11 @@ public class QueuingAudioPlayer extends Component
 			this.lifetime = aLifetime;
 			this.haveReceivedPlayCommand = true;
 		}
-
+		
+		public void setContentType(String aContentType) {
+			this.contentType = aContentType;
+		}
+		
 		public String getContentID() {
 			return contentID;
 		}
