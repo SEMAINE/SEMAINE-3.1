@@ -1,7 +1,7 @@
 ByteValuedFeatureProcessors
 100 | name 0 (gasp) (laughter) (sigh) OK OK_(laughter) OK_right ah ah_OK_(laughter) alright definitely exactly_(laughter) go_(laughter) god_yes gosh gosh_OK mh mhmh mhmh_(laughter) no no_(laughter) oh oh_(laughter) oh_god_no_(laughter) oh_gosh_(laughter) oh_no oh_no_(laughter) oh_well oh_yeah really really_(laughter) right_OK ve_oh_(laughter) well_(laughter) wow yeah yeah_(laughter) yeah_definitely yes
 15 | voicequality 0 whispery lax creaky tense modal breathy
-5 | intonation 0 rising falling low mid high
+0 | intonation 0 rising falling low mid high
 ShortValuedFeatureProcessors
 ContinuousFeatureProcessors
 15 linear | anger

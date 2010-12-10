@@ -1,5 +1,5 @@
 ByteValuedFeatureProcessors
-10 | intonation 0 rising falling low mid high
+0 | intonation 0 rising falling low mid high
 ShortValuedFeatureProcessors
 ContinuousFeatureProcessors
 25 linear | anger

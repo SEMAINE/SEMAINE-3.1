@@ -1,7 +1,7 @@
 ByteValuedFeatureProcessors
 100 | name 0 (gasp) (laughter) (sigh) alright definitely ma mh_yeah mhmh mhmh_right mhmh_yeah mna_(snort) nae oh_right oh_yeah right well yeah
 15 | voicequality 0 whispery lax creaky tense modal breathy
-5 | intonation 0 rising falling low mid high
+0 | intonation 0 rising falling low mid high
 ShortValuedFeatureProcessors
 ContinuousFeatureProcessors
 15 linear | anger
