@@ -10,7 +10,7 @@ rem Locations of installed software:
 rem %~dp0 is expanded pathname of the current script
 set SEMAINEDIR=%~dp0%
 set JAVADIR="%SEMAINEDIR%java"
-set GRETADIR="%SEMAINEDIR%Greta"
+set GRETADIR="%SEMAINEDIR%Greta\bin"
 set OPENSMILEDIR="%SEMAINEDIR%Opensmile"
 set IMPERIALDIR="C:\Program Files\iBUG\Semaine Video Components"
 
