@@ -1,5 +1,5 @@
 #!/bin/sh
 
 SCRIPTDIR=`dirname $0`
-PACKAGE="source"
+PACKAGE="greta-source"
 "$SCRIPTDIR"/makedist.sh $PACKAGE
