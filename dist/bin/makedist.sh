@@ -22,6 +22,9 @@ INST_ROOTDIR="SEMAINE-$VERSION"
 
 mkdir -p "$ROOTDIR/dist/$INST_ROOTDIR"
 DISTFILE="$ROOTDIR/dist/$INST_ROOTDIR/$INST_ROOTDIR-$PACKAGE.zip"
+if [ -x "$DISTFILE" ] ; then
+  rm "$DISTFILE"
+fi
 
 TMPDIR="$ROOTDIR/dist/tmp"
 mkdir -p "$TMPDIR"
