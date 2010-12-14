@@ -804,18 +804,6 @@ Greta/GretaApplications/GretaActive/Player/src/RealTimeAudio.cpp
 Greta/GretaApplications/GretaActive/Player/src/RealTimeAudio.h
 Greta/GretaApplications/GretaActive/Player/src/RealtimePlayerWindow.cpp
 Greta/GretaApplications/GretaActive/Player/src/RealTimePlayerWindow.h
-Greta/GretaApplications/GretaActive/UserSignals/MSVC/UserSignals.sln
-Greta/GretaApplications/GretaActive/UserSignals/MSVC/UserSignals.vcproj
-Greta/GretaApplications/GretaActive/UserSignals/src/main.cpp
-Greta/GretaApplications/GretaActive/UserSignals/src/UserSignals.cpp
-Greta/GretaApplications/GretaActive/UserSignals/src/UserSignals.h
-Greta/GretaApplications/GretaActive/WoZ/MSVC/WoZ.sln
-Greta/GretaApplications/GretaActive/WoZ/MSVC/WoZ.vcproj
-Greta/GretaApplications/GretaActive/WoZ/src/main.cpp
-Greta/GretaApplications/GretaActive/WoZ/src/WoZSender.cpp
-Greta/GretaApplications/GretaActive/WoZ/src/WoZSender.h
-Greta/GretaApplications/GretaActive/WoZ/src/WoZWindow.cpp
-Greta/GretaApplications/GretaActive/WoZ/src/WoZWindow.h
 Greta/GretaCore/GretaActionSelection/MSVC/ActionSelection.sln
 Greta/GretaCore/GretaActionSelection/MSVC/ActionSelection.vcproj
 Greta/GretaCore/GretaActionSelection/src/ActionSelection.cpp
@@ -2970,7 +2958,6 @@ Greta/include/Common/GL/glaux.h
 Greta/include/Common/GL/glext.h
 Greta/include/Common/GL/glut.h
 Greta/include/Common/iconv.h
-Greta/include/Common/myvec.h
 Greta/include/Common/Ogre/asm_math.h
 Greta/include/Common/Ogre/boost/aligned_storage.hpp
 Greta/include/Common/Ogre/boost/any.hpp
@@ -5895,7 +5882,6 @@ Greta/include/Common/semaine/system/ComponentRunner.h
 Greta/include/Common/semaine/util/ParseErrorHandler.h
 Greta/include/Common/semaine/util/XMLTool.cpp
 Greta/include/Common/semaine/util/XMLTool.h
-Greta/include/Common/srs.h
 Greta/include/Common/WildMagic/ForceWinZipToInclude.txt
 Greta/include/Common/WildMagic/GTglExtensions.h
 Greta/include/Common/WildMagic/GTglPlugin.h
