@@ -338,6 +338,7 @@ Greta/bin/gestures/view3.txt
 Greta/bin/gestures/warning_hand.txt
 Greta/bin/gestures/wipe.txt
 Greta/bin/gestures/youx.txt
+Greta/bin/glut32.dll
 Greta/bin/greta_activemq.ini
 Greta/bin/head/gestuary.dtd
 Greta/bin/head/gestuary.xml
@@ -755,6 +756,11 @@ Greta/bin/utils/WAIT.exe
 Greta/bin/xerces-c_3_1.dll
 Greta/bin/xqilla22.dll
 Greta/bin/zlib1.dll
+Greta/bin/xerces-c_3_1D.dll
+Greta/bin/xqilla22d.dll
+Greta/bin/OgreMain_d.dll
+Greta/bin/activemq-cppd.dll
+Greta/bin/Plugins_d.cfg
 Greta/GretaApplications/GretaActive/ActionSelection/MSVC/ActionSelectionconnector.sln
 Greta/GretaApplications/GretaActive/ActionSelection/MSVC/ActionSelectionconnector.vcproj
 Greta/GretaApplications/GretaActive/ActionSelection/src/ActionSelectionConnector.cpp
@@ -7696,7 +7702,6 @@ Greta/lib/Win32/External/GlAux.Lib
 Greta/lib/Win32/External/glui32.lib
 Greta/lib/Win32/External/glut32.lib
 Greta/lib/Win32/External/iconv.lib
-Greta/lib/Win32/External/IKANlib.lib
 Greta/lib/Win32/External/libxml2.lib
 Greta/lib/Win32/External/libxmld2.lib
 Greta/lib/Win32/External/ogre/libboost_date_time-vc80-mt-1_42.lib
