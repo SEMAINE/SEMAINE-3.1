@@ -20,7 +20,7 @@ public class EmotionExtractor extends Component {
 
 	public EmotionExtractor() throws JMSException {
 		super("EmotionExtractor");
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma"));
+		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.emotion.voice"));
 		senders.add(emotionSender);
 	}
 

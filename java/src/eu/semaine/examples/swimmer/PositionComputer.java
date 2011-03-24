@@ -21,7 +21,7 @@ public class PositionComputer extends Component {
 	
 	public PositionComputer() throws JMSException {
 		super("PositionComputer");
-		receivers.add(new EmmaReceiver("semaine.data.state.user.emma"));
+		receivers.add(new EmmaReceiver("semaine.data.state.user.emma.emotion.voice"));
 		senders.add(positionSender);
 	}
 	
@@ -37,10 +37,10 @@ public class PositionComputer extends Component {
 			List<Element> dimensions = XMLTool.getChildrenByLocalNameNS(emotion, EmotionML.E_DIMENSION, EmotionML.namespaceURI);
 			for (Element dim : dimensions) {
 				if (dim.getAttribute(EmotionML.A_NAME).equals(EmotionML.VOC_FSRE_DIMENSION_AROUSAL)) {
-					float arousalValue = EmotionML.fsreArousal2SemaineArousal(Float.parseFloat(dim.getAttribute(EmotionML.A_VALUE)));
+					float arousalValue = Float.parseFloat(dim.getAttribute(EmotionML.A_VALUE));
 					
 					// Arousal influences the swimmer's position:
-					position += 10*arousalValue;
+					position += 10*(arousalValue-0.4f);
 					System.out.println("At time " + meta.getTime()+", arousal "+arousalValue+" -- new position "+position);
 					break;
 				}

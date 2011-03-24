@@ -51,7 +51,7 @@ public class Commentator extends Component {
 	private void say(String text) throws JMSException {
 		Document bml = XMLTool.newDocument(BML.ROOT_TAGNAME, BML.namespaceURI);
 		Element speech = XMLTool.appendChildElement(bml.getDocumentElement(), BML.E_SPEECH);
-		speech.setAttribute("language", "en-GB");
+		speech.setAttribute("language", "en-US");
 		speech.setTextContent(text);
 		Element mark = XMLTool.appendChildElement(speech, SSML.E_MARK, SSML.namespaceURI);
 		mark.setAttribute(SSML.A_NAME, "m1");

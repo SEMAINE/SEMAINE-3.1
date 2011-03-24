@@ -26,9 +26,9 @@ public class HelloAnalyser extends Component {
 		int arousalValue = 0, valenceValue = 0;
 		String input = m.getText();
 		if (input.contains("very")) arousalValue = 1;
-		else if (input.contains("a bit")) arousalValue = -1;
+		else if (input.contains("a bit")) arousalValue = 0;
 		if (input.contains("happy")) valenceValue = 1;
-		else if (input.contains("sad")) valenceValue = -1;
+		else if (input.contains("sad")) valenceValue = 0;
 		Document emotionML = createEmotionML(arousalValue, valenceValue);
 		emotionSender.sendXML(emotionML, meta.getTime());
 	}
@@ -39,10 +39,10 @@ public class HelloAnalyser extends Component {
 		emotion.setAttribute(EmotionML.A_DIMENSION_VOCABULARY, EmotionML.VOC_FSRE_DIMENSION_DEFINITION);
 		Element arousal = XMLTool.appendChildElement(emotion, EmotionML.E_DIMENSION);
 		arousal.setAttribute(EmotionML.A_NAME, EmotionML.VOC_FSRE_DIMENSION_AROUSAL);
-		arousal.setAttribute(EmotionML.A_VALUE, String.valueOf(EmotionML.semaineArousal2FSREArousal(arousalValue)));
+		arousal.setAttribute(EmotionML.A_VALUE, String.valueOf(arousalValue));
 		Element valence = XMLTool.appendChildElement(emotion, EmotionML.E_DIMENSION);
-		arousal.setAttribute(EmotionML.A_NAME, EmotionML.VOC_FSRE_DIMENSION_VALENCE);
-		valence.setAttribute(EmotionML.A_VALUE, String.valueOf(EmotionML.semaineValence2FSREValence(valenceValue)));
+		valence.setAttribute(EmotionML.A_NAME, EmotionML.VOC_FSRE_DIMENSION_VALENCE);
+		valence.setAttribute(EmotionML.A_VALUE, String.valueOf(valenceValue));
 		return emotionML;
 	}
 }

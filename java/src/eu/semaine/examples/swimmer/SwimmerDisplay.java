@@ -45,7 +45,7 @@ public class SwimmerDisplay extends Component {
 		int width = waterIcon.getIconWidth(), height = waterIcon.getIconHeight();
 		JLabel water = new JLabel(waterIcon);
         water.setBounds(0, 0, width, height);
-		layeredPane.add(water, 0);
+		layeredPane.add(water, 2);
 		layeredPane.setPreferredSize(water.getPreferredSize());
 		ImageIcon swimmerIcon = new ImageIcon(this.getClass().getResource("swimmer.png"));
 		swimmer = new JLabel(swimmerIcon);
@@ -54,6 +54,7 @@ public class SwimmerDisplay extends Component {
 		availableWidth = width - 50 - swimmerWidth;
 		swimmer.setBounds(availableWidth / 2, yMid, swimmerWidth, swimmerHeight);
 		layeredPane.add(swimmer, 1);
+		layeredPane.moveToFront(swimmer);
 		frame.pack();
 		frame.setVisible(true);
 	}
