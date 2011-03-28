@@ -23,7 +23,7 @@ public class HelloAnalyser extends Component {
 	}
 	
 	@Override protected void react(SEMAINEMessage m) throws JMSException {
-		int arousalValue = 0, valenceValue = 0;
+		float arousalValue = 0.5f, valenceValue = 0.5f;
 		String input = m.getText();
 		if (input.contains("very")) arousalValue = 1;
 		else if (input.contains("a bit")) arousalValue = 0;
@@ -33,7 +33,7 @@ public class HelloAnalyser extends Component {
 		emotionSender.sendXML(emotionML, meta.getTime());
 	}
 
-	private Document createEmotionML(int arousalValue, int valenceValue) {
+	private Document createEmotionML(float arousalValue, float valenceValue) {
 		Document emotionML = XMLTool.newDocument(EmotionML.E_ROOT_TAGNAME, EmotionML.namespaceURI);
 		Element emotion = XMLTool.appendChildElement(emotionML.getDocumentElement(), EmotionML.E_EMOTION);
 		emotion.setAttribute(EmotionML.A_DIMENSION_VOCABULARY, EmotionML.VOC_FSRE_DIMENSION_DEFINITION);
