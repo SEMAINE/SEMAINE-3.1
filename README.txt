@@ -1,6 +1,8 @@
 The latest documentation on building, installing and running 
 the SEMAINE-3.1 system can be found at 
-http://semaine.opendfki.de/wiki/SEMAINE-3.1
+http://semaine.opendfki.de/wiki/SEMAINE-3.1. We will soon move this content to the new GitHub space.
+
+The GitHub project location is https://github.com/organizations/SEMAINE/
 
 Quickstart guide for Windows:
 1. If you have a camera and a fast PC, install the SEMAINE video components from http://ibug.doc.ic.ac.uk/resources
