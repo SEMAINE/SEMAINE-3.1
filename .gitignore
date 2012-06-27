@@ -1,0 +1,42 @@
+
+# /
+/GretaActive
+
+# /MARY/
+/MARY/log
+
+# /MARY/download/
+/MARY/download/*
+
+# /c++/
+/c++/doc
+
+# /c++/m4/
+/c++/m4/lt*m4
+
+# /c++/src/
+/c++/src/semaine.suo
+/c++/src/semaine.ncb
+/c++/src/*.user
+/c++/src/Debug
+
+# /c++/vs2005/
+/c++/vs2005/*.ncb
+/c++/vs2005/*.suo
+/c++/vs2005/*.user
+/c++/vs2005/Debug
+/c++/vs2005/Release
+
+# /dist/
+/dist/tmp
+/dist/SEMAINE-*
+
+# /java/
+/java/bin
+/java/doc
+/java/netbeans
+/java/logs
+/java/tmp
+
+# /java/lib/
+/java/lib/semaine*.jar
