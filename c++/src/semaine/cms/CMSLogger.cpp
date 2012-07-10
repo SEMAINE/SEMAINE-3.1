@@ -56,7 +56,8 @@ CMSLogger * CMSLogger::getLog(const std::string& source)
 //////////////////////// Member stuff ///////////////////////
 
 CMSLogger::CMSLogger(const std::string & source) :
-	source(source)
+	source(source),
+		errorMP(0)
 {
 	std::string basename = "semaine.log."+source;
 	try {
