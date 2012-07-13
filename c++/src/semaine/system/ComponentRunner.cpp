@@ -27,6 +27,7 @@ ComponentRunner::~ComponentRunner()
 		c->join();
 		delete c;
 	}
+	components.clear();
 }
 
 void ComponentRunner::go()
