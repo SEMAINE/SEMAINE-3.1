@@ -92,6 +92,24 @@ CMSLogger::~CMSLogger()
 		delete infoMP;
 		delete debugMP;
 	}
+
+	// Close open resources. 
+	try{ 
+		if( session != NULL ) session->close(); 
+		if( connection != NULL ) connection->close(); 
+	}catch (CMSException& e) { e.printStackTrace(); } 
+
+	// Now Destroy them 
+	try{ 
+		if( session != NULL ) delete session; 
+	}catch (CMSException& e) { e.printStackTrace(); } 
+	session = NULL; 
+
+	try{ 
+		if( connection != NULL ) delete connection; 
+	}catch ( CMSException& e ) { e.printStackTrace(); } 
+	connection = NULL; 
+
 }
 
 	void CMSLogger::error(const std::string & message, const std::exception * exc)
