@@ -57,7 +57,10 @@ CMSLogger * CMSLogger::getLog(const std::string& source)
 
 CMSLogger::CMSLogger(const std::string & source) :
 	source(source),
-		errorMP(0)
+		errorMP(0),
+		warnMP(0),
+		infoMP(0),
+		debugMP(0)
 {
 	std::string basename = "semaine.log."+source;
 	try {
@@ -85,13 +88,26 @@ CMSLogger::CMSLogger(const std::string & source) :
 CMSLogger::~CMSLogger()
 {
 	loggers.erase(source); // remove me from map
-	if (errorMP != NULL) {
-	    // assume all are non-null
-		delete errorMP;
-		delete warnMP;
-		delete infoMP;
-		delete debugMP;
-	}
+
+	try{ 
+		if( errorMP != NULL ) delete errorMP; 
+	}catch ( CMSException& e ) { e.printStackTrace(); } 
+	errorMP = NULL;
+
+	try{ 
+		if( warnMP != NULL ) delete warnMP; 
+	}catch ( CMSException& e ) { e.printStackTrace(); } 
+	warnMP = NULL;
+
+	try{ 
+		if( infoMP != NULL ) delete infoMP; 
+	}catch ( CMSException& e ) { e.printStackTrace(); } 
+	infoMP = NULL;
+
+	try{ 
+		if( debugMP != NULL ) delete debugMP; 
+	}catch ( CMSException& e ) { e.printStackTrace(); } 
+	debugMP = NULL;
 
 	// Close open resources. 
 	try{ 
