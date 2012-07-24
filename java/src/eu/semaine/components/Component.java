@@ -195,7 +195,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 			// Check at every loop that the total system is ready
 			synchronized (meta) {
 				if (!meta.isSystemReady()) {
-					log.info(meta.getTime(), "waiting for system to become ready");
+					log.info(new Object[] {meta.getTime(), "waiting for system to become ready"});
 				}
 				while (!meta.isSystemReady()) {
 					try {
@@ -203,7 +203,7 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 					} catch (InterruptedException ie) {
 					}
 					if (meta.isSystemReady()) {
-						log.info(meta.getTime(), "system ready - let's go");
+						log.info(new Object[] {meta.getTime(), "system ready - let's go"});
 						hasSystemJustBecomeReady = true;
 					}
 				}
@@ -215,12 +215,12 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 				long timeSpentInAct = System.currentTimeMillis() - before;
 				meta.statistics().actTime(timeSpentInAct);
 			} catch (Throwable e) {
-				log.error(meta.getTime(), "error when trying to act", e);
+				log.error(new Object[] {meta.getTime(), "error when trying to act", e});
 				try {
 					state = State.failure;
 					meta.reportState(state, "error when trying to act", e);
 				} catch (JMSException me) {
-					log.error(meta.getTime(), "cannot report failure state", me);
+					log.error(new Object[] {meta.getTime(), "cannot report failure state", me});
 				}
 				requestExit();
 				return;
@@ -251,14 +251,14 @@ public class Component extends Thread implements SEMAINEMessageAvailableListener
 				long timeSpentInReact = System.currentTimeMillis() - before;
 				meta.statistics().reactTime(timeSpentInReact);
 			} catch (Throwable e) {
-				log.error(meta.getTime(), "error when trying to react", e);
-				log.debug(meta.getTime(), "(message was: ", MessageLogComponent.message2logString(message), ")");
+				log.error(new Object[] {meta.getTime(), "error when trying to react", e});
+				log.debug(new Object[] {meta.getTime(), "(message was: ", MessageLogComponent.message2logString(message), ")"});
 				try {
 					state = State.failure;
 					meta.reportState(state, "error when trying to react", e,
 							" (message was: ", MessageLogComponent.message2logString(message), ")");
 				} catch (JMSException me) {
-					log.error(meta.getTime(), "cannot report failure state", me);
+					log.error(new Object[] {meta.getTime(), "cannot report failure state", me});
 				}
 				requestExit();
 				return;
