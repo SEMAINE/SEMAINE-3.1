@@ -23,7 +23,10 @@ throw (CMSException) :
 	cmsUser(DEFAULT_CMS_USER),
 	cmsPassword(DEFAULT_CMS_PASSWORD),
 	exception(NULL),
-	excListener(NULL)
+	excListener(NULL),
+	session(0),
+	topic(0),
+	connection(0)
 {
 	initialise(topicName);
 }
@@ -34,21 +37,48 @@ throw (CMSException) :
 	cmsUser(cmsUser),
 	cmsPassword(cmsPassword),
 	exception(NULL),
-	excListener(NULL)
+	excListener(NULL),
+	session(0),
+	topic(0),
+	connection(0)
 {
 	initialise(topicName);
 }
 
 IOBase::~IOBase()
 {
-	connection->close();
-	delete topic;
-	delete session;
-	delete connection;
-	if (exception != NULL) {
-		delete exception;
-	}
-	delete excListener;
+	
+	// Close open resources. 
+	try{ 
+		if( session != NULL ) session->close(); 
+		if( connection != NULL ) connection->close(); 
+	}catch (CMSException& e) { e.printStackTrace(); } 
+
+	// Now Destroy them 
+	try{ 
+		if( session != NULL ) delete session; 
+	}catch (CMSException& e) { e.printStackTrace(); } 
+	session = NULL; 
+
+	try{ 
+		if( connection != NULL ) delete connection; 
+	}catch ( CMSException& e ) { e.printStackTrace(); } 
+	connection = NULL; 
+
+	try{ 
+		if( topic != NULL ) delete topic; 
+	}catch ( CMSException& e ) { e.printStackTrace(); } 
+	topic = NULL; 
+
+	try{ 
+		if (exception != NULL) delete exception;
+	}catch (CMSException& e) { e.printStackTrace(); } 
+	exception = NULL;
+
+	try{ 
+		if (excListener != NULL) delete excListener;
+	}catch (CMSException& e) { e.printStackTrace(); } 
+	excListener = NULL;
 }
 
 void IOBase::initialise(const std::string & topicName)
