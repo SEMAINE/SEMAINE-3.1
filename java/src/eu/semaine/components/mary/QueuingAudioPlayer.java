@@ -90,8 +90,8 @@ public class QueuingAudioPlayer extends Component
 			if (anim == null) {
 				AnimationState oldState = animationStates.get(contentID);
 				if (oldState != null) {
-					log.warn(meta.getTime(), "Received "+m.getDatatype()+" message from "+m.getSource()+" (topic "+m.getTopicName()
-							+") for content ID '"+contentID+"', but that ID is already in state '"+oldState.toString()+"' -- discarding message.");
+					log.warn(new Object[] {meta.getTime(), "Received "+m.getDatatype()+" message from "+m.getSource()+" (topic "+m.getTopicName()
+							+") for content ID '"+contentID+"', but that ID is already in state '"+oldState.toString()+"' -- discarding message."});
 					return;
 				} else {
 					anim = new Animation(contentID, contentCreationTime, contentType);
@@ -127,7 +127,7 @@ public class QueuingAudioPlayer extends Component
 				try {
 					playerQueue.put(anim);
 				} catch (InterruptedException e) {
-					log.error(meta.getTime(), e);
+					log.error(new Object[] {meta.getTime(), e});
 				}
 				availableAnimations.remove(contentID);
 			}
@@ -204,7 +204,7 @@ public class QueuingAudioPlayer extends Component
 				if (!anim.needsAudio) {
 					continue;
 				}
-				log.debug(meta.getTime(), "Now playing: "+anim.contentID);
+				log.debug(new Object[] {meta.getTime(), "Now playing: "+anim.contentID});
 				ByteArrayInputStream bais = new ByteArrayInputStream(anim.getAudioData());
 				
 				try {
@@ -213,7 +213,7 @@ public class QueuingAudioPlayer extends Component
 					player.start();
 					sendCallbackMessage(SemaineML.V_START, anim.getContentID(), anim.getContentType());
 					animationStates.put(anim.getContentID(), AnimationState.PLAYING);
-					log.debug(meta.getTime(), anim.getContentID()+" started playing "+(meta.getTime()-anim.getContentCreationTime())+" ms after creation");
+					log.debug(new Object[] {meta.getTime(), anim.getContentID()+" started playing "+(meta.getTime()-anim.getContentCreationTime())+" ms after creation"});
 					player.join();
 					sendCallbackMessage(SemaineML.V_END, anim.getContentID(), anim.getContentType());
 					animationStates.put(anim.getContentID(), AnimationState.FINISHED);
@@ -239,7 +239,7 @@ public class QueuingAudioPlayer extends Component
 		}
 		
 		callbackSender.sendXML(doc, meta.getTime());
-		log.debug(meta.getTime(), "Sending callback: ID '"+contentID+"' "+type);
+		log.debug(new Object[] {meta.getTime(), "Sending callback: ID '"+contentID+"' "+type});
 	}
 
 	
