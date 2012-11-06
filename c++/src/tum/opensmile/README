@@ -1,0 +1,79 @@
+
+  openSMILE
+   - open Speech and Music Interpretation by Large-space Extraction -
+  Copyright (C) 2008-2010  Florian Eyben, Martin Woellmer, Bjoern Schuller
+  
+  Institute for Human-Machine Communication
+  Technische Universitaet Muenchen (TUM)
+  D-80333 Munich, Germany
+
+ ********************************************************************** 
+ If you use openSMILE or any code from openSMILE in your research work,
+ you are kindly asked to acknowledge the use of openSMILE in your publications.
+ See the file CITING.txt for details.
+ **********************************************************************
+
+  This copy of openSMILE is distributed under the terms of the GPL:
+ 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details (file: COPYING).
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+ ++ For commercial licensing options, please contact the authors ++
+ 
+About openSMILE:
+================
+
+openSMILE is a complete and open-source toolkit for audio analysis, processing and classification especially targeted at speech and music applications, e.g. ASR, emotion recognition, or beat tracking and chord detection.
+The toolkit is developed at the Institute for Human-Machine Communication at the Technische Universitaet Muenchen in Munich, Germany.
+It was started withtin the SEMAINE EU FP7 project.
+
+
+Third-party dependencies:
+=========================
+
+openSMILE uses LibSVM (by Chih-Chung Chang and Chih-Jen Lin) for classification tasks. It is distributed with openSMILE and is included in the svm/ directory.
+
+PortAudio is required for live recording from sound card and for the SEMAINE component.
+You can get it from: http://www.portaudio.com
+A working snapshot is included in thirdparty/portaudio.tgz
+
+Optionally, openSMILE can be linked against the SEMAINE API and the Julius LVCSR engine, enabling an interface to the SEMAINE system and a keyword spotter component. See http://www.semaine-project.eu/ for details on running the SEMAINE system.
+
+Moreover, there is an experimental dependency on the Speex Codec package for an echo cancellation component. By default openSMILE is compiled without this component, thus you do not require Speex. If you want to experiment with the echo cancellation feature, please read the unix build files and the speex echo canceller source files. 
+
+
+Documentation/Installing/Using:
+===============================
+
+openSMILE is well documented in the openSMILE book, which can be found in doc/openSMILE_book.pdf.
+
+For quick-start information on how to compile openSMILE, see the file INSTALL.
+
+
+Developers:
+===========
+
+Developer's documentation can be found in "doc/developer" and in the openSMILE book.
+
+Information on how to write and compile run-time linkable plug-ins for openSMILE, see the openSMILE book or take a look at the files in the "plugindev" directory, especially the README file.
+
+
+Getting more help:
+==================
+
+If you encounter problems with openSMILE, and solve them yourself, please do inform Florian Eyben via e-mail (lastname at tum.de), so the documentation can be updated!
+
+If you cannot solve the problems yourself, please do also contact Florian Eyben so we can solve the problem together and update the documentation.
+
+

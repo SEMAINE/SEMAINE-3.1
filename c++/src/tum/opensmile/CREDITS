@@ -1,0 +1,34 @@
+
+ACKNOWLEDEGMENT
+==============
+
+The development of openSMILE has received funding
+from the European Community's Seventh Framework
+Programme (FP7/2007-2013) under grant agreement No.
+211486 (SEMAINE)
+
+
+*******************************************************************************
+** We would like to thank the following people for contributing to openSMILE **
+*******************************************************************************
+
+Christoph Kozielski (TUM student), 
+  - helped to fix many bugs in various components (toneSpec, ...), 
+  - pointed out some missing essential features, 
+  - implemented the Chroma component, 
+  - helped with compilation on Windows and Mingw32.
+
+Benedikt Gollan (TUM student), 
+  - helped integrating openSMILE into Qt GUI's (ADMIRE project & openEAR GUI), 
+  - implemented the components:
+       chromaFeatures, chordFeatures, 
+       chromaPerFrame, channelMixer, and  stretchToTime. 
+  - added support for negative start index to waveSource component
+  - added support for message based switching of models in libsvmliveSink
+  - helped with compilation under windows/mingw.
+  - various bugfixes
+
+Dino Seppi (KU-LEUVEN),
+  - bugfixes in functionalTimes
+  - ideas for duration and onset functionals
+
