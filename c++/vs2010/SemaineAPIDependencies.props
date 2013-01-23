@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <SemaineApiVS>$(ProjectDir)..\vs2005\</SemaineApiVS>
+    <SemaineLibs>$(SemaineApiVS)$(Configuration)</SemaineLibs>
+    <SemaineIncludes>$(SemaineApiVS)..\src</SemaineIncludes>
+    <Thirdparty>$(SemaineApiVS)..\..\thirdparty\build</Thirdparty>
+    <SemaineDeps>$(SemaineApiVs)..\..\..\thirdparty\compiled\</SemaineDeps>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SemaineApiVS)..\src;$(SemaineDeps)include\apache2;$(SemaineDeps)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName)-vc80.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>xerces-c_3.lib;xqilla23.lib;libaprutil-1.lib;libapr-1.lib;activemq-cpp.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SemaineDeps)lib\</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <PropertyGroup Label="Configuration">
+    <BuildLogFile>$(IntDir)$(ProjectName)-BuildLog.htm</BuildLogFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="SemaineApiVS">
+      <Value>$(SemaineApiVS)</Value>
+    </BuildMacro>
+    <BuildMacro Include="SemaineLibs">
+      <Value>$(SemaineLibs)</Value>
+    </BuildMacro>
+    <BuildMacro Include="SemaineIncludes">
+      <Value>$(SemaineIncludes)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Thirdparty">
+      <Value>$(Thirdparty)</Value>
+    </BuildMacro>
+    <BuildMacro Include="SemaineDeps">
+      <Value>$(SemaineDeps)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

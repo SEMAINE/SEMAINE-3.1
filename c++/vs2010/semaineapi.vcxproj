@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9B43E26F-03F9-4A57-8A9C-7FC32B3D342D}</ProjectGuid>
+    <RootNamespace>semaineapi</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="SemaineAPIDependencies.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="SemaineAPIDependenciesDebug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(IntDir)semaineapi-BuildLog.htm</Path>
+    </BuildLog>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <ProgramDataBaseFileName>$(IntDir)semaineapi-vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(ProjectName)d.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\AgentStateInfo.h" />
+    <ClInclude Include="..\src\semaine\datatypes\xml\BML.h" />
+    <ClInclude Include="..\src\semaine\cms\receiver\BMLReceiver.h" />
+    <ClInclude Include="..\src\semaine\cms\sender\BMLSender.h" />
+    <ClInclude Include="..\src\semaine\cms\CMSLogger.h" />
+    <ClInclude Include="..\src\semaine\components\Component.h" />
+    <ClInclude Include="..\src\semaine\system\ComponentRunner.h" />
+    <ClInclude Include="..\src\semaine\config.h" />
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\ContextStateInfo.h" />
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\DialogStateInfo.h" />
+    <ClInclude Include="..\src\semaine\components\dummy\DummyAnalyser.h" />
+    <ClInclude Include="..\src\semaine\components\dummy\DummyFeatureExtractor.h" />
+    <ClInclude Include="..\src\semaine\components\dummy\DummyFML2BML.h" />
+    <ClInclude Include="..\src\semaine\datatypes\xml\EMMA.h" />
+    <ClInclude Include="..\src\semaine\cms\receiver\EmmaReceiver.h" />
+    <ClInclude Include="..\src\semaine\cms\sender\EmmaSender.h" />
+    <ClInclude Include="..\src\semaine\datatypes\xml\EmotionML.h" />
+    <ClInclude Include="..\src\semaine\cms\event.h" />
+    <ClInclude Include="..\src\semaine\cms\receiver\FeatureReceiver.h" />
+    <ClInclude Include="..\src\semaine\cms\sender\FeatureSender.h" />
+    <ClInclude Include="..\src\semaine\datatypes\xml\FML.h" />
+    <ClInclude Include="..\src\semaine\cms\receiver\FMLReceiver.h" />
+    <ClInclude Include="..\src\semaine\cms\sender\FMLSender.h" />
+    <ClInclude Include="..\src\semaine\components\dummy\GenericTestComponent.h" />
+    <ClInclude Include="..\src\semaine\cms\IOBase.h" />
+    <ClInclude Include="..\src\semaine\cms\loglevel.h" />
+    <ClInclude Include="..\src\semaine\cms\exceptions\MessageFormatException.h" />
+    <ClInclude Include="..\src\semaine\components\meta\MetaMessenger.h" />
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\NamespaceContext.h" />
+    <ClInclude Include="..\src\semaine\components\control\ParticipantControl.h" />
+    <ClInclude Include="..\src\semaine\cms\receiver\Receiver.h" />
+    <ClInclude Include="..\src\semaine\cms\message\SEMAINEEmmaMessage.h" />
+    <ClInclude Include="..\src\semaine\cms\exceptions\SEMAINEException.h" />
+    <ClInclude Include="..\src\semaine\cms\message\SEMAINEMessage.h" />
+    <ClInclude Include="..\src\semaine\cms\SEMAINEMessageAvailableListener.h" />
+    <ClInclude Include="..\src\semaine\datatypes\xml\SemaineML.h" />
+    <ClInclude Include="..\src\semaine\cms\message\SEMAINEStateMessage.h" />
+    <ClInclude Include="..\src\semaine\cms\message\SEMAINEXMLMessage.h" />
+    <ClInclude Include="..\src\semaine\cms\sender\Sender.h" />
+    <ClInclude Include="..\src\semaine\datatypes\xml\SSML.h" />
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\StateInfo.h" />
+    <ClInclude Include="..\src\semaine\cms\receiver\StateReceiver.h" />
+    <ClInclude Include="..\src\semaine\cms\sender\StateSender.h" />
+    <ClInclude Include="..\src\semaine\cms\exceptions\SystemConfigurationException.h" />
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\SystemStateInfo.h" />
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\UserStateInfo.h" />
+    <ClInclude Include="..\src\semaine\cms\receiver\XMLReceiver.h" />
+    <ClInclude Include="..\src\semaine\cms\sender\XMLSender.h" />
+    <ClInclude Include="..\src\semaine\util\XMLTool.h" />
+    <ClInclude Include="..\src\semaine\datatypes\stateinfo\XPathInfoMapper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\semaine\datatypes\xml\BML.cpp" />
+    <ClCompile Include="..\src\semaine\cms\CMSLogger.cpp" />
+    <ClCompile Include="..\src\semaine\components\Component.cpp" />
+    <ClCompile Include="..\src\semaine\system\ComponentRunner.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\xml\EMMA.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\xml\EmotionML.cpp" />
+    <ClCompile Include="..\src\semaine\cms\sender\FeatureSender.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\xml\FML.cpp" />
+    <ClCompile Include="..\src\semaine\cms\IOBase.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\semaine\components\meta\MetaMessenger.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\stateinfo\NamespaceContext.cpp" />
+    <ClCompile Include="..\src\semaine\components\control\ParticipantControl.cpp" />
+    <ClCompile Include="..\src\semaine\cms\receiver\Receiver.cpp" />
+    <ClCompile Include="..\src\semaine\cms\message\SEMAINEEmmaMessage.cpp" />
+    <ClCompile Include="..\src\semaine\cms\message\SEMAINEFeatureMessage.cpp" />
+    <ClCompile Include="..\src\semaine\cms\message\SEMAINEMessage.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\xml\SemaineML.cpp" />
+    <ClCompile Include="..\src\semaine\cms\message\SEMAINEStateMessage.cpp" />
+    <ClCompile Include="..\src\semaine\cms\message\SEMAINEXMLMessage.cpp" />
+    <ClCompile Include="..\src\semaine\cms\sender\Sender.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\xml\SSML.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\stateinfo\StateInfo.cpp" />
+    <ClCompile Include="..\src\semaine\cms\receiver\StateReceiver.cpp" />
+    <ClCompile Include="..\src\semaine\cms\sender\StateSender.cpp" />
+    <ClCompile Include="..\src\semaine\cms\sender\XMLSender.cpp" />
+    <ClCompile Include="..\src\semaine\util\XMLTool.cpp" />
+    <ClCompile Include="..\src\semaine\datatypes\stateinfo\XPathInfoMapper.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
